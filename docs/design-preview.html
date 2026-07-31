@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tools.scult.in — Design System Proof</title>
+
+<!-- Fraunces stands in for Recoleta (commercial licence only). SOFT/WONK axes
+     are dialled to approximate Recoleta's soft 1970s serifs. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1&family=Cabin:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  /* brand */
+  --violet-500:#7030F8; --violet-600:#631AFF; --violet-700:#4B20DE;
+  --violet-800:#4432E2; --violet-900:#16018E; --violet-100:#EBE6FE;
+  /* cta */
+  --cta:#FAC44B; --cta-pure:#FFD800;
+  /* semantic */
+  --mint:#1AE39B; --green:#23CA87; --lime:#82F375; --peach:#FFDDC0; --cyan:#3CF0FF;
+  /* tiles */
+  --tile-yellow:#FFF9D9; --tile-blue:#CCE0FF; --tile-lavender:#DCD9F5; --tile-green:#CEFFCC;
+  /* surfaces */
+  --cream:#FCFBF3; --offwhite:#FAFAFB; --ice:#DFF6FF;
+  /* ink */
+  --ink:#000; --ink-body:#161616; --ink-muted:#333; --ink-subtle:#6B7280;
+  --ink-subtle-onice:#5C636E;   /* #6B7280 is only 4.32:1 on ice — fails AA */
+  --line:#ECE5F0; --line-grey:#E6E6E6;
+  /* type */
+  --display:"Fraunces",Georgia,serif;
+  --sans:"Cabin",ui-sans-serif,system-ui,sans-serif;
+  --marker:"Permanent Marker",cursive;
+  --ease:cubic-bezier(.4,0,.2,1);
+  --site:1160px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--sans);font-size:16px;line-height:24px;color:var(--ink-body);background:#fff;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display);color:var(--ink);font-weight:600;font-variation-settings:"SOFT" 100,"WONK" 1;margin:0}
+.wrap{max-width:var(--site);margin-inline:auto;padding-inline:24px}
+/* Two-tone by necessity: #4432E2 alone is 1.96:1 on indigo, 1.20:1 on the aurora.
+   The white outer ring is 14.70:1 on indigo, so the pair clears 3:1 everywhere. */
+:focus-visible{outline:3px solid var(--violet-800);outline-offset:2px;box-shadow:0 0 0 2px #fff}
+@media(forced-colors:active){:focus-visible{outline:3px solid Highlight;box-shadow:none}}
+
+/* ---------- section chrome ---------- */
+.sec{padding:72px 0;border-top:1px solid var(--line)}
+.sec:first-of-type{border-top:0}
+.eyebrow{font-family:var(--sans);font-size:14px;line-height:18px;letter-spacing:.12em;text-transform:uppercase;color:var(--violet-500);font-weight:700;margin-bottom:12px}
+.sec > .wrap > h2{font-size:52px;line-height:56px;letter-spacing:-1px}
+.lede{font-size:24px;line-height:33.6px;color:var(--ink-muted);max-width:62ch;margin-top:16px}
+.note{font-size:14px;line-height:20px;color:var(--ink-subtle);margin-top:8px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;background:var(--violet-100);color:var(--violet-900);padding:2px 6px;border-radius:6px}
+
+/* ---------- hero + aurora ---------- */
+.hero{position:relative;overflow:hidden;padding:0 0 64px;text-align:center;isolation:isolate}
+.aurora{position:absolute;inset-inline:0;top:-98px;height:270px;z-index:-1;pointer-events:none;
+  background:radial-gradient(farthest-side at 50% 55%,rgba(228,147,201,.99),rgb(128,0,255) 45%,rgba(0,30,255,.68) 64%,rgba(255,255,255,0))}
+.navpill{display:flex;align-items:center;justify-content:space-between;gap:24px;
+  height:83px;background:#fff;border-radius:100px;padding:0 32px 0 30px;margin-top:28px;
+  box-shadow:0 10px 24px rgb(0 0 0/.12)}
+.logo{font-family:var(--display);font-size:30px;font-weight:700;color:var(--violet-600);letter-spacing:-.5px}
+.navlinks{display:flex;gap:24px;font-size:18px;line-height:27px;font-weight:500;letter-spacing:.5px}
+.navlinks a{color:#000;text-decoration:none}
+.navlinks a:hover,.navlinks a[aria-current]{color:var(--violet-600)}
+h1.hero-h{font-size:70px;line-height:70px;letter-spacing:-1px;margin:56px auto 0;max-width:18ch}
+@media(max-width:1023px){h1.hero-h{font-size:50px;line-height:55px}.navlinks{display:none}}
+@media(max-width:639px){h1.hero-h{font-size:40px;line-height:42px}}
+.marker{font-family:var(--marker);font-size:22px;color:var(--violet-500);transform:rotate(-3deg);display:inline-block}
+
+/* ---------- the signature CTA ---------- */
+/* min-height, not height: a fixed 52px box around 18px text fails WCAG 1.4.12
+   Text Spacing at line-height 1.5. Renders identically at defaults. */
+.btn-brutal{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:11px 30px;
+  font-family:var(--sans);font-size:18px;line-height:27px;font-weight:400;color:#000;background:var(--cta);
+  border:1px solid #000;border-radius:100px;box-shadow:7px 7px 0 0 #000;
+  transition:background-color 200ms var(--ease),box-shadow 200ms var(--ease),transform 200ms var(--ease);
+  text-decoration:none;cursor:pointer}
+.btn-brutal:hover{background:#fff;box-shadow:none;transform:translate(7px,7px)}
+.btn-brutal:active{transform:translate(7px,7px) scale(.99)}
+
+/* Scoped reduced-motion. A blanket duration reset would turn the CTA press into a
+   7px teleport and would not touch scroll-driven animations at all. */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-timeline:none !important}
+  .btn-brutal{transition:background-color 200ms var(--ease),box-shadow 200ms var(--ease)}
+  .btn-brutal:hover,.btn-brutal:active{transform:none !important;box-shadow:4px 4px 0 0 #000}
+  .chip-tool:hover,.chip-tool:focus-visible{transform:none !important}
+}
+.btn-violet{background:var(--violet-700);color:#fff;border-color:#000}
+.btn-violet:hover{background:#fff;color:#000}
+
+/* ---------- swatches ---------- */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;margin-top:32px}
+.sw{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.sw .chipc{height:88px;display:flex;align-items:flex-end;justify-content:flex-end;padding:8px}
+.sw .meta{padding:12px 14px;font-size:13px;line-height:19px}
+.sw .name{font-weight:700;color:#000}
+.sw .hex{font-family:ui-monospace,monospace;color:var(--ink-subtle)}
+.badge{font-size:11px;font-weight:700;padding:2px 7px;border-radius:99px;background:#000;color:#fff}
+.badge.aaa{background:#0b7a48}.badge.aa{background:#1106CC}.badge.fail{background:#B00020}
+
+/* ---------- type scale ---------- */
+.tbl{width:100%;border-collapse:collapse;margin-top:24px;font-size:14px}
+.tbl th,.tbl td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:baseline}
+.tbl th{font-weight:700;color:#000;border-bottom-color:#000}
+.tbl td:last-child{color:var(--ink-subtle);font-family:ui-monospace,monospace;font-size:12px;white-space:nowrap}
+
+/* ---------- tool chips (the tools-grid pattern) ---------- */
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px}
+@media(max-width:900px){.grid4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.grid4{grid-template-columns:1fr}}
+.chip-tool{display:flex;align-items:center;gap:12px;padding:16px 20px;background:#fff;
+  border:1px solid var(--line);border-radius:10px;transition:all 180ms var(--ease);
+  text-decoration:none;color:#000;font-size:16px}
+.chip-tool:hover,.chip-tool:focus-visible{border-color:#000;box-shadow:4px 4px 0 0 #000;transform:translate(-2px,-2px)}
+.chip-tool .ic{width:34px;height:34px;flex:none;border-radius:8px;display:grid;place-items:center;font-size:17px;background:var(--violet-100)}
+
+/* ---------- pastel tiles ---------- */
+.tiles{display:flex;flex-wrap:wrap;gap:20px;margin-top:32px;padding:32px;border-radius:26px;
+  background:radial-gradient(farthest-side at 50% 55%,rgba(228,147,201,.99),rgb(128,0,255) 45%,rgba(0,30,255,.68) 64%,rgba(255,255,255,0))}
+.tile{width:190px;height:200px;padding:20px;border:10px solid #fff;border-radius:20px;
+  box-shadow:0 0 30px 0 rgb(255 255 255/.49);display:flex;flex-direction:column;justify-content:flex-end;
+  font-weight:700;color:#000;font-size:16px}
+
+/* ---------- band demo ---------- */
+.band-cream{background:linear-gradient(var(--cream),#fff)}
+.band-ice{background:var(--ice)}
+.band-dark{background:var(--violet-900);color:#fff}
+.band-dark h2,.band-dark .lede{color:#fff}
+.band-dark .lede{opacity:.82}
+.ann{background:var(--cta);color:#000;text-align:center;padding:11px 16px;font-size:16px}
+.ann b{font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="ann"><b>Design proof</b> — every value on this page is measured from the reference site, not invented.</div>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="navpill">
+      <span class="logo">tools</span>
+      <nav class="navlinks" aria-label="Preview navigation">
+        <a href="#palette" aria-current="page">Palette</a>
+        <a href="#type">Type</a>
+        <a href="#buttons">Buttons</a>
+        <a href="#grid">Tools grid</a>
+        <a href="#tiles">Tiles</a>
+      </nav>
+      <a class="btn-brutal" href="#buttons">TRY A TOOL</a>
+    </div>
+    <h1 class="hero-h">Free tools that do the boring work for you</h1>
+    <p class="lede" style="margin-inline:auto;text-align:center">
+      This page is the visual contract for tools.scult.in — the same colours, the same
+      type, the same neo-brutalist buttons as the reference design.
+    </p>
+    <p style="margin-top:20px"><span class="marker">↓ hover the yellow button</span></p>
+  </div>
+</header>
+
+<!-- ================= PALETTE ================= -->
+<section class="sec" id="palette">
+  <div class="wrap">
+    <p class="eyebrow">01 — Colour</p>
+    <h2>Palette, with contrast receipts</h2>
+    <p class="lede">Measured from a 2,689-element computed-style audit of the reference site.
+      Badges show WCAG 2.2 contrast for the intended text colour on that swatch.</p>
+
+    <div class="swatches">
+      <div class="sw"><div class="chipc" style="background:#7030F8"><span class="badge aa">AA 6.06</span></div>
+        <div class="meta"><div class="name">Violet primary</div><div class="hex">#7030F8</div></div></div>
+      <div class="sw"><div class="chipc" style="background:#631AFF"><span class="badge aa">AA 6.73</span></div>
+        <div class="meta"><div class="name">Violet hover/active</div><div class="hex">#631AFF</div></div></div>
+      <div class="sw"><div class="chipc" style="background:#4B20DE"><span class="badge aaa">AAA 8.20</span></div>
+        <div class="meta"><div class="name">Violet deep</div><div class="hex">#4B20DE</div></div></div>
+      <div class="sw"><div class="chipc" style="background:#16018E"><span class="badge aaa">AAA 14.7</span></div>
+        <div class="meta"><div class="name">Indigo dark</div><div class="hex">#16018E</div></div></div>
+      <div class="sw"><div class="chipc" style="background:#FAC44B"><span class="badge aaa">AAA 13.1 on&nbsp;#000</span></div>
+        <div class="meta"><div class="name">CTA yellow</div><div class="hex">#FAC44B</div>
+        <div class="note">White text here is <b>1.61:1 — never do it.</b></div></div></div>
+      <div class="sw"><div class="chipc" style="background:#1AE39B"><span class="badge aaa">AAA 12.5 on&nbsp;#000</span></div>
+        <div class="meta"><div class="name">Mint</div><div class="hex">#1AE39B</div>
+        <div class="note">White text 1.68:1 — black only.</div></div></div>
+      <div class="sw"><div class="chipc" style="background:#82F375"></div>
+        <div class="meta"><div class="name">Lime</div><div class="hex">#82F375</div></div></div>
+      <div class="sw"><div class="chipc" style="background:#FFDDC0"></div>
+        <div class="meta"><div class="name">Peach</div><div class="hex">#FFDDC0</div></div></div>
+      <div class="sw"><div class="chipc" style="background:#3CF0FF"></div>
+        <div class="meta"><div class="name">Cyan</div><div class="hex">#3CF0FF</div></div></div>
+      <div class="sw"><div class="chipc" style="background:#FCFBF3;border-bottom:1px solid var(--line)"></div>
+        <div class="meta"><div class="name">Cream surface</div><div class="hex">#FCFBF3</div></div></div>
+      <div class="sw"><div class="chipc" style="background:#DFF6FF"></div>
+        <div class="meta"><div class="name">Ice surface</div><div class="hex">#DFF6FF</div></div></div>
+      <div class="sw"><div class="chipc" style="background:#ECE5F0"></div>
+        <div class="meta"><div class="name">Card border</div><div class="hex">#ECE5F0</div>
+        <div class="note">1.23:1 — decorative only.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TYPE ================= -->
+<section class="sec band-cream" id="type">
+  <div class="wrap">
+    <p class="eyebrow">02 — Typography</p>
+    <h2>Fraunces display, Cabin body</h2>
+    <p class="lede">The reference uses <b>Recoleta</b>, which is commercial-licence-only.
+      <b>Fraunces</b> is the OFL substitute at ~82% similarity — shown here with
+      <code>SOFT 100</code> and <code>WONK 1</code> to pull it toward Recoleta's soft serifs.</p>
+
+    <table class="tbl">
+      <thead><tr><th>Sample</th><th>Role</th><th>Spec</th></tr></thead>
+      <tbody>
+        <tr><td style="font-family:var(--display);font-size:70px;line-height:1;letter-spacing:-1px;font-weight:600">Hire a team</td>
+            <td>Hero h1</td><td>Fraunces 600 · 70/70 · -1px</td></tr>
+        <tr><td style="font-family:var(--display);font-size:52px;line-height:56px;letter-spacing:-1px;font-weight:600">Section heading</td>
+            <td>h2</td><td>Fraunces 600 · 52/56 · -1px</td></tr>
+        <tr><td style="font-family:var(--display);font-size:30px;line-height:36px;font-weight:700">Card heading</td>
+            <td>h3</td><td>Fraunces 700 · 30/36</td></tr>
+        <tr><td style="font-family:var(--display);font-size:22px;line-height:33px;font-weight:600">Sub heading</td>
+            <td>h4</td><td>Fraunces 600 · 22/33</td></tr>
+        <tr><td style="font-size:24px;line-height:33.6px">Lead paragraph copy</td>
+            <td>Lede</td><td>Cabin 400 · 24/33.6</td></tr>
+        <tr><td style="font-size:16px;line-height:24px">Body copy sets at sixteen pixels.</td>
+            <td>Body</td><td>Cabin 400 · 16/24</td></tr>
+        <tr><td style="font-size:18px;line-height:27px;font-weight:500;letter-spacing:.5px">Navigation link</td>
+            <td>Nav</td><td>Cabin 500 · 18/27 · +0.5px</td></tr>
+        <tr><td style="font-size:14px;line-height:18px;color:var(--ink-subtle)">Small print and captions</td>
+            <td>Small</td><td>Cabin 400 · 14/18</td></tr>
+        <tr><td><span class="marker">Handwritten accent</span></td>
+            <td>Accent</td><td>Permanent Marker 400 · 22</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ================= BUTTONS ================= -->
+<section class="sec" id="buttons">
+  <div class="wrap">
+    <p class="eyebrow">03 — The signature component</p>
+    <h2>Neo-brutalist pill</h2>
+    <p class="lede">Yellow fill, 1px black border, 100px radius, and a hard
+      <code>7px 7px 0 0 #000</code> shadow. On hover the button translates
+      <i>into</i> its own shadow. Hover them.</p>
+    <p class="note">The 1px black border is not decoration — the yellow fill is only
+      1.61:1 against white, so the border is what satisfies WCAG 1.4.11 for the
+      control's boundary. Do not remove it.</p>
+    <div style="display:flex;gap:36px;flex-wrap:wrap;margin-top:36px;align-items:center">
+      <a class="btn-brutal" href="#buttons">START FREE TRIAL</a>
+      <a class="btn-brutal btn-violet" href="#buttons">RUN THE TOOL</a>
+      <button class="btn-brutal" style="background:#fff">SECONDARY</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TOOLS GRID ================= -->
+<section class="sec band-ice" id="grid">
+  <div class="wrap">
+    <p class="eyebrow">04 — The workhorse pattern</p>
+    <h2>Tools grid</h2>
+    <p class="lede">The reference's capability chips become the tools directory: white card,
+      <code>1px #ECE5F0</code>, 10px radius, icon + label. Hover adds a black border and a
+      hard shadow, which also fixes the 1.23:1 border contrast for an interactive element.</p>
+    <div class="grid4">
+      <a class="chip-tool" href="#grid"><span class="ic">🔍</span>Meta Tag Generator</a>
+      <a class="chip-tool" href="#grid"><span class="ic">📊</span>ROAS Calculator</a>
+      <a class="chip-tool" href="#grid"><span class="ic">🎨</span>Palette Extractor</a>
+      <a class="chip-tool" href="#grid"><span class="ic">🖼️</span>Image Compressor</a>
+      <a class="chip-tool" href="#grid"><span class="ic">📝</span>Schema Markup</a>
+      <a class="chip-tool" href="#grid"><span class="ic">⚡</span>Core Web Vitals</a>
+      <a class="chip-tool" href="#grid"><span class="ic">🧾</span>GST Calculator</a>
+      <a class="chip-tool" href="#grid"><span class="ic">✂️</span>SVG Optimiser</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TILES ================= -->
+<section class="sec" id="tiles">
+  <div class="wrap">
+    <p class="eyebrow">05 — Pastel tiles on aurora</p>
+    <h2>Category tiles</h2>
+    <p class="lede">Thick 10px white frame, 20px radius, white outer glow, on the aurora
+      gradient. Pastel fills are lifted verbatim from the reference service cards.</p>
+    <div class="tiles">
+      <div class="tile" style="background:var(--tile-green)">Content&nbsp;&amp; SEO</div>
+      <div class="tile" style="background:var(--tile-blue)">Performance</div>
+      <div class="tile" style="background:var(--tile-lavender)">Design&nbsp;&amp; Brand</div>
+      <div class="tile" style="background:var(--tile-yellow)">Ads&nbsp;&amp; Growth</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DARK BAND ================= -->
+<section class="sec band-dark">
+  <div class="wrap" style="text-align:center">
+    <p class="eyebrow" style="color:var(--cta)">06 — Dark band</p>
+    <h2>The indigo footer transition</h2>
+    <p class="lede" style="margin-inline:auto">
+      <code style="background:rgba(255,255,255,.14);color:#fff">#16018E</code> at 14.7:1 —
+      the reference's white-to-indigo split, reused as the conversion band that hands
+      visitors back to the agency.</p>
+    <p style="margin-top:32px"><a class="btn-brutal" href="#palette">BOOK A CALL</a></p>
+  </div>
+</section>
+
+<footer style="padding:40px 0 64px;border-top:1px solid var(--line)">
+  <div class="wrap" style="text-align:center">
+    <p class="note">tools.scult.in — design system proof · tokens measured from the reference design</p>
+  </div>
+</footer>
+
+</body>
+</html>

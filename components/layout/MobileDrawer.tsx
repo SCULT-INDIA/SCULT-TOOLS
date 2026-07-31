@@ -1,0 +1,140 @@
+'use client'
+
+import { X } from 'lucide-react'
+import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
+import { Icon } from '@/components/ui/Icon'
+import { CATEGORIES } from '@/lib/tools/categories'
+import { getToolCount } from '@/lib/tools/registry'
+
+/**
+ * Mobile navigation, matching the reference: a 260px panel sliding in from the
+ * right over a black/40 scrim.
+ *
+ * Dialog semantics are done properly because a drawer that traps nobody is worse
+ * than no drawer: focus moves in on open, Tab cycles inside, Escape closes, the
+ * body stops scrolling behind it, and focus returns to the trigger on close.
+ */
+export function MobileDrawer() {
+  const [open, setOpen] = useState(false)
+  const panelRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    // Move focus into the panel so the next Tab lands inside it.
+    const focusables = () =>
+      Array.from(
+        panelRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled])',
+        ) ?? [],
+      )
+    focusables()[0]?.focus()
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setOpen(false)
+        return
+      }
+      if (e.key !== 'Tab') return
+
+      const items = focusables()
+      if (items.length === 0) return
+      const first = items[0]
+      const last = items[items.length - 1]
+      if (!first || !last) return
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = previous
+      triggerRef.current?.focus()
+    }
+  }, [open])
+
+  return (
+    <>
+      <button
+        ref={triggerRef}
+        type="button"
+        aria-label="Open menu"
+        aria-expanded={open}
+        onClick={() => setOpen(true)}
+        className="flex size-11 flex-col items-center justify-center gap-[7px] lg:hidden"
+      >
+        <span className="block h-0.5 w-6 bg-ink" />
+        <span className="block h-0.5 w-6 bg-ink" />
+        <span className="block h-0.5 w-6 bg-ink" />
+      </button>
+
+      {/* Scrim — matches the reference's bg-black/40 at 300ms. */}
+      <div
+        aria-hidden="true"
+        onClick={() => setOpen(false)}
+        className={`fixed inset-0 z-60 bg-black/40 transition-opacity duration-300 lg:hidden ${
+          open ? 'opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+      />
+
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
+        className={`fixed top-0 right-0 z-70 h-full w-[260px] bg-white transition-transform duration-300 md:w-[300px] lg:hidden ${
+          open ? 'translate-x-0' : 'translate-x-full'
+        }`}
+        style={{ transitionTimingFunction: 'cubic-bezier(0.4,0,0.2,1)' }}
+      >
+        <div className="flex items-center justify-between border-line border-b p-4 pr-3">
+          <span className="font-display font-bold text-[22px] text-violet-600">
+            Scult Tools
+          </span>
+          <button
+            type="button"
+            aria-label="Close menu"
+            onClick={() => setOpen(false)}
+            className="rounded p-2"
+          >
+            <X className="size-5" aria-hidden="true" />
+          </button>
+        </div>
+
+        <nav aria-label="Categories" className="flex flex-col gap-1 overflow-y-auto p-4">
+          <Link
+            href="/all"
+            onClick={() => setOpen(false)}
+            className="flex items-center justify-between rounded-sm px-2 py-2.5 font-medium text-[17px] hover:text-violet-600"
+          >
+            All tools
+          </Link>
+          {CATEGORIES.map((c) => (
+            <Link
+              key={c.slug}
+              href={`/${c.slug}`}
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 rounded-sm px-2 py-2.5 text-[17px] hover:text-violet-600"
+            >
+              <Icon name={c.icon} className="size-4 shrink-0 text-violet-700" />
+              <span className="flex-1">{c.name}</span>
+              <span className="text-[13px] text-ink-subtle">{getToolCount(c.slug)}</span>
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </>
+  )
+}

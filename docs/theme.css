@@ -1,0 +1,423 @@
+/* =============================================================================
+   tools.scult.in — design tokens
+   Tailwind CSS v4.3.3 CSS-first configuration (@theme). No tailwind.config.js.
+   Every value below is MEASURED from the reference design, not invented.
+
+   REV 2 — corrections after adversarial review. Changelog at the bottom of this
+   file. The notable ones: the focus ring is now two-tone (the single-colour ring
+   failed WCAG 1.4.11 on every dark surface), fixed heights became min-heights
+   (1.4.12 Text Spacing), font-variation-settings moved off the @font-face
+   descriptor (unreliable — the Recoleta substitution was silently not applying),
+   and .aurora is now layered (unlayered CSS outranks every @layer in v4).
+   ============================================================================= */
+
+@import "tailwindcss";
+
+@theme {
+  /* ---------------------------------------------------------------------------
+     BRAND — violet ramp. #7030F8 is the reference site's most-used accent.
+     --------------------------------------------------------------------------- */
+  --color-violet-50:  #F4EFFE;
+  --color-violet-100: #EBE6FE;   /* rgba(99,26,255,.086) flattened on white */
+  --color-violet-400: #7959E7;
+  --color-violet-500: #7030F8;   /* PRIMARY accent — 6.06:1 on white (AA) */
+  --color-violet-600: #631AFF;   /* nav active + hover — 6.73:1 (AA) */
+  --color-violet-700: #4B20DE;   /* deep accent; REQUIRED on pastel tiles — 8.20:1 on white */
+  --color-violet-800: #4432E2;   /* focus ring base — 7.50:1 on white ONLY */
+  --color-violet-900: #16018E;   /* dark section base — 14.70:1 (AAA) */
+
+  /* ---------------------------------------------------------------------------
+     CTA — yellow. White text on these FAILS WCAG (1.61:1). Always pair with #000.
+     The 1px black border is load-bearing for 1.4.11: the fill alone is 1.61:1
+     against a white page, so the border is the control's only visible boundary.
+     --------------------------------------------------------------------------- */
+  --color-cta:      #FAC44B;
+  --color-cta-pure: #FFD800;
+
+  /* ---------------------------------------------------------------------------
+     SEMANTIC / pastel accents. All LIGHT — black text only.
+     --------------------------------------------------------------------------- */
+  --color-mint:  #1AE39B;        /* white-on-mint FAILS (1.68:1) */
+  --color-green: #23CA87;
+  --color-lime:  #82F375;
+  --color-peach: #FFDDC0;
+  --color-cyan:  #3CF0FF;
+
+  /* Pastel card fills, verbatim from the reference service tiles.
+     Accent text inside these MUST be --color-violet-700, not violet-500:
+       violet-500 on lavender = 4.41:1  FAIL
+       violet-700 on lavender = 5.97:1  AA   · tile-blue 6.12 · yellow 7.73 · green 7.34 */
+  --color-tile-yellow:   #FFF9D9;
+  --color-tile-blue:     #CCE0FF;
+  --color-tile-lavender: #DCD9F5;
+  --color-tile-green:    #CEFFCC;
+
+  /* ---------------------------------------------------------------------------
+     SURFACES
+     --------------------------------------------------------------------------- */
+  --color-cream:    #FCFBF3;
+  --color-offwhite: #FAFAFB;
+  --color-ice:      #DFF6FF;
+  --color-ice-2:    #DAF4FF;
+
+  /* ---------------------------------------------------------------------------
+     INK + LINES  (contrast figures are against WHITE unless stated)
+     --------------------------------------------------------------------------- */
+  --color-ink:        #000000;
+  --color-ink-body:   #161616;   /* 18.10:1 */
+  --color-ink-muted:  #333333;   /* 12.63:1 */
+  --color-ink-subtle: #6B7280;   /* 4.83:1 white · 4.66:1 cream · 4.32:1 ON ICE = FAIL */
+  --color-ink-subtle-onice: #5C636E;  /* use on ice/pastel: 5.42:1 ice · 6.06:1 white */
+  --color-line:       #ECE5F0;   /* default card border — 1.23:1, DECORATIVE ONLY */
+  --color-line-grey:  #E6E6E6;   /* dividers — decorative */
+
+  /* ---------------------------------------------------------------------------
+     TYPOGRAPHY
+     Display: Fraunces (OFL, variable) standing in for Recoleta, which is
+     commercial-licence-only. Fraunces carries NO Reserved Font Name, so it may
+     be subset and self-hosted without renaming.
+
+     Ship ONE Latin-subset variable file with SOFT/WONK pinned at build time
+     (fonttools varLib.instancer) and wght + opsz kept LIVE:
+       - wght live because the measured scale needs 600 AND 700 (h3 is 30/36/700);
+         shipping only 500/600 gives synthetic bold on every card heading.
+       - opsz live because the display face runs from 70px down to 16px; a single
+         opsz-72 instance gives display-weight hairlines to 16-22px headings.
+     --------------------------------------------------------------------------- */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-sans:    "Cabin", ui-sans-serif, system-ui, sans-serif;
+  --font-marker:  "Permanent Marker", cursive;
+
+  /* Measured type scale. v4 pairs line-height/tracking/weight to the size. */
+  --text-hero: 70px;
+  --text-hero--line-height: 70px;
+  --text-hero--letter-spacing: -1px;
+  --text-hero--font-weight: 600;
+
+  --text-h2: 52px;
+  --text-h2--line-height: 56px;
+  --text-h2--letter-spacing: -1px;
+  --text-h2--font-weight: 600;
+
+  --text-h3: 30px;
+  --text-h3--line-height: 36px;
+  --text-h3--font-weight: 700;     /* requires Fraunces wght 700 */
+
+  --text-h4: 22px;
+  --text-h4--line-height: 33px;
+  --text-h4--font-weight: 600;
+
+  --text-lead: 24px;
+  --text-lead--line-height: 33.6px;
+
+  --text-body: 16px;
+  --text-body--line-height: 24px;
+
+  --text-nav: 18px;
+  --text-nav--line-height: 27px;
+  --text-nav--letter-spacing: 0.5px;
+  --text-nav--font-weight: 500;
+
+  --text-small: 14px;
+  --text-small--line-height: 18px;
+
+  /* ---------------------------------------------------------------------------
+     RADII — 10px is the reference's default; 100px for pills.
+     --------------------------------------------------------------------------- */
+  --radius-card:  10px;
+  --radius-sm:    8px;
+  --radius-md:    12px;
+  --radius-lg:    20px;
+  --radius-panel: 26px;
+  --radius-pill:  100px;
+
+  /* ---------------------------------------------------------------------------
+     SHADOWS — the design is flat + hard-offset, not soft-elevation.
+     --------------------------------------------------------------------------- */
+  --shadow-brutal:      7px 7px 0 0 #000000;   /* SIGNATURE button shadow */
+  --shadow-brutal-sm:   4px 4px 0 0 #000000;
+  --shadow-card:        0 4px 10px 0 rgb(0 0 0 / 0.08);
+  --shadow-card-raised: 0 10px 24px 0 rgb(0 0 0 / 0.12);
+  --shadow-hero:        10px 5px 30px 10px rgb(0 0 0 / 0.22);
+  --shadow-glow:        0 0 30px 0 rgb(255 255 255 / 0.49);
+
+  /* ---------------------------------------------------------------------------
+     LAYOUT — reference container is max-w-290 → 290 × 4px = 1160px.
+     --------------------------------------------------------------------------- */
+  --container-site: 1160px;
+
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;   /* nav collapses here on the reference */
+  --breakpoint-xl: 1280px;
+
+  --ease-brand: cubic-bezier(0.4, 0, 0.2, 1);   /* measured on the CTA */
+}
+
+/* =============================================================================
+   FONT LOADING
+
+   PREFERRED: declare these through next/font/local and feed its generated
+   `variable:` output into --font-display / --font-sans, so Next emits the
+   family name, preloads, and generates a metric-matched fallback. The blocks
+   below are the hand-authored equivalent — use them only if you are NOT routing
+   through next/font, and never both.
+
+   NOTE the format string is "woff2", not "woff2-variations": browsers that don't
+   recognise a format string skip the source entirely and fall back silently.
+   ============================================================================= */
+@font-face {
+  font-family: "Fraunces";
+  src: url("/fonts/fraunces-latin-var.woff2") format("woff2");
+  font-weight: 100 900;              /* variable range — covers 600 and 700 */
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+2000-206F, U+20B9, U+2122;
+  /* Deliberately NO font-variation-settings here — see :root below. */
+}
+
+@font-face {
+  font-family: "Cabin";
+  src: url("/fonts/Cabin-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+2000-206F, U+20B9, U+2122;
+}
+@font-face {
+  font-family: "Cabin";
+  src: url("/fonts/Cabin-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cabin";
+  src: url("/fonts/Cabin-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* =============================================================================
+   BASE
+   ============================================================================= */
+@layer base {
+  /* SOFT/WONK are set HERE, not as an @font-face descriptor — descriptor support
+     is unreliable (notably Safari), and where it is ignored you silently ship
+     plain Fraunces and the entire Recoleta substitution fails with no error.
+     Belt and braces: also pin these axes at build time with varLib.instancer. */
+  :root {
+    font-variation-settings: "SOFT" 100, "WONK" 1;
+    /* Sticky header + WCAG 2.2 SC 2.4.11 Focus Not Obscured. Match to nav height. */
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 24px;
+    color: var(--color-ink-body);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    color: var(--color-ink);
+    font-weight: 600;
+    font-optical-sizing: auto;   /* keep opsz live across 16px-70px */
+  }
+
+  /* FOCUS — two-tone by necessity. A single #4432E2 ring measures 1.96:1 on the
+     #16018E footer, 1.20:1 on the aurora core and 2.80:1 on black: a 1.4.11
+     failure on every dark surface in this palette. The white outer ring is
+     14.70:1 on indigo and 6.25:1 on the aurora, so the PAIR clears 3:1 anywhere. */
+  :focus-visible {
+    outline: 3px solid var(--color-violet-800);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px #FFFFFF;
+  }
+
+  /* Respect user/OS high-contrast themes rather than fighting them. */
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline: 3px solid Highlight;
+      box-shadow: none;
+    }
+  }
+}
+
+/* =============================================================================
+   SIGNATURE COMPONENTS
+   ============================================================================= */
+@layer components {
+  /* The neo-brutalist CTA. Reference recipe:
+     bg #FAC44B · 1px solid #000 · radius 100px · shadow 7px 7px 0 0 #000
+     min-height 52px · px 30px · Cabin 18px/27px w400 · 200ms cubic-bezier(.4,0,.2,1)
+     hover → white fill, shadow collapses, button translates into the shadow.
+
+     min-height, not height: a fixed 52px box around 18px text fails WCAG 1.4.12
+     Text Spacing once line-height goes to 1.5, and compounds under 1.4.4 Resize
+     Text. Renders pixel-identical at default settings, so fidelity is unaffected. */
+  .btn-brutal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    /* 11px block padding + 27px line-height + 2px borders = 51px, so min-height
+       lands the default render on exactly 52px (matching the reference) while
+       still allowing the box to grow under user text-spacing overrides. */
+    padding: 11px 30px;
+    font-family: var(--font-sans);
+    font-size: 18px;
+    line-height: 27px;
+    font-weight: 400;
+    color: var(--color-ink);
+    background: var(--color-cta);
+    border: 1px solid var(--color-ink);       /* REQUIRED for WCAG 1.4.11 */
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-brutal);
+    transition: background-color 200ms var(--ease-brand),
+                box-shadow      200ms var(--ease-brand),
+                transform       200ms var(--ease-brand);
+  }
+  .btn-brutal:hover {
+    background: #fff;
+    box-shadow: none;
+    transform: translate(7px, 7px);           /* presses into its own shadow */
+  }
+  .btn-brutal:active { transform: translate(7px, 7px) scale(0.99); }
+
+  /* Tool / capability chip — the tools-directory workhorse. */
+  .chip-tool {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    transition: border-color 180ms var(--ease-brand),
+                box-shadow   180ms var(--ease-brand),
+                transform    180ms var(--ease-brand);
+  }
+  /* Hover/focus must introduce a >=3:1 boundary — #ECE5F0 alone is 1.23:1,
+     which is fine for a static card but not for an interactive control. */
+  .chip-tool:hover,
+  .chip-tool:focus-visible {
+    border-color: var(--color-ink);
+    box-shadow: var(--shadow-brutal-sm);
+    transform: translate(-2px, -2px);
+  }
+
+  /* Pastel tile with the thick white frame. min-* so long labels can't clip. */
+  .tile-pastel {
+    min-width: 190px;
+    min-height: 200px;
+    padding: 20px;
+    border: 10px solid #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-glow);
+  }
+  /* Accent text inside a pastel tile must use violet-700 (see @theme note). */
+  .tile-pastel :is(a, .accent) { color: var(--color-violet-700); }
+
+  /* AURORA GLOW — the hero halo, verbatim from the reference, painted on a
+     1265x270 element at top:-98px behind the floating nav pill.
+
+     This MUST stay inside @layer components. Unlayered CSS in Tailwind v4
+     outranks every @layer including utilities, so an unlayered .aurora cannot
+     be overridden by any utility class. */
+  .aurora {
+    position: absolute;
+    inset-inline: 0;
+    top: -98px;
+    height: 270px;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(farthest-side at 50% 55%,
+      rgba(228, 147, 201, 0.99),
+      rgb(128, 0, 255) 45%,
+      rgba(0, 30, 255, 0.68) 64%,
+      rgba(255, 255, 255, 0));
+  }
+
+  /* The nav pill's WHITE FILL IS LOAD-BEARING: black 18px/500 nav text measures
+     3.36:1 over the aurora core, an AA failure for normal text. Never ship a
+     transparent or scroll-transparent nav variant over the halo. */
+  .nav-pill {
+    background: #fff;
+    border-radius: var(--radius-panel);
+  }
+}
+
+/* =============================================================================
+   REDUCED MOTION — scoped, not a blanket reset.
+
+   A global `* { animation-duration: .01ms !important; transition-duration:
+   .01ms !important }` does three wrong things here:
+     1. It does nothing to scroll-driven animations, whose progress comes from
+        `animation-timeline`, not duration — hence the explicit `none` below.
+     2. It turns the CTA's translate(7px,7px) from a smooth press into a 7px
+        teleport, making the UI worse rather than calmer.
+     3. It cannot be undone by a variant or a later rule, so authoring around it
+        is impossible.
+   Instead: kill decorative motion, neutralise scroll timelines, and express
+   interactive state without movement.
+   ============================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  /* Decorative/looping motion only — marquees, the aurora, reveals. */
+  .aurora,
+  [data-decorative-motion] {
+    animation: none !important;
+    animation-timeline: none !important;
+  }
+
+  /* Scroll-driven animations everywhere: progress is timeline-driven, so
+     duration overrides are inert. Detach the timeline instead. */
+  *, *::before, *::after {
+    animation-timeline: none !important;
+  }
+
+  /* Express the press with border and shadow, never movement. */
+  .btn-brutal {
+    transition: background-color 200ms var(--ease-brand),
+                box-shadow      200ms var(--ease-brand);
+  }
+  .btn-brutal:hover,
+  .btn-brutal:active {
+    transform: none !important;
+    box-shadow: var(--shadow-brutal-sm);
+  }
+  .chip-tool:hover,
+  .chip-tool:focus-visible { transform: none !important; }
+}
+
+/* =============================================================================
+   REV 2 CHANGELOG — what changed and why
+   -----------------------------------------------------------------------------
+   1  Removed "Recoleta" from --font-display. It kept a commercial family in the
+      shipped stack and showed anyone with it installed a rendering no visitor
+      would ever get.
+   2  format("woff2-variations") -> format("woff2"). The former is skipped by
+      browsers that don't recognise it, silently falling back to Georgia.
+   3  font-variation-settings moved from the @font-face descriptor to :root.
+      Descriptor support is unreliable; where ignored, the Recoleta substitution
+      silently did not apply at all.
+   4  Font plan now ships ONE variable file with wght + opsz live (was: implied
+      static instances). wght 700 is required by --text-h3--font-weight; a single
+      opsz-72 instance would give hairline strokes to 16-22px headings.
+   5  Focus ring is now two-tone + forced-colors aware. The single-colour ring
+      failed 1.4.11 on indigo (1.96:1), aurora (1.20:1) and black (2.80:1).
+   6  height -> min-height on .btn-brutal and .tile-pastel (WCAG 1.4.12 / 1.4.4).
+   7  .aurora moved into @layer components — unlayered CSS outranks all layers
+      in Tailwind v4, so no utility could override it.
+   8  Added --color-ink-subtle-onice (#5C636E). #6B7280 on ice is 4.32:1, an AA
+      failure the on-white-only figure had hidden.
+   9  Documented that pastel tiles require violet-700; violet-500 on lavender is
+      4.41:1 and fails AA.
+  10  Added .nav-pill and the note that its white fill is load-bearing: black nav
+      text over the aurora core is 3.36:1.
+  11  Replaced the blanket reduced-motion reset with a scoped one that also
+      neutralises animation-timeline and removes the CTA translate.
+  12  Added scroll-padding-top for WCAG 2.2 SC 2.4.11 under the sticky header.
+  13  transition: all -> explicit property lists (avoids animating layout props).
+   ============================================================================= */

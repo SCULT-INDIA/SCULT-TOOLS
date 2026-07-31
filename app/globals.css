@@ -1,0 +1,701 @@
+/* =============================================================================
+   tools.scult.in — design tokens
+   Tailwind CSS v4 CSS-first configuration. There is no tailwind.config.js in v4.
+
+   Every value here is MEASURED from the reference design. Contrast figures are
+   computed, not estimated. See docs/PLAN.md §2 and docs/theme.css for the
+   annotated source of truth and the REV 2 changelog.
+   ============================================================================= */
+
+@import 'tailwindcss';
+
+@theme {
+  /* ---- BRAND: violet ramp. #7030F8 is the reference's most-used accent ------ */
+  --color-violet-50: #f4effe;
+  --color-violet-100: #ebe6fe;
+  --color-violet-400: #7959e7;
+  --color-violet-500: #7030f8; /* PRIMARY — 6.06:1 on white (AA) */
+  --color-violet-600: #631aff; /* nav hover/active — 6.73:1 (AA) */
+  --color-violet-700: #4b20de; /* REQUIRED on pastel tiles — 8.20:1 on white */
+  --color-violet-800: #4432e2; /* focus ring base — 7.50:1 on white ONLY */
+  --color-violet-900: #16018e; /* dark sections — 14.70:1 (AAA) */
+
+  /* ---- CTA: white text on these FAILS (1.61:1). Always pair with #000 ------ */
+  --color-cta: #fac44b;
+  --color-cta-pure: #ffd800;
+
+  /* ---- Pastel accents. All LIGHT — black text only ------------------------- */
+  --color-mint: #1ae39b; /* white-on-mint FAILS (1.68:1) */
+  --color-green: #23ca87;
+  --color-lime: #82f375;
+  --color-peach: #ffddc0;
+  --color-cyan: #3cf0ff;
+
+  /* Tile fills, verbatim from the reference service cards.
+     Accent text inside these MUST be violet-700: violet-500 on lavender is
+     4.41:1 and fails AA; violet-700 is 5.97:1 and passes on all four. */
+  --color-tile-yellow: #fff9d9;
+  --color-tile-blue: #cce0ff;
+  --color-tile-lavender: #dcd9f5;
+  --color-tile-green: #ceffcc;
+
+  /* ---- Surfaces ------------------------------------------------------------ */
+  --color-cream: #fcfbf3;
+  --color-offwhite: #fafafb;
+  --color-ice: #dff6ff;
+  --color-ice-2: #daf4ff;
+
+  /* ---- Ink + lines (contrast is vs WHITE unless noted) -------------------- */
+  --color-ink: #000000;
+  --color-ink-body: #161616; /* 18.10:1 */
+  --color-ink-muted: #333333; /* 12.63:1 */
+  --color-ink-subtle: #6b7280; /* 4.83:1 white · 4.32:1 ON ICE = FAIL */
+  --color-ink-subtle-onice: #5c636e; /* 5.42:1 ice · 6.06:1 white */
+  --color-line: #ece5f0; /* card border — 1.23:1, DECORATIVE ONLY */
+  --color-line-grey: #e6e6e6;
+
+  /* ---- Typography --------------------------------------------------------- */
+  --font-display: var(--font-fraunces), Georgia, 'Times New Roman', serif;
+  --font-sans: var(--font-cabin), ui-sans-serif, system-ui, sans-serif;
+  --font-marker: var(--font-marker-raw), cursive;
+
+  /* Measured scale. v4 pairs line-height/tracking/weight to the size. */
+  --text-hero: 70px;
+  --text-hero--line-height: 70px;
+  --text-hero--letter-spacing: -1px;
+  --text-hero--font-weight: 600;
+
+  --text-h2: 52px;
+  --text-h2--line-height: 56px;
+  --text-h2--letter-spacing: -1px;
+  --text-h2--font-weight: 600;
+
+  --text-h3: 30px;
+  --text-h3--line-height: 36px;
+  --text-h3--font-weight: 700;
+
+  --text-h4: 22px;
+  --text-h4--line-height: 33px;
+  --text-h4--font-weight: 600;
+
+  --text-lead: 24px;
+  --text-lead--line-height: 33.6px;
+
+  --text-body: 16px;
+  --text-body--line-height: 24px;
+
+  --text-nav: 18px;
+  --text-nav--line-height: 27px;
+  --text-nav--letter-spacing: 0.5px;
+  --text-nav--font-weight: 500;
+
+  --text-small: 14px;
+  --text-small--line-height: 18px;
+
+  /* ---- Radii: 10px is the reference default; 100px for pills -------------- */
+  --radius-card: 10px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-panel: 26px;
+  --radius-pill: 100px;
+
+  /* ---- Shadows: flat + hard-offset, not soft elevation -------------------- */
+  --shadow-brutal: 7px 7px 0 0 #000000;
+  --shadow-brutal-sm: 4px 4px 0 0 #000000;
+  --shadow-card: 0 4px 10px 0 rgb(0 0 0 / 0.08);
+  --shadow-card-raised: 0 10px 24px 0 rgb(0 0 0 / 0.12);
+  --shadow-glow: 0 0 30px 0 rgb(255 255 255 / 0.49);
+
+  /* ---- Soft-elevation shadows for the 2026 minimal landing-page surfaces.
+     Layered (a tight low-opacity shadow + a broad diffuse one) reads as soft
+     ambient light rather than a single hard drop-shadow — the calmer look the
+     rest of §"MODERN" below is built around. Tool pages keep --shadow-brutal;
+     these are additive, not a replacement. */
+  --shadow-xs: 0 1px 2px 0 rgb(23 23 23 / 0.04);
+  --shadow-sm: 0 1px 3px 0 rgb(23 23 23 / 0.06), 0 1px 2px -1px rgb(23 23 23 / 0.06);
+  --shadow-md:
+    0 4px 12px -2px rgb(23 23 23 / 0.06), 0 2px 6px -2px rgb(23 23 23 / 0.04);
+  --shadow-lg:
+    0 12px 32px -8px rgb(23 23 23 / 0.10), 0 4px 12px -4px rgb(23 23 23 / 0.06);
+  --shadow-violet-glow: 0 8px 30px -6px rgb(112 48 248 / 0.25);
+
+  /* ---- Layout: reference container is max-w-290 -> 1160px ---------------- */
+  --container-site: 1160px;
+
+  --ease-brand: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* =============================================================================
+   BASE
+   ============================================================================= */
+@layer base {
+  html {
+    /* Ships the whole site at what a visitor pressing Ctrl/Cmd "+" once in
+       Chrome/Edge/Firefox/Safari would land on — a deliberate, requested
+       default rather than something to "fix" later.
+
+       `zoom` (not `transform: scale`) because it reflows layout instead of
+       stretching a fixed-size box: every `px`/`rem` value, every media query,
+       and every `position: fixed`/`sticky` element resolves against the
+       zoomed size, which is exactly how real browser zoom behaves and is why
+       nothing else on this page had to change to accommodate it. `transform`
+       would not reflow, would need manual width compensation, and would turn
+       every `position: fixed` element into a child of a new containing block
+       with its own scaled coordinate space — the sticky header specifically
+       would misbehave.
+
+       The real trade-off, worth stating rather than hiding: a user's browser
+       chrome now reports "100%" while the page already looks like 110%, so a
+       visitor deliberately zooming further starts from an unfamiliar
+       baseline, and it eats into whatever margin a smaller laptop screen had
+       before wrapping. Verified in the browser at 1280/1366/1440/1920 and at
+       375 (mobile): no new horizontal overflow and Tailwind's responsive
+       classes still switch at their real `px` breakpoints, because `zoom`
+       does not change what `window.innerWidth`/media queries see — only how
+       big the result of evaluating them is drawn. */
+    zoom: 1.1;
+  }
+
+  :root {
+    /* SOFT/WONK are set here, never as an @font-face descriptor — descriptor
+       support is unreliable, and where ignored the Recoleta substitution fails
+       silently with no error. This is what pulls Fraunces toward Recoleta's
+       soft 1970s serifs. */
+    font-variation-settings: 'SOFT' 100, 'WONK' 1;
+    /* Sticky header + WCAG 2.2 SC 2.4.11 Focus Not Obscured. */
+    scroll-padding-top: 7rem;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 24px;
+    color: var(--color-ink-body);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    color: var(--color-ink);
+    font-weight: 600;
+    font-optical-sizing: auto; /* keep opsz live from 70px down to 16px */
+  }
+
+  /* FOCUS — two-tone by necessity. A single #4432E2 ring is 1.96:1 on the
+     indigo footer, 1.20:1 on the aurora core and 2.80:1 on black: a 1.4.11
+     failure on every dark surface here. White is 14.70:1 on indigo, so the
+     PAIR clears 3:1 anywhere. */
+  :focus-visible {
+    outline: 3px solid var(--color-violet-800);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px #ffffff;
+    border-radius: 2px;
+  }
+
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline: 3px solid Highlight;
+      box-shadow: none;
+    }
+  }
+
+  ::selection {
+    background: var(--color-violet-100);
+    color: var(--color-violet-900);
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+}
+
+/* =============================================================================
+   COMPONENTS
+   ============================================================================= */
+@layer components {
+  .container-site {
+    width: 100%;
+    max-width: var(--container-site);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  /* The neo-brutalist CTA — the signature component.
+     min-height not height: a fixed 52px box around 18px text fails WCAG 1.4.12
+     Text Spacing at line-height 1.5. 11px block padding + 27px line-height +
+     2px borders = 51px, so min-height lands the default render on exactly 52px,
+     matching the reference, while still allowing growth. */
+  .btn-brutal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 52px;
+    padding: 11px 30px;
+    font-family: var(--font-sans);
+    font-size: 18px;
+    line-height: 27px;
+    font-weight: 400;
+    color: var(--color-ink);
+    background: var(--color-cta);
+    border: 1px solid var(--color-ink); /* REQUIRED for WCAG 1.4.11 */
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-brutal);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color 200ms var(--ease-brand),
+      box-shadow 200ms var(--ease-brand),
+      transform 200ms var(--ease-brand);
+  }
+  .btn-brutal:hover {
+    background: #fff;
+    box-shadow: none;
+    transform: translate(7px, 7px);
+  }
+  .btn-brutal:active {
+    transform: translate(7px, 7px) scale(0.99);
+  }
+  .btn-brutal:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: var(--shadow-brutal-sm);
+  }
+
+  .btn-brutal-sm {
+    /* 44px, not 42: this is a primary action on touch devices and 42 sat just
+       under the 44px target-size bar the tool pages are held to. The 2px is
+       imperceptible against the reference design and removes the exception. */
+    min-height: 44px;
+    padding: 7px 22px;
+    font-size: 16px;
+    line-height: 24px;
+    box-shadow: var(--shadow-brutal-sm);
+  }
+  .btn-brutal-sm:hover {
+    transform: translate(4px, 4px);
+  }
+  .btn-brutal-sm:active {
+    transform: translate(4px, 4px) scale(0.99);
+  }
+
+  .btn-violet {
+    background: var(--color-violet-700);
+    color: #fff;
+  }
+  .btn-violet:hover {
+    background: #fff;
+    color: var(--color-ink);
+  }
+
+  .btn-white {
+    background: #fff;
+  }
+  .btn-white:hover {
+    background: var(--color-cta);
+  }
+
+  /* Tool chip — the tools-directory workhorse, from the reference's
+     capability-chip grid. */
+  .chip-tool {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    text-decoration: none;
+    color: var(--color-ink);
+    transition:
+      border-color 180ms var(--ease-brand),
+      box-shadow 180ms var(--ease-brand),
+      transform 180ms var(--ease-brand);
+  }
+  /* Hover/focus introduces a >=3:1 boundary — #ECE5F0 alone is 1.23:1, which is
+     fine for a static card but not for an interactive control. */
+  .chip-tool:hover,
+  .chip-tool:focus-visible {
+    border-color: var(--color-ink);
+    box-shadow: var(--shadow-brutal-sm);
+    transform: translate(-2px, -2px);
+  }
+
+  .card-flat {
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+  }
+
+  /* Pastel tile with the thick white frame. */
+  .tile-pastel {
+    min-height: 200px;
+    padding: 20px;
+    border: 10px solid #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* AURORA — the halo behind the floating nav pill, from the reference.
+
+     Geometry is tuned to the header's clipped box. The wrapper is
+     overflow-hidden (that clip is what stops a sticky gradient painting over
+     scrolled content), which means anything offset above the wrapper is thrown
+     away — so a large negative `top` silently discards the gradient's bright
+     core and leaves only faint edges. Instead the box is sized to END where the
+     wrapper ends (-20px + 170px ≈ the wrapper's 147px), putting the core just
+     below the pill where the reference has its brightest band, and the mask
+     feathers the last stretch so the cut is never visible.
+
+     MUST stay inside @layer components: unlayered CSS in Tailwind v4 outranks
+     every @layer including utilities, so an unlayered .aurora could not be
+     overridden by any utility class. */
+  .aurora {
+    -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
+    position: absolute;
+    inset-inline: 0;
+    top: -20px;
+    height: 170px;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      farthest-side at 50% 55%,
+      rgba(228, 147, 201, 0.99),
+      rgb(128, 0, 255) 45%,
+      rgba(0, 30, 255, 0.68) 64%,
+      rgba(255, 255, 255, 0)
+    );
+  }
+
+  /* The nav pill's WHITE FILL IS LOAD-BEARING: black 18px/500 nav text is
+     3.36:1 over the aurora core, an AA failure. Never make this transparent. */
+  .nav-pill {
+    background: #fff;
+    border-radius: var(--radius-panel);
+  }
+
+  /* Homepage hero — the hub-and-spoke category illustration.
+     Transform-only, no shadow pulsing: the site's shadow language is a hard,
+     unblurred offset (--shadow-brutal), and animating a soft halo alongside it
+     would fight that language. Both run on an INNER span rather than the
+     outer <Link> — see the comment in Hero.tsx for why: a running animation
+     wins the `transform` property outright, so a hover:scale on the same
+     element it runs on would never be visible. */
+  @keyframes hub-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.06);
+    }
+  }
+
+  @keyframes card-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  .eyebrow {
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-violet-500);
+  }
+
+  .field {
+    width: 100%;
+    padding: 11px 14px;
+    background: #fff;
+    border: 1px solid var(--color-line-grey);
+    border-radius: var(--radius-sm);
+    font-size: 16px; /* 16px prevents iOS zoom-on-focus */
+    line-height: 24px;
+    transition: border-color 150ms var(--ease-brand);
+  }
+  .field:hover {
+    border-color: #b9b9b9;
+  }
+  .field:focus {
+    border-color: var(--color-violet-700);
+    outline: none;
+  }
+  .field:focus-visible {
+    outline: 3px solid var(--color-violet-800);
+    outline-offset: 1px;
+  }
+
+  .label {
+    display: block;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 700;
+    color: var(--color-ink);
+    margin-bottom: 6px;
+  }
+
+  .hint {
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--color-ink-subtle);
+  }
+
+  /* Skip link — visible on focus only. */
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 200;
+  }
+  .skip-link:focus {
+    left: 1rem;
+    top: 1rem;
+    padding: 12px 20px;
+    background: var(--color-cta);
+    border: 1px solid #000;
+    border-radius: var(--radius-pill);
+  }
+
+  /* ===========================================================================
+     MODERN / MINIMAL — 2026 landing-page primitives.
+
+     Additive, not a replacement: tool pages (ToolShell, ResultPanel, the
+     directory grid) keep the neo-brutalist hard-shadow language above
+     unchanged. These are a second, calmer register reserved for the home page
+     — soft layered shadows instead of hard offsets, a single restrained
+     accent instead of a five-colour pastel set, generous whitespace, subtle
+     glass surfaces. "Calm and legible beats busy and flashy" (2026 UX
+     baseline) — motion and colour earn their place by aiding understanding.
+     =========================================================================== */
+
+  /* Primary action — solid, quiet, a soft violet glow rather than a hard
+     black offset. Lifts 2px on hover instead of translating into a shadow. */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 48px;
+    padding: 12px 26px;
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--color-violet-700);
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      transform 200ms var(--ease-out),
+      box-shadow 200ms var(--ease-out),
+      background-color 200ms var(--ease-out);
+  }
+  .btn-primary:hover {
+    background: var(--color-violet-600);
+    box-shadow: var(--shadow-violet-glow);
+    transform: translateY(-2px);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Secondary action — quiet outline, fills subtly on hover. */
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 48px;
+    padding: 12px 26px;
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-ink-body);
+    background: #fff;
+    border: 1px solid var(--color-line-grey);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-xs);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      border-color 200ms var(--ease-out),
+      box-shadow 200ms var(--ease-out),
+      transform 200ms var(--ease-out);
+  }
+  .btn-secondary:hover {
+    border-color: var(--color-violet-700);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+  }
+
+  /* Soft elevated card — the calm alternative to .card-flat / .chip-tool for
+     the landing page. Subtle border, layered shadow, gentle lift on hover. */
+  .card-modern {
+    background: #fff;
+    border: 1px solid rgb(23 23 23 / 0.06);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
+    transition:
+      box-shadow 250ms var(--ease-out),
+      transform 250ms var(--ease-out),
+      border-color 250ms var(--ease-out);
+  }
+  .card-modern:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: rgb(23 23 23 / 0.1);
+    transform: translateY(-3px);
+  }
+
+  /* Frosted glass surface — sticky header, floating panels. Falls back to a
+     solid surface where backdrop-filter is unsupported (older WebViews). */
+  .glass {
+    background: rgb(255 255 255 / 0.72);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    backdrop-filter: blur(16px) saturate(1.4);
+    border: 1px solid rgb(23 23 23 / 0.06);
+  }
+  @supports not ((backdrop-filter: blur(1px))) {
+    .glass {
+      background: rgb(255 255 255 / 0.96);
+    }
+  }
+
+  /* Ambient mesh backdrop for the hero: soft, low-opacity, out-of-focus colour
+     fields rather than the reference's saturated hard aurora — the 2026-calm
+     take on the same "colour behind the fold" idea. Decorative only. */
+  .mesh {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .mesh::before,
+  .mesh::after {
+    content: '';
+    position: absolute;
+    width: 560px;
+    height: 560px;
+    border-radius: 999px;
+    filter: blur(110px);
+    opacity: 0.35;
+  }
+  .mesh::before {
+    top: -220px;
+    left: 50%;
+    translate: -60% 0;
+    background: var(--color-violet-500);
+  }
+  .mesh::after {
+    top: -160px;
+    left: 50%;
+    translate: 10% 0;
+    background: var(--color-cta);
+    opacity: 0.22;
+  }
+
+  /* Gradient accent word for headlines — used sparingly, one word per page. */
+  .text-accent-gradient {
+    background: linear-gradient(
+      100deg,
+      var(--color-violet-600) 10%,
+      var(--color-violet-500) 50%,
+      var(--color-violet-400) 90%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  /* Numeric stat display — tabular figures, tight tracking. */
+  .stat-figure {
+    font-family: var(--font-display);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* =============================================================================
+   UTILITIES
+   ============================================================================= */
+@utility marquee-mask {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+}
+
+/* =============================================================================
+   REDUCED MOTION — scoped, not a blanket reset.
+
+   A global duration reset does three wrong things: it cannot touch scroll-driven
+   animations (progress is timeline-driven, not duration-driven), it converts the
+   CTA's translate(7px,7px) press into a 7px teleport, and it cannot be undone by
+   any later rule. So: kill decorative motion, detach scroll timelines, and
+   express interactive state without movement.
+   ============================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-timeline: none !important;
+  }
+
+  .aurora,
+  [data-decorative-motion] {
+    animation: none !important;
+  }
+
+  .btn-brutal {
+    transition:
+      background-color 200ms var(--ease-brand),
+      box-shadow 200ms var(--ease-brand);
+  }
+  .btn-brutal:hover,
+  .btn-brutal:active,
+  .btn-brutal-sm:hover,
+  .btn-brutal-sm:active {
+    transform: none !important;
+    box-shadow: var(--shadow-brutal-sm);
+  }
+  .chip-tool:hover,
+  .chip-tool:focus-visible {
+    transform: none !important;
+  }
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .card-modern:hover {
+    transform: none !important;
+  }
+}

@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Biome replaces ESLint + Prettier. `next lint` was REMOVED in Next 16 and
+      # `next build` no longer lints, so this step is the only linting gate.
+      - name: Lint + format check
+        run: npx biome ci .
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      # Includes registry integrity: slug collisions, orphaned tools, dangling
+      # `related` references and missing components all fail the build here.
+      - name: Unit tests
+        run: npx vitest run
+
+      - name: Build
+        run: npx next build
+
+      # Fails on a known-critical CVE rather than merely reporting it.
+      - name: Dependency audit
+        run: npm audit --audit-level=high

@@ -1,0 +1,518 @@
+<!--
+  Scult Tools (tools.scult.in) — Hero Section Design v1
+  Built strictly from the codebase brand system (app/globals.css + docs/theme.css):
+    Fraunces display (SOFT 100 / WONK 1) · Cabin body · violet ramp #7030F8/#4B20DE
+    yellow CTA #FAC44B (black text + 1px black border, brutal 7px shadow)
+    pastel tiles · aurora halo behind white nav pill · eyebrow style
+  Author: Pranjul Rathour | Designation: GenAI Engineer | NEXT UPGRAD WEB SOLUTIONS
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scult Tools — Free tools that do the boring work for you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;500;700&family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..700,100,1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* ==== tokens lifted verbatim from app/globals.css ==== */
+    --color-violet-100: #ebe6fe;
+    --color-violet-400: #7959e7;
+    --color-violet-500: #7030f8;
+    --color-violet-600: #631aff;
+    --color-violet-700: #4b20de;
+    --color-violet-900: #16018e;
+    --color-cta: #fac44b;
+    --color-tile-yellow: #fff9d9;
+    --color-tile-blue: #cce0ff;
+    --color-tile-lavender: #dcd9f5;
+    --color-tile-green: #ceffcc;
+    --color-cream: #fcfbf3;
+    --color-ice: #dff6ff;
+    --color-ink: #000000;
+    --color-ink-body: #161616;
+    --color-ink-muted: #333333;
+    --color-line: #ece5f0;
+    --color-line-grey: #e6e6e6;
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-sans: 'Cabin', ui-sans-serif, system-ui, sans-serif;
+    --radius-card: 10px;
+    --radius-lg: 20px;
+    --radius-panel: 26px;
+    --radius-pill: 100px;
+    --shadow-brutal: 7px 7px 0 0 #000000;
+    --shadow-brutal-sm: 4px 4px 0 0 #000000;
+    --shadow-glow: 0 0 30px 0 rgb(255 255 255 / 0.49);
+    --container-site: 1160px;
+    --ease-brand: cubic-bezier(0.4, 0, 0.2, 1);
+    font-variation-settings: 'SOFT' 100, 'WONK' 1;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--color-ink-body);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container-site {
+    width: 100%;
+    max-width: var(--container-site);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  :focus-visible {
+    outline: 3px solid #4432e2;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px #ffffff;
+    border-radius: 2px;
+  }
+
+  /* ================= HEADER — aurora halo behind the white nav pill ========= */
+  .header-wrap {
+    position: relative;
+    overflow: hidden;
+    padding: 22px 0 30px;
+  }
+
+  .aurora {
+    -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
+    position: absolute;
+    inset-inline: 0;
+    top: -20px;
+    height: 170px;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      farthest-side at 50% 55%,
+      rgba(228, 147, 201, 0.99),
+      rgb(128, 0, 255) 45%,
+      rgba(0, 30, 255, 0.68) 64%,
+      rgba(255, 255, 255, 0)
+    );
+  }
+
+  /* white fill is load-bearing: nav text over the aurora core fails AA */
+  .nav-pill {
+    position: relative;
+    z-index: 1;
+    background: #fff;
+    border-radius: var(--radius-panel);
+    border: 1px solid var(--color-line);
+    box-shadow: 0 4px 10px 0 rgb(0 0 0 / 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 14px 26px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+  }
+
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-card);
+    background: var(--color-violet-700);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 18px;
+    line-height: 27px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+    color: var(--color-ink);
+    text-decoration: none;
+    transition: color 200ms var(--ease-brand);
+  }
+  .nav-links a:hover { color: var(--color-violet-600); }
+
+  /* ================= Brutal buttons — the signature component =============== */
+  .btn-brutal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 52px;
+    padding: 11px 30px;
+    font-family: var(--font-sans);
+    font-size: 18px;
+    line-height: 27px;
+    font-weight: 400;
+    color: var(--color-ink);
+    background: var(--color-cta);
+    border: 1px solid var(--color-ink);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-brutal);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color 200ms var(--ease-brand),
+      box-shadow 200ms var(--ease-brand),
+      transform 200ms var(--ease-brand);
+  }
+  .btn-brutal:hover {
+    background: #fff;
+    box-shadow: none;
+    transform: translate(7px, 7px);
+  }
+  .btn-brutal:active { transform: translate(7px, 7px) scale(0.99); }
+
+  .btn-brutal-sm {
+    min-height: 44px;
+    padding: 7px 22px;
+    font-size: 16px;
+    line-height: 24px;
+    box-shadow: var(--shadow-brutal-sm);
+  }
+  .btn-brutal-sm:hover { transform: translate(4px, 4px); }
+
+  .btn-white { background: #fff; }
+  .btn-white:hover { background: var(--color-cta); }
+
+  /* ================= HERO ==================================================== */
+  .hero {
+    text-align: center;
+    padding: 40px 0 0;
+    position: relative;
+  }
+
+  .eyebrow {
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-violet-500);
+    animation: rise 0.7s ease both;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--color-ink);
+    font-optical-sizing: auto;
+    font-size: clamp(40px, 6vw, 70px);
+    line-height: 1;
+    letter-spacing: -1px;
+    max-width: 17ch;
+    margin: 18px auto 0;
+    animation: rise 0.7s 0.08s ease both;
+  }
+
+  /* gradient accent — one word per page, per the design system */
+  .text-accent-gradient {
+    background: linear-gradient(
+      100deg,
+      var(--color-violet-600) 10%,
+      var(--color-violet-500) 50%,
+      var(--color-violet-400) 90%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .lead {
+    font-size: clamp(17px, 2vw, 24px);
+    line-height: 1.4;
+    color: var(--color-ink-muted);
+    max-width: 52ch;
+    margin: 24px auto 0;
+    animation: rise 0.7s 0.16s ease both;
+  }
+
+  .cta-row {
+    display: flex;
+    gap: 22px;
+    justify-content: center;
+    margin-top: 36px;
+    flex-wrap: wrap;
+    animation: rise 0.7s 0.24s ease both;
+  }
+
+  .assurance {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px 26px;
+    margin-top: 30px;
+    list-style: none;
+    animation: rise 0.7s 0.3s ease both;
+  }
+
+  .assurance li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    color: var(--color-ink);
+  }
+  .assurance svg { flex-shrink: 0; }
+
+  /* ================= HUB STAGE — tools radiating from the Scult mark ======== */
+  .hub-stage {
+    position: relative;
+    height: 400px;
+    margin-top: 18px;
+  }
+
+  .lines-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .lines-svg path {
+    stroke: var(--color-violet-400);
+    opacity: 0.38;
+    stroke-width: 1.2;
+    fill: none;
+    stroke-dasharray: 900;
+    stroke-dashoffset: 900;
+    animation: draw 2s 0.35s var(--ease-brand) forwards;
+  }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  .hub {
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    transform: translate(-50%, -50%);
+    width: 96px;
+    height: 96px;
+    border-radius: var(--radius-lg);
+    background: var(--color-violet-700);
+    border: 1px solid var(--color-ink);
+    box-shadow: var(--shadow-brutal);
+    display: grid;
+    place-items: center;
+    z-index: 3;
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  /* pastel tool tiles — thick white frame + glow, from .tile-pastel */
+  .tool-tile {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+    width: 148px;
+    min-height: 108px;
+    padding: 14px;
+    border: 8px solid #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-glow), 0 10px 24px 0 rgb(0 0 0 / 0.12);
+    text-decoration: none;
+    animation: floaty 5.5s ease-in-out infinite;
+    transition: transform 200ms var(--ease-brand);
+  }
+  .tool-tile:hover { transform: scale(1.06); }
+
+  .tool-tile svg { width: 26px; height: 26px; color: var(--color-violet-700); }
+
+  .tool-tile .t-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--color-ink);
+    line-height: 1.2;
+  }
+
+  @keyframes floaty {
+    0%, 100% { translate: 0 0; }
+    50%      { translate: 0 -9px; }
+  }
+
+  .tt-1 { left: 6%;   top: 10%;  background: var(--color-tile-yellow);   animation-delay: 0s; }
+  .tt-2 { left: 16%;  top: 56%;  background: var(--color-tile-blue);     animation-delay: 0.8s; }
+  .tt-3 { left: 2%;   top: 72%;  background: var(--color-tile-lavender); animation-delay: 1.5s; }
+  .tt-4 { right: 6%;  top: 10%;  background: var(--color-tile-green);    animation-delay: 0.4s; }
+  .tt-5 { right: 16%; top: 56%;  background: var(--color-tile-lavender); animation-delay: 1.2s; }
+  .tt-6 { right: 2%;  top: 72%;  background: var(--color-tile-blue);     animation-delay: 1.9s; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ================= Responsive ============================================= */
+  @media (max-width: 1023px) {
+    .nav-links { display: none; }
+  }
+
+  @media (max-width: 860px) {
+    .hub-stage { height: 330px; }
+    .tool-tile { width: 108px; min-height: 88px; padding: 10px; border-width: 6px; }
+    .tool-tile .t-name { font-size: 13px; }
+    .tool-tile svg { width: 20px; height: 20px; }
+    .hub { width: 72px; height: 72px; font-size: 32px; }
+    .cta-row { flex-direction: column; align-items: center; }
+  }
+
+  /* ================= Reduced motion — scoped, per the design system ========= */
+  @media (prefers-reduced-motion: reduce) {
+    .eyebrow, h1, .lead, .cta-row, .assurance { animation: none; }
+    .tool-tile { animation: none; }
+    .lines-svg path { animation: none; stroke-dashoffset: 0; }
+    .btn-brutal { transition: background-color 200ms var(--ease-brand), box-shadow 200ms var(--ease-brand); }
+    .btn-brutal:hover, .btn-brutal:active {
+      transform: none !important;
+      box-shadow: var(--shadow-brutal-sm);
+    }
+    .tool-tile:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== HEADER: aurora + white nav pill ==================== -->
+<header class="header-wrap">
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="container-site">
+    <nav class="nav-pill" aria-label="Main">
+      <a class="brand" href="#">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        Scult Tools
+      </a>
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">SEO</a></li>
+        <li><a href="#">Developer</a></li>
+        <li><a href="#">Business</a></li>
+        <li><a href="#">AI Visibility</a></li>
+      </ul>
+      <a href="#" class="btn-brutal btn-brutal-sm">ALL 15 TOOLS</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ==================== HERO ==================== -->
+<main>
+  <section class="hero container-site" aria-labelledby="hero-title">
+
+    <p class="eyebrow">15 tools · 6 categories · zero signups</p>
+
+    <h1 id="hero-title">Free tools that do the <span class="text-accent-gradient">boring</span> work for you</h1>
+
+    <p class="lead">
+      SEO, business paperwork, developer utilities, writing, design and AI
+      visibility — built by a working agency, running right in your browser.
+    </p>
+
+    <div class="cta-row">
+      <a href="#" class="btn-brutal">EXPLORE ALL 15 TOOLS</a>
+      <a href="#" class="btn-brutal btn-white">CHECK AI VISIBILITY</a>
+    </div>
+
+    <ul class="assurance">
+      <li>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="#23ca87" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Free, no trial clock
+      </li>
+      <li>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="#23ca87" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        No account to create
+      </li>
+      <li>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="#23ca87" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Files never leave your browser
+      </li>
+    </ul>
+
+    <!-- ============ HUB: categories radiating from the Scult mark ============ -->
+    <div class="hub-stage" aria-hidden="true">
+
+      <svg class="lines-svg" viewBox="0 0 1160 400" preserveAspectRatio="none">
+        <!-- left fan -->
+        <path d="M0 50  C 280 70,  440 160, 580 182"/>
+        <path d="M0 105 C 280 112, 440 168, 580 184"/>
+        <path d="M0 160 C 280 162, 440 176, 580 186"/>
+        <path d="M0 215 C 280 212, 440 186, 580 188"/>
+        <path d="M0 270 C 280 262, 440 198, 580 190"/>
+        <path d="M0 325 C 280 310, 440 210, 580 192"/>
+        <!-- right fan -->
+        <path d="M1160 50  C 880 70,  720 160, 580 182"/>
+        <path d="M1160 105 C 880 112, 720 168, 580 184"/>
+        <path d="M1160 160 C 880 162, 720 176, 580 186"/>
+        <path d="M1160 215 C 880 212, 720 186, 580 188"/>
+        <path d="M1160 270 C 880 262, 720 198, 580 190"/>
+        <path d="M1160 325 C 880 310, 720 210, 580 192"/>
+      </svg>
+
+      <div class="hub">S</div>
+
+      <!-- SEO -->
+      <div class="tool-tile tt-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <span class="t-name">SEO</span>
+      </div>
+      <!-- Business -->
+      <div class="tool-tile tt-2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+        <span class="t-name">Business</span>
+      </div>
+      <!-- Developer -->
+      <div class="tool-tile tt-3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+        <span class="t-name">Developer</span>
+      </div>
+      <!-- Writing -->
+      <div class="tool-tile tt-4">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        <span class="t-name">Writing</span>
+      </div>
+      <!-- Design -->
+      <div class="tool-tile tt-5">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="0.5" fill="currentColor"/><circle cx="17.5" cy="10.5" r="0.5" fill="currentColor"/><circle cx="8.5" cy="7.5" r="0.5" fill="currentColor"/><circle cx="6.5" cy="12.5" r="0.5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.78-.68 1.78-1.72 0-.44-.18-.84-.45-1.13-.27-.28-.45-.68-.45-1.12a1.78 1.78 0 011.78-1.78h2.12A5.22 5.22 0 0022 11.06C21.94 6.05 17.5 2 12 2z"/></svg>
+        <span class="t-name">Design</span>
+      </div>
+      <!-- AI Visibility -->
+      <div class="tool-tile tt-6">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.07 4.93A10 10 0 006.99 3.34M4 6h.01M2.29 9.62a10 10 0 1019.02-1.27M16.24 7.76a6 6 0 10-8.01 8.91M12 18h.01M17.99 11.66a6 6 0 01-2.22 4.75M12 12h.01"/></svg>
+        <span class="t-name">AI Visibility</span>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+</body>
+</html>
