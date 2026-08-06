@@ -7,6 +7,7 @@ import scultLogo from '@/public/brand/scult-tools-blue.png'
 import { AllToolsLink } from './AllToolsLink'
 import { AnnouncementBar } from './AnnouncementBar'
 import { CategoryMenu } from './CategoryMenu'
+import { GitHubStarButton } from './GitHubStarButton'
 import { MobileDrawer } from './MobileDrawer'
 import { SearchBox } from './SearchBox'
 
@@ -83,6 +84,12 @@ export function Header() {
             </div>
 
             <div className="flex items-center gap-2">
+              {/* lg-only: the star count is a nice-to-have, and every
+                  breakpoint below this is already tight with search + the
+                  primary CTA + the drawer trigger. */}
+              <div className="hidden lg:block">
+                <GitHubStarButton />
+              </div>
               <ThemeToggle />
               {/* Renamed from "TOOLS": at this breakpoint the main <nav>
                   (Tools dropdown + "All tools") is hidden, so this button IS
