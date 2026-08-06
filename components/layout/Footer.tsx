@@ -1,10 +1,10 @@
 import { Heart, ShieldCheck, Sparkles } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import scultMark from '@/app/icon.png'
 import { parentLink, SITE } from '@/lib/site'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { getToolsByCategory, TOOLS } from '@/lib/tools/registry'
+import scultLogo from '@/public/brand/scult-tools-white.png'
 import { LiveUptime } from './LiveUptime'
 
 /**
@@ -162,13 +162,8 @@ export function Footer() {
         {/* 3. Credibility bar */}
         <div className="container-site grid items-center gap-8 py-14 md:grid-cols-3">
           <div className="text-center md:text-left">
-            {/* Same PNG as the Header's mark and the browser-tab favicon — one
-                asset. The mark's white disc reads as a small badge against
-                violet-900, which is the intended shape rather than a stray box:
-                verified transparent outside the disc (corner alpha 0). */}
-            <p className="inline-flex items-center justify-center gap-2.5 font-display font-bold text-[38px] text-white leading-none md:justify-start">
-              <Image src={scultMark} alt="" width={40} height={40} className="size-9" />
-              Scult<span className="text-cta">Tools</span>
+            <p className="flex items-center justify-center md:justify-start">
+              <Image src={scultLogo} alt="SCULT Tools" className="h-9 w-auto md:h-10" />
             </p>
             <p className="mt-3 text-[14px] text-white/70">
               {clientSideCount} of {TOOLS.length} tools run entirely in your browser.

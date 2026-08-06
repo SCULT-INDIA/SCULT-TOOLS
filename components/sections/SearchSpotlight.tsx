@@ -27,19 +27,24 @@ export function SearchSpotlight() {
             Search by name or by what you're trying to do — "compress", "invoice",
             "schema" all work. Results appear before you finish typing.
           </p>
-          <p className="mt-3 text-[15px] text-violet-700">
+          {/* text-ink-muted, not text-violet-700: violet-700 is unchanged
+              across themes and measures ~2.14:1 on dark-mode `bg-ice`
+              (#1c123a), an AA failure for 15px text. ink-muted is the
+              token-backed swap already used one line up, so this line keeps
+              reading as secondary copy in both themes. */}
+          <p className="mt-3 text-[15px] text-ink-muted">
             Every tool is reachable in two clicks from any page on the site.
           </p>
         </div>
 
         {/* Browser-chrome frame around a real, working SearchBox — not a static
             screenshot. */}
-        <div className="overflow-hidden rounded-panel border border-line bg-white shadow-card-raised">
+        <div className="overflow-hidden rounded-panel border border-line bg-cream shadow-card-raised">
           <div className="flex items-center gap-1.5 border-line border-b bg-offwhite px-4 py-3">
             <span className="size-2.5 rounded-full bg-line-grey" />
             <span className="size-2.5 rounded-full bg-line-grey" />
             <span className="size-2.5 rounded-full bg-line-grey" />
-            <span className="ml-3 flex items-center gap-1.5 rounded-sm bg-white px-3 py-1 text-[12px] text-ink-subtle">
+            <span className="ml-3 flex items-center gap-1.5 rounded-sm bg-cream px-3 py-1 text-[12px] text-ink-subtle">
               <Search className="size-3" aria-hidden="true" />
               tools.scult.in
             </span>

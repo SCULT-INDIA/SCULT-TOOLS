@@ -20,7 +20,8 @@ export const meta: Tool = {
   runtime: 'client',
   monthlyCostCeiling: 0,
   leadTier: 'C',
-  serviceTarget: 'branding',
+  // 'branding' 404s on scult.in — 'branding-agency' is the real page.
+  serviceTarget: 'branding-agency',
   updatedAt: '2026-07-29',
   owner: 'scult-business',
   icon: 'Mail',
@@ -32,11 +33,10 @@ export const meta: Tool = {
     'Click Copy signature, then paste it into your email settings using the Gmail or Outlook steps under the preview.',
   ],
   howItWorks:
-    'Email clients render HTML like it is 1999, so this generator deliberately writes 1999-era markup: nested tables, every style declared inline, absolute pixel sizes, and an Arial/Helvetica font stack. Desktop Outlook renders messages with Microsoft Word’s engine, which ignores flexbox, grid and most modern CSS; Gmail strips <style> blocks entirely and keeps only inline styles. A signature built with div-and-class markup shatters in one client or the other — table markup survives both. The Copy signature button writes the markup to your clipboard as a text/html ClipboardItem with a plain-text fallback, which is why pasting into Gmail or Outlook’s signature editor keeps the formatting instead of dumping raw code. Every value you type is HTML-escaped before it enters the markup, phone numbers become dialable tel: links with spaces stripped, and a URL missing its protocol gets https:// added and flagged.',
+    'Desktop Outlook renders with Microsoft Word’s engine, which ignores flexbox and grid; Gmail strips <style> blocks. So this generator writes nested-table markup with every style inline — the format both render faithfully. It copies to your clipboard as a text/html ClipboardItem, so pasting keeps formatting, not raw code.',
   limitations: [
-    'Your photo or logo must already be hosted at a public https URL — this tool runs entirely in your browser and does not upload or host image files. If that URL ever dies, the image vanishes from every email you have sent.',
-    'Many clients block remote images by default (desktop Outlook and most corporate setups), so recipients may see your signature without the photo until they click to download pictures. Never put essential contact details inside an image.',
-    'Dark-mode email clients may invert or recolour parts of the signature. Test in the clients your contacts actually use before rolling it out company-wide.',
+    'Photo and logo URLs must already be publicly hosted — this tool does not upload or store images.',
+    'Many clients block remote images by default, so recipients may not see your photo until they choose to load it.',
   ],
   faq: [
     {

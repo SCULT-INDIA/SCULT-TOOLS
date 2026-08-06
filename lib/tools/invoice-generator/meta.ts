@@ -39,11 +39,10 @@ export const meta: Tool = {
     'Come back any time — the draft autosaves to this browser, so nothing is lost.',
   ],
   howItWorks:
-    'Every amount is handled in integer minor units (paise, cents) rather than floating-point rupees: each line’s quantity × rate is rounded once to the nearest paisa, the subtotal is an exact integer sum of those rounded lines, and the discount and tax are each rounded exactly once more. That is what guarantees the printed columns always reconcile — subtotal − discount + tax equals the total to the last paisa, which is not true of tools that round a floating-point chain at the end. The discount is applied before tax, matching how GST and VAT treat a trade discount shown on the invoice: tax is charged on the discounted taxable value, not the gross. Export is deliberately your browser’s own Print → Save as PDF rather than a server-generated file: a print stylesheet isolates the A4 sheet from the rest of the page, so the invoice never leaves your machine — no upload, no account, no watermark.',
+    'Amounts are computed in integer minor units, not floating-point: each line total is rounded once, and discount and tax are rounded once more, so subtotal minus discount plus tax reconciles exactly. Discount applies before tax, matching GST/VAT rules. Export is your browser’s Print to PDF; nothing is uploaded.',
   limitations: [
-    'This produces a professional invoice document, not a GST-compliant e-invoice — it does not register anything on the GST portal or generate an IRN and signed QR code, which businesses above the e-invoicing turnover threshold must obtain through the Invoice Registration Portal.',
-    'It keeps no client records, ledgers or invoice sequences beyond the single autosaved draft in your browser — it is a document generator, not accounting software.',
-    'The PDF comes from your browser’s print engine, so exact margins depend on the print dialog; turn off “Headers and footers” there for a clean sheet.',
+    'It generates a standard invoice document, not a GST e-invoice — no IRN or signed QR code from the government portal.',
+    'It has no client database or invoice ledger beyond the single autosaved draft in your browser.',
   ],
   faq: [
     {

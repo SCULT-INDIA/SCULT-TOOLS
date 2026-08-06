@@ -50,6 +50,8 @@ export interface JsonResult {
   /** The source line the error sits on, windowed if it is very long. */
   readonly errorSnippet?: string
   readonly stats?: JsonStats
+  /** Only set by {@link repairJson} — true when the input needed fixing up. */
+  readonly repaired?: boolean
 }
 
 /** Past this, formatting in the main thread would visibly hang the tab. */
@@ -323,4 +325,411 @@ export function formatBytes(bytes: number): string {
   const kb = bytes / 1024
   if (kb < 1024) return `${kb.toFixed(kb < 10 ? 2 : 1)} KB`
   return `${(kb / 1024).toFixed(2)} MB`
+}
+
+/**
+ * Tree, path and comparison helpers.
+ *
+ * Added for the redesign's tree view / inspector / Compare tool: the previous
+ * file only ever turned a whole document into a whole string. Exploring one
+ * node, naming its location, and diffing two documents all need to walk the
+ * parsed value directly rather than through `JSON.stringify`.
+ */
+
+/** A single step down into a parsed value: an object key or an array index. */
+export type PathSegment = string | number
+
+export type JsonValueType = 'object' | 'array' | 'string' | 'number' | 'boolean' | 'null'
+
+export function typeOfValue(value: unknown): JsonValueType {
+  if (value === null) return 'null'
+  if (Array.isArray(value)) return 'array'
+  if (typeof value === 'string') return 'string'
+  if (typeof value === 'number') return 'number'
+  if (typeof value === 'boolean') return 'boolean'
+  return 'object'
+}
+
+const IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/
+
+/**
+ * Renders a path the way a developer would paste it into `jq`/JS — array
+ * indices in brackets, `.`-joined identifier keys, bracket-and-quote for keys
+ * that are not valid identifiers (spaces, hyphens, leading digits).
+ */
+export function formatJsonPath(path: readonly PathSegment[]): string {
+  let out = '$'
+  for (const segment of path) {
+    if (typeof segment === 'number') {
+      out += `[${segment}]`
+    } else if (IDENTIFIER.test(segment)) {
+      out += `.${segment}`
+    } else {
+      out += `[${JSON.stringify(segment)}]`
+    }
+  }
+  return out
+}
+
+/**
+ * A short, single-line stand-in for a value — what the tree view shows beside
+ * a key, and what the inspector shows for a container that has no one scalar
+ * to display. Containers describe their size rather than their contents,
+ * since printing a nested object inline defeats the point of a tree view.
+ */
+export function previewValue(value: unknown, maxChars = 48): string {
+  const type = typeOfValue(value)
+  if (type === 'object') {
+    const count = Object.keys(value as Record<string, unknown>).length
+    return count === 0 ? '{}' : `{${count} ${count === 1 ? 'key' : 'keys'}}`
+  }
+  if (type === 'array') {
+    const count = (value as unknown[]).length
+    return count === 0 ? '[]' : `[${count} ${count === 1 ? 'item' : 'items'}]`
+  }
+  if (type === 'string') {
+    const quoted = JSON.stringify(value)
+    return quoted.length > maxChars ? `${quoted.slice(0, maxChars - 2)}…"` : quoted
+  }
+  // number, boolean, null all stringify to their literal JSON form.
+  return JSON.stringify(value) ?? 'null'
+}
+
+const MISSING: unique symbol = Symbol('missing')
+
+/**
+ * Reads the value at `path` inside `root`, or `undefined` if the path does
+ * not exist. `undefined` is unambiguous here — every value under a parsed
+ * JSON document is `object | unknown[] | string | number | boolean | null`,
+ * never `undefined` itself.
+ */
+export function getAtPath(root: unknown, path: readonly PathSegment[]): unknown {
+  let current: unknown = root
+  for (const segment of path) {
+    if (typeof segment === 'number') {
+      if (!Array.isArray(current)) return undefined
+      current = current[segment]
+    } else {
+      if (typeof current !== 'object' || current === null || Array.isArray(current)) {
+        return undefined
+      }
+      current = (current as Record<string, unknown>)[segment]
+    }
+  }
+  return current
+}
+
+/**
+ * Returns a new tree with the value at `path` replaced — used by the
+ * inspector's inline leaf editor. Copies only the nodes along the path, so
+ * every sibling subtree is shared with the original rather than deep-cloned.
+ * Any path that does not resolve inside `root`'s actual shape is a no-op:
+ * the inspector can only ever pass a path it read from this same tree.
+ */
+export function setAtPath(
+  root: unknown,
+  path: readonly PathSegment[],
+  value: unknown,
+): unknown {
+  if (path.length === 0) return value
+  const [head, ...rest] = path
+  // Unreachable — `path.length === 0` already returned — but
+  // `noUncheckedIndexedAccess` can't see that from a destructure alone.
+  if (head === undefined) return root
+  if (typeof head === 'number') {
+    if (!Array.isArray(root) || head < 0 || head >= root.length) return root
+    const updated = setAtPath(root[head], rest, value)
+    // Propagate "nothing changed" up rather than only checking at the exact
+    // level a path fails to resolve — otherwise every ancestor still gets a
+    // needless fresh copy, and a no-op edit is no longer referentially a no-op.
+    if (updated === root[head]) return root
+    const copy = root.slice()
+    copy[head] = updated
+    return copy
+  }
+  if (typeof root !== 'object' || root === null || Array.isArray(root)) return root
+  const record = root as Record<string, unknown>
+  if (!(head in record)) return root
+  const updated = setAtPath(record[head], rest, value)
+  if (updated === record[head]) return root
+  const copy: Record<string, unknown> = { ...record }
+  copy[head] = updated
+  return copy
+}
+
+/**
+ * Best-effort recovery for the handful of "that's valid JavaScript, not valid
+ * JSON" mistakes users actually make: `//` and `/* *\/` comments, single-quoted
+ * strings, unquoted object keys, and trailing commas. Deliberately narrow —
+ * this is a repair tool, not a JS-object-literal parser, and guessing at
+ * anything stranger (missing commas, unbalanced brackets) would silently
+ * produce a *different* document rather than the one the user meant.
+ *
+ * Runs the same `build` pipeline as {@link formatJson} once the text parses,
+ * so a repaired document reports stats and formats identically to one that
+ * never needed repair.
+ */
+export function repairJson(input: string, options: FormatOptions = {}): JsonResult {
+  if (input.trim() === '') {
+    return { output: '' }
+  }
+
+  const directly = build(input, indentOf(options), options.sort === true)
+  if (directly.error === undefined) {
+    return { ...directly, repaired: false }
+  }
+
+  const sanitized = sanitizeLikelyJson(input)
+  const repaired = build(sanitized, indentOf(options), options.sort === true)
+  if (repaired.error === undefined) {
+    return { ...repaired, repaired: true }
+  }
+
+  return {
+    ...repaired,
+    error: `Could not automatically repair this JSON. ${repaired.error ?? ''}`.trim(),
+    repaired: true,
+  }
+}
+
+function indentOf(options: FormatOptions): IndentOption {
+  return options.indent ?? 2
+}
+
+/**
+ * Normalises comments and quoting *outside string literals only*, then fixes
+ * up unquoted keys and trailing commas on the non-string segments of the
+ * result. Splitting the string-aware pass from the regex pass keeps each one
+ * simple: the first never has to reason about object/array structure, the
+ * second never has to reason about escapes.
+ */
+function sanitizeLikelyJson(input: string): string {
+  const withoutCommentsAndSingleQuotes = stripCommentsAndNormalizeQuotes(input)
+  const segments = withoutCommentsAndSingleQuotes.split(/("(?:[^"\\]|\\.)*")/)
+  return segments
+    .map((segment, i) =>
+      // Odd indices are the double-quoted strings the split captured — leave
+      // their contents untouched. Even indices are code, and get the
+      // structural fixes.
+      i % 2 === 1 ? segment : fixUnquotedKeysAndTrailingCommas(segment),
+    )
+    .join('')
+}
+
+/**
+ * Single left-to-right scan, one character of lookahead. Tracks whether it is
+ * inside a `"..."` string, a `'...'` string, a `//` comment or a `/* *\/`
+ * comment, and only acts on the character in that state — never on a regex
+ * applied to the whole text, which cannot tell a `//` inside a string from a
+ * real comment.
+ */
+function stripCommentsAndNormalizeQuotes(input: string): string {
+  let out = ''
+  let mode: 'code' | 'double' | 'single' | 'line-comment' | 'block-comment' = 'code'
+  for (let i = 0; i < input.length; i++) {
+    const ch = input[i]
+    const next = input[i + 1]
+
+    if (mode === 'code') {
+      if (ch === '/' && next === '/') {
+        mode = 'line-comment'
+        i++
+      } else if (ch === '/' && next === '*') {
+        mode = 'block-comment'
+        i++
+      } else if (ch === '"') {
+        mode = 'double'
+        out += '"'
+      } else if (ch === "'") {
+        mode = 'single'
+        out += '"'
+      } else {
+        out += ch
+      }
+      continue
+    }
+
+    if (mode === 'double') {
+      if (ch === '\\' && next !== undefined) {
+        out += ch + next
+        i++
+      } else if (ch === '"') {
+        mode = 'code'
+        out += '"'
+      } else {
+        out += ch
+      }
+      continue
+    }
+
+    if (mode === 'single') {
+      if (ch === '\\' && next === "'") {
+        // A redundant escape once the delimiter is no longer a quote.
+        out += "'"
+        i++
+      } else if (ch === '\\' && next !== undefined) {
+        out += ch + next
+        i++
+      } else if (ch === '"') {
+        // Was a bare literal double-quote inside a single-quoted string; the
+        // new delimiter is `"`, so it must be escaped to stay a literal.
+        out += '\\"'
+      } else if (ch === "'") {
+        mode = 'code'
+        out += '"'
+      } else {
+        out += ch
+      }
+      continue
+    }
+
+    // Comments contribute nothing but must preserve newlines, or every error
+    // location reported after this point would be off by however many
+    // comment lines were removed.
+    if (mode === 'line-comment') {
+      if (ch === '\n') {
+        mode = 'code'
+        out += '\n'
+      }
+      continue
+    }
+
+    // mode === 'block-comment'
+    if (ch === '*' && next === '/') {
+      mode = 'code'
+      i++
+    } else if (ch === '\n') {
+      out += '\n'
+    }
+  }
+  return out
+}
+
+/** Runs only on segments already known to contain no string literals. */
+function fixUnquotedKeysAndTrailingCommas(code: string): string {
+  return code
+    .replace(/,(\s*[}\]])/g, '$1')
+    .replace(/([{,]\s*)([A-Za-z_$][A-Za-z0-9_$]*)(\s*:)/g, '$1"$2"$3')
+}
+
+export type DiffKind = 'added' | 'removed' | 'changed'
+
+export interface DiffEntry {
+  readonly path: string
+  readonly kind: DiffKind
+  readonly left?: string
+  readonly right?: string
+}
+
+export interface CompareResult {
+  readonly entries: readonly DiffEntry[]
+  readonly truncated: boolean
+  readonly identical: boolean
+}
+
+/** Past this many differences the list is a wall of noise, not a report. */
+const MAX_DIFF_ENTRIES = 500
+
+/**
+ * Past this nesting the two documents are compared as opaque values rather
+ * than descended into — the same defensive ceiling as `describeShape`, kept
+ * separate because a diff walk allocates a new path array per level and a
+ * pathological document should not be allowed to make that expensive.
+ */
+const MAX_DIFF_DEPTH = 200
+
+export function compareJson(left: unknown, right: unknown): CompareResult {
+  const entries: DiffEntry[] = []
+  diffWalk(left, right, [], 0, entries)
+  return {
+    entries,
+    truncated: entries.length >= MAX_DIFF_ENTRIES,
+    identical: entries.length === 0,
+  }
+}
+
+function diffWalk(
+  left: unknown,
+  right: unknown,
+  path: readonly PathSegment[],
+  depth: number,
+  entries: DiffEntry[],
+): void {
+  if (entries.length >= MAX_DIFF_ENTRIES) return
+
+  if (left === MISSING) {
+    entries.push({
+      path: formatJsonPath(path),
+      kind: 'added',
+      right: previewValue(right),
+    })
+    return
+  }
+  if (right === MISSING) {
+    entries.push({
+      path: formatJsonPath(path),
+      kind: 'removed',
+      left: previewValue(left),
+    })
+    return
+  }
+
+  const leftType = typeOfValue(left)
+  const rightType = typeOfValue(right)
+  if (leftType !== rightType) {
+    entries.push({
+      path: formatJsonPath(path),
+      kind: 'changed',
+      left: previewValue(left),
+      right: previewValue(right),
+    })
+    return
+  }
+
+  if (depth >= MAX_DIFF_DEPTH) {
+    if (JSON.stringify(left) !== JSON.stringify(right)) {
+      entries.push({
+        path: formatJsonPath(path),
+        kind: 'changed',
+        left: previewValue(left),
+        right: previewValue(right),
+      })
+    }
+    return
+  }
+
+  if (leftType === 'object') {
+    const leftRecord = left as Record<string, unknown>
+    const rightRecord = right as Record<string, unknown>
+    const keys = new Set([...Object.keys(leftRecord), ...Object.keys(rightRecord)])
+    for (const key of keys) {
+      if (entries.length >= MAX_DIFF_ENTRIES) return
+      const leftValue = key in leftRecord ? leftRecord[key] : MISSING
+      const rightValue = key in rightRecord ? rightRecord[key] : MISSING
+      diffWalk(leftValue, rightValue, [...path, key], depth + 1, entries)
+    }
+    return
+  }
+
+  if (leftType === 'array') {
+    const leftArray = left as unknown[]
+    const rightArray = right as unknown[]
+    const length = Math.max(leftArray.length, rightArray.length)
+    for (let i = 0; i < length; i++) {
+      if (entries.length >= MAX_DIFF_ENTRIES) return
+      const leftValue = i < leftArray.length ? leftArray[i] : MISSING
+      const rightValue = i < rightArray.length ? rightArray[i] : MISSING
+      diffWalk(leftValue, rightValue, [...path, i], depth + 1, entries)
+    }
+    return
+  }
+
+  if (left !== right) {
+    entries.push({
+      path: formatJsonPath(path),
+      kind: 'changed',
+      left: previewValue(left),
+      right: previewValue(right),
+    })
+  }
 }

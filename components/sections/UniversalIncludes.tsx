@@ -64,7 +64,7 @@ const GUARANTEES: readonly string[] = [
 
 export function UniversalIncludes() {
   return (
-    <section aria-labelledby="universal-includes" className="bg-white py-20 md:py-28">
+    <section aria-labelledby="universal-includes" className="bg-offwhite py-20 md:py-28">
       <div className="container-site">
         <h2
           id="universal-includes"
@@ -72,15 +72,28 @@ export function UniversalIncludes() {
         >
           Every tool you need.
         </h2>
-        <p className="mt-4 text-center font-display text-[22px] text-violet-500 md:text-[26px]">
+        {/* text-ink-muted, not text-violet-500: violet-500 is unchanged
+            across themes and measures ~3.23:1 on dark-mode `bg-offwhite` —
+            clears the 3:1 large-text bar at the md: 26px breakpoint but fails
+            the 4.5:1 normal-text bar at the base 22px size below 768px.
+            ink-muted is the token-backed swap that clears AA at every
+            viewport. */}
+        <p className="mt-4 text-center font-display text-[22px] text-ink-muted md:text-[26px]">
           All of it free, across every tool.
         </p>
 
         <div className="mt-12 grid gap-5 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
-          {/* Left: what one bookmark gets you. Gradient runs white → ice → cyan,
-              so every line sits on a light surface and takes violet-900 (14.70:1
-              on white, and still well clear on the cyan end). */}
-          <div className="rounded-panel bg-gradient-to-br from-white via-ice to-cyan/50 p-7 md:p-8">
+          {/* Left: what one bookmark gets you. Gradient runs cream → ice → cyan
+              (cream/ice are surface tokens, so both re-anchor to a dark elevation
+              in dark mode; cyan is a pastel accent, unchanged by design). Text is
+              `text-ink` rather than the fixed violet-900 the reference comment
+              used to specify — violet-900 is a "dark section" fill colour, not a
+              themed text token, so it would sit dark-on-dark once this card's own
+              background goes dark. `text-ink` still reads as near-black on the
+              light-mode cream/ice/cyan wash (visually equivalent to violet-900
+              there) and flips to near-white against the dark-mode version of the
+              same gradient. */}
+          <div className="rounded-panel bg-gradient-to-br from-cream via-ice to-cyan/50 p-7 md:p-8">
             <h3 className="font-display text-[26px] leading-tight tracking-[-0.5px]">
               <span className="font-bold">One bookmark</span>{' '}
               <span className="font-normal">gets you:</span>
@@ -89,7 +102,7 @@ export function UniversalIncludes() {
               {TOOLS.map((tool) => (
                 <li
                   key={tool.slug}
-                  className="flex items-center gap-2.5 font-medium text-[16px] text-violet-900 leading-6"
+                  className="flex items-center gap-2.5 font-medium text-[16px] text-ink leading-6"
                 >
                   {/* Each tool's own mark replaces the reference's dash bullet
                       — the same white-disc file its page and browser tab use.

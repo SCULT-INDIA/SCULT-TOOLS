@@ -89,7 +89,13 @@ export function ErrorDetail({
   action?: ReactNode
 }) {
   return (
-    <div className="rounded-card border border-ink bg-peach p-4">
+    // print-paper-ctx: bg-peach is one of the "pastel accents — all light, black
+    // text only" tokens (see globals.css §BRAND) and is never overridden for dark
+    // mode. border-ink/text-ink below, left un-pinned, would invert to their
+    // near-white dark-theme value while this peach fill stays fixed-light,
+    // making the whole error box unreadable. Freezing ink/line here keeps it a
+    // permanently light chip, matching the peach token's own contract.
+    <div className="rounded-card border border-ink bg-peach p-4 print-paper-ctx">
       <p className="font-semibold text-[14px] text-ink">
         {line != null
           ? `Line ${line}${column != null ? `, column ${column}` : ''} — `

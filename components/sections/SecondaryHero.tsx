@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Icon } from '@/components/ui/Icon'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { TOOLS } from '@/lib/tools/registry'
+import styles from './HeroDarkModeFixes.module.css'
 
 /**
  * Reference: band 2 — the second hero. Large serif headline left, a collage
@@ -44,7 +45,7 @@ export function SecondaryHero() {
               </li>
             ))}
           </ul>
-          <Link href="/all" className="btn-brutal mt-8">
+          <Link href="/all" className={`btn-brutal mt-8 ${styles.ctaContrastFix}`}>
             SEE ALL {TOOLS.length} TOOLS
           </Link>
         </div>
@@ -64,7 +65,12 @@ export function SecondaryHero() {
                 marginTop: i % 2 === 1 ? '2rem' : undefined,
               }}
             >
-              <Icon name={c.icon} className="size-7 text-violet-700" />
+              {/* `tile-icon-accent` dark-mode hook — see the matching comment
+                  in Hero.tsx's CategoryCard: violet-700 is AA on these tile
+                  fills only in light mode; the tokens invert to dark washes
+                  in dark mode and need --color-ink-body instead (documented
+                  as a known follow-up in globals.css). */}
+              <Icon name={c.icon} className="size-7 text-violet-700 tile-icon-accent" />
               <span className="font-display font-semibold text-[17px] tracking-normal">
                 {c.name}
               </span>

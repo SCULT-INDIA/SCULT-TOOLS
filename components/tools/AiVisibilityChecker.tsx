@@ -1,18 +1,29 @@
 'use client'
 
 // TriangleAlert, not AlertTriangle — this lucide version dropped the old alias.
-import { CircleCheck, CircleX, Radar, TriangleAlert } from 'lucide-react'
+import {
+  CircleCheck,
+  CircleX,
+  FileJson,
+  ListChecks,
+  Radar,
+  ShieldAlert,
+  ShieldCheck,
+  Sparkles,
+  TriangleAlert,
+} from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { CopyButton } from '@/components/tools/ResultPanel'
 import {
   ErrorDetail,
-  Pane,
+  ScoreRing,
   SegmentButton,
+  StatCard,
   StatusBar,
-  ToolbarAction,
+  StepTimeline,
+  type TimelineStep,
   ToolbarGroup,
   ToolToolbar,
-  ToolWorkspace,
 } from '@/components/tools/workspace'
 import {
   AI_BOTS,
@@ -29,7 +40,7 @@ import {
 } from '@/lib/tools/ai-visibility-checker/logic'
 
 /**
- * AI visibility checker — rebuilt on the shared workspace.
+ * AI visibility checker — single-column report, no left/right split.
  * Research brief: docs/research/ai-visibility-checker.md
  *
  * This is a submit-step tool — one of only two here that cannot compute in the
@@ -37,10 +48,10 @@ import {
  * origin's robots.txt, so every run is a real server-side fetch of somebody
  * else's site: four requests, once each. It must never run as you type.
  *
- * The centrepiece is the per-bot table. Competitors that produce a score never
+ * The centrepiece is the per-bot verdict. Competitors that produce a score never
  * show you a robots rule, and the robots validators that show you a rule never
- * score or audit — so the table carries the verdict, the rule that produced it
- * quoted verbatim, AND which User-agent group won. That last column is the USP:
+ * score or audit — so every bot card carries the verdict, the rule that produced
+ * it quoted verbatim, AND which User-agent group won. That last part is the USP:
  * robots precedence (a bot-specific group beating `*`, longest matching path
  * winning inside the group) is the single most misread thing in the file, and
  * showing which group decided is the difference between a verdict and an
@@ -49,6 +60,24 @@ import {
  * Everything this file renders was computed by the pure functions in logic.ts,
  * which owns RFC 9309 precedence, JSON-LD extraction, scoring and the SSRF gate.
  * Nothing here re-derives a verdict.
+ *
+ * Layout: this tool dropped the two-pane `ToolWorkspace` for a single-column
+ * stacked report (the redesign's "Group C" shape) — the form up top, the whole
+ * report below it. `ScoreRing`/`StatCard`/`StepTimeline` render only figures
+ * this file already computes from `VisibilityReport` — no field here is
+ * invented for the sake of filling a tile. Two deliberate departures from the
+ * wireframe this was rebuilt against, because the underlying tool checks
+ * robots.txt crawl access, not live answer-engine mentions:
+ *   - The step timeline names the five real fetch/scoring stages this run goes
+ *     through (homepage, robots.txt, llms.txt/sitemap, structured data,
+ *     scoring) rather than named answer engines like "Gemini" or "Grok" — this
+ *     tool never queries those products, so labelling a step with their name
+ *     would claim a check that never happened. There is likewise no reliable
+ *     run duration to promise, so progress is a step count, not a countdown.
+ *   - The "breakdown" and "sources" sections below use this report's own
+ *     data — per-crawler robots.txt access, and the JSON-LD types actually
+ *     found on the page — rather than mention/citation/sentiment metrics this
+ *     tool has no way to produce.
  *
  * Two safety notes that are load-bearing:
  *   - Every quoted robots rule is untrusted third-party text. It is rendered as
@@ -71,6 +100,15 @@ const LOADING_STAGES = [
   'Applying robots precedence and scoring…',
 ] as const
 
+/** Short labels for the step timeline dots — the same five stages, condensed to fit. */
+const STAGE_STEP_LABELS = [
+  'Homepage',
+  'robots.txt',
+  'llms.txt & sitemap',
+  'Structured data',
+  'Scoring',
+] as const
+
 const STATUS_LABEL: Record<CheckStatus, string> = {
   pass: 'Pass',
   warn: 'Check',
@@ -85,6 +123,13 @@ const BAND_TILE: Record<BandLabel, string> = {
   'AI-visible': 'bg-tile-green',
   'Partially visible': 'bg-tile-yellow',
   'Mostly invisible to AI': 'bg-peach',
+}
+
+/** ScoreRing arc colour per band — mirrors the speed test's good/needs-work/poor tones. */
+const BAND_RING_TONE: Record<BandLabel, string> = {
+  'AI-visible': 'text-green',
+  'Partially visible': 'text-cta-pure',
+  'Mostly invisible to AI': 'text-ink',
 }
 
 /**
@@ -133,7 +178,7 @@ const MAX_RULE_CHARS = 120
 /**
  * Robots rules come from a stranger's server. Only a prefix of “/” can win for
  * the path “/”, so the longest rule a site can push into this column is a run of
- * wildcards — cheap to abuse, and a 100 KB cell would destroy the table. Clamp
+ * wildcards — cheap to abuse, and a 100 KB cell would destroy the layout. Clamp
  * for display; the clipboard copy keeps the rule whole.
  */
 function clampRule(rule: string): { text: string; full?: string } {
@@ -156,7 +201,7 @@ function StatusBadge({ status }: { status: CheckStatus }) {
   )
 }
 
-/** The reading of the whole table, so it carries a word AND a distinct shape. */
+/** The reading for one bot, so it carries a word AND a distinct shape. */
 function AccessCell({ allowed }: { allowed: boolean }) {
   return (
     <span className="flex items-center gap-1.5 font-semibold text-[14px] text-ink">
@@ -171,7 +216,7 @@ function AccessCell({ allowed }: { allowed: boolean }) {
 }
 
 /**
- * The column nobody else ships: the rule that decided, quoted, and the group it
+ * The detail nobody else ships: the rule that decided, quoted, and the group it
  * came from. `source` distinguishes a bot-specific group (which beats `*`
  * outright) from the wildcard group from robots.txt saying nothing at all.
  */
@@ -179,7 +224,7 @@ function RuleCell({ bot }: { bot: BotAccess }) {
   if (bot.matchedRule === undefined) {
     return (
       <>
-        <span className="block text-[14px] text-ink-muted">
+        <span className="block text-[13px] text-ink-muted">
           {bot.source === 'default' ? 'No group names this bot' : 'No rule covers “/”'}
         </span>
         <span className="mt-0.5 block text-[12px] text-ink-subtle leading-4">
@@ -198,7 +243,7 @@ function RuleCell({ bot }: { bot: BotAccess }) {
     <>
       {/* Untrusted text from the target's robots.txt — rendered as text only. */}
       <code
-        className="block break-all font-mono text-[13px] text-ink"
+        className="block break-all font-mono text-[12px] text-ink"
         {...(full !== undefined ? { title: full } : {})}
       >
         {text}
@@ -213,9 +258,41 @@ function RuleCell({ bot }: { bot: BotAccess }) {
   )
 }
 
+/** One crawler's verdict as a card — the "AI engines breakdown" for this tool's real data. */
+function BotCard({ bot }: { bot: BotAccess }) {
+  return (
+    <div className="card-flat flex flex-col gap-2 border border-line p-3">
+      <div className="min-w-0">
+        <p
+          className="truncate font-mono font-medium text-[13px] text-ink"
+          title={bot.name}
+        >
+          {bot.name}
+        </p>
+        <p className="truncate text-[11px] text-ink-subtle">{bot.company}</p>
+      </div>
+      <AccessCell allowed={bot.allowed} />
+      {/* An honest 1:1 rendering of the same allowed/blocked boolean above, not a
+          fabricated numeric score — this tool never scores a bot individually. */}
+      <div
+        aria-hidden="true"
+        className="h-1.5 w-full overflow-hidden rounded-pill bg-line-grey"
+      >
+        <div
+          className={`h-full ${bot.allowed ? 'bg-green' : 'bg-violet-700'}`}
+          style={{ width: bot.allowed ? '100%' : '0%' }}
+        />
+      </div>
+      <div className="text-[11px] leading-4">
+        <RuleCell bot={bot} />
+      </div>
+    </div>
+  )
+}
+
 function CheckCard({ check }: { check: CheckResult }) {
   return (
-    <div className="card-flat border border-line bg-white p-4">
+    <div className="card-flat border border-line p-4">
       <div className="flex items-start justify-between gap-3">
         <h5 className="font-display font-semibold text-[15px] text-ink">
           {check.label}
@@ -411,6 +488,11 @@ export function AiVisibilityChecker() {
     }
   }
 
+  /** Scrolls to the checks list rather than duplicating it — there is no separate recommendations view. */
+  function viewRecommendations(): void {
+    document.getElementById('aiv-checks')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   const stageLabel =
     LOADING_STAGES[Math.min(stage, LOADING_STAGES.length - 1)] ?? 'Checking…'
   const blockedCount =
@@ -422,402 +504,474 @@ export function AiVisibilityChecker() {
       : blockedOnly
         ? report.bots.filter((b) => !b.allowed)
         : report.bots
+  const scoredChecks = report?.checks.filter((c) => c.scored) ?? []
+  const checksPassed = scoredChecks.filter((c) => c.status === 'pass').length
+  /** The first not-yet-passing scored check, in check order — the same priority the score gives it. */
+  const topFix = report?.checks.find((c) => c.scored && c.status !== 'pass')
+
+  const timelineSteps: TimelineStep[] = STAGE_STEP_LABELS.map((label, i) => ({
+    label,
+    status: i < stage ? 'done' : i === stage ? 'active' : 'pending',
+  }))
+  const progressPercent = Math.round(((stage + 1) / LOADING_STAGES.length) * 100)
 
   return (
-    <ToolWorkspace
-      inputLabel="Site to check"
-      outputLabel="Visibility report"
-      minHeight="min-h-[32rem]"
-      toolbar={
-        <ToolToolbar
-          actions={
-            <>
-              <ToolbarAction
-                onClick={() => void copyLink()}
-                disabled={report === undefined}
-              >
-                {linkCopied ? 'Link copied' : 'Copy shareable link'}
-              </ToolbarAction>
-              <ToolbarAction
-                onClick={() => {
-                  setUrl(SAMPLE_URL)
-                  setInputError(undefined)
-                }}
-              >
-                Load example
-              </ToolbarAction>
-              <ToolbarAction
-                onClick={startOver}
-                disabled={url === '' && report === undefined && apiError === undefined}
-              >
-                Start over
-              </ToolbarAction>
-            </>
-          }
-        >
-          <ToolbarGroup label="Crawler table">
-            <SegmentButton
-              active={!blockedOnly}
-              onClick={() => setBlockedOnly(false)}
-              title="Show every crawler we evaluate"
-            >
-              All {AI_BOTS.length} crawlers
-            </SegmentButton>
-            <SegmentButton
-              active={blockedOnly}
-              onClick={() => setBlockedOnly(true)}
-              title="Show only the crawlers that robots.txt blocks"
-            >
-              Blocked only
-            </SegmentButton>
-          </ToolbarGroup>
-        </ToolToolbar>
-      }
-      input={
-        <Pane title="Site to check">
-          <form
-            className="flex flex-col gap-5"
-            onSubmit={(e) => {
-              e.preventDefault()
-              if (!loading) void runCheckFor(url)
-            }}
+    <div className="flex flex-col gap-6 rounded-panel border border-ink bg-cream p-5 shadow-brutal md:p-6">
+      <ToolToolbar>
+        <ToolbarGroup label="Crawler breakdown">
+          <SegmentButton
+            active={!blockedOnly}
+            onClick={() => setBlockedOnly(false)}
+            title="Show every crawler we evaluate"
           >
+            All {AI_BOTS.length} crawlers
+          </SegmentButton>
+          <SegmentButton
+            active={blockedOnly}
+            onClick={() => setBlockedOnly(true)}
+            title="Show only the crawlers that robots.txt blocks"
+          >
+            Blocked only
+          </SegmentButton>
+        </ToolbarGroup>
+      </ToolToolbar>
+
+      {/* Brand-button grid, positioned at the top, matching the convention
+          established across the other tools. "Check visibility" itself
+          stays where it is, below the URL field — it is a `type="submit"`
+          button tied to the form's `onSubmit` (which drives the
+          abort-controller/fetch logic), and it already carries the primary
+          `.btn-violet` treatment; moving it out of the `<form>` risks losing
+          Enter-to-submit for a purely cosmetic gain. */}
+      <div className="grid grid-cols-2 gap-2 rounded-card border border-line-grey bg-offwhite p-3 sm:grid-cols-3 sm:gap-3 sm:p-4">
+        <button
+          type="button"
+          onClick={() => void copyLink()}
+          disabled={report === undefined}
+          className="btn-brutal btn-brutal-sm btn-violet w-full"
+        >
+          {linkCopied ? 'Link copied' : 'Copy shareable link'}
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setUrl(SAMPLE_URL)
+            setInputError(undefined)
+          }}
+          className="btn-brutal btn-brutal-sm btn-white w-full"
+        >
+          Load example
+        </button>
+        <button
+          type="button"
+          onClick={startOver}
+          disabled={url === '' && report === undefined && apiError === undefined}
+          className="btn-brutal btn-brutal-sm btn-white w-full"
+        >
+          Start over
+        </button>
+      </div>
+
+      <form
+        className="flex flex-col gap-5"
+        onSubmit={(e) => {
+          e.preventDefault()
+          if (!loading) void runCheckFor(url)
+        }}
+      >
+        <div>
+          <label className="label" htmlFor="aiv-url">
+            Website URL
+          </label>
+          <input
+            id="aiv-url"
+            className="field"
+            type="text"
+            inputMode="url"
+            autoComplete="off"
+            spellCheck={false}
+            placeholder="https://yourdomain.com"
+            value={url}
+            onChange={(e) => {
+              setUrl(e.target.value)
+              if (inputError !== undefined) setInputError(undefined)
+            }}
+            aria-describedby={inputError !== undefined ? 'aiv-url-error' : 'aiv-url-hint'}
+            aria-invalid={inputError !== undefined}
+          />
+          {inputError !== undefined ? (
+            <p className="mt-1.5 font-medium text-[14px] text-violet-700" id="aiv-url-error">
+              {inputError}
+            </p>
+          ) : (
+            <p className="hint mt-1.5" id="aiv-url-hint">
+              Any http or https address. Private and internal hosts are refused.
+            </p>
+          )}
+          <button
+            type="submit"
+            className="btn-brutal btn-violet btn-brutal-sm mt-4 w-full sm:w-auto"
+            disabled={loading}
+          >
+            <Radar className="size-4" aria-hidden="true" />
+            {loading ? 'Checking…' : 'Check visibility'}
+          </button>
+        </div>
+      </form>
+
+      {/* The plain statement of what leaves our server, no signup, nothing stored —
+          secure, no-login, and exactly how long it takes. Deliberately request-level:
+          the legend for the *report* lives further down, so no sentence repeats. */}
+      <div className="rounded-card border border-line-grey bg-offwhite p-4">
+        <h4 className="font-display font-semibold text-[15px] text-ink">
+          Exactly what this does
+        </h4>
+        <p className="mt-2 text-[14px] text-ink-muted leading-5">
+          Our server makes four requests to your domain, once each — no account, no email:
+        </p>
+        <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[13px] text-ink">
+          <li>/</li>
+          <li>/robots.txt</li>
+          <li>/llms.txt</li>
+          <li>/sitemap.xml</li>
+        </ul>
+        <p className="mt-3 text-[14px] text-ink-muted leading-5">
+          It identifies itself as{' '}
+          <span className="font-mono text-[13px] text-ink">ScultToolsBot/1.0</span>, gives
+          up after 10 seconds, and follows at most three redirects. If your WAF blocks
+          unfamiliar crawlers, allow that user-agent before you run this — otherwise you
+          are measuring your firewall, not your robots.txt.
+        </p>
+      </div>
+
+      <div className="border-line border-t pt-6">
+        {loading ? (
+          <div className="flex flex-col gap-6">
             <div>
-              <label className="label" htmlFor="aiv-url">
-                Website URL
-              </label>
-              <input
-                id="aiv-url"
-                className="field"
-                type="text"
-                inputMode="url"
-                autoComplete="off"
-                spellCheck={false}
-                placeholder="https://yourdomain.com"
-                value={url}
-                onChange={(e) => {
-                  setUrl(e.target.value)
-                  if (inputError !== undefined) setInputError(undefined)
-                }}
-                aria-describedby={
-                  inputError !== undefined ? 'aiv-url-error' : 'aiv-url-hint'
-                }
-                aria-invalid={inputError !== undefined}
-              />
-              {inputError !== undefined ? (
-                <p
-                  className="mt-1.5 font-medium text-[14px] text-violet-700"
-                  id="aiv-url-error"
-                >
-                  {inputError}
-                </p>
-              ) : (
-                <p className="hint mt-1.5" id="aiv-url-hint">
-                  Any http or https address. Private and internal hosts are refused.
-                </p>
-              )}
-              <button
-                type="submit"
-                className="btn-brutal btn-violet btn-brutal-sm mt-4 w-full sm:w-auto"
-                disabled={loading}
+              <div
+                role="progressbar"
+                aria-label="Visibility check in progress"
+                aria-valuenow={progressPercent}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                className="h-2 w-full overflow-hidden rounded-pill border border-line-grey bg-cream"
               >
-                <Radar className="size-4" aria-hidden="true" />
-                {loading ? 'Checking…' : 'Check visibility'}
-              </button>
+                <div
+                  data-decorative-motion
+                  className="h-full rounded-pill bg-violet-500 transition-[width] duration-300"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+              <div className="mt-4">
+                <StepTimeline steps={timelineSteps} />
+              </div>
+              <p className="mt-2 text-[13px] text-ink-subtle">
+                {stageLabel} Step {Math.min(stage + 1, LOADING_STAGES.length)} of{' '}
+                {LOADING_STAGES.length}.
+              </p>
             </div>
 
-            {/* The plain statement of what leaves our server. Deliberately
-                request-level: the legend for the *report* lives in the output
-                pane, so no sentence is duplicated across the two panes. */}
-            <div className="rounded-card border border-line-grey bg-offwhite p-4">
-              <h4 className="font-display font-semibold text-[15px] text-ink">
-                Exactly what this does
+            <div className="border-line border-t pt-5">
+              <h4 className="font-display font-semibold text-[17px] text-ink">
+                The {AI_BOTS.length} crawlers we evaluate
               </h4>
-              <p className="mt-2 text-[14px] text-ink-muted leading-5">
-                Our server makes four requests to your domain, once each:
+              <p className="mt-1 text-[14px] text-ink-muted leading-5">
+                While that runs: each crawler gets its own robots.txt verdict, because
+                they are separate user-agents with separate rules.
               </p>
-              <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[13px] text-ink">
-                <li>/</li>
-                <li>/robots.txt</li>
-                <li>/llms.txt</li>
-                <li>/sitemap.xml</li>
-              </ul>
-              <p className="mt-3 text-[14px] text-ink-muted leading-5">
-                It identifies itself as{' '}
-                <span className="font-mono text-[13px] text-ink">ScultToolsBot/1.0</span>,
-                gives up after 10 seconds, and follows at most three redirects. If your
-                WAF blocks unfamiliar crawlers, allow that user-agent before you run this
-                — otherwise you are measuring your firewall, not your robots.txt.
-              </p>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                {AI_BOTS.map((bot) => (
+                  <div key={bot.name} className="card-flat border border-line p-3">
+                    <p className="font-mono font-medium text-[13px] text-ink">
+                      {bot.name}
+                    </p>
+                    <p className="text-[12px] text-ink-subtle">
+                      {bot.company} · {bot.purpose}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </form>
-        </Pane>
-      }
-      output={
-        <Pane
-          title="Visibility report"
-          actions={
-            report !== undefined ? (
-              <CopyButton text={formatReportText(report)} label="Copy report" />
-            ) : null
-          }
-        >
-          {report !== undefined ? (
-            <div className="flex flex-col gap-5">
+          </div>
+        ) : apiError !== undefined ? (
+          <div className="flex flex-col gap-3">
+            <ErrorDetail
+              message={
+                apiError.code === 'blocked'
+                  ? `The site blocked our checker — ${apiError.error}`
+                  : apiError.error
+              }
+            />
+            {apiError.code === 'blocked' ? (
+              <p className="text-[14px] text-ink-muted leading-5">
+                To be fair to your site: blocking ScultToolsBot does not mean AI bots are
+                blocked. Plenty of firewalls reject unfamiliar crawlers while letting
+                GPTBot or ClaudeBot through. Allow the user-agent listed above, or read
+                your robots.txt and WAF allowlist directly.
+              </p>
+            ) : null}
+            {apiError.code === 'unreachable' ? (
+              <p className="text-[14px] text-ink-muted leading-5">
+                Check the site is live and publicly reachable, then try again. Very slow
+                sites exceed our 10-second limit, and more than three redirects is treated
+                as a loop.
+              </p>
+            ) : null}
+            {apiError.code === 'private-address' || apiError.code === 'invalid-url' ? (
+              <p className="text-[14px] text-ink-muted leading-5">
+                Only public http and https addresses can be checked. Staging behind a VPN,
+                localhost and private IP ranges are refused on purpose — this endpoint
+                fetches whatever you give it, so it must not be usable to probe an
+                internal network.
+              </p>
+            ) : null}
+          </div>
+        ) : report !== undefined ? (
+          <div className="flex flex-col gap-8">
+            {/* Visibility overview */}
+            <div>
+              <div className="flex items-center justify-between gap-3">
+                <h4 className="font-display font-semibold text-[17px] text-ink">
+                  Visibility overview
+                </h4>
+                <CopyButton text={formatReportText(report)} label="Copy report" />
+              </div>
               <div
-                className={`rounded-card border border-ink ${BAND_TILE[report.band]} p-4`}
+                className={`mt-3 flex flex-col items-center gap-5 rounded-panel border border-ink p-6 shadow-brutal sm:flex-row ${BAND_TILE[report.band]}`}
               >
-                <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
-                  <p className="font-display font-bold text-[44px] text-ink leading-none tabular-nums">
-                    {report.score}
-                    <span className="ml-1 font-normal text-[18px] text-ink-muted">
-                      /100
-                    </span>
-                  </p>
+                <ScoreRing
+                  value={report.score}
+                  label="Visibility"
+                  size="lg"
+                  toneClass={BAND_RING_TONE[report.band]}
+                />
+                <div className="flex-1 text-center sm:text-left">
                   <p className="font-display font-semibold text-[20px] text-ink">
                     {report.band}
                   </p>
+                  <p className="mt-2 text-[14px] text-ink leading-5">
+                    <strong>
+                      {report.allowedBotCount} of {report.bots.length}
+                    </strong>{' '}
+                    AI crawlers can fetch{' '}
+                    <span className="break-all font-mono text-[13px]">{report.url}</span>
+                  </p>
                 </div>
-                <p className="mt-3 text-[14px] text-ink leading-5">
-                  <strong>
-                    {report.allowedBotCount} of {report.bots.length}
-                  </strong>{' '}
-                  AI crawlers can fetch{' '}
-                  <span className="break-all font-mono text-[13px]">{report.url}</span>
-                </p>
               </div>
 
-              <div>
-                <h4 className="font-display font-semibold text-[17px] text-ink">
-                  Which AI crawlers can reach you — and the rule that decided
-                </h4>
-                {crawlerFinding !== undefined ? (
-                  <p className="mt-1 text-[14px] text-ink-muted leading-5">
-                    {crawlerFinding}
-                  </p>
-                ) : null}
-
-                {visibleBots.length === 0 ? (
-                  <p className="mt-3 rounded-card border border-line-grey bg-tile-green p-3 text-[14px] text-ink leading-5">
-                    Nothing is blocked — all {report.bots.length} crawlers are allowed.
-                    Switch the toolbar back to “All {AI_BOTS.length} crawlers” to see the
-                    rule behind each verdict.
-                  </p>
-                ) : (
-                  <div className="mt-3 overflow-x-auto rounded-card border border-line">
-                    <table className="w-full min-w-[30rem] border-collapse bg-white text-left">
-                      <caption className="sr-only">
-                        Crawl access to “/” for each AI crawler, with the robots.txt rule
-                        and the User-agent group that produced each verdict
-                      </caption>
-                      <thead>
-                        <tr className="border-line border-b bg-cream">
-                          <th scope="col" className={TH}>
-                            Crawler
-                          </th>
-                          <th scope="col" className={TH}>
-                            Run by
-                          </th>
-                          <th scope="col" className={TH}>
-                            Access to /
-                          </th>
-                          <th scope="col" className={TH}>
-                            Rule that decided
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {visibleBots.map((bot) => (
-                          <tr
-                            key={bot.name}
-                            className="border-line border-b align-top last:border-b-0"
-                          >
-                            <th
-                              scope="row"
-                              className="px-3 py-2.5 font-mono font-normal text-[13px] text-ink"
-                            >
-                              {bot.name}
-                              <span className="mt-0.5 block font-sans text-[12px] text-ink-subtle leading-4">
-                                {bot.purpose}
-                              </span>
-                            </th>
-                            <td className="px-3 py-2.5 text-[14px] text-ink-muted">
-                              {bot.company}
-                            </td>
-                            <td className="px-3 py-2.5">
-                              <AccessCell allowed={bot.allowed} />
-                            </td>
-                            <td className="px-3 py-2.5">
-                              <RuleCell bot={bot} />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-                {/* One-line reading key for the rule column. The full precedence
-                    rules (longest path, empty Disallow, Allow ties) are spelled
-                    out in howItWorks below — repeating them here clause-for-clause
-                    was clutter under an already self-explaining table. */}
-                <p className="hint mt-2">
-                  A group naming the bot beats{' '}
-                  <span className="font-mono">User-agent: *</span> entirely — the rule
-                  column quotes whichever group won.
-                </p>
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <StatCard
+                  icon={ShieldCheck}
+                  label="Crawlers allowed"
+                  value={report.allowedBotCount}
+                  sublabel={`of ${report.bots.length}`}
+                  tone="green"
+                />
+                <StatCard
+                  icon={ShieldAlert}
+                  label="Crawlers blocked"
+                  value={blockedCount}
+                  sublabel={`of ${report.bots.length}`}
+                  tone="yellow"
+                />
+                <StatCard
+                  icon={FileJson}
+                  label="Schema types found"
+                  value={report.jsonLdTypes.length}
+                  sublabel="JSON-LD @type values"
+                  tone="blue"
+                />
+                <StatCard
+                  icon={ListChecks}
+                  label="Checks passed"
+                  value={`${checksPassed}/${scoredChecks.length}`}
+                  sublabel="scored checks"
+                  tone="lavender"
+                />
               </div>
+            </div>
 
+            {/* AI crawler access breakdown */}
+            <div>
+              <h4 className="font-display font-semibold text-[17px] text-ink">
+                AI crawler access breakdown
+              </h4>
+              {crawlerFinding !== undefined ? (
+                <p className="mt-1 text-[14px] text-ink-muted leading-5">
+                  {crawlerFinding}
+                </p>
+              ) : null}
+
+              {visibleBots.length === 0 ? (
+                <p className="mt-3 rounded-card border border-line-grey bg-tile-green p-3 text-[14px] text-ink leading-5">
+                  Nothing is blocked — all {report.bots.length} crawlers are allowed.
+                  Switch the toolbar back to “All {AI_BOTS.length} crawlers” to see the
+                  rule behind each verdict.
+                </p>
+              ) : (
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {visibleBots.map((bot) => (
+                    <BotCard key={bot.name} bot={bot} />
+                  ))}
+                </div>
+              )}
+              <p className="hint mt-2">
+                A group naming the bot beats{' '}
+                <span className="font-mono">User-agent: *</span> entirely — each card
+                quotes whichever group won.
+              </p>
+            </div>
+
+            {/* Checks alongside structured data found — the closest this report has
+                to "top findings" and "what you're telling engines about yourself". */}
+            <div className="grid gap-6 lg:grid-cols-2">
               <div>
                 <h4 className="font-display font-semibold text-[17px] text-ink">
                   The {report.checks.length} checks
                 </h4>
-                <div className="mt-3 grid gap-3">
+                <div id="aiv-checks" className="mt-3 grid gap-3">
                   {report.checks.map((check) => (
                     <CheckCard key={check.id} check={check} />
                   ))}
                 </div>
               </div>
-            </div>
-          ) : apiError !== undefined ? (
-            <div className="flex flex-col gap-3">
-              <ErrorDetail
-                message={
-                  apiError.code === 'blocked'
-                    ? `The site blocked our checker — ${apiError.error}`
-                    : apiError.error
-                }
-              />
-              {apiError.code === 'blocked' ? (
-                <p className="text-[14px] text-ink-muted leading-5">
-                  To be fair to your site: blocking ScultToolsBot does not mean AI bots
-                  are blocked. Plenty of firewalls reject unfamiliar crawlers while
-                  letting GPTBot or ClaudeBot through. Allow the user-agent listed on the
-                  left, or read your robots.txt and WAF allowlist directly.
-                </p>
-              ) : null}
-              {apiError.code === 'unreachable' ? (
-                <p className="text-[14px] text-ink-muted leading-5">
-                  Check the site is live and publicly reachable, then try again. Very slow
-                  sites exceed our 10-second limit, and more than three redirects is
-                  treated as a loop.
-                </p>
-              ) : null}
-              {apiError.code === 'private-address' || apiError.code === 'invalid-url' ? (
-                <p className="text-[14px] text-ink-muted leading-5">
-                  Only public http and https addresses can be checked. Staging behind a
-                  VPN, localhost and private IP ranges are refused on purpose — this
-                  endpoint fetches whatever you give it, so it must not be usable to probe
-                  an internal network.
-                </p>
-              ) : null}
-            </div>
-          ) : loading ? (
-            <div className="flex h-full items-center justify-center p-6">
-              <div className="text-center">
-                {/* data-decorative-motion so globals.css stops the pulse under
-                    prefers-reduced-motion; the stage text carries the state. */}
-                <Radar
-                  className="mx-auto size-6 animate-pulse text-violet-700"
-                  aria-hidden="true"
-                  data-decorative-motion
-                />
-                <p className="mt-3 font-medium text-[15px] text-ink">{stageLabel}</p>
-                <p className="mt-1 text-[13px] text-ink-subtle">
-                  Step {Math.min(stage + 1, LOADING_STAGES.length)} of{' '}
-                  {LOADING_STAGES.length}
-                </p>
-              </div>
-            </div>
-          ) : (
-            /* Not an empty state — the legend for the report that replaces it. */
-            <div className="flex flex-col gap-5">
-              <div>
-                <h4 className="font-display font-semibold text-[17px] text-ink">
-                  The {AI_BOTS.length} crawlers we evaluate
-                </h4>
-                <p className="mt-1 text-[14px] text-ink-muted leading-5">
-                  Each one gets its own robots.txt verdict, because they are separate
-                  user-agents with separate rules. OpenAI alone ships three: you can allow
-                  ChatGPT search while opting out of training.
-                </p>
-                <div className="mt-3 overflow-x-auto rounded-card border border-line">
-                  <table className="w-full min-w-[26rem] border-collapse bg-white text-left">
-                    <caption className="sr-only">
-                      The AI crawlers this tool evaluates, the company behind each and
-                      what it feeds
-                    </caption>
-                    <thead>
-                      <tr className="border-line border-b bg-cream">
-                        <th scope="col" className={TH}>
-                          Crawler
-                        </th>
-                        <th scope="col" className={TH}>
-                          Run by
-                        </th>
-                        <th scope="col" className={TH}>
-                          What it feeds
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {AI_BOTS.map((bot) => (
-                        <tr
-                          key={bot.name}
-                          className="border-line border-b last:border-b-0"
-                        >
-                          <th
-                            scope="row"
-                            className="px-3 py-2 font-mono font-normal text-[13px] text-ink"
-                          >
-                            {bot.name}
-                          </th>
-                          <td className="px-3 py-2 text-[14px] text-ink-muted">
-                            {bot.company}
-                          </td>
-                          <td className="px-3 py-2 text-[14px] text-ink-muted">
-                            {bot.purpose}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
 
               <div>
                 <h4 className="font-display font-semibold text-[17px] text-ink">
-                  What the score is made of
+                  Structured data found
                 </h4>
-                <dl className="mt-3 divide-y divide-line border-line border-t">
-                  {CHECK_LEGEND.map((item) => (
-                    <div key={item.label} className="py-2.5">
-                      <dt className="flex items-baseline justify-between gap-3">
-                        <span className="font-semibold text-[14px] text-ink">
-                          {item.label}
-                        </span>
-                        <span className="shrink-0 font-medium text-[13px] text-ink-subtle tabular-nums">
-                          {item.weight}
-                        </span>
-                      </dt>
-                      <dd className="mt-0.5 text-[13px] text-ink-muted leading-5">
-                        {item.meaning}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-                {/* Kept at the score because the score is where over-reading
-                    happens; trimmed to one line since the FAQ below answers
-                    "what does 80+ mean" in full. */}
-                <p className="hint mt-3">
-                  100/100 means AI engines <em>can</em> read and parse you — not that they
-                  will cite you.
+                <p className="mt-1 text-[14px] text-ink-muted leading-5">
+                  The @type values declared in ld+json blocks on your homepage.
                 </p>
+                {report.jsonLdTypes.length > 0 ? (
+                  <ul className="mt-3 flex flex-wrap gap-2">
+                    {report.jsonLdTypes.map((type) => (
+                      <li
+                        key={type}
+                        className="rounded-pill border border-violet-700 bg-cream px-2.5 py-1 font-medium text-[13px] text-violet-700"
+                      >
+                        {type}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="mt-3 rounded-card border border-line-grey bg-offwhite p-3 text-[14px] text-ink-muted leading-5">
+                    No JSON-LD structured data on the homepage — AI engines have to infer
+                    what your site is instead of being told.
+                  </p>
+                )}
               </div>
             </div>
-          )}
-        </Pane>
-      }
-      status={
+
+            {/* AI recommendation */}
+            <div className="flex flex-col gap-3 rounded-card border border-line-grey bg-violet-50 p-4">
+              <h4 className="flex items-center gap-2 font-display font-semibold text-[16px] text-ink">
+                <Sparkles className="size-4 text-violet-700" aria-hidden="true" />
+                AI recommendation
+              </h4>
+              <p className="text-[14px] text-ink-body leading-6">
+                {topFix !== undefined
+                  ? topFix.fix
+                  : 'Every scored check passes. Keep an eye on the noai signal below if your policy on AI use ever changes.'}
+              </p>
+              <div>
+                <button
+                  type="button"
+                  onClick={viewRecommendations}
+                  className="rounded-sm border border-line-grey bg-cream px-3 py-1.5 font-medium text-[13px] text-ink transition-colors hover:border-ink"
+                >
+                  View recommendations
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* Not an empty state — the legend for the report that replaces it. */
+          <div className="flex flex-col gap-5">
+            <div>
+              <h4 className="font-display font-semibold text-[17px] text-ink">
+                The {AI_BOTS.length} crawlers we evaluate
+              </h4>
+              <p className="mt-1 text-[14px] text-ink-muted leading-5">
+                Each one gets its own robots.txt verdict, because they are separate
+                user-agents with separate rules. OpenAI alone ships three: you can allow
+                ChatGPT search while opting out of training.
+              </p>
+              <div className="mt-3 overflow-x-auto rounded-card border border-line">
+                <table className="w-full min-w-[26rem] border-collapse bg-cream text-left">
+                  <caption className="sr-only">
+                    The AI crawlers this tool evaluates, the company behind each and what
+                    it feeds
+                  </caption>
+                  <thead>
+                    <tr className="border-line border-b bg-cream">
+                      <th scope="col" className={TH}>
+                        Crawler
+                      </th>
+                      <th scope="col" className={TH}>
+                        Run by
+                      </th>
+                      <th scope="col" className={TH}>
+                        What it feeds
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {AI_BOTS.map((bot) => (
+                      <tr key={bot.name} className="border-line border-b last:border-b-0">
+                        <th
+                          scope="row"
+                          className="px-3 py-2 font-mono font-normal text-[13px] text-ink"
+                        >
+                          {bot.name}
+                        </th>
+                        <td className="px-3 py-2 text-[14px] text-ink-muted">
+                          {bot.company}
+                        </td>
+                        <td className="px-3 py-2 text-[14px] text-ink-muted">
+                          {bot.purpose}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-display font-semibold text-[17px] text-ink">
+                What the score is made of
+              </h4>
+              <dl className="mt-3 divide-y divide-line border-line border-t">
+                {CHECK_LEGEND.map((item) => (
+                  <div key={item.label} className="py-2.5">
+                    <dt className="flex items-baseline justify-between gap-3">
+                      <span className="font-semibold text-[14px] text-ink">
+                        {item.label}
+                      </span>
+                      <span className="shrink-0 font-medium text-[13px] text-ink-subtle tabular-nums">
+                        {item.weight}
+                      </span>
+                    </dt>
+                    <dd className="mt-0.5 text-[13px] text-ink-muted leading-5">
+                      {item.meaning}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+              {/* Kept at the score because the score is where over-reading happens;
+                  trimmed to one line since the FAQ elsewhere answers "what does 80+
+                  mean" in full. */}
+              <p className="hint mt-3">
+                100/100 means AI engines <em>can</em> read and parse you — not that they
+                will cite you.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="border-line border-t pt-4">
         <StatusBar
           // 'valid' is reserved for a genuinely good verdict. A green tick beside
           // "5/100, Mostly invisible to AI" would assert the opposite of the
@@ -847,16 +1001,13 @@ export function AiVisibilityChecker() {
               ? [
                   { label: 'crawlers allowed', value: `${report.allowedBotCount}` },
                   { label: 'blocked', value: `${blockedCount}` },
-                  {
-                    label: 'schema types',
-                    value: `${report.jsonLdTypes.length}`,
-                  },
+                  { label: 'schema types', value: `${report.jsonLdTypes.length}` },
                 ]
               : [{ label: 'crawlers checked', value: `${AI_BOTS.length}` }]
           }
           privacyNote="Four requests to your domain, once — no email, nothing stored"
         />
-      }
-    />
+      </div>
+    </div>
   )
 }

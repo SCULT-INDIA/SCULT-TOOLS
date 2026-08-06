@@ -7,7 +7,7 @@ export const meta: Tool = {
   h1: 'Favicon Generator',
   description:
     'Make a complete favicon set — favicon.ico, PNGs and apple-touch-icon — from an image, text or emoji. Everything is generated in your browser; nothing uploads.',
-  tagline: 'One image, letter or emoji in — the whole favicon set out.',
+  tagline: 'Create perfect favicons for all platforms in seconds.',
   keywords: [
     'favicon generator',
     'favicon.ico generator',
@@ -37,11 +37,11 @@ export const meta: Tool = {
     'Paste the HTML snippet into your <head> and drop the files in your site root.',
   ],
   howItWorks:
-    'Your source is drawn onto a 512px canvas — an image gets centre-cropped to a square, text and emoji are rendered directly — then scaled down to each target size with high-quality resampling. The favicon.ico is assembled here in the browser: ICO is not an image format but a container, a 6-byte ICONDIR header plus a 16-byte directory entry per image (with the quirk that 256px is encoded as a 0 width byte), followed by the payloads. We pack real PNGs inside it, which has been valid since Windows Vista and is what every modern browser expects, so one .ico carries crisp 16, 32 and 48px versions and the renderer picks the right one. The apple-touch-icon is flattened onto a solid background because iOS ignores alpha and paints transparency black. Android and PWA installs need no extra files beyond one 512px PNG plus a 192px one declared in site.webmanifest — Chrome scales those for every launcher density. The ZIP download is built by our own STORE-method writer with per-file CRC-32 checksums; PNGs are already compressed, so the archive stores them as-is. No canvas data, image or filename ever leaves this tab.',
+    'Your source is drawn onto a 512px canvas, then scaled to each target size with high-quality resampling. The favicon.ico is byte-assembled here as a real ICO container packing PNGs for 16, 32 and 48px, valid since Windows Vista. The apple-touch-icon is flattened onto a solid background because iOS ignores alpha. Nothing leaves your browser.',
   limitations: [
-    'No SVG favicon output. An SVG favicon is worth adding by hand — it needs real vector source art, and rasterising a bitmap into an SVG wrapper would only inflate the file without gaining sharpness.',
-    'Detailed photos and busy logos turn to mud at 16px. A favicon needs one bold shape, one or two colours, and near-zero fine detail — if the 16px preview looks smudged, simplify the source rather than fighting the scaler.',
-    'Emoji rendering uses the fonts installed on your device, so the exact emoji artwork can differ slightly from what visitors on other platforms would draw — the generated PNGs freeze whichever design your system uses.',
+    'No SVG output — that needs real vector source art, not a rasterised wrapper.',
+    'Detailed photos and busy logos turn to mud at 16px; simplify the source if the preview looks smudged.',
+    'Emoji artwork comes from your device’s fonts, so it can look different on other platforms.',
   ],
   faq: [
     {

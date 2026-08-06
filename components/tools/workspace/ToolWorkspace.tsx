@@ -60,7 +60,7 @@ export function ToolWorkspace({
   outputFirstOnMobile?: boolean
 }) {
   return (
-    <div className="overflow-hidden rounded-panel border border-line bg-white">
+    <div className="overflow-hidden rounded-panel border border-line bg-cream">
       {toolbar ? <div className="border-line border-b bg-offwhite">{toolbar}</div> : null}
 
       <div className="grid lg:grid-cols-2">
@@ -110,16 +110,39 @@ export function Pane({
       {title || actions ? (
         <header className="flex min-h-12 shrink-0 items-center justify-between gap-3 border-line border-b px-4 py-2">
           {title ? (
-            <h3 className="font-sans font-bold text-[12px] text-ink-subtle uppercase tracking-[0.1em]">
+            // `shrink-0`: without it, a header whose title + actions don't
+            // both fit lets the flex algorithm shrink either child — and by
+            // default it shrinks the title (shorter, so it "loses" less
+            // space in the ratio) rather than the actions, wrapping a short
+            // uppercase label like "JSON-LD" mid-word onto two lines while
+            // the actions stay full width. The title should never wrap; the
+            // actions (already `flex items-center gap-2`, individually
+            // shrinkable/wrappable buttons) are the right thing to give way.
+            <h3 className="shrink-0 whitespace-nowrap font-sans font-bold text-[12px] text-ink-subtle uppercase tracking-[0.1em]">
               {title}
             </h3>
           ) : (
             <span />
           )}
-          {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
+          {actions ? (
+            <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
+              {actions}
+            </div>
+          ) : null}
         </header>
       ) : null}
-      <div className={`flex-1 ${scroll ? 'overflow-auto' : ''} ${padded ? 'p-4' : ''}`}>
+      {/* `min-h-0` overrides the flex item's default `min-height: auto`. Without
+          it, a flex child in a column ancestor refuses to shrink below its own
+          content's natural height — which defeats `overflow-auto` entirely: the
+          div renders at full content height and paints straight through the
+          fixed-height section around it instead of clipping and scrolling.
+          Invisible whenever content already fits (nothing to overflow), which is
+          why this shipped unnoticed — it only shows up once a pane's content
+          exceeds its `minHeight`, e.g. the invoice preview's A4-aspect sheet
+          getting shorter at narrower widths while its content stays the same. */}
+      <div
+        className={`min-h-0 flex-1 ${scroll ? 'overflow-auto' : ''} ${padded ? 'p-4' : ''}`}
+      >
         {children}
       </div>
     </>

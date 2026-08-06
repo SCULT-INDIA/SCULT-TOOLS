@@ -25,7 +25,9 @@ export const meta: Tool = {
   runtime: 'client',
   monthlyCostCeiling: 0,
   leadTier: 'B',
-  serviceTarget: 'seo',
+  // 'seo' 404s on scult.in — no generic page under that slug exists;
+  // 'seo-companies-for-small-business' is the closest real service page.
+  serviceTarget: 'seo-companies-for-small-business',
   updatedAt: '2026-07-29',
   owner: 'scult-seo',
   icon: 'MessageCircleQuestion',
@@ -37,11 +39,11 @@ export const meta: Tool = {
     'Paste it into your page and confirm it with the schema.org validator — Google’s Rich Results Test dropped FAQPage support in June 2026.',
   ],
   howItWorks:
-    'Your pairs become a schema.org FAQPage: a mainEntity array where each entry is a Question whose acceptedAnswer is an Answer with a text property — the exact shape Google’s structured-data documentation specifies. The JSON is serialised with every "<" escaped as a \\u003c unicode sequence, which parses back to the same string but can never form a closing script tag, so an answer containing HTML cannot break out of the <script type="application/ld+json"> element you paste it into. The HTML output exists because Google’s guidelines require the marked-up Q&A to be visible on the page — schema with no matching on-page content is a guideline violation, so the tool emits a semantic details/summary block alongside the script tag. Be clear about what the markup buys you today: FAQ rich results are gone. Google restricted them to well-known authoritative sites in August 2023 and then retired them entirely on 7 May 2026 — the expandable Q&A under a snippet no longer appears for anyone, and Google cited markup abuse as the reason. Rich Results Test support for FAQPage was removed in June 2026 and the Search Console API followed in August, so validate against the schema.org validator instead. FAQPage itself remains a valid schema.org type and is safe to keep on your pages. The reason to ship it now is a different reader: AI search engines and answer engines parse structured data regardless of rich-result eligibility, so clean FAQPage markup makes your answers unambiguous to the systems that are still reading them. If you added FAQ schema purely for the rich result, it is no longer doing that job.',
+    'Your pairs become a schema.org FAQPage: a mainEntity array of Question objects whose acceptedAnswer holds the Answer text — the shape Google’s structured-data docs specify. Every "<" is serialised as \\u003c, so embedded HTML can’t break out of the <script type="application/ld+json"> tag. Google retired FAQ rich results on 7 May 2026, but AI answer engines still parse this markup, and the HTML output satisfies the on-page-visibility requirement schema.org checks require.',
   limitations: [
-    'FAQ rich results no longer exist. Google retired them on 7 May 2026 for all sites, so this markup will not produce an expandable Q&A under your snippet. It is worth shipping for AI answer engines and for schema clarity, not for a rich result.',
-    'The marked-up questions and answers must be visible on the page. Schema that has no matching on-page content violates Google’s structured-data guidelines and can attract a manual action.',
-    'The roughly 1,200-character answer limit the tool warns about came from the retired rich result. It is kept as a discipline rather than a requirement: a concise answer is easier for an answer engine to quote, and nothing enforces it now.',
+    'FAQ rich results were retired by Google on 7 May 2026, so this markup won’t produce an expandable Q&A in search — it’s worth adding for AI answer engines and schema clarity instead.',
+    'The marked-up questions and answers must also be visible as real text on the page; schema with no matching on-page content violates Google’s guidelines.',
+    'The ~1,200-character answer limit the tool flags is a holdover from the retired rich result, kept as a discipline for concise, quotable answers rather than an enforced rule.',
   ],
   faq: [
     {

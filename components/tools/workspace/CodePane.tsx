@@ -45,13 +45,24 @@ export function CodePane({
   const gutterWidth = `${String(lines.length).length + 1}ch`
 
   return (
-    <div className="h-full overflow-auto bg-white font-mono text-[13px] leading-[1.65]">
+    // print-paper-ctx: this pane's syntax palette (TOKEN_CLASS below) is a fixed
+    // ramp "verified against white" per the docblock, with no dark-mode variant —
+    // so the canvas itself must always render as a light document regardless of
+    // the site theme, exactly like the escape hatch's other use (the invoice
+    // canvas). Without it, --color-ink/-ink-muted/-ink-subtle invert to their
+    // near-white dark-theme values while this bg (and bg-peach below) stay fixed
+    // light, making most token text and any highlighted line unreadable.
+    <div className="h-full overflow-auto bg-white font-mono text-[13px] leading-[1.65] print-paper-ctx">
       <div className="flex min-w-full">
         {/* Gutter. aria-hidden: line numbers are a visual aid, and a screen
-            reader announcing "1 2 3 4" before every line is pure noise. */}
+            reader announcing "1 2 3 4" before every line is pure noise.
+            bg-white, not bg-offwhite: the two are visually identical in light
+            mode, but bg-offwhite is a token that inverts to near-black in dark
+            mode — since the pane above it is pinned light via print-paper-ctx,
+            an inverting gutter would show a dark seam next to a light canvas. */}
         <div
           aria-hidden="true"
-          className="sticky left-0 shrink-0 select-none border-line border-r bg-offwhite py-3 text-right text-ink-subtle"
+          className="sticky left-0 shrink-0 select-none border-line border-r bg-white py-3 text-right text-ink-subtle"
           style={{ width: gutterWidth, paddingInline: '0.5rem' }}
         >
           {lines.map((_, i) => (

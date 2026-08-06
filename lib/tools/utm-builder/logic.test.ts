@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { buildUtmUrl, normalizeUtmValue, parseUtmPrefs } from './logic'
+import {
+  buildUtmUrl,
+  computeQualityScore,
+  normalizeUtmValue,
+  parseUtmPrefs,
+} from './logic'
 
 const BASE = {
   source: 'newsletter',
@@ -132,6 +137,24 @@ describe('normalizeUtmValue', () => {
   })
 })
 
+describe('buildUtmUrl — campaign ID', () => {
+  it('applies utm_id when a campaign ID is given', () => {
+    const r = buildUtmUrl({ url: 'https://example.com', ...BASE, campaignId: '7891011' })
+    expect(r.url).toContain('utm_id=7891011')
+    expect(r.params).toContainEqual({ param: 'utm_id', value: '7891011' })
+  })
+
+  it('omits utm_id when no campaign ID is given, without affecting other params', () => {
+    const r = buildUtmUrl({ url: 'https://example.com', ...BASE })
+    expect(r.url).not.toContain('utm_id')
+    expect(r.params.map((p) => p.param)).toEqual([
+      'utm_source',
+      'utm_medium',
+      'utm_campaign',
+    ])
+  })
+})
+
 describe('buildUtmUrl — warnings', () => {
   it('warns and assumes https when the URL has no protocol', () => {
     const r = buildUtmUrl({ url: 'example.com/pricing', ...BASE })
@@ -209,6 +232,41 @@ describe('buildUtmUrl — invalid input never throws', () => {
     for (const prefix of ['h', 'ht', 'htt', 'http', 'https', 'https:', 'https:/']) {
       expect(() => buildUtmUrl({ url: prefix, ...BASE })).not.toThrow()
     }
+  })
+})
+
+describe('computeQualityScore', () => {
+  it('scores 100 with every check passing on a clean link', () => {
+    const r = buildUtmUrl({ url: 'https://example.com', ...BASE })
+    const quality = computeQualityScore(r)
+    expect(quality.score).toBe(100)
+    expect(quality.checks.every((c) => c.pass)).toBe(true)
+  })
+
+  it('scores 0 and fails the required check when the URL cannot be built', () => {
+    const r = buildUtmUrl({ url: 'not a url', ...BASE })
+    const quality = computeQualityScore(r)
+    expect(quality.score).toBe(0)
+    expect(quality.checks.find((c) => c.id === 'required')?.pass).toBe(false)
+  })
+
+  it('fails the casing check and drags the score down when casing is inconsistent', () => {
+    const r = buildUtmUrl({
+      url: 'https://example.com',
+      ...BASE,
+      campaign: 'Spring Sale',
+      lowercase: false,
+    })
+    const quality = computeQualityScore(r)
+    expect(quality.checks.find((c) => c.id === 'casing')?.pass).toBe(false)
+    expect(quality.checks.find((c) => c.id === 'best-practices')?.pass).toBe(false)
+    expect(quality.score).toBeLessThan(100)
+  })
+
+  it('fails the required check when a required parameter is missing', () => {
+    const r = buildUtmUrl({ url: 'https://example.com', source: 'newsletter' })
+    const quality = computeQualityScore(r)
+    expect(quality.checks.find((c) => c.id === 'required')?.pass).toBe(false)
   })
 })
 

@@ -309,7 +309,7 @@ export function MarketingRoiCalculator() {
                         className={`min-h-11 rounded-sm border px-3 font-medium text-[13px] transition-colors ${
                           active
                             ? 'border-ink bg-violet-700 text-white'
-                            : 'border-line-grey bg-white text-ink-muted hover:border-ink hover:text-ink'
+                            : 'border-line-grey bg-cream text-ink-muted hover:border-ink hover:text-ink'
                         }`}
                       >
                         {preset.label} {preset.value}%
@@ -330,9 +330,8 @@ export function MarketingRoiCalculator() {
           {allBlank ? (
             <div className="flex h-full items-center justify-center p-6">
               <p className="max-w-[38ch] text-center text-[14px] text-ink-subtle leading-6">
-                Enter the spend, the revenue it brought in, and your gross margin. This
-                pane then shows the verdict, your ROAS against the break-even ROAS your
-                margin demands, and the full working.
+                Enter the spend, revenue and margin to see the verdict, the ROAS vs.
+                break-even ROAS comparison, and the full working.
               </p>
             </div>
           ) : !result.ok ? (
@@ -342,8 +341,8 @@ export function MarketingRoiCalculator() {
                 <span className="font-semibold text-ink">
                   {FIELD_LABEL[result.field]}
                 </span>{' '}
-                field needs attention — the note beside it says what. Once it reads as a
-                number, the verdict and the break-even comparison appear here.
+                field needs attention — fix it to see the verdict and break-even
+                comparison here.
               </p>
             </div>
           ) : (
@@ -613,7 +612,7 @@ function BarRow({
           depends on seeing the bar. */}
       <div
         aria-hidden="true"
-        className="mt-1.5 h-2.5 w-full overflow-hidden rounded-pill border border-ink/20 bg-white"
+        className="mt-1.5 h-2.5 w-full overflow-hidden rounded-pill border border-ink/20 bg-cream"
       >
         <span
           className={`block h-full rounded-pill ${tone === 'mine' ? 'bg-violet-700' : 'bg-ink'}`}
@@ -682,8 +681,17 @@ function Field({
         />
       </div>
       {error !== undefined ? (
+        // This hint sits directly on the Campaign-figures Pane's ambient
+        // bg-cream — no bg-violet-50/tile-* fill in between — so it falls
+        // outside the existing dark-mode fix for violet-700-on-tile-fill
+        // pairings and measures ~2.27:1 in dark mode. --color-violet-accent-text
+        // is the codebase's existing token for standalone accent text/icons on
+        // an ambient surface (see .eyebrow / the nav-link hover state); it is
+        // dark-mode-only, so the fallback keeps light mode unchanged. The
+        // TriangleAlert icon below has no color class of its own, so it
+        // inherits this fix too.
         <p
-          className="mt-1.5 flex gap-1.5 font-medium text-[13px] text-violet-700 leading-5"
+          className="mt-1.5 flex gap-1.5 font-medium text-[13px] text-[var(--color-violet-accent-text,var(--color-violet-700))] leading-5"
           id={hintId}
         >
           <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden="true" />

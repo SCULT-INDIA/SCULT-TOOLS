@@ -25,10 +25,10 @@ export const meta: Tool = {
     'Copy the result.',
   ],
   howItWorks:
-    'Parsing uses the native JSON.parse, which is both the fastest and the most standards-accurate option available. Native error messages only give a character offset, so we convert that offset into a line and column and show the offending line — which is the difference between an opaque "unexpected token at position 1043" and knowing it is a trailing comma on line 42.',
+    'Parsing uses the native JSON.parse, the fastest and most standards-accurate option available. Its errors only give a character offset, so we convert that into a line and column and show the offending line — turning "unexpected token at position 1043" into "trailing comma on line 42."',
   limitations: [
-    'Strict JSON only. Comments, trailing commas and single-quoted strings are invalid by specification and will be reported as errors rather than silently fixed.',
-    'Integers beyond 2^53 lose precision, because JavaScript numbers are IEEE-754 doubles. This is a property of the language, not this tool.',
+    'Strict JSON only — comments, trailing commas and single-quoted strings are reported as errors, not silently fixed.',
+    'Integers beyond 2^53 lose precision; JavaScript numbers are IEEE-754 doubles.',
   ],
   faq: [
     {

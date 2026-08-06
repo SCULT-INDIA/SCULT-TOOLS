@@ -19,7 +19,9 @@ export const meta: Tool = {
   runtime: 'client',
   monthlyCostCeiling: 0,
   leadTier: 'B',
-  serviceTarget: 'performance-marketing',
+  // 'performance-marketing' 404s on scult.in — no generic page under that
+  // slug exists; 'google-ads-management' is the closest real service page.
+  serviceTarget: 'google-ads-management',
   updatedAt: '2026-07-28',
   owner: 'scult-growth',
   icon: 'Link2',
@@ -30,10 +32,10 @@ export const meta: Tool = {
     'Copy the tagged URL, or save the preset for next time.',
   ],
   howItWorks:
-    'Parameters are appended with the URL API rather than string concatenation, which correctly handles a destination that already has a query string or a fragment. Values are lowercased and spaces become hyphens by default, because GA4 treats `Spring-Sale` and `spring-sale` as two different campaigns — inconsistent casing is the single most common cause of fragmented campaign reports.',
+    'Parameters are appended via the URL API, so it works correctly even if the destination already has a query string or fragment. Values are lowercased and spaces become hyphens, since GA4 treats `Spring-Sale` and `spring-sale` as separate campaigns — a common cause of fragmented reports.',
   limitations: [
-    'UTMs are visible in the URL and trivially editable by anyone. They are for attribution, never for access control or secrets.',
-    'GA4 also reads `gclid` and `fbclid` automatically. Adding UTMs to an ad that already auto-tags can double-count if configured badly.',
+    'UTMs are visible in the URL and editable by anyone — never use them for access control or secrets.',
+    'GA4 also auto-reads `gclid` and `fbclid`, so adding UTMs on top of auto-tagged ads can double-count.',
   ],
   faq: [
     {

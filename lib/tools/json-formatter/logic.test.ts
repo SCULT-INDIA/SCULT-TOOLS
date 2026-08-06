@@ -1,5 +1,16 @@
 import { describe, expect, it } from 'vitest'
-import { formatBytes, formatJson, minifyJson } from './logic'
+import {
+  compareJson,
+  formatBytes,
+  formatJson,
+  formatJsonPath,
+  getAtPath,
+  minifyJson,
+  previewValue,
+  repairJson,
+  setAtPath,
+  typeOfValue,
+} from './logic'
 
 describe('formatJson — formatting', () => {
   it('formats valid JSON with a 2-space indent by default', () => {
@@ -249,5 +260,195 @@ describe('formatBytes', () => {
   it('does not print a nonsense figure for invalid input', () => {
     expect(formatBytes(Number.NaN)).toBe('—')
     expect(formatBytes(-1)).toBe('—')
+  })
+})
+
+describe('typeOfValue', () => {
+  it('names every JSON value shape', () => {
+    expect(typeOfValue(null)).toBe('null')
+    expect(typeOfValue([1])).toBe('array')
+    expect(typeOfValue({})).toBe('object')
+    expect(typeOfValue('s')).toBe('string')
+    expect(typeOfValue(1)).toBe('number')
+    expect(typeOfValue(true)).toBe('boolean')
+  })
+})
+
+describe('formatJsonPath', () => {
+  it('renders identifier keys with dot notation', () => {
+    expect(formatJsonPath(['a', 'b'])).toBe('$.a.b')
+  })
+
+  it('renders array indices in brackets', () => {
+    expect(formatJsonPath(['items', 0, 'sku'])).toBe('$.items[0].sku')
+  })
+
+  it('brackets and quotes keys that are not valid identifiers', () => {
+    expect(formatJsonPath(['a-b'])).toBe('$["a-b"]')
+    expect(formatJsonPath(['2fast'])).toBe('$["2fast"]')
+  })
+
+  it('renders the root path as just "$"', () => {
+    expect(formatJsonPath([])).toBe('$')
+  })
+})
+
+describe('previewValue', () => {
+  it('summarises containers by size, not contents', () => {
+    expect(previewValue({})).toBe('{}')
+    expect(previewValue({ a: 1 })).toBe('{1 key}')
+    expect(previewValue({ a: 1, b: 2 })).toBe('{2 keys}')
+    expect(previewValue([])).toBe('[]')
+    expect(previewValue([1, 2, 3])).toBe('[3 items]')
+  })
+
+  it('renders scalars as their JSON literal', () => {
+    expect(previewValue('hi')).toBe('"hi"')
+    expect(previewValue(42)).toBe('42')
+    expect(previewValue(true)).toBe('true')
+    expect(previewValue(null)).toBe('null')
+  })
+
+  it('truncates long strings rather than printing them in full', () => {
+    const long = previewValue('x'.repeat(200), 20)
+    expect(long.length).toBeLessThanOrEqual(20)
+    expect(long.endsWith('…"')).toBe(true)
+  })
+})
+
+describe('getAtPath / setAtPath', () => {
+  const doc = { a: { b: [1, 2, { c: 3 }] }, d: 'x' }
+
+  it('reads a nested value by path', () => {
+    expect(getAtPath(doc, ['a', 'b', 2, 'c'])).toBe(3)
+    expect(getAtPath(doc, ['d'])).toBe('x')
+    expect(getAtPath(doc, [])).toBe(doc)
+  })
+
+  it('returns undefined for a path that does not exist', () => {
+    expect(getAtPath(doc, ['nope'])).toBeUndefined()
+    expect(getAtPath(doc, ['a', 'b', 99])).toBeUndefined()
+    expect(getAtPath(doc, ['d', 'x'])).toBeUndefined()
+  })
+
+  it('replaces a value at a path without mutating the original', () => {
+    const next = setAtPath(doc, ['a', 'b', 2, 'c'], 99)
+    expect(getAtPath(next, ['a', 'b', 2, 'c'])).toBe(99)
+    expect(getAtPath(doc, ['a', 'b', 2, 'c'])).toBe(3)
+  })
+
+  it('leaves sibling subtrees referentially unchanged', () => {
+    const next = setAtPath(doc, ['d'], 'y') as typeof doc
+    expect(next.a).toBe(doc.a)
+  })
+
+  it('is a no-op for a path that does not resolve', () => {
+    expect(setAtPath(doc, ['nope'], 1)).toBe(doc)
+    expect(setAtPath(doc, ['a', 'b', 99], 1)).toBe(doc)
+  })
+})
+
+describe('repairJson', () => {
+  it('passes already-valid JSON straight through, unmarked as repaired', () => {
+    const r = repairJson('{"a":1}')
+    expect(r.error).toBeUndefined()
+    expect(r.repaired).toBe(false)
+  })
+
+  it('fixes a trailing comma', () => {
+    const r = repairJson('{"a": 1,}')
+    expect(r.error).toBeUndefined()
+    expect(r.repaired).toBe(true)
+    expect(r.output).toBe('{\n  "a": 1\n}')
+  })
+
+  it('fixes single-quoted strings', () => {
+    const r = repairJson("{'a': 'x'}")
+    expect(r.error).toBeUndefined()
+    expect(r.output).toBe('{\n  "a": "x"\n}')
+  })
+
+  it('fixes unquoted keys', () => {
+    const r = repairJson('{a: 1, b: 2}')
+    expect(r.error).toBeUndefined()
+    expect(r.output).toBe('{\n  "a": 1,\n  "b": 2\n}')
+  })
+
+  it('strips // and block comments', () => {
+    const r = repairJson('{\n  // note\n  "a": 1 /* inline */\n}')
+    expect(r.error).toBeUndefined()
+    expect(r.output).toBe('{\n  "a": 1\n}')
+  })
+
+  it('does not touch // inside a string value', () => {
+    const r = repairJson('{"url": "https://example.com"}')
+    expect(r.error).toBeUndefined()
+    expect(r.output).toContain('https://example.com')
+  })
+
+  it('does not touch a single quote inside a double-quoted string', () => {
+    const r = repairJson('{"name": "O\'Brien"}')
+    expect(r.error).toBeUndefined()
+    expect(r.output).toContain("O'Brien")
+  })
+
+  it('handles several problems in the same document', () => {
+    const r = repairJson(
+      "{\n  name: 'Scult', // trailing comma below\n  active: true,\n}",
+    )
+    expect(r.error).toBeUndefined()
+    expect(r.repaired).toBe(true)
+    expect(JSON.parse(r.output)).toEqual({ name: 'Scult', active: true })
+  })
+
+  it('reports failure, still marked as an attempted repair, for unfixable input', () => {
+    const r = repairJson('not json at all {{{')
+    expect(r.error).toBeDefined()
+    expect(r.repaired).toBe(true)
+  })
+
+  it('treats empty input as not an error', () => {
+    expect(repairJson('').output).toBe('')
+    expect(repairJson('').error).toBeUndefined()
+  })
+})
+
+describe('compareJson', () => {
+  it('reports no differences for identical documents', () => {
+    const r = compareJson({ a: 1, b: [1, 2] }, { a: 1, b: [1, 2] })
+    expect(r.identical).toBe(true)
+    expect(r.entries).toHaveLength(0)
+  })
+
+  it('reports an added key', () => {
+    const r = compareJson({ a: 1 }, { a: 1, b: 2 })
+    expect(r.entries).toEqual([{ path: '$.b', kind: 'added', right: '2' }])
+  })
+
+  it('reports a removed key', () => {
+    const r = compareJson({ a: 1, b: 2 }, { a: 1 })
+    expect(r.entries).toEqual([{ path: '$.b', kind: 'removed', left: '2' }])
+  })
+
+  it('reports a changed scalar', () => {
+    const r = compareJson({ a: 1 }, { a: 2 })
+    expect(r.entries).toEqual([{ path: '$.a', kind: 'changed', left: '1', right: '2' }])
+  })
+
+  it('reports a type change as changed, not added+removed', () => {
+    const r = compareJson({ a: 1 }, { a: '1' })
+    expect(r.entries).toEqual([{ path: '$.a', kind: 'changed', left: '1', right: '"1"' }])
+  })
+
+  it('walks nested objects and arrays with a path per difference', () => {
+    const r = compareJson({ items: [{ sku: 'A' }] }, { items: [{ sku: 'B' }] })
+    expect(r.entries).toEqual([
+      { path: '$.items[0].sku', kind: 'changed', left: '"A"', right: '"B"' },
+    ])
+  })
+
+  it('diffs extra array elements as additions', () => {
+    const r = compareJson([1, 2], [1, 2, 3])
+    expect(r.entries).toEqual([{ path: '$[2]', kind: 'added', right: '3' }])
   })
 })

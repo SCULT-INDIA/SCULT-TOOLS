@@ -100,9 +100,17 @@
   --radius-panel: 26px;
   --radius-pill: 100px;
 
-  /* ---- Shadows: flat + hard-offset, not soft elevation -------------------- */
-  --shadow-brutal: 7px 7px 0 0 #000000;
-  --shadow-brutal-sm: 4px 4px 0 0 #000000;
+  /* ---- Shadows: flat + hard-offset, not soft elevation --------------------
+     --color-shadow-ink backs the brutal offset block specifically so it can
+     be re-themed: the offset sits BESIDE/BEHIND the face on the PAGE, not
+     behind it, so its visibility depends entirely on contrast against the
+     page, never against the face. Light mode: black on white (~21:1). Dark
+     mode inverts it to white (~19.5:1 on the darkest new surface) — the
+     standard inverted-neo-brutalism convention, not something bespoke here.
+     Dark value is declared in :root[data-theme="dark"] below. */
+  --color-shadow-ink: #000000;
+  --shadow-brutal: 7px 7px 0 0 var(--color-shadow-ink);
+  --shadow-brutal-sm: 4px 4px 0 0 var(--color-shadow-ink);
   --shadow-card: 0 4px 10px 0 rgb(0 0 0 / 0.08);
   --shadow-card-raised: 0 10px 24px 0 rgb(0 0 0 / 0.12);
   --shadow-glow: 0 0 30px 0 rgb(255 255 255 / 0.49);
@@ -125,6 +133,93 @@
 
   --ease-brand: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* =============================================================================
+   DARK THEME — token overrides.
+
+   `data-theme` is set on <html> by the blocking bootstrap script in
+   app/layout.tsx (and kept in sync afterwards by ThemeProvider), which
+   resolves 'system' into an explicit 'light' | 'dark' before this CSS ever
+   has to react — so this is a plain attribute selector, never a bare
+   `@media (prefers-color-scheme: dark)` block.
+
+   Design rule (user-confirmed, overrides an earlier, more elaborate pass):
+   dark mode changes SURFACES ONLY — the neutral backgrounds pages/cards/
+   panels/inputs sit on, plus the ink/text tokens needed to stay legible
+   against them. Every "identity" color — button faces (yellow CTA, violet
+   fills), badge/tile fills, link/icon accent colors (violet-500/600/700),
+   the headline gradient — renders EXACTLY the same hex value in dark mode
+   as in light mode. An earlier pass also recolored those for dark-mode
+   contrast; all of that was reverted (see git history around this comment
+   if you need the specific rules) because it changed the site's visual
+   identity between themes, which is explicitly not wanted here.
+
+   Surfaces are TRUE NEUTRAL BLACK/GRAY now, not the violet-tinted near-black
+   an earlier pass used (--color-cream was #14111e, --color-offwhite
+   #0d0b14, etc. — both have a blue-violet hue baked in). The values below
+   are plain neutral grays (zero saturation), the same elevation ladder
+   Android/Material dark themes use (#000000 → #121212 → #1e1e1e → #282828)
+   — "black", not "a very dark shade of the brand color". */
+:root[data-theme='dark'] {
+  /* ---- Surfaces: true neutral black, 4-step elevation ladder --------------
+     offwhite is the page itself (darkest); cream/ice/ice-2 step up in
+     lightness for raised card/panel/tint surfaces, same ordering light mode
+     uses (cream < ice < ice-2 in luminance there too). */
+  --color-cream: #121212;
+  --color-offwhite: #000000;
+  --color-ice: #1e1e1e;
+  --color-ice-2: #282828;
+
+  /* ---- Ink + lines: true neutral gray, same reasoning — no violet tint.
+     Necessary even under "colors don't change" (unlike buttons/badges/
+     links, body text has no brand identity to preserve — it exists purely
+     to be legible, and legible against a black page means light, not
+     black). Contrast vs --color-offwhite: ink ~19:1, ink-body ~17:1,
+     ink-muted ~9:1, ink-subtle ~5.5:1 — AA at worst, most AAA. */
+  --color-ink: #f5f5f5;
+  --color-ink-body: #ececec;
+  --color-ink-muted: #b5b5b5;
+  --color-ink-subtle: #8a8a8a;
+  --color-ink-subtle-onice: #9a9a9a;
+  --color-line: #232323; /* decorative only — matches light mode's role */
+  --color-line-grey: #3a3a3a; /* functional border — still subtle by design */
+
+  /* ---- Shadow ink: backs --shadow-brutal/--shadow-brutal-sm. Inverted to
+     white specifically because the hard-offset shadow sits BESIDE the
+     button on the page, not behind it — a black shadow on a black page is
+     invisible, which would silently strip every .btn-brutal of its
+     signature 3D offset. This is a structural fix to keep the shape
+     visible, not a color change to the button itself (face/text/border are
+     untouched — see the button rules further down). */
+  --color-shadow-ink: #ffffff;
+
+  /* ---- Soft-elevation shadows. Each adds a 1px inset light rim on the top
+     edge AND boosts the black shadow's opacity — a rim alone reads flat
+     here because the luminance gap between the new dark surfaces is tiny
+     (0.0037-0.0138), nowhere near what a light-mode card gets from white on
+     near-black; pure #000 stays objectively darker than every tinted
+     near-black surface, so the boosted shadow can still deepen the area
+     under/behind a card even when card and page are both "dark". */
+  --shadow-xs: inset 0 1px 0 0 rgb(255 255 255 / 0.05), 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-sm:
+    inset 0 1px 0 0 rgb(255 255 255 / 0.06), 0 1px 3px 0 rgb(0 0 0 / 0.55),
+    0 1px 2px -1px rgb(0 0 0 / 0.5);
+  --shadow-md:
+    inset 0 1px 0 0 rgb(255 255 255 / 0.07), 0 4px 12px -2px rgb(0 0 0 / 0.6),
+    0 2px 6px -2px rgb(0 0 0 / 0.5);
+  --shadow-lg:
+    inset 0 1px 0 0 rgb(255 255 255 / 0.08), 0 12px 32px -8px rgb(0 0 0 / 0.65),
+    0 4px 12px -4px rgb(0 0 0 / 0.55);
+  --shadow-card: inset 0 1px 0 0 rgb(255 255 255 / 0.05), 0 4px 10px 0 rgb(0 0 0 / 0.55);
+  --shadow-card-raised:
+    inset 0 1px 0 0 rgb(255 255 255 / 0.07), 0 10px 24px 0 rgb(0 0 0 / 0.6);
+  /* Colour glow, not a black shadow — reads MORE vividly against a near-black
+     page than white (classic simultaneous-contrast), so this is trimmed
+     slightly rather than boosted, to keep .btn-primary's hover glow from
+     looking neon against the dark canvas. A genuine minor tweak, not a
+     structural change like the shadows above. */
+  --shadow-violet-glow: 0 8px 30px -6px rgb(112 48 248 / 0.22);
 }
 
 /* =============================================================================
@@ -156,6 +251,25 @@
        does not change what `window.innerWidth`/media queries see — only how
        big the result of evaluating them is drawn. */
     zoom: 1.1;
+    /* Defensive, not decorative: any future full-bleed/breakout element that
+       computes its width from `100vw` will be off by the width of whatever
+       scrollbar-gutter this OS/browser reserves, because `vw` resolves
+       against the true viewport (includes the scrollbar) while this page's
+       own `margin-inline: auto` centering resolves against
+       `document.documentElement.clientWidth` (excludes it) — a few pixels of
+       mismatch that no local calc() can predict, since scrollbar width varies
+       by OS/browser/zoom setting (0 on macOS/overlay scrollbars, ~15-17px on
+       Windows). Clipping here traps that residual site-wide before it can
+       reach `document.documentElement.scrollWidth`, without needing every
+       future breakout to guess a magic number. First needed by the Schema
+       Markup Generator's wide layout (components/tools/SchemaMarkupGenerator.tsx).
+       `hidden`, not `clip`: tried `clip` first since it's the more precise
+       signal of intent, but measured that Chrome still let `window.scrollTo`
+       move the root scroll position past the "clipped" edge (the root/
+       viewport scroller doesn't suppress programmatic scroll under `clip` the
+       way a normal element does) — `hidden` measured as actually preventing
+       the scroll, not just hiding a scrollbar. */
+    overflow-x: hidden;
   }
 
   :root {
@@ -173,7 +287,13 @@
     font-size: var(--text-body);
     line-height: 24px;
     color: var(--color-ink-body);
-    background: #fff;
+    /* Was a literal #fff, which cannot be themed. --color-offwhite is the
+       token whose light-mode role is "recessed/neutral surface, functionally
+       the page" (#fafafb — near-indistinguishable from pure white, so this
+       is not a visible change in light mode) and whose dark value
+       (#0d0b14) is the darkest of the four new dark surfaces, giving every
+       raised card/panel token headroom to read as "above" the page. */
+    background: var(--color-offwhite);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -306,6 +426,43 @@
   .btn-white:hover {
     background: var(--color-cta);
   }
+  /* Dark-mode-only face swap for the three states that animate TO a literal
+     white background: .btn-white at rest, plus .btn-brutal/.btn-violet on
+     hover (both hover-transition to background:#fff — see their rules
+     above/below). In dark mode --color-ink (border) and --color-shadow-ink
+     (the brutal offset) both flip to near-white, so a #fff face sitting
+     between them collapses into one tonal blob — the border-vs-shadow step
+     that makes the brutal shadow read as 3D disappears specifically for
+     these white-face states. Swapping the face to --color-cream's dark
+     value (#14111e, the "raised card" surface) restores a real luminance
+     gap against the near-white border/shadow, without touching the border,
+     shadow, or text-color rules those states already share. */
+  :root[data-theme='dark'] .btn-white,
+  :root[data-theme='dark'] .btn-brutal:hover,
+  :root[data-theme='dark'] .btn-violet:hover {
+    background: var(--color-cream);
+  }
+
+  /* The bare `.btn-brutal` RESTING face (no `.btn-white`/`.btn-violet`
+     modifier, not `:hover`) is a case the swap above doesn't reach: its
+     `color`/`border` come from `--color-ink` on the base `.btn-brutal` rule
+     itself (a direct CSS property, not a `.text-ink` utility class an
+     existing selector could hook), while its `background` stays the
+     theme-invariant `--color-cta` (yellow — the token's own comment already
+     says "white text on this FAILS, always pair with #000"). In dark mode
+     `--color-ink` flips to near-white, so near-white text/border ends up on
+     unchanged yellow — measured ~1.45:1, effectively blank. Forcing black
+     unconditionally (not a token) is correct here specifically because the
+     yellow face never changes between themes, so neither should the text
+     that must read against it. `:not(:hover)` is required: on hover this
+     button's background already goes to `--color-cream` dark (near-black,
+     via the swap above), where the base rule's ink-flips-near-white text is
+     exactly what gives that state its own correct ~16-17:1 contrast — this
+     override must not follow the face there and re-collapse it to black. */
+  :root[data-theme='dark'] .btn-brutal:not(.btn-white):not(.btn-violet):not(:hover) {
+    color: #000;
+    border-color: #000;
+  }
 
   /* Tool chip — the tools-directory workhorse, from the reference's
      capability-chip grid. */
@@ -382,9 +539,17 @@
 
   /* The nav pill's WHITE FILL IS LOAD-BEARING: black 18px/500 nav text is
      3.36:1 over the aurora core, an AA failure. Never make this transparent. */
+  /* Given the site's own hard-offset shadow signature (every button, every
+     .chip-tool hover) — the pill previously carried none of it, reading as
+     a plain rounded bar borrowed from a different design system rather than
+     this one. border-ink + shadow-brutal-sm ties the nav into the same
+     neo-brutalist language, -sm because a persistent chrome element earns a
+     lighter touch than a CTA — the shadow is a signature, not a shout. */
   .nav-pill {
     background: #fff;
+    border: 2px solid var(--color-ink);
     border-radius: var(--radius-panel);
+    box-shadow: var(--shadow-brutal-sm);
   }
 
   /* Homepage hero — the hub-and-spoke category illustration.
@@ -641,6 +806,199 @@
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
   }
+
+  /* ==========================================================================
+     DARK-MODE: flip hardcoded-white surfaces to dark elevated variants.
+
+     These classes use literal `background: #fff` (necessary for light-mode
+     print-fidelity or WCAG-boundary contrast reasons) and cannot rely on a
+     CSS variable — so their dark-mode equivalent must be declared here as an
+     explicit override rather than delegated to a token swap in :root.
+     ========================================================================== */
+
+  /* Tool chip cards — the directory workhorse */
+  :root[data-theme='dark'] .chip-tool {
+    background: var(--color-cream);
+    border-color: var(--color-line-grey);
+  }
+  :root[data-theme='dark'] .chip-tool:hover,
+  :root[data-theme='dark'] .chip-tool:focus-visible {
+    background: var(--color-cream);
+    border-color: var(--color-ink);
+  }
+
+  /* Flat card (tool-page panels) */
+  :root[data-theme='dark'] .card-flat {
+    background: var(--color-cream);
+    border-color: var(--color-line);
+  }
+
+  /* Minimal landing-page card */
+  :root[data-theme='dark'] .card-modern {
+    background: var(--color-cream);
+    border-color: rgb(255 255 255 / 0.07);
+  }
+  :root[data-theme='dark'] .card-modern:hover {
+    border-color: rgb(255 255 255 / 0.12);
+  }
+
+  /* The floating nav pill */
+  :root[data-theme='dark'] .nav-pill {
+    background: var(--color-cream);
+  }
+
+  /* Frosted-glass surfaces (sticky header) */
+  :root[data-theme='dark'] .glass {
+    background: rgb(20 17 30 / 0.80);
+    border-color: rgb(255 255 255 / 0.08);
+  }
+
+  /* Form fields */
+  :root[data-theme='dark'] .field {
+    background: var(--color-cream);
+    border-color: var(--color-line-grey);
+    color: var(--color-ink-body);
+  }
+  :root[data-theme='dark'] .field:hover {
+    border-color: var(--color-ink-muted);
+  }
+  :root[data-theme='dark'] .field:focus {
+    border-color: var(--color-violet-700);
+  }
+
+  /* Secondary ("outline") button */
+  :root[data-theme='dark'] .btn-secondary {
+    background: var(--color-cream);
+    border-color: var(--color-line-grey);
+    color: var(--color-ink-body);
+  }
+  :root[data-theme='dark'] .btn-secondary:hover {
+    background: var(--color-ice);
+    border-color: var(--color-violet-700);
+  }
+
+}
+
+/* =============================================================================
+   DARK-MODE: UTILITY-CLASS COLOR FIXES — must stay UNLAYERED.
+
+   Every rule below repairs a dark-mode contrast failure on an element that
+   ALSO carries a raw Tailwind utility class (.text-violet-700, .text-ink,
+   .ring-1, .border-violet-700, .hover\:text-violet-600, ...) for the exact
+   property being fixed. Tailwind's generated utilities live in
+   `@layer utilities` — the last layer in the `@layer theme, base,
+   components, utilities;` order this file's own `@import 'tailwindcss'`
+   establishes — so `@layer utilities` beats `@layer components` for a
+   shared property on a shared element regardless of selector specificity
+   (confirmed against this project's own compiled `@tailwindcss/postcss`
+   output). A `:root[data-theme='dark']`-prefixed override placed inside the
+   @layer components block above would therefore silently do nothing here.
+   Unlayered author CSS outranks every layer including utilities — the same
+   fact the `.aurora` comment further up already documents, there to explain
+   why staying INSIDE a layer is required; here it is the reason for staying
+   OUTSIDE one. Nothing below touches an element that doesn't also carry one
+   of these Tailwind utility classes — plain custom-class overrides with no
+   such conflict (.eyebrow, .tile-pastel, and the rest of the block above)
+   correctly stay inside @layer components.
+   ============================================================================= */
+
+/* Tool-page H1 icon disc (ToolShell.tsx `tool-h1-icon` hook, added alongside
+   `ring-1 ring-line`): ring-line is ~1.16:1 in dark mode (decorative-only by
+   design), so the opaque disc has no visible edge once the page around it
+   goes dark. Sets `box-shadow` directly rather than the `--tw-ring-color`
+   custom property Tailwind's ring utilities compose internally, since that
+   custom property also feeds ring-offset math this rule has no reason to
+   depend on. */
+:root[data-theme='dark'] .tool-h1-icon {
+  box-shadow: 0 0 0 1px var(--color-line-grey);
+}
+
+/* Pastel/CTA fills (mint/peach/lime/cyan/cta) are documented at the top of
+   this file as intentionally unchanged across themes, each with its own
+   self-contained light-surface text contract — but `text-ink` IS
+   theme-adaptive and flips to near-white in dark mode, so any element that
+   pairs one of these fixed-light fills with the `text-ink` utility loses
+   almost all contrast the moment dark mode is active (confirmed live:
+   bg-mint/text-ink measures ~1.52:1; bg-cta/text-ink ~1.5:1). `bg-green` and
+   `bg-cta`'s own closing-CTA usage are a separate, deliberately protected
+   exception (see the top-of-file "Pastel accents" comment) and are NOT
+   touched here — only the specific `text-ink` pairing is fixed, and only
+   for the fills confirmed to have a real `text-ink` combination somewhere
+   in the tool pages. Light mode is unaffected either way: `text-ink` is
+   already #000 there, so this dark-mode-only rule changes nothing visible
+   in light mode. */
+:root[data-theme='dark'] .bg-peach.text-ink,
+:root[data-theme='dark'] .bg-mint.text-ink,
+:root[data-theme='dark'] .bg-lime.text-ink,
+:root[data-theme='dark'] .bg-cyan.text-ink,
+:root[data-theme='dark'] .bg-cta.text-ink,
+:root[data-theme='dark'] .bg-peach .text-ink,
+:root[data-theme='dark'] .bg-mint .text-ink,
+:root[data-theme='dark'] .bg-lime .text-ink,
+:root[data-theme='dark'] .bg-cyan .text-ink {
+  color: #000;
+}
+
+/* =============================================================================
+   PRINT / DOCUMENT CONTEXT
+
+   Elements that are always rendered as physical documents (invoices, PDFs,
+   export previews) must show dark ink on white paper regardless of the site's
+   night-mode setting. Apply `.print-paper-ctx` to the wrapper div; it re-
+   declares the ink/line/surface/tile/tint tokens to their light-mode values
+   via CSS variable inheritance — a descendant overriding :root wins because
+   the property resolves on the NEAREST ancestor that declares it, not by
+   selector specificity (and not by CSS layer, either: neither this rule nor
+   the dark-mode `:root[data-theme='dark']` block it overrides lives in a
+   layer, and a custom property's inherited value is resolved per-element by
+   DOM proximity of the nearest declaring rule, not by cascade-layer order).
+   `background: #fff` on the paper div then stays what it is, and every token
+   referenced by an element inside — ink/line text, and now also any
+   bg-cream / bg-offwhite / bg-tile- (wildcard) / bg-violet-50 / bg-violet-100
+   fill — resolves back to its light-mode value instead of the page's dark one.
+   ============================================================================= */
+.print-paper-ctx {
+  --color-ink: #000000;
+  --color-ink-body: #161616;
+  --color-ink-muted: #333333;
+  --color-ink-subtle: #6b7280;
+  --color-ink-subtle-onice: #5c636e;
+  --color-line: #ece5f0;
+  --color-line-grey: #e6e6e6;
+  --color-shadow-ink: #000000;
+
+  /* Surface/tile/tint tokens, added alongside the ink/line family above.
+     9 of the 11 real invoice-templates/*.tsx files (rendered inside this
+     wrapper via InvoiceGenerator's canvas/preview-modal) fill part of the
+     sheet with one of these tokens — paired with ink-family text that this
+     rule already pins light — so left unfixed the fill goes dark while the
+     text stays pinned black: HospitalityTemplate/NonprofitTemplate's
+     full-sheet `bg-cream`; BoutiqueTemplate's masthead and TechTemplate's
+     summary card, both full-opacity `bg-tile-lavender` (plus TechTemplate's
+     alternating `bg-violet-50` line-item rows — the same
+     violet-700-on-tile-fill failure fixed above via a literal background
+     instead of the page's own dark-mode wash); AgencyTemplate/
+     ClassicTemplate/TradeTemplate's info box/badge and RetailTemplate's
+     total-due pill, all full-opacity `bg-offwhite`/`bg-tile-green`;
+     ClinicTemplate's notes card (`bg-offwhite`) and its low-alpha
+     `bg-tile-green/NN` accents (milder since the alpha blend pulls them
+     back toward the paper beneath, but still inconsistent with the
+     "always light paper" contract this class exists to guarantee).
+     CorporateTemplate/MinimalTemplate have no adaptive-surface fills and
+     are unaffected either way. violet-700 itself needs no entry here: it's
+     one of the ramp shades this file already leaves unchanged across
+     themes (see the dark-theme token block above), so it already stays
+     print-safe without help. */
+  --color-cream: #fcfbf3;
+  --color-offwhite: #fafafb;
+  --color-ice: #dff6ff;
+  --color-ice-2: #daf4ff;
+  --color-tile-yellow: #fff9d9;
+  --color-tile-blue: #cce0ff;
+  --color-tile-lavender: #dcd9f5;
+  --color-tile-green: #ceffcc;
+  --color-violet-50: #f4effe;
+  --color-violet-100: #ebe6fe;
 }
 
 /* =============================================================================

@@ -6,6 +6,7 @@ import { SearchBox } from '@/components/layout/SearchBox'
 import { Icon } from '@/components/ui/Icon'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { TOOLS } from '@/lib/tools/registry'
+import styles from './HeroDarkModeFixes.module.css'
 
 /**
  * The homepage hero, matched to the user's approved mockup: an open white
@@ -50,8 +51,12 @@ export function Hero() {
           className="mx-auto mt-4 max-w-[18ch] text-[40px] leading-[42px] tracking-[-1px] sm:text-[48px] sm:leading-[50px] md:text-[64px] md:leading-[66px] lg:text-[76px] lg:leading-[78px]"
         >
           Free tools that do the{' '}
-          <em className="text-accent-gradient font-semibold not-italic">boring</em> work
-          for you
+          <em
+            className={`text-accent-gradient font-semibold not-italic ${styles.accentGradientFix}`}
+          >
+            boring
+          </em>{' '}
+          work for you
         </h1>
 
         <p className="mx-auto mt-4 max-w-[44ch] text-[17px] text-ink-muted leading-7 md:text-lead">
@@ -63,7 +68,7 @@ export function Hero() {
             checkmark row above the constellation was already trimmed. Still
             clear of the subhead's own line-height, verified below. */}
         <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
-          <Link href="/all" className="btn-brutal">
+          <Link href="/all" className={`btn-brutal ${styles.ctaContrastFix}`}>
             EXPLORE ALL {TOOLS.length} TOOLS
           </Link>
           <Link href="/geo/ai-visibility-checker" className="btn-brutal btn-white">
@@ -268,10 +273,17 @@ function CategoryCard({ category }: { category: (typeof CATEGORIES)[number] }) {
   return (
     <Link
       href={`/${category.slug}`}
-      className="flex flex-col items-center gap-2.5 rounded-2xl border border-white bg-white px-5 py-4 shadow-card transition-transform hover:z-10 hover:scale-105"
+      className="flex flex-col items-center gap-2.5 rounded-2xl border border-line-grey bg-white px-5 py-4 shadow-card transition-transform hover:z-10 hover:scale-105"
       style={{ background: `var(--color-tile-${category.tile})` }}
     >
-      <Icon name={category.icon} className="size-7 text-violet-700" />
+      {/* `tile-icon-accent` is a dark-mode hook, not a styling class of its
+          own: violet-700 is required for AA contrast on the LIGHT pastel
+          tile fills (see the token comment in globals.css), but the four
+          --color-tile-* tokens flip to dark washes in dark mode and
+          violet-700 against them drops to ~1.9:1 — the exact "known
+          follow-up" globals.css already documents as needing a
+          component-level swap to --color-ink-body in dark mode. */}
+      <Icon name={category.icon} className="size-7 text-violet-700 tile-icon-accent" />
       <span className="whitespace-nowrap font-display font-semibold text-[15px] text-ink tracking-normal">
         {category.shortName}
       </span>

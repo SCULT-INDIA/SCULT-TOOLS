@@ -7,7 +7,9 @@ import {
   dueDateFromTerms,
   formatDisplayDate,
   formatMoney,
+  INVOICE_TEMPLATES,
   isCurrencyCode,
+  isTemplateId,
   nextInvoiceNumber,
   parseAmountInput,
   parseInvoiceDraft,
@@ -363,11 +365,32 @@ describe('parseInvoiceDraft — localStorage is untrusted input', () => {
     discountKind: 'percent',
     notes: 'Payment due within 14 days.',
     logo: '',
+    template: 'classic',
   }
 
   it('round-trips a valid draft', () => {
     const parsed = parseInvoiceDraft(JSON.parse(JSON.stringify(validDraft)))
     expect(parsed).toEqual(validDraft)
+  })
+
+  it('defaults a missing or unrecognised template to classic rather than rejecting the draft', () => {
+    const { template, ...withoutTemplate } = validDraft
+    // A draft saved before templates existed has no `template` key at all.
+    expect(parseInvoiceDraft(withoutTemplate)?.template).toBe('classic')
+    // A template later renamed or removed falls back the same way.
+    expect(
+      parseInvoiceDraft({ ...validDraft, template: 'retired-design' })?.template,
+    ).toBe('classic')
+    expect(parseInvoiceDraft({ ...validDraft, template: 'agency' })?.template).toBe(
+      'agency',
+    )
+  })
+
+  it('every template id is unique and recognised by isTemplateId', () => {
+    const ids = INVOICE_TEMPLATES.map((t) => t.id)
+    expect(new Set(ids).size).toBe(ids.length)
+    for (const id of ids) expect(isTemplateId(id)).toBe(true)
+    expect(isTemplateId('not-a-real-template')).toBe(false)
   })
 
   it('rejects drafts with a wrong shape or unknown currency', () => {

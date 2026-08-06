@@ -6,7 +6,6 @@ import { CategoryTabs } from '@/components/sections/CategoryTabs'
 import { ContactAndCta } from '@/components/sections/ContactAndCta'
 import { FullServiceGrid } from '@/components/sections/FullServiceGrid'
 import { Hero } from '@/components/sections/Hero'
-import { PrincipleWall } from '@/components/sections/PrincipleWall'
 import { SearchSpotlight } from '@/components/sections/SearchSpotlight'
 import { SecondaryHero } from '@/components/sections/SecondaryHero'
 import { TechMarquee } from '@/components/sections/TechMarquee'
@@ -119,8 +118,9 @@ export default function Home() {
       {/* ============================================= 11. UNIVERSAL INCLUDES */}
       <UniversalIncludes />
 
-      {/* ==================================================== 12. PROOF WALL */}
-      <PrincipleWall />
+      {/* ==================================================== 12. PROOF WALL —
+             removed at the user's request. The "verified in code" claims read
+             as too technical/developer-audit-toned for this page. */}
 
       {/* ============================================ 13. AI-VISIBILITY SPOTLIGHT */}
       <section aria-labelledby="spotlight" className="bg-violet-900 py-16 text-white">
@@ -139,7 +139,19 @@ export default function Home() {
               it. Run the check: one URL in, a 0–100 visibility score and the exact fixes
               out.
             </p>
-            <Link href="/geo/ai-visibility-checker" className="btn-brutal mt-7">
+            {/* text-black/border-black force the resting-state text/border to
+                literal black: .btn-brutal's own color/border both read
+                var(--color-ink), which flips to near-white in dark mode while
+                --color-cta (yellow) stays fixed, collapsing the face to
+                ~1.45:1. hover:text-ink/hover:border-ink deliberately restore
+                the token so the already-correct hover state (near-white on
+                the dark-mode .btn-brutal:hover cream face) is untouched —
+                utilities layer + :hover's higher specificity make that win
+                back on hover in both themes. */}
+            <Link
+              href="/geo/ai-visibility-checker"
+              className="btn-brutal mt-7 text-black border-black hover:text-ink hover:border-ink"
+            >
               CHECK YOUR AI VISIBILITY
             </Link>
           </div>
@@ -219,7 +231,17 @@ export default function Home() {
               >
                 {i + 1}
               </span>
-              <step.icon className="size-6 text-violet-700" aria-hidden="true" />
+              {/* Standalone accent icon directly on .card-flat's ambient
+                  cream — outside the existing tile/violet-50/100 dark-mode
+                  fix, so text-violet-700 alone measures ~2.27:1 in dark mode.
+                  --color-violet-accent-text is this codebase's existing
+                  dark-mode-only token for exactly this pairing (see
+                  .eyebrow / nav-link hover); the fallback keeps light mode's
+                  violet-700 unchanged. */}
+              <step.icon
+                className="size-6 text-[var(--color-violet-accent-text,var(--color-violet-700))]"
+                aria-hidden="true"
+              />
               <h3 className="mt-3 font-display font-semibold text-[19px] tracking-normal">
                 {step.t}
               </h3>
@@ -251,7 +273,12 @@ export default function Home() {
               visibility checker — send only the URL you type, never your content. The
               privacy page lists every tool and exactly what it does or does not send.
             </p>
-            <Link href="/privacy" className="btn-brutal btn-brutal-sm mt-7">
+            {/* See the AI-visibility CTA above for why text-black/border-black
+                + hover:text-ink/hover:border-ink are needed here. */}
+            <Link
+              href="/privacy"
+              className="btn-brutal btn-brutal-sm mt-7 text-black border-black hover:text-ink hover:border-ink"
+            >
               READ THE PRIVACY TABLE
             </Link>
           </div>
@@ -279,8 +306,13 @@ export default function Home() {
                 d: 'Every calculator and checker explains its formula so you can verify it, not trust it.',
               },
             ].map((item) => (
-              <li key={item.t} className="card-flat bg-white p-5">
-                <item.icon className="size-5 text-violet-700" aria-hidden="true" />
+              <li key={item.t} className="card-flat p-5">
+                {/* Same ambient-cream/.card-flat pairing as the "How it
+                    works" icons above — see that comment. */}
+                <item.icon
+                  className="size-5 text-[var(--color-violet-accent-text,var(--color-violet-700))]"
+                  aria-hidden="true"
+                />
                 <h3 className="mt-3 font-display font-semibold text-[17px] tracking-normal">
                   {item.t}
                 </h3>
@@ -308,9 +340,12 @@ export default function Home() {
               <details key={item.q} className="group py-4">
                 <summary className="flex cursor-pointer items-start justify-between gap-4 font-medium text-[17px] text-ink marker:content-none">
                   {item.q}
+                  {/* FAQ "+" toggle sits directly on this section's
+                      container-site/offwhite ambient page background, not a
+                      tile/violet-50/100 fill — same fix as the icons above. */}
                   <span
                     aria-hidden="true"
-                    className="mt-1 shrink-0 text-violet-700 transition-transform group-open:rotate-45"
+                    className="mt-1 shrink-0 text-[var(--color-violet-accent-text,var(--color-violet-700))] transition-transform group-open:rotate-45"
                   >
                     +
                   </span>

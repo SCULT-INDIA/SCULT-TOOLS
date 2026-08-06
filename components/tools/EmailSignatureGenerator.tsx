@@ -3,7 +3,7 @@
 // TriangleAlert, not AlertTriangle — this lucide version dropped the old alias.
 // Brand marks (Linkedin/Github/Twitter) do not exist in this version either, so
 // the social rows are labelled in text.
-import { Check, ClipboardCopy, TriangleAlert } from 'lucide-react'
+import { Check, ClipboardCopy, Download, TriangleAlert } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { CopyButton } from '@/components/tools/ResultPanel'
 import {
@@ -11,7 +11,6 @@ import {
   Pane,
   SegmentButton,
   StatusBar,
-  ToolbarAction,
   ToolbarGroup,
   ToolToolbar,
   ToolWorkspace,
@@ -159,6 +158,39 @@ const CLIENTS: readonly {
   },
 ]
 
+/**
+ * Purely cosmetic — a row of client-name pills under the preview so a visitor
+ * can picture "this in Gmail" vs "this in Outlook" before committing. At this
+ * fidelity the four real clients and a dark-mode client all render the exact
+ * same table-based markup identically; the meaningful per-client differences
+ * (install steps) are already handled below, in the functional CLIENTS list.
+ * Selecting a pill here only changes which pill looks pressed.
+ */
+const EMAIL_CLIENT_PREVIEWS: readonly { readonly id: string; readonly label: string }[] =
+  [
+    { id: 'gmail', label: 'Gmail' },
+    { id: 'outlook', label: 'Outlook' },
+    { id: 'apple-mail', label: 'Apple Mail' },
+    { id: 'yahoo-mail', label: 'Yahoo Mail' },
+    { id: 'dark-mode', label: 'Dark Mode' },
+  ]
+
+/** Quick-pick presets over the same accent state as the colour picker above. */
+const ACCENT_SWATCHES: readonly { readonly hex: string; readonly label: string }[] = [
+  { hex: DEFAULT_ACCENT, label: 'Violet (default)' },
+  { hex: '#111111', label: 'Ink' },
+  { hex: '#23ca87', label: 'Green' },
+  { hex: '#3cf0ff', label: 'Cyan' },
+  { hex: '#fac44b', label: 'Gold' },
+]
+
+/** True by construction of the generated markup — no per-signature check needed. */
+const SIGNATURE_OPTIONS: readonly string[] = [
+  'Responsive',
+  'Dark mode ready',
+  'Mobile friendly',
+]
+
 type CopyState = 'idle' | 'rich' | 'fallback' | 'error'
 
 /** Tiny abstract schematic inside each layout chip. Decorative only. */
@@ -206,6 +238,8 @@ export function EmailSignatureGenerator() {
   const [accent, setAccent] = useState(DEFAULT_ACCENT)
   const [view, setView] = useState<'preview' | 'html'>('preview')
   const [narrow, setNarrow] = useState(false)
+  const [chromeTheme, setChromeTheme] = useState<'light' | 'dark'>('light')
+  const [previewClient, setPreviewClient] = useState<string>('gmail')
   const [client, setClient] = useState<ClientId>('gmail')
   const [copyState, setCopyState] = useState<CopyState>('idle')
 
@@ -274,462 +308,683 @@ export function EmailSignatureGenerator() {
     }
   }
 
-  return (
-    <ToolWorkspace
-      inputLabel="Signature details"
-      outputLabel="Signature preview and HTML"
-      minHeight="min-h-[32rem]"
-      toolbar={
-        <ToolToolbar
-          actions={
-            <>
-              <ToolbarAction onClick={() => setFields(SAMPLE_FIELDS)}>
-                Load sample
-              </ToolbarAction>
-              <ToolbarAction onClick={() => setFields(EMPTY_FIELDS)} disabled={isEmpty}>
-                Clear
-              </ToolbarAction>
-            </>
-          }
-        >
-          <ToolbarGroup label="Show">
-            <SegmentButton
-              active={view === 'preview'}
-              onClick={() => setView('preview')}
-              title="The signature as a recipient sees it"
-            >
-              Preview
-            </SegmentButton>
-            <SegmentButton
-              active={view === 'html'}
-              onClick={() => setView('html')}
-              title="The table markup this generates"
-            >
-              HTML
-            </SegmentButton>
-          </ToolbarGroup>
+  /** Same file-download shape as the favicon generator's saveBlob — an object
+   * URL on a throwaway anchor, revoked a few seconds later. */
+  function downloadSignatureHtml(): void {
+    if (isEmpty) return
+    const blob = new Blob([result.html], { type: 'text/html' })
+    const url = URL.createObjectURL(blob)
+    const anchor = document.createElement('a')
+    anchor.href = url
+    anchor.download = 'email-signature.html'
+    anchor.click()
+    setTimeout(() => URL.revokeObjectURL(url), 10_000)
+  }
 
-          {view === 'preview' ? (
-            <ToolbarGroup label="Width">
-              <SegmentButton active={!narrow} onClick={() => setNarrow(false)}>
-                Desktop
-              </SegmentButton>
-              <SegmentButton
-                active={narrow}
-                onClick={() => setNarrow(true)}
-                title="360px — where inline links start wrapping"
-              >
-                Phone
-              </SegmentButton>
-            </ToolbarGroup>
-          ) : null}
-        </ToolToolbar>
-      }
-      input={
-        <Pane title="Your details">
-          <div className="flex flex-col gap-5">
-            <fieldset>
-              <legend className="label">Layout</legend>
-              <div className="grid grid-cols-3 gap-2">
-                {TEMPLATES.map((t) => {
-                  const selected = template === t.id
-                  return (
-                    <button
-                      key={t.id}
-                      type="button"
-                      aria-pressed={selected}
-                      onClick={() => setTemplate(t.id)}
-                      className={`flex min-h-[44px] flex-col items-center gap-1.5 rounded-sm border px-2 py-3 text-center transition-colors ${
-                        selected
-                          ? 'border-ink bg-violet-700 text-white'
-                          : 'border-line-grey bg-white text-ink hover:border-ink'
-                      }`}
+  return (
+    <div className="flex flex-col gap-6">
+      <ToolWorkspace
+        inputLabel="Signature details"
+        outputLabel="Signature preview and HTML"
+        minHeight="min-h-[32rem]"
+        toolbar={
+          <>
+            <ToolToolbar>
+              <ToolbarGroup label="Show">
+                <SegmentButton
+                  active={view === 'preview'}
+                  onClick={() => setView('preview')}
+                  title="The signature as a recipient sees it"
+                >
+                  Preview
+                </SegmentButton>
+                <SegmentButton
+                  active={view === 'html'}
+                  onClick={() => setView('html')}
+                  title="The table markup this generates"
+                >
+                  HTML
+                </SegmentButton>
+              </ToolbarGroup>
+
+              {view === 'preview' ? (
+                <>
+                  <ToolbarGroup label="Device">
+                    <SegmentButton active={!narrow} onClick={() => setNarrow(false)}>
+                      Desktop
+                    </SegmentButton>
+                    <SegmentButton
+                      active={narrow}
+                      onClick={() => setNarrow(true)}
+                      title="360px — where inline links start wrapping"
                     >
-                      <TemplateGlyph id={t.id} selected={selected} />
-                      <span className="font-bold text-[14px] leading-4">{t.label}</span>
-                      <span
-                        className={`text-[12px] leading-4 ${
-                          selected ? 'text-white/85' : 'text-ink-subtle'
+                      Mobile
+                    </SegmentButton>
+                  </ToolbarGroup>
+
+                  <ToolbarGroup label="Theme">
+                    <SegmentButton
+                      active={chromeTheme === 'light'}
+                      onClick={() => setChromeTheme('light')}
+                      title="Mock compose window in a light client"
+                    >
+                      Light
+                    </SegmentButton>
+                    <SegmentButton
+                      active={chromeTheme === 'dark'}
+                      onClick={() => setChromeTheme('dark')}
+                      title="Mock compose window in a dark client — the signature itself is unaffected, which is the point"
+                    >
+                      Dark
+                    </SegmentButton>
+                  </ToolbarGroup>
+                </>
+              ) : null}
+            </ToolToolbar>
+
+            {/* Load sample / Clear moved here from the toolbar's action slot, and
+              Copy signature / Download HTML moved up from the bottom action bar and
+              the Export panel below — one evenly-spaced, brand-styled row at the
+              very top of the tool instead of three scattered locations. Copy
+              signature keeps the default cta-yellow as the tool's single primary
+              action (it is the literal reason to be on this page); Load sample,
+              Clear and Download HTML share btn-white so the row reads as one
+              primary action plus its supporting actions, not four equal buttons. */}
+            <div className="grid grid-cols-2 gap-2 border-line border-b bg-offwhite p-3 sm:grid-cols-3 sm:gap-3 sm:p-4 lg:grid-cols-4">
+              <button
+                type="button"
+                onClick={() => setFields(SAMPLE_FIELDS)}
+                className="btn-brutal btn-brutal-sm btn-white w-full"
+              >
+                Load sample
+              </button>
+              <button
+                type="button"
+                onClick={() => setFields(EMPTY_FIELDS)}
+                disabled={isEmpty}
+                className="btn-brutal btn-brutal-sm btn-white w-full"
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  void copySignature()
+                }}
+                disabled={isEmpty}
+                className="btn-brutal btn-brutal-sm w-full"
+              >
+                {copyState === 'rich' || copyState === 'fallback' ? (
+                  <Check className="size-4" aria-hidden="true" strokeWidth={3} />
+                ) : (
+                  <ClipboardCopy className="size-4" aria-hidden="true" />
+                )}
+                {copyState === 'rich' ? 'Copied — now paste it' : 'Copy signature'}
+              </button>
+              <button
+                type="button"
+                onClick={downloadSignatureHtml}
+                disabled={isEmpty}
+                className="btn-brutal btn-brutal-sm btn-white w-full"
+              >
+                <Download className="size-4" aria-hidden="true" />
+                Download HTML
+              </button>
+            </div>
+          </>
+        }
+        input={
+          <Pane title="Your information">
+            <div className="flex flex-col gap-5">
+              <fieldset>
+                <legend className="label">Layout</legend>
+                <div className="grid grid-cols-3 gap-2">
+                  {TEMPLATES.map((t) => {
+                    const selected = template === t.id
+                    return (
+                      <button
+                        key={t.id}
+                        type="button"
+                        aria-pressed={selected}
+                        onClick={() => setTemplate(t.id)}
+                        className={`flex min-h-[44px] flex-col items-center gap-1.5 rounded-sm border px-2 py-3 text-center transition-colors ${
+                          selected
+                            ? 'border-ink bg-violet-700 text-white'
+                            : 'border-line-grey bg-cream text-ink hover:border-ink'
                         }`}
                       >
-                        {t.blurb}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-            </fieldset>
+                        <TemplateGlyph id={t.id} selected={selected} />
+                        <span className="font-bold text-[14px] leading-4">{t.label}</span>
+                        <span
+                          className={`text-[12px] leading-4 ${
+                            selected ? 'text-white/85' : 'text-ink-subtle'
+                          }`}
+                        >
+                          {t.blurb}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </fieldset>
 
-            <div>
-              <label className="label" htmlFor="sig-name">
-                Full name
-              </label>
-              <input
-                id="sig-name"
-                className="field"
-                type="text"
-                autoComplete="off"
-                placeholder="Priya Sharma"
-                value={fields.fullName}
-                onChange={(e) => setField('fullName', e.target.value)}
-              />
-            </div>
-
-            <div className="grid gap-5 sm:grid-cols-2">
               <div>
-                <label className="label" htmlFor="sig-title">
-                  Job title
+                <label className="label" htmlFor="sig-name">
+                  Full name
                 </label>
                 <input
-                  id="sig-title"
+                  id="sig-name"
                   className="field"
                   type="text"
                   autoComplete="off"
-                  placeholder="Marketing Lead"
-                  value={fields.jobTitle}
-                  onChange={(e) => setField('jobTitle', e.target.value)}
+                  placeholder="Priya Sharma"
+                  value={fields.fullName}
+                  onChange={(e) => setField('fullName', e.target.value)}
                 />
               </div>
-              <div>
-                <label className="label" htmlFor="sig-company">
-                  Company
-                </label>
-                <input
-                  id="sig-company"
-                  className="field"
-                  type="text"
-                  autoComplete="off"
-                  placeholder="Scult Digital"
-                  value={fields.company}
-                  onChange={(e) => setField('company', e.target.value)}
-                />
-              </div>
-            </div>
 
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label className="label" htmlFor="sig-phone">
-                  Phone
-                </label>
-                <input
-                  id="sig-phone"
-                  className="field"
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="off"
-                  placeholder="+91 98765 43210"
-                  value={fields.phone}
-                  onChange={(e) => setField('phone', e.target.value)}
-                  aria-describedby="sig-phone-hint"
-                />
-                <p className="hint mt-1.5" id="sig-phone-hint">
-                  Shown as typed; the tap-to-call link strips the spaces.
-                </p>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label className="label" htmlFor="sig-title">
+                    Job title
+                  </label>
+                  <input
+                    id="sig-title"
+                    className="field"
+                    type="text"
+                    autoComplete="off"
+                    placeholder="Marketing Lead"
+                    value={fields.jobTitle}
+                    onChange={(e) => setField('jobTitle', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="label" htmlFor="sig-company">
+                    Company
+                  </label>
+                  <input
+                    id="sig-company"
+                    className="field"
+                    type="text"
+                    autoComplete="off"
+                    placeholder="Scult Digital"
+                    value={fields.company}
+                    onChange={(e) => setField('company', e.target.value)}
+                  />
+                </div>
               </div>
-              <div>
-                <label className="label" htmlFor="sig-email">
-                  Email
-                </label>
-                <input
-                  id="sig-email"
-                  className="field"
-                  type="email"
-                  inputMode="email"
-                  autoComplete="off"
-                  spellCheck={false}
-                  placeholder="priya@scult.in"
-                  value={fields.email}
-                  onChange={(e) => setField('email', e.target.value)}
-                />
-              </div>
-            </div>
 
-            <div>
-              <label className="label" htmlFor="sig-website">
-                Website
-              </label>
-              <input
-                id="sig-website"
-                className="field"
-                type="url"
-                inputMode="url"
-                autoComplete="off"
-                spellCheck={false}
-                placeholder="https://yourcompany.com"
-                value={fields.website}
-                onChange={(e) => setField('website', e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label className="label" htmlFor="sig-photo">
-                Photo or logo URL{' '}
-                <span className="font-normal text-[13px] text-ink-subtle">
-                  · optional
-                </span>
-              </label>
-              <input
-                id="sig-photo"
-                className="field"
-                type="url"
-                inputMode="url"
-                autoComplete="off"
-                spellCheck={false}
-                placeholder="https://yoursite.com/headshot.jpg"
-                value={fields.photoUrl}
-                onChange={(e) => setField('photoUrl', e.target.value)}
-                aria-describedby="sig-photo-hint"
-              />
-              <p className="hint mt-1.5" id="sig-photo-hint">
-                A public https image URL. Square, around 128×128px, looks sharpest.
-              </p>
-            </div>
-
-            <fieldset>
-              <legend className="label">
-                Social links{' '}
-                <span className="font-normal text-[13px] text-ink-subtle">
-                  · optional
-                </span>
-              </legend>
-              <div className="grid gap-4 sm:grid-cols-2">
-                {SOCIAL_INPUTS.map((social) => (
-                  <div key={social.key}>
-                    <label className="label" htmlFor={`sig-${social.key}`}>
-                      {social.label}
-                    </label>
-                    <input
-                      id={`sig-${social.key}`}
-                      className="field"
-                      type="url"
-                      inputMode="url"
-                      autoComplete="off"
-                      spellCheck={false}
-                      placeholder={social.placeholder}
-                      value={fields[social.key]}
-                      onChange={(e) => setField(social.key, e.target.value)}
-                    />
-                  </div>
-                ))}
-              </div>
-              <p className="hint mt-2">
-                Written as text links, not icons — icon images are the first thing a
-                corporate mail server blocks.
-              </p>
-            </fieldset>
-
-            <fieldset className="border-line border-t pt-4">
-              <legend className="label px-0">Brand accent</legend>
-              <div className="flex items-center gap-3">
-                <input
-                  id="sig-accent"
-                  type="color"
-                  // Mirrors the hex field; the label belongs to that input so a
-                  // screen reader reads a value rather than a swatch.
-                  aria-label="Accent colour picker"
-                  value={pickerValue}
-                  onChange={(e) => setAccent(e.target.value)}
-                  className="size-11 shrink-0 cursor-pointer rounded-sm border border-line-grey bg-white p-1"
-                />
-                <label className="sr-only" htmlFor="sig-accent-hex">
-                  Accent colour hex value
-                </label>
-                <input
-                  id="sig-accent-hex"
-                  className="field w-36 font-mono"
-                  type="text"
-                  autoComplete="off"
-                  spellCheck={false}
-                  value={accent}
-                  onChange={(e) => setAccent(e.target.value)}
-                  aria-describedby="sig-accent-hint"
-                />
-              </div>
-              {/* The "type stays Arial/Helvetica" clause moved out — it answers
-                  the custom-font FAQ rendered below the tool, word for word. */}
-              <p className="hint mt-2" id="sig-accent-hint">
-                Used for the links, your company name and the accent rule.
-              </p>
-            </fieldset>
-          </div>
-        </Pane>
-      }
-      output={
-        <Pane
-          title={view === 'preview' ? 'In a real message' : 'Email-safe HTML'}
-          padded={false}
-          scroll={false}
-          actions={isEmpty ? null : <CopyButton text={result.html} label="Copy HTML" />}
-        >
-          <div className="flex h-full min-h-0 flex-col">
-            <div className="min-h-0 flex-1 overflow-auto">
-              {isEmpty ? (
-                <div className="flex h-full items-center justify-center p-6">
-                  <p className="max-w-[38ch] text-center text-[14px] text-ink-subtle leading-6">
-                    Fill in a name on the left and your signature is assembled here,
-                    inside a mock compose window — then switch to HTML to read the exact
-                    nested-table markup that gets copied.
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label className="label" htmlFor="sig-phone">
+                    Phone
+                  </label>
+                  <input
+                    id="sig-phone"
+                    className="field"
+                    type="tel"
+                    inputMode="tel"
+                    autoComplete="off"
+                    placeholder="+91 98765 43210"
+                    value={fields.phone}
+                    onChange={(e) => setField('phone', e.target.value)}
+                    aria-describedby="sig-phone-hint"
+                  />
+                  <p className="hint mt-1.5" id="sig-phone-hint">
+                    Shown as typed; the tap-to-call link strips the spaces.
                   </p>
                 </div>
-              ) : view === 'html' ? (
-                <CodePane
-                  value={pretty}
-                  language="html"
-                  wrap
-                  emptyLabel="Nothing to show yet."
+                <div>
+                  <label className="label" htmlFor="sig-email">
+                    Email
+                  </label>
+                  <input
+                    id="sig-email"
+                    className="field"
+                    type="email"
+                    inputMode="email"
+                    autoComplete="off"
+                    spellCheck={false}
+                    placeholder="priya@scult.in"
+                    value={fields.email}
+                    onChange={(e) => setField('email', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="label" htmlFor="sig-website">
+                  Website
+                </label>
+                <input
+                  id="sig-website"
+                  className="field"
+                  type="url"
+                  inputMode="url"
+                  autoComplete="off"
+                  spellCheck={false}
+                  placeholder="https://yourcompany.com"
+                  value={fields.website}
+                  onChange={(e) => setField('website', e.target.value)}
                 />
-              ) : (
-                <div className="p-4">
-                  {/* Mock compose window. A signature judged on empty white always
+              </div>
+
+              <div>
+                <label className="label" htmlFor="sig-photo">
+                  Photo or logo URL{' '}
+                  <span className="font-normal text-[13px] text-ink-subtle">
+                    · optional
+                  </span>
+                </label>
+                <input
+                  id="sig-photo"
+                  className="field"
+                  type="url"
+                  inputMode="url"
+                  autoComplete="off"
+                  spellCheck={false}
+                  placeholder="https://yoursite.com/headshot.jpg"
+                  value={fields.photoUrl}
+                  onChange={(e) => setField('photoUrl', e.target.value)}
+                  aria-describedby="sig-photo-hint"
+                />
+                <p className="hint mt-1.5" id="sig-photo-hint">
+                  A public https image URL. Square, around 128×128px, looks sharpest.
+                </p>
+              </div>
+
+              <fieldset>
+                <legend className="label">
+                  Social links{' '}
+                  <span className="font-normal text-[13px] text-ink-subtle">
+                    · optional
+                  </span>
+                </legend>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {SOCIAL_INPUTS.map((social) => (
+                    <div key={social.key}>
+                      <label className="label" htmlFor={`sig-${social.key}`}>
+                        {social.label}
+                      </label>
+                      <input
+                        id={`sig-${social.key}`}
+                        className="field"
+                        type="url"
+                        inputMode="url"
+                        autoComplete="off"
+                        spellCheck={false}
+                        placeholder={social.placeholder}
+                        value={fields[social.key]}
+                        onChange={(e) => setField(social.key, e.target.value)}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <p className="hint mt-2">
+                  Written as text links, not icons — icon images are the first thing a
+                  corporate mail server blocks.
+                </p>
+              </fieldset>
+
+              <fieldset className="border-line border-t pt-4">
+                <legend className="label px-0">Brand accent</legend>
+                <div className="flex items-center gap-3">
+                  <input
+                    id="sig-accent"
+                    type="color"
+                    // Mirrors the hex field; the label belongs to that input so a
+                    // screen reader reads a value rather than a swatch.
+                    aria-label="Accent colour picker"
+                    value={pickerValue}
+                    onChange={(e) => setAccent(e.target.value)}
+                    className="size-11 shrink-0 cursor-pointer rounded-sm border border-line-grey bg-cream p-1"
+                  />
+                  <label className="sr-only" htmlFor="sig-accent-hex">
+                    Accent colour hex value
+                  </label>
+                  <input
+                    id="sig-accent-hex"
+                    className="field w-36 font-mono"
+                    type="text"
+                    autoComplete="off"
+                    spellCheck={false}
+                    value={accent}
+                    onChange={(e) => setAccent(e.target.value)}
+                    aria-describedby="sig-accent-hint"
+                  />
+                </div>
+                {/* The "type stays Arial/Helvetica" clause moved out — it answers
+                  the custom-font FAQ rendered below the tool, word for word. */}
+                <p className="hint mt-2" id="sig-accent-hint">
+                  Used for the links, your company name and the accent rule.
+                </p>
+              </fieldset>
+            </div>
+          </Pane>
+        }
+        output={
+          <Pane
+            title={view === 'preview' ? 'Live preview' : 'Email-safe HTML'}
+            padded={false}
+            scroll={false}
+            actions={isEmpty ? null : <CopyButton text={result.html} label="Copy HTML" />}
+          >
+            <div className="flex h-full min-h-0 flex-col">
+              <div className="min-h-0 flex-1 overflow-auto">
+                {isEmpty ? (
+                  <div className="flex h-full items-center justify-center p-6">
+                    <p className="max-w-[38ch] text-center text-[14px] text-ink-subtle leading-6">
+                      Fill in a name on the left and your signature is assembled here,
+                      inside a mock compose window — then switch to HTML to read the exact
+                      nested-table markup that gets copied.
+                    </p>
+                  </div>
+                ) : view === 'html' ? (
+                  <CodePane
+                    value={pretty}
+                    language="html"
+                    wrap
+                    emptyLabel="Nothing to show yet."
+                  />
+                ) : (
+                  <div className="flex flex-col gap-4 p-4">
+                    {/* Mock compose window. A signature judged on empty white always
                       looks fine; judged under "Best," at the foot of a message, an
                       oversized photo or a shouty accent is obvious. This frame is
                       chrome and uses brand tokens; the signature inside renders the
-                      user's own styling and is deliberately exempt. */}
-                  <div
-                    className={`overflow-hidden rounded-card border border-line-grey bg-white ${
-                      narrow ? 'mx-auto max-w-[360px]' : ''
-                    }`}
-                  >
-                    <div className="border-line-grey border-b bg-offwhite px-4 py-2.5">
-                      <p className="font-bold text-[11px] text-ink-subtle uppercase tracking-[0.1em]">
-                        New message
-                      </p>
-                      <p className="mt-1 text-[13px] text-ink-muted">
-                        <span className="text-ink-subtle">To </span>
-                        client@company.com
-                      </p>
-                      <p className="text-[13px] text-ink-muted">
-                        <span className="text-ink-subtle">Subject </span>
-                        Re: Next steps
-                      </p>
-                    </div>
-                    <div className="px-4 pt-4 text-[14px] text-ink-muted leading-6">
-                      <p>Sounds good — I’ll send the draft across tomorrow.</p>
-                      <p className="mt-3">Best,</p>
-                    </div>
-                    {/* Safe to render with dangerouslySetInnerHTML ONLY because
+                      user's own styling and is deliberately exempt. Only the chrome
+                      swaps for the dark toggle — the message body and the signature
+                      stay light, matching how Gmail/Outlook dark themes actually
+                      behave: the compose surface itself, not arbitrary content, is
+                      what goes dark. */}
+                    {/* `print-paper-ctx` on the light branch pins the ink/line
+                      tokens used below (New message / To / Subject labels) to
+                      their light-mode values — this mock must read as a light
+                      email client even when the site itself is in dark mode.
+                      Only the light branch gets it: the dark branch already
+                      uses literal white/opacity values plus the live `border-ink`
+                      token, which correctly tracks site theme for contrast
+                      against its own literal near-black background. */}
+                    <div
+                      className={`overflow-hidden rounded-card border ${
+                        chromeTheme === 'dark'
+                          ? 'border-ink bg-[#1c1c1e]'
+                          : 'print-paper-ctx border-line-grey bg-white'
+                      } ${narrow ? 'mx-auto max-w-[360px]' : ''}`}
+                    >
+                      <div
+                        className={`border-b px-4 py-2.5 ${
+                          chromeTheme === 'dark'
+                            ? 'border-white/10 bg-[#141416]'
+                            : // Literal, not `bg-offwhite` — that token flips dark
+                              // in site dark mode, which would leave a near-black
+                              // header floating inside this always-light frame.
+                              'border-line-grey bg-[#fafafb]'
+                        }`}
+                      >
+                        <p
+                          className={`font-bold text-[11px] uppercase tracking-[0.1em] ${
+                            chromeTheme === 'dark' ? 'text-white/50' : 'text-ink-subtle'
+                          }`}
+                        >
+                          New message
+                        </p>
+                        <p
+                          className={`mt-1 text-[13px] ${
+                            chromeTheme === 'dark' ? 'text-white/80' : 'text-ink-muted'
+                          }`}
+                        >
+                          <span
+                            className={
+                              chromeTheme === 'dark' ? 'text-white/50' : 'text-ink-subtle'
+                            }
+                          >
+                            To{' '}
+                          </span>
+                          client@company.com
+                        </p>
+                        <p
+                          className={`text-[13px] ${
+                            chromeTheme === 'dark' ? 'text-white/80' : 'text-ink-muted'
+                          }`}
+                        >
+                          <span
+                            className={
+                              chromeTheme === 'dark' ? 'text-white/50' : 'text-ink-subtle'
+                            }
+                          >
+                            Subject{' '}
+                          </span>
+                          Re: Next steps
+                        </p>
+                      </div>
+                      {/* print-paper-ctx applied unconditionally: this div sits
+                        on a literal-white background in BOTH chrome themes
+                        (its own `bg-white` when dark, the frame's `bg-white`
+                        when light), so `text-ink-muted` needs pinning to its
+                        light value either way — otherwise it turns pale lavender
+                        in site dark mode and nearly disappears against the white
+                        message body. */}
+                      <div
+                        className={`print-paper-ctx px-4 pt-4 text-[14px] leading-6 ${
+                          chromeTheme === 'dark'
+                            ? 'bg-white text-ink-muted'
+                            : 'text-ink-muted'
+                        }`}
+                      >
+                        <p>Sounds good — I’ll send the draft across tomorrow.</p>
+                        <p className="mt-3">Best,</p>
+                      </div>
+                      {/* Safe to render with dangerouslySetInnerHTML ONLY because
                         buildSignatureHtml escapes every user-supplied value
                         (& < > " ') before it reaches this string, and restricts
                         every href to http(s)/tel:/mailto: — see escapeHtml and
                         resolveLink in logic.ts and their tests. No unescaped user
                         input can enter this markup. */}
-                    <div
-                      className="overflow-x-auto px-4 pt-3 pb-5"
-                      dangerouslySetInnerHTML={{ __html: result.html }}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
+                      <div
+                        className={`overflow-x-auto px-4 pt-3 pb-5 ${
+                          chromeTheme === 'dark' ? 'bg-white' : ''
+                        }`}
+                        dangerouslySetInnerHTML={{ __html: result.html }}
+                      />
+                    </div>
 
-            <div className="shrink-0 border-line border-t bg-offwhite p-4">
-              {/* Warnings live here rather than in the preview so they survive the
+                    {/* Presentational only — see EMAIL_CLIENT_PREVIEWS. Switching the
+                      pill never changes result.html or the mock window above; the
+                      whole argument of this tool is that the markup is identical
+                      everywhere, so there is nothing to actually re-render here. */}
+                    <fieldset>
+                      <legend className="label">Email client previews</legend>
+                      <div className="flex flex-wrap gap-2">
+                        {EMAIL_CLIENT_PREVIEWS.map((c) => (
+                          <SegmentButton
+                            key={c.id}
+                            active={previewClient === c.id}
+                            onClick={() => setPreviewClient(c.id)}
+                          >
+                            {c.label}
+                          </SegmentButton>
+                        ))}
+                      </div>
+                      <p className="hint mt-1.5">
+                        A reference only — the copied HTML is identical across every
+                        client above.
+                      </p>
+                    </fieldset>
+                  </div>
+                )}
+              </div>
+
+              <div className="shrink-0 border-line border-t bg-offwhite p-4">
+                {/* Warnings live here rather than in the preview so they survive the
                   switch to the HTML view — a dropped social URL is exactly the
                   thing you would otherwise hunt for in the source. */}
-              {result.warnings.length > 0 ? (
-                <ul className="mb-4 flex flex-col gap-2">
-                  {result.warnings.map((warning) => (
-                    <li
-                      key={warning}
-                      className="flex items-start gap-2 rounded-sm border border-line-grey bg-tile-yellow p-3 text-[13px] text-ink-body leading-5"
-                    >
-                      <TriangleAlert
-                        className="mt-0.5 size-4 shrink-0"
-                        aria-hidden="true"
-                      />
-                      <span>{warning}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
+                {result.warnings.length > 0 ? (
+                  <ul className="mb-4 flex flex-col gap-2">
+                    {result.warnings.map((warning) => (
+                      <li
+                        key={warning}
+                        className="flex items-start gap-2 rounded-sm border border-line-grey bg-tile-yellow p-3 text-[13px] text-ink-body leading-5"
+                      >
+                        <TriangleAlert
+                          className="mt-0.5 size-4 shrink-0"
+                          aria-hidden="true"
+                        />
+                        <span>{warning}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
 
-              <div className="flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    void copySignature()
-                  }}
-                  className="btn-brutal btn-brutal-sm btn-violet"
-                  disabled={isEmpty}
-                >
-                  {copyState === 'rich' || copyState === 'fallback' ? (
-                    <Check className="size-4" aria-hidden="true" strokeWidth={3} />
-                  ) : (
-                    <ClipboardCopy className="size-4" aria-hidden="true" />
-                  )}
-                  {copyState === 'rich' ? 'Copied — now paste it' : 'Copy signature'}
-                </button>
+                {/* The Copy signature button itself now lives in the top button
+                  grid (see the toolbar above) — this hint stays here because it
+                  is about the current view, not a standalone action. */}
                 <p className="hint max-w-[28ch]">
                   {view === 'html'
                     ? 'Indented here for reading — Copy HTML hands over the exact markup.'
                     : 'Copies as rich text, so it pastes in formatted rather than as code.'}
                 </p>
+
+                {copyState === 'fallback' ? (
+                  <p className="mt-3 text-[13px] text-ink-body leading-5">
+                    Your browser cannot write rich text to the clipboard, so the HTML
+                    source was copied instead. Paste it into your client’s “edit signature
+                    as HTML” or source view.
+                  </p>
+                ) : null}
+                {copyState === 'error' ? (
+                  <p className="mt-3 flex items-start gap-2 text-[13px] text-ink-body leading-5">
+                    <TriangleAlert
+                      className="mt-0.5 size-4 shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span>
+                      Your browser refused clipboard access. Switch to the HTML view and
+                      select the markup by hand, or allow clipboard permissions for this
+                      site.
+                    </span>
+                  </p>
+                ) : null}
+
+                <fieldset className="mt-4">
+                  <legend className="label">Install it in</legend>
+                  <div className="flex flex-wrap gap-2">
+                    {CLIENTS.map((c) => (
+                      <SegmentButton
+                        key={c.id}
+                        active={client === c.id}
+                        onClick={() => setClient(c.id)}
+                      >
+                        {c.label}
+                      </SegmentButton>
+                    ))}
+                  </div>
+                  <ol className="mt-3 flex list-decimal flex-col gap-1.5 pl-5 text-[13px] text-ink-body leading-5">
+                    {steps.map((step) => (
+                      <li key={step}>{step}</li>
+                    ))}
+                  </ol>
+                </fieldset>
               </div>
-
-              {copyState === 'fallback' ? (
-                <p className="mt-3 text-[13px] text-ink-body leading-5">
-                  Your browser cannot write rich text to the clipboard, so the HTML source
-                  was copied instead. Paste it into your client’s “edit signature as HTML”
-                  or source view.
-                </p>
-              ) : null}
-              {copyState === 'error' ? (
-                <p className="mt-3 flex items-start gap-2 text-[13px] text-ink-body leading-5">
-                  <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-                  <span>
-                    Your browser refused clipboard access. Switch to the HTML view and
-                    select the markup by hand, or allow clipboard permissions for this
-                    site.
-                  </span>
-                </p>
-              ) : null}
-
-              <fieldset className="mt-4">
-                <legend className="label">Install it in</legend>
-                <div className="flex flex-wrap gap-2">
-                  {CLIENTS.map((c) => (
-                    <SegmentButton
-                      key={c.id}
-                      active={client === c.id}
-                      onClick={() => setClient(c.id)}
-                    >
-                      {c.label}
-                    </SegmentButton>
-                  ))}
-                </div>
-                <ol className="mt-3 flex list-decimal flex-col gap-1.5 pl-5 text-[13px] text-ink-body leading-5">
-                  {steps.map((step) => (
-                    <li key={step}>{step}</li>
-                  ))}
-                </ol>
-              </fieldset>
             </div>
-          </div>
-        </Pane>
-      }
-      status={
-        <StatusBar
-          state={isEmpty ? 'neutral' : 'valid'}
-          message={
-            isEmpty
-              ? 'Waiting for your details'
-              : result.warnings.length > 0
-                ? `Ready to paste · ${result.warnings.length} thing${
-                    result.warnings.length === 1 ? '' : 's'
-                  } worth checking`
-                : 'Ready to paste'
-          }
-          stats={[
-            { label: GMAIL_LIMIT_LABEL, value: String(result.html.length) },
-            { label: 'layout', value: templateLabel },
-            {
-              label: hasRemoteImage ? 'remote image — often blocked' : 'remote images',
-              value: hasRemoteImage ? '1' : '0',
-            },
-          ]}
-          privacyNote="Built in your browser — no upload, no account"
-        />
-      }
-    />
+          </Pane>
+        }
+        status={
+          <StatusBar
+            state={isEmpty ? 'neutral' : 'valid'}
+            message={
+              isEmpty
+                ? 'Waiting for your details'
+                : result.warnings.length > 0
+                  ? `Ready to paste · ${result.warnings.length} thing${
+                      result.warnings.length === 1 ? '' : 's'
+                    } worth checking`
+                  : 'Ready to paste'
+            }
+            stats={[
+              { label: GMAIL_LIMIT_LABEL, value: String(result.html.length) },
+              { label: 'layout', value: templateLabel },
+              {
+                label: hasRemoteImage ? 'remote image — often blocked' : 'remote images',
+                value: hasRemoteImage ? '1' : '0',
+              },
+            ]}
+            privacyNote="Built in your browser — no upload, no account"
+          />
+        }
+      />
+
+      <section
+        aria-label="Signature summary"
+        className="rounded-panel border border-line bg-cream p-5 md:p-6"
+      >
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <fieldset>
+            <legend className="label">Layout</legend>
+            <div className="grid grid-cols-2 gap-2">
+              {TEMPLATES.map((t) => {
+                const selected = template === t.id
+                return (
+                  <button
+                    key={t.id}
+                    type="button"
+                    aria-pressed={selected}
+                    onClick={() => setTemplate(t.id)}
+                    title={t.blurb}
+                    className={`flex min-h-11 flex-col items-center justify-center gap-1 rounded-sm border p-2 transition-colors ${
+                      selected
+                        ? 'border-ink bg-violet-700 text-white'
+                        : 'border-line-grey bg-cream text-ink hover:border-ink'
+                    }`}
+                  >
+                    <TemplateGlyph id={t.id} selected={selected} />
+                    <span className="font-bold text-[12px] leading-4">{t.label}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend className="label">Brand colours</legend>
+            <div className="flex flex-wrap gap-2">
+              {ACCENT_SWATCHES.map((swatch) => {
+                const active = normalizeHexColor(accent) === normalizeHexColor(swatch.hex)
+                return (
+                  <button
+                    key={swatch.hex}
+                    type="button"
+                    aria-pressed={active}
+                    title={swatch.label}
+                    aria-label={swatch.label}
+                    onClick={() => setAccent(swatch.hex)}
+                    className={`size-9 shrink-0 rounded-full border-2 transition-colors ${
+                      active ? 'border-ink' : 'border-transparent hover:border-line-grey'
+                    }`}
+                    style={{ backgroundColor: swatch.hex }}
+                  />
+                )
+              })}
+            </div>
+            <p className="hint mt-2">Or pick a custom hex on the left.</p>
+          </fieldset>
+
+          <fieldset>
+            <legend className="label">Signature options</legend>
+            <ul className="flex flex-col gap-1.5">
+              {SIGNATURE_OPTIONS.map((option) => (
+                <li
+                  key={option}
+                  className="flex items-center gap-2 text-[13px] text-ink-body"
+                >
+                  <Check className="size-4 shrink-0 text-green" aria-hidden="true" />
+                  {option}
+                </li>
+              ))}
+            </ul>
+          </fieldset>
+        </div>
+      </section>
+    </div>
   )
 }

@@ -6,7 +6,7 @@ export const meta: Tool = {
   title: 'Slogan Generator — Free Tagline Maker',
   h1: 'Slogan Generator',
   description:
-    'Generate ten brandable slogans per click from hand-written template banks in five tones. Star a shortlist and check every line against Google Ads character limits.',
+    'Generate ten brandable slogans per click from hand-written template banks in five tones. Save a shortlist and check every line against Google Ads character limits.',
   tagline: 'Ten taglines per click, in the tone your brand actually speaks.',
   keywords: [
     'slogan generator',
@@ -24,7 +24,8 @@ export const meta: Tool = {
   runtime: 'client',
   monthlyCostCeiling: 0,
   leadTier: 'C',
-  serviceTarget: 'branding',
+  // 'branding' 404s on scult.in — 'branding-agency' is the real page.
+  serviceTarget: 'branding-agency',
   updatedAt: '2026-07-29',
   owner: 'scult-business',
   icon: 'Quote',
@@ -32,16 +33,15 @@ export const meta: Tool = {
   howToUse: [
     'Enter your brand name or main keyword, and optionally what you do.',
     'Pick the tone that matches your brand voice.',
-    'Generate a batch of ten and star the lines worth keeping.',
+    'Generate a batch of ten and heart the lines worth keeping.',
     'Regenerate for fresh ideas — anything on screen or shortlisted is never repeated.',
     'Copy your favourites; the shortlist stays saved in this browser.',
   ],
   howItWorks:
-    'Every tone has a hand-written bank of 16-plus sentence patterns — benefit-led, contrast, imperative, parallelism, short punch lines — and your keyword and noun are inflected into them grammatically: the brand is capitalised when it opens a sentence and kept as typed mid-sentence, and a/an is chosen by vowel sound wherever a template needs an article. Each batch is a shuffle of that bank with everything already on screen or shortlisted excluded, so regenerating never repeats itself. There is no LLM behind this, which is exactly why it is instant, free and private — nothing you type leaves the browser. The trade is breadth for quality: a curated set of lines that survive being read aloud, instead of an infinite stream of madlibs.',
+    'Each tone draws on a hand-written bank of 16-plus sentence patterns — benefit-led, contrast, imperative. Your keyword is inflected grammatically: capitalised at a sentence start, a/an chosen by vowel sound. Batches shuffle the bank, excluding lines already shown, so regenerating never repeats. No LLM.',
   limitations: [
-    'Templates cannot know your positioning, audience or category — treat every line as raw material to sharpen, not finished brand copy.',
-    'Nothing here is trademark-checked. Search the trademark registry and your competitors before putting a slogan on anything permanent.',
-    'The banks are English-only, and the grammar handling (capitalisation, a/an selection) assumes English phrasing.',
+    'Templates don’t know your positioning or audience — treat lines as raw material, not finished copy.',
+    'Nothing here is trademark-checked, so search before using a line anywhere permanent.',
   ],
   faq: [
     {

@@ -14,7 +14,8 @@ export const meta: Tool = {
   runtime: 'client',
   monthlyCostCeiling: 0,
   leadTier: 'B',
-  serviceTarget: 'branding',
+  // 'branding' 404s on scult.in — 'branding-agency' is the real page.
+  serviceTarget: 'branding-agency',
   updatedAt: '2026-07-28',
   owner: 'scult-design',
   icon: 'Palette',
@@ -26,10 +27,10 @@ export const meta: Tool = {
     'Copy the palette as CSS custom properties or Tailwind tokens.',
   ],
   howItWorks:
-    'Harmonies are computed in OKLCH rather than HSL. This matters: rotating hue in HSL changes perceived lightness dramatically — HSL yellow and HSL blue at the same "lightness" differ by a factor of four in actual luminance — so HSL palettes come out visually lumpy. OKLCH is perceptually uniform, so a fixed lightness really does look like a fixed lightness across hues, and a ten-step ramp has ten even steps.',
+    'Harmonies are computed in OKLCH, not HSL: HSL lightness does not match perceived lightness, so HSL yellow and blue at the same value differ by roughly 4x in actual luminance, producing lumpy palettes. OKLCH is perceptually uniform, so holding lightness constant looks even across hues, and the ten-step ramp stays evenly spaced.',
   limitations: [
-    'OKLCH can express colours outside the sRGB gamut. We clamp to sRGB, so extremely saturated inputs may shift slightly on output.',
-    'A generated palette is a starting point, not a brand. It has no opinion about what your colours should mean.',
+    'Very saturated inputs may shift slightly, since out-of-gamut OKLCH colours get clamped to sRGB.',
+    'A generated palette is a starting point, not a brand — it carries no meaning of its own.',
   ],
   faq: [
     {

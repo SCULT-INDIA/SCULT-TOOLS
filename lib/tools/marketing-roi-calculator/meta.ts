@@ -25,7 +25,9 @@ export const meta: Tool = {
   runtime: 'client',
   monthlyCostCeiling: 0,
   leadTier: 'B',
-  serviceTarget: 'performance-marketing',
+  // 'performance-marketing' 404s on scult.in — no generic page under that
+  // slug exists; 'google-ads-management' is the closest real service page.
+  serviceTarget: 'google-ads-management',
   updatedAt: '2026-07-29',
   owner: 'scult-growth',
   icon: 'TrendingUp',
@@ -38,11 +40,10 @@ export const meta: Tool = {
     'Open “Show the maths” to check every step with your own numbers plugged in.',
   ],
   howItWorks:
-    'ROI = (revenue × gross margin − spend − other costs) ÷ (spend + other costs) × 100. ROAS = revenue ÷ spend. The two diverge because ROAS pretends every revenue rupee is a rupee kept, while ROI keeps only your margin and charges you for every cost. That makes break-even ROAS = 1 ÷ margin: at a 25% margin you need 4× ROAS before the first rupee of profit exists, so a campaign with a “good” 3× ROAS is losing 25 paise on every rupee spent. All arithmetic runs in integer paise and basis points, rounded once, and the verdict is derived from the same rounded profit figure that is displayed — so the label can never contradict the numbers beside it.',
+    'ROI = (revenue × margin − spend − other costs) ÷ (spend + other costs) × 100; ROAS = revenue ÷ spend. ROAS credits every rupee as profit, while ROI keeps only margin and charges all costs, so break-even ROAS = 1 ÷ margin — a "good" 3× ROAS at 25% margin can still be a loss.',
   limitations: [
-    'This is last-click, single-touch arithmetic: whatever revenue you attribute to the campaign gets full credit. Across multi-touch journeys, summing per-campaign ROI this way overstates the total.',
-    'No incrementality adjustment. Some attributed revenue would have arrived without the campaign (brand searches, returning customers), so true ROI is usually lower than the number shown.',
-    'Customer lifetime value is deliberately excluded: with a generous enough LTV multiplier, any campaign looks profitable. If repeat purchases matter, model them explicitly rather than inflating first-purchase revenue.',
+    'Last-click credit: revenue attributed here gets full credit, so summing across a multi-touch journey overstates total ROI.',
+    'No incrementality or LTV adjustment: some of this revenue would have happened anyway, and repeat purchases are not counted.',
   ],
   faq: [
     {

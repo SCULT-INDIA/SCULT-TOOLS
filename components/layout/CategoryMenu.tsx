@@ -2,6 +2,7 @@
 
 import { ChevronDown } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@/components/ui/Icon'
 import { CATEGORIES } from '@/lib/tools/categories'
@@ -22,6 +23,12 @@ export function CategoryMenu({ items }: { items?: readonly Item[] }) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
+  const pathname = usePathname()
+  // Active when the current route is a category or tool page — i.e. the
+  // first path segment matches a known category slug. Gives the trigger a
+  // visual "you are here" state the nav had no way to show before.
+  const [firstSegment] = pathname.split('/').filter(Boolean)
+  const isActive = CATEGORIES.some((c) => c.slug === firstSegment)
 
   const list: readonly Item[] =
     items ??
@@ -67,8 +74,9 @@ export function CategoryMenu({ items }: { items?: readonly Item[] }) {
         type="button"
         aria-expanded={open}
         aria-haspopup="true"
+        aria-current={isActive ? 'true' : undefined}
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1 hover:text-violet-600"
+        className={`flex items-center gap-1 hover:text-violet-600 ${isActive ? 'text-violet-700' : ''}`}
       >
         Tools
         <ChevronDown
@@ -79,13 +87,20 @@ export function CategoryMenu({ items }: { items?: readonly Item[] }) {
 
       {open ? (
         <div className="absolute top-full left-0 z-50 w-[560px] pt-3">
-          <div className="grid grid-cols-2 gap-1 rounded-panel border border-line bg-white p-3 shadow-card-raised">
+          {/* border-ink + shadow-brutal-sm, matching the trigger pill's own
+              redesign — a brutal-language dropdown reads as one continuous
+              piece of chrome with the bar it opens from, rather than a
+              softer, borrowed-register panel bolted onto a brutal trigger. */}
+          <div className="grid grid-cols-2 gap-1 rounded-panel border-2 border-ink bg-cream p-3 shadow-brutal-sm">
             {list.map((c) => (
               <Link
                 key={c.slug}
                 href={`/${c.slug}`}
                 onClick={() => setOpen(false)}
-                className="flex items-start gap-3 rounded-card p-3 transition-colors hover:bg-violet-50"
+                aria-current={c.slug === firstSegment ? 'page' : undefined}
+                className={`flex items-start gap-3 rounded-card p-3 transition-colors hover:bg-violet-50 ${
+                  c.slug === firstSegment ? 'bg-violet-50' : ''
+                }`}
               >
                 <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-sm bg-violet-100">
                   <Icon name={c.icon} className="size-4 text-violet-700" />

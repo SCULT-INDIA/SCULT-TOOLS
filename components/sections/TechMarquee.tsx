@@ -24,7 +24,7 @@ export function TechMarquee() {
   return (
     <section
       aria-label="Where the output goes"
-      className="border-line border-y bg-white py-10"
+      className="border-line border-y bg-offwhite py-10"
     >
       <p className="mb-6 text-center text-[13px] text-ink-subtle uppercase tracking-[0.12em]">
         Built to slot into what you already use

@@ -1,14 +1,24 @@
 'use client'
 
+import {
+  AlignLeft,
+  BookOpen,
+  CaseSensitive,
+  Gauge,
+  Hash,
+  Mic,
+  Pilcrow,
+  Ruler,
+  Type,
+} from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Pane,
   SegmentButton,
+  StatCard,
   StatusBar,
-  ToolbarAction,
   ToolbarGroup,
   ToolToolbar,
-  ToolWorkspace,
 } from '@/components/tools/workspace'
 import {
   analyzeText,
@@ -21,13 +31,13 @@ import {
 } from '@/lib/tools/word-counter/logic'
 
 /**
- * Word counter — rebuilt on the shared workspace.
+ * Word counter — single-column writing surface + stat cards.
  * Research brief: docs/research/word-counter.md
  *
- * The most editor-shaped tool of the fifteen, so the left pane is a writing
- * surface filling the full height and the right pane is a live readout.
- * Previously the stat tiles sat *above* a fixed-height textarea, which put the
- * numbers out of view exactly when you were writing enough to care about them.
+ * Previously a two-pane workspace (writing surface left, live readout right).
+ * Redesigned as a single stacked column: the textarea up top, then a StatCard
+ * grid for the headline counts, then the secondary blocks (goal, platform
+ * limits, longest sentence, keyword density) that don't fit a single number.
  *
  * Every count lives in logic.ts and is already tested — including the part that
  * makes the tool worth using, which is `Intl.Segmenter` grapheme counting. A
@@ -118,6 +128,7 @@ export function WordCounter() {
   )
   const entries: readonly DensityEntry[] =
     densityMode === 'phrases' ? bigrams : stats.density
+  const topEntry = entries[0]
 
   const goal = Number.parseInt(goalRaw, 10)
   const goalValid = Number.isFinite(goal) && goal > 0 && goal <= MAX_GOAL
@@ -145,219 +156,260 @@ export function WordCounter() {
   }
 
   return (
-    <ToolWorkspace
-      inputLabel="Your text"
-      outputLabel="Live counts"
-      minHeight="min-h-[32rem]"
-      toolbar={
-        <ToolToolbar
-          actions={
-            <>
-              <ToolbarAction onClick={() => setText(SAMPLE)}>Load sample</ToolbarAction>
-              <ToolbarAction onClick={clearDraft} disabled={isEmpty}>
-                Clear
-              </ToolbarAction>
-            </>
-          }
-        >
-          <ToolbarGroup label="Keywords">
-            <SegmentButton
-              active={densityMode === 'words'}
-              onClick={() => setDensityMode('words')}
-            >
-              Words
-            </SegmentButton>
-            <SegmentButton
-              active={densityMode === 'phrases'}
-              onClick={() => setDensityMode('phrases')}
-            >
-              Phrases
-            </SegmentButton>
-          </ToolbarGroup>
+    <div className="flex flex-col gap-6">
+      <div className="overflow-hidden rounded-panel border border-line bg-cream shadow-brutal">
+        <div className="border-line border-b bg-offwhite">
+          <ToolToolbar>
+            <ToolbarGroup label="Keywords">
+              <SegmentButton
+                active={densityMode === 'words'}
+                onClick={() => setDensityMode('words')}
+              >
+                Words
+              </SegmentButton>
+              <SegmentButton
+                active={densityMode === 'phrases'}
+                onClick={() => setDensityMode('phrases')}
+              >
+                Phrases
+              </SegmentButton>
+            </ToolbarGroup>
 
-          <div className="flex items-center gap-2">
-            <label
-              className="font-medium text-[12px] text-ink-subtle uppercase tracking-[0.08em]"
-              htmlFor="wc-goal"
-            >
-              Goal
+            <div className="flex items-center gap-2">
+              <label
+                className="font-medium text-[12px] text-ink-subtle uppercase tracking-[0.08em]"
+                htmlFor="wc-goal"
+              >
+                Goal
+              </label>
+              <input
+                id="wc-goal"
+                type="number"
+                inputMode="numeric"
+                min={1}
+                max={MAX_GOAL}
+                step={50}
+                placeholder="none"
+                value={goalRaw}
+                onChange={(e) => setGoalRaw(e.target.value)}
+                className="min-h-9 w-24 rounded-sm border border-line-grey bg-cream px-2.5 text-[13px] tabular-nums"
+              />
+            </div>
+          </ToolToolbar>
+        </div>
+
+        {/* An evenly-spaced grid, not a left-packed flex-wrap row — same fix
+          as Schema Markup Generator / FAQ Schema Generator's action rows.
+          Brand buttons: "Load sample" is the primary "start here" action
+          (cta-yellow, no modifier), "Clear" is secondary (btn-white). */}
+        <div className="grid grid-cols-2 gap-2 border-line border-b bg-offwhite p-3 sm:grid-cols-3 sm:gap-3 sm:p-4 lg:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => setText(SAMPLE)}
+            className="btn-brutal btn-brutal-sm w-full"
+          >
+            Load sample
+          </button>
+          <button
+            type="button"
+            onClick={clearDraft}
+            disabled={isEmpty}
+            className="btn-brutal btn-brutal-sm btn-white w-full"
+          >
+            Clear
+          </button>
+        </div>
+
+        <div className="flex min-h-[22rem] flex-col">
+          <Pane title="Your text" padded={false} scroll={false}>
+            <label className="sr-only" htmlFor="wc-input">
+              Type or paste your text
             </label>
-            <input
-              id="wc-goal"
-              type="number"
-              inputMode="numeric"
-              min={1}
-              max={MAX_GOAL}
-              step={50}
-              placeholder="none"
-              value={goalRaw}
-              onChange={(e) => setGoalRaw(e.target.value)}
-              className="min-h-9 w-24 rounded-sm border border-line-grey bg-white px-2.5 text-[13px] tabular-nums"
+            <textarea
+              id="wc-input"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Start typing, or paste a draft here…"
+              className="size-full resize-none border-0 bg-cream p-4 text-[15px] text-ink-body leading-[1.7] outline-none placeholder:text-ink-subtle"
+            />
+          </Pane>
+        </div>
+      </div>
+
+      {isEmpty ? (
+        <div className="rounded-panel border border-line bg-cream p-10">
+          <p className="mx-auto max-w-[36ch] text-center text-[14px] text-ink-subtle leading-6">
+            Start typing above. Counts update as you go — including Unicode-correct
+            characters, reading time, and how much room you have left against each
+            platform limit.
+          </p>
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+            <StatCard
+              icon={Type}
+              label="Words"
+              value={fmt(stats.words)}
+              tone="lavender"
+            />
+            <StatCard
+              icon={CaseSensitive}
+              label="Characters"
+              value={fmt(stats.chars)}
+              sublabel={`${fmt(stats.charsNoSpaces)} without spaces`}
+              tone="yellow"
+            />
+            <StatCard
+              icon={AlignLeft}
+              label="Sentences"
+              value={fmt(stats.sentences)}
+              tone="blue"
+            />
+            <StatCard
+              icon={Pilcrow}
+              label="Paragraphs"
+              value={fmt(stats.paragraphs)}
+              tone="green"
+            />
+            <StatCard
+              icon={BookOpen}
+              label="Reading time"
+              value={formatDuration(stats.readingMinutes)}
+              sublabel={`${READING_WPM} wpm`}
+              tone="lavender"
+            />
+            <StatCard
+              icon={Mic}
+              label="Speaking time"
+              value={formatDuration(stats.speakingMinutes)}
+              sublabel={`${SPEAKING_WPM} wpm`}
+              tone="yellow"
+            />
+            <StatCard
+              icon={Gauge}
+              label="Reading level"
+              value={sentenceBand(stats.avgSentenceWords)}
+              sublabel={`${stats.avgSentenceWords} words / sentence`}
+              tone="blue"
+            />
+            <StatCard
+              icon={Hash}
+              label="Keyword density"
+              value={topEntry ? topEntry.term : '—'}
+              sublabel={topEntry ? `${topEntry.pct}% of words` : 'No repeated terms yet'}
+              tone="green"
+            />
+            <StatCard
+              icon={Ruler}
+              label="Average word"
+              value={`${stats.avgWordLength} letters`}
+              tone="lavender"
             />
           </div>
-        </ToolToolbar>
-      }
-      input={
-        <Pane title="Your text" padded={false} scroll={false}>
-          <label className="sr-only" htmlFor="wc-input">
-            Type or paste your text
-          </label>
-          <textarea
-            id="wc-input"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Start typing, or paste a draft here…"
-            className="size-full resize-none border-0 bg-white p-4 text-[15px] text-ink-body leading-[1.7] outline-none placeholder:text-ink-subtle"
-          />
-        </Pane>
-      }
-      output={
-        <Pane title="Live counts">
-          {isEmpty ? (
-            <div className="flex h-full items-center justify-center p-6">
-              <p className="max-w-[36ch] text-center text-[14px] text-ink-subtle leading-6">
-                Start typing on the left. Counts update as you go — including
-                Unicode-correct characters, reading time, and how much room you have left
-                against each platform limit.
+
+          {goalValid ? (
+            <div className="rounded-panel border border-line bg-cream p-4">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+                <p className="label mb-0">Goal</p>
+                <p className="font-medium text-[14px] text-ink tabular-nums">
+                  {fmt(stats.words)} / {fmt(goal)} words
+                  <span className="ml-2 text-ink-subtle">{goalPct}%</span>
+                  {goalDone ? (
+                    <span className="ml-2 font-bold text-ink">· reached</span>
+                  ) : null}
+                </p>
+              </div>
+              {/* Native <progress>: announced correctly with no ARIA of its own. */}
+              <progress
+                className="mt-2 h-2.5 w-full overflow-hidden rounded-pill border border-line-grey [&::-moz-progress-bar]:bg-violet-700 [&::-webkit-progress-bar]:bg-offwhite [&::-webkit-progress-value]:bg-violet-700"
+                max={goal}
+                value={Math.min(stats.words, goal)}
+              />
+            </div>
+          ) : null}
+
+          <div className="rounded-panel border border-line bg-cream p-4">
+            <p className="label">Fits in</p>
+            <ul className="flex flex-col gap-1.5">
+              {PLATFORM_LIMITS.map((platform) => {
+                const remaining = platform.limit - stats.chars
+                const over = remaining < 0
+                return (
+                  <li
+                    key={platform.name}
+                    className="flex items-baseline justify-between gap-3 rounded-sm border border-line-grey bg-offwhite px-3 py-2 text-[14px]"
+                  >
+                    <span className="text-ink-body">{platform.name}</span>
+                    {/* Wording carries the state, not weight alone: "over by"
+                        and "left" are different words, so this reads correctly
+                        in greyscale and to a screen reader. */}
+                    <span
+                      className={
+                        over
+                          ? 'font-bold text-ink tabular-nums'
+                          : 'font-medium text-ink-muted tabular-nums'
+                      }
+                    >
+                      {over
+                        ? `over by ${fmt(Math.abs(remaining))}`
+                        : `${fmt(remaining)} left`}
+                    </span>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+
+          {longest.words > 0 ? (
+            <div className="rounded-panel border border-line bg-cream p-4">
+              <p className="label">Longest sentence · {longest.words} words</p>
+              <p className="rounded-sm border border-line-grey bg-offwhite p-3 text-[14px] text-ink-body leading-6">
+                {longestPreview}
+              </p>
+              <p className="hint mt-1.5">
+                Usually the first candidate for a rewrite — long sentences are where
+                meaning goes to hide.
               </p>
             </div>
-          ) : (
-            <div className="flex flex-col gap-6">
-              <div className="grid grid-cols-2 gap-3">
-                <BigStat label="Words" value={fmt(stats.words)} />
-                <BigStat label="Characters" value={fmt(stats.chars)} />
-                <BigStat label="Sentences" value={fmt(stats.sentences)} />
-                <BigStat label="Paragraphs" value={fmt(stats.paragraphs)} />
-              </div>
+          ) : null}
 
-              {goalValid ? (
-                <div>
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-                    <p className="label mb-0">Goal</p>
-                    <p className="font-medium text-[14px] text-ink tabular-nums">
-                      {fmt(stats.words)} / {fmt(goal)} words
-                      <span className="ml-2 text-ink-subtle">{goalPct}%</span>
-                      {goalDone ? (
-                        <span className="ml-2 font-bold text-ink">· reached</span>
-                      ) : null}
-                    </p>
-                  </div>
-                  {/* Native <progress>: announced correctly with no ARIA of its own. */}
-                  <progress
-                    className="mt-2 h-2.5 w-full overflow-hidden rounded-pill border border-line-grey [&::-moz-progress-bar]:bg-violet-700 [&::-webkit-progress-bar]:bg-offwhite [&::-webkit-progress-value]:bg-violet-700"
-                    max={goal}
-                    value={Math.min(stats.words, goal)}
-                  />
-                </div>
-              ) : null}
+          <div className="rounded-panel border border-line bg-cream p-4">
+            <p className="label">Top {densityMode === 'words' ? 'terms' : 'phrases'}</p>
+            {entries.length === 0 ? (
+              <p className="hint">
+                {densityMode === 'words'
+                  ? 'No repeated terms yet — everyday words like “the” and “and” are excluded.'
+                  : 'No repeated two-word phrases yet.'}
+              </p>
+            ) : (
+              <ul className="flex flex-col gap-1.5">
+                {entries.map((entry) => (
+                  <li key={entry.term} className="flex items-center gap-3">
+                    <span className="w-[9rem] shrink-0 truncate text-[14px] text-ink-body">
+                      {entry.term}
+                    </span>
+                    {/* Decorative: the figures to the right carry the
+                        information, so nothing depends on seeing the bar. */}
+                    <span
+                      aria-hidden="true"
+                      className="h-2 shrink-0 rounded-pill bg-violet-700"
+                      style={{
+                        width: `${Math.min(60, Math.max(4, entry.pct * 3))}%`,
+                      }}
+                    />
+                    <span className="ml-auto shrink-0 text-[13px] text-ink-subtle tabular-nums">
+                      {entry.count} · {entry.pct.toFixed(1)}%
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </>
+      )}
 
-              <div>
-                <p className="label">Fits in</p>
-                <ul className="flex flex-col gap-1.5">
-                  {PLATFORM_LIMITS.map((platform) => {
-                    const remaining = platform.limit - stats.chars
-                    const over = remaining < 0
-                    return (
-                      <li
-                        key={platform.name}
-                        className="flex items-baseline justify-between gap-3 rounded-sm border border-line-grey bg-offwhite px-3 py-2 text-[14px]"
-                      >
-                        <span className="text-ink-body">{platform.name}</span>
-                        {/* Wording carries the state, not weight alone: "over by"
-                            and "left" are different words, so this reads correctly
-                            in greyscale and to a screen reader. */}
-                        <span
-                          className={
-                            over
-                              ? 'font-bold text-ink tabular-nums'
-                              : 'font-medium text-ink-muted tabular-nums'
-                          }
-                        >
-                          {over
-                            ? `over by ${fmt(Math.abs(remaining))}`
-                            : `${fmt(remaining)} left`}
-                        </span>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
-
-              <dl className="divide-y divide-line border-line border-t">
-                <SmallStat
-                  label="Characters without spaces"
-                  value={fmt(stats.charsNoSpaces)}
-                />
-                <SmallStat
-                  label={`Reading time · ${READING_WPM} wpm`}
-                  value={formatDuration(stats.readingMinutes)}
-                />
-                <SmallStat
-                  label={`Speaking time · ${SPEAKING_WPM} wpm`}
-                  value={formatDuration(stats.speakingMinutes)}
-                />
-                <SmallStat
-                  label="Average sentence"
-                  value={`${stats.avgSentenceWords} words · ${sentenceBand(stats.avgSentenceWords)}`}
-                />
-                <SmallStat
-                  label="Average word"
-                  value={`${stats.avgWordLength} letters`}
-                />
-              </dl>
-
-              {longest.words > 0 ? (
-                <div>
-                  <p className="label">Longest sentence · {longest.words} words</p>
-                  <p className="rounded-sm border border-line-grey bg-offwhite p-3 text-[14px] text-ink-body leading-6">
-                    {longestPreview}
-                  </p>
-                  <p className="hint mt-1.5">
-                    Usually the first candidate for a rewrite — long sentences are where
-                    meaning goes to hide.
-                  </p>
-                </div>
-              ) : null}
-
-              <div>
-                <p className="label">
-                  Top {densityMode === 'words' ? 'terms' : 'phrases'}
-                </p>
-                {entries.length === 0 ? (
-                  <p className="hint">
-                    {densityMode === 'words'
-                      ? 'No repeated terms yet — everyday words like “the” and “and” are excluded.'
-                      : 'No repeated two-word phrases yet.'}
-                  </p>
-                ) : (
-                  <ul className="flex flex-col gap-1.5">
-                    {entries.map((entry) => (
-                      <li key={entry.term} className="flex items-center gap-3">
-                        <span className="w-[9rem] shrink-0 truncate text-[14px] text-ink-body">
-                          {entry.term}
-                        </span>
-                        {/* Decorative: the figures to the right carry the
-                            information, so nothing depends on seeing the bar. */}
-                        <span
-                          aria-hidden="true"
-                          className="h-2 shrink-0 rounded-pill bg-violet-700"
-                          style={{
-                            width: `${Math.min(60, Math.max(4, entry.pct * 3))}%`,
-                          }}
-                        />
-                        <span className="ml-auto shrink-0 text-[13px] text-ink-subtle tabular-nums">
-                          {entry.count} · {entry.pct.toFixed(1)}%
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </div>
-          )}
-        </Pane>
-      }
-      status={
+      <div className="overflow-hidden rounded-panel border border-line bg-offwhite">
         <StatusBar
           state="neutral"
           message={
@@ -378,25 +430,7 @@ export function WordCounter() {
           }
           privacyNote="Counted in your browser — the draft is saved only on this device"
         />
-      }
-    />
-  )
-}
-
-function BigStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-card border border-line-grey bg-offwhite px-4 py-3">
-      <p className="stat-figure font-bold text-[30px] text-ink leading-none">{value}</p>
-      <p className="mt-1.5 text-[13px] text-ink-subtle">{label}</p>
-    </div>
-  )
-}
-
-function SmallStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-baseline justify-between gap-4 py-2.5">
-      <dt className="text-[14px] text-ink-muted">{label}</dt>
-      <dd className="font-medium text-[14px] text-ink tabular-nums">{value}</dd>
+      </div>
     </div>
   )
 }

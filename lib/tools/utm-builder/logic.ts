@@ -18,7 +18,13 @@
  * No React, no I/O — pure functions, unit-tested in logic.test.ts.
  */
 
-export type UtmFieldName = 'source' | 'medium' | 'campaign' | 'term' | 'content'
+export type UtmFieldName =
+  | 'source'
+  | 'medium'
+  | 'campaign'
+  | 'campaignId'
+  | 'term'
+  | 'content'
 
 export interface UtmFieldSpec {
   readonly name: UtmFieldName
@@ -28,6 +34,8 @@ export interface UtmFieldSpec {
   readonly required: boolean
   readonly hint: string
   readonly placeholder: string
+  /** Rendered under "Advanced options" rather than in the main field list. */
+  readonly advanced?: boolean
 }
 
 /**
@@ -61,6 +69,15 @@ export const UTM_FIELDS: readonly UtmFieldSpec[] = [
     placeholder: 'spring-sale',
   },
   {
+    name: 'campaignId',
+    param: 'utm_id',
+    label: 'Campaign ID',
+    required: false,
+    hint: 'Optional. Matches this link to a Google Ads campaign ID for cross-platform reporting.',
+    placeholder: '7891011',
+    advanced: true,
+  },
+  {
     name: 'term',
     param: 'utm_term',
     label: 'Campaign term',
@@ -83,6 +100,7 @@ export interface UtmInput {
   readonly source?: string
   readonly medium?: string
   readonly campaign?: string
+  readonly campaignId?: string
   readonly term?: string
   readonly content?: string
   /** Lowercase and hyphenate every value before applying it. Defaults to true. */
@@ -213,6 +231,7 @@ export function buildUtmUrl(input: UtmInput): UtmResult {
     source: (input.source ?? '').trim(),
     medium: (input.medium ?? '').trim(),
     campaign: (input.campaign ?? '').trim(),
+    campaignId: (input.campaignId ?? '').trim(),
     term: (input.term ?? '').trim(),
     content: (input.content ?? '').trim(),
   }
@@ -258,6 +277,66 @@ export function buildUtmUrl(input: UtmInput): UtmResult {
   }
 
   return { url, params, warnings }
+}
+
+export interface QualityCheck {
+  readonly id: string
+  readonly label: string
+  readonly pass: boolean
+}
+
+export interface QualityScore {
+  readonly score: number
+  readonly checks: readonly QualityCheck[]
+}
+
+const REQUIRED_PARAMS = UTM_FIELDS.filter((field) => field.required).map(
+  (field) => field.param,
+)
+
+/**
+ * Scores a built link against the checks that keep a UTM scheme usable in
+ * GA4: every required dimension present, no casing/whitespace that would
+ * fragment a campaign into duplicate rows, and no other advisory warning
+ * left unresolved.
+ *
+ * Pure function over the `UtmResult` `buildUtmUrl` already produced — no
+ * re-parsing, so the score can never disagree with the warnings shown
+ * beside it.
+ */
+export function computeQualityScore(result: UtmResult): QualityScore {
+  const appliedParams = new Set(result.params.map((param) => param.param))
+  const hasAllRequired = REQUIRED_PARAMS.every((param) => appliedParams.has(param))
+  const hasCasingIssue = result.warnings.some((w) => w.includes('case-sensitive'))
+  const hasOtherIssue = result.warnings.some(
+    (w) => w.includes('already had UTM parameters') || w.includes('characters'),
+  )
+
+  const checks: QualityCheck[] = [
+    {
+      id: 'required',
+      label: 'All required parameters are set',
+      pass: result.error === undefined && hasAllRequired,
+    },
+    {
+      id: 'casing',
+      label: 'No spaces or uppercase letters',
+      pass: !hasCasingIssue,
+    },
+    {
+      id: 'best-practices',
+      label: 'GA4 best practices followed',
+      pass:
+        result.error === undefined && hasAllRequired && !hasCasingIssue && !hasOtherIssue,
+    },
+  ]
+
+  const score =
+    result.error !== undefined
+      ? 0
+      : Math.round((checks.filter((check) => check.pass).length / checks.length) * 100)
+
+  return { score, checks }
 }
 
 export interface UtmPrefs {

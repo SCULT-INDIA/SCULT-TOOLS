@@ -25,7 +25,9 @@ export const meta: Tool = {
   runtime: 'client',
   monthlyCostCeiling: 0,
   leadTier: 'B',
-  serviceTarget: 'branding',
+  // Verified live on scult.in — 'branding' 404s, the agency's real page is
+  // 'branding-agency'. See docs in ToolShell's parentLink usage / lib/site.ts.
+  serviceTarget: 'branding-agency',
   updatedAt: '2026-07-29',
   owner: 'scult-business',
   icon: 'Lightbulb',
@@ -37,11 +39,10 @@ export const meta: Tool = {
     'Star the ones you like to build a shortlist, then copy a name or check its domain.',
   ],
   howItWorks:
-    'Every name is built combinatorially in your browser — no AI call, which is why results are instant and nothing you type leaves the page. Five strategies do the work. Brandable extracts your keyword’s root (its opening consonant–vowel–consonant shape) and recombines it with curated syllables, rejecting any candidate with vowel pile-ups or heavy consonant runs. Compound joins the keyword to a real word like Hub, Labs or Forge. Modern suffix trims trailing vowels and appends endings such as -ly, -ify, -io or -ora. Portmanteau splices the keyword into a real word at a letter they share, keeping at least three characters from each side. Alliteration pairs the keyword with curated real words sharing its initial. Each name is then scored, not decorated: length against the eight-letters-or-fewer sweet spot for memorable brand names, and pronounceability with a consonant-cluster heuristic — three or more consonant sounds in a row outside common onsets like “str” gets flagged, because names people stumble over get misspelled and lost.',
+    'Names are built combinatorially in your browser, not by an AI call — five strategies (brandable syllables, compound words, modern suffixes, portmanteau, alliteration) generate candidates, then each is scored for length against an eight-letters-or-fewer sweet spot and for pronounceability via a consonant-cluster heuristic flagging three-plus consonants in a row.',
   limitations: [
-    'No trademark or company-registry search is performed. Before committing to a name, search the Indian trademark registry and the MCA company-name database — a generated name can still be legally taken.',
-    'Domain availability is not checked here. The “Check domain” link opens Namecheap’s public search in a new tab; this tool has no affiliation and no live availability data.',
-    'Word banks and the pronounceability heuristic are English-centric — a name that scores well here may read or sound different in other languages.',
+    'No trademark or company-registry search is performed — verify a name against the Indian trademark registry and MCA database before committing to it.',
+    'Domain availability isn’t checked; “Check domain” just opens Namecheap’s public search in a new tab.',
   ],
   faq: [
     {

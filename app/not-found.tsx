@@ -31,7 +31,17 @@ export default function NotFound() {
       </div>
 
       <p className="mt-10">
-        <Link href="/all" className="btn-brutal">
+        {/* text-black/border-black force the resting-state text/border to
+            literal black: .btn-brutal's own color/border both read
+            var(--color-ink), which flips to near-white in dark mode while
+            --color-cta (yellow) stays fixed, collapsing the face to
+            ~1.45:1. hover:text-ink/hover:border-ink restore the token so the
+            already-correct hover state (near-white on the dark-mode
+            .btn-brutal:hover cream face) is untouched. */}
+        <Link
+          href="/all"
+          className="btn-brutal text-black border-black hover:text-ink hover:border-ink"
+        >
           BROWSE ALL TOOLS
         </Link>
       </p>

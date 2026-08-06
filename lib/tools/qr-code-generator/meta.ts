@@ -30,9 +30,9 @@ export const meta: Tool = {
     'Download as PNG for print or SVG for scaling.',
   ],
   howItWorks:
-    'The QR matrix is generated in your browser, so the code encodes your data directly rather than pointing at a redirect on our domain. That distinction matters: most free QR generators embed a tracking URL they control, which means your printed code stops working if they go away or start charging. UPI codes follow the NPCI deep-link spec — `upi://pay?pa=<vpa>&pn=<name>&am=<amount>&cu=INR`.',
+    'QR generation happens entirely in your browser, so the code encodes your data directly rather than a tracking redirect on our domain — unlike most free generators, it keeps working even if we go away or start charging. UPI codes follow the NPCI deep-link spec: `upi://pay?pa=<vpa>&pn=<name>&am=<amount>&cu=INR`.',
   limitations: [
-    'Because there is no redirect, the code cannot be edited after printing and we cannot offer scan analytics. That is the trade-off for permanence.',
+    "The code can't be edited after printing and there's no scan analytics — that's the trade-off for permanence.",
     'Very long inputs need a denser matrix, which needs a larger printed size to stay scannable.',
   ],
   faq: [

@@ -26,7 +26,9 @@ export const meta: Tool = {
   runtime: 'client',
   monthlyCostCeiling: 0,
   leadTier: 'B',
-  serviceTarget: 'seo',
+  // 'seo' 404s on scult.in — no generic page under that slug exists;
+  // 'seo-companies-for-small-business' is the closest real service page.
+  serviceTarget: 'seo-companies-for-small-business',
   updatedAt: '2026-07-29',
   owner: 'scult-seo',
   icon: 'FileCode2',
@@ -39,11 +41,11 @@ export const meta: Tool = {
     'Confirm eligibility with Google’s Rich Results Test.',
   ],
   howItWorks:
-    'JSON-LD is a <script> block of linked data that describes the page to crawlers without touching the visible HTML — it is the format Google explicitly recommends over microdata. This tool builds that object from a typed spec table: each schema type lists its properties with the correct nesting (an Article’s author becomes a Person entity, a Product’s price sits inside an Offer), and values are serialized with JSON.stringify, so quoting and escaping are always correct by construction. The required flags mirror Google’s rich-result documentation rather than schema.org — schema.org marks almost everything optional, but Google will not show a Product snippet without an offer or an Article card without an image, and that gap is exactly what the warnings panel checks, alongside URL absoluteness and ISO 8601 date formats. Empty optional fields are dropped from the output entirely, because "datePublished": "" is not a missing value to a validator, it is an invalid empty one.',
+    'JSON-LD is the script-block format Google recommends over microdata. This tool builds it from a typed spec table so each schema type nests properties correctly (an Article author becomes a Person, a Product price sits inside an Offer), flagging fields Google rich results require, not just schema.org optional ones.',
   limitations: [
-    'Generating markup does not guarantee a rich result. Markup makes a page eligible; whether Google shows the treatment is decided per query, per site, and can change.',
-    'Structured data must describe content actually visible on the page. Markup that disagrees with what users see violates Google’s guidelines and can earn a manual action.',
-    'Covers the nine most-used types. Niche types (Recipe, JobPosting, VideoObject, Dataset) have extra requirements — check Google’s structured data docs for those.',
+    'Valid markup makes a page eligible for a rich result — it does not guarantee Google shows one.',
+    'Markup must match what users actually see on the page, or it risks a manual action.',
+    'Covers the nine most-used types; niche types like Recipe or JobPosting have extra requirements.',
   ],
   faq: [
     {

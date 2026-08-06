@@ -125,7 +125,7 @@ export function CopyButton({
       // 44px tall on touch viewports, tighter from `sm` up — see the note in
       // workspace/ToolToolbar.tsx. Copy is the most-tapped control in most tools,
       // so it is the last one that should be hard to hit.
-      className={`flex min-h-11 items-center gap-1.5 rounded-sm border bg-white px-3 py-1.5 font-medium text-[14px] transition-colors sm:min-h-9 ${
+      className={`flex min-h-11 items-center gap-1.5 rounded-sm border bg-cream px-3 py-1.5 font-medium text-[14px] transition-colors sm:min-h-9 ${
         state === 'failed' ? 'border-ink' : 'border-line-grey hover:border-ink'
       }`}
     >

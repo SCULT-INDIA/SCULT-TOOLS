@@ -4,28 +4,42 @@ import {
   Check,
   CircleAlert,
   CircleCheck,
+  Clock,
+  Download,
+  Eye,
+  FileJson,
+  Globe,
+  Image as ImageIcon,
+  Layers,
   Monitor,
+  MousePointerClick,
   Smartphone,
+  Sparkles,
+  Timer,
   TriangleAlert,
   Zap,
 } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { CopyButton } from '@/components/tools/ResultPanel'
 import {
+  DonutChart,
+  type DonutSegment,
   ErrorDetail,
-  Pane,
+  ScoreRing,
   SegmentButton,
+  StatCard,
   StatusBar,
-  ToolbarAction,
+  StepTimeline,
+  type TimelineStep,
   ToolbarGroup,
   ToolToolbar,
-  ToolWorkspace,
 } from '@/components/tools/workspace'
 import {
   CORE_WEB_VITALS,
   categoryForScore,
   describeThresholds,
   formatReportText,
+  formatSavings,
   labelForCategory,
   labelForScore,
   METRIC_LABELS,
@@ -45,7 +59,7 @@ import {
 } from '@/lib/tools/website-speed-test/logic'
 
 /**
- * Website speed test — rebuilt on the shared workspace.
+ * Website speed test — single-column report, no left/right split.
  * Research brief: docs/research/website-speed-test.md
  *
  * The only tool on the site with a submit step, and the only one that is not
@@ -65,12 +79,14 @@ import {
  *      each stage timer — checks it before touching state. A superseded response
  *      is dropped rather than overwriting the report you are reading.
  *
- * What changed from the previous version: the result no longer renders in a
- * ResultPanel below the form with the opportunities in a second card below that.
- * The form holds the left pane and stays put across runs (re-testing after a fix
- * is the normal second action, and PSI's 6-hour cache makes it instant); the whole
- * report fills the right pane. Before a run that pane is the threshold reference
- * rather than an empty state, so the two panes never say the same thing.
+ * Layout: this tool dropped the two-pane `ToolWorkspace` for a single-column
+ * stacked report (the redesign's "Group C" shape) — the form up top, the whole
+ * report below it, because a speed report reads top-to-bottom like the PSI/GTmetrix
+ * reports it is replacing, not side-by-side against an input form. It is also the
+ * heaviest consumer of the shared `ScoreRing` / `StatCard` / `DonutChart` /
+ * `StepTimeline` primitives, all of which render only figures this file already
+ * computes from `SpeedTestPayload` — no field here is invented for the sake of
+ * filling a tile (see the file-level deviations noted in the redesign report).
  *
  * Every classification, the verdict, the report text and the threshold bands come
  * from logic.ts and are unit-tested. This file is state, markup and the two things
@@ -114,6 +130,31 @@ const CATEGORY_TINT: Record<MetricCategory, string> = {
   good: 'bg-tile-green',
   'needs-improvement': 'bg-tile-yellow',
   poor: 'bg-peach',
+}
+
+/** Stroke/accent colour for the score ring and the metric-ratings donut. */
+const CATEGORY_RING_TONE: Record<MetricCategory, string> = {
+  good: 'text-green',
+  'needs-improvement': 'text-cta-pure',
+  poor: 'text-ink',
+}
+
+/** Icon backdrop for the five Core Web Vitals StatCards. */
+const CATEGORY_STAT_TONE: Record<MetricCategory, 'green' | 'yellow' | 'lavender'> = {
+  good: 'green',
+  'needs-improvement': 'yellow',
+  poor: 'lavender',
+}
+
+/** The five metrics this tool ever measures, in report order. */
+const ALL_METRIC_IDS: readonly MetricId[] = ['LCP', 'FCP', 'CLS', 'INP', 'TBT']
+
+const METRIC_ICON: Record<MetricId, typeof Zap> = {
+  LCP: ImageIcon,
+  FCP: Eye,
+  CLS: Layers,
+  INP: MousePointerClick,
+  TBT: Clock,
 }
 
 type Phase = 'idle' | 'running' | 'done' | 'error'
@@ -173,32 +214,6 @@ function ThresholdTrack({ id, value }: { id: MetricId; value: number }) {
   )
 }
 
-function MetricRow({ reading }: { reading: MetricReading }) {
-  const bands = describeThresholds(reading.id)
-  return (
-    <li className="border-line border-b py-3 last:border-b-0">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <p className="text-[14px]">
-          <abbr title={reading.label} className="font-semibold text-ink no-underline">
-            {reading.id}
-          </abbr>
-          <span className="ml-2 text-ink-muted">{reading.label}</span>
-        </p>
-        <p className="flex shrink-0 items-center gap-2.5">
-          <span className="font-semibold text-[17px] text-ink tabular-nums">
-            {reading.display}
-          </span>
-          <RatingPill category={reading.category} />
-        </p>
-      </div>
-      <ThresholdTrack id={reading.id} value={reading.value} />
-      <p className="mt-1.5 text-[12px] text-ink-subtle leading-4">
-        Good {bands.good} · Needs improvement {bands.needsImprovement} · Poor {bands.poor}
-      </p>
-    </li>
-  )
-}
-
 function SectionHeading({ heading, detail }: { heading: string; detail: string }) {
   return (
     <div>
@@ -208,11 +223,52 @@ function SectionHeading({ heading, detail }: { heading: string; detail: string }
   )
 }
 
+/** One Core Web Vital as a StatCard, with its rating pill and threshold track. */
+function VitalStatCard({
+  id,
+  reading,
+}: {
+  id: MetricId
+  reading: MetricReading | undefined
+}) {
+  const Icon = METRIC_ICON[id]
+  if (!reading) {
+    return (
+      <div className="flex flex-col gap-2">
+        <StatCard
+          icon={Icon}
+          label={id}
+          value="—"
+          sublabel={`${METRIC_LABELS[id]} · not measured this run`}
+          tone="lavender"
+        />
+      </div>
+    )
+  }
+  return (
+    <div className="flex flex-col gap-2">
+      <StatCard
+        icon={Icon}
+        label={id}
+        value={reading.display}
+        sublabel={reading.label}
+        tone={CATEGORY_STAT_TONE[reading.category]}
+      />
+      <div className="flex items-center justify-between gap-2 px-1">
+        <RatingPill category={reading.category} />
+      </div>
+      <div className="px-1">
+        <ThresholdTrack id={id} value={reading.value} />
+      </div>
+    </div>
+  )
+}
+
 /**
- * The output pane before a run — the thresholds the test will judge against,
+ * The report before a run — the thresholds the test will judge against,
  * generated from the same `METRIC_THRESHOLDS` the classifier uses.
  *
- * This is what keeps the workspace from having two empty states. It is also
+ * This is what keeps the page from being an empty box while idle. It is also
  * genuinely the reference someone might have come for, so it stays on screen
  * during the run and after an error rather than only filling dead time.
  */
@@ -296,11 +352,14 @@ export function WebsiteSpeedTest() {
   const [urlError, setUrlError] = useState<string | null>(null)
   const [cancelled, setCancelled] = useState(false)
   const [shareBase, setShareBase] = useState('')
+  /** Wall-clock time the finished run took, measured client-side — real, not estimated. */
+  const [durationMs, setDurationMs] = useState<number | null>(null)
 
   const abortRef = useRef<AbortController | null>(null)
   const timersRef = useRef<number[]>([])
   /** Monotonic run id. Every async continuation checks it before setting state. */
   const runIdRef = useRef(0)
+  const startedAtRef = useRef(0)
 
   // Seed the form after mount, never during render: the server has neither
   // localStorage nor a query string, and reading either during render would make
@@ -353,6 +412,16 @@ export function WebsiteSpeedTest() {
     [result],
   )
 
+  /** One reading per metric id, field data preferred — the same rule `selectVitals` uses. */
+  const readingById = useMemo(() => {
+    const map = new Map<MetricId, MetricReading>()
+    if (result !== null) {
+      for (const reading of result.lab) map.set(reading.id, reading)
+      for (const reading of result.field) map.set(reading.id, reading)
+    }
+    return map
+  }, [result])
+
   const running = phase === 'running'
   const stage = STAGES[stageIndex] ?? STAGES[0]
   const stageText = stage?.text ?? 'Running the test'
@@ -389,7 +458,9 @@ export function WebsiteSpeedTest() {
     setResult(null)
     setCancelled(false)
     setStageIndex(0)
+    setDurationMs(null)
     setPhase('running')
+    startedAtRef.current = Date.now()
 
     timersRef.current = STAGES.slice(1).map((entry, index) =>
       window.setTimeout(() => {
@@ -433,6 +504,7 @@ export function WebsiteSpeedTest() {
 
       setResult(payload)
       setTestedUrl(target)
+      setDurationMs(Date.now() - startedAtRef.current)
       setPhase('done')
       try {
         localStorage.setItem(
@@ -480,12 +552,26 @@ export function WebsiteSpeedTest() {
     setTestError(null)
     setUrlError(null)
     setCancelled(false)
+    setDurationMs(null)
     setPhase('idle')
     try {
       localStorage.removeItem(STORAGE_KEY)
     } catch {
       // Nothing to remove if storage is blocked.
     }
+  }
+
+  function downloadJson(): void {
+    if (result === null) return
+    const blob = new Blob([JSON.stringify(result, null, 2)], {
+      type: 'application/json',
+    })
+    const href = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = href
+    a.download = 'website-speed-report.json'
+    a.click()
+    URL.revokeObjectURL(href)
   }
 
   const scoreCategory =
@@ -528,351 +614,535 @@ export function WebsiteSpeedTest() {
           ? 'Test cancelled — nothing was measured'
           : 'Ready — nothing runs until you press the button'
 
+  // Derived, report-only breakdowns for the three donuts below. Every figure here
+  // is read straight off `result` / `vitals` — none of it is invented to fill a
+  // tile. See the redesign report for why "resource/page-weight/request" donuts
+  // from the wireframe were replaced: PSI's compact payload this tool parses
+  // never carried byte-weight or request-count data, and logic.ts is out of scope
+  // for this pass.
+  const ratingCounts: Record<MetricCategory, number> = {
+    good: 0,
+    'needs-improvement': 0,
+    poor: 0,
+  }
+  for (const id of ALL_METRIC_IDS) {
+    const reading = readingById.get(id)
+    if (reading) ratingCounts[reading.category] += 1
+  }
+  const ratingSegments: DonutSegment[] = (['good', 'needs-improvement', 'poor'] as const)
+    .filter((category) => ratingCounts[category] > 0)
+    .map((category) => ({
+      label: labelForCategory(category),
+      value: ratingCounts[category],
+      colorClass: CATEGORY_RING_TONE[category],
+    }))
+
+  const savingsSegments: DonutSegment[] =
+    result?.opportunities.map((o) => ({
+      label: o.title,
+      value: o.savingsMs,
+    })) ?? []
+  const totalSavingsMs =
+    result?.opportunities.reduce((sum, o) => sum + o.savingsMs, 0) ?? 0
+
+  const coverageSegments: DonutSegment[] =
+    vitals === null
+      ? []
+      : [
+          {
+            label: 'Core Web Vitals',
+            value: vitals.primary.length,
+            colorClass: 'text-violet-700',
+          },
+          {
+            label: 'Supporting metrics',
+            value: vitals.supporting.length,
+            colorClass: 'text-tile-blue',
+          },
+        ].filter((s) => s.value > 0)
+
+  const timelineSteps: TimelineStep[] = ALL_METRIC_IDS.map((id) => {
+    const reading = readingById.get(id)
+    return {
+      label: id,
+      sublabel: reading ? reading.display : 'not measured',
+      status: reading ? 'done' : 'pending',
+    }
+  })
+
+  const topOpportunities = result?.opportunities.slice(0, 3) ?? []
+
   return (
-    <ToolWorkspace
-      inputLabel="Page to test"
-      outputLabel="Speed report"
-      minHeight="min-h-[32rem]"
-      outputFirstOnMobile={phase === 'done'}
-      toolbar={
-        <ToolToolbar
-          actions={
-            <>
-              <ToolbarAction onClick={() => setUrl(SAMPLE_URL)} disabled={running}>
-                Load sample
-              </ToolbarAction>
-              <ToolbarAction
-                onClick={clearAll}
-                disabled={running || (url === '' && result === null)}
-              >
-                Clear
-              </ToolbarAction>
-            </>
-          }
+    <div className="flex flex-col gap-6 rounded-panel border border-line bg-cream p-5 md:p-6">
+      <ToolToolbar>
+        <ToolbarGroup label="Device">
+          <SegmentButton
+            active={strategy === 'mobile'}
+            onClick={() => setStrategy('mobile')}
+            title="A mid-range phone on a throttled 4G connection — what Google ranks you on"
+          >
+            <span className="inline-flex items-center gap-1.5">
+              <Smartphone className="size-4" aria-hidden="true" />
+              Mobile
+            </span>
+          </SegmentButton>
+          <SegmentButton
+            active={strategy === 'desktop'}
+            onClick={() => setStrategy('desktop')}
+            title="Fast hardware on broadband — usually a much kinder score"
+          >
+            <span className="inline-flex items-center gap-1.5">
+              <Monitor className="size-4" aria-hidden="true" />
+              Desktop
+            </span>
+          </SegmentButton>
+        </ToolbarGroup>
+      </ToolToolbar>
+
+      {/* A dedicated, evenly-spaced grid rather than a left-packed flex-wrap
+          row — see Schema Markup Generator / FAQ Schema Generator for the
+          identical fix. Every page-level action for this tool (load sample,
+          clear, run/cancel the test, export) lives here now, instead of split
+          across the toolbar, a form-adjacent button row and a bottom export
+          bar. `Run test` is this tool's "the thing you came here to click",
+          so it gets the default cta-yellow and a double-wide cell at the
+          narrowest breakpoint; everything else is `btn-white`. `Cancel` only
+          exists while a run is in flight, and Download PDF / Export JSON stay
+          mounted but disabled with no report yet, rather than popping in and
+          out of the grid. `Copy report` / `Share report` remain their own
+          `CopyButton` component near the report itself (see below) — that
+          component has no className hook to take on the brand button look,
+          matching how both reference tools leave `CopyButton` untouched. */}
+      <div className="grid grid-cols-2 gap-2 border-line border-b bg-offwhite p-3 sm:grid-cols-3 sm:gap-3 sm:p-4 lg:grid-cols-6">
+        <button
+          type="button"
+          onClick={() => setUrl(SAMPLE_URL)}
+          disabled={running}
+          className="btn-brutal btn-brutal-sm btn-white w-full"
         >
-          <ToolbarGroup label="Device">
-            <SegmentButton
-              active={strategy === 'mobile'}
-              onClick={() => setStrategy('mobile')}
-              title="A mid-range phone on a throttled 4G connection — what Google ranks you on"
+          Load sample
+        </button>
+        <button
+          type="button"
+          onClick={clearAll}
+          disabled={running || (url === '' && result === null)}
+          className="btn-brutal btn-brutal-sm btn-white w-full"
+        >
+          Clear
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            void runTest()
+          }}
+          disabled={running}
+          className="btn-brutal btn-brutal-sm w-full col-span-2 sm:col-span-1"
+        >
+          {running
+            ? 'Testing…'
+            : result === null
+              ? `Run ${DEVICE_LABEL[strategy].toLowerCase()} test`
+              : 'Run test again'}
+        </button>
+        {running ? (
+          <button
+            type="button"
+            onClick={cancelTest}
+            className="btn-brutal btn-brutal-sm btn-white w-full"
+          >
+            Cancel
+          </button>
+        ) : null}
+        <button
+          type="button"
+          onClick={() => window.print()}
+          disabled={result === null}
+          className="btn-brutal btn-brutal-sm btn-white w-full"
+        >
+          <Download className="size-4" aria-hidden="true" />
+          Download PDF
+        </button>
+        <button
+          type="button"
+          onClick={downloadJson}
+          disabled={result === null}
+          className="btn-brutal btn-brutal-sm btn-white w-full"
+        >
+          <FileJson className="size-4" aria-hidden="true" />
+          Export JSON
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-5">
+        <div>
+          <label className="label" htmlFor="speed-url">
+            Page URL
+          </label>
+          <input
+            id="speed-url"
+            className="field"
+            type="url"
+            inputMode="url"
+            autoComplete="url"
+            spellCheck={false}
+            placeholder="https://example.com/pricing"
+            value={url}
+            onChange={(e) => {
+              setUrl(e.target.value)
+              if (urlError !== null) setUrlError(null)
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !running) {
+                e.preventDefault()
+                void runTest()
+              }
+            }}
+            aria-describedby={urlError !== null ? 'speed-url-msg' : undefined}
+            aria-invalid={urlError !== null || undefined}
+          />
+          {urlError !== null ? (
+            <p
+              className="mt-1.5 flex gap-1.5 font-medium text-[13px] text-ink leading-[18px]"
+              id="speed-url-msg"
             >
-              <span className="inline-flex items-center gap-1.5">
-                <Smartphone className="size-4" aria-hidden="true" />
-                Mobile
-              </span>
-            </SegmentButton>
-            <SegmentButton
-              active={strategy === 'desktop'}
-              onClick={() => setStrategy('desktop')}
-              title="Fast hardware on broadband — usually a much kinder score"
-            >
-              <span className="inline-flex items-center gap-1.5">
-                <Monitor className="size-4" aria-hidden="true" />
-                Desktop
-              </span>
-            </SegmentButton>
-          </ToolbarGroup>
-        </ToolToolbar>
-      }
-      input={
-        <Pane title="Page to test">
-          <div className="flex flex-col gap-5">
-            <div>
-              <label className="label" htmlFor="speed-url">
-                Page URL
-              </label>
-              <input
-                id="speed-url"
-                className="field"
-                type="url"
-                inputMode="url"
-                autoComplete="url"
-                spellCheck={false}
-                placeholder="https://example.com/pricing"
-                value={url}
-                onChange={(e) => {
-                  setUrl(e.target.value)
-                  if (urlError !== null) setUrlError(null)
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !running) {
-                    e.preventDefault()
-                    void runTest()
-                  }
-                }}
-                aria-describedby={urlError !== null ? 'speed-url-msg' : undefined}
-                aria-invalid={urlError !== null || undefined}
+              <TriangleAlert
+                className="mt-0.5 size-3.5 shrink-0 text-violet-700"
+                aria-hidden="true"
               />
-              {urlError !== null ? (
-                <p
-                  className="mt-1.5 flex gap-1.5 font-medium text-[13px] text-ink leading-[18px]"
-                  id="speed-url-msg"
-                >
-                  <TriangleAlert
-                    className="mt-0.5 size-3.5 shrink-0 text-violet-700"
-                    aria-hidden="true"
-                  />
-                  {urlError}
-                </p>
-              ) : null}
-            </div>
+              {urlError}
+            </p>
+          ) : null}
+        </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                onClick={() => {
-                  void runTest()
-                }}
-                disabled={running}
-                className="btn-brutal btn-violet"
-              >
-                {running
-                  ? 'Testing…'
-                  : result === null
-                    ? `Run ${DEVICE_LABEL[strategy].toLowerCase()} test`
-                    : 'Run test again'}
-              </button>
-              {running ? (
-                <button
-                  type="button"
-                  onClick={cancelTest}
-                  className="btn-brutal btn-brutal-sm btn-white"
-                >
-                  Cancel
-                </button>
-              ) : null}
-            </div>
+        {deviceMismatch && result !== null ? (
+          <p className="rounded-sm border border-ink bg-tile-yellow p-3 text-[13px] text-ink leading-5">
+            <TriangleAlert
+              className="mr-1.5 inline size-3.5 align-[-2px]"
+              aria-hidden="true"
+            />
+            The report shown is the <strong>{DEVICE_LABEL[result.strategy]}</strong> run.
+            You now have <strong>{DEVICE_LABEL[strategy]}</strong> selected — run the test
+            again to measure it.
+          </p>
+        ) : null}
+      </div>
 
-            {deviceMismatch && result !== null ? (
-              <p className="rounded-sm border border-ink bg-tile-yellow p-3 text-[13px] text-ink leading-5">
-                <TriangleAlert
-                  className="mr-1.5 inline size-3.5 align-[-2px]"
-                  aria-hidden="true"
-                />
-                The report shown is the <strong>{DEVICE_LABEL[result.strategy]}</strong>{' '}
-                run. You now have <strong>{DEVICE_LABEL[strategy]}</strong> selected — run
-                the test again to measure it.
-              </p>
-            ) : null}
-          </div>
-        </Pane>
-      }
-      output={
-        <Pane
-          title="Speed report"
-          actions={
-            phase === 'done' && result !== null ? (
-              <>
-                <CopyButton text={reportText} label="Copy report" />
-                {shareLink === '' ? null : (
-                  <CopyButton text={shareLink} label="Copy link" />
-                )}
-              </>
-            ) : null
-          }
-        >
-          {phase === 'running' ? (
-            <div className="flex flex-col gap-6">
-              <div>
-                <div
-                  role="progressbar"
-                  aria-label="Speed test in progress"
-                  className="h-2 w-full overflow-hidden rounded-pill border border-line-grey bg-white"
-                >
-                  <div
-                    data-decorative-motion
-                    className="h-full w-full animate-pulse rounded-pill bg-violet-500"
-                  />
-                </div>
-                <ol className="mt-4 flex flex-col gap-2.5">
-                  {STAGES.map((entry, index) => {
-                    const done = index < stageIndex
-                    const now = index === stageIndex
-                    return (
-                      <li
-                        key={entry.text}
-                        className="flex items-center gap-2.5 text-[14px]"
-                      >
-                        {done ? (
-                          <Check
-                            className="size-4 shrink-0 text-violet-700"
-                            aria-hidden="true"
-                          />
-                        ) : (
-                          <span
-                            aria-hidden="true"
-                            className={`size-3 shrink-0 rounded-pill border ${
-                              now ? 'border-ink bg-violet-700' : 'border-line-grey'
-                            }`}
-                          />
-                        )}
-                        <span
-                          className={
-                            now
-                              ? 'font-semibold text-ink'
-                              : done
-                                ? 'text-ink-muted'
-                                : 'text-ink-subtle'
-                          }
-                        >
-                          {entry.text}
-                        </span>
-                        {/* The state is a word, not just an icon or a weight. */}
-                        <span className="ml-auto shrink-0 text-[12px] text-ink-subtle">
-                          {done ? 'done' : now ? 'now' : 'waiting'}
-                        </span>
-                      </li>
-                    )
-                  })}
-                </ol>
-              </div>
-
-              <div className="border-line border-t pt-5">
-                <ThresholdReference lead={referenceLead} />
-              </div>
-            </div>
-          ) : phase === 'error' && testError !== null ? (
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-3">
-                <ErrorDetail message={testError.message} />
-                <p className="text-[14px] text-ink-body leading-6">{testError.hint}</p>
-              </div>
-              <div className="border-line border-t pt-5">
-                <ThresholdReference lead={referenceLead} />
-              </div>
-            </div>
-          ) : phase === 'done' &&
-            result !== null &&
-            verdict !== null &&
-            vitals !== null ? (
-            <div className="flex flex-col gap-6">
+      <div className="border-line border-t pt-6">
+        {phase === 'running' ? (
+          <div className="flex flex-col gap-6">
+            <div>
               <div
-                className={`rounded-card border border-ink p-4 ${CATEGORY_TINT[verdict.category]}`}
+                role="progressbar"
+                aria-label="Speed test in progress"
+                className="h-2 w-full overflow-hidden rounded-pill border border-line-grey bg-offwhite"
               >
-                <p className="flex items-start gap-2 font-display font-semibold text-[18px] text-ink leading-6">
+                <div
+                  data-decorative-motion
+                  className="h-full w-full animate-pulse rounded-pill bg-violet-500"
+                />
+              </div>
+              <ol className="mt-4 flex flex-col gap-2.5">
+                {STAGES.map((entry, index) => {
+                  const done = index < stageIndex
+                  const now = index === stageIndex
+                  return (
+                    <li
+                      key={entry.text}
+                      className="flex items-center gap-2.5 text-[14px]"
+                    >
+                      {done ? (
+                        <Check
+                          className="size-4 shrink-0 text-violet-700"
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <span
+                          aria-hidden="true"
+                          className={`size-3 shrink-0 rounded-pill border ${
+                            now ? 'border-ink bg-violet-700' : 'border-line-grey'
+                          }`}
+                        />
+                      )}
+                      <span
+                        className={
+                          now
+                            ? 'font-semibold text-ink'
+                            : done
+                              ? 'text-ink-muted'
+                              : 'text-ink-subtle'
+                        }
+                      >
+                        {entry.text}
+                      </span>
+                      {/* The state is a word, not just an icon or a weight. */}
+                      <span className="ml-auto shrink-0 text-[12px] text-ink-subtle">
+                        {done ? 'done' : now ? 'now' : 'waiting'}
+                      </span>
+                    </li>
+                  )
+                })}
+              </ol>
+            </div>
+
+            <div className="border-line border-t pt-5">
+              <ThresholdReference lead={referenceLead} />
+            </div>
+          </div>
+        ) : phase === 'error' && testError !== null ? (
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-3">
+              <ErrorDetail message={testError.message} />
+              <p className="text-[14px] text-ink-body leading-6">{testError.hint}</p>
+            </div>
+            <div className="border-line border-t pt-5">
+              <ThresholdReference lead={referenceLead} />
+            </div>
+          </div>
+        ) : phase === 'done' && result !== null && verdict !== null && vitals !== null ? (
+          <div className="flex flex-col gap-8">
+            {/* Score card */}
+            <div className="flex flex-col items-center gap-5 rounded-panel border border-ink bg-offwhite p-6 shadow-brutal sm:flex-row sm:items-center">
+              {result.score !== null ? (
+                <ScoreRing
+                  value={result.score}
+                  label="Performance"
+                  size="lg"
+                  toneClass={
+                    scoreCategory ? CATEGORY_RING_TONE[scoreCategory] : undefined
+                  }
+                />
+              ) : (
+                <div className="flex flex-col items-center gap-1">
+                  <span className="font-display font-bold text-[44px] text-ink-subtle leading-none">
+                    —
+                  </span>
+                  <span className="text-[12px] text-ink-subtle">no score returned</span>
+                </div>
+              )}
+
+              <div className="flex flex-1 flex-col gap-3 text-center sm:text-left">
+                <div
+                  className={`inline-flex w-fit items-center gap-2 self-center rounded-card border border-ink px-3 py-1.5 font-display font-semibold text-[16px] text-ink sm:self-start ${CATEGORY_TINT[verdict.category]}`}
+                >
                   {verdict.category === 'good' ? (
-                    <CircleCheck className="mt-0.5 size-5 shrink-0" aria-hidden="true" />
+                    <CircleCheck className="size-4.5 shrink-0" aria-hidden="true" />
                   ) : (
-                    <TriangleAlert
-                      className="mt-0.5 size-5 shrink-0"
-                      aria-hidden="true"
-                    />
+                    <TriangleAlert className="size-4.5 shrink-0" aria-hidden="true" />
                   )}
                   {verdict.headline}
-                </p>
-                <p className="mt-1.5 text-[14px] text-ink leading-5">{verdict.detail}</p>
-              </div>
-
-              <div>
-                <p className="text-[13px] text-ink-subtle">
-                  Lighthouse performance score · {DEVICE_LABEL[result.strategy]} · one lab
-                  run
-                </p>
-                <div className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-2">
-                  <span className="stat-figure font-bold text-[56px] text-ink leading-none">
-                    {result.score ?? '—'}
-                  </span>
-                  <span className="text-[15px] text-ink-subtle">/ 100</span>
-                  {scoreCategory !== null ? (
-                    <RatingPill category={scoreCategory} />
-                  ) : null}
                 </div>
-                {result.finalUrl === '' ? null : (
-                  <p className="mt-2 break-all text-[12px] text-ink-subtle">
-                    Tested: {result.finalUrl}
+                <p className="text-[14px] text-ink-body leading-5">{verdict.detail}</p>
+
+                <dl className="mt-1 grid grid-cols-2 gap-3 text-left sm:grid-cols-4">
+                  <div>
+                    <dt className="flex items-center gap-1 text-[11px] text-ink-subtle uppercase tracking-[0.06em]">
+                      <Globe className="size-3" aria-hidden="true" /> Tested on
+                    </dt>
+                    <dd className="truncate text-[13px] text-ink" title={result.finalUrl}>
+                      {result.finalUrl === '' ? '—' : result.finalUrl}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="flex items-center gap-1 text-[11px] text-ink-subtle uppercase tracking-[0.06em]">
+                      <Timer className="size-3" aria-hidden="true" /> Test duration
+                    </dt>
+                    <dd className="text-[13px] text-ink tabular-nums">
+                      {durationMs === null ? '—' : formatSavings(durationMs) || '<1 ms'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[11px] text-ink-subtle uppercase tracking-[0.06em]">
+                      Device
+                    </dt>
+                    <dd className="text-[13px] text-ink">
+                      {DEVICE_LABEL[result.strategy]}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[11px] text-ink-subtle uppercase tracking-[0.06em]">
+                      Data source
+                    </dt>
+                    <dd className="text-[13px] text-ink">
+                      {vitals.usingField ? 'Real visitors' : 'Lab only'}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+
+            {/* Core Web Vitals StatCards */}
+            <div>
+              <SectionHeading
+                heading={
+                  vitals.usingField
+                    ? 'Core Web Vitals — real visitors'
+                    : 'Core Web Vitals — this lab run'
+                }
+                detail={sourceDetail}
+              />
+              <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+                {ALL_METRIC_IDS.map((id) => (
+                  <VitalStatCard key={id} id={id} reading={readingById.get(id)} />
+                ))}
+              </div>
+            </div>
+
+            {/* AI performance summary */}
+            <div className="flex flex-col gap-3 rounded-card border border-line-grey bg-violet-50 p-4">
+              <h4 className="flex items-center gap-2 font-display font-semibold text-[16px] text-ink">
+                <Sparkles className="size-4 text-violet-700" aria-hidden="true" />
+                AI performance summary
+              </h4>
+              <p className="text-[14px] text-ink-body leading-6">
+                {verdict.category === 'good'
+                  ? `Nice work — ${result.finalUrl === '' ? 'this page' : 'this page'} passes Google's Core Web Vitals for ${vitals.usingField ? 'real visitors' : 'this lab run'}. Keep an eye on the fixes below to hold the score as the page grows.`
+                  : `There is room to improve here — ${verdict.detail} Fixing the top opportunities below is the fastest way to move the needle.`}
+              </p>
+              {topOpportunities.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {topOpportunities.map((o) => (
+                    <span
+                      key={o.id}
+                      className="chip-savings inline-flex items-center gap-1.5 rounded-pill border border-violet-700 bg-cream px-2.5 py-1 font-medium text-[12px] text-violet-700"
+                    >
+                      <Zap className="size-3" aria-hidden="true" />
+                      {o.title}
+                      {o.savingsDisplay !== '' ? (
+                        <span className="text-ink-subtle">~{o.savingsDisplay}</span>
+                      ) : null}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+
+            {/* Top opportunities + page load timeline */}
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div>
+                <h4 className="flex items-center gap-2 font-display font-semibold text-[16px] text-ink">
+                  <Zap className="size-4 text-violet-700" aria-hidden="true" />
+                  Top opportunities
+                </h4>
+                {result.opportunities.length > 0 ? (
+                  <>
+                    <p className="hint mt-1">
+                      Sorted by the time Lighthouse estimates each fix would save on this
+                      load — largest first.
+                    </p>
+                    <ol className="mt-3 flex flex-col gap-3">
+                      {result.opportunities.map((opportunity, index) => (
+                        <li key={opportunity.id} className="flex gap-3">
+                          <span
+                            className="flex size-6 shrink-0 items-center justify-center rounded-pill bg-violet-100 font-semibold text-[13px] text-violet-700"
+                            aria-hidden="true"
+                          >
+                            {index + 1}
+                          </span>
+                          <div className="min-w-0">
+                            <p className="font-medium text-[15px] text-ink leading-5">
+                              {opportunity.title}
+                              {opportunity.savingsDisplay !== '' ? (
+                                <span className="ml-2 whitespace-nowrap font-semibold text-[13px] text-violet-700">
+                                  saves ~{opportunity.savingsDisplay}
+                                </span>
+                              ) : null}
+                            </p>
+                            {opportunity.description !== '' ? (
+                              <p className="mt-0.5 text-[13px] text-ink-subtle leading-[18px]">
+                                {opportunity.description}
+                              </p>
+                            ) : null}
+                          </div>
+                        </li>
+                      ))}
+                    </ol>
+                  </>
+                ) : (
+                  <p className="mt-3 rounded-sm border border-line-grey bg-tile-green p-3 text-[13px] text-ink leading-5">
+                    Lighthouse found no audit with a measurable time saving on this page —
+                    there is nothing obvious left to cut.
                   </p>
                 )}
               </div>
 
-              {vitals.primary.length > 0 ? (
-                <div>
-                  <SectionHeading
-                    heading={
-                      vitals.usingField
-                        ? 'Core Web Vitals — real visitors'
-                        : 'Core Web Vitals — this lab run'
-                    }
-                    detail={sourceDetail}
-                  />
-                  <ul className="mt-2 border-line border-t">
-                    {vitals.primary.map((reading) => (
-                      <MetricRow key={`primary-${reading.id}`} reading={reading} />
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-
-              {vitals.supporting.length > 0 ? (
-                <div>
-                  <SectionHeading
-                    heading="Supporting lab metrics"
-                    detail={
-                      vitals.usingField
-                        ? 'One simulated load, useful for debugging. The real-visitor numbers above are what Google assesses.'
-                        : 'Diagnostics from the same simulated load.'
-                    }
-                  />
-                  <ul className="mt-2 border-line border-t">
-                    {vitals.supporting.map((reading) => (
-                      <MetricRow key={`lab-${reading.id}`} reading={reading} />
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-
-              {result.opportunities.length > 0 ? (
-                <div>
-                  <h4 className="flex items-center gap-2 font-display font-semibold text-[16px] text-ink">
-                    <Zap className="size-4 text-violet-700" aria-hidden="true" />
-                    Fix these first
-                  </h4>
-                  <p className="hint mt-1">
-                    Sorted by the time Lighthouse estimates each fix would save on this
-                    load — largest first.
-                  </p>
-                  <ol className="mt-3 flex flex-col gap-3">
-                    {result.opportunities.map((opportunity, index) => (
-                      <li key={opportunity.id} className="flex gap-3">
-                        <span
-                          className="flex size-6 shrink-0 items-center justify-center rounded-pill bg-violet-100 font-semibold text-[13px] text-violet-700"
-                          aria-hidden="true"
-                        >
-                          {index + 1}
-                        </span>
-                        <div className="min-w-0">
-                          <p className="font-medium text-[15px] text-ink leading-5">
-                            {opportunity.title}
-                            {opportunity.savingsDisplay !== '' ? (
-                              <span className="ml-2 whitespace-nowrap font-semibold text-[13px] text-violet-700">
-                                saves ~{opportunity.savingsDisplay}
-                              </span>
-                            ) : null}
-                          </p>
-                          {opportunity.description !== '' ? (
-                            <p className="mt-0.5 text-[13px] text-ink-subtle leading-[18px]">
-                              {opportunity.description}
-                            </p>
-                          ) : null}
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              ) : (
-                <p className="rounded-sm border border-line-grey bg-tile-green p-3 text-[13px] text-ink leading-5">
-                  Lighthouse found no audit with a measurable time saving on this page —
-                  there is nothing obvious left to cut.
+              <div>
+                <h4 className="font-display font-semibold text-[16px] text-ink">
+                  Metrics timeline
+                </h4>
+                <p className="hint mt-1">
+                  Every metric this run measured, in report order, with its reading — the
+                  network-stage breakdown (DNS/SSL/etc.) PSI's compact response does not
+                  expose is not shown rather than guessed.
                 </p>
+                <div className="mt-3">
+                  <StepTimeline steps={timelineSteps} />
+                </div>
+              </div>
+            </div>
+
+            {/* Breakdown donuts */}
+            <div>
+              <SectionHeading
+                heading="Report breakdown"
+                detail="Derived from this run's own readings — ratios of rating, estimated fix time and metric coverage."
+              />
+              <div className="mt-3 grid gap-6 sm:grid-cols-3">
+                <div className="flex justify-center">
+                  <DonutChart
+                    segments={ratingSegments}
+                    centerLabel="rated"
+                    centerValue={String(
+                      ALL_METRIC_IDS.filter((id) => readingById.has(id)).length,
+                    )}
+                  />
+                </div>
+                <div className="flex justify-center">
+                  <DonutChart
+                    segments={savingsSegments}
+                    centerLabel="est. savings"
+                    centerValue={
+                      totalSavingsMs > 0 ? formatSavings(totalSavingsMs) : '0 ms'
+                    }
+                  />
+                </div>
+                <div className="flex justify-center">
+                  <DonutChart
+                    segments={coverageSegments}
+                    centerLabel="metrics shown"
+                    centerValue={String(vitals.primary.length + vitals.supporting.length)}
+                  />
+                </div>
+              </div>
+              <div className="mt-2 grid gap-1 text-center text-[12px] text-ink-subtle sm:grid-cols-3">
+                <span>Metric ratings</span>
+                <span>Fix time by opportunity</span>
+                <span>Core Web Vitals vs. supporting</span>
+              </div>
+            </div>
+
+            {/* Export bar — Download PDF / Export JSON moved to the top
+                action grid (see above); Copy report / Share report stay
+                here as `CopyButton`, which has no className hook to take on
+                the brand button look. */}
+            <div className="flex flex-wrap items-center gap-2 border-line border-t pt-5">
+              <CopyButton text={reportText} label="Copy report" />
+              {shareLink === '' ? null : (
+                <CopyButton
+                  text={shareLink}
+                  label="Share report"
+                  ariaLabel={`Share report — copy link for ${result.finalUrl || testedUrl}`}
+                />
               )}
             </div>
-          ) : (
-            <ThresholdReference lead={referenceLead} />
-          )}
-        </Pane>
-      }
-      status={
-        // A finished run whose vitals fail is not a "valid" state — it gets the
-        // alert glyph, so the icon never contradicts the headline beside it.
+          </div>
+        ) : (
+          <ThresholdReference lead={referenceLead} />
+        )}
+      </div>
+
+      <div className="border-line border-t pt-4">
+        {/* A finished run whose vitals fail is not a "valid" state — it gets the
+           alert glyph, so the icon never contradicts the headline beside it. */}
         <StatusBar
           state={
             phase === 'error'
@@ -899,7 +1169,7 @@ export function WebsiteSpeedTest() {
           }
           privacyNote="No signup, no stored history — the URL is sent to Google to run the test"
         />
-      }
-    />
+      </div>
+    </div>
   )
 }

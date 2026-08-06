@@ -1,8 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import scultMark from '@/app/icon.png'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { getToolCount } from '@/lib/tools/registry'
+import scultLogo from '@/public/brand/scult-tools-blue.png'
+import { AllToolsLink } from './AllToolsLink'
 import { AnnouncementBar } from './AnnouncementBar'
 import { CategoryMenu } from './CategoryMenu'
 import { MobileDrawer } from './MobileDrawer'
@@ -43,30 +45,25 @@ export function Header() {
   }))
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white">
+    <header className="sticky top-0 z-50 w-full bg-offwhite">
       <AnnouncementBar />
 
-      <div className="pb-3">
+      {/* pt-3, not just pb-3: once the announcement bar is dismissed (or on
+          a repeat visit, where it stays dismissed), this pill is the first
+          thing in the sticky header — with no top padding its own top
+          border sits flush against the viewport edge, which reads as
+          clipped rather than as a bordered pill. Symmetric with the
+          existing pb-3 below it. */}
+      <div className="py-3">
         <div className="container-site">
           <div className="nav-pill flex h-[60px] items-center justify-between gap-4 px-4 md:h-[68px] lg:h-[83px] lg:gap-6 lg:px-[30px]">
-            {/* The mark is the same PNG that generates the browser-tab favicon
-                (app/icon.png) — one asset, so the tab icon and the on-page logo
-                can never drift out of sync. `alt=""`: the adjacent wordmark
-                already announces "ScultTools" in text, so the mark is decorative
-                reinforcement rather than a second, redundant name. */}
-            <Link
-              href="/"
-              className="inline-flex shrink-0 items-center gap-2 font-display font-bold text-[26px] text-violet-600 tracking-[-0.5px] lg:text-[30px]"
-            >
+            <Link href="/" className="inline-flex shrink-0 items-center">
               <Image
-                src={scultMark}
-                alt=""
-                width={30}
-                height={30}
+                src={scultLogo}
+                alt="SCULT Tools"
                 priority
-                className="size-6 lg:size-[30px]"
+                className="h-7 w-auto lg:h-9"
               />
-              Scult<span className="text-ink">Tools</span>
             </Link>
 
             <nav
@@ -74,21 +71,29 @@ export function Header() {
               className="hidden flex-1 items-center gap-6 font-medium text-[18px] text-ink tracking-[0.5px] lg:flex"
             >
               <CategoryMenu items={menuItems} />
-              <Link href="/all" className="hover:text-violet-600">
-                All tools
-              </Link>
+              <AllToolsLink />
             </nav>
 
-            <div className="hidden w-[240px] shrink-0 lg:block">
+            {/* md, not lg: a tablet-width viewport has the room, and search
+                is the single highest-leverage nav affordance on a 15-tool
+                catalogue — no reason to withhold it for two more
+                breakpoints just because the full link row still needs lg. */}
+            <div className="hidden w-[200px] shrink-0 md:block lg:w-[240px]">
               <SearchBox />
             </div>
 
             <div className="flex items-center gap-2">
+              <ThemeToggle />
+              {/* Renamed from "TOOLS": at this breakpoint the main <nav>
+                  (Tools dropdown + "All tools") is hidden, so this button IS
+                  the only way to reach the catalogue — "TOOLS" read as a
+                  menu trigger it isn't; "ALL TOOLS" names its real,
+                  single-destination action. */}
               <Link
                 href="/all"
                 className="btn-brutal btn-brutal-sm hidden whitespace-nowrap sm:inline-flex lg:hidden"
               >
-                TOOLS
+                ALL TOOLS
               </Link>
               <Link
                 href="/geo/ai-visibility-checker"

@@ -36,12 +36,12 @@ export const meta: Tool = {
     'Set an optional word goal to track progress toward a target length.',
   ],
   howItWorks:
-    "Words and sentences are segmented with Intl.Segmenter, the browser's implementation of the Unicode UAX #29 text-segmentation standard, instead of a naive split on spaces. That is why \"don't\" counts as one word rather than two, why Chinese or Japanese text with no spaces between words still gets a real word count, and why an emoji made of several code points still counts as one character — characters are counted as grapheme clusters, not UTF-16 code units (in raw JavaScript, '👍'.length is 2). Reading time divides the word count by 238 words per minute, the average adult silent-reading rate from Brysbaert's 2019 meta-analysis of 190 reading studies; speaking time uses 130 wpm, a typical conversational pace. Keyword density tokenises the text, drops around 170 English stopwords plus any term under three characters, and reports each remaining term's count and share of all words. Everything runs in an O(n) pass in your browser — nothing is uploaded.",
+    'Words and characters are segmented with Intl.Segmenter (Unicode UAX #29), counting grapheme clusters rather than UTF-16 units, so contractions and space-free scripts like Chinese count correctly. Reading time uses 238 words/minute (Brysbaert, 2019); speaking time uses 130 wpm. Runs locally in your browser.',
   limitations: [
-    'Reading time is a population average. 238 wpm applies to non-technical prose read silently; technical, legal or unfamiliar material reads meaningfully slower, and skimming is faster.',
-    'Keyword density is a diagnostic signal, not an SEO target. Writing toward a specific percentage is keyword stuffing, which modern search engines penalise rather than reward.',
-    'The X badge counts characters the way this page does. X itself counts every URL as 23 characters and weights some scripts as two, so treat 280 here as a close approximation.',
-    'The stopword list is English-only, so keyword density for other languages will include function words.',
+    'Reading time (238 wpm) is a population average — technical or unfamiliar text reads slower, skimming faster.',
+    'Keyword density is a diagnostic, not an SEO target — writing to a percentage is keyword stuffing.',
+    'The X character badge is a close approximation: X itself counts URLs as 23 characters and weights some scripts as two.',
+    'The stopword list is English-only, so density for other languages will include function words.',
   ],
   faq: [
     {

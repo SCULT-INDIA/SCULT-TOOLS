@@ -37,9 +37,16 @@ export default function AboutPage() {
 
         <p className="mt-6 text-[18px] text-ink-muted leading-8 md:text-lead">
           {SITE.name} is built and maintained by{' '}
+          {/* Plain link on this article's ambient offwhite page background,
+              not a tile/violet-50/100 fill — text-violet-700 alone measures
+              well under AA in dark mode. --color-violet-accent-text is this
+              codebase's existing dark-mode-only token for standalone accent
+              text (see .eyebrow / nav-link hover); the fallback keeps light
+              mode's violet-700 unchanged. hover:text-violet-600 already has
+              its own dark-mode override in globals.css, so it is untouched. */}
           <a
             href={parentLink('/', 'about')}
-            className="text-violet-700 underline decoration-1 underline-offset-4 hover:text-violet-600"
+            className="text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4 hover:text-violet-600"
           >
             {SITE.parentName}
           </a>
@@ -87,9 +94,11 @@ export default function AboutPage() {
             pretends to be more certain than it is will eventually mislead someone. If you
             find a calculation we have got wrong, we would genuinely rather hear it — the
             contact details are on{' '}
+            {/* Same ambient-page/standalone-link pairing as the byline link
+                above — see that comment. */}
             <a
-              href={parentLink('/contact', 'about-corrections')}
-              className="text-violet-700 underline decoration-1 underline-offset-4"
+              href={parentLink('/#book-meeting', 'about-corrections')}
+              className="text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4"
             >
               scult.in
             </a>
@@ -98,7 +107,13 @@ export default function AboutPage() {
         </section>
 
         <p className="mt-10">
-          <Link href="/all" className="btn-brutal">
+          {/* See the byline link's comment above for the accent-text fix
+              pattern; this is the same .btn-brutal resting-state fix used on
+              the homepage's two CTAs and the 404 page. */}
+          <Link
+            href="/all"
+            className="btn-brutal text-black border-black hover:text-ink hover:border-ink"
+          >
             BROWSE ALL {TOOLS.length} TOOLS
           </Link>
         </p>

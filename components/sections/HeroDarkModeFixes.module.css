@@ -1,0 +1,63 @@
+/**
+ * Second-pass dark-mode contrast fixes scoped to the home hero's two CTA
+ * links (Hero.tsx, SecondaryHero.tsx) and Hero.tsx's gradient headline word.
+ *
+ * Deliberately NOT in app/globals.css: the task that produced this file
+ * says the shared stylesheet is owned by a separate consolidation pass, so
+ * fixes discovered here are colocated with the components they patch
+ * instead. Both rules below use the exact `:root[data-theme='dark'] .x`
+ * shape globals.css's own dark-mode overrides use (see e.g. `.btn-secondary`,
+ * `.chip-tool` there) — same mechanism, just living next to its component.
+ *
+ * Cascade note: a plain Next.js CSS Module file is NOT wrapped in any
+ * `@layer`, so — exactly like globals.css's own unlayered "DARK-MODE:
+ * UTILITY-CLASS COLOR FIXES" section documents for `.bg-cta.text-ink` —
+ * these rules outrank Tailwind's `@layer components`/`@layer utilities`
+ * regardless of selector specificity. That is why a single class with no
+ * `!important` is enough to beat `.btn-brutal`'s component-layer `color`.
+ */
+
+/* .btn-brutal's plain (non-.btn-white) resting state: `color: var(--color-ink)`
+   over `background: var(--color-cta)` (globals.css ~L391-403). --color-ink
+   flips to near-white in dark mode while --color-cta stays the same yellow
+   (documented in globals.css as intentionally theme-invariant), collapsing
+   resting-state contrast to ~1.45:1. Fixed to flat black, matching the
+   site-wide "pastel/CTA fills are always paired with black text" rule
+   globals.css states for `.bg-cta`/`.bg-green` elsewhere.
+
+   The hover state is intentionally NOT touched by the first rule alone:
+   `:root[data-theme='dark'] .btn-brutal:hover` (globals.css ~L473) already
+   swaps the face to the dark `--color-cream` surface, and the near-white
+   `--color-ink` text `.btn-brutal` already carries is the CORRECT pairing
+   against that dark face. Without the second rule below, this file's flat
+   black would win on hover too (unlayered beats unlayered by specificity,
+   and `:hover` alone doesn't reduce specificity below the base rule enough
+   to lose) and re-break the *hover* state instead of the resting one — so
+   the second rule explicitly restores `--color-ink` on hover. */
+:root[data-theme="dark"] .ctaContrastFix {
+  color: #000;
+}
+:root[data-theme="dark"] .ctaContrastFix:hover {
+  color: var(--color-ink);
+}
+
+/* `.text-accent-gradient` (globals.css ~L794): three violet stops tuned for
+   a light page. Unmodified in dark mode they measure ~2.9:1-3.23:1 against
+   the dark page background — at/below the WCAG AA large-text floor (3:1).
+   `--color-violet-accent-text` (globals.css ~L207, "#8d72eb") is the site's
+   own existing text-safe violet token, already verified ~5.33:1 on
+   --color-offwhite and already used for this exact failure mode at
+   `.eyebrow` and the nav-link hover state — reused for both outer stops
+   here rather than inventing a new token. The middle stop is a one-off
+   lighter shade (not a token, so it stays local to this fix) purely to keep
+   a little gradient movement instead of flattening to one flat color; it is
+   lighter than the accent-text token, so it cannot measure below the same
+   ~5.3:1 floor. */
+:root[data-theme="dark"] .accentGradientFix {
+  background: linear-gradient(
+    100deg,
+    var(--color-violet-accent-text) 10%,
+    #a68ef2 50%,
+    var(--color-violet-accent-text) 90%
+  );
+}

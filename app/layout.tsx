@@ -2,10 +2,24 @@ import type { Metadata, Viewport } from 'next'
 import { Cabin, Fraunces, Permanent_Marker } from 'next/font/google'
 import Script from 'next/script'
 import { Footer } from '@/components/layout/Footer'
-import { Header } from '@/components/layout/Header'
-import { ChatFab } from '@/components/ui/ChatFab'
+import { HeaderGate } from '@/components/layout/HeaderGate'
+import { ThemeProvider } from '@/components/theme/ThemeProvider'
+import { FloatingActions } from '@/components/ui/FloatingActions'
 import { SITE } from '@/lib/site'
 import './globals.css'
+
+/**
+ * Standard no-flash-of-wrong-theme bootstrap (the same idea `next-themes`
+ * ships, hand-rolled here since that package is not a dependency of this
+ * project — see package.json). Must run synchronously, before anything
+ * paints, and must agree byte-for-byte with the storage key and value set
+ * read by `components/theme/ThemeProvider.tsx`.
+ *
+ * A plain `<script dangerouslySetInnerHTML>`, not `next/script` — `next/script`'s
+ * default strategy is `afterInteractive`, which defers execution until after
+ * hydration and would let the wrong theme paint first. This has to block.
+ */
+const THEME_BOOTSTRAP_SCRIPT = `(function(){try{var k='theme';var s=localStorage.getItem(k);var t=s==='light'||s==='dark'||s==='system'?s:'system';var r=t==='system'?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):t;document.documentElement.setAttribute('data-theme',r);}catch(e){}})();`
 
 /**
  * Fonts are self-hosted: next/font downloads them at build time and serves them
@@ -156,8 +170,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       // Next 16 removed automatic smooth scrolling; opt back in explicitly.
       data-scroll-behavior="smooth"
       className={`${fraunces.variable} ${cabin.variable} ${marker.variable}`}
+      // The theme bootstrap script below sets `data-theme` on this element
+      // before hydration, which will never match the attribute-less markup
+      // React rendered on the server. That mismatch is the entire point
+      // (it's what avoids a flash of the wrong theme), so it has to be told
+      // not to warn about it.
+      suppressHydrationWarning
     >
       <head>
+        {/* Must be the very first thing in <head> — a blocking, synchronous
+            script that runs before any themed content paints. See the
+            THEME_BOOTSTRAP_SCRIPT comment above for why this can't be a
+            next/script. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }} />
         <OrganizationJsonLd />
         {/* No <link rel="canonical"> here on purpose. A hardcoded canonical in the
             root layout applies to EVERY route, which would declare every tool page
@@ -165,31 +190,33 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             `alternates.canonical` in generateMetadata. */}
       </head>
       <body>
-        <a href="#main" className="skip-link">
-          Skip to content
-        </a>
-        <Header />
-        <main id="main" tabIndex={-1} className="scroll-mt-28">
-          {children}
-        </main>
-        <Footer />
-        <ChatFab />
+        <ThemeProvider>
+          <a href="#main" className="skip-link">
+            Skip to content
+          </a>
+          <HeaderGate />
+          <main id="main" tabIndex={-1} className="scroll-mt-28">
+            {children}
+          </main>
+          <Footer />
+          <FloatingActions />
 
-        {/* GA4 loads after interaction so it never competes with the LCP.
-            Same property as the parent site, so a tools -> agency journey is one
-            session rather than a referral that resets attribution. */}
-        {SITE.gaId ? (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${SITE.gaId}`}
-              strategy="afterInteractive"
-            />
-            <Script id="ga4" strategy="afterInteractive">
-              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+          {/* GA4 loads after interaction so it never competes with the LCP.
+              Same property as the parent site, so a tools -> agency journey is one
+              session rather than a referral that resets attribution. */}
+          {SITE.gaId ? (
+            <>
+              <Script
+                src={`https://www.googletagmanager.com/gtag/js?id=${SITE.gaId}`}
+                strategy="afterInteractive"
+              />
+              <Script id="ga4" strategy="afterInteractive">
+                {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());gtag('config','${SITE.gaId}',{cookie_domain:'.scult.in'});`}
-            </Script>
-          </>
-        ) : null}
+              </Script>
+            </>
+          ) : null}
+        </ThemeProvider>
       </body>
     </html>
   )

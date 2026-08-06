@@ -67,9 +67,16 @@ export default function AllToolsPage() {
               >
                 {category.name}
               </h2>
+              {/* Plain link on this page's ambient offwhite background, not a
+                  tile/violet-50/100 fill — text-violet-700 alone measures
+                  well under AA in dark mode. --color-violet-accent-text is
+                  this codebase's existing dark-mode-only token for standalone
+                  accent text (see .eyebrow / nav-link hover); the fallback
+                  keeps light mode's violet-700 unchanged. hover:text-violet-600
+                  already has its own dark-mode override in globals.css. */}
               <Link
                 href={`/${category.slug}`}
-                className="font-medium text-[15px] text-violet-700 underline decoration-1 underline-offset-4 hover:text-violet-600"
+                className="font-medium text-[15px] text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4 hover:text-violet-600"
               >
                 Category page →
               </Link>

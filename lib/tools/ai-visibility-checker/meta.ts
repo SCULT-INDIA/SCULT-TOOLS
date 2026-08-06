@@ -26,7 +26,8 @@ export const meta: Tool = {
   runtime: 'server',
   monthlyCostCeiling: 500,
   leadTier: 'A',
-  serviceTarget: 'ai-services',
+  // 'ai-services' 404s on scult.in — 'ai-consulting' is the real page.
+  serviceTarget: 'ai-consulting',
   updatedAt: '2026-07-29',
   owner: 'scult-ai',
   icon: 'Radar',
@@ -38,11 +39,10 @@ export const meta: Tool = {
     'Work through each check card — every finding comes with a concrete fix.',
   ],
   howItWorks:
-    'GEO (Generative Engine Optimization) and AEO (Answer Engine Optimization) are about being usable as a source by AI answer engines, not just ranking in blue links. This checker fetches your robots.txt, /llms.txt and homepage exactly once, then evaluates the effective robots rule for the path "/" for ten AI crawlers: GPTBot, OAI-SearchBot and ChatGPT-User (OpenAI), ClaudeBot and anthropic-ai (Anthropic), PerplexityBot (Perplexity), Google-Extended (Google Gemini), CCBot (Common Crawl, whose dataset many models train on), Bytespider (ByteDance) and meta-externalagent (Meta). Robots precedence is applied the way crawlers actually apply it: the most specific matching User-agent group wins over the * group, an empty Disallow line allows everything, and between Allow and Disallow the longest matching path wins, with Allow winning exact ties. On top of crawler access we parse every JSON-LD block for schema types, check the on-page basics answer engines quote (title, meta description, h1, h2 outline, lang), and probe for llms.txt and an XML sitemap. The weighted score is crawler access 40, structured data 20, basics 20, llms.txt 10, sitemap 10. One honest caveat: crawlability is necessary but not sufficient — a perfect score means AI engines CAN read and parse you, not that they WILL cite you. Citation still depends on content quality, authority and relevance.',
+    'Fetches robots.txt, /llms.txt and your homepage once, then applies robots precedence for ten AI crawlers: most-specific User-agent group wins, longest matching path wins. Scored 40/20/20/10/10 across crawler access, structured data, page basics, llms.txt and sitemap — being readable is necessary, not sufficient, for citation.',
   limitations: [
-    'We cannot see inside AI companies’ private crawl and ranking policies. This tool verifies the public, controllable signals — what an engine does beyond them is not observable from outside.',
-    'This is a homepage check, not a site-wide audit. Robots rules, schema and headings can differ per page; a clean homepage does not guarantee your blog or docs are equally crawlable.',
-    'Allowing or blocking AI crawlers is a business decision about how your content may be used. This tool shows you the current state so you can decide deliberately — it does not make that call for you.',
+    'This checks your homepage only, not every page on your site.',
+    'It reports the public crawl signals it can see, not what an AI company does with your content afterward.',
   ],
   faq: [
     {

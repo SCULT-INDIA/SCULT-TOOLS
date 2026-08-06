@@ -77,9 +77,18 @@ export default function PrivacyPage() {
                 {clientSide.map((tool) => (
                   <tr key={tool.slug} className="border-line border-b">
                     <td className="py-2.5 pr-4">
+                      {/* Plain link on the table's ambient page background,
+                          not a tile/violet-50/100 fill — text-violet-700
+                          alone measures well under AA in dark mode.
+                          --color-violet-accent-text is this codebase's
+                          existing dark-mode-only token for standalone accent
+                          text (see .eyebrow / nav-link hover); the fallback
+                          keeps light mode's violet-700 unchanged.
+                          hover:text-violet-600 already has its own dark-mode
+                          override in globals.css. */}
                       <Link
                         href={`/${tool.category}/${tool.slug}`}
-                        className="text-violet-700 underline decoration-1 underline-offset-4 hover:text-violet-600"
+                        className="text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4 hover:text-violet-600"
                       >
                         {tool.title}
                       </Link>
@@ -109,9 +118,17 @@ export default function PrivacyPage() {
             <ul className="mt-4 space-y-3">
               {networked.map((tool) => (
                 <li key={tool.slug} className="card-flat p-4">
+                  {/* Sits on .card-flat's ambient cream, not a
+                      tile/violet-50/100 fill — .card-flat's own dark-mode fix
+                      only re-themes the surface, not this accent text, which
+                      measures well under AA in dark mode.
+                      --color-violet-accent-text is this codebase's existing
+                      dark-mode-only token for standalone accent text (see
+                      .eyebrow / nav-link hover); the fallback keeps light
+                      mode's violet-700 unchanged. */}
                   <Link
                     href={`/${tool.category}/${tool.slug}`}
-                    className="font-medium text-violet-700 underline decoration-1 underline-offset-4"
+                    className="font-medium text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4"
                   >
                     {tool.title}
                   </Link>
@@ -167,9 +184,11 @@ export default function PrivacyPage() {
         <p className="mt-12 text-[15px] text-ink-subtle leading-7">
           Questions about any of this? {SITE.parentName} is a real company in Noida, Delhi
           NCR — the contact details are on{' '}
+          {/* Plain link on this closing paragraph's ambient page background —
+              same fix as the table links above. */}
           <a
             href={SITE.parentUrl}
-            className="text-violet-700 underline decoration-1 underline-offset-4"
+            className="text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4"
           >
             scult.in
           </a>

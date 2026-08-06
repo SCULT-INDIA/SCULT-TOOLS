@@ -48,6 +48,36 @@ export function isCurrencyCode(value: string): value is CurrencyCode {
 
 export type DiscountKind = 'percent' | 'flat'
 
+/**
+ * The invoice sheet's visual design. Purely presentational — every template
+ * renders the exact same computed totals from the exact same `InvoiceDraft`,
+ * so switching templates can never change what a client is actually billed.
+ *
+ * Kept as data here (id + label), same pattern as `CURRENCIES`, so the
+ * dropdown and the persistence validation both read from one list rather than
+ * drifting. The templates themselves are React components and live in
+ * `components/tools/invoice-templates/` — this module stays UI-free.
+ */
+export const INVOICE_TEMPLATES = [
+  { id: 'classic', label: 'Classic — general business' },
+  { id: 'minimal', label: 'Minimal — freelancer & consultant' },
+  { id: 'agency', label: 'Agency — creative & marketing' },
+  { id: 'corporate', label: 'Corporate — enterprise & B2B' },
+  { id: 'boutique', label: 'Boutique — studio & events' },
+  { id: 'trade', label: 'Trade — contractor & home services' },
+  { id: 'retail', label: 'Retail — shop & e-commerce' },
+  { id: 'hospitality', label: 'Hospitality — café & restaurant' },
+  { id: 'tech', label: 'Tech — software & subscriptions' },
+  { id: 'clinic', label: 'Clinic — health & wellness' },
+  { id: 'nonprofit', label: 'Nonprofit — community & donations' },
+] as const
+
+export type TemplateId = (typeof INVOICE_TEMPLATES)[number]['id']
+
+export function isTemplateId(value: string): value is TemplateId {
+  return INVOICE_TEMPLATES.some((t) => t.id === value)
+}
+
 export interface InvoiceLineInput {
   readonly quantity: number
   readonly rate: number
@@ -385,6 +415,8 @@ export interface InvoiceDraft {
   readonly notes: string
   /** Empty, or a `data:image/…` URL — the logo never leaves the browser. */
   readonly logo: string
+  /** Which visual design renders the sheet. See `INVOICE_TEMPLATES`. */
+  readonly template: TemplateId
 }
 
 const MAX_LINES = 50
@@ -473,6 +505,15 @@ export function parseInvoiceDraft(raw: unknown): InvoiceDraft | undefined {
   const logoRaw = readString(record.logo, MAX_LOGO_DATA_URL) ?? ''
   const logo = logoRaw.startsWith('data:image/') ? logoRaw : ''
 
+  // Defaults rather than rejects: every draft saved before templates shipped
+  // is missing this field entirely, and treating that as corrupt would throw
+  // away someone's whole in-progress invoice over a feature that didn't exist
+  // yet. An unrecognised value (a template renamed or removed later) falls
+  // back the same way rather than losing the draft.
+  const templateRaw = record.template
+  const template: TemplateId =
+    typeof templateRaw === 'string' && isTemplateId(templateRaw) ? templateRaw : 'classic'
+
   return {
     fromName,
     fromAddress,
@@ -485,6 +526,7 @@ export function parseInvoiceDraft(raw: unknown): InvoiceDraft | undefined {
     dueDate,
     currency: currencyRaw,
     lines,
+    template,
     taxLabel,
     taxPercent,
     discount,

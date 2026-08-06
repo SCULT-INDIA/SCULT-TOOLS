@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   BATCH_SIZE,
+  computeBrandabilityScore,
   createRng,
   domainCandidate,
   generateBatch,
@@ -172,6 +173,53 @@ describe('scoring', () => {
   it('builds the exact-match .com candidate from any name shape', () => {
     expect(domainCandidate('Copper Coffee')).toBe('coppercoffee.com')
     expect(domainCandidate('Cofara')).toBe('cofara.com')
+  })
+})
+
+describe('computeBrandabilityScore', () => {
+  it('scores 100 when every check passes', () => {
+    const r = generateBatch(['coffee'], 'brandable', createRng(3))
+    const idea = r.names.find((n) => n.pronounceable && n.lengthBand !== 'long')
+    expect(idea).toBeDefined()
+    if (idea === undefined) return
+    const result = computeBrandabilityScore(idea)
+    expect(result.score).toBe(100)
+    expect(result.checks.every((c) => c.pass)).toBe(true)
+  })
+
+  it('never disagrees with the fields it was computed from', () => {
+    for (const style of ALL_STYLES) {
+      const r = generateBatch(['market'], style, createRng(9))
+      for (const idea of r.names) {
+        const result = computeBrandabilityScore(idea)
+        const lengthCheck = result.checks.find((c) => c.id === 'length')
+        const pronounceableCheck = result.checks.find((c) => c.id === 'pronounceable')
+        const singleWordCheck = result.checks.find((c) => c.id === 'single-word')
+        expect(lengthCheck?.pass).toBe(idea.lengthBand !== 'long')
+        expect(pronounceableCheck?.pass).toBe(idea.pronounceable)
+        expect(singleWordCheck?.pass).toBe(!idea.name.includes(' '))
+        expect(result.score).toBe(
+          Math.round(
+            (result.checks.filter((c) => c.pass).length / result.checks.length) * 100,
+          ),
+        )
+      }
+    }
+  })
+
+  it('scores lower for a long, tricky-to-say name than a short, easy one', () => {
+    const easy = generateBatch(['coffee'], 'brandable', createRng(3)).names.find(
+      (n) => n.pronounceable && n.lengthBand === 'great',
+    )
+    const hard = generateBatch(['coffee'], 'alliteration', createRng(41)).names.find(
+      (n) => n.name.includes(' '),
+    )
+    expect(easy).toBeDefined()
+    expect(hard).toBeDefined()
+    if (easy === undefined || hard === undefined) return
+    expect(computeBrandabilityScore(easy).score).toBeGreaterThan(
+      computeBrandabilityScore(hard).score,
+    )
   })
 })
 

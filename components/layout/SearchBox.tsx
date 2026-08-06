@@ -6,6 +6,16 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useId, useRef, useState } from 'react'
 import { SEARCH_INDEX, type SearchHit, searchTools } from '@/lib/tools/search'
 
+/** SSR-safe: defaults to the non-Mac label so server and first client render
+ * agree, then corrects itself post-mount if the platform is actually Mac. */
+function useShortcutLabel(): string {
+  const [label, setLabel] = useState('Ctrl K')
+  useEffect(() => {
+    if (/Mac|iPhone|iPad/.test(navigator.platform)) setLabel('⌘K')
+  }, [])
+  return label
+}
+
 /**
  * Tool search with a full combobox keyboard contract.
  *
@@ -13,7 +23,17 @@ import { SEARCH_INDEX, type SearchHit, searchTools } from '@/lib/tools/search'
  * move a virtual cursor via aria-activedescendant, Enter navigates, Escape
  * closes, and the listbox is announced. `Cmd/Ctrl+K` focuses it from anywhere.
  */
-export function SearchBox({ size = 'default' }: { size?: 'default' | 'large' }) {
+export function SearchBox({
+  size = 'default',
+  onNavigate,
+}: {
+  size?: 'default' | 'large'
+  /** Called right before navigating to a picked result — e.g. the mobile
+   * drawer closes itself here, since it has no other way to know a search
+   * selection (as opposed to a plain link click, which it already handles
+   * inline) is about to leave the page. */
+  onNavigate?: () => void
+}) {
   const router = useRouter()
   const listId = useId()
   const [query, setQuery] = useState('')
@@ -55,6 +75,7 @@ export function SearchBox({ size = 'default' }: { size?: 'default' | 'large' }) 
     if (!hit) return
     setOpen(false)
     setQuery('')
+    onNavigate?.()
     router.push(hit.href)
   }
 
@@ -84,6 +105,10 @@ export function SearchBox({ size = 'default' }: { size?: 'default' | 'large' }) 
   }
 
   const large = size === 'large'
+  const shortcutLabel = useShortcutLabel()
+  // Hidden once there's a query or the listbox is open — a shortcut hint
+  // sitting behind live search results reads as a stray leftover, not a tip.
+  const showShortcutHint = query === '' && !open
 
   return (
     <div ref={rootRef} className="relative w-full">
@@ -108,8 +133,16 @@ export function SearchBox({ size = 'default' }: { size?: 'default' | 'large' }) 
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={onKeyDown}
           onFocus={() => hits.length > 0 && setOpen(true)}
-          className={`field rounded-pill ${large ? 'py-3.5 pl-12 text-[17px]' : 'pl-11'} pr-4`}
+          className={`field rounded-pill ${large ? 'py-3.5 pl-12 pr-16 text-[17px]' : 'pl-11 pr-11'}`}
         />
+        {showShortcutHint ? (
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 rounded-sm border border-line-grey px-1.5 py-0.5 font-sans text-[11px] text-ink-subtle"
+          >
+            {shortcutLabel}
+          </span>
+        ) : null}
       </div>
 
       {/* Options are <div role="option"> rather than <li>, and are deliberately
@@ -121,7 +154,7 @@ export function SearchBox({ size = 'default' }: { size?: 'default' | 'large' }) 
           id={listId}
           role="listbox"
           aria-label="Search results"
-          className="absolute top-full left-0 z-50 mt-2 w-full overflow-hidden rounded-card border border-line bg-white shadow-card-raised"
+          className="absolute top-full left-0 z-50 mt-2 w-full overflow-hidden rounded-card border border-line bg-cream shadow-card-raised"
         >
           {hits.map((hit, i) => (
             <div
@@ -137,7 +170,7 @@ export function SearchBox({ size = 'default' }: { size?: 'default' | 'large' }) 
                 go(hit)
               }}
               className={`flex cursor-pointer items-center gap-3 px-4 py-3 ${
-                i === active ? 'bg-violet-50' : 'bg-white'
+                i === active ? 'bg-violet-50' : 'bg-cream'
               }`}
             >
               {/* The tool's own mark — same white-disc file as its favicon,

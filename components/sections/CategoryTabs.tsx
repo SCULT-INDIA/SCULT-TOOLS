@@ -66,12 +66,15 @@ export function CategoryTabs() {
 
             <ul className="grid gap-3" aria-label={`${category.name} tools`}>
               {tools.map((tool, i) => (
-                // White cards, not translucent-white-on-violet. The reference's
+                // Opaque cards, not translucent-white-on-violet. The reference's
                 // right column is bright device mockups that pop off the violet
                 // field; `bg-white/5` reads as flat monotone at this size.
+                // `bg-cream` (not a literal white) so the card follows the same
+                // light-surface elevation token as every other card on the site
+                // once dark mode flips it to a near-black surface.
                 <li
                   key={tool.slug}
-                  className="flex items-center gap-4 rounded-md bg-white p-4 shadow-card"
+                  className="flex items-center gap-4 rounded-md bg-cream p-4 shadow-card"
                   style={{ marginLeft: i % 2 === 1 ? '1.5rem' : undefined }}
                 >
                   <Image
@@ -81,9 +84,15 @@ export function CategoryTabs() {
                     height={36}
                     className="size-9 shrink-0 rounded-full ring-1 ring-line"
                   />
+                  {/* hover:text-violet-600, not hover:text-violet-700: this
+                      is the same rest-ink/hover-accent pattern CategoryPlans
+                      uses just below, and only the -600 utility has an
+                      existing dark-mode hover fix wired in globals.css. -700
+                      measures ~2.27:1 on this card's dark-mode `bg-cream`, an
+                      AA failure the -600 swap avoids for free. */}
                   <Link
                     href={`/${tool.category}/${tool.slug}`}
-                    className="font-medium text-[15px] text-ink hover:text-violet-700"
+                    className="font-medium text-[15px] text-ink hover:text-violet-600"
                   >
                     {tool.title}
                   </Link>

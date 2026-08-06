@@ -83,7 +83,7 @@ export function SegmentButton({
       className={`min-h-11 rounded-sm border px-3 font-medium text-[13px] transition-colors disabled:cursor-not-allowed disabled:opacity-45 sm:min-h-9 ${
         active
           ? 'border-ink bg-violet-700 text-white'
-          : 'border-line-grey bg-white text-ink-muted hover:border-ink hover:text-ink'
+          : 'border-line-grey bg-cream text-ink-muted hover:border-ink hover:text-ink'
       }`}
     >
       {children}
@@ -96,17 +96,21 @@ export function ToolbarAction({
   onClick,
   children,
   disabled = false,
+  title,
 }: {
   onClick: () => void
   children: ReactNode
   disabled?: boolean
+  /** e.g. "Coming soon" on a placeholder action that is shown but not built yet. */
+  title?: string
 }) {
   return (
     <button
       type="button"
+      title={title}
       onClick={onClick}
       disabled={disabled}
-      className="min-h-11 rounded-sm border border-line-grey bg-white px-3 font-medium text-[13px] text-ink transition-colors hover:border-ink disabled:cursor-not-allowed disabled:opacity-45 sm:min-h-9"
+      className="min-h-11 rounded-sm border border-line-grey bg-cream px-3 font-medium text-[13px] text-ink transition-colors hover:border-ink disabled:cursor-not-allowed disabled:opacity-45 sm:min-h-9"
     >
       {children}
     </button>

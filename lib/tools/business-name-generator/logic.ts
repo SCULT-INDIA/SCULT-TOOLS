@@ -592,6 +592,47 @@ function decorate(c: Candidate, style: StyleId): NameIdea {
   }
 }
 
+export interface BrandabilityCheck {
+  readonly id: string
+  readonly label: string
+  readonly pass: boolean
+}
+
+export interface BrandabilityScore {
+  readonly score: number
+  readonly checks: readonly BrandabilityCheck[]
+}
+
+/**
+ * Brandability score for one already-generated name — same shape as UTM
+ * Builder's `computeQualityScore`: a small set of pass/fail checks over
+ * fields `decorate` already computed, never re-derived, so the score can
+ * never disagree with the chips the card prints beside it.
+ */
+export function computeBrandabilityScore(idea: NameIdea): BrandabilityScore {
+  const checks: BrandabilityCheck[] = [
+    {
+      id: 'length',
+      label: 'Comfortable brand length (12 letters or fewer)',
+      pass: idea.lengthBand !== 'long',
+    },
+    {
+      id: 'pronounceable',
+      label: 'Easy to say out loud',
+      pass: idea.pronounceable,
+    },
+    {
+      id: 'single-word',
+      label: 'Reads as one word, no spaces',
+      pass: !idea.name.includes(' '),
+    },
+  ]
+  const score = Math.round(
+    (checks.filter((check) => check.pass).length / checks.length) * 100,
+  )
+  return { score, checks }
+}
+
 /**
  * Builds one batch of scored, deduplicated names. Deterministic under a
  * seeded rng: the same keywords, style and seed always produce the same
