@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cabin, Fraunces, Permanent_Marker } from 'next/font/google'
 import Script from 'next/script'
@@ -216,6 +217,12 @@ gtag('js',new Date());gtag('config','${SITE.gaId}',{cookie_domain:'.scult.in'});
               </Script>
             </>
           ) : null}
+
+          {/* Vercel Analytics — a no-op off Vercel's own infrastructure (it
+              posts to /_vercel/insights, which only exists on a Vercel
+              deployment), so this is safe to render unconditionally in every
+              environment, including local dev and any other host. */}
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
