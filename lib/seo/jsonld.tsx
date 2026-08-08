@@ -1,5 +1,6 @@
-import { absoluteUrl, SITE } from '@/lib/site'
+import type { Guide } from '@/lib/guides/types'
 import type { Prompt, PromptCategory } from '@/lib/prompts/types'
+import { absoluteUrl, SITE } from '@/lib/site'
 import type { Category, Tool } from '@/lib/tools/types'
 
 /**
@@ -61,21 +62,33 @@ export function toolJsonLd(tool: Tool, category: Category): object {
 }
 
 /**
+ * The shared FAQPage builder both `faqJsonLd` (tool pages) and the site-wide
+ * `/faq` page use. Marking up content the visitor cannot see is a structured-data
+ * violation, so both callers only ever pass Q&A pairs that are actually rendered
+ * on the same page.
+ */
+export function genericFaqJsonLd(
+  items: readonly { readonly q: string; readonly a: string }[],
+): object {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  }
+}
+
+/**
  * FAQPage is emitted ONLY when the FAQ is actually visible on the page. Marking
  * up content the user cannot see is a structured-data violation, and every tool
  * page renders its FAQ, so the guard is a real invariant rather than decoration.
  */
 export function faqJsonLd(tool: Tool): object | null {
   if (tool.faq.length === 0) return null
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: tool.faq.map((item) => ({
-      '@type': 'Question',
-      name: item.q,
-      acceptedAnswer: { '@type': 'Answer', text: item.a },
-    })),
-  }
+  return genericFaqJsonLd(tool.faq)
 }
 
 export function categoryJsonLd(category: Category, tools: readonly Tool[]): object {
@@ -150,6 +163,30 @@ export function promptCollectionJsonLd(
         url: absoluteUrl(`/prompts/${prompt.category}/${prompt.slug}`),
       })),
     },
+  }
+}
+
+/**
+ * A guide is authored editorial content, not a program or a prompt — `Article`
+ * is the right schema.org type. No `author` field: there is no real named
+ * author to attribute this to, and inventing one would be a fabricated
+ * credential (see docs/PLAN.md §6.8 on the same principle for testimonials).
+ * `publisher` follows the same rule as every other node here: it references
+ * the PARENT's @id, never a second orphaned entity.
+ */
+export function guideJsonLd(guide: Guide): object {
+  const url = absoluteUrl(`/guides/${guide.slug}`)
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    '@id': `${url}#article`,
+    headline: guide.title,
+    url,
+    description: guide.description,
+    isAccessibleForFree: true,
+    publisher: PUBLISHER,
+    inLanguage: SITE.locale,
+    dateModified: guide.updatedAt,
   }
 }
 
