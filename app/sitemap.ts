@@ -1,10 +1,104 @@
 import type { MetadataRoute } from 'next'
+import { GUIDES } from '@/lib/guides/registry'
 import { PROMPT_CATEGORIES } from '@/lib/prompts/categories'
 import { getPromptsByCategory, PROMPTS } from '@/lib/prompts/registry'
 import type { Prompt } from '@/lib/prompts/types'
 import { absoluteUrl } from '@/lib/site'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { TOOLS } from '@/lib/tools/registry'
+
+/**
+ * Static trust/reference pages the registries don't drive. `lastModified` for
+ * `/about` and `/privacy` is their real last-commit date (`git log`), not a
+ * guess — the 2026-08-09 build-out pages get the literal date they were
+ * actually written, for the same reason: never `new Date()`.
+ */
+const STATIC_PAGES: readonly {
+  path: string
+  lastModified: string
+  changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency']
+  priority: number
+}[] = [
+  {
+    path: '/about',
+    lastModified: '2026-08-08',
+    changeFrequency: 'monthly',
+    priority: 0.5,
+  },
+  {
+    path: '/privacy',
+    lastModified: '2026-08-08',
+    changeFrequency: 'monthly',
+    priority: 0.5,
+  },
+  { path: '/faq', lastModified: '2026-08-09', changeFrequency: 'monthly', priority: 0.6 },
+  {
+    path: '/glossary',
+    lastModified: '2026-08-09',
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  },
+  {
+    path: '/collections',
+    lastModified: '2026-08-09',
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  },
+  {
+    path: '/guides',
+    lastModified: '2026-08-09',
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  },
+  {
+    path: '/changelog',
+    lastModified: '2026-08-09',
+    changeFrequency: 'weekly',
+    priority: 0.5,
+  },
+  {
+    path: '/sitemap',
+    lastModified: '2026-08-09',
+    changeFrequency: 'weekly',
+    priority: 0.4,
+  },
+  {
+    path: '/roadmap',
+    lastModified: '2026-08-09',
+    changeFrequency: 'monthly',
+    priority: 0.3,
+  },
+  {
+    path: '/brand',
+    lastModified: '2026-08-09',
+    changeFrequency: 'yearly',
+    priority: 0.3,
+  },
+  {
+    path: '/contact',
+    lastModified: '2026-08-09',
+    changeFrequency: 'yearly',
+    priority: 0.3,
+  },
+  {
+    path: '/security',
+    lastModified: '2026-08-09',
+    changeFrequency: 'yearly',
+    priority: 0.3,
+  },
+  {
+    path: '/accessibility',
+    lastModified: '2026-08-09',
+    changeFrequency: 'yearly',
+    priority: 0.3,
+  },
+  {
+    path: '/terms',
+    lastModified: '2026-08-09',
+    changeFrequency: 'yearly',
+    priority: 0.3,
+  },
+]
 
 /**
  * Generated entirely from the two registries.
@@ -95,6 +189,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: promptLastModified(p),
       changeFrequency: 'monthly' as const,
       priority: 0.7,
+    })),
+    ...STATIC_PAGES.map((page) => ({
+      url: absoluteUrl(page.path),
+      lastModified: page.lastModified,
+      changeFrequency: page.changeFrequency,
+      priority: page.priority,
+    })),
+    ...GUIDES.map((guide) => ({
+      url: absoluteUrl(`/guides/${guide.slug}`),
+      lastModified: guide.updatedAt,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
     })),
   ]
 }
