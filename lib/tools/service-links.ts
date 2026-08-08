@@ -9,7 +9,7 @@ import { parentLink } from '@/lib/site'
  * branding'), so this is a deliberate translation table, not a 1:1 slug
  * reuse — checked against the live site rather than guessed.
  */
-const SERVICE_PAGES: Record<string, { path: string; label: string }> = {
+export const SERVICE_PAGES: Record<string, { path: string; label: string }> = {
   'web-development': { path: '/services/web-development', label: 'web development' },
   'custom-software': {
     path: '/services/custom-software-development',
