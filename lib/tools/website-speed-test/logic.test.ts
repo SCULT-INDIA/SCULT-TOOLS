@@ -5,8 +5,11 @@ import {
   classifyMetric,
   describeThresholds,
   formatMetricValue,
+  formatReportMarkdown,
   formatReportText,
   formatSavings,
+  formatServerResponseTime,
+  formatTransferSize,
   isPrivateAddress,
   labelForScore,
   METRIC_LABELS,
@@ -136,6 +139,32 @@ describe('formatSavings', () => {
   it('returns an empty string for zero or invalid savings', () => {
     expect(formatSavings(0)).toBe('')
     expect(formatSavings(Number.NaN)).toBe('')
+  })
+})
+
+describe('formatTransferSize', () => {
+  it('rounds bytes to whole KB', () => {
+    expect(formatTransferSize(45_000)).toBe('44 KB')
+    expect(formatTransferSize(1024)).toBe('1 KB')
+  })
+  it('floors to 0 KB for zero, negative or non-finite input', () => {
+    expect(formatTransferSize(0)).toBe('0 KB')
+    expect(formatTransferSize(-5)).toBe('0 KB')
+    expect(formatTransferSize(Number.NaN)).toBe('0 KB')
+  })
+})
+
+describe('formatServerResponseTime', () => {
+  it('uses ms below one second and seconds above, same convention as formatMetricValue', () => {
+    expect(formatServerResponseTime(420)).toBe('420 ms')
+    expect(formatServerResponseTime(1200)).toBe('1.2 s')
+  })
+  it('shows 0 ms rather than a dash — unlike formatSavings, 0 is a real reading here', () => {
+    expect(formatServerResponseTime(0)).toBe('0 ms')
+  })
+  it('renders a dash for negative or non-finite input', () => {
+    expect(formatServerResponseTime(Number.NaN)).toBe('—')
+    expect(formatServerResponseTime(-5)).toBe('—')
   })
 })
 
@@ -287,8 +316,93 @@ const PSI_FIXTURE = {
         scoreDisplayMode: 'informative',
         details: { overallSavingsMs: 5000 },
       },
+      // Current PSI v5 shape: `entity` is a plain string, and there is no
+      // `blockingTime` field. The first item deliberately uses the classic
+      // `{ text: string }` entity shape too, to exercise the fallback that
+      // covers an older Lighthouse version or a reintroduced legacy audit.
+      'third-parties-insight': {
+        details: {
+          type: 'table',
+          isEntityGrouped: true,
+          items: [
+            {
+              entity: { text: 'Google Analytics' },
+              mainThreadTime: 320.4,
+              transferSize: 45_000,
+            },
+            { entity: 'Google Tag Manager', mainThreadTime: 210.1, transferSize: 30_000 },
+            { entity: 'Facebook', mainThreadTime: 150.9, transferSize: 60_000 },
+            { entity: 'Hotjar', mainThreadTime: 90, transferSize: 20_000 },
+            { entity: 'Intercom', mainThreadTime: 60, transferSize: 15_000 },
+            { entity: 'Zero-cost widget', mainThreadTime: 0, transferSize: 500 },
+          ],
+        },
+      },
+      'resource-summary': {
+        details: {
+          type: 'table',
+          items: [
+            {
+              resourceType: 'document',
+              label: 'Document',
+              requestCount: 1,
+              transferSize: 12_000,
+            },
+            {
+              resourceType: 'script',
+              label: 'Script',
+              requestCount: 8,
+              transferSize: 250_000,
+            },
+            {
+              resourceType: 'stylesheet',
+              label: 'Stylesheet',
+              requestCount: 2,
+              transferSize: 40_000,
+            },
+            {
+              resourceType: 'image',
+              label: 'Image',
+              requestCount: 5,
+              transferSize: 180_000,
+            },
+            {
+              resourceType: 'font',
+              label: 'Font',
+              requestCount: 1,
+              transferSize: 30_000,
+            },
+            {
+              resourceType: 'other',
+              label: 'Other',
+              requestCount: 3,
+              transferSize: 5_000,
+            },
+            {
+              resourceType: 'third-party',
+              label: 'Third-party',
+              requestCount: 6,
+              transferSize: 170_000,
+            },
+            {
+              resourceType: 'total',
+              label: 'Total',
+              requestCount: 20,
+              transferSize: 517_000,
+            },
+          ],
+        },
+      },
+      'server-response-time': { numericValue: 420 },
     },
   },
+}
+
+/** A minimally valid response — enough to pass parsePsiResponse's overall
+ * validity check (needs a score, lab metric or field metric) while carrying
+ * no audits at all, for "the audit is missing entirely" cases below. */
+const MINIMAL_VALID_RESPONSE = {
+  lighthouseResult: { categories: { performance: { score: 0.5 } }, audits: {} },
 }
 
 describe('parsePsiResponse — happy path', () => {
@@ -386,6 +500,206 @@ describe('parsePsiResponse — malformed payloads degrade gracefully', () => {
   })
 })
 
+describe('parsePsiResponse — third-party cost (third-parties-insight audit)', () => {
+  it('ranks entities by main-thread time, largest first, capped at five', () => {
+    const parsed = parsePsiResponse(PSI_FIXTURE, 'mobile')
+    const thirdParty = parsed.payload?.thirdParty ?? []
+    expect(thirdParty.map((t) => t.name)).toEqual([
+      'Google Analytics',
+      'Google Tag Manager',
+      'Facebook',
+      'Hotjar',
+      'Intercom',
+    ])
+  })
+
+  it('formats main-thread time and transfer size for the top entity', () => {
+    const parsed = parsePsiResponse(PSI_FIXTURE, 'mobile')
+    const top = parsed.payload?.thirdParty[0]
+    expect(top?.mainThreadMs).toBe(320)
+    expect(top?.mainThreadDisplay).toBe('320 ms')
+    expect(top?.transferSize).toBe(45_000)
+    expect(top?.transferDisplay).toBe('44 KB')
+  })
+
+  it('reads the classic `{ text: string }` entity shape as well as the current plain string', () => {
+    // PSI_FIXTURE's top entity ("Google Analytics") uses the old shape, every
+    // other entity uses the current one — both must parse.
+    const parsed = parsePsiResponse(PSI_FIXTURE, 'mobile')
+    const names = (parsed.payload?.thirdParty ?? []).map((t) => t.name)
+    expect(names).toContain('Google Analytics')
+    expect(names).toContain('Google Tag Manager')
+  })
+
+  it('excludes an entity with zero measurable main-thread cost', () => {
+    const parsed = parsePsiResponse(PSI_FIXTURE, 'mobile')
+    const names = (parsed.payload?.thirdParty ?? []).map((t) => t.name)
+    expect(names).not.toContain('Zero-cost widget')
+  })
+
+  it('returns an empty array — never throws — when the audit is missing entirely', () => {
+    const parsed = parsePsiResponse(MINIMAL_VALID_RESPONSE, 'mobile')
+    expect(parsed.payload?.thirdParty).toEqual([])
+  })
+
+  it('returns an empty array when details.items is missing or not an array', () => {
+    const parsed = parsePsiResponse(
+      {
+        lighthouseResult: {
+          categories: { performance: { score: 0.5 } },
+          audits: { 'third-parties-insight': { details: {} } },
+        },
+      },
+      'mobile',
+    )
+    expect(parsed.payload?.thirdParty).toEqual([])
+  })
+
+  it('skips malformed entries instead of throwing (no entity name, non-numeric time)', () => {
+    const parsed = parsePsiResponse(
+      {
+        lighthouseResult: {
+          categories: { performance: { score: 0.5 } },
+          audits: {
+            'third-parties-insight': {
+              details: {
+                items: [
+                  { entity: {}, mainThreadTime: 100 },
+                  { entity: 'Broken', mainThreadTime: 'lots' },
+                  { entity: 'Legit', mainThreadTime: 50, transferSize: 1000 },
+                ],
+              },
+            },
+          },
+        },
+      },
+      'mobile',
+    )
+    expect(parsed.payload?.thirdParty.map((t) => t.name)).toEqual(['Legit'])
+  })
+
+  it('treats a missing transfer size as 0 rather than dropping the entity', () => {
+    const parsed = parsePsiResponse(
+      {
+        lighthouseResult: {
+          categories: { performance: { score: 0.5 } },
+          audits: {
+            'third-parties-insight': {
+              details: { items: [{ entity: 'No size', mainThreadTime: 40 }] },
+            },
+          },
+        },
+      },
+      'mobile',
+    )
+    expect(parsed.payload?.thirdParty[0]).toMatchObject({
+      name: 'No size',
+      transferSize: 0,
+      transferDisplay: '0 KB',
+    })
+  })
+})
+
+describe('parsePsiResponse — resource breakdown (resource-summary audit)', () => {
+  it('excludes the third-party and total aggregate rows', () => {
+    const parsed = parsePsiResponse(PSI_FIXTURE, 'mobile')
+    const types = (parsed.payload?.resourceBreakdown ?? []).map((r) => r.resourceType)
+    expect(types).not.toContain('third-party')
+    expect(types).not.toContain('total')
+    expect(types).toEqual(['script', 'image', 'stylesheet', 'font', 'document', 'other'])
+  })
+
+  it('formats transfer size in whole KB and keeps the request count', () => {
+    const parsed = parsePsiResponse(PSI_FIXTURE, 'mobile')
+    const script = parsed.payload?.resourceBreakdown.find(
+      (r) => r.resourceType === 'script',
+    )
+    expect(script).toMatchObject({
+      label: 'Script',
+      requestCount: 8,
+      transferSize: 250_000,
+      transferDisplay: '244 KB',
+    })
+  })
+
+  it('returns an empty array — never throws — when the audit is missing entirely', () => {
+    const parsed = parsePsiResponse(MINIMAL_VALID_RESPONSE, 'mobile')
+    expect(parsed.payload?.resourceBreakdown).toEqual([])
+  })
+
+  it('drops rows with zero requests and rows missing a type or label', () => {
+    const parsed = parsePsiResponse(
+      {
+        lighthouseResult: {
+          categories: { performance: { score: 0.5 } },
+          audits: {
+            'resource-summary': {
+              details: {
+                items: [
+                  {
+                    resourceType: 'font',
+                    label: 'Font',
+                    requestCount: 0,
+                    transferSize: 0,
+                  },
+                  { resourceType: 'image', requestCount: 3, transferSize: 1000 },
+                  { label: 'Weird', requestCount: 2, transferSize: 500 },
+                  {
+                    resourceType: 'other',
+                    label: 'Other',
+                    requestCount: 2,
+                    transferSize: 900,
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+      'mobile',
+    )
+    expect(parsed.payload?.resourceBreakdown.map((r) => r.resourceType)).toEqual([
+      'other',
+    ])
+  })
+})
+
+describe('parsePsiResponse — server response time (server-response-time audit)', () => {
+  it('extracts the numericValue in ms', () => {
+    const parsed = parsePsiResponse(PSI_FIXTURE, 'mobile')
+    expect(parsed.payload?.serverResponseMs).toBe(420)
+  })
+
+  it('is null when the audit is missing entirely', () => {
+    const parsed = parsePsiResponse(MINIMAL_VALID_RESPONSE, 'mobile')
+    expect(parsed.payload?.serverResponseMs).toBeNull()
+  })
+
+  it('is null rather than NaN when numericValue is non-numeric or negative', () => {
+    const nonNumeric = parsePsiResponse(
+      {
+        lighthouseResult: {
+          categories: { performance: { score: 0.5 } },
+          audits: { 'server-response-time': { numericValue: 'slow' } },
+        },
+      },
+      'mobile',
+    )
+    expect(nonNumeric.payload?.serverResponseMs).toBeNull()
+
+    const negative = parsePsiResponse(
+      {
+        lighthouseResult: {
+          categories: { performance: { score: 0.5 } },
+          audits: { 'server-response-time': { numericValue: -10 } },
+        },
+      },
+      'mobile',
+    )
+    expect(negative.payload?.serverResponseMs).toBeNull()
+  })
+})
+
 describe('stripAuditMarkdown', () => {
   it('flattens links and backticks', () => {
     expect(stripAuditMarkdown('Use [preload](https://x.dev) for `hero.jpg`.')).toBe(
@@ -417,6 +731,84 @@ describe('parseSpeedTestPayload', () => {
         opportunities: [],
       }),
     ).toBeUndefined()
+  })
+})
+
+describe('parseSpeedTestPayload — third-party / resource breakdown / TTFB', () => {
+  const base = {
+    finalUrl: 'https://example.com/',
+    strategy: 'mobile' as const,
+    score: 80,
+    lab: [],
+    field: [],
+    fieldSource: 'none' as const,
+    opportunities: [],
+  }
+
+  it('defaults all three to empty/null when absent — a response cached from before this field existed', () => {
+    const parsed = parseSpeedTestPayload(base)
+    expect(parsed).toBeDefined()
+    expect(parsed?.thirdParty).toEqual([])
+    expect(parsed?.resourceBreakdown).toEqual([])
+    expect(parsed?.serverResponseMs).toBeNull()
+  })
+
+  it('accepts a well-formed set of all three fields', () => {
+    const parsed = parseSpeedTestPayload({
+      ...base,
+      thirdParty: [
+        {
+          name: 'Google Analytics',
+          mainThreadMs: 320,
+          mainThreadDisplay: '320 ms',
+          transferSize: 45_000,
+          transferDisplay: '44 KB',
+        },
+      ],
+      resourceBreakdown: [
+        {
+          resourceType: 'script',
+          label: 'Script',
+          requestCount: 8,
+          transferSize: 250_000,
+          transferDisplay: '244 KB',
+        },
+      ],
+      serverResponseMs: 420,
+    })
+    expect(parsed?.thirdParty).toHaveLength(1)
+    expect(parsed?.resourceBreakdown).toHaveLength(1)
+    expect(parsed?.serverResponseMs).toBe(420)
+  })
+
+  it('accepts an explicit null serverResponseMs', () => {
+    expect(
+      parseSpeedTestPayload({ ...base, serverResponseMs: null })?.serverResponseMs,
+    ).toBeNull()
+  })
+
+  it('rejects the whole payload when thirdParty is present but not an array', () => {
+    expect(parseSpeedTestPayload({ ...base, thirdParty: 'nope' })).toBeUndefined()
+  })
+
+  it('rejects the whole payload when a thirdParty entry is missing required fields', () => {
+    expect(
+      parseSpeedTestPayload({ ...base, thirdParty: [{ name: 'X' }] }),
+    ).toBeUndefined()
+  })
+
+  it('rejects the whole payload when resourceBreakdown is present but not an array', () => {
+    expect(parseSpeedTestPayload({ ...base, resourceBreakdown: 'nope' })).toBeUndefined()
+  })
+
+  it('rejects the whole payload when a resourceBreakdown entry is missing required fields', () => {
+    expect(
+      parseSpeedTestPayload({ ...base, resourceBreakdown: [{ resourceType: 'script' }] }),
+    ).toBeUndefined()
+  })
+
+  it('rejects the whole payload when serverResponseMs is present but not a number', () => {
+    expect(parseSpeedTestPayload({ ...base, serverResponseMs: 'slow' })).toBeUndefined()
   })
 })
 
@@ -476,6 +868,9 @@ function payload(over: Partial<SpeedTestPayload> = {}): SpeedTestPayload {
     field: [],
     fieldSource: 'none',
     opportunities: [],
+    thirdParty: [],
+    resourceBreakdown: [],
+    serverResponseMs: null,
     ...over,
   }
 }
@@ -669,5 +1064,152 @@ describe('formatReportText', () => {
     expect(
       formatReportText(payload({ field: [reading('LCP', 2000)], fieldSource: 'page' })),
     ).toContain('Chrome UX Report')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// formatReportMarkdown — the markdown-specific sibling of formatReportText.
+// ---------------------------------------------------------------------------
+
+describe('formatReportMarkdown', () => {
+  it('leads with a top-level heading, the URL, score and verdict', () => {
+    const text = formatReportMarkdown(
+      payload({
+        field: [reading('LCP', 5200), reading('INP', 150), reading('CLS', 0.03)],
+        fieldSource: 'page',
+      }),
+    )
+    expect(text).toContain('# Website speed test report')
+    expect(text).toContain('**URL:** https://example.com/pricing')
+    expect(text).toContain('**Performance score:** 62 / 100 — Needs improvement')
+    expect(text).toContain('## Verdict')
+    expect(text).toContain('**Core Web Vitals: LCP needs work**')
+  })
+
+  it('renders the Core Web Vitals as a real markdown table, not a padded plain-text block', () => {
+    const text = formatReportMarkdown(
+      payload({
+        field: [reading('LCP', 2000), reading('INP', 120), reading('CLS', 0.02)],
+        fieldSource: 'page',
+      }),
+    )
+    expect(text).toContain(
+      '## Core Web Vitals — real-user data (Chrome UX Report, 28 days, 75th percentile)',
+    )
+    expect(text).toContain('| Metric | Reading | Rating | Good threshold |')
+    expect(text).toContain('| --- | --- | --- | --- |')
+    expect(text).toContain('| LCP — Largest Contentful Paint | 2.0 s | Good | ≤ 2.5 s |')
+    // Not just formatReportText re-labelled: no hand-padded plain-text lines.
+    expect(text).not.toMatch(/^ {2}LCP {2}/m)
+  })
+
+  it('renders supporting lab metrics as their own table', () => {
+    const text = formatReportMarkdown(payload())
+    expect(text).toContain('## Supporting lab metrics — this run')
+    expect(text).toContain('| FCP — First Contentful Paint |')
+  })
+
+  it('numbers opportunities as a real markdown list with bold titles and descriptions', () => {
+    const text = formatReportMarkdown(
+      payload({
+        opportunities: [
+          {
+            id: 'unused-javascript',
+            title: 'Reduce unused JavaScript',
+            savingsMs: 1200,
+            savingsDisplay: '1.2 s',
+            description: 'Ship less script.',
+          },
+        ],
+      }),
+    )
+    expect(text).toContain('## Fix these first')
+    expect(text).toContain('1. **Reduce unused JavaScript** — saves ~1.2 s')
+    expect(text).toContain('   Ship less script.')
+  })
+
+  it('omits the Fix these first section entirely when there are no opportunities', () => {
+    expect(formatReportMarkdown(payload({ opportunities: [] }))).not.toContain(
+      'Fix these first',
+    )
+  })
+
+  it('says so plainly when there is no score at all', () => {
+    expect(formatReportMarkdown(payload({ score: null }))).toContain(
+      '**Performance score:** not returned',
+    )
+  })
+
+  it('covers TTFB, third-party cost and resource breakdown — data formatReportText omits', () => {
+    const text = formatReportMarkdown(
+      payload({
+        serverResponseMs: 420,
+        thirdParty: [
+          {
+            name: 'Google Analytics',
+            mainThreadMs: 320,
+            mainThreadDisplay: '320 ms',
+            transferSize: 45_000,
+            transferDisplay: '44 KB',
+          },
+        ],
+        resourceBreakdown: [
+          {
+            resourceType: 'script',
+            label: 'Script',
+            requestCount: 8,
+            transferSize: 250_000,
+            transferDisplay: '244 KB',
+          },
+        ],
+      }),
+    )
+    expect(text).toContain('## Beyond the Core Web Vitals')
+    expect(text).toContain('**Server response time (TTFB):** 420 ms')
+    expect(text).toContain('### Third-party cost')
+    expect(text).toContain('| Google Analytics | 320 ms | 44 KB |')
+    expect(text).toContain('### Resource breakdown')
+    expect(text).toContain('| Script | 244 KB | 8 |')
+  })
+
+  it('omits the Beyond the Core Web Vitals section entirely when none of the three are present', () => {
+    const text = formatReportMarkdown(
+      payload({ serverResponseMs: null, thirdParty: [], resourceBreakdown: [] }),
+    )
+    expect(text).not.toContain('Beyond the Core Web Vitals')
+  })
+
+  it('escapes a literal pipe in an audit title or third-party name so the table cannot break', () => {
+    const text = formatReportMarkdown(
+      payload({
+        thirdParty: [
+          {
+            name: 'A | B',
+            mainThreadMs: 10,
+            mainThreadDisplay: '10 ms',
+            transferSize: 0,
+            transferDisplay: '0 KB',
+          },
+        ],
+      }),
+    )
+    expect(text).toContain('| A \\| B | 10 ms | 0 KB |')
+  })
+
+  it('includes a generated-at line only when the caller supplies one', () => {
+    const withoutDate = formatReportMarkdown(payload())
+    expect(withoutDate).toContain('Generated by the [Website Speed Test]')
+    expect(withoutDate).not.toContain('Generated Aug')
+
+    const withDate = formatReportMarkdown(payload(), 'Aug 8, 2026, 3:45 PM')
+    expect(withDate).toContain(
+      'Generated Aug 8, 2026, 3:45 PM by the [Website Speed Test]',
+    )
+  })
+
+  it('never calls Date.now() or reads the system clock — deterministic for the same payload', () => {
+    const a = formatReportMarkdown(payload())
+    const b = formatReportMarkdown(payload())
+    expect(a).toBe(b)
   })
 })

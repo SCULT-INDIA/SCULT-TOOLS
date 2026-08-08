@@ -54,10 +54,18 @@
    lighter than the accent-text token, so it cannot measure below the same
    ~5.3:1 floor. */
 :root[data-theme="dark"] .accentGradientFix {
-  background: linear-gradient(
+  /* background-image, NOT the `background:` shorthand — the shorthand resets
+     background-clip to border-box, and this rule's higher specificity would
+     carry that reset over `.text-accent-gradient`'s background-clip: text,
+     painting the gradient as a solid box over the transparent word. The
+     explicit clip re-declarations guard against the same failure if the
+     base rule ever changes. */
+  background-image: linear-gradient(
     100deg,
     var(--color-violet-accent-text) 10%,
     #a68ef2 50%,
     var(--color-violet-accent-text) 90%
   );
+  -webkit-background-clip: text;
+  background-clip: text;
 }

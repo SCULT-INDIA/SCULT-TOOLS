@@ -1,9 +1,13 @@
 'use client'
 
 import { X } from 'lucide-react'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
-const DISMISS_KEY = 'scult-tools:announcement-dismissed:v1'
+// The version suffix is the announcement's identity: bumping it (v1 → v2 for
+// the prompt-library launch) re-surfaces the bar for people who dismissed the
+// previous message, while their new dismissal persists exactly as before.
+const DISMISS_KEY = 'scult-tools:announcement-dismissed:v2'
 
 /**
  * The reference site's yellow promo rail.
@@ -50,7 +54,19 @@ export function AnnouncementBar() {
     >
       <div className="container-site flex min-h-9 items-center justify-center gap-3 py-1.5 pr-8 text-center">
         <p className="text-[13px] leading-5">
-          15 free tools · no login · most run entirely in your browser
+          {/* The count is hardcoded, unlike the server components that read
+              PROMPTS.length: this is a client component in the sitewide
+              header, and importing the registry for one number would ship
+              every prompt body in the shared bundle. Update it when the
+              library grows — same convention as the "15 free tools" line
+              this bar carried before. */}
+          New: 254 free AI prompts —{' '}
+          <Link
+            href="/prompts"
+            className="font-semibold underline decoration-1 underline-offset-2 hover:opacity-70"
+          >
+            browse the library
+          </Link>
         </p>
       </div>
       <button

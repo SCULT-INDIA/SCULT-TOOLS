@@ -65,13 +65,11 @@ export function SecondaryHero() {
                 marginTop: i % 2 === 1 ? '2rem' : undefined,
               }}
             >
-              {/* `tile-icon-accent` dark-mode hook — see the matching comment
-                  in Hero.tsx's CategoryCard: violet-700 is AA on these tile
-                  fills only in light mode; the tokens invert to dark washes
-                  in dark mode and need --color-ink-body instead (documented
-                  as a known follow-up in globals.css). */}
-              <Icon name={c.icon} className="size-7 text-violet-700 tile-icon-accent" />
-              <span className="font-display font-semibold text-[17px] tracking-normal">
+              {/* Tile fills are theme-FIXED light pastels (see the matching
+                  comment in Hero.tsx's CategoryCard) — everything on them is
+                  literal black/violet-700, never adaptive ink. */}
+              <Icon name={c.icon} className="size-7 text-violet-700" />
+              <span className="font-display font-semibold text-[17px] text-black tracking-normal">
                 {c.name}
               </span>
             </div>

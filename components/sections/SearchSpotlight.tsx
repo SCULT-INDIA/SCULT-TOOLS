@@ -1,5 +1,6 @@
 import { Search } from 'lucide-react'
 import Link from 'next/link'
+import { PROMPTS } from '@/lib/prompts/registry'
 import { TOOLS } from '@/lib/tools/registry'
 
 /**
@@ -21,11 +22,12 @@ export function SearchSpotlight() {
             id="search-spotlight"
             className="max-w-[14ch] text-[32px] leading-[1.15] tracking-[-1px] md:text-[42px]"
           >
-            Find any tool in seconds
+            Find any tool or prompt in seconds
           </h2>
           <p className="mt-4 max-w-[46ch] text-[16px] text-ink-muted leading-7">
             Search by name or by what you're trying to do — "compress", "invoice",
-            "schema" all work. Results appear before you finish typing.
+            "schema" all work, and prompts show up alongside the tools. Results appear
+            before you finish typing.
           </p>
           {/* text-ink-muted, not text-violet-700: violet-700 is unchanged
               across themes and measures ~2.14:1 on dark-mode `bg-ice`
@@ -55,7 +57,11 @@ export function SearchSpotlight() {
               className="field flex items-center gap-3 rounded-pill py-3.5 pl-5 text-[17px] text-ink-subtle no-underline"
             >
               <Search className="size-5 shrink-0" aria-hidden="true" />
-              Search {TOOLS.length} free tools…
+              {/* Mirrors the real SearchBox's large placeholder ("Search N
+                  free tools & N prompts…") — this mock claiming a
+                  tools-only search while the live widget beside it in the
+                  header searches both would be a visible contradiction. */}
+              Search {TOOLS.length} free tools & {PROMPTS.length} prompts…
             </Link>
             <p className="hint mt-3">
               The real search box lives at the top of every page — press{' '}

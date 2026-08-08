@@ -45,6 +45,32 @@ export interface Opportunity {
   readonly description: string
 }
 
+/**
+ * One third party's cost on this load — Lighthouse's `third-parties-insight`
+ * audit, trimmed to the one figure worth ranking on. See `extractThirdParty`
+ * for why that figure is main-thread time, and for the audit's former id.
+ */
+export interface ThirdPartyEntry {
+  readonly name: string
+  readonly mainThreadMs: number
+  readonly mainThreadDisplay: string
+  readonly transferSize: number
+  readonly transferDisplay: string
+}
+
+/**
+ * One resource-type row from Lighthouse's `resource-summary` audit (Script,
+ * Image, Stylesheet, Font, Document, Other — never the `third-party`/`total`
+ * aggregate rows, which are overlaps of the others, not distinct categories).
+ */
+export interface ResourceBreakdownEntry {
+  readonly resourceType: string
+  readonly label: string
+  readonly requestCount: number
+  readonly transferSize: number
+  readonly transferDisplay: string
+}
+
 /** The compact payload our Route Handler ships to the client. */
 export interface SpeedTestPayload {
   readonly finalUrl: string
@@ -56,6 +82,12 @@ export interface SpeedTestPayload {
   readonly field: readonly MetricReading[]
   readonly fieldSource: FieldSource
   readonly opportunities: readonly Opportunity[]
+  /** Top third parties by main-thread cost; empty when none had measurable cost. */
+  readonly thirdParty: readonly ThirdPartyEntry[]
+  /** Transfer size per resource type; empty when the audit did not run. */
+  readonly resourceBreakdown: readonly ResourceBreakdownEntry[]
+  /** Backend time-to-first-byte in ms — a diagnostic, not a Core Web Vital. */
+  readonly serverResponseMs: number | null
 }
 
 export type SpeedTestErrorCode =
@@ -65,6 +97,7 @@ export type SpeedTestErrorCode =
   | 'quota'
   | 'timeout'
   | 'upstream'
+  | 'rate-limited'
 
 export interface SpeedTestApiError {
   readonly code: SpeedTestErrorCode
@@ -157,6 +190,28 @@ export function formatMetricValue(id: MetricId, value: number): string {
 /** Estimated-savings figures: sub-second in ms, otherwise seconds to 1 decimal. */
 export function formatSavings(ms: number): string {
   if (!Number.isFinite(ms) || ms <= 0) return ''
+  return ms >= 1000 ? `${(ms / 1000).toFixed(1)} s` : `${Math.round(ms)} ms`
+}
+
+/**
+ * Byte counts (third-party transfer size, resource-summary rows) as whole KB.
+ * PSI reports these in bytes; nobody reads "45000 B" as a page-weight figure.
+ */
+export function formatTransferSize(bytes: number): string {
+  if (!Number.isFinite(bytes) || bytes <= 0) return '0 KB'
+  return `${Math.round(bytes / 1024)} KB`
+}
+
+/**
+ * Server response time (TTFB), ms below a second and seconds above — the same
+ * ms/s convention `formatMetricValue` uses for TBT/INP-style readings. Kept
+ * separate rather than folded into `formatMetricValue` because TTFB is not a
+ * `MetricId`: it has no Google-published Good/Poor band, so it never goes
+ * through `classifyMetric`, and 0 ms is a real (excellent) reading rather than
+ * "nothing to show" — unlike `formatSavings`, which treats 0 as absent.
+ */
+export function formatServerResponseTime(ms: number): string {
+  if (!Number.isFinite(ms) || ms < 0) return '—'
   return ms >= 1000 ? `${(ms / 1000).toFixed(1)} s` : `${Math.round(ms)} ms`
 }
 
@@ -413,6 +468,94 @@ function extractOpportunities(audits: UnknownRecord): Opportunity[] {
   return out.sort((a, b) => b.savingsMs - a.savingsMs).slice(0, 5)
 }
 
+/** Aggregate rows in `resource-summary` that are not a distinct resource type. */
+const RESOURCE_SUMMARY_AGGREGATES = new Set(['third-party', 'total'])
+
+/**
+ * Third-party cost — audit id `third-parties-insight`.
+ *
+ * Lighthouse renamed and reshaped this audit as part of Google's "Insights"
+ * rollout: the classic `third-party-summary` id (and its `blockingTime`
+ * field) is gone from current PSI v5 responses, confirmed against a live run
+ * while building this — `entity` now arrives as a plain string rather than
+ * `{ text: string }`. Both entity shapes are read below so a future rename
+ * back, or a response from an older Lighthouse version, degrades instead of
+ * silently dropping every entity.
+ *
+ * Ranked by `mainThreadTime` — the entity's total measured main-thread cost
+ * (parse + compile + execute + layout) — because it is the only per-entity
+ * cost figure this audit reports; there is no separate blocking-time field to
+ * choose over it. Capped at five, same as `extractOpportunities`, and
+ * entities with no measurable cost (seen live: trackers whose only activity
+ * was a fire-and-forget beacon request) are dropped rather than shown as 0.
+ */
+function extractThirdParty(audits: UnknownRecord): ThirdPartyEntry[] {
+  const items = asRecord(asRecord(audits['third-parties-insight'])?.details)?.items
+  if (!Array.isArray(items)) return []
+  const out: ThirdPartyEntry[] = []
+  for (const item of items) {
+    const row = asRecord(item)
+    if (!row) continue
+    const name = asString(row.entity) ?? asString(asRecord(row.entity)?.text)
+    const mainThreadMs = asFiniteNumber(row.mainThreadTime)
+    if (!name || mainThreadMs === undefined || mainThreadMs <= 0) continue
+    const transferSize = asFiniteNumber(row.transferSize) ?? 0
+    out.push({
+      name,
+      mainThreadMs: Math.round(mainThreadMs),
+      mainThreadDisplay: formatSavings(mainThreadMs),
+      transferSize: Math.round(transferSize),
+      transferDisplay: formatTransferSize(transferSize),
+    })
+  }
+  return out.sort((a, b) => b.mainThreadMs - a.mainThreadMs).slice(0, 5)
+}
+
+/**
+ * Resource breakdown by type — audit id `resource-summary`. The `third-party`
+ * and `total` rows are aggregates that overlap the others (a third-party
+ * script is also counted under `script`), not a distinct category, so they
+ * are excluded rather than shown as extra rows. Rows with zero requests
+ * (a resource type the page simply does not use) are dropped so the list
+ * only shows categories that actually apply — no empty "Fonts: 0 KB" line.
+ * Sorted by transfer size, largest first, so the heaviest category leads.
+ */
+function extractResourceBreakdown(audits: UnknownRecord): ResourceBreakdownEntry[] {
+  const items = asRecord(asRecord(audits['resource-summary'])?.details)?.items
+  if (!Array.isArray(items)) return []
+  const out: ResourceBreakdownEntry[] = []
+  for (const item of items) {
+    const row = asRecord(item)
+    if (!row) continue
+    const resourceType = asString(row.resourceType)
+    const label = asString(row.label)
+    if (!resourceType || !label || RESOURCE_SUMMARY_AGGREGATES.has(resourceType)) continue
+    const requestCount = asFiniteNumber(row.requestCount) ?? 0
+    if (requestCount <= 0) continue
+    const transferSize = asFiniteNumber(row.transferSize) ?? 0
+    out.push({
+      resourceType,
+      label,
+      requestCount: Math.round(requestCount),
+      transferSize: Math.round(transferSize),
+      transferDisplay: formatTransferSize(transferSize),
+    })
+  }
+  return out.sort((a, b) => b.transferSize - a.transferSize)
+}
+
+/**
+ * Server response time (TTFB) — audit id `server-response-time`, a single
+ * `numericValue` in ms. Not a `MetricId`: it has no Core Web Vital threshold,
+ * it measures backend latency rather than anything Lighthouse renders, so it
+ * is surfaced as one more diagnostic reading rather than folded into the
+ * classified metric set.
+ */
+function extractServerResponseTime(audits: UnknownRecord): number | null {
+  const value = asFiniteNumber(asRecord(audits['server-response-time'])?.numericValue)
+  return value !== undefined && value >= 0 ? Math.round(value) : null
+}
+
 /**
  * Trims a raw PSI v5 response (often 2-6 MB of Lighthouse JSON) to the compact
  * payload the client renders. Every read is defensive: a missing or malformed
@@ -480,6 +623,9 @@ export function parsePsiResponse(raw: unknown, strategy: Strategy): ParsedSpeedT
       field,
       fieldSource,
       opportunities: audits ? extractOpportunities(audits) : [],
+      thirdParty: audits ? extractThirdParty(audits) : [],
+      resourceBreakdown: audits ? extractResourceBreakdown(audits) : [],
+      serverResponseMs: audits ? extractServerResponseTime(audits) : null,
     },
   }
 }
@@ -497,6 +643,7 @@ const ERROR_CODES: readonly SpeedTestErrorCode[] = [
   'quota',
   'timeout',
   'upstream',
+  'rate-limited',
 ]
 
 function isMetricId(v: unknown): v is MetricId {
@@ -524,6 +671,70 @@ function parseReadings(raw: unknown): MetricReading[] | undefined {
     const reading = parseReading(item)
     if (!reading) return undefined
     out.push(reading)
+  }
+  return out
+}
+
+function parseThirdPartyEntry(raw: unknown): ThirdPartyEntry | undefined {
+  const r = asRecord(raw)
+  if (!r) return undefined
+  const name = asString(r.name)
+  const mainThreadMs = asFiniteNumber(r.mainThreadMs)
+  const mainThreadDisplay = asString(r.mainThreadDisplay)
+  const transferSize = asFiniteNumber(r.transferSize)
+  const transferDisplay = asString(r.transferDisplay)
+  if (
+    !name ||
+    mainThreadMs === undefined ||
+    !mainThreadDisplay ||
+    transferSize === undefined ||
+    !transferDisplay
+  ) {
+    return undefined
+  }
+  return { name, mainThreadMs, mainThreadDisplay, transferSize, transferDisplay }
+}
+
+function parseThirdPartyEntries(raw: unknown): ThirdPartyEntry[] | undefined {
+  if (!Array.isArray(raw)) return undefined
+  const out: ThirdPartyEntry[] = []
+  for (const item of raw) {
+    const entry = parseThirdPartyEntry(item)
+    if (!entry) return undefined
+    out.push(entry)
+  }
+  return out
+}
+
+function parseResourceBreakdownEntry(raw: unknown): ResourceBreakdownEntry | undefined {
+  const r = asRecord(raw)
+  if (!r) return undefined
+  const resourceType = asString(r.resourceType)
+  const label = asString(r.label)
+  const requestCount = asFiniteNumber(r.requestCount)
+  const transferSize = asFiniteNumber(r.transferSize)
+  const transferDisplay = asString(r.transferDisplay)
+  if (
+    !resourceType ||
+    !label ||
+    requestCount === undefined ||
+    transferSize === undefined ||
+    !transferDisplay
+  ) {
+    return undefined
+  }
+  return { resourceType, label, requestCount, transferSize, transferDisplay }
+}
+
+function parseResourceBreakdownEntries(
+  raw: unknown,
+): ResourceBreakdownEntry[] | undefined {
+  if (!Array.isArray(raw)) return undefined
+  const out: ResourceBreakdownEntry[] = []
+  for (const item of raw) {
+    const entry = parseResourceBreakdownEntry(item)
+    if (!entry) return undefined
+    out.push(entry)
   }
   return out
 }
@@ -565,6 +776,28 @@ export function parseSpeedTestPayload(raw: unknown): SpeedTestPayload | undefine
       description: typeof o.description === 'string' ? o.description : '',
     })
   }
+
+  // The three fields below are newer than the other ones above them, and this
+  // API's responses are CDN- and data-cached for up to 6 hours (see the route
+  // handler) — a client can load this file right after a deploy and still get
+  // served a response body cached from before it, one that predates these
+  // keys entirely. An absent key defaults to empty/null exactly as a real
+  // "nothing to report" run would; only a key that is *present but malformed*
+  // invalidates the whole payload, same as every other field above.
+  const thirdParty =
+    r.thirdParty === undefined ? [] : parseThirdPartyEntries(r.thirdParty)
+  if (!thirdParty) return undefined
+  const resourceBreakdown =
+    r.resourceBreakdown === undefined
+      ? []
+      : parseResourceBreakdownEntries(r.resourceBreakdown)
+  if (!resourceBreakdown) return undefined
+  const serverResponseMs =
+    r.serverResponseMs === undefined || r.serverResponseMs === null
+      ? null
+      : asFiniteNumber(r.serverResponseMs)
+  if (serverResponseMs === undefined) return undefined
+
   return {
     finalUrl: typeof r.finalUrl === 'string' ? r.finalUrl : '',
     strategy: r.strategy,
@@ -573,6 +806,9 @@ export function parseSpeedTestPayload(raw: unknown): SpeedTestPayload | undefine
     field,
     fieldSource,
     opportunities,
+    thirdParty,
+    resourceBreakdown,
+    serverResponseMs,
   }
 }
 
@@ -833,6 +1069,150 @@ export function formatReportText(payload: SpeedTestPayload): string {
     '',
     'Measured with Google Lighthouse via the PageSpeed Insights API.',
     'Run your own: https://tools.scult.in/seo/website-speed-test',
+  )
+  return lines.join('\n')
+}
+
+// ---------------------------------------------------------------------------
+// Markdown export
+// ---------------------------------------------------------------------------
+
+/** A markdown table header a literal pipe or newline in upstream data (an
+ * audit title, a third-party entity name) would otherwise corrupt. */
+function escapeMarkdownCell(text: string): string {
+  return text.replace(/\|/g, '\\|').replace(/\r?\n/g, ' ')
+}
+
+const METRIC_TABLE_HEADER =
+  '| Metric | Reading | Rating | Good threshold |\n| --- | --- | --- | --- |'
+
+function markdownMetricRow(reading: MetricReading): string {
+  return `| ${reading.id} — ${escapeMarkdownCell(reading.label)} | ${reading.display} | ${labelForCategory(
+    reading.category,
+  )} | ${describeThresholds(reading.id).good} |`
+}
+
+/**
+ * The whole report as clean, valid Markdown — a distinct sibling to
+ * `formatReportText`, not that function wrapped in a code fence. Every
+ * metric list becomes a real table (Metric / Reading / Rating / Good
+ * threshold), and this version additionally covers the three readings
+ * `formatReportText` leaves out for brevity (TTFB, third-party cost,
+ * resource breakdown) — markdown's tables make room for them where a
+ * clipboard-friendly plain-text block did not.
+ *
+ * `generatedAt`, when given, is a caller-supplied display string — e.g. from
+ * `new Date().toLocaleString()` read at the moment of the download click.
+ * This function never calls `Date.now()`/`new Date()` itself, so it stays a
+ * pure, deterministic reduction over `payload` like every other formatter
+ * here; omit the argument entirely for a footer with no timestamp at all.
+ */
+export function formatReportMarkdown(
+  payload: SpeedTestPayload,
+  generatedAt?: string,
+): string {
+  const verdict = summariseVerdict(payload)
+  const { primary, supporting, usingField } = selectVitals(payload)
+  const lines: string[] = [
+    '# Website speed test report',
+    '',
+    `**URL:** ${payload.finalUrl === '' ? '(url unknown)' : payload.finalUrl}`,
+    `**Device:** ${payload.strategy === 'mobile' ? 'Mobile' : 'Desktop'}`,
+    payload.score === null
+      ? '**Performance score:** not returned'
+      : `**Performance score:** ${payload.score} / 100 — ${labelForScore(payload.score)}`,
+    '',
+    '## Verdict',
+    '',
+    `**${verdict.headline}**`,
+    '',
+    verdict.detail,
+  ]
+
+  if (primary.length > 0) {
+    lines.push(
+      '',
+      usingField
+        ? '## Core Web Vitals — real-user data (Chrome UX Report, 28 days, 75th percentile)'
+        : '## Core Web Vitals — lab data from this run (INP needs real users, so it is absent)',
+      '',
+      METRIC_TABLE_HEADER,
+      ...primary.map(markdownMetricRow),
+    )
+  }
+
+  if (supporting.length > 0) {
+    lines.push(
+      '',
+      '## Supporting lab metrics — this run',
+      '',
+      METRIC_TABLE_HEADER,
+      ...supporting.map(markdownMetricRow),
+    )
+  }
+
+  if (payload.opportunities.length > 0) {
+    lines.push(
+      '',
+      '## Fix these first',
+      '',
+      'Sorted by estimated time saved, largest first.',
+      '',
+    )
+    for (const [index, o] of payload.opportunities.entries()) {
+      const saving = o.savingsDisplay === '' ? '' : ` — saves ~${o.savingsDisplay}`
+      lines.push(`${index + 1}. **${escapeMarkdownCell(o.title)}**${saving}`)
+      if (o.description !== '') lines.push(`   ${escapeMarkdownCell(o.description)}`)
+    }
+  }
+
+  const hasBeyond =
+    payload.serverResponseMs !== null ||
+    payload.thirdParty.length > 0 ||
+    payload.resourceBreakdown.length > 0
+  if (hasBeyond) {
+    lines.push('', '## Beyond the Core Web Vitals')
+    if (payload.serverResponseMs !== null) {
+      lines.push(
+        '',
+        `**Server response time (TTFB):** ${formatServerResponseTime(payload.serverResponseMs)}`,
+      )
+    }
+    if (payload.thirdParty.length > 0) {
+      lines.push(
+        '',
+        '### Third-party cost',
+        '',
+        '| Third party | Main-thread time | Transfer size |',
+        '| --- | --- | --- |',
+        ...payload.thirdParty.map(
+          (t) =>
+            `| ${escapeMarkdownCell(t.name)} | ${t.mainThreadDisplay} | ${t.transferDisplay} |`,
+        ),
+      )
+    }
+    if (payload.resourceBreakdown.length > 0) {
+      lines.push(
+        '',
+        '### Resource breakdown',
+        '',
+        '| Resource type | Transfer size | Requests |',
+        '| --- | --- | --- |',
+        ...payload.resourceBreakdown.map(
+          (r) =>
+            `| ${escapeMarkdownCell(r.label)} | ${r.transferDisplay} | ${r.requestCount} |`,
+        ),
+      )
+    }
+  }
+
+  lines.push(
+    '',
+    '---',
+    '',
+    generatedAt === undefined
+      ? 'Generated by the [Website Speed Test](https://tools.scult.in/seo/website-speed-test) tool at tools.scult.in — measured with Google Lighthouse via the PageSpeed Insights API.'
+      : `Generated ${generatedAt} by the [Website Speed Test](https://tools.scult.in/seo/website-speed-test) tool at tools.scult.in — measured with Google Lighthouse via the PageSpeed Insights API.`,
   )
   return lines.join('\n')
 }

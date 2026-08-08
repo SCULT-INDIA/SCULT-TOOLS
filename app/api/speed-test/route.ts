@@ -8,6 +8,12 @@
  *   runs, and the raw PSI response is megabytes of Lighthouse JSON that gets
  *   trimmed here to the compact payload the UI renders.
  *
+ *   The repeat-test cache is our own (see result-cache.ts), not Next's fetch
+ *   data cache — PSI responses run 2-6 MB and Next's data cache silently
+ *   refuses anything over 2MB, which used to make every real test both leak
+ *   the API key into server logs and occasionally crash the request. See
+ *   result-cache.ts's docblock for the full story.
+ *
  * Inputs   `url` (the page to test), `strategy` (mobile | desktop).
  * Outputs  200 with a `SpeedTestPayload`, or a clean JSON error
  *          `{ code, error }` — never a raw upstream error body.
@@ -24,6 +30,7 @@
 
 import { lookup } from 'node:dns/promises'
 import { NextResponse } from 'next/server'
+import { checkRateLimit, clientIpFromHeaders } from '@/lib/rate-limit'
 import {
   isIpLiteralHost,
   isPrivateAddress,
@@ -32,6 +39,7 @@ import {
   type Strategy,
   validateTestUrl,
 } from '@/lib/tools/website-speed-test/logic'
+import { createResultCache } from '@/lib/tools/website-speed-test/result-cache'
 
 /** Lighthouse alone routinely takes 15-40s; give PSI a minute before giving up. */
 export const maxDuration = 60
@@ -42,6 +50,15 @@ const PSI_TIMEOUT_MS = 60_000
 const MAX_RESPONSE_BYTES = 15_000_000
 /** 6 hours — a page's performance profile does not change minute to minute. */
 const REVALIDATE_SECONDS = 21_600
+
+/** Module-scoped: lives for this warm instance's lifetime, same as the rate limiter. */
+const resultCache = createResultCache()
+
+/** A real Lighthouse run costs Google's free quota and ~15-40s of our own
+ * function time — 6 runs/minute per IP is generous for a human clicking
+ * "test again" and stingy for a script. See lib/rate-limit.ts. */
+const RATE_LIMIT_MAX = 6
+const RATE_LIMIT_WINDOW_MS = 60_000
 
 function errorJson(
   code: SpeedTestErrorCode,
@@ -61,6 +78,22 @@ function upstreamMessage(body: unknown): string {
 }
 
 export async function GET(request: Request): Promise<NextResponse> {
+  const clientIp = clientIpFromHeaders(request.headers)
+  const rateLimit = checkRateLimit(
+    `speed-test:${clientIp}`,
+    RATE_LIMIT_MAX,
+    RATE_LIMIT_WINDOW_MS,
+  )
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      {
+        code: 'rate-limited' satisfies SpeedTestErrorCode,
+        error: `Too many tests from this connection — wait ${rateLimit.retryAfterSeconds}s and try again.`,
+      },
+      { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfterSeconds) } },
+    )
+  }
+
   const { searchParams } = new URL(request.url)
 
   const rawStrategy = searchParams.get('strategy') ?? 'mobile'
@@ -98,6 +131,15 @@ export async function GET(request: Request): Promise<NextResponse> {
     }
   }
 
+  const cached = resultCache.get(targetUrl, strategy)
+  if (cached !== undefined) {
+    return NextResponse.json(cached, {
+      headers: {
+        'Cache-Control': `public, s-maxage=${REVALIDATE_SECONDS}, stale-while-revalidate=3600`,
+      },
+    })
+  }
+
   const psiUrl = new URL(PSI_ENDPOINT)
   psiUrl.searchParams.set('url', targetUrl)
   psiUrl.searchParams.set('strategy', strategy)
@@ -117,9 +159,11 @@ export async function GET(request: Request): Promise<NextResponse> {
       // googleapis.com never redirects this endpoint; anything else is wrong.
       redirect: 'error',
       signal: AbortSignal.timeout(PSI_TIMEOUT_MS),
-      // Repeat tests of the same URL+strategy within 6h are served from the
-      // data cache instead of burning a fresh Lighthouse run.
-      next: { revalidate: REVALIDATE_SECONDS },
+      // Never let Next's fetch data cache touch this response: PSI bodies run
+      // 2-6 MB, past the cache's 2MB ceiling, so asking it to cache this only
+      // produced log-spammed failures (API key included) and crashes. Repeat
+      // tests are served from resultCache below instead.
+      cache: 'no-store',
     })
   } catch (err) {
     if (err instanceof DOMException && err.name === 'TimeoutError') {
@@ -199,9 +243,11 @@ export async function GET(request: Request): Promise<NextResponse> {
     )
   }
 
+  resultCache.set(targetUrl, strategy, parsed.payload, REVALIDATE_SECONDS * 1000)
+
   return NextResponse.json(parsed.payload, {
     headers: {
-      // Let the CDN reuse a finished report too — same window as the data cache.
+      // Let the CDN reuse a finished report too — same window as resultCache.
       'Cache-Control': `public, s-maxage=${REVALIDATE_SECONDS}, stale-while-revalidate=3600`,
     },
   })

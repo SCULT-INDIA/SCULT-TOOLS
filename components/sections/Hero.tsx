@@ -4,6 +4,7 @@ import Link from 'next/link'
 import scultMark from '@/app/icon.png'
 import { SearchBox } from '@/components/layout/SearchBox'
 import { Icon } from '@/components/ui/Icon'
+import { PROMPTS } from '@/lib/prompts/registry'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { TOOLS } from '@/lib/tools/registry'
 import styles from './HeroDarkModeFixes.module.css'
@@ -43,7 +44,7 @@ export function Hero() {
     <section aria-labelledby="hero-heading" className="pt-6 pb-8 text-center md:pt-8">
       <div className="container-site">
         <p className="eyebrow">
-          {TOOLS.length} tools · {CATEGORIES.length} categories · zero signups
+          {TOOLS.length} tools · {PROMPTS.length} AI prompts · zero signups
         </p>
 
         <h1
@@ -70,6 +71,9 @@ export function Hero() {
         <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
           <Link href="/all" className={`btn-brutal ${styles.ctaContrastFix}`}>
             EXPLORE ALL {TOOLS.length} TOOLS
+          </Link>
+          <Link href="/prompts" className="btn-brutal btn-violet">
+            BROWSE {PROMPTS.length} PROMPTS
           </Link>
           <Link href="/geo/ai-visibility-checker" className="btn-brutal btn-white">
             CHECK AI VISIBILITY
@@ -276,15 +280,12 @@ function CategoryCard({ category }: { category: (typeof CATEGORIES)[number] }) {
       className="flex flex-col items-center gap-2.5 rounded-2xl border border-line-grey bg-white px-5 py-4 shadow-card transition-transform hover:z-10 hover:scale-105"
       style={{ background: `var(--color-tile-${category.tile})` }}
     >
-      {/* `tile-icon-accent` is a dark-mode hook, not a styling class of its
-          own: violet-700 is required for AA contrast on the LIGHT pastel
-          tile fills (see the token comment in globals.css), but the four
-          --color-tile-* tokens flip to dark washes in dark mode and
-          violet-700 against them drops to ~1.9:1 — the exact "known
-          follow-up" globals.css already documents as needing a
-          component-level swap to --color-ink-body in dark mode. */}
-      <Icon name={category.icon} className="size-7 text-violet-700 tile-icon-accent" />
-      <span className="whitespace-nowrap font-display font-semibold text-[15px] text-ink tracking-normal">
+      {/* The tile fills are theme-FIXED light pastels (they are not in the
+          dark-mode token override block), so everything on them must be
+          literal black/violet-700, never adaptive ink — text-ink flips to
+          near-white in dark mode and vanishes against the light pastel. */}
+      <Icon name={category.icon} className="size-7 text-violet-700" />
+      <span className="whitespace-nowrap font-display font-semibold text-[15px] text-black tracking-normal">
         {category.shortName}
       </span>
     </Link>

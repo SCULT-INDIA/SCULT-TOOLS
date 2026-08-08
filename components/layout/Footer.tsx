@@ -35,10 +35,10 @@ import { LiveUptime } from './LiveUptime'
 /** Verifiable claims, standing in for the reference's third-party badges. */
 const BADGES = [
   { Icon: ShieldCheck, title: 'WCAG 2.2 AA', sub: 'contrast verified' },
-  // Count verified by `npx vitest run` after the tool redesign (19 files).
-  // Update it when the suite grows — a stale number here is a checkable claim
-  // that has quietly become false.
-  { Icon: Sparkles, title: '628 tests', sub: 'passing in CI' },
+  // Count verified by `npx vitest run` after the prompt-library search work
+  // (24 files, 698 tests). Update it when the suite grows — a stale number
+  // here is a checkable claim that has quietly become false.
+  { Icon: Sparkles, title: '698 tests', sub: 'passing in CI' },
 ]
 
 const SOCIALS = [
@@ -104,11 +104,14 @@ export function Footer() {
       {/* 1. Dual closing CTA cards. `relative z-10` is load-bearing — see Dome. */}
       <section aria-label="Get started" className="container-site relative z-10 pt-16">
         <div className="grid gap-6 md:grid-cols-2 md:gap-8">
+          {/* bg-cta / bg-green are theme-fixed brand fills — text on them must
+              be literal black, not adaptive ink (which flips near-white in
+              dark mode and vanishes against the light fill). */}
           <div className="rounded-panel bg-cta px-8 py-12 text-center md:px-10 md:py-14">
-            <h2 className="mx-auto max-w-[13ch] text-[34px] leading-[1.05] tracking-[-1px] md:text-[44px]">
+            <h2 className="mx-auto max-w-[13ch] text-[34px] text-black leading-[1.05] tracking-[-1px] md:text-[44px]">
               Check your AI visibility
             </h2>
-            <p className="mx-auto mt-4 max-w-[34ch] text-[15px] text-ink/75 leading-6">
+            <p className="mx-auto mt-4 max-w-[34ch] text-[15px] text-black/75 leading-6">
               One URL in, a 0–100 score and the exact fixes out.
             </p>
             <Link href="/geo/ai-visibility-checker" className="btn-brutal btn-white mt-7">
@@ -117,10 +120,10 @@ export function Footer() {
           </div>
 
           <div className="rounded-panel bg-green px-8 py-12 text-center md:px-10 md:py-14">
-            <h2 className="mx-auto max-w-[13ch] text-[34px] leading-[1.05] tracking-[-1px] md:text-[44px]">
+            <h2 className="mx-auto max-w-[13ch] text-[34px] text-black leading-[1.05] tracking-[-1px] md:text-[44px]">
               Browse all the tools
             </h2>
-            <p className="mt-4 text-[15px] text-ink/75 leading-6">
+            <p className="mt-4 text-[15px] text-black/75 leading-6">
               {TOOLS.length} tools across six categories
               <br />
               {clientSideCount} of them never send your data anywhere
@@ -174,14 +177,17 @@ export function Footer() {
 
           <div className="flex flex-wrap justify-center gap-3 md:justify-end">
             {BADGES.map(({ Icon, title, sub }) => (
+              // Literal black text: the badge chip is fixed white in both
+              // themes, so adaptive ink (near-white in dark mode) vanishes
+              // against it.
               <div
                 key={title}
-                className="flex items-center gap-2 rounded-sm bg-white px-3.5 py-2.5 text-ink"
+                className="flex items-center gap-2 rounded-sm bg-white px-3.5 py-2.5 text-black"
               >
                 <Icon className="size-5 shrink-0 text-violet-700" aria-hidden="true" />
                 <span className="leading-tight">
                   <span className="block font-bold text-[12px]">{title}</span>
-                  <span className="block text-[11px] text-ink-subtle">{sub}</span>
+                  <span className="block text-[11px] text-black/60">{sub}</span>
                 </span>
               </div>
             ))}
@@ -195,6 +201,7 @@ export function Footer() {
               {[
                 { href: '/', label: 'Home' },
                 { href: '/all', label: 'All tools' },
+                { href: '/prompts', label: 'Prompt library' },
                 { href: '/about', label: 'About' },
                 { href: '/privacy', label: 'Privacy' },
               ].map((item) => (
@@ -278,7 +285,7 @@ export function Footer() {
         <div className="container-site flex justify-center pb-10">
           <a
             href={parentLink('/', 'footer-byline')}
-            className="inline-flex items-center gap-2 rounded-pill bg-white px-8 py-4 text-[15px] text-ink transition-transform hover:scale-[1.02]"
+            className="inline-flex items-center gap-2 rounded-pill bg-white px-8 py-4 text-[15px] text-black transition-transform hover:scale-[1.02]"
           >
             <span className="underline decoration-1 underline-offset-4">
               Made with{' '}

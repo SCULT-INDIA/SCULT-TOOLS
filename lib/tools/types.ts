@@ -114,4 +114,8 @@ export const RESERVED_SLUGS: readonly string[] = [
   'robots',
   'opengraph-image',
   '_next',
+  // The Prompt Library (lib/prompts/) — a deliberately separate registry,
+  // see docs/research/prompt-library.md §6. Reserved here so a future tool
+  // or category can never collide with /prompts.
+  'prompts',
 ]

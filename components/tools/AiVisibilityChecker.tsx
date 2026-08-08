@@ -2,21 +2,25 @@
 
 // TriangleAlert, not AlertTriangle — this lucide version dropped the old alias.
 import {
+  Building2,
   CircleCheck,
   CircleX,
+  Download,
   FileJson,
   ListChecks,
+  Minus,
   Radar,
   ShieldAlert,
   ShieldCheck,
   Sparkles,
+  TrendingDown,
+  TrendingUp,
   TriangleAlert,
 } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { CopyButton } from '@/components/tools/ResultPanel'
 import {
   ErrorDetail,
-  ScoreRing,
   SegmentButton,
   StatCard,
   StatusBar,
@@ -25,13 +29,18 @@ import {
   ToolbarGroup,
   ToolToolbar,
 } from '@/components/tools/workspace'
+import { BrandIcon, brandForCompany } from '@/components/ui/BrandIcon'
+import { downloadTextFile, slugifyUrlForFilename } from '@/lib/download-file'
 import {
   AI_BOTS,
   type ApiError,
   type BandLabel,
   type BotAccess,
+  type BotSpec,
+  type CheckId,
   type CheckResult,
   type CheckStatus,
+  formatReportMarkdown,
   formatReportText,
   isApiError,
   isVisibilityReport,
@@ -89,6 +98,74 @@ import {
 
 const LAST_URL_KEY = 'scult-tools:ai-visibility-checker:v1'
 
+/**
+ * "Compare to your last check" storage — deliberately separate from
+ * LAST_URL_KEY, which only ever remembers the one most recent URL typed.
+ * This is a small per-origin history (one entry per origin, last result
+ * only, never a full timeline) so re-checking a domain you've checked
+ * before can show an honest delta: your own device's memory of your own
+ * past run, not a fabricated trend. Keyed by `new URL(x).origin` rather
+ * than the full URL so https://example.com/ and https://example.com/about
+ * count as the same site sharing one score history.
+ */
+const HISTORY_KEY = 'scult-tools:ai-visibility-checker:history:v1'
+
+/** One origin's remembered result — score plus when it was recorded. */
+type HistoryEntry = { readonly score: number; readonly checkedAt: string }
+
+/** The comparison rendered next to the score: how many points moved, and
+ * when the prior check that set the baseline happened. */
+type ScoreDelta = { readonly deltaPoints: number; readonly previousCheckedAt: string }
+
+/** Best-effort read of one origin's remembered result. Malformed or missing
+ * storage is not an error here — it just means no comparison renders. */
+function readHistoryEntry(origin: string): HistoryEntry | undefined {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY)
+    if (raw === null) return undefined
+    const parsed: unknown = JSON.parse(raw)
+    if (typeof parsed !== 'object' || parsed === null) return undefined
+    const entry = (parsed as Record<string, unknown>)[origin]
+    if (
+      typeof entry === 'object' &&
+      entry !== null &&
+      typeof (entry as HistoryEntry).score === 'number' &&
+      typeof (entry as HistoryEntry).checkedAt === 'string'
+    ) {
+      return entry as HistoryEntry
+    }
+    return undefined
+  } catch {
+    return undefined
+  }
+}
+
+/** Overwrites one origin's entry with the latest result. Only the last
+ * result per origin is kept — this is "last time", not a history feature. */
+function writeHistoryEntry(origin: string, entry: HistoryEntry): void {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY)
+    const all: Record<string, HistoryEntry> =
+      raw !== null ? (JSON.parse(raw) as Record<string, HistoryEntry>) : {}
+    all[origin] = entry
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(all))
+  } catch {
+    // Private mode or storage full — the comparison just won't be there
+    // next time. Never breaks the run itself.
+  }
+}
+
+/** "Aug 3", or "Aug 3, 2025" when the remembered check is from a different
+ * calendar year — dropping the year for anything recent reads naturally,
+ * but silently calling a year-old check "recent" would misrepresent it. */
+function formatCheckedDate(iso: string): string {
+  const then = new Date(iso)
+  const now = new Date()
+  const opts: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' }
+  if (then.getFullYear() !== now.getFullYear()) opts.year = 'numeric'
+  return new Intl.DateTimeFormat('en-US', opts).format(then)
+}
+
 /** Seeded so the first paint has a real, checkable URL rather than an empty box. */
 const SAMPLE_URL = 'https://scult.in'
 
@@ -116,20 +193,124 @@ const STATUS_LABEL: Record<CheckStatus, string> = {
 }
 
 /**
- * Band tiles are light pastels carrying black text — never the reverse. The
- * band word is always present, so the tile is reinforcement, not the signal.
+ * Hero styling — the report's one dominant panel. It is a solid violet-900
+ * fill with white text, not another light pastel tile: the same
+ * theme-invariant dark-block idiom the site footer already uses (see
+ * `Footer.tsx`'s `bg-violet-900 text-white`), so it needs no dark-mode
+ * override of its own and reads as a genuinely different KIND of surface
+ * from every card-flat/card-modern box below it, not just a bigger one.
+ *
+ * The verdict badge sitting on top of that fill is a fixed-white pill —
+ * literal `text-black`, never adaptive `text-ink`, same rule as every other
+ * theme-fixed fill in this file. Only the border carries a per-band accent;
+ * the band word itself still carries the verdict on its own.
  */
-const BAND_TILE: Record<BandLabel, string> = {
-  'AI-visible': 'bg-tile-green',
-  'Partially visible': 'bg-tile-yellow',
-  'Mostly invisible to AI': 'bg-peach',
+const BAND_ICON: Record<BandLabel, typeof CircleCheck> = {
+  'AI-visible': CircleCheck,
+  'Partially visible': TriangleAlert,
+  'Mostly invisible to AI': CircleX,
 }
 
-/** ScoreRing arc colour per band — mirrors the speed test's good/needs-work/poor tones. */
-const BAND_RING_TONE: Record<BandLabel, string> = {
-  'AI-visible': 'text-green',
-  'Partially visible': 'text-cta-pure',
-  'Mostly invisible to AI': 'text-ink',
+const BAND_BADGE_BORDER: Record<BandLabel, string> = {
+  'AI-visible': 'border-green',
+  'Partially visible': 'border-cta-pure',
+  'Mostly invisible to AI': 'border-violet-700',
+}
+
+/** Hero progress-bar fill — bright enough to read on the violet-900 panel. */
+const HERO_BAR_TONE: Record<BandLabel, string> = {
+  'AI-visible': 'bg-green',
+  'Partially visible': 'bg-cta-pure',
+  'Mostly invisible to AI': 'bg-white/70',
+}
+
+/**
+ * The real company behind every crawler name, shown once per group instead
+ * of repeated on every card — OpenAI alone ships three bots, and spelling
+ * out "OpenAI" three times in a row is exactly the redundancy a clean layout
+ * should remove. Grouping also means every AI company this tool checks gets
+ * its official mark shown at least once, which a flat per-bot list would
+ * bury in ten near-identical cards.
+ *
+ * Generic over `BotSpec`/`BotAccess` — the pre-run legend and loading state
+ * only have the spec (no verdict yet); the finished report adds `allowed`.
+ * Grouping the same way in both keeps the layout identical before and after
+ * a run, so nothing has to be relearned once the report replaces the legend.
+ */
+function groupByCompany<T extends { readonly company: string }>(
+  bots: readonly T[],
+): { company: string; bots: T[] }[] {
+  const groups: { company: string; bots: T[] }[] = []
+  for (const bot of bots) {
+    const existing = groups.find((g) => g.company === bot.company)
+    if (existing) existing.bots.push(bot)
+    else groups.push({ company: bot.company, bots: [bot] })
+  }
+  return groups
+}
+
+/** A company's mark on a white chip, or a neutral building glyph when no
+ * official mark is available (Common Crawl has none in either icon set) —
+ * a plain fallback beats guessing at a logo. */
+function CompanyLogo({ company, size = 22 }: { company: string; size?: number }) {
+  const brand = brandForCompany(company)
+  return (
+    <span
+      className="flex shrink-0 items-center justify-center rounded-[10px] border border-line-grey bg-white"
+      style={{ width: size + 14, height: size + 14 }}
+    >
+      {brand ? (
+        <BrandIcon brand={brand} size={size} />
+      ) : (
+        <Building2 className="size-4 text-ink-subtle" aria-hidden="true" />
+      )}
+    </span>
+  )
+}
+
+/**
+ * The same grouped-by-company layout as `CompanyBotGroup`, for before a
+ * verdict exists — the pre-run legend and the in-progress state. Sharing the
+ * shape means the report that eventually replaces this literally slots in
+ * where this was, instead of the page re-flowing into an unfamiliar layout.
+ */
+function CompanySpecGroup({
+  company,
+  bots,
+}: {
+  company: string
+  bots: readonly BotSpec[]
+}) {
+  return (
+    // .card-modern — the calm alternative to .card-flat — carries its own
+    // border, radius and hover lift already, so no extra hover utility is
+    // layered on top of it here. This is reference material (the legend for
+    // a report that doesn't exist yet), not an action item, so it uses the
+    // same quieter tier as `CompanyBotGroup` below rather than the assertive
+    // card-flat + shadow-brutal treatment reserved for "What to fix".
+    <div className="card-modern p-4">
+      <div className="flex items-center gap-3">
+        <CompanyLogo company={company} />
+        <div className="min-w-0">
+          <p className="font-display font-semibold text-[15px] text-ink">{company}</p>
+          <p className="text-[12px] text-ink-subtle">
+            {bots.length === 1 ? '1 crawler' : `${bots.length} crawlers`}
+          </p>
+        </div>
+      </div>
+      <div className="mt-1">
+        {bots.map((bot) => (
+          <div
+            key={bot.name}
+            className="border-line-grey border-t px-1 py-2.5 first:border-t-0 first:pt-0"
+          >
+            <p className="font-mono font-medium text-[13px] text-ink">{bot.name}</p>
+            <p className="text-[12px] text-ink-subtle">{bot.purpose}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 /**
@@ -153,7 +334,7 @@ const CHECK_LEGEND: readonly { label: string; weight: string; meaning: string }[
     label: 'On-page basics',
     weight: '20 pts',
     meaning:
-      'Title, meta description, an h1, at least two h2s, and a lang attribute — the five signals answer engines quote.',
+      'Nine signals answer engines quote: title, meta description, an h1, at least two h2s, a lang attribute, Open Graph tags, a canonical link, image alt-text coverage, and a minimum word count so a near-empty page cannot pass by accident.',
   },
   {
     label: 'llms.txt',
@@ -170,6 +351,12 @@ const CHECK_LEGEND: readonly { label: string; weight: string; meaning: string }[
     weight: 'not scored',
     meaning:
       'noai / noimageai in your meta robots tag or X-Robots-Tag header. Reported, never judged — opting out is a legitimate choice.',
+  },
+  {
+    label: 'noindex / nofollow',
+    weight: 'not scored',
+    meaning:
+      'The same meta robots tag and X-Robots-Tag header, checked for a noindex or nofollow directive instead — flagged prominently because either one can keep AI engines from citing the page regardless of every other check passing.',
   },
 ]
 
@@ -259,42 +446,101 @@ function RuleCell({ bot }: { bot: BotAccess }) {
 }
 
 /** One crawler's verdict as a card — the "AI engines breakdown" for this tool's real data. */
+/**
+ * One crawler's verdict, nested inside its company's group card — the
+ * company mark and name already sit in the group header above, so this row
+ * carries only what's specific to this one bot: its own name, what it
+ * feeds, and its own verdict and matched rule.
+ */
 function BotCard({ bot }: { bot: BotAccess }) {
   return (
-    <div className="card-flat flex flex-col gap-2 border border-line p-3">
-      <div className="min-w-0">
-        <p
-          className="truncate font-mono font-medium text-[13px] text-ink"
-          title={bot.name}
-        >
-          {bot.name}
-        </p>
-        <p className="truncate text-[11px] text-ink-subtle">{bot.company}</p>
+    <div className="flex flex-col gap-1.5 border-line-grey border-t px-1 py-3 first:border-t-0 first:pt-0">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+        <div className="min-w-0">
+          <p className="font-mono font-medium text-[13px] text-ink" title={bot.name}>
+            {bot.name}
+          </p>
+          <p className="text-[12px] text-ink-subtle">{bot.purpose}</p>
+        </div>
+        <AccessCell allowed={bot.allowed} />
       </div>
-      <AccessCell allowed={bot.allowed} />
-      {/* An honest 1:1 rendering of the same allowed/blocked boolean above, not a
-          fabricated numeric score — this tool never scores a bot individually. */}
-      <div
-        aria-hidden="true"
-        className="h-1.5 w-full overflow-hidden rounded-pill bg-line-grey"
-      >
-        <div
-          className={`h-full ${bot.allowed ? 'bg-green' : 'bg-violet-700'}`}
-          style={{ width: bot.allowed ? '100%' : '0%' }}
-        />
-      </div>
-      <div className="text-[11px] leading-4">
+      <div className="text-[12px] leading-4">
         <RuleCell bot={bot} />
       </div>
     </div>
   )
 }
 
+/**
+ * A company's crawler(s), grouped under one header carrying its official
+ * mark, name, and an allowed/total summary — the summary alone tells you
+ * whether to even open this group, without scanning individual rows.
+ *
+ * `bots` (every crawler this company runs) and `visible` (the subset the
+ * "Blocked only" toolbar filter currently shows) are separate on purpose:
+ * the badge always describes the whole company, even while the filter
+ * hides its passing crawlers from the list below it.
+ */
+function CompanyBotGroup({
+  company,
+  bots,
+  visible,
+}: {
+  company: string
+  bots: readonly BotAccess[]
+  visible: readonly BotAccess[]
+}) {
+  const allowedCount = bots.filter((b) => b.allowed).length
+  return (
+    // card-modern (Tier 3 — see the credit-scale comment above the report
+    // body below): reference material to verify, not a fix to act on, so it
+    // reads calmer than the assertive card-flat + shadow-brutal FixCard list.
+    <div className="card-modern p-4">
+      <div className="flex items-center gap-3">
+        <CompanyLogo company={company} />
+        <div className="min-w-0 flex-1">
+          <p className="font-display font-semibold text-[15px] text-ink">{company}</p>
+          <p className="text-[12px] text-ink-subtle">
+            {bots.length === 1 ? '1 crawler' : `${bots.length} crawlers`}
+          </p>
+        </div>
+        {/* bg-tile-* and bg-peach are theme-fixed light pastels — text and
+            border must be literal black, never adaptive ink (which flips
+            near-white in dark mode and vanishes against the still-light
+            fill). */}
+        <span
+          className={`shrink-0 rounded-pill border border-black px-2.5 py-1 font-semibold text-[12px] text-black ${
+            allowedCount === bots.length
+              ? 'bg-tile-green'
+              : allowedCount === 0
+                ? 'bg-peach'
+                : 'bg-tile-yellow'
+          }`}
+        >
+          {allowedCount}/{bots.length} allowed
+        </span>
+      </div>
+      <div className="mt-1">
+        {visible.map((bot) => (
+          <BotCard key={bot.name} bot={bot} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Tier 4 — pure reference, no card at all. This only ever renders inside the
+ * "All checks" disclosure, the single most passive section on the page
+ * (collapsed by default; everything actionable already surfaced in "What to
+ * fix" above), so it recedes as a bare divided row rather than competing for
+ * attention with a border and a shadow the way it used to.
+ */
 function CheckCard({ check }: { check: CheckResult }) {
   return (
-    <div className="card-flat border border-line p-4">
+    <div className="flex flex-col gap-1.5 py-3">
       <div className="flex items-start justify-between gap-3">
-        <h5 className="font-display font-semibold text-[15px] text-ink">
+        <h5 className="font-display font-semibold text-[14px] text-ink">
           {check.label}
           {check.scored ? null : (
             <span className="ml-2 font-sans font-normal text-[12px] text-ink-subtle">
@@ -304,8 +550,8 @@ function CheckCard({ check }: { check: CheckResult }) {
         </h5>
         <StatusBadge status={check.status} />
       </div>
-      <p className="mt-2 text-[14px] text-ink-muted leading-5">{check.finding}</p>
-      <p className="mt-2 text-[14px] text-ink leading-5">
+      <p className="text-[13px] text-ink-muted leading-5">{check.finding}</p>
+      <p className="text-[13px] text-ink leading-5">
         <span className="font-semibold">Fix: </span>
         {check.fix}
       </p>
@@ -313,8 +559,109 @@ function CheckCard({ check }: { check: CheckResult }) {
   )
 }
 
-const TH =
-  'px-3 py-2 font-sans font-bold text-[12px] text-ink uppercase tracking-[0.06em]'
+/** Point value per check — mirrors `computeScore`'s 40/20/20/10/10 weights
+ * (`lib/tools/ai-visibility-checker/logic.ts`). `pass` always means the full
+ * weight was earned for every scored check (each is graded pass only when
+ * every sub-condition it covers is met), so "not yet passing" and "has
+ * points left on the table" are the same thing — safe to build a fix list
+ * from status alone. */
+const CHECK_WEIGHT: Record<CheckId, number> = {
+  crawlers: 40,
+  noindex: 0,
+  'structured-data': 20,
+  basics: 20,
+  'llms-txt': 10,
+  sitemap: 10,
+  noai: 0,
+}
+
+/**
+ * One outstanding fix, ranked by how many points it's worth — the whole
+ * point of this section is answering "what should I do first", and impact
+ * order answers that better than the checks' fixed display order.
+ */
+function FixCard({ check, rank }: { check: CheckResult; rank: number }) {
+  const weight = CHECK_WEIGHT[check.id]
+  return (
+    // See CompanySpecGroup above for why `border` is dropped and the hover
+    // treatment is added.
+    <div className="card-flat flex gap-3.5 p-4 transition-colors duration-150 hover:border-ink">
+      <span
+        className="flex size-7 shrink-0 items-center justify-center rounded-full border border-ink bg-cta font-bold text-[13px] text-ink"
+        aria-hidden="true"
+      >
+        {rank}
+      </span>
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h5 className="font-display font-semibold text-[15px] text-ink">
+            {check.label}
+          </h5>
+          {/* violet-700 is tuned for light surfaces; bg-cream is adaptive and
+              goes near-black in dark mode, so both border and text use the
+              dark-safe accent token (falls back to violet-700 in light mode,
+              same idiom as .eyebrow/nav-link hover elsewhere on the site). */}
+          <span className="shrink-0 rounded-pill border border-[var(--color-violet-accent-text,var(--color-violet-700))] bg-cream px-2.5 py-0.5 font-semibold text-[12px] text-[var(--color-violet-accent-text,var(--color-violet-700))]">
+            Worth {weight} pts
+          </span>
+        </div>
+        <p className="mt-1.5 text-[14px] text-ink-muted leading-5">{check.finding}</p>
+        {/* bg-violet-50 is theme-fixed light (no dark-mode override exists
+            for it — confirmed against globals.css) — text on it must be
+            literal black, never adaptive ink-body, which flips near-white in
+            dark mode and would go invisible against this still-light fill. */}
+        <div className="mt-2.5 flex items-start gap-2 rounded-card bg-violet-50 p-3">
+          <Sparkles
+            className="mt-0.5 size-4 shrink-0 text-violet-700"
+            aria-hidden="true"
+          />
+          <p className="text-[14px] text-black leading-5">{check.fix}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * The Markdown download action, styled as `CopyButton`'s sibling (same
+ * shell, same 44px/36px touch-target step-down, same idle-border-deepens-
+ * on-hover language) rather than reusing that component directly — the
+ * shared `CopyButton` owns clipboard-specific copied/failed state that a
+ * file download has no equivalent for, so a lookalike button with its own
+ * `onClick` is less code than bending a shared component to a second job.
+ *
+ * `Date.now()` here runs inside the click handler, not at render — the
+ * project-wide ban on `Date`/`Date.now()` in render-time code (it breaks
+ * static generation) does not reach an event handler that only runs when a
+ * visitor clicks. `formatReportMarkdown` itself still takes the timestamp as
+ * a plain string argument and calls `Date` nowhere, so the pure function
+ * stays exactly reproducible in a test.
+ */
+function DownloadMarkdownButton({ report }: { report: VisibilityReport }) {
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        const generatedAt = new Date().toLocaleString('en-US', {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+        })
+        downloadTextFile(
+          `${slugifyUrlForFilename(report.url)}-ai-visibility-report.md`,
+          formatReportMarkdown(report, generatedAt),
+        )
+      }}
+      className="flex min-h-11 items-center gap-1.5 rounded-sm border border-line-grey bg-cream px-3 py-1.5 font-medium text-[14px] transition-colors hover:border-ink sm:min-h-9"
+    >
+      <Download className="size-4" aria-hidden="true" />
+      Download Markdown
+    </button>
+  )
+}
+
+/** AI_BOTS never changes at runtime, so this groups once at module load
+ * rather than on every render of the pre-run legend and loading state. */
+const SPEC_GROUPS = groupByCompany(AI_BOTS)
 
 export function AiVisibilityChecker() {
   const [url, setUrl] = useState(SAMPLE_URL)
@@ -322,6 +669,7 @@ export function AiVisibilityChecker() {
   const [loading, setLoading] = useState(false)
   const [stage, setStage] = useState(0)
   const [report, setReport] = useState<VisibilityReport | undefined>(undefined)
+  const [scoreDelta, setScoreDelta] = useState<ScoreDelta | undefined>(undefined)
   const [apiError, setApiError] = useState<ApiError | undefined>(undefined)
   const [blockedOnly, setBlockedOnly] = useState(false)
   const [linkCopied, setLinkCopied] = useState(false)
@@ -343,6 +691,7 @@ export function AiVisibilityChecker() {
     setInputError(undefined)
     setApiError(undefined)
     setReport(undefined)
+    setScoreDelta(undefined)
     setStage(0)
     setLoading(true)
 
@@ -362,6 +711,29 @@ export function AiVisibilityChecker() {
       })
       const data: unknown = await res.json()
       if (res.ok && isVisibilityReport(data)) {
+        // "Compare to your last check" — look up this origin's remembered
+        // result BEFORE overwriting it, so the delta compares against the
+        // prior run, then store the new one for next time. Origin, not full
+        // URL, so a re-check of a different path on the same site still
+        // finds its history.
+        let delta: ScoreDelta | undefined
+        try {
+          const origin = new URL(data.url).origin
+          const previous = readHistoryEntry(origin)
+          if (previous !== undefined) {
+            delta = {
+              deltaPoints: data.score - previous.score,
+              previousCheckedAt: previous.checkedAt,
+            }
+          }
+          writeHistoryEntry(origin, {
+            score: data.score,
+            checkedAt: new Date().toISOString(),
+          })
+        } catch {
+          // Malformed URL — no comparison this run, report still stands.
+        }
+        setScoreDelta(delta)
         setReport(data)
         setLinkCopied(false)
         // Make the result addressable so it can be sent to whoever owns the
@@ -477,6 +849,7 @@ export function AiVisibilityChecker() {
   function startOver(): void {
     abortRef.current?.abort()
     setReport(undefined)
+    setScoreDelta(undefined)
     setApiError(undefined)
     setInputError(undefined)
     setLoading(false)
@@ -488,26 +861,36 @@ export function AiVisibilityChecker() {
     }
   }
 
-  /** Scrolls to the checks list rather than duplicating it — there is no separate recommendations view. */
-  function viewRecommendations(): void {
-    document.getElementById('aiv-checks')?.scrollIntoView({ behavior: 'smooth' })
-  }
-
   const stageLabel =
     LOADING_STAGES[Math.min(stage, LOADING_STAGES.length - 1)] ?? 'Checking…'
   const blockedCount =
     report === undefined ? 0 : report.bots.length - report.allowedBotCount
   const crawlerFinding = report?.checks.find((c) => c.id === 'crawlers')?.finding
-  const visibleBots =
+  /** Icon for the hero's verdict badge — undefined pre-run, same guard shape
+   * as `crawlerFinding` above. */
+  const BandGlyph = report === undefined ? undefined : BAND_ICON[report.band]
+  /** Grouped from the FULL bot list — a company's allowed/total badge
+   * should describe the company, not the current filter, even while
+   * "Blocked only" hides its passing crawlers below. */
+  const botGroups =
     report === undefined
       ? []
-      : blockedOnly
-        ? report.bots.filter((b) => !b.allowed)
-        : report.bots
+      : groupByCompany(report.bots)
+          .map((g) => ({
+            ...g,
+            visible: blockedOnly ? g.bots.filter((b) => !b.allowed) : g.bots,
+          }))
+          .filter((g) => g.visible.length > 0)
   const scoredChecks = report?.checks.filter((c) => c.scored) ?? []
   const checksPassed = scoredChecks.filter((c) => c.status === 'pass').length
-  /** The first not-yet-passing scored check, in check order — the same priority the score gives it. */
-  const topFix = report?.checks.find((c) => c.scored && c.status !== 'pass')
+  /** Every check with points still on the table, ranked by how many —
+   * pass always means full credit (see CHECK_WEIGHT's docblock), so this
+   * doubles as "what to do, in priority order". */
+  const outstandingFixes = scoredChecks
+    .filter((c) => c.status !== 'pass')
+    .slice()
+    .sort((a, b) => CHECK_WEIGHT[b.id] - CHECK_WEIGHT[a.id])
+  const pointsAvailable = outstandingFixes.reduce((sum, c) => sum + CHECK_WEIGHT[c.id], 0)
 
   const timelineSteps: TimelineStep[] = STAGE_STEP_LABELS.map((label, i) => ({
     label,
@@ -600,7 +983,10 @@ export function AiVisibilityChecker() {
             aria-invalid={inputError !== undefined}
           />
           {inputError !== undefined ? (
-            <p className="mt-1.5 font-medium text-[14px] text-violet-700" id="aiv-url-error">
+            <p
+              className="mt-1.5 font-medium text-[14px] text-violet-700"
+              id="aiv-url-error"
+            >
               {inputError}
             </p>
           ) : (
@@ -679,16 +1065,13 @@ export function AiVisibilityChecker() {
                 While that runs: each crawler gets its own robots.txt verdict, because
                 they are separate user-agents with separate rules.
               </p>
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                {AI_BOTS.map((bot) => (
-                  <div key={bot.name} className="card-flat border border-line p-3">
-                    <p className="font-mono font-medium text-[13px] text-ink">
-                      {bot.name}
-                    </p>
-                    <p className="text-[12px] text-ink-subtle">
-                      {bot.company} · {bot.purpose}
-                    </p>
-                  </div>
+              <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {SPEC_GROUPS.map((group) => (
+                  <CompanySpecGroup
+                    key={group.company}
+                    company={group.company}
+                    bots={group.bots}
+                  />
                 ))}
               </div>
             </div>
@@ -727,39 +1110,158 @@ export function AiVisibilityChecker() {
             ) : null}
           </div>
         ) : report !== undefined ? (
-          <div className="flex flex-col gap-8">
-            {/* Visibility overview */}
-            <div>
-              <div className="flex items-center justify-between gap-3">
-                <h4 className="font-display font-semibold text-[17px] text-ink">
-                  Visibility overview
-                </h4>
+          <div className="flex flex-col gap-10">
+            {/* Report header — a quiet utility row, not a headline in its
+                own right. The hero right below already announces the
+                result; this is only where the export actions live.
+                flex-wrap: two action buttons plus a label is tight at 375px
+                (see the mobile responsive pass) — wrapping beats letting
+                either button's label clip. */}
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <span className="eyebrow">Your report</span>
+              <div className="flex flex-wrap items-center gap-2">
                 <CopyButton text={formatReportText(report)} label="Copy report" />
+                <DownloadMarkdownButton report={report} />
               </div>
-              <div
-                className={`mt-3 flex flex-col items-center gap-5 rounded-panel border border-ink p-6 shadow-brutal sm:flex-row ${BAND_TILE[report.band]}`}
-              >
-                <ScoreRing
-                  value={report.score}
-                  label="Visibility"
-                  size="lg"
-                  toneClass={BAND_RING_TONE[report.band]}
-                />
-                <div className="flex-1 text-center sm:text-left">
-                  <p className="font-display font-semibold text-[20px] text-ink">
+            </div>
+
+            {/* HERO — the one thing on this page that must be unmissable.
+                A solid violet-900 panel, the same theme-invariant dark-block
+                idiom the site footer already uses, rather than another
+                light pastel tile: a different KIND of surface, not just a
+                bigger one. The score is set far larger than any other
+                number on the page on purpose — this is the only place that
+                gets to be this big. */}
+            <div className="overflow-hidden rounded-panel border border-ink bg-violet-900 text-white shadow-brutal">
+              <div className="p-6 sm:p-9">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <span className="font-bold text-[13px] text-cta-pure uppercase tracking-wide">
+                    AI Visibility Score
+                  </span>
+                  {/* Fixed-white pill on a fixed-dark panel — literal
+                      text-black, never adaptive text-ink, same rule as every
+                      other theme-fixed fill in this file. The border alone
+                      carries the per-band accent; the word already carries
+                      the verdict. */}
+                  <span
+                    className={`flex shrink-0 items-center gap-1.5 rounded-pill border-2 bg-white px-3 py-1.5 font-semibold text-[13px] text-black ${BAND_BADGE_BORDER[report.band]}`}
+                  >
+                    {BandGlyph ? (
+                      <BandGlyph className="size-4 shrink-0" aria-hidden="true" />
+                    ) : null}
                     {report.band}
-                  </p>
-                  <p className="mt-2 text-[14px] text-ink leading-5">
-                    <strong>
-                      {report.allowedBotCount} of {report.bots.length}
-                    </strong>{' '}
-                    AI crawlers can fetch{' '}
-                    <span className="break-all font-mono text-[13px]">{report.url}</span>
-                  </p>
+                  </span>
                 </div>
+
+                <div className="mt-5 flex flex-wrap items-end gap-3">
+                  <span className="font-display font-bold text-[92px] text-white leading-[0.85] tabular-nums sm:text-[128px]">
+                    {report.score}
+                  </span>
+                  <span className="pb-2 font-display font-semibold text-[24px] text-white/50 sm:pb-4 sm:text-[30px]">
+                    /100
+                  </span>
+                </div>
+
+                <div
+                  role="progressbar"
+                  aria-label="Visibility score"
+                  aria-valuenow={report.score}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  className="mt-4 h-2.5 w-full max-w-md overflow-hidden rounded-pill bg-white/15"
+                >
+                  <div
+                    className={`h-full rounded-pill ${HERO_BAR_TONE[report.band]}`}
+                    style={{ width: `${report.score}%` }}
+                  />
+                </div>
+
+                <p className="mt-5 text-[15px] text-white/85 leading-6">
+                  <strong className="text-white">
+                    {report.allowedBotCount} of {report.bots.length}
+                  </strong>{' '}
+                  AI crawlers can fetch{' '}
+                  <span className="break-all font-mono text-[13px] text-white/70">
+                    {report.url}
+                  </span>
+                </p>
+
+                {/* Honest, not a hype metric: this is the visitor's own
+                    device remembering their own last run of this same
+                    origin — no account, no server storage. Absence of this
+                    line means there was no prior check, which needs no
+                    separate "first time!" message to say so. */}
+                {scoreDelta !== undefined ? (
+                  <p className="mt-2 flex items-center gap-1.5 text-[13px] text-white/70">
+                    {scoreDelta.deltaPoints > 0 ? (
+                      <TrendingUp className="size-3.5 shrink-0" aria-hidden="true" />
+                    ) : scoreDelta.deltaPoints < 0 ? (
+                      <TrendingDown className="size-3.5 shrink-0" aria-hidden="true" />
+                    ) : (
+                      <Minus className="size-3.5 shrink-0" aria-hidden="true" />
+                    )}
+                    {scoreDelta.deltaPoints === 0
+                      ? `Same score as your last check on ${formatCheckedDate(scoreDelta.previousCheckedAt)}`
+                      : `${scoreDelta.deltaPoints > 0 ? '+' : ''}${scoreDelta.deltaPoints} pts since your last check on ${formatCheckedDate(scoreDelta.previousCheckedAt)}`}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+
+            {/* What to fix — moved directly under the hero (it used to sit
+                third, after a full recap of the same stats). This is the
+                direct answer to "what do I do about that number", so it
+                earns the very next slot. It keeps the assertive card-flat +
+                shadow-brutal treatment on purpose — the one list on the page
+                that should still fight for attention — and the heading is
+                now the second-largest text on the page after the score
+                itself, anchoring it as the report's other focal point. */}
+            <div>
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h4 className="font-display font-bold text-[26px] text-ink leading-tight sm:text-[30px]">
+                  What to fix
+                </h4>
+                {outstandingFixes.length > 0 ? (
+                  <p className="text-[13px] text-ink-subtle">
+                    Up to <strong className="text-ink">{pointsAvailable} pts</strong>{' '}
+                    available
+                  </p>
+                ) : null}
               </div>
 
-              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {/* bg-tile-green is theme-fixed — border/icon/text stay literal
+                  black, never adaptive ink. */}
+              {outstandingFixes.length === 0 ? (
+                <div className="mt-4 flex items-center gap-3 rounded-panel border border-black bg-tile-green p-4 shadow-brutal-sm">
+                  <CircleCheck
+                    className="size-6 shrink-0 text-black"
+                    aria-hidden="true"
+                  />
+                  <p className="text-[14px] text-black leading-5">
+                    <strong>Nothing left to fix</strong> — every scored check passes.
+                    {report.score < 100
+                      ? ' Your score reflects a noai signal or partial crawler access above; see the sections below.'
+                      : ''}
+                  </p>
+                </div>
+              ) : (
+                <div className="mt-4 flex flex-col gap-3">
+                  {outstandingFixes.map((check, i) => (
+                    <FixCard key={check.id} check={check} rank={i + 1} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* At a glance — the numbers behind the score, restated. An
+                eyebrow label instead of a section heading on purpose: this
+                is a recap of what the hero and the fix list already said,
+                not a third headline competing with them. Two tones only
+                (green/yellow/lavender), each earned: green for a genuinely
+                good count, yellow only when a crawler is actually blocked. */}
+            <div>
+              <span className="eyebrow">At a glance</span>
+              <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
                 <StatCard
                   icon={ShieldCheck}
                   label="Crawlers allowed"
@@ -772,26 +1274,31 @@ export function AiVisibilityChecker() {
                   label="Crawlers blocked"
                   value={blockedCount}
                   sublabel={`of ${report.bots.length}`}
-                  tone="yellow"
+                  tone={blockedCount > 0 ? 'yellow' : 'lavender'}
                 />
                 <StatCard
                   icon={FileJson}
                   label="Schema types found"
                   value={report.jsonLdTypes.length}
                   sublabel="JSON-LD @type values"
-                  tone="blue"
+                  tone="lavender"
                 />
                 <StatCard
                   icon={ListChecks}
                   label="Checks passed"
                   value={`${checksPassed}/${scoredChecks.length}`}
                   sublabel="scored checks"
-                  tone="lavender"
+                  tone={checksPassed === scoredChecks.length ? 'green' : 'lavender'}
                 />
               </div>
             </div>
 
-            {/* AI crawler access breakdown */}
+            {/* AI crawler access breakdown — reference material to verify,
+                not an action item: everything actionable already surfaced
+                in "What to fix" above. card-modern (the calm alternative to
+                card-flat) instead of another hard-shadowed box, so this
+                recedes rather than competing with the hero and the fix list
+                for attention. */}
             <div>
               <h4 className="font-display font-semibold text-[17px] text-ink">
                 AI crawler access breakdown
@@ -802,16 +1309,21 @@ export function AiVisibilityChecker() {
                 </p>
               ) : null}
 
-              {visibleBots.length === 0 ? (
-                <p className="mt-3 rounded-card border border-line-grey bg-tile-green p-3 text-[14px] text-ink leading-5">
+              {botGroups.length === 0 ? (
+                <p className="mt-3 rounded-card border border-line-grey bg-tile-green p-3 text-[14px] text-black leading-5">
                   Nothing is blocked — all {report.bots.length} crawlers are allowed.
                   Switch the toolbar back to “All {AI_BOTS.length} crawlers” to see the
                   rule behind each verdict.
                 </p>
               ) : (
-                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {visibleBots.map((bot) => (
-                    <BotCard key={bot.name} bot={bot} />
+                <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                  {botGroups.map((group) => (
+                    <CompanyBotGroup
+                      key={group.company}
+                      company={group.company}
+                      bots={group.bots}
+                      visible={group.visible}
+                    />
                   ))}
                 </div>
               )}
@@ -822,25 +1334,18 @@ export function AiVisibilityChecker() {
               </p>
             </div>
 
-            {/* Checks alongside structured data found — the closest this report has
-                to "top findings" and "what you're telling engines about yourself". */}
-            <div className="grid gap-6 lg:grid-cols-2">
+            {/* Structured data alongside the full checklist — pure
+                reference, so both sides drop the card treatment entirely
+                and sit bare on the page background: nothing here is an
+                action item, everything actionable already surfaced in
+                "What to fix" above. Headings step down to the quietest tier
+                on the page (15px medium, muted colour) to match. */}
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
               <div>
-                <h4 className="font-display font-semibold text-[17px] text-ink">
-                  The {report.checks.length} checks
-                </h4>
-                <div id="aiv-checks" className="mt-3 grid gap-3">
-                  {report.checks.map((check) => (
-                    <CheckCard key={check.id} check={check} />
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="font-display font-semibold text-[17px] text-ink">
+                <h4 className="font-display font-medium text-[15px] text-ink-muted">
                   Structured data found
                 </h4>
-                <p className="mt-1 text-[14px] text-ink-muted leading-5">
+                <p className="mt-1 text-[13px] text-ink-subtle leading-5">
                   The @type values declared in ld+json blocks on your homepage.
                 </p>
                 {report.jsonLdTypes.length > 0 ? (
@@ -848,41 +1353,42 @@ export function AiVisibilityChecker() {
                     {report.jsonLdTypes.map((type) => (
                       <li
                         key={type}
-                        className="rounded-pill border border-violet-700 bg-cream px-2.5 py-1 font-medium text-[13px] text-violet-700"
+                        className="rounded-pill border border-[var(--color-violet-accent-text,var(--color-violet-700))] bg-cream px-2.5 py-1 font-medium text-[13px] text-[var(--color-violet-accent-text,var(--color-violet-700))]"
                       >
                         {type}
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="mt-3 rounded-card border border-line-grey bg-offwhite p-3 text-[14px] text-ink-muted leading-5">
+                  <p className="mt-3 text-[14px] text-ink-muted leading-5">
                     No JSON-LD structured data on the homepage — AI engines have to infer
                     what your site is instead of being told.
                   </p>
                 )}
               </div>
-            </div>
 
-            {/* AI recommendation */}
-            <div className="flex flex-col gap-3 rounded-card border border-line-grey bg-violet-50 p-4">
-              <h4 className="flex items-center gap-2 font-display font-semibold text-[16px] text-ink">
-                <Sparkles className="size-4 text-violet-700" aria-hidden="true" />
-                AI recommendation
-              </h4>
-              <p className="text-[14px] text-ink-body leading-6">
-                {topFix !== undefined
-                  ? topFix.fix
-                  : 'Every scored check passes. Keep an eye on the noai signal below if your policy on AI use ever changes.'}
-              </p>
-              <div>
-                <button
-                  type="button"
-                  onClick={viewRecommendations}
-                  className="rounded-sm border border-line-grey bg-cream px-3 py-1.5 font-medium text-[13px] text-ink transition-colors hover:border-ink"
-                >
-                  View recommendations
-                </button>
-              </div>
+              <details className="group">
+                {/* violet-accent-text is the dark-safe idiom this file
+                    already uses for "Worth N pts" below — plain violet-700
+                    drops to ~2.3:1 on the dark surface this sits on, per
+                    globals.css's own note. */}
+                <summary className="flex cursor-pointer list-none items-center justify-between font-display font-medium text-[15px] text-ink-muted transition-colors duration-150 marker:content-none hover:text-[var(--color-violet-accent-text,var(--color-violet-700))] [&::-webkit-details-marker]:hidden">
+                  All {report.checks.length} checks, including passing ones
+                  <span
+                    aria-hidden="true"
+                    className="text-[13px] text-ink-subtle transition-transform group-open:rotate-180"
+                  >
+                    ▾
+                  </span>
+                </summary>
+                {/* Bare divided list, not a grid of cards — the single most
+                    passive section on the page (collapsed by default). */}
+                <div className="mt-2 divide-y divide-line border-line border-t">
+                  {report.checks.map((check) => (
+                    <CheckCard key={check.id} check={check} />
+                  ))}
+                </div>
+              </details>
             </div>
           </div>
         ) : (
@@ -897,44 +1403,14 @@ export function AiVisibilityChecker() {
                 user-agents with separate rules. OpenAI alone ships three: you can allow
                 ChatGPT search while opting out of training.
               </p>
-              <div className="mt-3 overflow-x-auto rounded-card border border-line">
-                <table className="w-full min-w-[26rem] border-collapse bg-cream text-left">
-                  <caption className="sr-only">
-                    The AI crawlers this tool evaluates, the company behind each and what
-                    it feeds
-                  </caption>
-                  <thead>
-                    <tr className="border-line border-b bg-cream">
-                      <th scope="col" className={TH}>
-                        Crawler
-                      </th>
-                      <th scope="col" className={TH}>
-                        Run by
-                      </th>
-                      <th scope="col" className={TH}>
-                        What it feeds
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {AI_BOTS.map((bot) => (
-                      <tr key={bot.name} className="border-line border-b last:border-b-0">
-                        <th
-                          scope="row"
-                          className="px-3 py-2 font-mono font-normal text-[13px] text-ink"
-                        >
-                          {bot.name}
-                        </th>
-                        <td className="px-3 py-2 text-[14px] text-ink-muted">
-                          {bot.company}
-                        </td>
-                        <td className="px-3 py-2 text-[14px] text-ink-muted">
-                          {bot.purpose}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {SPEC_GROUPS.map((group) => (
+                  <CompanySpecGroup
+                    key={group.company}
+                    company={group.company}
+                    bots={group.bots}
+                  />
+                ))}
               </div>
             </div>
 

@@ -88,7 +88,10 @@ the test runs instead of implying it is local.
   waterfall is an exploration surface, and shipping one would make this the
   60-metric dump the USP exists to avoid. It is also the single most expensive
   thing to render well; a bad waterfall is worse than none. Revisit as a
-  collapsed, second-level dynamic import if evidence says people want it.
+  collapsed, second-level dynamic import if evidence says people want it. (The
+  third-party-cost and resource-breakdown-by-type additions below are compact
+  single blocks derived from existing audits, not a per-request timeline — they
+  do not reverse this exclusion.)
 - **Test-location choice** (5 of 5). Not available: the PSI v5 API takes no
   location parameter — Google picks the data centre. Offering a location control
   that silently did nothing would be a lie. Noted rather than faked.
@@ -145,3 +148,22 @@ the test runs instead of implying it is local.
   all text.
 - **The form stays put after a run.** Re-testing the same page after a fix is the
   normal second action, and PSI's 6-hour cache means a repeat is instant.
+
+## Later update: flagship positioning and a deeper-signals pass (2026-08)
+
+This tool and the AI Visibility Checker are being positioned as the site's
+two flagship products — the results most likely to be the first thing a
+visitor runs and the ones most worth getting right. That status is why the
+FAQ got a content-depth pass rather than a rewrite: the existing copy was
+accurate, so the work was adding the specific, honest questions a real
+visitor would ask next (why field data is sometimes missing, what
+third-party scripts actually cost), not restating what was already there.
+
+In parallel, a separate pass is deepening `logic.ts` with signals PSI's
+audits already return but this tool did not yet surface: third-party script
+cost, a resource breakdown by type, and server response time (TTFB). These
+land as compact, single-block summaries alongside the existing top-five
+opportunities — not a waterfall or a per-request table, which stays excluded
+per the section above. The verdict-first shape, the five-opportunity cap and
+the mobile/desktop toggle are unaffected; the new signals extend the report
+that already exists rather than replacing any part of it.

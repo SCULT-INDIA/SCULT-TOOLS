@@ -1,4 +1,5 @@
 import { ShieldCheck } from 'lucide-react'
+import { PROMPTS } from '@/lib/prompts/registry'
 import { TOOLS } from '@/lib/tools/registry'
 
 /**
@@ -16,6 +17,8 @@ export function TrustStrip() {
   return (
     <div className="container-site flex flex-wrap items-center justify-center gap-x-10 gap-y-4 border-line border-t py-8 text-center">
       <Stat value={`${TOOLS.length}`} label="tools shipped" />
+      <Divider />
+      <Stat value={`${PROMPTS.length}`} label="verified AI prompts" />
       <Divider />
       <Stat value={`${testCount}+`} label="tests passing in CI" />
       <Divider />

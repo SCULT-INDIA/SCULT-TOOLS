@@ -182,6 +182,15 @@
   --color-ink-muted: #b5b5b5;
   --color-ink-subtle: #8a8a8a;
   --color-ink-subtle-onice: #9a9a9a;
+
+  /* Text-safe violet for dark surfaces (~5.3:1 on the black page): violet-700
+     is tuned for light backgrounds and drops to ~2.3:1 here. Dark-only on
+     purpose — every consumer writes
+     var(--color-violet-accent-text, var(--color-violet-700)), so light mode
+     takes the fallback. HeroDarkModeFixes.module.css's gradient rule consumes
+     it without a fallback and renders the hero's accent word invisible if
+     this token is ever removed again. */
+  --color-violet-accent-text: #8d72eb;
   --color-line: #232323; /* decorative only — matches light mode's role */
   --color-line-grey: #3a3a3a; /* functional border — still subtle by design */
 

@@ -35,9 +35,10 @@ export const meta: Tool = {
     'Pick mobile or desktop. Mobile is what Google ranks you on, so start there.',
     'Run the test and wait 15–40 seconds while Google loads your page in a real Chrome instance.',
     'Read the verdict, then start with the top opportunity — it carries the largest estimated saving.',
+    'Test the same URL and device again later — your browser remembers the last score for that exact combination and shows how many points moved.',
   ],
   howItWorks:
-    'Runs Google’s own Lighthouse engine via the free PageSpeed Insights v5 API — the same test behind pagespeed.web.dev. It reports lab data (one simulated Chrome load) and field data (CrUX: real users at the 75th percentile). Each Core Web Vital is scored against Google’s published Good/Poor thresholds; retests of the same URL are cached for 6 hours.',
+    'Runs Google’s own Lighthouse engine via the free PageSpeed Insights v5 API — the same test behind pagespeed.web.dev. It reports lab data (one simulated Chrome load) and field data (CrUX: real users at the 75th percentile). Each Core Web Vital is scored against Google’s published Good/Poor thresholds; it also surfaces server response time (TTFB), the third-party scripts costing the most main-thread time, and a transfer-size breakdown by resource type. Retests of the same URL are cached for 6 hours.',
   limitations: [
     'A lab score is one run from one Google data centre, so a few points of swing between runs is normal — treat trends as meaningful, single runs as indicative.',
     'Field (CrUX) data only exists when a page gets enough Chrome traffic; smaller pages may fall back to origin-wide data or none at all.',
@@ -56,6 +57,10 @@ export const meta: Tool = {
       a: 'Lab data is one simulated page load run by Lighthouse — controlled and repeatable, good for debugging. Field data is the 75th-percentile experience of real Chrome users over the last 28 days (the CrUX dataset), and it is what Google actually uses to assess Core Web Vitals.',
     },
     {
+      q: 'Why does this report show no field (real-user) data for my page?',
+      a: 'Field data comes from the Chrome UX Report, which only publishes a page once enough real Chrome users have visited it over the trailing 28 days. Below that threshold, PageSpeed Insights falls back to origin-level data — real users across the whole site rather than this specific page — and if the origin is too small too, there is no field data at all, so the report falls back to this run’s lab metrics instead. Interaction to Next Paint can only ever come from field data, so a page with no field data also has no INP reading.',
+    },
+    {
       q: 'Does page speed affect Google rankings?',
       a: 'Yes — Core Web Vitals are a confirmed ranking signal, assessed from field data at the 75th percentile. The effect is modest compared with content relevance, but speed also compounds through lower bounce rates and higher conversion, which is usually where the real money is.',
     },
@@ -66,6 +71,10 @@ export const meta: Tool = {
     {
       q: 'What are Core Web Vitals?',
       a: 'Google’s three user-experience metrics: Largest Contentful Paint (loading — Good at ≤2.5s), Interaction to Next Paint (responsiveness — Good at ≤200ms) and Cumulative Layout Shift (visual stability — Good at ≤0.10). A page passes when all three are Good at the 75th percentile of real visits.',
+    },
+    {
+      q: 'Do third-party scripts (ads, analytics, chat widgets) really slow a page down?',
+      a: 'Yes — every embedded script adds its own network request and runs JavaScript on the same main thread as your own code, which is exactly what Total Blocking Time and Interaction to Next Paint measure. A single heavy ad network or chat widget can cost more than the rest of the page combined. Lighthouse’s audits already account for this: when a third-party script is expensive enough to be worth fixing, it can appear in the top-five opportunities like any other audit, sorted by estimated saving.',
     },
   ],
 }

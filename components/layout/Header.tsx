@@ -9,6 +9,7 @@ import { AnnouncementBar } from './AnnouncementBar'
 import { CategoryMenu } from './CategoryMenu'
 import { GitHubStarButton } from './GitHubStarButton'
 import { MobileDrawer } from './MobileDrawer'
+import { PromptsLink } from './PromptsLink'
 import { SearchBox } from './SearchBox'
 
 /**
@@ -73,6 +74,7 @@ export function Header() {
             >
               <CategoryMenu items={menuItems} />
               <AllToolsLink />
+              <PromptsLink />
             </nav>
 
             {/* md, not lg: a tablet-width viewport has the room, and search

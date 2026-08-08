@@ -145,6 +145,18 @@ export default function PrivacyPage() {
 
         <section className="mt-12">
           <h2 className="text-[26px] tracking-[-0.5px] md:text-[30px]">
+            The prompt library
+          </h2>
+          <p className="mt-3 text-[16px] text-ink-muted leading-7">
+            Prompt pages are static content with a copy button. Anything you type into a
+            prompt's customize fields stays on the page and is never sent to us, and
+            copying uses your browser's own clipboard — the library needs no data from you
+            at all.
+          </p>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="text-[26px] tracking-[-0.5px] md:text-[30px]">
             What we do collect
           </h2>
           <ul className="mt-4 space-y-3 text-[16px] text-ink-muted leading-7">

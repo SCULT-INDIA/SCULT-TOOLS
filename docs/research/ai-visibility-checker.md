@@ -192,3 +192,23 @@ Honest caveat kept on the page: crawlability is necessary, not sufficient. A
   addition** (`formatReportText`). The RFC 9309 precedence logic and the SSRF
   gate are the two most security-critical and most-tested things in this
   repository, and the redesign was a UI problem.
+
+## Later update: flagship positioning and a deeper on-page pass (2026-08)
+
+This tool is being positioned as the site's flagship product — the one
+result most likely to be the first thing a visitor runs and the one most
+worth getting right. That status is why the FAQ got a content-depth pass
+rather than a rewrite: the existing copy was accurate, so the work was
+adding the specific, honest questions a real visitor would ask next (robots
+precedence mistakes, noai versus a robots.txt block, why llms.txt only costs
+half credit), not restating what was already there.
+
+In parallel, a separate pass is deepening the on-page-signals half of
+`logic.ts` — meta robots noindex/nofollow, Open Graph and Twitter Card tags,
+canonical links, image alt-text coverage, named schema types, and thin-content
+word counts are being added alongside the checks documented above. This
+research brief and the tool's FAQ were written to describe the current check
+list without over-specifying it, so that pass can land without leaving this
+document stale. The 40/20/20/10/10 weighting and the crawler-access-dominates
+rationale are unaffected — new on-page checks extend the existing "on-page
+basics" weight rather than displacing it.

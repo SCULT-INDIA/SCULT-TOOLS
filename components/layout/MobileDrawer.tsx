@@ -157,6 +157,20 @@ export function MobileDrawer() {
               <span className="text-[13px] text-ink-subtle">{getToolCount(c.slug)}</span>
             </Link>
           ))}
+          <Link
+            href="/prompts"
+            onClick={() => setOpen(false)}
+            aria-current={
+              pathname === '/prompts' || pathname.startsWith('/prompts/') ? 'page' : undefined
+            }
+            className={`mt-1 flex items-center justify-between rounded-sm border-line border-t px-2 py-2.5 pt-3.5 font-medium text-[17px] hover:text-violet-600 ${
+              pathname === '/prompts' || pathname.startsWith('/prompts/')
+                ? 'text-violet-700'
+                : ''
+            }`}
+          >
+            Prompts
+          </Link>
         </nav>
       </div>
     </>

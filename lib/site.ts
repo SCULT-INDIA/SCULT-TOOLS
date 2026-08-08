@@ -11,7 +11,7 @@ export const SITE = {
   parentName: 'Scult',
   tagline: 'Free tools that do the boring work for you',
   description:
-    'Free online tools for SEO, business, developers, writing, design and AI visibility — built by Scult, an AI-first digital agency. Most run entirely in your browser.',
+    'Free online tools plus a verified AI prompt library — SEO, business, developer and design utilities, and copy-paste prompts for ChatGPT, Claude, Cursor, Midjourney and more. Built by Scult, an AI-first digital agency.',
   locale: 'en-IN',
   gaId: process.env.NEXT_PUBLIC_GA_ID ?? '',
   /** Injected at build time by next.config.ts — see the note there. */

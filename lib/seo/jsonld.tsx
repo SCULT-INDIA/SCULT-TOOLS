@@ -1,4 +1,5 @@
 import { absoluteUrl, SITE } from '@/lib/site'
+import type { Prompt, PromptCategory } from '@/lib/prompts/types'
 import type { Category, Tool } from '@/lib/tools/types'
 
 /**
@@ -95,6 +96,58 @@ export function categoryJsonLd(category: Category, tools: readonly Tool[]): obje
         position: i + 1,
         name: tool.title,
         url: absoluteUrl(`/${tool.category}/${tool.slug}`),
+      })),
+    },
+  }
+}
+
+/**
+ * A prompt isn't an application — `SoftwareApplication` (toolJsonLd's type)
+ * would be the wrong fit. `CreativeWork` is schema.org's generic content
+ * type, which is exactly what a prompt is: authored content with a subject,
+ * not a program. See docs/research/prompt-library.md §6.
+ */
+export function promptJsonLd(prompt: Prompt, category: PromptCategory): object {
+  const url = absoluteUrl(`/prompts/${prompt.category}/${prompt.slug}`)
+  const latestVerification = prompt.verifiedAgainst[0]
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    '@id': `${url}#prompt`,
+    name: prompt.title,
+    url,
+    description: prompt.description,
+    about: category.name,
+    keywords: prompt.tags.join(', '),
+    isAccessibleForFree: true,
+    publisher: PUBLISHER,
+    inLanguage: SITE.locale,
+    dateModified: prompt.changelog.at(-1)?.date ?? latestVerification?.date,
+  }
+}
+
+export function promptCollectionJsonLd(
+  category: PromptCategory,
+  prompts: readonly Prompt[],
+): object {
+  const url = absoluteUrl(`/prompts/${category.slug}`)
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${url}#collection`,
+    name: `${category.name} Prompts`,
+    description: category.intro,
+    url,
+    inLanguage: SITE.locale,
+    publisher: PUBLISHER,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: prompts.length,
+      itemListElement: prompts.map((prompt, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: prompt.title,
+        url: absoluteUrl(`/prompts/${prompt.category}/${prompt.slug}`),
       })),
     },
   }

@@ -1,5 +1,6 @@
 import { lookup } from 'node:dns/promises'
 import { NextResponse } from 'next/server'
+import { checkRateLimit, clientIpFromHeaders } from '@/lib/rate-limit'
 import {
   type ApiError,
   buildReport,
@@ -41,6 +42,12 @@ const TIMEOUT_MS = 10_000
 const MAX_REDIRECTS = 3
 const MAX_BODY_BYTES = 2 * 1024 * 1024
 const REVALIDATE_SECONDS = 21_600 // 6 hours
+
+/** Each check can fire up to 4 outbound fetches against a THIRD PARTY's
+ * server on the visitor's behalf — more conservative than the speed test,
+ * which only ever calls Google. See lib/rate-limit.ts. */
+const RATE_LIMIT_MAX = 6
+const RATE_LIMIT_WINDOW_MS = 60_000
 
 interface FetchOutcome {
   readonly ok: boolean
@@ -175,6 +182,22 @@ function errorResponse(error: ApiError, httpStatus: number): NextResponse {
 }
 
 export async function GET(request: Request): Promise<NextResponse> {
+  const clientIp = clientIpFromHeaders(request.headers)
+  const rateLimit = checkRateLimit(
+    `ai-visibility:${clientIp}`,
+    RATE_LIMIT_MAX,
+    RATE_LIMIT_WINDOW_MS,
+  )
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      {
+        code: 'rate-limited' satisfies ApiError['code'],
+        error: `Too many checks from this connection — wait ${rateLimit.retryAfterSeconds}s and try again.`,
+      },
+      { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfterSeconds) } },
+    )
+  }
+
   const rawUrl = new URL(request.url).searchParams.get('url') ?? ''
   const validation = validateTargetUrl(rawUrl)
   if (validation.url === undefined || validation.hostname === undefined) {

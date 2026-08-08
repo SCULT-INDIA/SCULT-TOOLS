@@ -20,6 +20,9 @@ const nextConfig: NextConfig = {
   // Faster cold starts across restarts in dev.
   experimental: {
     turbopackFileSystemCacheForDev: true,
+    // The brand-icon barrel exports ~330 marks; the prompt library uses ~25.
+    // Without this, every page importing BrandIcon pulls the whole set.
+    optimizePackageImports: ['@lobehub/icons'],
   },
 
   images: {

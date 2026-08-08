@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { PROMPTS } from '@/lib/prompts/registry'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { parentLink, SITE } from '@/lib/site'
 import { TOOLS } from '@/lib/tools/registry'
@@ -71,6 +72,21 @@ export default function AboutPage() {
             calculator shows its formula because we wanted to be able to check the numbers
             ourselves.
           </p>
+          <p className="mt-4 text-[16px] text-ink-muted leading-7">
+            The{' '}
+            {/* Same ambient-page/standalone-link pairing as the byline link
+                above — see that comment. */}
+            <Link
+              href="/prompts"
+              className="text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4 hover:text-violet-600"
+            >
+              prompt library
+            </Link>{' '}
+            is held to the same standard: {PROMPTS.length} free prompts for ChatGPT,
+            Claude, Cursor, Midjourney and the rest, each published with an explanation of
+            why it works and the tool version it was verified against — dated, so you can
+            judge how current it still is.
+          </p>
         </section>
 
         <section className="mt-12">
@@ -106,7 +122,7 @@ export default function AboutPage() {
           </p>
         </section>
 
-        <p className="mt-10">
+        <p className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
           {/* See the byline link's comment above for the accent-text fix
               pattern; this is the same .btn-brutal resting-state fix used on
               the homepage's two CTAs and the 404 page. */}
@@ -115,6 +131,12 @@ export default function AboutPage() {
             className="btn-brutal text-black border-black hover:text-ink hover:border-ink"
           >
             BROWSE ALL {TOOLS.length} TOOLS
+          </Link>
+          <Link
+            href="/prompts"
+            className="text-[15px] text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4 hover:text-violet-600"
+          >
+            Or the {PROMPTS.length} prompts →
           </Link>
         </p>
       </article>

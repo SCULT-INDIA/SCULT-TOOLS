@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ToolCard } from '@/components/ui/ToolCard'
+import { PROMPTS } from '@/lib/prompts/registry'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { getToolsByCategory, TOOLS } from '@/lib/tools/registry'
@@ -35,6 +36,18 @@ export default function AllToolsPage() {
         </h1>
         <p className="mt-5 max-w-[62ch] text-[17px] text-ink-muted leading-7 md:text-lead">
           Everything on the site, grouped by category. No signup on any of them.
+        </p>
+        <p className="mt-3 text-[15px] text-ink-muted">
+          Looking for prompts instead?{' '}
+          {/* Same ambient-page/standalone-link pairing as the "Category
+              page →" links below — see that comment. */}
+          <Link
+            href="/prompts"
+            className="text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4 hover:text-violet-600"
+          >
+            The prompt library
+          </Link>{' '}
+          has {PROMPTS.length} of those, also free.
         </p>
 
         <nav aria-label="Jump to category" className="mt-7 flex flex-wrap gap-2">

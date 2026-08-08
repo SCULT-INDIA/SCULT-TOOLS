@@ -280,9 +280,131 @@ export function extractJsonLd(html: string): JsonLdResult {
   return { blockCount, parsedCount, types: [...new Set(types)] }
 }
 
+/**
+ * The @type values that let an AI system know *what the site even is* — as
+ * distinct from just "some JSON-LD exists". `extractJsonLd` keeps collecting
+ * every raw @type (the UI still lists them all); this is a refinement layered
+ * on top, not a replacement: a page can declare FAQPage and Article schema
+ * all day and an engine still won't know if it's a bakery or a bank without
+ * one of these.
+ */
+const IDENTITY_SCHEMA_TYPES = new Set([
+  'organization',
+  'website',
+  'localbusiness',
+  'person',
+])
+
+/** True when at least one declared @type identifies what the site is. */
+export function hasIdentitySchema(types: readonly string[]): boolean {
+  return types.some((t) => IDENTITY_SCHEMA_TYPES.has(t.toLowerCase()))
+}
+
 // ---------------------------------------------------------------------------
 // On-page basics AI answers rely on
 // ---------------------------------------------------------------------------
+
+export interface SocialMetaResult {
+  readonly ogTitle: boolean
+  readonly ogDescription: boolean
+  readonly ogImage: boolean
+  /** Twitter Card is a fallback/bonus signal, reported but not required — see analyzeBasics. */
+  readonly twitterCard: boolean
+}
+
+/**
+ * Checks for the three Open Graph tags and the Twitter Card tag AI systems
+ * and social crawlers use to understand page context without fetching the
+ * whole page. Open Graph uses `property=`, Twitter Card uses `name=` — the
+ * two conventions this regex-based reader has to cover.
+ */
+export function analyzeSocialMeta(html: string): SocialMetaResult {
+  const ogTitle = findMetaContentByAttr(html, 'property', 'og:title')
+  const ogDescription = findMetaContentByAttr(html, 'property', 'og:description')
+  const ogImage = findMetaContentByAttr(html, 'property', 'og:image')
+  const twitterCard = findMetaContentByAttr(html, 'name', 'twitter:card')
+  return {
+    ogTitle: ogTitle !== undefined && ogTitle !== '',
+    ogDescription: ogDescription !== undefined && ogDescription !== '',
+    ogImage: ogImage !== undefined && ogImage !== '',
+    twitterCard: twitterCard !== undefined && twitterCard !== '',
+  }
+}
+
+/** True when a `<link rel="canonical">` tag with a non-empty href exists. */
+export function hasCanonicalLink(html: string): boolean {
+  const tags = html.match(/<link\b[^>]*>/gi) ?? []
+  const relRe = /rel\s*=\s*["']?canonical["'\s/>]/i
+  const hrefRe = /href\s*=\s*(?:"([^"]*)"|'([^']*)')/i
+  for (const tag of tags) {
+    if (!relRe.test(tag)) continue
+    const match = hrefRe.exec(tag)
+    const href = (match?.[1] ?? match?.[2] ?? '').trim()
+    if (href !== '') return true
+  }
+  return false
+}
+
+export interface AltTextResult {
+  readonly imgCount: number
+  readonly withAlt: number
+  /**
+   * Fraction of <img> tags with a non-empty alt attribute, 0–1. Defined as 1
+   * (full credit) when the homepage has no <img> tags at all — there is
+   * nothing to flag, and a text-only homepage should not be penalized twice
+   * by both the alt-text check and the thin-content check below.
+   */
+  readonly coverage: number
+}
+
+/**
+ * Parses every <img> tag on the homepage and computes what fraction carries
+ * a non-empty alt attribute — a real multimodal-parsing signal: an AI system
+ * that cannot run JavaScript or vision-caption every image leans on alt text
+ * to know what an image is.
+ */
+export function analyzeAltText(html: string): AltTextResult {
+  const tags = html.match(/<img\b[^>]*>/gi) ?? []
+  const imgCount = tags.length
+  const altRe = /alt\s*=\s*(?:"([^"]*)"|'([^']*)')/i
+  let withAlt = 0
+  for (const tag of tags) {
+    const match = altRe.exec(tag)
+    const value = (match?.[1] ?? match?.[2] ?? '').trim()
+    if (value !== '') withAlt += 1
+  }
+  return { imgCount, withAlt, coverage: imgCount === 0 ? 1 : withAlt / imgCount }
+}
+
+/** Below this fraction of <img> tags with alt text, the basics check flags it. */
+const ALT_TEXT_MIN_COVERAGE = 0.8
+
+/**
+ * A homepage this short gives an AI engine nothing to cite regardless of
+ * every other check passing — a rough word count is enough to catch it.
+ */
+const THIN_CONTENT_WORD_THRESHOLD = 150
+
+/**
+ * Rough visible-word count: strips <script> and <style> blocks (their
+ * contents are not visible text), strips every remaining tag, and counts
+ * whitespace-separated tokens. Deliberately approximate — no entity
+ * decoding, no awareness of `display: none` — this is a thin-content
+ * tripwire, not a word processor.
+ */
+export function countVisibleWords(html: string): number {
+  const withoutScripts = html.replace(/<script\b[\s\S]*?<\/script>/gi, ' ')
+  const withoutStyles = withoutScripts.replace(/<style\b[\s\S]*?<\/style>/gi, ' ')
+  const withoutTags = withoutStyles.replace(/<[^>]*>/g, ' ')
+  return withoutTags.split(/\s+/).filter((w) => w.length > 0).length
+}
+
+/**
+ * How many independent basics signals `analyzeBasics` grades. Kept as a
+ * named constant because `computeScore`'s basics bucket divides by it —
+ * changing what counts as a basic signal here changes what 20 points means.
+ */
+const BASICS_SIGNAL_COUNT = 9
 
 export interface BasicsResult {
   readonly title: string | undefined
@@ -290,16 +412,36 @@ export interface BasicsResult {
   readonly h1Count: number
   readonly h2Count: number
   readonly lang: string | undefined
-  /** How many of the five signals are present (title, description, one h1, ≥2 h2s, lang). */
+  readonly social: SocialMetaResult
+  readonly hasCanonical: boolean
+  readonly altText: AltTextResult
+  readonly wordCount: number
+  /**
+   * How many of the nine signals are present/healthy: title, description,
+   * one h1, ≥2 h2s, lang, a complete Open Graph trio (og:title/description/
+   * image), a canonical link, alt-text coverage at or above
+   * ALT_TEXT_MIN_COVERAGE, and a word count at or above
+   * THIN_CONTENT_WORD_THRESHOLD.
+   */
   readonly presentCount: number
 }
 
-/** Finds the content attribute of the first <meta name="..."> tag, attribute order-independent. */
-function findMetaContent(html: string, name: string): string | undefined {
+/**
+ * Finds the content attribute of the first `<meta attr="key" ...>` tag,
+ * attribute order-independent. Generalized over the matching attribute so it
+ * covers both `<meta name="description">` and `<meta property="og:title">` —
+ * the two conventions real pages mix, since Open Graph tags use `property`
+ * while everything else on this page uses `name`.
+ */
+function findMetaContentByAttr(
+  html: string,
+  attr: 'name' | 'property',
+  key: string,
+): string | undefined {
   const tags = html.match(/<meta\b[^>]*>/gi) ?? []
-  const nameRe = new RegExp(`name\\s*=\\s*["']?${escapeRegExp(name)}["'\\s/>]`, 'i')
+  const attrRe = new RegExp(`${attr}\\s*=\\s*["']?${escapeRegExp(key)}["'\\s/>]`, 'i')
   for (const tag of tags) {
-    if (!nameRe.test(tag)) continue
+    if (!attrRe.test(tag)) continue
     const content = /content\s*=\s*(?:"([^"]*)"|'([^']*)')/i.exec(tag)
     if (content === null) continue
     return (content[1] ?? content[2] ?? '').trim()
@@ -307,12 +449,18 @@ function findMetaContent(html: string, name: string): string | undefined {
   return undefined
 }
 
+/** Finds the content attribute of the first <meta name="..."> tag, attribute order-independent. */
+function findMetaContent(html: string, name: string): string | undefined {
+  return findMetaContentByAttr(html, 'name', name)
+}
+
 /**
  * Extracts the plain-HTML signals answer engines read before anything else:
- * title, meta description, a single h1, h2 section headings, and the lang
- * attribute. Regex-based by design — this runs server-side on raw fetched
- * HTML with no DOM, and these five signals are all detectable at the tag
- * level without building a tree.
+ * title, meta description, a single h1, h2 section headings, the lang
+ * attribute, Open Graph/Twitter Card tags, a canonical link, image alt-text
+ * coverage, and a rough visible-word count. Regex-based by design — this
+ * runs server-side on raw fetched HTML with no DOM, and every one of these
+ * signals is detectable at the tag level without building a tree.
  */
 export function analyzeBasics(html: string): BasicsResult {
   const titleMatch = /<title\b[^>]*>([\s\S]*?)<\/title>/i.exec(html)
@@ -329,14 +477,38 @@ export function analyzeBasics(html: string): BasicsResult {
   const langMatch = /<html\b[^>]*\blang\s*=\s*["']?([a-zA-Z-]+)["'\s>]/i.exec(html)
   const lang = langMatch?.[1]
 
+  const social = analyzeSocialMeta(html)
+  const hasCanonical = hasCanonicalLink(html)
+  const altText = analyzeAltText(html)
+  const wordCount = countVisibleWords(html)
+
+  const openGraphComplete = social.ogTitle && social.ogDescription && social.ogImage
+  const altHealthy = altText.coverage >= ALT_TEXT_MIN_COVERAGE
+  const hasEnoughContent = wordCount >= THIN_CONTENT_WORD_THRESHOLD
+
   const presentCount =
     (title !== undefined ? 1 : 0) +
     (description !== undefined ? 1 : 0) +
     (h1Count >= 1 ? 1 : 0) +
     (h2Count >= 2 ? 1 : 0) +
-    (lang !== undefined ? 1 : 0)
+    (lang !== undefined ? 1 : 0) +
+    (openGraphComplete ? 1 : 0) +
+    (hasCanonical ? 1 : 0) +
+    (altHealthy ? 1 : 0) +
+    (hasEnoughContent ? 1 : 0)
 
-  return { title, description, h1Count, h2Count, lang, presentCount }
+  return {
+    title,
+    description,
+    h1Count,
+    h2Count,
+    lang,
+    social,
+    hasCanonical,
+    altText,
+    wordCount,
+    presentCount,
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -364,6 +536,38 @@ export function detectNoaiSignals(html: string, xRobotsTag?: string): readonly s
 }
 
 // ---------------------------------------------------------------------------
+// noindex / nofollow signals
+// ---------------------------------------------------------------------------
+
+/**
+ * Detects `noindex` / `nofollow` in the meta robots tag or the X-Robots-Tag
+ * header — deliberately separate from `detectNoaiSignals` above, because
+ * these mean something very different: `noai` is an opt-out request aimed at
+ * AI training, while `noindex` tells every search and answer engine not to
+ * index the page at all. A noindexed homepage is close to fatal for AI
+ * visibility (there is nothing to retrieve, cite, or ground an answer in),
+ * so it gets its own check even though — like noai — it is reported here
+ * rather than folded into the scored basics bucket; see buildReport for why.
+ */
+export function detectNoindexSignals(
+  html: string,
+  xRobotsTag?: string,
+): readonly string[] {
+  const signals: string[] = []
+  const sources: { label: string; value: string | undefined }[] = [
+    { label: 'meta robots tag', value: findMetaContent(html, 'robots') },
+    { label: 'X-Robots-Tag header', value: xRobotsTag },
+  ]
+  for (const { label, value } of sources) {
+    if (value === undefined) continue
+    const tokens = value.toLowerCase().split(/[\s,]+/)
+    if (tokens.includes('noindex')) signals.push(`noindex in ${label}`)
+    if (tokens.includes('nofollow')) signals.push(`nofollow in ${label}`)
+  }
+  return signals
+}
+
+// ---------------------------------------------------------------------------
 // Scoring
 // ---------------------------------------------------------------------------
 
@@ -371,7 +575,7 @@ export interface ScoreInput {
   /** Fraction of the AI bot roster allowed to crawl `/`, 0–1. */
   readonly crawlerFraction: number
   readonly structuredData: CheckStatus
-  /** Fraction of the five on-page basics present, 0–1. */
+  /** Fraction of the nine on-page basics present/healthy, 0–1 (see BASICS_SIGNAL_COUNT). */
   readonly basicsFraction: number
   readonly llmsTxt: CheckStatus
   readonly sitemap: CheckStatus
@@ -394,6 +598,17 @@ export function bandFor(score: number): BandLabel {
  * 20, llms.txt 10, sitemap 10. Crawler access dominates deliberately — a
  * blocked crawler makes every other signal moot for that engine. Fractional
  * inputs are clamped so a caller bug can never produce a score outside 0–100.
+ *
+ * Two checks never appear in this input at all: `noai` and `noindex` are
+ * informational only (see their docblocks in buildReport). `noindex` is
+ * arguably the single most severe finding this tool can report — a
+ * noindexed homepage is close to fatal for AI visibility — but it is
+ * intentionally excluded from the score rather than smuggled into the
+ * basics fraction, for the same reason `noai` always was: opting a page out
+ * of indexing is sometimes deliberate (a staging homepage, a page mid-
+ * migration), and a scored check should never punish a choice it cannot
+ * distinguish from a mistake. It gets a dedicated, prominently-flagged card
+ * instead of points, which is what actually gets it fixed when it is one.
  */
 export function computeScore(input: ScoreInput): { score: number; band: BandLabel } {
   const clamp = (n: number): number =>
@@ -600,6 +815,7 @@ export interface BotAccess {
 
 export type CheckId =
   | 'crawlers'
+  | 'noindex'
   | 'structured-data'
   | 'basics'
   | 'llms-txt'
@@ -690,27 +906,68 @@ export function buildReport(input: ReportInput): VisibilityReport {
     scored: true,
   })
 
-  // 2. Structured data — weight 20
+  // 2. noindex/nofollow — informational, not scored (see detectNoindexSignals'
+  // docblock for why this sits alongside noai rather than inside the scored
+  // basics bucket: it deserves a loud, dedicated card, but folding a single
+  // meta tag into a 9-way average would bury exactly the signal that should
+  // never be buried). Status can still be 'fail' despite being unscored —
+  // CheckCard renders status independently of `scored`, which is how this
+  // stays visually severe without moving any points.
+  const noindexSignals = detectNoindexSignals(input.html, input.xRobotsTag)
+  const hasNoindex = noindexSignals.some((s) => s.startsWith('noindex'))
+  const hasNofollow = noindexSignals.some((s) => s.startsWith('nofollow'))
+  checks.push({
+    id: 'noindex',
+    label: 'Meta robots noindex/nofollow',
+    status: hasNoindex ? 'fail' : hasNofollow ? 'warn' : 'pass',
+    finding: hasNoindex
+      ? `Found: ${noindexSignals.join('; ')}. This tells every search and AI engine not to index the page at all — none of the other checks on this report matter if this one is wrong.`
+      : hasNofollow
+        ? `Found: ${noindexSignals.join('; ')}. The page can still be indexed, but crawlers are told not to follow its links.`
+        : 'No noindex or nofollow directive in the meta robots tag or X-Robots-Tag header.',
+    fix: hasNoindex
+      ? 'Remove "noindex" from the meta robots tag / X-Robots-Tag header unless you deliberately want this page excluded from search and AI answers.'
+      : hasNofollow
+        ? 'Remove "nofollow" if the links on this page should pass discovery to the rest of your site.'
+        : 'Nothing to do.',
+    scored: false,
+  })
+
+  // 3. Structured data — weight 20
   const jsonLd = extractJsonLd(input.html)
-  const structuredStatus: CheckStatus = jsonLd.types.length > 0 ? 'pass' : 'fail'
+  const identityPresent = hasIdentitySchema(jsonLd.types)
+  const structuredStatus: CheckStatus =
+    jsonLd.types.length === 0 ? 'fail' : identityPresent ? 'pass' : 'warn'
   checks.push({
     id: 'structured-data',
     label: 'Structured data (JSON-LD)',
     status: structuredStatus,
     finding:
       jsonLd.types.length > 0
-        ? `Found ${jsonLd.parsedCount} JSON-LD block${jsonLd.parsedCount === 1 ? '' : 's'} declaring: ${jsonLd.types.join(', ')}.`
+        ? identityPresent
+          ? `Found ${jsonLd.parsedCount} JSON-LD block${jsonLd.parsedCount === 1 ? '' : 's'} declaring: ${jsonLd.types.join(', ')}.`
+          : `Found ${jsonLd.parsedCount} JSON-LD block${jsonLd.parsedCount === 1 ? '' : 's'} declaring: ${jsonLd.types.join(', ')} — but none of them identifies what the site even is (Organization, WebSite, LocalBusiness or Person).`
         : jsonLd.blockCount > 0
           ? `Found ${jsonLd.blockCount} JSON-LD block${jsonLd.blockCount === 1 ? '' : 's'} but none parsed as valid JSON.`
           : 'No JSON-LD structured data on the homepage — AI engines have to infer what your site is instead of being told.',
     fix:
       jsonLd.types.length > 0
-        ? 'Nothing to fix. Consider adding FAQPage or Article schema on content pages too.'
+        ? identityPresent
+          ? 'Nothing to fix. Consider adding FAQPage or Article schema on content pages too.'
+          : 'Add an Organization, WebSite, LocalBusiness or Person block alongside what you already have — it is what tells engines what the site is, not just what a given page is about.'
         : 'Add a <script type="application/ld+json"> block with at least Organization or WebSite schema. Our Schema Markup Generator builds it for you.',
     scored: true,
   })
 
-  // 3. On-page basics — weight 20
+  // 4. On-page basics — weight 20, spread across nine signals (see
+  // BASICS_SIGNAL_COUNT): the original five (title, description, h1, h2s,
+  // lang) plus Open Graph, canonical link, image alt-text coverage and a
+  // thin-content tripwire, all folded in here rather than given their own
+  // scored checks — each is a real but comparatively minor signal next to
+  // crawler access or structured data, and this bucket is exactly where the
+  // original five already live. Pass/warn/fail thresholds are scaled up from
+  // the original "0 missing / ≤2 missing / more" to keep roughly the same
+  // proportion (≤2 of 5 ≈ 40% ↔ ≤3 of 9).
   const basics = analyzeBasics(input.html)
   const basicsMissing: string[] = []
   if (basics.title === undefined) basicsMissing.push('title tag')
@@ -718,20 +975,35 @@ export function buildReport(input: ReportInput): VisibilityReport {
   if (basics.h1Count === 0) basicsMissing.push('h1 heading')
   if (basics.h2Count < 2) basicsMissing.push('h2 section headings')
   if (basics.lang === undefined) basicsMissing.push('lang attribute')
+  if (!(basics.social.ogTitle && basics.social.ogDescription && basics.social.ogImage)) {
+    basicsMissing.push('Open Graph tags (og:title, og:description, og:image)')
+  }
+  if (!basics.hasCanonical) basicsMissing.push('canonical link')
+  if (basics.altText.coverage < ALT_TEXT_MIN_COVERAGE) {
+    const pct = Math.round(basics.altText.coverage * 100)
+    basicsMissing.push(
+      basics.altText.imgCount === 0
+        ? 'image alt text'
+        : `image alt text (only ${pct}% of ${basics.altText.imgCount} images)`,
+    )
+  }
+  if (basics.wordCount < THIN_CONTENT_WORD_THRESHOLD) {
+    basicsMissing.push(`enough visible text (only ${basics.wordCount} words)`)
+  }
   const basicsStatus: CheckStatus =
-    basicsMissing.length === 0 ? 'pass' : basicsMissing.length <= 2 ? 'warn' : 'fail'
+    basicsMissing.length === 0 ? 'pass' : basicsMissing.length <= 3 ? 'warn' : 'fail'
   checks.push({
     id: 'basics',
     label: 'On-page basics AI answers rely on',
     status: basicsStatus,
     finding:
       basicsMissing.length === 0
-        ? `All five basics present: title, meta description, ${basics.h1Count} h1, ${basics.h2Count} h2 headings, lang="${basics.lang ?? ''}".`
+        ? `All nine basics present: title, meta description, ${basics.h1Count} h1, ${basics.h2Count} h2 headings, lang="${basics.lang ?? ''}", Open Graph tags, a canonical link, ${Math.round(basics.altText.coverage * 100)}% image alt-text coverage, and ${basics.wordCount} words of visible text.`
         : `Missing or weak: ${basicsMissing.join(', ')}.`,
     fix:
       basicsMissing.length === 0
         ? 'Nothing to fix. Keep headings descriptive — engines quote them as answer anchors.'
-        : 'Add the missing elements. Answer engines lean on the title, description and heading outline to decide what a page answers.',
+        : 'Add the missing elements. Answer engines lean on the title, description and heading outline to decide what a page answers, and a thin or context-free homepage gives them nothing to cite even when every other check passes.',
     scored: true,
   })
 
@@ -791,7 +1063,7 @@ export function buildReport(input: ReportInput): VisibilityReport {
   const { score, band } = computeScore({
     crawlerFraction,
     structuredData: structuredStatus,
-    basicsFraction: basics.presentCount / 5,
+    basicsFraction: basics.presentCount / BASICS_SIGNAL_COUNT,
     llmsTxt: llmsPresent ? 'pass' : 'warn',
     sitemap: sitemapStatus,
   })
@@ -817,7 +1089,12 @@ function formatBytes(bytes: number): string {
 // API response types shared with the component
 // ---------------------------------------------------------------------------
 
-export type ApiErrorCode = 'invalid-url' | 'private-address' | 'unreachable' | 'blocked'
+export type ApiErrorCode =
+  | 'invalid-url'
+  | 'private-address'
+  | 'unreachable'
+  | 'blocked'
+  | 'rate-limited'
 
 export interface ApiError {
   readonly error: string
@@ -853,6 +1130,26 @@ export function isApiError(value: unknown): value is ApiError {
  * over the report contract, and a contract change should break a test rather
  * than silently truncate what someone pastes to their developer.
  */
+/**
+ * The one-line English explanation of why a bot got its verdict: the exact
+ * rule that decided (quoted verbatim) and which group it came from, or —
+ * when no rule matched at all — why an absence still means something
+ * specific rather than leaving a blank. Shared between `formatReportText`
+ * and `formatReportMarkdown` because it is the one piece of prose both
+ * exports need identically; only the surrounding punctuation (a plain
+ * dash-joined line vs. a table cell) differs between them.
+ */
+function describeBotVerdict(bot: BotAccess): string {
+  if (bot.matchedRule !== undefined) {
+    return `${bot.matchedRule} — from ${
+      bot.source === 'specific' ? 'a group naming this bot' : 'the User-agent: * group'
+    }`
+  }
+  return bot.source === 'default'
+    ? 'robots.txt names no group for it, so it is allowed by default'
+    : 'a group matched but no rule applies to /'
+}
+
 export function formatReportText(report: VisibilityReport): string {
   const lines: string[] = [
     `AI visibility report — ${report.url}`,
@@ -863,18 +1160,8 @@ export function formatReportText(report: VisibilityReport): string {
   ]
 
   for (const bot of report.bots) {
-    const reason =
-      bot.matchedRule !== undefined
-        ? `${bot.matchedRule} — from ${
-            bot.source === 'specific'
-              ? 'a group naming this bot'
-              : 'the User-agent: * group'
-          }`
-        : bot.source === 'default'
-          ? 'robots.txt names no group for it, so it is allowed by default'
-          : 'a group matched but no rule applies to /'
     lines.push(
-      `- ${bot.name} (${bot.company}): ${bot.allowed ? 'ALLOWED' : 'BLOCKED'} — ${reason}`,
+      `- ${bot.name} (${bot.company}): ${bot.allowed ? 'ALLOWED' : 'BLOCKED'} — ${describeBotVerdict(bot)}`,
     )
   }
 
@@ -890,6 +1177,104 @@ export function formatReportText(report: VisibilityReport): string {
   }
 
   lines.push('', 'Checked with tools.scult.in/geo/ai-visibility-checker')
+  return lines.join('\n')
+}
+
+/**
+ * Escapes text for safe embedding in a Markdown table cell.
+ *
+ * Every table cell below is one line, so a literal newline inside the value
+ * would silently start a new (broken) row; and an unescaped `|` would fuse
+ * two columns into one. Both are live risks here, not theoretical: a quoted
+ * robots.txt rule and a JSON-LD `@type` string are both third-party content
+ * a hostile site controls, and both land directly in a table cell below.
+ */
+function escapeMarkdownCell(text: string): string {
+  return text.replace(/\r?\n/g, ' ').replace(/\|/g, '\\|')
+}
+
+/**
+ * Renders a finished report as a standalone Markdown document, for the
+ * "Download Markdown" export.
+ *
+ * Purpose  `formatReportText`'s audience is a paste into a ticket or Slack
+ *          thread — a flat, skimmable block. This is a saved artifact: a
+ *          file that should still be a well-formed report when opened cold
+ *          in a Markdown viewer, checked into a repo next to a robots.txt
+ *          fix, or handed to another tool that reads Markdown. A sibling
+ *          shaped for that reader, not a wrapper around the plain-text one —
+ *          real tables for the two array-shaped parts of the report (the
+ *          per-bot verdicts, the full check list) rather than a bulleted
+ *          transcript of the same paragraphs.
+ * Inputs   a `VisibilityReport`, plus `generatedAt` — a caller-supplied,
+ *          already-formatted timestamp string. This module deliberately
+ *          calls `Date`/`Date.now()` nowhere (a project-wide rule, since
+ *          code that runs at render time and calls either breaks static
+ *          generation): the download button stamps the moment of the click
+ *          and passes the result in here, so this function stays pure and
+ *          exactly reproducible in a test.
+ * Outputs  a Markdown string: an H1 naming the URL, the score and band, a
+ *          per-bot access table, the JSON-LD `@type` values found as a
+ *          bullet list (or a stated absence), a full checks table, and a
+ *          closing attribution line.
+ * Failure  none. Every value that ultimately comes from the target site
+ *          itself — a quoted robots.txt rule, a JSON-LD type name — passes
+ *          through `escapeMarkdownCell` before it reaches a table cell.
+ */
+export function formatReportMarkdown(
+  report: VisibilityReport,
+  generatedAt: string,
+): string {
+  const lines: string[] = [
+    `# AI Visibility Report — ${escapeMarkdownCell(report.url)}`,
+    '',
+    `**Score:** ${report.score}/100 — **${report.band}**`,
+    '',
+    `**AI crawlers allowed:** ${report.allowedBotCount} of ${report.bots.length}`,
+    '',
+    '## AI crawler access',
+    '',
+    '| Crawler | Company | Verdict | Rule that decided |',
+    '| --- | --- | --- | --- |',
+  ]
+
+  for (const bot of report.bots) {
+    lines.push(
+      `| ${escapeMarkdownCell(bot.name)} | ${escapeMarkdownCell(bot.company)} | ${
+        bot.allowed ? 'Allowed' : 'Blocked'
+      } | ${escapeMarkdownCell(describeBotVerdict(bot))} |`,
+    )
+  }
+
+  lines.push('', '## Structured data (JSON-LD types found)', '')
+  if (report.jsonLdTypes.length > 0) {
+    for (const type of report.jsonLdTypes) lines.push(`- ${escapeMarkdownCell(type)}`)
+  } else {
+    lines.push('_No JSON-LD structured data found on the homepage._')
+  }
+
+  lines.push(
+    '',
+    '## Checks',
+    '',
+    '| Check | Status | Scored | Finding | Fix |',
+    '| --- | --- | --- | --- | --- |',
+  )
+  for (const check of report.checks) {
+    lines.push(
+      `| ${escapeMarkdownCell(check.label)} | ${check.status.toUpperCase()} | ${
+        check.scored ? 'Yes' : 'No (informational)'
+      } | ${escapeMarkdownCell(check.finding)} | ${escapeMarkdownCell(check.fix)} |`,
+    )
+  }
+
+  lines.push(
+    '',
+    '---',
+    '',
+    `_Generated ${escapeMarkdownCell(generatedAt)} by the [AI Visibility Checker](https://tools.scult.in/geo/ai-visibility-checker)._`,
+  )
+
   return lines.join('\n')
 }
 
