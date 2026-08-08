@@ -118,4 +118,15 @@ export const RESERVED_SLUGS: readonly string[] = [
   // see docs/research/prompt-library.md §6. Reserved here so a future tool
   // or category can never collide with /prompts.
   'prompts',
+  // The 2026-08 trust/GEO-AEO page build-out. Same reasoning as the block
+  // above: these are top-level routes, not tools, and must never collide
+  // with a future category or tool slug.
+  'faq',
+  'contact',
+  'security',
+  'accessibility',
+  'changelog',
+  'roadmap',
+  'brand',
+  'glossary',
 ]
