@@ -1,42 +1,53 @@
-Scult Tools — Proprietary License
-==================================
+Scult Tools License — Free for Non-Commercial Use
+==================================================
 
 Copyright (c) 2026 Scult India. All rights reserved.
 
 This repository, including its source code, design system, documentation,
-prompt library content, and all associated assets (logos, icons, and
-brand marks), is the exclusive property of **Scult India** ("Scult").
+and prompt library content, is owned by **Scult India** ("Scult") and made
+available under the terms below.
 
-## What this license permits
+## The short version
 
-The source is published publicly on GitHub for **transparency, review, and
-portfolio purposes**. You may:
+**Free and open to use, study, modify, and self-host — for non-commercial
+purposes.** Want to run it, or something built on it, as part of a business
+or a paid product? That needs a commercial license from Scult — see
+[Commercial use](#commercial-use) below.
 
-- View, clone, and read the source code.
-- Fork the repository for the purpose of submitting a pull request back to
-  this project.
+## Non-commercial use — free, no permission needed
+
+You may, at no cost and without asking first:
+
+- Use, run, and self-host this code for personal projects, learning,
+  academic work, research, non-profit use, or evaluation.
+- Copy, modify, and fork the repository, including for your own
+  non-commercial variant.
+- Submit a pull request back to this project.
 - Reference this project by name and link to it (e.g. in articles, résumés,
   or case studies), with attribution to Scult India.
 
-## What this license does not permit
+"Non-commercial" means you are not charging anyone for it, not using it to
+generate advertising or subscription revenue, and not operating it (or a
+derivative of it) as, or on behalf of, a for-profit business.
 
-Unless you have prior **written permission from Scult India**, you may not:
+## Commercial use — talk to Scult first
 
-- Use, copy, modify, merge, publish, distribute, sublicense, or sell copies
-  of this software or any derivative of it, in whole or in part.
-- Deploy this codebase, or a substantially similar copy of it, as your own
-  product or service — commercial or non-commercial.
-- Reuse the Scult or Scult Tools brand names, wordmarks, or logo assets
-  (`public/brand/`, `public/tool-icons/`) in any context outside this
-  repository.
-- Redistribute the prompt library content (`lib/prompts/`) as a standalone
-  product.
+If you want to use this project, or a derivative of it, **as part of a
+commercial product or service** — including running a hosted version for
+paying customers, embedding it in a client deliverable, or shipping a
+rebranded copy — you need a commercial license from Scult India first.
 
-This is **not** an open-source license in the OSI sense (MIT, Apache-2.0,
-GPL, etc.) — the code is *source-available*, not freely reusable. If you'd
-like to license any part of this project, integrate with it, or build
-something similar under a commercial agreement, reach out — see
-[Contact](README.md#contact--connect) in the README.
+This is deliberate, not a formality: Scult builds custom software for a
+living, and would rather build **the exact version you actually need** —
+same engineering standard, tailored to your stack and your brand — than
+have you adapt a generic tools hub. **[Book a call with Scult →](https://scult.in/?utm_source=github&utm_medium=license&utm_campaign=commercial-use#book-meeting)**
+
+## Brand and assets — always restricted
+
+Regardless of commercial or non-commercial use, the **Scult** and
+**Scult Tools** names, wordmarks, and logo assets (`public/brand/`,
+`public/tool-icons/`) may not be reused, in any context, without Scult
+India's written permission. Fork the code; don't fork the brand.
 
 ## Third-party code
 

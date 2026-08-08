@@ -1,30 +1,63 @@
+<p align="center">
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="public/brand/scult-tools-white.png">
-  <img src="public/brand/scult-tools-blue.png" alt="Scult Tools" width="360">
+  <img src="public/brand/scult-tools-blue.png" alt="Scult Tools" width="560">
 </picture>
+</p>
 
-### Free tools that do the boring work for you.
+<h3 align="center">Free tools that do the boring work for you.</h3>
 
-**15 production tools · 254 AI prompts · zero signups · zero ads · zero tracking.**
-Built and run in production by [**Scult**](https://scult.in) — an AI-first digital agency in Noida, Delhi NCR, India.
+<p align="center">
+<b>15 production tools · 254 AI prompts · zero signups · zero ads · zero tracking.</b><br>
+Built and run in production by <a href="https://scult.in"><b>Scult</b></a> — an AI-first digital agency in Noida, Delhi NCR, India.
+</p>
 
-[![CI](https://github.com/Pranjulrathour/Tools.scult.in/actions/workflows/ci.yml/badge.svg)](https://github.com/Pranjulrathour/Tools.scult.in/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-772%20passing-2ea44f?style=flat-square)](https://github.com/Pranjulrathour/Tools.scult.in/actions/workflows/ci.yml)
-[![Tools](https://img.shields.io/badge/tools-15-631AFF?style=flat-square)](#the-tools-catalogue)
-[![Prompts](https://img.shields.io/badge/AI%20prompts-254-631AFF?style=flat-square)](#the-prompt-library)
-[![Accessibility](https://img.shields.io/badge/WCAG-2.2%20AA-000000?style=flat-square)](#accessibility)
-[![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=next.js&logoColor=white)](#tech-stack)
-[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white)](#tech-stack)
-[![License](https://img.shields.io/badge/license-Proprietary%20%C2%B7%20Scult%20India-b60000?style=flat-square)](LICENSE.md)
+<p align="center">
+<a href="https://github.com/Pranjulrathour/Tools.scult.in/actions/workflows/ci.yml"><img src="https://github.com/Pranjulrathour/Tools.scult.in/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+<a href="https://github.com/Pranjulrathour/Tools.scult.in/actions/workflows/ci.yml"><img src="https://img.shields.io/badge/tests-772%20passing-2ea44f?style=flat-square" alt="Tests"></a>
+<a href="#the-tools-catalogue"><img src="https://img.shields.io/badge/tools-15-631AFF?style=flat-square" alt="Tools"></a>
+<a href="#the-prompt-library"><img src="https://img.shields.io/badge/AI%20prompts-254-631AFF?style=flat-square" alt="Prompts"></a>
+<a href="#accessibility"><img src="https://img.shields.io/badge/WCAG-2.2%20AA-000000?style=flat-square" alt="Accessibility"></a>
+<a href="#tech-stack"><img src="https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=next.js&logoColor=white" alt="Next.js"></a>
+<a href="#tech-stack"><img src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript"></a>
+<a href="LICENSE.md"><img src="https://img.shields.io/badge/license-Free%20for%20Non--Commercial%20Use-2ea44f?style=flat-square" alt="License"></a>
+</p>
 
-**[🌐 tools.scult.in](https://tools.scult.in)** &nbsp;·&nbsp; **[📚 Prompt Library](https://tools.scult.in/prompts)** &nbsp;·&nbsp; **[🐞 Report a bug](https://scult.in/?utm_source=github&utm_medium=readme&utm_campaign=report-bug#book-meeting)** &nbsp;·&nbsp; **[💡 Request a tool](https://scult.in/?utm_source=github&utm_medium=readme&utm_campaign=request-tool#book-meeting)**
+<p align="center">
+<b><a href="https://tools.scult.in">🌐 tools.scult.in</a></b> &nbsp;·&nbsp;
+<b><a href="https://tools.scult.in/prompts">📚 Prompt Library</a></b> &nbsp;·&nbsp;
+<b><a href="https://scult.in/?utm_source=github&utm_medium=readme&utm_campaign=report-bug#book-meeting">🐞 Report a bug</a></b> &nbsp;·&nbsp;
+<b><a href="https://scult.in/?utm_source=github&utm_medium=readme&utm_campaign=request-tool#book-meeting">💡 Request a tool</a></b> &nbsp;·&nbsp;
+<b><a href="https://scult.in/?utm_source=github&utm_medium=readme&utm_campaign=commercial-use#book-meeting">💼 Commercial license</a></b>
+</p>
+
+<p align="center">
+<a href="https://tools.scult.in/seo/schema-markup-generator"><img src="public/tool-icons/schema-markup-generator.png" width="52" height="52" alt="Schema Markup Generator" title="Schema Markup Generator"></a>
+<a href="https://tools.scult.in/seo/faq-schema-generator"><img src="public/tool-icons/faq-schema-generator.png" width="52" height="52" alt="FAQ Schema Generator" title="FAQ Schema Generator"></a>
+<a href="https://tools.scult.in/seo/utm-builder"><img src="public/tool-icons/utm-builder.png" width="52" height="52" alt="UTM Campaign URL Builder" title="UTM Campaign URL Builder"></a>
+<a href="https://tools.scult.in/seo/marketing-roi-calculator"><img src="public/tool-icons/marketing-roi-calculator.png" width="52" height="52" alt="Marketing ROI Calculator" title="Marketing ROI Calculator"></a>
+<a href="https://tools.scult.in/seo/website-speed-test"><img src="public/tool-icons/website-speed-test.png" width="52" height="52" alt="Website Speed Test" title="Website Speed Test"></a>
+<a href="https://tools.scult.in/business/invoice-generator"><img src="public/tool-icons/invoice-generator.png" width="52" height="52" alt="Free Invoice Generator" title="Free Invoice Generator"></a>
+<a href="https://tools.scult.in/business/business-name-generator"><img src="public/tool-icons/business-name-generator.png" width="52" height="52" alt="Business Name Generator" title="Business Name Generator"></a>
+<a href="https://tools.scult.in/business/slogan-generator"><img src="public/tool-icons/slogan-generator.png" width="52" height="52" alt="Slogan Generator" title="Slogan Generator"></a>
+<br>
+<a href="https://tools.scult.in/business/email-signature-generator"><img src="public/tool-icons/email-signature-generator.png" width="52" height="52" alt="Email Signature Generator" title="Email Signature Generator"></a>
+<a href="https://tools.scult.in/dev/json-formatter"><img src="public/tool-icons/json-formatter.png" width="52" height="52" alt="JSON Formatter" title="JSON Formatter"></a>
+<a href="https://tools.scult.in/dev/qr-code-generator"><img src="public/tool-icons/qr-code-generator.png" width="52" height="52" alt="QR Code Generator" title="QR Code Generator"></a>
+<a href="https://tools.scult.in/dev/favicon-generator"><img src="public/tool-icons/favicon-generator.png" width="52" height="52" alt="Favicon Generator" title="Favicon Generator"></a>
+<a href="https://tools.scult.in/productivity/word-counter"><img src="public/tool-icons/word-counter.png" width="52" height="52" alt="Word Counter" title="Word Counter"></a>
+<a href="https://tools.scult.in/design/color-palette-generator"><img src="public/tool-icons/color-palette-generator.png" width="52" height="52" alt="Colour Palette Generator" title="Colour Palette Generator"></a>
+<a href="https://tools.scult.in/geo/ai-visibility-checker"><img src="public/tool-icons/ai-visibility-checker.png" width="52" height="52" alt="AI Visibility Checker" title="AI Visibility Checker"></a>
+<br>
+<sub>All 15 tools, at a glance — hover any icon for its name, click to open it live.</sub>
+</p>
 
 ---
 
 ## Table of Contents
 
 - [About](#about)
-- [Why it's source-available](#why-its-source-available)
+- [License, in short](#license-in-short)
 - [Features](#features)
 - [The Tools Catalogue](#the-tools-catalogue)
 - [The Prompt Library](#the-prompt-library)
@@ -52,9 +85,13 @@ Every tool started as something the team needed on a real project: an invoice th
 
 The catalogue is a **deliberate product decision, not a running total**. A test in [`lib/tools/registry.test.ts`](lib/tools/registry.test.ts) fails the build the moment the tool count drifts from the approved list — so "15 tools" on this page can never quietly go stale.
 
-## Why it's source-available
+## License, in short
 
-This repository is public on GitHub for **transparency and portfolio purposes** — so anyone evaluating Scult's engineering can read real, shipped, production code rather than take a claim on faith. It is **not** open source in the OSI sense: the code, design system, and prompt library are the property of **Scult India**, and reuse beyond reading/forking-to-PR requires permission. See [License](#license).
+**Free and open to use, study, self-host, and modify — for non-commercial purposes.** Clone it, learn from it, run it for yourself, fork it, send a PR.
+
+Want to run this (or something built on it) as part of a **commercial** product or service? That needs a quick conversation first — Scult builds custom software for a living, and would rather build the exact version your business actually needs than have you bolt a generic tools hub onto it. **[Book a call →](https://scult.in/?utm_source=github&utm_medium=readme&utm_campaign=commercial-use#book-meeting)**
+
+Full terms: [License](#license) · [LICENSE.md](LICENSE.md).
 
 ## Features
 
@@ -394,7 +431,7 @@ A known-critical CVE fails the pipeline outright rather than merely flagging it.
 
 ## Contributing
 
-This project is source-available rather than open source (see [License](#license)), but **corrections and issue reports are genuinely welcome** — especially a wrong calculation, a broken link, or an accessibility miss. Every tool states its own limitations for exactly this reason: a tool that pretends to be more certain than it is will eventually mislead someone.
+This project is free and open for non-commercial use (see [License](#license)), and **corrections and issue reports are genuinely welcome** — especially a wrong calculation, a broken link, or an accessibility miss. Every tool states its own limitations for exactly this reason: a tool that pretends to be more certain than it is will eventually mislead someone.
 
 To propose a fix:
 
@@ -418,9 +455,11 @@ New tools require **product approval first** — the catalogue is a deliberate 1
 
 ## License
 
-**Proprietary — © 2026 Scult India. All rights reserved.**
+**© 2026 Scult India. Free for non-commercial use — commercial use requires a license.**
 
-This is **source-available**, not open source: you're welcome to read the code, fork it to submit a fix, and reference the project with attribution. Reuse, redistribution, or standing up a competing copy requires **written permission from Scult India**. Full terms: **[LICENSE.md](LICENSE.md)**.
+Use it, study it, self-host it, modify it, fork it — free, for **non-commercial purposes**. If you want to use this project (or a derivative of it) as part of a **commercial** product or service, [talk to Scult](https://scult.in/?utm_source=github&utm_medium=readme&utm_campaign=commercial-use#book-meeting) about a commercial license or custom-built software instead — Scult builds exactly-fitted software for a living, and would rather build your version properly than have you retrofit a generic one.
+
+The **Scult** and **Scult Tools** brand names, wordmarks, and logo assets are never included in that grant — see [Brand and Assets](#brand-and-assets). Full terms: **[LICENSE.md](LICENSE.md)**.
 
 ## Brand and Assets
 
