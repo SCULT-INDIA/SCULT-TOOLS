@@ -1,9 +1,13 @@
-import { Heart, ShieldCheck, Sparkles } from 'lucide-react'
+import { ArrowUpRight, Heart, Mail, ShieldCheck, Sparkles } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { BrandIcon } from '@/components/ui/BrandIcon'
+import { getCategoriesByGroup, PROMPT_GROUPS } from '@/lib/prompts/categories'
+import { getPromptsByCategory } from '@/lib/prompts/registry'
 import { parentLink, SITE } from '@/lib/site'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { getToolsByCategory, TOOLS } from '@/lib/tools/registry'
+import { SERVICE_PAGES } from '@/lib/tools/service-links'
 import scultLogo from '@/public/brand/scult-tools-white.png'
 import { LiveUptime } from './LiveUptime'
 
@@ -13,7 +17,15 @@ import { LiveUptime } from './LiveUptime'
  *   1. Dual CTA cards  — yellow + green, floating on the arc
  *   2. Dome            — a pale arc behind a dark indigo one
  *   3. Credibility bar — wordmark left · live counter centre · badges right
- *   4. Link grid       — four flat columns, social row under column one
+ *   4. Link grid       — one block per header (bold label + a thin rule,
+ *                        then its flat link list): Site+socials, every tool
+ *                        category with every one of its tools (the full
+ *                        sitemap, not a teaser), every published
+ *                        prompt-library group, then Scult's own services.
+ *                        `buildFooterColumns()` assembles the list;
+ *                        `FooterColumn` is the one shape every block shares.
+ *                        Laid out with CSS multi-columns (`columns-*`), not
+ *                        a grid — see the comment at the render site for why.
  *   5. "Made with ❤️" pill
  *   6. Legal bar       — single centred copyright line, over a bottom glow
  *
@@ -35,17 +47,42 @@ import { LiveUptime } from './LiveUptime'
 /** Verifiable claims, standing in for the reference's third-party badges. */
 const BADGES = [
   { Icon: ShieldCheck, title: 'WCAG 2.2 AA', sub: 'contrast verified' },
-  // Count verified by `npx vitest run` after the prompt-library search work
-  // (24 files, 698 tests). Update it when the suite grows — a stale number
-  // here is a checkable claim that has quietly become false.
-  { Icon: Sparkles, title: '698 tests', sub: 'passing in CI' },
+  // Count verified by `npx vitest run` after the 2026-08 trust/GEO-AEO page
+  // build-out (26 files, 781 tests). Update it when the suite grows — a
+  // stale number here is a checkable claim that has quietly become false.
+  { Icon: Sparkles, title: '781 tests', sub: 'passing in CI' },
 ]
 
+const CONTACT_EMAIL = 'connect@scult.in'
+
+/** Real logos via BrandIcon, each on a small white disc for legibility on
+ * the indigo field — same pattern as the tool-link marks below. */
 const SOCIALS = [
-  { label: 'X', href: 'https://x.com/scult' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/scult' },
-  { label: 'GitHub', href: 'https://github.com/scult' },
+  {
+    brand: 'linkedin',
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/company/scult-india/',
+  },
+  { brand: 'instagram', label: 'Instagram', href: 'https://www.instagram.com/scult.in/' },
+  { brand: 'x-twitter', label: 'X', href: 'https://x.com/scult_india' },
 ]
+
+/**
+ * Display names for `SERVICE_PAGES` (lib/tools/service-links.ts), keyed by the
+ * same `serviceTarget` strings. That map's own `label` field is a CTA
+ * fragment ("Explore {label}"), lower-cased on purpose for that sentence —
+ * wrong case for a stand-alone footer link, so this is a presentation-only
+ * duplicate, not a second source of truth for the URL or which services
+ * exist.
+ */
+const SERVICE_LABELS: Record<string, string> = {
+  'web-development': 'Web Development',
+  'custom-software': 'Custom Software Development',
+  'branding-agency': 'UI/UX Design & Branding',
+  'seo-companies-for-small-business': 'Local SEO Services',
+  'google-ads-management': 'Google Ads Management',
+  'ai-consulting': 'AI Agents & Automation',
+}
 
 /**
  * The two-arc transition from the white body into the indigo footer.
@@ -88,16 +125,107 @@ function Dome() {
   )
 }
 
+/** One footer column: a header (plain label, or a link when it has its own
+ * page) over a flat list of links. Every column in `buildFooterColumns()`
+ * below is this same shape, which is what lets one grid render all of them
+ * identically — site links, each tool category, each live prompt-library
+ * group and the services list. */
+type FooterColumn = {
+  key: string
+  header: string
+  headerHref?: string
+  items: readonly { key: string; label: string; href: string; external?: boolean }[]
+}
+
+/**
+ * Every footer column, in display order: Site, then one column per tool
+ * category (all of its tools, not a teaser), then one column per
+ * prompt-library group that has at least one published category — the same
+ * `getPromptsByCategory(c.slug).length > 0` gate app/prompts/[category]/
+ * page.tsx uses for generateStaticParams, so a dead category can never get a
+ * link here — then Scult's own services. Computed fresh on every render
+ * (all inputs are static registries), never a hand-kept snapshot.
+ */
+function buildFooterColumns(): readonly FooterColumn[] {
+  const siteColumn: FooterColumn = {
+    key: 'site',
+    header: 'Site',
+    items: [
+      { key: 'home', label: 'Home', href: '/' },
+      { key: 'all', label: 'All tools', href: '/all' },
+      { key: 'prompts', label: 'Prompt library', href: '/prompts' },
+      { key: 'guides', label: 'Guides', href: '/guides' },
+      { key: 'collections', label: 'Collections', href: '/collections' },
+      { key: 'about', label: 'About', href: '/about' },
+      { key: 'faq', label: 'FAQ', href: '/faq' },
+      { key: 'terms', label: 'Terms', href: '/terms' },
+      { key: 'privacy', label: 'Privacy', href: '/privacy' },
+    ],
+  }
+
+  // Everything else that doesn't earn its own column: the 2026-08 trust/GEO
+  // build-out pages. Grouped here rather than folded into `siteColumn` so
+  // that block stays a short, primary-navigation list.
+  const resourcesColumn: FooterColumn = {
+    key: 'resources',
+    header: 'Resources',
+    items: [
+      { key: 'sitemap', label: 'Sitemap', href: '/sitemap' },
+      { key: 'contact', label: 'Contact', href: '/contact' },
+      { key: 'changelog', label: 'Changelog', href: '/changelog' },
+      { key: 'roadmap', label: 'Roadmap', href: '/roadmap' },
+      { key: 'glossary', label: 'Glossary', href: '/glossary' },
+      { key: 'security', label: 'Security', href: '/security' },
+      { key: 'accessibility', label: 'Accessibility', href: '/accessibility' },
+      { key: 'brand', label: 'Brand & press', href: '/brand' },
+    ],
+  }
+
+  const toolColumns: FooterColumn[] = CATEGORIES.map((category) => ({
+    key: `cat-${category.slug}`,
+    header: category.name,
+    headerHref: `/${category.slug}`,
+    items: getToolsByCategory(category.slug).map((tool) => ({
+      key: tool.slug,
+      label: tool.title,
+      href: `/${tool.category}/${tool.slug}`,
+    })),
+  }))
+
+  const promptColumns: FooterColumn[] = PROMPT_GROUPS.map((group) => ({
+    group,
+    categories: getCategoriesByGroup(group.slug).filter(
+      (category) => getPromptsByCategory(category.slug).length > 0,
+    ),
+  }))
+    .filter((entry) => entry.categories.length > 0)
+    .map(({ group, categories }) => ({
+      key: `group-${group.slug}`,
+      header: group.name,
+      items: categories.map((category) => ({
+        key: category.slug,
+        label: category.name,
+        href: `/prompts/${category.slug}`,
+      })),
+    }))
+
+  const servicesColumn: FooterColumn = {
+    key: 'services',
+    header: 'What Scult builds',
+    items: Object.entries(SERVICE_PAGES).map(([key, entry]) => ({
+      key,
+      label: SERVICE_LABELS[key] ?? entry.label,
+      href: parentLink(entry.path, `footer-service-${key}`),
+      external: true,
+    })),
+  }
+
+  return [siteColumn, resourcesColumn, ...toolColumns, ...promptColumns, servicesColumn]
+}
+
 export function Footer() {
   const clientSideCount = TOOLS.filter((t) => t.runsInBrowser).length
-
-  // Columns 2-4: two categories each, with their tools flattened underneath —
-  // a flat link list per column, as in the reference.
-  const linkColumns = [
-    CATEGORIES.slice(0, 2),
-    CATEGORIES.slice(2, 4),
-    CATEGORIES.slice(4, 6),
-  ]
+  const footerColumns = buildFooterColumns()
 
   return (
     <>
@@ -166,7 +294,7 @@ export function Footer() {
         <div className="container-site grid items-center gap-8 py-14 md:grid-cols-3">
           <div className="text-center md:text-left">
             <p className="flex items-center justify-center md:justify-start">
-              <Image src={scultLogo} alt="SCULT Tools" className="h-9 w-auto md:h-10" />
+              <Image src={scultLogo} alt="SCULT Tools" className="h-12 w-auto md:h-16" />
             </p>
             <p className="mt-3 text-[14px] text-white/70">
               {clientSideCount} of {TOOLS.length} tools run entirely in your browser.
@@ -194,92 +322,109 @@ export function Footer() {
           </div>
         </div>
 
-        {/* 4. Link grid — four flat columns */}
-        <div className="container-site grid gap-x-8 gap-y-10 pb-14 sm:grid-cols-2 lg:grid-cols-4">
-          <nav aria-label="Site">
-            <ul className="space-y-3">
-              {[
-                { href: '/', label: 'Home' },
-                { href: '/all', label: 'All tools' },
-                { href: '/prompts', label: 'Prompt library' },
-                { href: '/about', label: 'About' },
-                { href: '/privacy', label: 'Privacy' },
-              ].map((item) => (
-                <li key={item.href}>
+        {/* 4. Link grid — one block per header: Site, then every tool
+            category (all of its tools), then every live prompt-library
+            group, then Scult's services. Every block carries the same
+            treatment: a bold header — a link where it has its own page,
+            plain text where it doesn't — over a thin rule, then its flat
+            list of links.
+
+            CSS multi-column, not CSS grid: a grid row locks to its tallest
+            cell, so a short block (Productivity, one link) sitting beside a
+            tall one (Site, nine links) leaves a huge dead gap before the
+            next row starts — sixteen blocks of wildly different lengths
+            made that gap enormous. `columns-*` flows blocks top-to-bottom
+            and balances total height across columns instead, so two short
+            blocks stack into the space one tall block used to waste.
+            `break-inside-avoid-column` keeps a header glued to its own list
+            rather than splitting across the column break. An ideal width
+            rather than a fixed count is what makes this "more horizontal"
+            on request — more, narrower columns appear as the viewport
+            widens; one column on mobile. */}
+        <nav aria-label="Footer" className="container-site pb-14">
+          <div className="columns-[9.5rem] gap-x-8">
+            {footerColumns.map((column) => (
+              <div key={column.key} className="mb-7 break-inside-avoid-column">
+                {column.headerHref ? (
                   <Link
-                    href={item.href}
-                    className="text-[15px] text-white/85 hover:text-white"
+                    href={column.headerHref}
+                    className="block border-white/15 border-b pb-2.5 font-semibold text-[15px] text-white transition-colors hover:text-white/80"
                   >
-                    {item.label}
+                    {column.header}
                   </Link>
-                </li>
-              ))}
-            </ul>
+                ) : (
+                  <p className="border-white/15 border-b pb-2.5 font-semibold text-[15px] text-white">
+                    {column.header}
+                  </p>
+                )}
 
-            {/* Social row, directly under column one as in the reference. Text
-                labels rather than glyphs: this lucide build ships only the `X`
-                mark (the rest were removed upstream for trademark reasons), and
-                one icon beside two words reads as a broken row. */}
-            <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
-              {SOCIALS.map(({ label, href }) => (
-                <li key={label}>
-                  <a
-                    href={href}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    className="text-[14px] text-white/70 transition-colors hover:text-white"
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {linkColumns.map((group) => (
-            <nav
-              key={group.map((c) => c.slug).join('-')}
-              aria-label={group.map((c) => c.name).join(' and ')}
-            >
-              <ul className="space-y-3">
-                {group.flatMap((category) => [
-                  <li key={category.slug}>
-                    <Link
-                      href={`/${category.slug}`}
-                      className="text-[15px] text-white/85 hover:text-white"
-                    >
-                      {category.name}
-                    </Link>
-                  </li>,
-                  ...getToolsByCategory(category.slug)
-                    .slice(0, 2)
-                    .map((tool) => (
-                      <li key={tool.slug}>
-                        {/* Tool links carry the tool's own mark; category
-                            links above them stay text-only, which is also
-                            what visually separates the two levels of this
-                            flat list. The baked-in white disc is what keeps
-                            the mark legible on the indigo field. */}
-                        <Link
-                          href={`/${tool.category}/${tool.slug}`}
-                          className="inline-flex items-center gap-2 text-[15px] text-white/85 hover:text-white"
+                <ul className="mt-3 space-y-2">
+                  {column.items.map((item) =>
+                    item.external ? (
+                      <li key={item.key}>
+                        <a
+                          href={item.href}
+                          rel="noopener noreferrer"
+                          target="_blank"
+                          className="inline-flex items-center gap-1.5 text-[14px] text-white/70 hover:text-white"
                         >
-                          <Image
-                            src={`/tool-icons/${tool.slug}.png`}
-                            alt=""
-                            width={18}
-                            height={18}
-                            className="size-4.5 shrink-0 rounded-full"
+                          {item.label}
+                          <ArrowUpRight
+                            className="size-3.5 shrink-0"
+                            aria-hidden="true"
                           />
-                          {tool.title}
+                        </a>
+                      </li>
+                    ) : (
+                      <li key={item.key}>
+                        <Link
+                          href={item.href}
+                          className="text-[14px] text-white/70 hover:text-white"
+                        >
+                          {item.label}
                         </Link>
                       </li>
-                    )),
-                ])}
-              </ul>
-            </nav>
-          ))}
-        </div>
+                    ),
+                  )}
+                </ul>
+
+                {/* Contact + social row, under the Site block only — each
+                    mark on a small white disc because X's official mark is
+                    near-black and would vanish bare on this indigo field. */}
+                {column.key === 'site' && (
+                  <ul className="mt-5 space-y-2">
+                    <li>
+                      <a
+                        href={`mailto:${CONTACT_EMAIL}`}
+                        className="inline-flex items-center gap-2.5 text-[14px] text-white/70 transition-colors hover:text-white"
+                      >
+                        <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-white">
+                          <Mail className="size-3.5 text-violet-700" aria-hidden="true" />
+                        </span>
+                        {CONTACT_EMAIL}
+                      </a>
+                    </li>
+                    {SOCIALS.map(({ brand, label, href }) => (
+                      <li key={label}>
+                        <a
+                          href={href}
+                          rel="noopener noreferrer"
+                          target="_blank"
+                          className="inline-flex items-center gap-2.5 text-[14px] text-white/70 transition-colors hover:text-white"
+                        >
+                          <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-white">
+                            <BrandIcon brand={brand} size={14} />
+                          </span>
+                          {label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </nav>
 
         {/* 5. "Made with ❤️" pill */}
         <div className="container-site flex justify-center pb-10">
@@ -306,6 +451,10 @@ export function Footer() {
             Copyright © {SITE.buildYear} {SITE.parentName}. All Rights Reserved. |{' '}
             <Link href="/about" className="hover:text-white">
               About
+            </Link>{' '}
+            |{' '}
+            <Link href="/terms" className="hover:text-white">
+              Terms
             </Link>{' '}
             |{' '}
             <Link href="/privacy" className="hover:text-white">
