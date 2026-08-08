@@ -24,6 +24,7 @@ export function StatCard({
   sublabel,
   trend,
   tone = 'lavender',
+  compact = false,
 }: {
   icon: LucideIcon
   label: string
@@ -31,14 +32,32 @@ export function StatCard({
   sublabel?: string
   trend?: { direction: 'up' | 'down'; value: string; positive?: boolean }
   tone?: keyof typeof TONE_CLASS
+  /**
+   * A denser tile for a wide summary strip rather than a tall dashboard
+   * column — half the padding/gap, a smaller icon badge, and a value size
+   * dropped from display-scale (26px) to body-scale (16px) so a full row of
+   * these reads as one slim band, not another dashboard block. Opt-in and
+   * defaulted off: existing callers (speed test, AI visibility, FAQ
+   * generator) keep today's larger tile untouched.
+   */
+  compact?: boolean
 }) {
   return (
-    <div className="flex flex-col gap-3 rounded-card border border-line-grey bg-cream p-4">
+    <div
+      className={
+        compact
+          ? 'flex flex-col gap-1.5 rounded-card border border-line-grey bg-cream p-2.5'
+          : 'flex flex-col gap-3 rounded-card border border-line-grey bg-cream p-4'
+      }
+    >
       <div className="flex items-center justify-between">
         <span
-          className={`inline-flex size-9 items-center justify-center rounded-full ${TONE_CLASS[tone]}`}
+          className={`inline-flex items-center justify-center rounded-full ${TONE_CLASS[tone]} ${compact ? 'size-6' : 'size-9'}`}
         >
-          <Icon className="size-4.5 text-violet-700" aria-hidden="true" />
+          <Icon
+            className={compact ? 'size-3 text-violet-700' : 'size-4.5 text-violet-700'}
+            aria-hidden="true"
+          />
         </span>
         {trend ? (
           <span
@@ -61,13 +80,33 @@ export function StatCard({
       </div>
 
       <div>
-        <p className="font-display font-bold text-[26px] text-ink leading-tight tabular-nums">
+        <p
+          className={
+            compact
+              ? 'font-display font-bold text-[16px] text-ink leading-tight tabular-nums'
+              : 'font-display font-bold text-[26px] text-ink leading-tight tabular-nums'
+          }
+        >
           {value}
         </p>
-        <p className="text-[13px] text-ink-subtle">{label}</p>
+        <p
+          className={
+            compact ? 'text-[11px] text-ink-subtle' : 'text-[13px] text-ink-subtle'
+          }
+        >
+          {label}
+        </p>
       </div>
 
-      {sublabel ? <p className="text-[12px] text-ink-subtle">{sublabel}</p> : null}
+      {sublabel ? (
+        <p
+          className={
+            compact ? 'text-[11px] text-ink-subtle' : 'text-[12px] text-ink-subtle'
+          }
+        >
+          {sublabel}
+        </p>
+      ) : null}
     </div>
   )
 }

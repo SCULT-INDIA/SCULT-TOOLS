@@ -4,12 +4,13 @@
 import {
   Building2,
   ChevronDown,
-  Eye,
   FileText,
   List,
   Minus,
   Package,
   Palette,
+  PanelLeftClose,
+  PanelLeftOpen,
   Percent,
   Plus,
   Printer,
@@ -28,7 +29,6 @@ import {
   DropZone,
   SegmentButton,
   StatusBar,
-  ToolbarAction,
   ToolbarGroup,
   ToolToolbar,
 } from '@/components/tools/workspace'
@@ -220,7 +220,7 @@ function makeDefaultDraft(today?: Date): InvoiceDraft {
     notes:
       'Payment due within 14 days of the issue date.\n\nBank transfer — Studio Andaz, HDFC Bank, A/C 50100123456789, IFSC HDFC0000123.\nUPI: studioandaz@okhdfcbank\n\nPlease quote the invoice number with your payment.',
     logo: '',
-    template: 'classic',
+    template: 'trade',
   }
 }
 
@@ -612,7 +612,7 @@ function TemplateSwatch({
       className={`flex flex-col gap-1.5 rounded-sm border p-1.5 text-left transition-colors ${
         active
           ? 'border-violet-700 bg-violet-50 ring-1 ring-violet-700'
-          : 'border-line-grey hover:border-ink'
+          : 'border-line-grey hover:border-violet-700'
       }`}
     >
       <div className="aspect-[210/297] w-full">
@@ -689,7 +689,7 @@ function SidebarTabRail({
             className={`flex min-h-11 shrink-0 flex-col items-center justify-center gap-1 whitespace-nowrap rounded-md px-2 py-2 text-center font-medium text-[11px] leading-tight transition-colors sm:min-h-9 lg:w-full lg:whitespace-normal lg:py-2.5 ${
               active
                 ? 'bg-violet-100 text-violet-700'
-                : 'text-ink-muted hover:bg-offwhite hover:text-ink'
+                : 'text-ink-muted hover:bg-violet-50 hover:text-violet-700'
             }`}
           >
             <Icon className="size-4 shrink-0" aria-hidden="true" />
@@ -766,7 +766,7 @@ function QuickAddButton({
     <button
       type="button"
       onClick={onClick}
-      className="flex min-h-16 flex-col items-center justify-center gap-1.5 rounded-sm border border-line-grey bg-cream px-2 py-3 text-center font-medium text-[12px] text-ink-muted transition-colors hover:border-ink hover:text-ink"
+      className="flex min-h-16 flex-col items-center justify-center gap-1.5 rounded-sm border border-line-grey bg-cream px-2 py-3 text-center font-medium text-[12px] text-ink-muted transition-colors hover:border-violet-700 hover:text-violet-700"
     >
       <Icon className="size-4" aria-hidden="true" />
       {label}
@@ -778,15 +778,20 @@ export function InvoiceGenerator() {
   const [draft, setDraft] = useState<InvoiceDraft>(() => makeDefaultDraft())
   const [savedAt, setSavedAt] = useState(0)
   const [logoError, setLogoError] = useState('')
-  const [previewOpen, setPreviewOpen] = useState(false)
+  const [exportOpen, setExportOpen] = useState(false)
   // Pure UI state — which sidebar tab, how big the preview box renders, how
   // much of the template grid shows, and whether the logo is drawn on the
   // live sheet. None of this is part of `InvoiceDraft`: switching tabs, zoom,
   // "View all" or the logo-visibility toggle must never touch the autosaved
   // draft or the print path's source of truth.
   const [activeTab, setActiveTab] = useState<SidebarTabId>('business')
-  const [zoom, setZoom] = useState<(typeof ZOOM_LEVELS)[number]>(100)
+  const [zoom, setZoom] = useState<(typeof ZOOM_LEVELS)[number]>(75)
   const [templatesExpanded, setTemplatesExpanded] = useState(false)
+  // Collapses the fields column to just its icon rail on desktop, freeing
+  // ~24rem for the sheet. Only meaningful at `lg` and up — below that the
+  // fields already stack full-width above the sheet, so there's nothing to
+  // collapse and the toggle button is hidden there.
+  const [fieldsOpen, setFieldsOpen] = useState(true)
   const [showLogo, setShowLogo] = useState(true)
   const hydrated = useRef(false)
   const lastAddedLineId = useRef<string | null>(null)
@@ -845,23 +850,23 @@ export function InvoiceGenerator() {
     return () => clearTimeout(t)
   }, [savedAt])
 
-  // "Preview invoice" is a look-closer surface, not a second editable form, so
-  // it gets Escape-to-close and a scroll lock but not MobileDrawer's full
-  // focus trap — there is nothing inside it a keyboard user needs to tab
-  // through beyond the one close button.
+  // The export dialog is a look-closer-and-choose-a-template surface, not a
+  // second editable form, so it gets Escape-to-close and a scroll lock but
+  // not MobileDrawer's full focus trap — nothing inside it needs tabbing
+  // through beyond the close button and the template swatches themselves.
   useEffect(() => {
-    if (!previewOpen) return
+    if (!exportOpen) return
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') setPreviewOpen(false)
+      if (e.key === 'Escape') setExportOpen(false)
     }
     document.addEventListener('keydown', onKeyDown)
     return () => {
       document.removeEventListener('keydown', onKeyDown)
       document.body.style.overflow = previousOverflow
     }
-  }, [previewOpen])
+  }, [exportOpen])
 
   // Fires once per "Quick add" click (see `focusSignal` above), after the
   // requested tab's panel has committed to the DOM, and moves focus to the
@@ -1036,16 +1041,40 @@ export function InvoiceGenerator() {
           four-column workspace (icon rail, that tab's fields, the sheet
           itself, a template/design sidebar) once there's room for it; below
           `lg` the rail+fields collapse into one column ABOVE the sheet and
-          the design sidebar becomes a collapsible section below it. */}
+          the design sidebar becomes a collapsible section below it.
+
+          The sheet itself has a fixed natural width (SHEET_WIDTH, 860px) and
+          ScaledSheet shrinks it to fit whatever box it's given. On
+          ToolShell's normal container-site cap (1160px) minus the two fixed
+          side columns (24rem + 18rem = 672px) minus their own padding, the
+          sheet was landing in roughly a 400px box — under half its natural
+          width. A first attempt broke this tool out to full viewport width
+          (up to a 1600px cap) to fix that, but that made the workspace span
+          edge-to-edge on a typical ~1366px laptop screen while the page's
+          own header stayed at the normal, narrower width above it — a
+          jarring, disproportionate jump, not what "fits the screen" means.
+          Staying inside container-site's normal width and instead letting
+          the two collapsible side columns below (PanelLeftClose on the
+          fields column, the `<details>` on Column 4) be how a user reclaims
+          space is the fix that doesn't fight the rest of the page's own
+          layout. */}
       <div className="overflow-hidden rounded-panel border border-line bg-cream">
         <div className="flex flex-col lg:flex-row">
           {/* Column 1 + 2 — the icon rail and the active tab's fields. Kept as
               one bordered unit (rail | fields) so the divider between them and
               the divider between this unit and the sheet read as one
               consistent ruleset, same idiom the previous layout used. */}
-          <div className="flex flex-col border-line border-b lg:w-[24rem] lg:flex-none lg:flex-row lg:border-b-0 lg:border-r">
+          <div
+            className={`flex flex-col border-line border-b lg:flex-none lg:flex-row lg:border-b-0 lg:border-r ${
+              fieldsOpen ? 'lg:w-[24rem]' : 'lg:w-24'
+            }`}
+          >
             <SidebarTabRail activeTab={activeTab} onSelect={setActiveTab} />
-            <div className="flex min-w-0 flex-1 flex-col border-line border-t p-4 sm:p-5 lg:border-t-0 lg:border-l">
+            <div
+              className={`flex min-w-0 flex-1 flex-col border-line border-t p-4 sm:p-5 lg:border-t-0 lg:border-l ${
+                fieldsOpen ? '' : 'lg:hidden'
+              }`}
+            >
               <div className="flex-1">
                 <div
                   role="tabpanel"
@@ -1128,7 +1157,7 @@ export function InvoiceGenerator() {
                               patch({ logo: '' })
                               setLogoError('')
                             }}
-                            className="min-h-11 rounded-sm border border-line-grey bg-cream px-3 font-medium text-[14px] transition-colors hover:border-ink"
+                            className="min-h-11 rounded-sm border border-line-grey bg-cream px-3 font-medium text-[14px] transition-colors hover:border-violet-700 hover:text-violet-700"
                           >
                             Remove logo
                           </button>
@@ -1295,7 +1324,7 @@ export function InvoiceGenerator() {
                                   onClick={() => removeLine(line.id)}
                                   disabled={draft.lines.length <= 1}
                                   aria-label={`Remove ${rowName.toLowerCase()}`}
-                                  className="flex size-11 shrink-0 items-center justify-center rounded-sm border border-line-grey bg-cream transition-colors hover:border-ink disabled:cursor-not-allowed disabled:opacity-45"
+                                  className="flex size-11 shrink-0 items-center justify-center rounded-sm border border-line-grey bg-cream transition-colors hover:border-violet-700 hover:text-violet-700 disabled:cursor-not-allowed disabled:opacity-45"
                                 >
                                   <Trash2 className="size-4" aria-hidden="true" />
                                 </button>
@@ -1484,15 +1513,17 @@ export function InvoiceGenerator() {
                               onChange={(e) => patch({ invoiceNumber: e.target.value })}
                               aria-describedby="inv-number-hint"
                             />
-                            <ToolbarAction
+                            <button
+                              type="button"
                               onClick={() =>
                                 patch({
                                   invoiceNumber: nextInvoiceNumber(draft.invoiceNumber),
                                 })
                               }
+                              className="min-h-11 rounded-sm border border-line-grey bg-cream px-3 font-medium text-[13px] text-ink transition-colors hover:border-violet-700 hover:text-violet-700 sm:min-h-9"
                             >
                               Next number
-                            </ToolbarAction>
+                            </button>
                           </div>
                         </div>
                         <div>
@@ -1613,11 +1644,55 @@ export function InvoiceGenerator() {
               <ToolToolbar
                 actions={
                   <>
-                    <ToolbarAction onClick={clearAll}>Clear</ToolbarAction>
-                    <ToolbarAction onClick={() => setPreviewOpen(true)}>
-                      <Eye className="size-4" aria-hidden="true" />
-                      Preview
-                    </ToolbarAction>
+                    {/* Desktop-only: below `lg` the fields column already
+                        stacks full-width above the sheet, so there's
+                        nothing to collapse and this button would be a
+                        no-op — hidden rather than shown-but-inert. */}
+                    <button
+                      type="button"
+                      onClick={() => setFieldsOpen((v) => !v)}
+                      title={fieldsOpen ? 'Hide fields panel' : 'Show fields panel'}
+                      className="hidden min-h-9 items-center gap-1.5 rounded-sm border border-line-grey bg-cream px-3 font-medium text-[13px] text-ink transition-colors hover:border-violet-700 hover:text-violet-700 lg:inline-flex"
+                    >
+                      {fieldsOpen ? (
+                        <PanelLeftClose className="size-4" aria-hidden="true" />
+                      ) : (
+                        <PanelLeftOpen className="size-4" aria-hidden="true" />
+                      )}
+                      {fieldsOpen ? 'Hide fields' : 'Show fields'}
+                    </button>
+                    {/* Not the shared ToolbarAction here on purpose — that
+                        component is neutral gray by design since it's
+                        reused across every tool on the site, some of which
+                        don't want a violet accent on every button. This
+                        tool's own controls carry the brand accent
+                        (violet-700 border/text) directly instead. */}
+                    <button
+                      type="button"
+                      onClick={clearAll}
+                      className="min-h-9 rounded-sm border border-line-grey bg-cream px-3 font-medium text-[13px] text-ink transition-colors hover:border-violet-700 hover:text-violet-700"
+                    >
+                      Clear
+                    </button>
+                    {/* The primary export entry point, moved up here from
+                        the bottom bar so it's visible without scrolling —
+                        opens a dialog with the live preview alongside every
+                        template, not just a bigger look at the current one
+                        (that's what the old "Preview" button did; this
+                        replaces it, since choosing a template belongs at
+                        the export moment, not buried in Column 4).
+                        btn-brutal-sm — the site's real CTA treatment
+                        (cta-yellow, shadow-brutal) — since this is the
+                        single most important action on the page, not just
+                        another toolbar utility. */}
+                    <button
+                      type="button"
+                      onClick={() => setExportOpen(true)}
+                      className="btn-brutal btn-brutal-sm border-black text-black hover:border-ink hover:text-ink"
+                    >
+                      <Printer className="size-4" aria-hidden="true" />
+                      Export PDF
+                    </button>
                   </>
                 }
               >
@@ -1628,7 +1703,7 @@ export function InvoiceGenerator() {
                     disabled={zoom === ZOOM_LEVELS[0]}
                     aria-label="Zoom out"
                     title="Zoom out"
-                    className="flex min-h-11 min-w-11 items-center justify-center rounded-sm border border-line-grey bg-cream transition-colors hover:border-ink disabled:cursor-not-allowed disabled:opacity-45 sm:min-h-9 sm:min-w-9"
+                    className="flex min-h-11 min-w-11 items-center justify-center rounded-sm border border-line-grey bg-cream text-ink transition-colors hover:border-violet-700 hover:text-violet-700 disabled:cursor-not-allowed disabled:opacity-45 sm:min-h-9 sm:min-w-9"
                   >
                     <Minus className="size-4" aria-hidden="true" />
                   </button>
@@ -1644,7 +1719,7 @@ export function InvoiceGenerator() {
                     disabled={zoom === ZOOM_LEVELS[ZOOM_LEVELS.length - 1]}
                     aria-label="Zoom in"
                     title="Zoom in"
-                    className="flex min-h-11 min-w-11 items-center justify-center rounded-sm border border-line-grey bg-cream transition-colors hover:border-ink disabled:cursor-not-allowed disabled:opacity-45 sm:min-h-9 sm:min-w-9"
+                    className="flex min-h-11 min-w-11 items-center justify-center rounded-sm border border-line-grey bg-cream text-ink transition-colors hover:border-violet-700 hover:text-violet-700 disabled:cursor-not-allowed disabled:opacity-45 sm:min-h-9 sm:min-w-9"
                   >
                     <Plus className="size-4" aria-hidden="true" />
                   </button>
@@ -1661,8 +1736,19 @@ export function InvoiceGenerator() {
                   `ScaledSheet` itself is untouched, so it still measures with
                   `offsetWidth`/`offsetHeight` and still never shows a
                   scrollbar at the 100% default, where the box height is
-                  exactly what it always was. */}
-              <div className="h-[calc(30rem*var(--inv-zoom))] lg:h-[calc(46rem*var(--inv-zoom))]">
+                  exactly what it always was.
+
+                  46rem (736px) was tuned for a much shorter sheet than a
+                  real multi-line invoice actually renders at 860px wide —
+                  once the WIDTH fix above gave the sheet enough room, THIS
+                  fixed height became the new binding constraint instead
+                  (ScaledSheet's scale is Math.min(widthRatio, heightRatio)),
+                  quietly re-shrinking it back down to ~0.68x. 72rem gives
+                  enough headroom for a typical multi-line-item invoice to
+                  clear the height check and let width be the real
+                  constraint, without making the box unreasonably tall on
+                  first load. */}
+              <div className="h-[calc(30rem*var(--inv-zoom))] lg:h-[calc(72rem*var(--inv-zoom))]">
                 {/* THE PRINTABLE REGION. PRINT_CSS targets this id — everything
                     else on the page is collapsed around it, so what you see here
                     is exactly and only what lands in the PDF. Only THIS instance
@@ -1684,21 +1770,41 @@ export function InvoiceGenerator() {
             </section>
           </div>
 
-          {/* Column 4 — template gallery + design controls. A `<details>` so
-              it can honestly collapse on narrow viewports without a second
-              layout to maintain; `lg:pointer-events-none` on the summary keeps
-              a mouse from collapsing it once there's room for four columns
-              side by side (open by default either way). */}
+          {/* Column 4 — template gallery + design controls. A `<details>`,
+              now genuinely toggleable on desktop too (it used to be locked
+              open there via `lg:pointer-events-none`, one of the two
+              fixed-width columns that left the sheet itself badly
+              squeezed; see the fields column's own PanelLeftClose toggle
+              for the other one).
+
+              Defaults CLOSED (no `open` attribute) rather than open: this
+              is a one-time "pick a template" decision, not something that
+              needs to stay visible the whole time someone is editing an
+              invoice, and starting closed hands its ~230px straight back
+              to the sheet without the user having to discover and click
+              anything — the sheet should look properly A4-sized on first
+              paint, not just after a manual toggle. The chevron + label
+              stay visible either way as the open affordance. */}
           <details
-            open
-            className="group flex flex-col border-line border-t lg:w-72 lg:flex-none lg:border-t-0 lg:border-l"
+            // `<details>` only ever collapsed CONTENT height, never the
+            // column's own width — lg:w-72 stayed fixed even closed, so
+            // closing it on desktop wasted the space instead of returning
+            // it to the sheet. `[&:not([open])]:lg:w-14` overrides the
+            // width to a slim closed rail once this element itself loses
+            // its `open` attribute, at the same breakpoint the fixed width
+            // applies.
+            className="group flex flex-col border-line border-t lg:w-72 lg:flex-none lg:border-t-0 lg:border-l [&:not([open])]:lg:w-14"
           >
-            <summary className="flex cursor-pointer list-none items-center justify-between p-3 lg:cursor-default lg:pointer-events-none [&::-webkit-details-marker]:hidden">
-              <span className="font-bold text-[11px] text-ink-subtle uppercase tracking-[0.1em]">
+            <summary className="flex cursor-pointer list-none items-center justify-between p-3 [&::-webkit-details-marker]:hidden">
+              {/* Hidden at the lg collapsed-rail width (56px, set above) —
+                  there's no room for this label there, only the chevron.
+                  Always visible on mobile, where summary width is never
+                  the constraint. */}
+              <span className="font-bold text-[11px] text-ink-subtle uppercase tracking-[0.1em] lg:hidden lg:group-open:inline">
                 Design &amp; template
               </span>
               <ChevronDown
-                className="size-4 text-ink-subtle transition-transform group-open:rotate-180 lg:hidden"
+                className="size-4 text-ink-subtle transition-transform group-open:rotate-180"
                 aria-hidden="true"
               />
             </summary>
@@ -1776,24 +1882,15 @@ export function InvoiceGenerator() {
           </ul>
         ) : null}
 
-        {/* Bottom bar — autosave status on the left; on the right, the real
-            export (Download PDF, unchanged `window.print()` handler, just
-            relabelled to match "Download" language) beside the pre-existing
-            "Copy total" action, which has no slot in the target layout but
-            is a real, working feature not worth deleting. */}
+        {/* Bottom bar — autosave status on the left; "Copy total" on the
+            right, a real, working feature with no other slot in this
+            layout. The actual PDF export moved to the top-of-tool "Export
+            PDF" button and its dialog — no duplicate download action down
+            here competing with it. */}
         <div className="border-line border-t bg-offwhite">
           <ToolToolbar
             actions={
-              <>
-                <ToolbarAction onClick={() => window.print()}>
-                  <Printer className="size-4" aria-hidden="true" />
-                  Download PDF
-                </ToolbarAction>
-                <CopyButton
-                  text={formatMoney(result.total, currency)}
-                  label="Copy total"
-                />
-              </>
+              <CopyButton text={formatMoney(result.total, currency)} label="Copy total" />
             }
           >
             <span className="text-[12px] text-ink-subtle">
@@ -1833,40 +1930,103 @@ export function InvoiceGenerator() {
         </div>
       </div>
 
-      {/* "Preview invoice" — a bigger, distraction-free look at the sheet
-          before printing. A second instance of the same template, deliberately
-          WITHOUT the `invoice-sheet` id (see the comment at the inline
-          instance above): this one is display-only and never a print target. */}
-      {/* This scrim's onClick only fires setPreviewOpen when the click TARGET
-          is the scrim itself (not bubbled from the sheet inside it), so a tap
-          anywhere on the invoice cannot dismiss the dialog — no separate
-          stopPropagation guard needed on the sheet wrapper below. */}
-      {previewOpen ? (
+      {/* Export dialog — the live sheet on the left (a second instance of
+          the same template, deliberately WITHOUT the `invoice-sheet` id:
+          see the inline Column-3 instance's own comment — this one is
+          display-only and never a print target, `window.print()` below
+          still isolates the real one via PRINT_CSS regardless of what's
+          visually on top of it), every template as a picker on the right.
+          Replaces the old plain "bigger look" preview modal — choosing a
+          template belongs at the export moment, not only buried in Column
+          4's collapsible gallery (which still exists, for picking a
+          template before you're ready to export). */}
+      {/* This scrim's onClick only fires setExportOpen when the click TARGET
+          is the scrim itself (not bubbled from the dialog card inside it),
+          so a tap anywhere on the dialog cannot dismiss it — no separate
+          stopPropagation guard needed on the card wrapper below. */}
+      {exportOpen ? (
         // biome-ignore lint/a11y/useKeyWithClickEvents: keyboard users already have Escape, wired in the effect above.
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Invoice preview"
+          aria-labelledby="export-dialog-title"
           onClick={(e) => {
-            if (e.target === e.currentTarget) setPreviewOpen(false)
+            if (e.target === e.currentTarget) setExportOpen(false)
           }}
           className="fixed inset-0 z-70 overflow-auto bg-ink/60 p-4 sm:p-10"
         >
-          <div className="print-paper-ctx relative mx-auto w-full max-w-[900px]">
+          <div className="relative mx-auto w-full max-w-[1200px] rounded-panel bg-white p-4 sm:p-6">
             <button
               type="button"
-              onClick={() => setPreviewOpen(false)}
-              className="-top-12 sm:-top-4 absolute right-0 flex size-10 items-center justify-center rounded-full bg-white text-ink shadow-card sm:-right-14"
+              onClick={() => setExportOpen(false)}
+              className="-top-12 sm:-top-4 absolute right-0 flex size-10 items-center justify-center rounded-full bg-white text-ink shadow-card transition-colors hover:text-violet-700 sm:-right-14"
             >
               <X className="size-5" aria-hidden="true" />
-              <span className="sr-only">Close preview</span>
+              <span className="sr-only">Close</span>
             </button>
-            <SelectedTemplate
-              draft={effectiveDraft}
-              result={result}
-              currency={currency}
-              taxLabel={taxLabel}
-            />
+
+            <h2
+              id="export-dialog-title"
+              className="font-display font-semibold text-[19px] text-ink"
+            >
+              Export invoice
+            </h2>
+
+            {/* flex, not grid — an arbitrary grid-cols-[1fr_1.15fr] track
+                has no minmax(0,...) floor the way Tailwind's own numbered
+                grid-cols-N utilities do, so the second track was sizing to
+                its content's shrink-to-fit width (~260px) instead of its
+                fr share. flex-1/w-[26rem] on plain flex children doesn't
+                have that gotcha, and it's the same pattern the fixed-width
+                columns elsewhere in this file already use. */}
+            <div className="mt-4 flex flex-col gap-6 lg:flex-row">
+              {/* Live preview — ScaledSheet again, same auto-fit-to-box
+                  logic the inline Column-3 sheet uses, just in a shorter
+                  box sized for this dialog rather than the page. */}
+              <div className="print-paper-ctx min-w-0 flex-1 rounded-md border border-line-grey bg-offwhite p-4">
+                <div className="h-[50vh] lg:h-[65vh]">
+                  <ScaledSheet>
+                    <SelectedTemplate
+                      draft={effectiveDraft}
+                      result={result}
+                      currency={currency}
+                      taxLabel={taxLabel}
+                    />
+                  </ScaledSheet>
+                </div>
+              </div>
+
+              {/* Template picker — every template, not just the first
+                  TEMPLATE_PREVIEW_COUNT: this dialog IS the "view all"
+                  moment, so there's no "Show fewer" toggle to reach for. */}
+              <div className="flex flex-col lg:w-[26rem] lg:flex-none">
+                <p className="font-bold text-[12px] text-ink-subtle uppercase tracking-[0.1em]">
+                  Choose a template
+                </p>
+                <div className="mt-2 grid grid-cols-3 gap-2 overflow-y-auto sm:grid-cols-4 lg:max-h-[55vh]">
+                  {INVOICE_TEMPLATES.map((t) => {
+                    const [shortLabel] = t.label.split(' — ')
+                    return (
+                      <TemplateSwatch
+                        key={t.id}
+                        templateId={t.id}
+                        label={shortLabel ?? t.label}
+                        active={draft.template === t.id}
+                        onSelect={() => patch({ template: t.id })}
+                      />
+                    )
+                  })}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="btn-brutal mt-4 justify-center"
+                >
+                  <Printer className="size-4" aria-hidden="true" />
+                  Download PDF
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       ) : null}

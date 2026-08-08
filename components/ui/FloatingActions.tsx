@@ -3,7 +3,7 @@ import { parentLink } from '@/lib/site'
 import scultMark from '@/public/tool-icons/logo.png'
 import whatsappMark from '@/public/tool-icons/Pink Black Photocentric Neon Tech Talk Podcast Instagram Post.png'
 
-const WHATSAPP_NUMBER = '918467977141'
+const WHATSAPP_NUMBER = '919250680738'
 const WHATSAPP_MESSAGE = "Hi! I found you through Scult Tools and I'd like to know more."
 
 /**

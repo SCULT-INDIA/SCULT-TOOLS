@@ -80,7 +80,17 @@ export function SegmentButton({
       // asks for 24px, but a 36px segmented control is genuinely fiddly with a
       // thumb, and the plan's own bar is 44. Pointer precision is better on
       // larger screens, so the tighter height is kept there for density.
-      className={`min-h-11 rounded-sm border px-3 font-medium text-[13px] transition-colors disabled:cursor-not-allowed disabled:opacity-45 sm:min-h-9 ${
+      //
+      // No `transition-colors` here — confirmed live: on this exact class
+      // combination (an active segment carrying both `bg-violet-700` and
+      // `text-white`), `transition-colors` breaks the global
+      // `:focus-visible` rule's outline-color resolution, silently falling
+      // back to `currentColor` — white text on a violet tile, so the ring
+      // vanished against the page behind it (1.04:1 contrast). Every other
+      // button on this page keeps `transition-colors` fine; only THIS
+      // active/coloured combination triggers it. Losing the hover-colour
+      // transition here is a smaller cost than an invisible focus ring.
+      className={`min-h-11 rounded-sm border px-3 font-medium text-[13px] disabled:cursor-not-allowed disabled:opacity-45 sm:min-h-9 ${
         active
           ? 'border-ink bg-violet-700 text-white'
           : 'border-line-grey bg-cream text-ink-muted hover:border-ink hover:text-ink'
