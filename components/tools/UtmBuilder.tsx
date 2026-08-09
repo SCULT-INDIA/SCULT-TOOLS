@@ -13,6 +13,7 @@ import {
   ToolToolbar,
   ToolWorkspace,
 } from '@/components/tools/workspace'
+import { trackToolEvent } from '@/lib/analytics'
 import {
   buildUtmUrl,
   computeQualityScore,
@@ -182,6 +183,7 @@ export function UtmBuilder() {
                 onClick={() => {
                   setUrl(SAMPLE_URL)
                   setValues(SAMPLE_VALUES)
+                  trackToolEvent('utm-builder', 'load_sample')
                 }}
                 className="btn-brutal btn-brutal-sm btn-white w-full"
               >
@@ -189,7 +191,10 @@ export function UtmBuilder() {
               </button>
               <button
                 type="button"
-                onClick={clearAll}
+                onClick={() => {
+                  clearAll()
+                  trackToolEvent('utm-builder', 'clear')
+                }}
                 disabled={isEmpty}
                 className="btn-brutal btn-brutal-sm btn-white w-full"
               >
@@ -215,7 +220,10 @@ export function UtmBuilder() {
               </button>
               <button
                 type="button"
-                onClick={savePreset}
+                onClick={() => {
+                  savePreset()
+                  trackToolEvent('utm-builder', 'save_preset')
+                }}
                 className="btn-brutal btn-brutal-sm col-span-2 w-full sm:col-span-1"
               >
                 {savedAt === 0 ? 'Save source & medium' : 'Saved'}
@@ -280,7 +288,13 @@ export function UtmBuilder() {
           <Pane
             title="Your tagged URL"
             actions={
-              showResult ? <CopyButton text={result.url} label="Copy URL" /> : null
+              showResult ? (
+                <CopyButton
+                  text={result.url}
+                  label="Copy URL"
+                  onCopy={() => trackToolEvent('utm-builder', 'copy_url')}
+                />
+              ) : null
             }
           >
             {isEmpty ? (

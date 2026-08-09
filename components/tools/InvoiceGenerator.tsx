@@ -32,6 +32,7 @@ import {
   ToolbarGroup,
   ToolToolbar,
 } from '@/components/tools/workspace'
+import { trackToolEvent } from '@/lib/analytics'
 import {
   addDays,
   CURRENCIES,
@@ -1687,7 +1688,10 @@ export function InvoiceGenerator() {
                         another toolbar utility. */}
                     <button
                       type="button"
-                      onClick={() => setExportOpen(true)}
+                      onClick={() => {
+                        setExportOpen(true)
+                        trackToolEvent('invoice-generator', 'open_export')
+                      }}
                       className="btn-brutal btn-brutal-sm border-black text-black hover:border-ink hover:text-ink"
                     >
                       <Printer className="size-4" aria-hidden="true" />
@@ -1890,7 +1894,11 @@ export function InvoiceGenerator() {
         <div className="border-line border-t bg-offwhite">
           <ToolToolbar
             actions={
-              <CopyButton text={formatMoney(result.total, currency)} label="Copy total" />
+              <CopyButton
+                text={formatMoney(result.total, currency)}
+                label="Copy total"
+                onCopy={() => trackToolEvent('invoice-generator', 'copy_total')}
+              />
             }
           >
             <span className="text-[12px] text-ink-subtle">
@@ -2019,7 +2027,12 @@ export function InvoiceGenerator() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => window.print()}
+                  onClick={() => {
+                    trackToolEvent('invoice-generator', 'download_pdf', {
+                      template: draft.template,
+                    })
+                    window.print()
+                  }}
                   className="btn-brutal mt-4 justify-center"
                 >
                   <Printer className="size-4" aria-hidden="true" />

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { SegmentButton, StatCard, StatusBar } from '@/components/tools/workspace'
+import { trackToolEvent } from '@/lib/analytics'
 import {
   analyzeText,
   bigramDensity,
@@ -202,6 +203,10 @@ export function WordCounter() {
       } else {
         await editorRef.current.requestFullscreen()
       }
+      trackToolEvent(
+        'word-counter',
+        isFullscreen ? 'exit_fullscreen' : 'enter_fullscreen',
+      )
     } catch {
       // Browsers can reject a fullscreen request (policy, embedding
       // restrictions) — fail silently rather than throwing.
@@ -317,14 +322,20 @@ export function WordCounter() {
             <div className="ml-auto flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => setText(SAMPLE)}
+                onClick={() => {
+                  setText(SAMPLE)
+                  trackToolEvent('word-counter', 'load_sample')
+                }}
                 className="btn-brutal btn-brutal-sm"
               >
                 Load sample
               </button>
               <button
                 type="button"
-                onClick={clearDraft}
+                onClick={() => {
+                  clearDraft()
+                  trackToolEvent('word-counter', 'clear')
+                }}
                 disabled={isEmpty}
                 className="btn-brutal btn-brutal-sm btn-white"
               >

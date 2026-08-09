@@ -74,6 +74,7 @@ export function CopyButton({
   text,
   label = 'Copy',
   ariaLabel,
+  onCopy,
 }: {
   text: string
   label?: string
@@ -87,6 +88,14 @@ export function CopyButton({
    * it as `Copy “…”` rather than replacing the word outright.
    */
   ariaLabel?: string
+  /**
+   * Fired only after a genuinely successful clipboard write, never on a
+   * failed attempt — a failed copy isn't a "the user used this" signal.
+   * Optional and side-effect-free by default, so every existing caller is
+   * unaffected; callers that care (analytics) pass it, everyone else
+   * ignores it.
+   */
+  onCopy?: () => void
 }) {
   const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle')
 
@@ -108,6 +117,7 @@ export function CopyButton({
     try {
       await clipboard.writeText(text)
       setState('copied')
+      onCopy?.()
     } catch {
       // Blocked by permissions policy, an insecure origin, or a WebView that
       // stubs the API and rejects. Previously this reset to idle, so the button

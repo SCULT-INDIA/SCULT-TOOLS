@@ -27,6 +27,7 @@ import {
   ToolToolbar,
   useDialogBehavior,
 } from '@/components/tools/workspace'
+import { trackToolEvent } from '@/lib/analytics'
 import {
   buildSchema,
   EXAMPLE_VALUES,
@@ -637,6 +638,7 @@ export function SchemaMarkupGenerator() {
 
   function loadExample(): void {
     setValues((prev) => ({ ...prev, ...seedUiValues(EXAMPLE_VALUES[typeId]) }))
+    trackToolEvent('schema-markup-generator', 'load_sample')
   }
 
   /** Clears only the current type's fields — other types' values are untouched. */
@@ -648,6 +650,7 @@ export function SchemaMarkupGenerator() {
       }
       return next
     })
+    trackToolEvent('schema-markup-generator', 'clear')
   }
 
   /**
@@ -790,22 +793,28 @@ export function SchemaMarkupGenerator() {
           </button>
           <button
             type="button"
-            onClick={() =>
+            onClick={() => {
               downloadFile(
                 `${typeId.toLowerCase()}-schema.json`,
                 activeJson,
                 'application/json',
               )
-            }
+              trackToolEvent('schema-markup-generator', 'download_schema', {
+                format: 'json',
+              })
+            }}
             className="btn-brutal btn-brutal-sm btn-white w-full"
           >
             Download JSON
           </button>
           <button
             type="button"
-            onClick={() =>
+            onClick={() => {
               downloadFile(`${typeId.toLowerCase()}-schema.txt`, outputText, 'text/plain')
-            }
+              trackToolEvent('schema-markup-generator', 'download_schema', {
+                format: 'txt',
+              })
+            }}
             className="btn-brutal btn-brutal-sm btn-white w-full"
           >
             Download TXT
@@ -1086,6 +1095,9 @@ export function SchemaMarkupGenerator() {
                   <CopyButton
                     text={outputText}
                     label={format === 'script' ? 'Copy script' : 'Copy JSON'}
+                    onCopy={() =>
+                      trackToolEvent('schema-markup-generator', 'copy_output', { format })
+                    }
                   />
                   <a
                     href="https://search.google.com/test/rich-results"

@@ -40,6 +40,7 @@ import {
   ToolbarGroup,
   ToolToolbar,
 } from '@/components/tools/workspace'
+import { trackToolEvent } from '@/lib/analytics'
 import { downloadTextFile, slugifyUrlForFilename } from '@/lib/download-file'
 import {
   CORE_WEB_VITALS,
@@ -707,6 +708,7 @@ export function WebsiteSpeedTest() {
     setStageIndex(0)
     setDurationMs(null)
     setPhase('running')
+    trackToolEvent('website-speed-test', 'run_test', { strategy })
     startedAtRef.current = Date.now()
 
     timersRef.current = STAGES.slice(1).map((entry, index) =>
@@ -835,6 +837,7 @@ export function WebsiteSpeedTest() {
 
   function downloadJson(): void {
     if (result === null) return
+    trackToolEvent('website-speed-test', 'download_report', { format: 'json' })
     const blob = new Blob([JSON.stringify(result, null, 2)], {
       type: 'application/json',
     })
@@ -856,6 +859,7 @@ export function WebsiteSpeedTest() {
    */
   function downloadMarkdown(): void {
     if (result === null) return
+    trackToolEvent('website-speed-test', 'download_report', { format: 'markdown' })
     const generatedAt = new Date().toLocaleString('en-US', {
       dateStyle: 'medium',
       timeStyle: 'short',
@@ -1019,7 +1023,10 @@ export function WebsiteSpeedTest() {
       <div className="grid grid-cols-2 gap-2 border-line border-b bg-offwhite p-3 sm:grid-cols-3 sm:gap-3 sm:p-4 lg:grid-cols-7">
         <button
           type="button"
-          onClick={() => setUrl(SAMPLE_URL)}
+          onClick={() => {
+            setUrl(SAMPLE_URL)
+            trackToolEvent('website-speed-test', 'load_sample')
+          }}
           disabled={running}
           className="btn-brutal btn-brutal-sm btn-white w-full"
         >
@@ -1058,7 +1065,10 @@ export function WebsiteSpeedTest() {
         ) : null}
         <button
           type="button"
-          onClick={() => window.print()}
+          onClick={() => {
+            trackToolEvent('website-speed-test', 'download_report', { format: 'pdf' })
+            window.print()
+          }}
           disabled={result === null}
           className="btn-brutal btn-brutal-sm btn-white w-full"
         >
@@ -1587,12 +1597,17 @@ export function WebsiteSpeedTest() {
                 here as `CopyButton`, which has no className hook to take on
                 the brand button look. */}
             <div className="flex flex-wrap items-center gap-2 border-line border-t pt-5">
-              <CopyButton text={reportText} label="Copy report" />
+              <CopyButton
+                text={reportText}
+                label="Copy report"
+                onCopy={() => trackToolEvent('website-speed-test', 'copy_report')}
+              />
               {shareLink === '' ? null : (
                 <CopyButton
                   text={shareLink}
                   label="Share report"
                   ariaLabel={`Share report — copy link for ${result.finalUrl || testedUrl}`}
+                  onCopy={() => trackToolEvent('website-speed-test', 'share_report')}
                 />
               )}
             </div>

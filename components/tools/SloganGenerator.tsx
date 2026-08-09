@@ -4,6 +4,7 @@ import { Check, Heart, RefreshCw, Sparkles, TriangleAlert, X } from 'lucide-reac
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { CopyButton } from '@/components/tools/ResultPanel'
 import { ErrorDetail, SegmentButton, StatusBar } from '@/components/tools/workspace'
+import { trackToolEvent } from '@/lib/analytics'
 import {
   AD_DESCRIPTION_LIMIT,
   AD_HEADLINE_LIMIT,
@@ -197,6 +198,7 @@ export function SloganGenerator() {
     if (!canGenerate) return
     setSeen((prev) => [...prev, ...batch.slogans].slice(-SEEN_CAP))
     setSeed(Math.floor(Math.random() * 2 ** 31))
+    trackToolEvent('slogan-generator', 'generate_slogans')
   }
 
   function loadSample(): void {
@@ -206,12 +208,14 @@ export function SloganGenerator() {
     setSeed(INITIAL_SEED)
     setSeen([])
     setAdFilter('all')
+    trackToolEvent('slogan-generator', 'load_sample')
   }
 
   function clearAll(): void {
     setKeyword('')
     setNoun('')
     setSeen([])
+    trackToolEvent('slogan-generator', 'clear')
   }
 
   function toggleSave(slogan: string): void {
@@ -431,7 +435,11 @@ export function SloganGenerator() {
                         aria-label={`Actions for “${slogan}”`}
                         className="flex shrink-0 items-center gap-2"
                       >
-                        <CopyButton text={slogan} ariaLabel={`Copy “${slogan}”`} />
+                        <CopyButton
+                          text={slogan}
+                          ariaLabel={`Copy “${slogan}”`}
+                          onCopy={() => trackToolEvent('slogan-generator', 'copy_slogan')}
+                        />
                         <button
                           type="button"
                           aria-pressed={saved}

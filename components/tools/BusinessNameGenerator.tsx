@@ -21,6 +21,7 @@ import {
   StatusBar,
   ToolbarAction,
 } from '@/components/tools/workspace'
+import { trackToolEvent } from '@/lib/analytics'
 import {
   BATCH_SIZE,
   type BrandabilityScore,
@@ -281,6 +282,7 @@ export function BusinessNameGenerator() {
             onClick={() => {
               setKeyword1('coffee')
               setKeyword2('')
+              trackToolEvent('business-name-generator', 'load_sample')
             }}
             className="btn-brutal btn-brutal-sm btn-white w-full"
           >
@@ -291,6 +293,7 @@ export function BusinessNameGenerator() {
             onClick={() => {
               setKeyword1('')
               setKeyword2('')
+              trackToolEvent('business-name-generator', 'clear')
             }}
             disabled={keyword1 === '' && keyword2 === ''}
             className="btn-brutal btn-brutal-sm btn-white w-full"
@@ -299,7 +302,10 @@ export function BusinessNameGenerator() {
           </button>
           <button
             type="button"
-            onClick={() => setBatchNo((n) => n + 1)}
+            onClick={() => {
+              setBatchNo((n) => n + 1)
+              trackToolEvent('business-name-generator', 'generate_names')
+            }}
             className="btn-brutal btn-brutal-sm col-span-2 w-full text-black hover:text-ink sm:col-span-1"
           >
             <RefreshCw className="size-4" aria-hidden="true" />
@@ -724,7 +730,10 @@ function NameCard({
         }
       >
         {!list ? <ScoreRing value={brandability.score} size="sm" /> : null}
-        <CopyButton text={idea.name} />
+        <CopyButton
+          text={idea.name}
+          onCopy={() => trackToolEvent('business-name-generator', 'copy_name')}
+        />
         <a
           href={`${REGISTRAR_SEARCH}${encodeURIComponent(idea.domain)}`}
           target="_blank"

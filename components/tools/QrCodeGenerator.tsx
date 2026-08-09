@@ -27,6 +27,7 @@ import {
   StatusBar,
   ToolToolbar,
 } from '@/components/tools/workspace'
+import { trackToolEvent } from '@/lib/analytics'
 import {
   assessQrColors,
   buildQrPayload,
@@ -475,7 +476,10 @@ export function QrCodeGenerator() {
         <button
           type="button"
           disabled={!ready}
-          onClick={downloadPng}
+          onClick={() => {
+            downloadPng()
+            trackToolEvent('qr-code-generator', 'download_png')
+          }}
           className="btn-brutal btn-brutal-sm w-full"
         >
           <Download className="size-4" aria-hidden="true" />
@@ -486,6 +490,7 @@ export function QrCodeGenerator() {
           disabled={!ready}
           onClick={() => {
             void downloadSvg()
+            trackToolEvent('qr-code-generator', 'download_svg')
           }}
           className="btn-brutal btn-brutal-sm btn-white w-full"
         >
@@ -962,6 +967,7 @@ export function QrCodeGenerator() {
               <CopyButton
                 text={typeof window === 'undefined' ? '' : window.location.href}
                 label="Copy link"
+                onCopy={() => trackToolEvent('qr-code-generator', 'copy_link')}
               />
             </div>
             <p className="hint mt-2">
@@ -1000,7 +1006,11 @@ export function QrCodeGenerator() {
           </div>
 
           {ready ? (
-            <CopyButton text={result.payload} label="Copy data" />
+            <CopyButton
+              text={result.payload}
+              label="Copy data"
+              onCopy={() => trackToolEvent('qr-code-generator', 'copy_data')}
+            />
           ) : (
             <button
               type="button"

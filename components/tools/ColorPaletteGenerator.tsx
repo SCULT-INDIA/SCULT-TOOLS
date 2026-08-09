@@ -4,6 +4,7 @@ import { ArrowRight, Check, Copy, Download, Lock, LockOpen, Shuffle } from 'luci
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { CopyButton } from '@/components/tools/ResultPanel'
 import { SegmentButton, StatusBar } from '@/components/tools/workspace'
+import { trackToolEvent } from '@/lib/analytics'
 import {
   applyHarmony,
   createRng,
@@ -228,6 +229,7 @@ export function ColorPaletteGenerator() {
         ? `New base ${next.toUpperCase()} — every band is locked, so only the ramp moved`
         : `New palette from ${next.toUpperCase()}`,
     )
+    trackToolEvent('color-palette-generator', 'regenerate')
   }, [allLocked, getRng, harmony])
 
   /**
@@ -337,6 +339,7 @@ export function ColorPaletteGenerator() {
       await navigator.clipboard.writeText(swatch.hex)
       setCopiedName(swatch.name)
       setAction(`Copied ${swatch.hex.toUpperCase()}`)
+      trackToolEvent('color-palette-generator', 'copy_swatch')
     } catch {
       // Blocked by permissions policy or an insecure origin.
       setAction(
@@ -381,6 +384,7 @@ export function ColorPaletteGenerator() {
       `${fileStem(prefix)}-palette.${spec.extension}`,
     )
     setAction(`Downloaded the ${spec.label} export`)
+    trackToolEvent('color-palette-generator', 'download_tokens', { format })
   }
 
   function downloadSvg(): void {
@@ -391,6 +395,7 @@ export function ColorPaletteGenerator() {
       `${fileStem(prefix)}-palette.svg`,
     )
     setAction('Downloaded the SVG swatch sheet')
+    trackToolEvent('color-palette-generator', 'download_svg')
   }
 
   const defaultMessage = allLocked
@@ -635,7 +640,13 @@ export function ColorPaletteGenerator() {
         {/* Download file/SVG sheet moved to the top button grid — "Copy all"
             stays here, contextual to the token preview right above it. */}
         <div className="mt-3">
-          <CopyButton text={tokens} label="Copy all" />
+          <CopyButton
+            text={tokens}
+            label="Copy all"
+            onCopy={() =>
+              trackToolEvent('color-palette-generator', 'copy_all', { format })
+            }
+          />
         </div>
 
         <p className="hint mt-2">

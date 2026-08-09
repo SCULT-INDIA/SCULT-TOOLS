@@ -13,6 +13,7 @@ import {
   ToolToolbar,
   ToolWorkspace,
 } from '@/components/tools/workspace'
+import { trackToolEvent } from '@/lib/analytics'
 import {
   calculateMarketingRoi,
   formatInr,
@@ -228,7 +229,13 @@ export function MarketingRoiCalculator() {
       toolbar={
         <ToolToolbar
           actions={
-            <ToolbarAction onClick={() => setValues(EMPTY)} disabled={allBlank}>
+            <ToolbarAction
+              onClick={() => {
+                setValues(EMPTY)
+                trackToolEvent('marketing-roi-calculator', 'clear')
+              }}
+              disabled={allBlank}
+            >
               Clear
             </ToolbarAction>
           }
@@ -238,7 +245,12 @@ export function MarketingRoiCalculator() {
               <SegmentButton
                 key={scenario.id}
                 active={sameValues(values, scenario.values)}
-                onClick={() => setValues(scenario.values)}
+                onClick={() => {
+                  setValues(scenario.values)
+                  trackToolEvent('marketing-roi-calculator', 'select_example', {
+                    scenario: scenario.id,
+                  })
+                }}
                 title={scenario.title}
               >
                 {scenario.label}
@@ -325,7 +337,15 @@ export function MarketingRoiCalculator() {
       output={
         <Pane
           title="Verdict and break-even"
-          actions={result.ok ? <CopyButton text={summary} label="Copy summary" /> : null}
+          actions={
+            result.ok ? (
+              <CopyButton
+                text={summary}
+                label="Copy summary"
+                onCopy={() => trackToolEvent('marketing-roi-calculator', 'copy_summary')}
+              />
+            ) : null
+          }
         >
           {allBlank ? (
             <div className="flex h-full items-center justify-center p-6">

@@ -15,6 +15,7 @@ import {
   ToolToolbar,
   ToolWorkspace,
 } from '@/components/tools/workspace'
+import { trackToolEvent } from '@/lib/analytics'
 import {
   buildSignatureHtml,
   buildSignatureText,
@@ -299,10 +300,12 @@ export function EmailSignatureGenerator() {
           }),
         ])
         setCopyState('rich')
+        trackToolEvent('email-signature-generator', 'copy_signature')
         return
       }
       await clipboard.writeText(result.html)
       setCopyState('fallback')
+      trackToolEvent('email-signature-generator', 'copy_signature')
     } catch {
       setCopyState('error')
     }
@@ -319,6 +322,7 @@ export function EmailSignatureGenerator() {
     anchor.download = 'email-signature.html'
     anchor.click()
     setTimeout(() => URL.revokeObjectURL(url), 10_000)
+    trackToolEvent('email-signature-generator', 'download_html')
   }
 
   return (
@@ -393,14 +397,20 @@ export function EmailSignatureGenerator() {
             <div className="grid grid-cols-2 gap-2 border-line border-b bg-offwhite p-3 sm:grid-cols-3 sm:gap-3 sm:p-4 lg:grid-cols-4">
               <button
                 type="button"
-                onClick={() => setFields(SAMPLE_FIELDS)}
+                onClick={() => {
+                  setFields(SAMPLE_FIELDS)
+                  trackToolEvent('email-signature-generator', 'load_sample')
+                }}
                 className="btn-brutal btn-brutal-sm btn-white w-full"
               >
                 Load sample
               </button>
               <button
                 type="button"
-                onClick={() => setFields(EMPTY_FIELDS)}
+                onClick={() => {
+                  setFields(EMPTY_FIELDS)
+                  trackToolEvent('email-signature-generator', 'clear')
+                }}
                 disabled={isEmpty}
                 className="btn-brutal btn-brutal-sm btn-white w-full"
               >
@@ -667,7 +677,15 @@ export function EmailSignatureGenerator() {
             title={view === 'preview' ? 'Live preview' : 'Email-safe HTML'}
             padded={false}
             scroll={false}
-            actions={isEmpty ? null : <CopyButton text={result.html} label="Copy HTML" />}
+            actions={
+              isEmpty ? null : (
+                <CopyButton
+                  text={result.html}
+                  label="Copy HTML"
+                  onCopy={() => trackToolEvent('email-signature-generator', 'copy_html')}
+                />
+              )
+            }
           >
             <div className="flex h-full min-h-0 flex-col">
               <div className="min-h-0 flex-1 overflow-auto">

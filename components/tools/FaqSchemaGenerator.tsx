@@ -32,6 +32,7 @@ import {
   ToolToolbar,
   useDialogBehavior,
 } from '@/components/tools/workspace'
+import { trackToolEvent } from '@/lib/analytics'
 import { ANSWER_SOFT_LIMIT, buildFaqSchema } from '@/lib/tools/faq-schema-generator/logic'
 
 /**
@@ -319,6 +320,7 @@ export function FaqSchemaGenerator() {
     setRows([{ id, question: '', answer: '' }])
     setQuery('')
     setFocusTarget(`faq-q-${id}`)
+    trackToolEvent('faq-schema-generator', 'clear')
   }
 
   function toggleCollapsed(id: number): void {
@@ -345,6 +347,7 @@ export function FaqSchemaGenerator() {
   function downloadJson(): void {
     if (!hasPairs) return
     downloadText('faq-schema.json', 'application/json', result.json)
+    trackToolEvent('faq-schema-generator', 'download_schema', { format: 'json' })
   }
 
   function downloadTxt(): void {
@@ -353,6 +356,7 @@ export function FaqSchemaGenerator() {
       .map((row, i) => `Q${i + 1}: ${row.question}\nA${i + 1}: ${row.answer}`)
       .join('\n\n')
     downloadText('faq-questions-and-answers.txt', 'text/plain', text)
+    trackToolEvent('faq-schema-generator', 'download_schema', { format: 'txt' })
   }
 
   return (
@@ -390,7 +394,10 @@ export function FaqSchemaGenerator() {
         <div className="grid grid-cols-2 gap-2 border-line border-b bg-offwhite p-3 sm:grid-cols-3 sm:gap-3 sm:p-4 lg:grid-cols-5">
           <button
             type="button"
-            onClick={() => setRows(SAMPLE_ROWS)}
+            onClick={() => {
+              setRows(SAMPLE_ROWS)
+              trackToolEvent('faq-schema-generator', 'load_sample')
+            }}
             className="btn-brutal btn-brutal-sm w-full"
           >
             Load sample
@@ -567,7 +574,16 @@ export function FaqSchemaGenerator() {
               title={format === 'json' ? 'JSON-LD' : 'HTML + JSON-LD'}
               padded={false}
               scroll={false}
-              actions={output === '' ? null : <CopyButton text={output} />}
+              actions={
+                output === '' ? null : (
+                  <CopyButton
+                    text={output}
+                    onCopy={() =>
+                      trackToolEvent('faq-schema-generator', 'copy_output', { format })
+                    }
+                  />
+                )
+              }
             >
               <div className="flex h-full flex-col">
                 <p className="shrink-0 border-line border-b bg-offwhite px-4 py-2 text-[13px] text-ink-muted leading-5">

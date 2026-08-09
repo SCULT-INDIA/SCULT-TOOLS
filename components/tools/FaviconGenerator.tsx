@@ -19,6 +19,7 @@ import {
   ToolbarGroup,
   ToolToolbar,
 } from '@/components/tools/workspace'
+import { trackToolEvent } from '@/lib/analytics'
 import {
   buildHtmlSnippet,
   buildIco,
@@ -855,7 +856,10 @@ export function FaviconGenerator() {
             actions={
               <button
                 type="button"
-                onClick={reset}
+                onClick={() => {
+                  reset()
+                  trackToolEvent('favicon-generator', 'reset')
+                }}
                 className="btn-brutal btn-brutal-sm btn-white"
               >
                 Reset
@@ -1576,6 +1580,7 @@ export function FaviconGenerator() {
               type="button"
               onClick={() => {
                 void downloadZip()
+                trackToolEvent('favicon-generator', 'download_zip')
               }}
               disabled={generated === null}
               className="btn-brutal gap-3 px-8 py-3"
@@ -1593,7 +1598,11 @@ export function FaviconGenerator() {
               </span>
             </button>
             <span className="hint">or</span>
-            <CopyButton text={htmlSnippet} label="Copy HTML Code" />
+            <CopyButton
+              text={htmlSnippet}
+              label="Copy HTML Code"
+              onCopy={() => trackToolEvent('favicon-generator', 'copy_html')}
+            />
             <p className="hint">Add favicon to your website</p>
           </div>
 
@@ -1614,7 +1623,11 @@ export function FaviconGenerator() {
               <div>
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h4 className="label mb-0">site.webmanifest</h4>
-                  <CopyButton text={manifestSnippet} label="Copy manifest" />
+                  <CopyButton
+                    text={manifestSnippet}
+                    label="Copy manifest"
+                    onCopy={() => trackToolEvent('favicon-generator', 'copy_manifest')}
+                  />
                 </div>
                 <pre className="mt-2 max-h-56 overflow-auto rounded-sm border border-line-grey bg-cream p-3 font-mono text-[13px] text-ink leading-5">
                   {manifestSnippet}

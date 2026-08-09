@@ -12,6 +12,7 @@ import {
   ToolbarGroup,
   ToolToolbar,
 } from '@/components/tools/workspace'
+import { trackToolEvent } from '@/lib/analytics'
 import {
   type CompareResult,
   compareJson,
@@ -244,11 +245,13 @@ export function JsonFormatter() {
   function handleFormat() {
     if (isEmpty || hasError) return
     setInput(formatJson(input, { indent, sort }).output)
+    trackToolEvent('json-formatter', 'format_json')
   }
 
   function handleMinify() {
     if (isEmpty || hasError) return
     setInput(minifyJson(input, { sort }).output)
+    trackToolEvent('json-formatter', 'minify_json')
   }
 
   function handleRepair() {
@@ -264,6 +267,9 @@ export function JsonFormatter() {
         ? 'Repaired — fixed comments, quotes or a trailing comma.'
         : 'Already valid JSON — nothing to repair.',
     )
+    trackToolEvent('json-formatter', 'repair_json', {
+      repaired: repaired.repaired ?? false,
+    })
   }
 
   function commitLeafEdit(path: readonly PathSegment[], nextValue: unknown) {
@@ -293,7 +299,15 @@ export function JsonFormatter() {
   return (
     <div className="overflow-hidden rounded-panel border border-line bg-cream">
       <div className="border-line border-b bg-offwhite">
-        <ToolToolbar actions={<CopyButton text={input} label="Copy JSON" />}>
+        <ToolToolbar
+          actions={
+            <CopyButton
+              text={input}
+              label="Copy JSON"
+              onCopy={() => trackToolEvent('json-formatter', 'copy_json')}
+            />
+          }
+        >
           <ToolbarGroup label="Indent">
             {([2, 4, 'tab'] as const).map((opt) => (
               <SegmentButton

@@ -30,6 +30,7 @@ import {
   ToolToolbar,
 } from '@/components/tools/workspace'
 import { BrandIcon, brandForCompany } from '@/components/ui/BrandIcon'
+import { trackToolEvent } from '@/lib/analytics'
 import { downloadTextFile, slugifyUrlForFilename } from '@/lib/download-file'
 import {
   AI_BOTS,
@@ -642,6 +643,7 @@ function DownloadMarkdownButton({ report }: { report: VisibilityReport }) {
     <button
       type="button"
       onClick={() => {
+        trackToolEvent('ai-visibility-checker', 'download_report', { format: 'markdown' })
         const generatedAt = new Date().toLocaleString('en-US', {
           dateStyle: 'medium',
           timeStyle: 'short',
@@ -840,6 +842,7 @@ export function AiVisibilityChecker() {
     try {
       await navigator.clipboard.writeText(window.location.href)
       setLinkCopied(true)
+      trackToolEvent('ai-visibility-checker', 'copy_link')
     } catch {
       // Clipboard can be blocked by permissions policy or an insecure origin.
       setLinkCopied(false)
@@ -940,6 +943,7 @@ export function AiVisibilityChecker() {
           onClick={() => {
             setUrl(SAMPLE_URL)
             setInputError(undefined)
+            trackToolEvent('ai-visibility-checker', 'load_sample')
           }}
           className="btn-brutal btn-brutal-sm btn-white w-full"
         >
@@ -959,7 +963,10 @@ export function AiVisibilityChecker() {
         className="flex flex-col gap-5"
         onSubmit={(e) => {
           e.preventDefault()
-          if (!loading) void runCheckFor(url)
+          if (!loading) {
+            trackToolEvent('ai-visibility-checker', 'check_visibility')
+            void runCheckFor(url)
+          }
         }}
       >
         <div>
@@ -1120,7 +1127,11 @@ export function AiVisibilityChecker() {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <span className="eyebrow">Your report</span>
               <div className="flex flex-wrap items-center gap-2">
-                <CopyButton text={formatReportText(report)} label="Copy report" />
+                <CopyButton
+                  text={formatReportText(report)}
+                  label="Copy report"
+                  onCopy={() => trackToolEvent('ai-visibility-checker', 'copy_report')}
+                />
                 <DownloadMarkdownButton report={report} />
               </div>
             </div>
