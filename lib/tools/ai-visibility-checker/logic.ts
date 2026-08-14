@@ -347,32 +347,147 @@ export function hasCanonicalLink(html: string): boolean {
 
 export interface AltTextResult {
   readonly imgCount: number
+  /** Count of images that are adequately annotated — see analyzeAltText. */
   readonly withAlt: number
   /**
-   * Fraction of <img> tags with a non-empty alt attribute, 0–1. Defined as 1
-   * (full credit) when the homepage has no <img> tags at all — there is
-   * nothing to flag, and a text-only homepage should not be penalized twice
-   * by both the alt-text check and the thin-content check below.
+   * Fraction of <img> tags adequately annotated, 0–1. Defined as 1 (full
+   * credit) when the homepage has no <img> tags at all — there is nothing to
+   * flag, and a text-only homepage should not be penalized twice by both the
+   * alt-text check and the thin-content check below.
    */
   readonly coverage: number
 }
 
+/** HTML void elements never carry children, so they never push an ancestor
+ * frame — a lone open tag with no matching close, by spec. */
+const VOID_ELEMENTS = new Set([
+  'area',
+  'base',
+  'br',
+  'col',
+  'embed',
+  'hr',
+  'img',
+  'input',
+  'link',
+  'meta',
+  'param',
+  'source',
+  'track',
+  'wbr',
+])
+
+interface AncestorFrame {
+  readonly tag: string
+  readonly ariaHidden: boolean
+  readonly ariaLabel: string | undefined
+}
+
+/** Attribute name/value pairs from inside a tag, lowercased keys. Shared by
+ * the ancestor walk below and every other attribute reader in this file
+ * that only ever needs one specific attribute could use this too, but they
+ * predate it and single-attribute regexes are simpler for a single lookup. */
+function parseTagAttrs(tagBody: string): Record<string, string> {
+  const attrs: Record<string, string> = {}
+  const attrRe = /([a-zA-Z][a-zA-Z0-9-:]*)\s*=\s*(?:"([^"]*)"|'([^']*)')/g
+  for (const match of tagBody.matchAll(attrRe)) {
+    const name = (match[1] ?? '').toLowerCase()
+    attrs[name] = match[2] ?? match[3] ?? ''
+  }
+  return attrs
+}
+
 /**
- * Parses every <img> tag on the homepage and computes what fraction carries
- * a non-empty alt attribute — a real multimodal-parsing signal: an AI system
- * that cannot run JavaScript or vision-caption every image leans on alt text
- * to know what an image is.
+ * True when an image at this point in the ancestor stack is decorative BY
+ * DECLARATION, not merely un-annotated: either it sits inside an
+ * `aria-hidden="true"` region (removed from the accessibility tree
+ * entirely — the same treatment axe-core and Lighthouse give aria-hidden
+ * content), or its nearest interactive ancestor (a link or button) already
+ * carries its own `aria-label`, which makes a redundant image description
+ * actively harmful rather than simply absent — a screen reader would
+ * announce the same name twice.
+ *
+ * Deliberately narrow: this does NOT try to detect "there is visible text
+ * next to this icon" in general, because that requires knowing the
+ * accessible-name computation a real DOM/AT would do, and a text-proximity
+ * guess would be just as likely to wave through a genuinely undescribed
+ * content image on some other site as it would to correctly clear a
+ * decorative icon on this one. Only the two structural signals a page can
+ * unambiguously declare — aria-hidden, aria-label — count.
+ */
+function isDecorativeByAncestry(stack: readonly AncestorFrame[]): boolean {
+  if (stack.some((frame) => frame.ariaHidden)) return true
+  for (let i = stack.length - 1; i >= 0; i--) {
+    const frame = stack[i]
+    if (frame === undefined) continue
+    if (frame.tag === 'a' || frame.tag === 'button') {
+      return frame.ariaLabel !== undefined && frame.ariaLabel.trim() !== ''
+    }
+  }
+  return false
+}
+
+/**
+ * Parses every <img> tag on the homepage and computes what fraction is
+ * adequately annotated for an AI system that cannot run JavaScript or
+ * vision-caption every image — the real signal being measured is "can
+ * something reading only markup tell what this image is or safely ignore
+ * it", not literally "does the alt attribute contain characters".
+ *
+ * A non-empty `alt` always counts. An empty (or missing) `alt` still counts
+ * when `isDecorativeByAncestry` says so — see that function's docblock for
+ * exactly which two cases qualify and, importantly, which ones deliberately
+ * don't. Everything else — an image with no alt, no aria-hidden ancestor,
+ * and no labelled interactive ancestor — is a real gap: nothing in the
+ * markup tells a text-only reader what it is or that it's safe to skip.
+ *
+ * Walks tags with a small ancestor stack rather than a flat `<img>` regex,
+ * so it can see what encloses each image — still no real DOM, just enough
+ * nesting awareness for the two declarations above. Tolerant of malformed
+ * third-party HTML: an unmatched closing tag is a no-op, and an unclosed
+ * opening tag simply stays on the stack for the rest of the document,
+ * exactly as a permissive HTML parser would treat it.
  */
 export function analyzeAltText(html: string): AltTextResult {
-  const tags = html.match(/<img\b[^>]*>/gi) ?? []
-  const imgCount = tags.length
-  const altRe = /alt\s*=\s*(?:"([^"]*)"|'([^']*)')/i
+  const tagRe = /<\/?([a-zA-Z][a-zA-Z0-9]*)\b([^>]*)>/g
+  const stack: AncestorFrame[] = []
+  let imgCount = 0
   let withAlt = 0
-  for (const tag of tags) {
-    const match = altRe.exec(tag)
-    const value = (match?.[1] ?? match?.[2] ?? '').trim()
-    if (value !== '') withAlt += 1
+
+  for (const match of html.matchAll(tagRe)) {
+    const full = match[0]
+    const name = (match[1] ?? '').toLowerCase()
+    const body = match[2] ?? ''
+
+    if (full.startsWith('</')) {
+      for (let i = stack.length - 1; i >= 0; i--) {
+        if (stack[i]?.tag === name) {
+          stack.length = i
+          break
+        }
+      }
+      continue
+    }
+
+    if (name === 'img') {
+      imgCount += 1
+      const attrs = parseTagAttrs(body)
+      const altValue = (attrs.alt ?? '').trim()
+      if (altValue !== '' || isDecorativeByAncestry(stack)) withAlt += 1
+      continue
+    }
+
+    const selfClosing = /\/\s*$/.test(body)
+    if (!VOID_ELEMENTS.has(name) && !selfClosing) {
+      const attrs = parseTagAttrs(body)
+      stack.push({
+        tag: name,
+        ariaHidden: (attrs['aria-hidden'] ?? '').toLowerCase() === 'true',
+        ariaLabel: attrs['aria-label'],
+      })
+    }
   }
+
   return { imgCount, withAlt, coverage: imgCount === 0 ? 1 : withAlt / imgCount }
 }
 

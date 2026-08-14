@@ -260,6 +260,51 @@ describe('analyzeAltText', () => {
     const html = '<img src="a.png" alt="A"><img src="b.png" alt="B">'
     expect(analyzeAltText(html)).toEqual({ imgCount: 2, withAlt: 2, coverage: 1 })
   })
+
+  it('treats an empty alt inside an aria-hidden region as covered', () => {
+    const html = '<div aria-hidden="true"><img src="a.png" alt=""></div>'
+    expect(analyzeAltText(html)).toEqual({ imgCount: 1, withAlt: 1, coverage: 1 })
+  })
+
+  it('treats an empty alt inside a labelled link as covered', () => {
+    const html = '<a href="/" aria-label="Go home"><img src="a.png" alt=""></a>'
+    expect(analyzeAltText(html)).toEqual({ imgCount: 1, withAlt: 1, coverage: 1 })
+  })
+
+  it('treats an empty alt inside a labelled button the same way', () => {
+    const html = '<button aria-label="Close"><img src="x.png" alt=""></button>'
+    expect(analyzeAltText(html)).toEqual({ imgCount: 1, withAlt: 1, coverage: 1 })
+  })
+
+  it('does not credit an empty alt inside an unlabelled link', () => {
+    const html = '<a href="/about"><img src="a.png" alt=""> Team</a>'
+    expect(analyzeAltText(html)).toEqual({ imgCount: 1, withAlt: 0, coverage: 0 })
+  })
+
+  it('does not credit an empty alt with no aria-hidden/aria-label ancestor at all', () => {
+    const html = '<div class="card"><img src="a.png" alt=""></div>'
+    expect(analyzeAltText(html)).toEqual({ imgCount: 1, withAlt: 0, coverage: 0 })
+  })
+
+  it('only exempts images actually inside the aria-hidden region, not siblings after it closes', () => {
+    const html =
+      '<div aria-hidden="true"><img src="a.png" alt=""></div><img src="b.png" alt="">'
+    expect(analyzeAltText(html)).toEqual({ imgCount: 2, withAlt: 1, coverage: 0.5 })
+  })
+
+  it('finds the nearest labelled ancestor, not a stale outer one', () => {
+    // The inner button has no aria-label of its own, so the image inside it
+    // should NOT inherit the outer link's label — the nearest interactive
+    // ancestor is what matters, not any ancestor anywhere up the tree.
+    const html =
+      '<a href="/" aria-label="Outer"><button><img src="a.png" alt=""></button></a>'
+    expect(analyzeAltText(html)).toEqual({ imgCount: 1, withAlt: 0, coverage: 0 })
+  })
+
+  it('is tolerant of an unmatched closing tag (a no-op, not a crash or a miscount)', () => {
+    const html = '</section><img src="a.png" alt="">'
+    expect(analyzeAltText(html)).toEqual({ imgCount: 1, withAlt: 0, coverage: 0 })
+  })
 })
 
 describe('countVisibleWords', () => {
