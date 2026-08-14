@@ -27,6 +27,7 @@ export function ToolCard({ tool }: { tool: Tool }) {
         <Image
           src={`/tool-icons/${tool.slug}.png`}
           alt=""
+          aria-hidden="true"
           width={40}
           height={40}
           className="size-10 shrink-0 rounded-full ring-1 ring-line"

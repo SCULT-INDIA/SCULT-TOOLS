@@ -113,6 +113,7 @@ export function UniversalIncludes() {
                   <Image
                     src={`/tool-icons/${tool.slug}.png`}
                     alt=""
+                    aria-hidden="true"
                     width={24}
                     height={24}
                     className="size-6 shrink-0 rounded-full"

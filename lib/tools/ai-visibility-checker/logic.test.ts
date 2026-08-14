@@ -261,6 +261,11 @@ describe('analyzeAltText', () => {
     expect(analyzeAltText(html)).toEqual({ imgCount: 2, withAlt: 2, coverage: 1 })
   })
 
+  it('treats an empty alt as covered when the image itself is aria-hidden', () => {
+    const html = '<img src="a.png" alt="" aria-hidden="true">'
+    expect(analyzeAltText(html)).toEqual({ imgCount: 1, withAlt: 1, coverage: 1 })
+  })
+
   it('treats an empty alt inside an aria-hidden region as covered', () => {
     const html = '<div aria-hidden="true"><img src="a.png" alt=""></div>'
     expect(analyzeAltText(html)).toEqual({ imgCount: 1, withAlt: 1, coverage: 1 })

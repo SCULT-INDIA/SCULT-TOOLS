@@ -140,6 +140,7 @@ export function FullServiceGrid() {
                 <Image
                   src={`/tool-icons/${tool.slug}.png`}
                   alt=""
+                  aria-hidden="true"
                   width={20}
                   height={20}
                   className="mt-0.5 size-5 shrink-0 rounded-full ring-1 ring-line"

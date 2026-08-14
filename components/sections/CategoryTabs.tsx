@@ -80,6 +80,7 @@ export function CategoryTabs() {
                   <Image
                     src={`/tool-icons/${tool.slug}.png`}
                     alt=""
+                    aria-hidden="true"
                     width={36}
                     height={36}
                     className="size-9 shrink-0 rounded-full ring-1 ring-line"

@@ -65,6 +65,7 @@ function Row({
             <Image
               src={`/tool-icons/${tool.slug}.png`}
               alt=""
+              aria-hidden="true"
               width={48}
               height={48}
               className="size-12 rounded-full"

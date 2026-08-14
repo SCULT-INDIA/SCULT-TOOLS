@@ -177,6 +177,7 @@ export function SearchBox({
           <Image
             src={`/tool-icons/${hit.slug}.png`}
             alt=""
+            aria-hidden="true"
             width={32}
             height={32}
             className="size-8 shrink-0 rounded-full ring-1 ring-line"

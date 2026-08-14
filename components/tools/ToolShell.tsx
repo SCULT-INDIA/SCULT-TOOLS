@@ -98,6 +98,7 @@ export function ToolShell({ tool, children }: { tool: Tool; children: React.Reac
             <Image
               src={`/tool-icons/${tool.slug}.png`}
               alt=""
+              aria-hidden="true"
               width={44}
               height={44}
               priority

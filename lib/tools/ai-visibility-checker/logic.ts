@@ -435,11 +435,14 @@ function isDecorativeByAncestry(stack: readonly AncestorFrame[]): boolean {
  * it", not literally "does the alt attribute contain characters".
  *
  * A non-empty `alt` always counts. An empty (or missing) `alt` still counts
- * when `isDecorativeByAncestry` says so — see that function's docblock for
- * exactly which two cases qualify and, importantly, which ones deliberately
- * don't. Everything else — an image with no alt, no aria-hidden ancestor,
- * and no labelled interactive ancestor — is a real gap: nothing in the
- * markup tells a text-only reader what it is or that it's safe to skip.
+ * when the image itself carries `aria-hidden="true"` — the single most
+ * common way a page declares "this exact image is decorative" — or when
+ * `isDecorativeByAncestry` says so for the enclosing markup; see that
+ * function's docblock for exactly which two ancestor cases qualify and,
+ * importantly, which ones deliberately don't. Everything else — an image
+ * with no alt, no aria-hidden anywhere on it or above it, and no labelled
+ * interactive ancestor — is a real gap: nothing in the markup tells a
+ * text-only reader what it is or that it's safe to skip.
  *
  * Walks tags with a small ancestor stack rather than a flat `<img>` regex,
  * so it can see what encloses each image — still no real DOM, just enough
@@ -473,7 +476,8 @@ export function analyzeAltText(html: string): AltTextResult {
       imgCount += 1
       const attrs = parseTagAttrs(body)
       const altValue = (attrs.alt ?? '').trim()
-      if (altValue !== '' || isDecorativeByAncestry(stack)) withAlt += 1
+      const ownAriaHidden = (attrs['aria-hidden'] ?? '').toLowerCase() === 'true'
+      if (altValue !== '' || ownAriaHidden || isDecorativeByAncestry(stack)) withAlt += 1
       continue
     }
 

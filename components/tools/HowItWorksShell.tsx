@@ -81,6 +81,7 @@ export function HowItWorksShell({ tool }: { tool: Tool }) {
           <Image
             src={`/tool-icons/${tool.slug}.png`}
             alt=""
+            aria-hidden="true"
             width={44}
             height={44}
             className="size-9 shrink-0 rounded-full ring-1 ring-line md:size-11"
