@@ -163,7 +163,12 @@ export function PromptDetailShell({
             parts are example details you can swap.
           </p>
         </div>
-        <PromptCopyBlock promptText={prompt.promptText} variables={prompt.variables} />
+        <PromptCopyBlock
+          category={prompt.category}
+          promptSlug={prompt.slug}
+          promptText={prompt.promptText}
+          variables={prompt.variables}
+        />
       </section>
 
       <section aria-labelledby="why-it-works" className="mt-10">

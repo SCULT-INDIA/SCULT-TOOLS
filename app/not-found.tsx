@@ -1,10 +1,12 @@
 import Link from 'next/link'
+import { NotFoundTracker } from '@/components/layout/NotFoundTracker'
 import { SearchBox } from '@/components/layout/SearchBox'
 import { CATEGORIES } from '@/lib/tools/categories'
 
 export default function NotFound() {
   return (
     <section className="container-site max-w-[44rem] py-20 text-center">
+      <NotFoundTracker />
       <p className="eyebrow">404</p>
       {/* "Page", not "tool": this same 404 also serves misses under
           /prompts/, where "that tool" would be wrong twice over. */}

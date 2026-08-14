@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { MailtoLink } from '@/components/ui/MailtoLink'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { parentLink, SITE } from '@/lib/site'
 
@@ -64,9 +65,13 @@ export default function ContactPage() {
             tool that pretends to be more certain than it is will eventually mislead
             someone. If you have still found a calculation we got wrong, a broken tool, or
             a correction of any kind, we would genuinely rather hear it than not. Email{' '}
-            <a href={`mailto:${CONTACT_EMAIL}`} className={LINK_CLASS}>
+            <MailtoLink
+              email={CONTACT_EMAIL}
+              context="contact-page"
+              className={LINK_CLASS}
+            >
               {CONTACT_EMAIL}
-            </a>
+            </MailtoLink>
             .
           </p>
         </section>

@@ -2,6 +2,7 @@
 
 import { Monitor, Moon, Sun } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { trackEvent } from '@/lib/analytics'
 import { type ThemeChoice, useTheme } from './ThemeProvider'
 
 const CYCLE: Record<ThemeChoice, ThemeChoice> = {
@@ -53,7 +54,11 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
-      onClick={() => setTheme(CYCLE[theme])}
+      onClick={() => {
+        const to = CYCLE[theme]
+        trackEvent('theme_change', { from: theme, to })
+        setTheme(to)
+      }}
       aria-label={`Theme: ${LABEL[displayTheme]}. Click to switch to ${LABEL[next]}.`}
       title={LABEL[displayTheme]}
       className="flex size-10 shrink-0 items-center justify-center rounded-full text-ink transition-colors hover:bg-violet-50 lg:size-11"

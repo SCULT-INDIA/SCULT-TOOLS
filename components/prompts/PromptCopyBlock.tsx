@@ -2,6 +2,7 @@
 
 import { Check, Copy, SlidersHorizontal } from 'lucide-react'
 import { Fragment, useMemo, useState } from 'react'
+import { trackPromptEvent } from '@/lib/analytics'
 import type { PromptVariable } from '@/lib/prompts/types'
 
 /**
@@ -44,9 +45,13 @@ function segment(promptText: string, variables: readonly PromptVariable[]): Segm
 }
 
 export function PromptCopyBlock({
+  category,
+  promptSlug,
   promptText,
   variables,
 }: {
+  category: string
+  promptSlug: string
   promptText: string
   variables: readonly PromptVariable[]
 }) {
@@ -77,6 +82,13 @@ export function PromptCopyBlock({
       await navigator.clipboard.writeText(filledText)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
+      // `customized`, not the actual values — never send what someone typed
+      // into a variable field, only whether they changed anything from the
+      // pre-filled example.
+      const customized = variables.some(
+        (v) => (values[v.name]?.trim() || v.example) !== v.example,
+      )
+      trackPromptEvent(category, promptSlug, 'copy_prompt', { customized })
     } catch {
       // Clipboard API can fail (permissions, insecure context) — the text
       // is still fully selectable/visible below, so nothing is truly lost.

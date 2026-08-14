@@ -2,6 +2,7 @@
 
 import { Bookmark, BookmarkCheck } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { trackEvent } from '@/lib/analytics'
 
 /**
  * "Bookmark this page" — a fixed top-right icon button on every tool page,
@@ -72,6 +73,7 @@ export function BookmarkButton() {
     }
     // Every browser actually in use today: no API exists to open the
     // dialog, so show the shortcut that does the same thing directly.
+    trackEvent('bookmark_hint_shown', { path: window.location.pathname })
     setJustShown(true)
   }
 

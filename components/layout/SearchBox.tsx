@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useId, useRef, useState } from 'react'
 import { Icon } from '@/components/ui/Icon'
+import { trackSearch } from '@/lib/analytics'
 import {
   PROMPT_COUNT,
   type PromptSearchEntry,
@@ -69,6 +70,19 @@ export function SearchBox({
     setOpen(next.length > 0)
   }, [query])
 
+  // Debounced, and only for a query worth calling "a real search" (2+
+  // chars) — this is a content-gap signal ("people search for X and find
+  // nothing"), not something worth firing on every single keystroke while
+  // someone is still typing their first letter.
+  useEffect(() => {
+    const trimmed = query.trim()
+    if (trimmed.length < 2) return
+    const timer = setTimeout(() => {
+      if (hits.length === 0) trackSearch(trimmed, { has_results: false })
+    }, 800)
+    return () => clearTimeout(timer)
+  }, [query, hits.length])
+
   // Cmd/Ctrl+K focuses search from anywhere on the page.
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -92,6 +106,7 @@ export function SearchBox({
 
   function go(hit: SearchHit | undefined) {
     if (!hit) return
+    trackSearch(query.trim(), { has_results: true, result_kind: hit.kind })
     setOpen(false)
     setQuery('')
     onNavigate?.()
