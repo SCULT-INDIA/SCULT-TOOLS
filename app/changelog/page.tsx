@@ -1,14 +1,25 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
+import { absoluteUrl } from '@/lib/site'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { TOOLS } from '@/lib/tools/registry'
 
+const TITLE = 'Changelog'
+const DESCRIPTION =
+  'What changed on Scult Tools and when — site-wide updates plus a per-tool last-updated list generated straight from the tool registry, not hand-typed.'
+
 export const metadata: Metadata = {
-  title: 'Changelog',
-  description:
-    'What changed on Scult Tools and when — site-wide updates plus a per-tool last-updated list generated straight from the tool registry, not hand-typed.',
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/changelog' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/changelog'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 /**

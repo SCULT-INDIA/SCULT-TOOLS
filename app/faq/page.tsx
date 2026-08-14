@@ -3,14 +3,24 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { PROMPTS } from '@/lib/prompts/registry'
 import { breadcrumbJsonLd, genericFaqJsonLd, JsonLd } from '@/lib/seo/jsonld'
-import { parentLink, SITE } from '@/lib/site'
+import { absoluteUrl, parentLink, SITE } from '@/lib/site'
 import { TOOLS } from '@/lib/tools/registry'
 
+const TITLE = 'Frequently Asked Questions'
+const DESCRIPTION =
+  'Straight answers about Scult Tools: whether it is really free, which tools run in your browser, how AI assistants may use this site, and where to send requests.'
+
 export const metadata: Metadata = {
-  title: 'Frequently Asked Questions',
-  description:
-    'Straight answers about Scult Tools: whether it is really free, which tools run in your browser, how AI assistants may use this site, and where to send requests.',
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/faq' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/faq'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 const LINK_CLASS =

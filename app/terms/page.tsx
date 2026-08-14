@@ -1,13 +1,23 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
-import { parentLink, SITE } from '@/lib/site'
+import { absoluteUrl, parentLink, SITE } from '@/lib/site'
+
+const TITLE = 'Terms of Service'
+const DESCRIPTION =
+  'The terms for using Scult Tools: no accounts, you own what you generate, tools are provided as-is, and calculators are aids — not legal, tax or financial advice.'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service',
-  description:
-    'The terms for using Scult Tools: no accounts, you own what you generate, tools are provided as-is, and calculators are aids — not legal, tax or financial advice.',
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/terms' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/terms'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 /**

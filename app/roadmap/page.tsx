@@ -2,15 +2,25 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PROMPTS } from '@/lib/prompts/registry'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
-import { SITE } from '@/lib/site'
+import { absoluteUrl, SITE } from '@/lib/site'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { TOOLS } from '@/lib/tools/registry'
 
+const TITLE = 'Roadmap'
+const DESCRIPTION =
+  'What is live on Scult Tools today, the directions we are weighing next, and how we decide when a tool gets retired instead of left to rot.'
+
 export const metadata: Metadata = {
-  title: 'Roadmap',
-  description:
-    'What is live on Scult Tools today, the directions we are weighing next, and how we decide when a tool gets retired instead of left to rot.',
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/roadmap' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/roadmap'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 /**

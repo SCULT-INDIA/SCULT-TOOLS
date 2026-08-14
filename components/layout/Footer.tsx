@@ -87,18 +87,33 @@ const SERVICE_LABELS: Record<string, string> = {
 /**
  * The two-arc transition from the white body into the indigo footer.
  *
- * The reference has a pale periwinkle arc sitting a few pixels above the dark
- * one, which reads as a soft rim following the curve — easy to miss and the
- * detail that makes the transition look drawn rather than clipped. Both arcs are
- * the same path; the pale one is simply translated up, so the rim stays a uniform
- * thickness across the full width instead of pinching at the centre.
+ * Geometry measured directly off the reference (draftss.com bakes this curve
+ * into a static background image — `Group-1171275088-1-1-1.webp`, 7680×4592 —
+ * so it was sampled pixel-by-pixel: scan each column for where the pale rim
+ * and then the dark indigo begin). Mapped into this 1440×180 viewBox:
  *
- * A later pass replaced this with two separate ellipses plus a radial halo on the
- * dark dome — a broader crescent, closer to the reference at the edges. It was
- * reverted on request. If it is revisited, the thing to keep in mind is that a
- * translated copy gives a uniform rim while two distinct ellipses give a crescent
- * that opens out toward the left and right edges; the reference is the latter, but
- * the former is far simpler and reads cleanly at every width.
+ *   dark arc:  y=180 at the edges → y≈64 at centre  (the original hill path
+ *              `C420,25 1020,25` evaluates to exactly 63.75 at t=0.5 — the
+ *              deep dome was right all along)
+ *   pale arc:  y≈133 at the edges → y≈0 at centre — NOT a translated copy of
+ *              the dark arc. It is a second, deeper curve, which is what makes
+ *              the rim a bold crescent ~50 units thick even at the far edges
+ *              (vs 64 at centre) instead of a thin stripe.
+ *
+ * Two earlier mistakes, kept here so they aren't retried:
+ *   1. A thin translated copy (16 units) for the pale rim — at the viewport
+ *      edges, where the dark hill thins to nothing, it read as a stray light
+ *      diagonal, the "edges not designed properly" artifact.
+ *   2. Papering over that with `bg-violet-900` on this wrapper — that fills
+ *      the area ABOVE the curves too, collapsing the whole dome into a flat
+ *      dark band with a faint lip. The strip above the pale arc must stay
+ *      transparent so the page background shows through and the curve reads
+ *      as a curve.
+ *
+ * The pale arc's control points are negative (−44) but the curve itself stays
+ * inside the viewBox: by symmetry its extremum is the t=0.5 midpoint, which
+ * evaluates to (133 + 3·(−44)·2 + 133)/8 ≈ 0. It is closed down to y=180 and
+ * painted first; the dark arc paints over its lower half, leaving the crescent.
  *
  * The negative top margin is what lets the arc rise *behind* the CTA cards. The
  * cards carry `relative z-10` for the same reason — without a stacking context
@@ -115,9 +130,8 @@ function Dome() {
         aria-hidden="true"
       >
         <path
-          d="M0,180 C420,25 1020,25 1440,180 Z"
+          d="M0,133 C420,-44 1020,-44 1440,133 L1440,180 L0,180 Z"
           fill="var(--color-violet-100)"
-          transform="translate(0,-16)"
         />
         <path d="M0,180 C420,25 1020,25 1440,180 Z" fill="var(--color-violet-900)" />
       </svg>
@@ -154,6 +168,7 @@ function buildFooterColumns(): readonly FooterColumn[] {
       { key: 'home', label: 'Home', href: '/' },
       { key: 'all', label: 'All tools', href: '/all' },
       { key: 'prompts', label: 'Prompt library', href: '/prompts' },
+      { key: 'pricing', label: 'Pricing', href: '/pricing' },
       { key: 'guides', label: 'Guides', href: '/guides' },
       { key: 'collections', label: 'Collections', href: '/collections' },
       { key: 'about', label: 'About', href: '/about' },
@@ -294,7 +309,16 @@ export function Footer() {
         <div className="container-site grid items-center gap-8 py-14 md:grid-cols-3">
           <div className="text-center md:text-left">
             <p className="flex items-center justify-center md:justify-start">
-              <Image src={scultLogo} alt="SCULT Tools" className="h-12 w-auto md:h-16" />
+              {/* Explicit width/height, same fix and reason as Header.tsx's
+                  logo: without them next/image serves the source PNG's full
+                  6000x3375 intrinsic size instead of a footer-appropriate one. */}
+              <Image
+                src={scultLogo}
+                alt="SCULT Tools"
+                width={114}
+                height={64}
+                className="h-12 w-auto md:h-16"
+              />
             </p>
             <p className="mt-3 text-[14px] text-white/70">
               {clientSideCount} of {TOOLS.length} tools run entirely in your browser.

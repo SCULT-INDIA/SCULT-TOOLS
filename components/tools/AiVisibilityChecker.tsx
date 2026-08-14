@@ -32,6 +32,7 @@ import {
 import { BrandIcon, brandForCompany } from '@/components/ui/BrandIcon'
 import { trackToolEvent } from '@/lib/analytics'
 import { downloadTextFile, slugifyUrlForFilename } from '@/lib/download-file'
+import { SITE } from '@/lib/site'
 import {
   AI_BOTS,
   type ApiError,
@@ -167,8 +168,10 @@ function formatCheckedDate(iso: string): string {
   return new Intl.DateTimeFormat('en-US', opts).format(then)
 }
 
-/** Seeded so the first paint has a real, checkable URL rather than an empty box. */
-const SAMPLE_URL = 'https://scult.in'
+/** Seeded so the first paint has a real, checkable URL rather than an empty
+ * box — the site's own subdomain, not the parent site, so the tool's first
+ * impression is a self-audit rather than a check of a different host. */
+const SAMPLE_URL = SITE.url
 
 const LOADING_STAGES = [
   'Fetching the homepage…',

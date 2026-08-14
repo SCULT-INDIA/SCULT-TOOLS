@@ -2,11 +2,22 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { GUIDES } from '@/lib/guides/registry'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
+import { absoluteUrl } from '@/lib/site'
+
+const TITLE = 'Guides'
+const DESCRIPTION = `${GUIDES.length} in-depth guides on AI search visibility, structured data and invoicing — each one tied to the real tools it references.`
 
 export const metadata: Metadata = {
-  title: 'Guides',
-  description: `${GUIDES.length} in-depth guides on AI search visibility, structured data and invoicing — each one tied to the real tools it references.`,
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/guides' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/guides'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 /**

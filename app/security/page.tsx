@@ -1,13 +1,24 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
+import { absoluteUrl } from '@/lib/site'
 import { getTool, TOOLS } from '@/lib/tools/registry'
 
+const TITLE = 'Security'
+const DESCRIPTION =
+  'What this site actually does for security: client-side tools that transmit nothing, SSRF-blocked server tools, the real response headers, and how to report a vulnerability.'
+
 export const metadata: Metadata = {
-  title: 'Security',
-  description:
-    'What this site actually does for security: client-side tools that transmit nothing, SSRF-blocked server tools, the real response headers, and how to report a vulnerability.',
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/security' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/security'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 const CONTACT_EMAIL = 'connect@scult.in'

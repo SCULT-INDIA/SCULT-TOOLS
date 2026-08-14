@@ -4,14 +4,25 @@ import { GUIDES } from '@/lib/guides/registry'
 import { getCategoriesByGroup, PROMPT_GROUPS } from '@/lib/prompts/categories'
 import { getPromptsByCategory, PROMPTS } from '@/lib/prompts/registry'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
+import { absoluteUrl } from '@/lib/site'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { getToolsByCategory, TOOLS } from '@/lib/tools/registry'
 
+const TITLE = 'Sitemap'
+const DESCRIPTION =
+  'Every page on Scult Tools in one place — every tool, prompt category, guide and trust page, plus links to the machine-readable robots.txt, sitemap.xml and llms.txt.'
+
 export const metadata: Metadata = {
-  title: 'Sitemap',
-  description:
-    'Every page on Scult Tools in one place — every tool, prompt category, guide and trust page, plus links to the machine-readable robots.txt, sitemap.xml and llms.txt.',
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/sitemap' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/sitemap'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 const LINK_CLASS =

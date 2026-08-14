@@ -1,15 +1,25 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
-import { SITE } from '@/lib/site'
+import { absoluteUrl, SITE } from '@/lib/site'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { TOOLS } from '@/lib/tools/registry'
 
+const TITLE = 'Privacy — which tools touch the network, and which do not'
+const DESCRIPTION =
+  'A plain-English table of exactly which Scult Tools send data over the network and which run entirely in your browser. No accounts, no file uploads, no dark patterns.'
+
 export const metadata: Metadata = {
-  title: 'Privacy — which tools touch the network, and which do not',
-  description:
-    'A plain-English table of exactly which Scult Tools send data over the network and which run entirely in your browser. No accounts, no file uploads, no dark patterns.',
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/privacy' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/privacy'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 /**

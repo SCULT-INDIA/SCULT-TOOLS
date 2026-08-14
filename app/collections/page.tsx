@@ -1,14 +1,25 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
+import { absoluteUrl } from '@/lib/site'
 import { getTool, TOOLS } from '@/lib/tools/registry'
 import type { Tool } from '@/lib/tools/types'
 
+const TITLE = 'Tool Collections'
+const DESCRIPTION =
+  'Curated bundles of Scult Tools grouped by what you are actually trying to do — GEO/AEO, SEO, freelance paperwork, developer utilities, and design and writing.'
+
 export const metadata: Metadata = {
-  title: 'Tool Collections',
-  description:
-    'Curated bundles of Scult Tools grouped by what you are actually trying to do — GEO/AEO, SEO, freelance paperwork, developer utilities, and design and writing.',
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/collections' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/collections'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 interface Collection {

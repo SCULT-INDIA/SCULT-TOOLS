@@ -33,6 +33,12 @@ const STATIC_PAGES: readonly {
   },
   { path: '/faq', lastModified: '2026-08-09', changeFrequency: 'monthly', priority: 0.6 },
   {
+    path: '/pricing',
+    lastModified: '2026-08-14',
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  },
+  {
     path: '/glossary',
     lastModified: '2026-08-09',
     changeFrequency: 'monthly',
@@ -168,6 +174,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: t.updatedAt,
       changeFrequency: 'monthly' as const,
       priority: 0.7,
+    })),
+    ...TOOLS.map((t) => ({
+      url: absoluteUrl(`/${t.category}/${t.slug}/how-it-works`),
+      lastModified: t.updatedAt,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
     })),
     {
       url: absoluteUrl('/prompts'),

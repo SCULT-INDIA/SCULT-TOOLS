@@ -1,13 +1,23 @@
 import type { Metadata } from 'next'
 import { MailtoLink } from '@/components/ui/MailtoLink'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
-import { parentLink, SITE } from '@/lib/site'
+import { absoluteUrl, parentLink, SITE } from '@/lib/site'
+
+const TITLE = 'Contact'
+const DESCRIPTION =
+  'How to reach Scult Tools — report a bug or a wrong calculation, ask about client work, or find us on LinkedIn, Instagram and X.'
 
 export const metadata: Metadata = {
-  title: 'Contact',
-  description:
-    'How to reach Scult Tools — report a bug or a wrong calculation, ask about client work, or find us on LinkedIn, Instagram and X.',
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/contact' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/contact'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 const CONTACT_EMAIL = 'connect@scult.in'

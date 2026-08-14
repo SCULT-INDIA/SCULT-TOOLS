@@ -45,6 +45,11 @@ export async function generateMetadata({
       title: `Free ${category.name} Tools`,
       description: category.intro,
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: `Free ${category.name} Tools`,
+      description: category.intro,
+    },
   }
 }
 

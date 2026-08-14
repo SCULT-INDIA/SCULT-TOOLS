@@ -83,8 +83,10 @@ export function genericFaqJsonLd(
 
 /**
  * FAQPage is emitted ONLY when the FAQ is actually visible on the page. Marking
- * up content the user cannot see is a structured-data violation, and every tool
- * page renders its FAQ, so the guard is a real invariant rather than decoration.
+ * up content the user cannot see is a structured-data violation. Tool FAQs
+ * render exclusively on the /how-it-works companion page (see
+ * HowItWorksShell) — the canonical tool page never calls this, precisely
+ * because ToolShell deliberately renders no FAQ content.
  */
 export function faqJsonLd(tool: Tool): object | null {
   if (tool.faq.length === 0) return null

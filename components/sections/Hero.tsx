@@ -65,6 +65,21 @@ export function Hero() {
           — running right in your browser.
         </p>
 
+        {/* The one differentiator a generic "free tools" aggregator can't
+            claim, surfaced here instead of buried in FAQ #4 — Dunford's
+            positioning framework treats "competitive alternative" as a
+            prerequisite the hero should state, not leave to the visitor to
+            infer. Deliberately its own short line, not appended onto the
+            subhead paragraph above: the subhead's height feeds every
+            "-mt-*" measurement further down this file (CTA row, checkmark
+            row, constellation overlap math), so a new one-line element with
+            its own small `mt` is safer than making that paragraph wrap
+            wider — re-verified at lg/md that nothing below still overlaps. */}
+        <p className="mx-auto mt-2 max-w-[44ch] text-[14px] text-ink-subtle">
+          Built by Scult's own delivery team — the tools we use on client work, not a
+          lead-gen funnel dressed up as free software.
+        </p>
+
         {/* `mt-6` (was `mt-9`): next lowest-cost gap in the stack once the
             checkmark row above the constellation was already trimmed. Still
             clear of the subhead's own line-height, verified below. */}

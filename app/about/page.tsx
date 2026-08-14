@@ -2,14 +2,24 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PROMPTS } from '@/lib/prompts/registry'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
-import { parentLink, SITE } from '@/lib/site'
+import { absoluteUrl, parentLink, SITE } from '@/lib/site'
 import { TOOLS } from '@/lib/tools/registry'
 
+const TITLE = 'About these tools'
+const DESCRIPTION =
+  'Who builds Scult Tools and why they are free. Built by Scult, an AI-first digital agency in Noida, Delhi NCR — these are the utilities our own delivery team uses.'
+
 export const metadata: Metadata = {
-  title: 'About these tools',
-  description:
-    'Who builds Scult Tools and why they are free. Built by Scult, an AI-first digital agency in Noida, Delhi NCR — these are the utilities our own delivery team uses.',
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/about' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/about'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 /**

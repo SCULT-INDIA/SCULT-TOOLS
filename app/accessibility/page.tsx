@@ -1,11 +1,22 @@
 import type { Metadata } from 'next'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
+import { absoluteUrl } from '@/lib/site'
+
+const TITLE = 'Accessibility'
+const DESCRIPTION =
+  'What Scult Tools does for keyboard, screen-reader and low-vision users, the one audit we have not done yet, and how to report an accessibility issue.'
 
 export const metadata: Metadata = {
-  title: 'Accessibility',
-  description:
-    'What Scult Tools does for keyboard, screen-reader and low-vision users, the one audit we have not done yet, and how to report an accessibility issue.',
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/accessibility' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/accessibility'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 const CONTACT_EMAIL = 'connect@scult.in'

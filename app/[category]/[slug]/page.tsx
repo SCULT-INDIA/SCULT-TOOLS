@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getToolComponent } from '@/components/tools'
 import { ToolShell } from '@/components/tools/ToolShell'
-import { breadcrumbJsonLd, faqJsonLd, JsonLd, toolJsonLd } from '@/lib/seo/jsonld'
+import { breadcrumbJsonLd, JsonLd, toolJsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
 import { getCategory } from '@/lib/tools/categories'
 import { getTool, TOOLS } from '@/lib/tools/registry'
@@ -98,8 +98,6 @@ export default async function ToolPage({ params }: { params: Promise<Params> }) 
   const ToolComponent = getToolComponent(tool.slug)
   if (!ToolComponent) notFound()
 
-  const faq = faqJsonLd(tool)
-
   return (
     <>
       <JsonLd data={toolJsonLd(tool, category)} />
@@ -110,7 +108,10 @@ export default async function ToolPage({ params }: { params: Promise<Params> }) 
           { name: tool.title, path: `/${tool.category}/${tool.slug}` },
         ])}
       />
-      {faq ? <JsonLd data={faq} /> : null}
+      {/* No FAQPage JSON-LD here on purpose — the FAQ itself only renders on
+          the /how-it-works companion page (see HowItWorksShell), and marking
+          up content this page doesn't show is exactly the invariant
+          lib/seo/jsonld.tsx's faqJsonLd docblock warns against. */}
 
       <ToolShell tool={tool}>
         <ToolComponent />

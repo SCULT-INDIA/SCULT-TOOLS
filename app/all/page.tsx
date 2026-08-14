@@ -3,13 +3,24 @@ import Link from 'next/link'
 import { ToolCard } from '@/components/ui/ToolCard'
 import { PROMPTS } from '@/lib/prompts/registry'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
+import { absoluteUrl } from '@/lib/site'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { getToolsByCategory, TOOLS } from '@/lib/tools/registry'
 
+const TITLE = `All ${TOOLS.length} Free Online Tools — A to Z`
+const DESCRIPTION = `Every free tool on Scult Tools, grouped by category. ${TOOLS.length} tools for SEO, business, developers, writing, design and AI visibility. No signup.`
+
 export const metadata: Metadata = {
-  title: `All ${TOOLS.length} Free Online Tools — A to Z`,
-  description: `Every free tool on Scult Tools, grouped by category. ${TOOLS.length} tools for SEO, business, developers, writing, design and AI visibility. No signup.`,
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/all' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/all'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 /**

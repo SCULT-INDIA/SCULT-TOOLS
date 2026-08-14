@@ -2,16 +2,26 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { PROMPTS } from '@/lib/prompts/registry'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
-import { parentLink, SITE } from '@/lib/site'
+import { absoluteUrl, parentLink, SITE } from '@/lib/site'
 import { TOOLS } from '@/lib/tools/registry'
 import scultLogoBlue from '@/public/brand/scult-tools-blue.png'
 import scultLogoWhite from '@/public/brand/scult-tools-white.png'
 
+const TITLE = 'Brand & Press Kit'
+const DESCRIPTION =
+  'Logos, boilerplate copy and company facts for Scult Tools, for press and partners who want to cite or link to the site correctly.'
+
 export const metadata: Metadata = {
-  title: 'Brand & Press Kit',
-  description:
-    'Logos, boilerplate copy and company facts for Scult Tools, for press and partners who want to cite or link to the site correctly.',
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/brand' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/brand'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 /** The same social links as the footer, kept as plain text/URL pairs here —
@@ -80,6 +90,8 @@ export default function BrandPage() {
               <Image
                 src={scultLogoBlue}
                 alt="Scult Tools logo, blue"
+                width={71}
+                height={40}
                 className="h-10 w-auto"
               />
               <p className="mt-4 text-[14px] text-ink-subtle">On light backgrounds</p>
@@ -88,6 +100,8 @@ export default function BrandPage() {
               <Image
                 src={scultLogoWhite}
                 alt="Scult Tools logo, white"
+                width={71}
+                height={40}
                 className="h-10 w-auto"
               />
               <p className="mt-4 text-[14px] text-white/70">On dark backgrounds</p>

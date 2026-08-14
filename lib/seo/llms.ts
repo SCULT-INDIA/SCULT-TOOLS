@@ -203,9 +203,10 @@ export function buildLlmsTxt(): string {
  * The fuller variant: full tool detail (tagline, how it works, limitations)
  * and complete guide bodies inlined, so an AI system can load real context in
  * one fetch instead of crawling every page. The prompt library section stays
- * link-level, deliberately — inlining all 200+ prompts would make this file
- * enormous for little benefit, since each prompt page is already a small,
- * templated record rather than long-form content worth pre-loading.
+ * link-level, deliberately — inlining all 570+ prompts (and rising toward
+ * 1000) would make this file enormous for little benefit, since each prompt
+ * page is already a small, templated record rather than long-form content
+ * worth pre-loading.
  */
 export function buildLlmsFullTxt(): string {
   const lines = [...buildHeader(), '', '## Tools']

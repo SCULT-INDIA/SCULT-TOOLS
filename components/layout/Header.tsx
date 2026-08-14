@@ -60,10 +60,20 @@ export function Header() {
         <div className="container-site">
           <div className="nav-pill flex h-[60px] items-center justify-between gap-4 px-4 md:h-[68px] lg:h-[83px] lg:gap-6 lg:px-[30px]">
             <Link href="/" className="inline-flex shrink-0 items-center">
+              {/* Explicit width/height (matching the source's 16:9 ratio, sized
+                  to the largest CSS display height this ever renders at) —
+                  without them next/image falls back to the source PNG's full
+                  6000x3375 intrinsic size for its srcset/preload, and this is
+                  the one `priority` image on every page, so that oversized
+                  preload was competing with the critical CSS/font requests
+                  for bandwidth. CSS (h-7/lg:h-9/w-auto) still controls the
+                  actual rendered size unchanged. */}
               <Image
                 src={scultLogo}
                 alt="SCULT Tools"
                 priority
+                width={64}
+                height={36}
                 className="h-7 w-auto lg:h-9"
               />
             </Link>

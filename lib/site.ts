@@ -36,3 +36,22 @@ export function parentLink(path = '/', toolSlug?: string): string {
 export function absoluteUrl(path = '/'): string {
   return new URL(path, SITE.url).toString()
 }
+
+/**
+ * Human-readable "last updated" date for visible freshness lines (tool
+ * pages, how-it-works pages) — e.g. "Jul 28" this year, "Jul 28, 2025" once
+ * the year has rolled over. `/faq` promises visitors can "judge how current"
+ * a tool is from its own page; this is what makes that claim true rather
+ * than something only JSON-LD's invisible `dateModified` could back up.
+ */
+export function formatUpdatedDate(iso: string): string {
+  const then = new Date(iso)
+  const opts: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' }
+  // Compared against the build-time year (see SITE.buildYear above), not
+  // `new Date()` — these pages are statically prerendered, and Next's Cache
+  // Components forbids reading the current time in a Server Component
+  // before any uncached/request data access. `buildYear` is this codebase's
+  // existing pattern for exactly that constraint.
+  if (String(then.getFullYear()) !== SITE.buildYear) opts.year = 'numeric'
+  return new Intl.DateTimeFormat('en-US', opts).format(then)
+}

@@ -28,9 +28,14 @@ export function FloatingActions() {
         aria-label="Chat with Scult on WhatsApp"
         className="group fixed bottom-5 left-5 z-40 block transition-transform duration-300 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] hover:scale-110 motion-reduce:transition-none motion-reduce:hover:scale-100"
       >
+        {/* Explicit width/height — the source PNG is a 1890x1890 export;
+            without these next/image serves that full intrinsic size instead
+            of one sized for a 56px (size-14) display. */}
         <Image
           src={whatsappMark}
           alt=""
+          width={56}
+          height={56}
           className="size-14 select-none rounded-[22.5%] shadow-card-raised transition-shadow duration-300 group-hover:shadow-[0_10px_25px_rgba(0,0,0,0.4),0_0_18px_rgba(43,184,38,0.45)]"
         />
       </a>
@@ -45,6 +50,8 @@ export function FloatingActions() {
         <Image
           src={scultMark}
           alt=""
+          width={56}
+          height={56}
           className="size-14 select-none rounded-[22.5%] shadow-card-raised transition-shadow duration-300 group-hover:shadow-card-raised"
         />
       </a>

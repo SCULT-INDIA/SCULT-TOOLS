@@ -2,6 +2,7 @@ import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { BookmarkButton } from '@/components/ui/BookmarkButton'
+import { formatUpdatedDate } from '@/lib/site'
 import { getCategory } from '@/lib/tools/categories'
 import type { Tool } from '@/lib/tools/types'
 
@@ -107,13 +108,21 @@ export function ToolShell({ tool, children }: { tool: Tool; children: React.Reac
           <p className="mx-auto mt-3 max-w-[58ch] text-[16px] text-ink-muted leading-6 md:text-[18px] md:leading-7">
             {tool.tagline}
           </p>
-          <Link
-            href={`/${tool.category}/${tool.slug}/how-it-works`}
-            className="mt-3 inline-flex items-center gap-1 font-medium text-[14px] text-violet-700 hover:underline"
-          >
-            How it works
-            <ArrowRight className="size-3.5" aria-hidden="true" />
-          </Link>
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href={`/${tool.category}/${tool.slug}/how-it-works`}
+              className="inline-flex items-center gap-1 font-medium text-[14px] text-violet-700 hover:underline"
+            >
+              How it works
+              <ArrowRight className="size-3.5" aria-hidden="true" />
+            </Link>
+            {/* Makes /faq's "each tool carries a real last-reviewed date on
+                its own page" claim true — see lib/site.ts's formatUpdatedDate
+                docblock. */}
+            <span className="text-[13px] text-ink-subtle">
+              &middot; Last updated {formatUpdatedDate(tool.updatedAt)}
+            </span>
+          </div>
         </header>
       </div>
 

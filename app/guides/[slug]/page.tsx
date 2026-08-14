@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { GUIDES, getGuide } from '@/lib/guides/registry'
 import { breadcrumbJsonLd, guideJsonLd, JsonLd } from '@/lib/seo/jsonld'
+import { absoluteUrl } from '@/lib/site'
 import { getTool } from '@/lib/tools/registry'
 
 export function generateStaticParams(): { slug: string }[] {
@@ -17,10 +18,22 @@ export async function generateMetadata({
   const { slug } = await params
   const guide = getGuide(slug)
   if (!guide) return {}
+  const path = `/guides/${guide.slug}`
   return {
     title: guide.title,
     description: guide.description,
-    alternates: { canonical: `/guides/${guide.slug}` },
+    alternates: { canonical: path },
+    openGraph: {
+      type: 'article',
+      url: absoluteUrl(path),
+      title: guide.title,
+      description: guide.description,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: guide.title,
+      description: guide.description,
+    },
   }
 }
 

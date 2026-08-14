@@ -2,6 +2,9 @@ import { ArrowLeft, ArrowUpRight, TriangleAlert } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ToolCard } from '@/components/ui/ToolCard'
+import { GUIDES } from '@/lib/guides/registry'
+import { PROMPTS } from '@/lib/prompts/registry'
+import { formatUpdatedDate } from '@/lib/site'
 import { getCategory } from '@/lib/tools/categories'
 import { getTool } from '@/lib/tools/registry'
 import { resolveServiceLink } from '@/lib/tools/service-links'
@@ -28,6 +31,18 @@ export function HowItWorksShell({ tool }: { tool: Tool }) {
     .map((slug) => getTool(slug))
     .filter((t): t is Tool => Boolean(t))
   const service = resolveServiceLink(tool.serviceTarget, tool.slug)
+
+  // Derived, not hand-kept — mirrors this codebase's existing rule for every
+  // other cross-registry link (sitemap, llms.txt, changelog all compute from
+  // a registry rather than duplicate it). Guide.relatedTools and
+  // Prompt.relatedToolSlug already point FROM guides/prompts TO tools; there
+  // was no link back the other way, so tools never surfaced the guides and
+  // prompts written about them. Computed here rather than added as a new
+  // field on Tool itself, since lib/prompts/registry.ts is deliberately never
+  // imported by lib/tools/registry.ts (see that file's own docblock) — the
+  // reverse lookup belongs at the component layer, not the registry layer.
+  const relatedGuides = GUIDES.filter((g) => g.relatedTools.includes(tool.slug))
+  const relatedPrompts = PROMPTS.filter((p) => p.relatedToolSlug === tool.slug)
 
   return (
     <article className="container-site max-w-[46rem] pt-8 pb-20">
@@ -74,6 +89,9 @@ export function HowItWorksShell({ tool }: { tool: Tool }) {
         </h1>
         <p className="mt-4 max-w-[58ch] text-[17px] text-ink-muted leading-7 md:text-lead">
           {tool.description}
+        </p>
+        <p className="mt-2 text-[13px] text-ink-subtle">
+          Last updated {formatUpdatedDate(tool.updatedAt)}
         </p>
         <Link
           href={`/${tool.category}/${tool.slug}`}
@@ -212,6 +230,45 @@ export function HowItWorksShell({ tool }: { tool: Tool }) {
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             {related.map((relatedTool) => (
               <ToolCard key={relatedTool.slug} tool={relatedTool} />
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {relatedGuides.length > 0 || relatedPrompts.length > 0 ? (
+        <section aria-labelledby="how-reading" className="mt-12">
+          <h2
+            id="how-reading"
+            className="text-[13px] font-bold uppercase tracking-[0.1em] text-ink-subtle"
+          >
+            Read next
+          </h2>
+          <div className="mt-4 flex flex-col gap-2.5">
+            {relatedGuides.map((guide) => (
+              <Link
+                key={guide.slug}
+                href={`/guides/${guide.slug}`}
+                className="card-modern flex items-center justify-between gap-3 p-5"
+              >
+                <span className="text-[15px] text-ink-body">{guide.title}</span>
+                <ArrowUpRight
+                  className="size-4 shrink-0 text-ink-subtle"
+                  aria-hidden="true"
+                />
+              </Link>
+            ))}
+            {relatedPrompts.map((prompt) => (
+              <Link
+                key={prompt.slug}
+                href={`/prompts/${prompt.category}/${prompt.slug}`}
+                className="card-modern flex items-center justify-between gap-3 p-5"
+              >
+                <span className="text-[15px] text-ink-body">{prompt.title}</span>
+                <ArrowUpRight
+                  className="size-4 shrink-0 text-ink-subtle"
+                  aria-hidden="true"
+                />
+              </Link>
             ))}
           </div>
         </section>

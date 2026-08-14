@@ -1,12 +1,23 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
+import { absoluteUrl } from '@/lib/site'
+
+const TITLE = 'SEO, GEO & AEO Glossary'
+const DESCRIPTION =
+  'Plain-English definitions of SEO, GEO and AEO terms — AI crawlers, robots.txt, llms.txt, structured data, Core Web Vitals — matched to how our own tools check each one.'
 
 export const metadata: Metadata = {
-  title: 'SEO, GEO & AEO Glossary',
-  description:
-    'Plain-English definitions of SEO, GEO and AEO terms — AI crawlers, robots.txt, llms.txt, structured data, Core Web Vitals — matched to how our own tools check each one.',
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: '/glossary' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/glossary'),
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
 // Standalone inline link on this page's plain article background — not a
