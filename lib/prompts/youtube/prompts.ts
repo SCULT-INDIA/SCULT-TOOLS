@@ -1951,4 +1951,545 @@ OUTPUT FORMAT
       },
     ],
   },
+  {
+    slug: 'youtube-hooks-first-8-seconds-retention-rewrite',
+    category: 'youtube',
+    title: `Rewrite a YouTube video's opening eight seconds so viewers stop the swipe-past reflex`,
+    description: `Diagnoses why a planned opening will lose viewers in the first retention window and produces three distinct hook rewrites built around a specific curiosity gap, not a generic teaser line.`,
+    promptText: `You are rewriting the opening 6-8 seconds of a YouTube video's script — the window where YouTube's own retention graph shows the steepest drop-off, before a viewer has decided to stay. I'm not asking for a punchier sentence; I'm asking you to diagnose why the current opening loses people and fix that specific cause.
+
+VIDEO TOPIC AND FORMAT
+{{video_topic}}
+
+CURRENT PLANNED OPENING
+{{current_opening}}
+
+WHO IS ALREADY IN THE FEED WHEN THEY SEE THIS
+{{target_viewer_context}}
+
+THE ONE THING THIS VIDEO ACTUALLY DELIVERS
+{{core_payoff}}
+
+PHASE 1 - DIAGNOSE
+Read the current planned opening and name the specific failure mode: does it announce the topic before creating a gap ('today I'm going to show you...'), does it front-load channel branding before any payoff, does it open on a claim the viewer already believes and has no reason to doubt, or does it promise something broader than the core payoff can actually deliver. Say which one it is and why, in one paragraph, before writing anything new.
+
+PHASE 2 - GENERATE THREE DISTINCT HOOKS
+Write three opening-line options, each built on a different mechanism: one that opens mid-action on the core payoff itself (cold open, no setup), one that states a specific claim the target viewer would want to argue with, and one that names a concrete cost of not knowing this that the viewer can picture happening to them. Do not write three variations of the same idea with different adjectives — each must create the curiosity gap through a different structural device. Keep each under two spoken sentences; this is what gets said before any logo, intro, or channel mention.
+
+PHASE 3 - PRESSURE-TEST
+For each of the three, state the one way a skeptical viewer could stop watching within the first two seconds anyway, and whether the line survives that or needs a small edit.
+
+WHAT NOT TO DO
+Do not use 'In this video' or any variant of announcing the video is a video. Do not open with a rhetorical question the viewer can answer 'no' to and lose interest. Do not suggest putting the channel name or subscribe ask before the hook.
+
+OUTPUT FORMAT
+1. One-paragraph diagnosis of the current opening's specific failure.
+2. Three hook options, labeled by mechanism, each with the pressure-test note attached.
+3. A one-line recommendation of which to lead with and why, given the target viewer context.`,
+    variables: [
+      {
+        name: 'video_topic',
+        description: `The video's subject and format (tutorial, review, story, breakdown).`,
+        example: `A 9-minute breakdown of why a popular budgeting app quietly changed its free tier and what it costs users now.`,
+        required: true,
+      },
+      {
+        name: 'current_opening',
+        description: `The opening line or two currently planned, as written.`,
+        example: `Hey everyone, welcome back to the channel. Today I want to talk about a budgeting app a lot of you have asked about.`,
+        required: true,
+      },
+      {
+        name: 'target_viewer_context',
+        description: `What the viewer was doing right before this video appeared and what else is competing for the click.`,
+        example: `Scrolling personal-finance Shorts on their phone at night, half-attention, three other budgeting videos in the same session.`,
+        required: true,
+      },
+      {
+        name: 'core_payoff',
+        description: `The single specific thing this video actually delivers, stated concretely.`,
+        example: `Shows the exact three account-limit changes the app made and what to switch to instead.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`youtube-hooks`, `retention`, `video-scripting`, `content-strategy`, `youtube-seo`],
+    whyItWorks: `YouTube's own audience-retention graph shows the sharpest single drop happens in the first several seconds, before the algorithm even has a strong session-duration signal to work with — so a weak opening doesn't just lose a few viewers, it suppresses the early watch-time ratio that decides whether the video gets shown to more people at all. GPT-5.1 left unconstrained will default to a warm, presenter-style opening ('Hey everyone, welcome back') because that pattern is extremely common in its training data and reads as natural and friendly — exactly the pattern that causes the drop-off this prompt targets. Forcing a diagnosis phase before generation matters because it stops the model from pattern-matching straight to 'add more energy' or 'make it punchier,' generic fixes that don't address the actual structural problem, which is usually that the gap between what the viewer already knows and what the video promises hasn't been opened yet. Requiring three hooks built on different mechanisms — cold open, arguable claim, concrete cost — rather than three phrasing variants of one idea prevents the model from doing shallow rewording and forces it to actually reason about which psychological lever fits this specific video, since a claim-based hook works differently on a viewer's attention than a cold open does. The pressure-test phase catches the second most common failure: a hook that's punchy in isolation but that a viewer who's already seen three similar videos in the same scrolling session would immediately recognize and skip past, which only shows up when you explicitly ask the model to argue against its own output rather than accept it as finished.`,
+    exampleOutput: `Diagnosis: the current opening front-loads channel welcome and topic announcement before any payoff, giving a skimming viewer nothing to stay for in the first three seconds. Hook A (cold open): 'This app just quietly capped your free account at three transactions a month.' Hook B (arguable claim): 'Everyone's still recommending this app for budgeting — it stopped being free two months ago.' Hook C (concrete cost): 'If you haven't checked your account limit this week, you've probably already lost a transaction to this.' Recommendation: lead with Hook A given the late-night scrolling context — it needs the least cognitive effort to land before the swipe reflex kicks in.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-08',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'youtube-script-long-form-retention-outline',
+    category: 'youtube',
+    title: `Turn a raw video idea into a long-form YouTube script structured around retention checkpoints, not just topic order`,
+    description: `Builds a full spoken script for a 8-15 minute video where every section is anchored to a specific moment the viewer might leave, not organized purely by what's logical to explain first.`,
+    promptText: `You are writing the full spoken script for a long-form YouTube video, structured around where viewers actually drop off rather than the most logical order to explain the topic.
+
+VIDEO IDEA
+{{video_idea}}
+
+TARGET RUNTIME
+{{target_runtime}}
+
+WHAT THE AUDIENCE ALREADY KNOWS COMING IN
+{{audience_knowledge_level}}
+
+THE MOMENT WORTH BUILDING TOWARD
+{{key_payoff_moment}}
+
+CALL TO ACTION GOAL
+{{cta_goal}}
+
+STRUCTURE RULES
+Open with the hook (assume a strong opening already exists from a separate pass — write a placeholder marker [HOOK] and continue from there). Every 60-90 seconds of script, insert a re-hook: a specific line that re-states or escalates why the viewer should keep watching, timed to land just before the point in the explanation where a viewer's attention would naturally wander (right after a dense or technical section, or right before a section that looks like a detour). Do not place the video's most valuable single insight in the first third — hold it for roughly the 60% mark and build the earlier sections as things that make that moment land harder, not as filler. Write in spoken, conversational sentences meant to be said aloud, not read — short clauses, contractions, no sentence a person would need to reread to parse. Place the ask (subscribe, comment, link) only once, positioned right after the key payoff moment lands, when the viewer has just gotten value, never at the open and never as a generic mid-roll interruption unconnected to the content around it.
+
+OUTPUT FORMAT
+Deliver the script broken into labeled sections with an approximate timestamp range for each (e.g. [0:00-0:45]), and after each section add a one-line retention note explaining what risk that section's placement or re-hook is managing. End with a short list of the 2-3 places in the script most likely to lose viewers even after this structure, so I know what to watch in the analytics after publishing.`,
+    variables: [
+      {
+        name: 'video_idea',
+        description: `The core idea or question the video answers.`,
+        example: `Why most home espresso machines under $300 produce inconsistent shots, and the one grinder upgrade that fixes it.`,
+        required: true,
+      },
+      {
+        name: 'target_runtime',
+        description: `The intended finished video length.`,
+        example: `About 11 minutes.`,
+        required: true,
+      },
+      {
+        name: 'audience_knowledge_level',
+        description: `What the typical viewer already understands versus doesn't.`,
+        example: `They know what espresso is and own a machine, but don't know what grind consistency actually means or why it matters.`,
+        required: true,
+      },
+      {
+        name: 'key_payoff_moment',
+        description: `The single most valuable insight or demonstration the video builds toward.`,
+        example: `A side-by-side shot comparison showing the exact difference a $60 grinder swap makes on the same machine.`,
+        required: true,
+      },
+      {
+        name: 'cta_goal',
+        description: `What you want the viewer to do after the payoff lands.`,
+        example: `Comment with their current grinder model so I can reply with a specific recommendation.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`youtube-script`, `long-form-video`, `retention`, `video-scripting`, `youtube-seo`],
+    whyItWorks: `Long-form YouTube retention graphs are rarely a smooth decline — they show a series of small cliffs at predictable moments: right after a dense explanation, right before a section that looks like a tangent, and anywhere the viewer briefly loses the thread of why they're still watching. Organizing a script purely by logical topic order, which is what GPT-5.1 defaults to when just asked to 'write a script about X,' ignores this entirely and produces something that reads well on the page but bleeds viewers on the timeline, because a logically-ordered explanation and a retention-ordered one are different structures solving different problems. Anchoring re-hooks to specific structural risk points rather than a fixed cadence forces the model to reason about where attention actually breaks rather than mechanically inserting a reminder every ninety seconds regardless of what's happening in the content at that moment. Holding the single best insight back to roughly the 60% mark works against the instinct to front-load value, but it mirrors what actually keeps session duration high: viewers who get everything valuable in the first two minutes have no reason to stay for the rest, which directly hurts average view duration, a signal YouTube weighs heavily in distribution. The single, precisely-placed call to action — right after value lands, not as a generic mid-roll interruption — avoids the common failure of asks that read as disconnected from the content, which viewers tune out or perceive as an ad break and use as their own exit point.`,
+    exampleOutput: `[0:00-0:10] [HOOK]. Retention note: placeholder, hook written separately. [0:10-1:15] Quick framing of why grind consistency is the invisible variable most people blame the machine for instead. Retention note: re-hook at 1:10 ('and that's not even the expensive fix') to carry through the technical explanation that follows. [1:15-2:30] What grind consistency actually means, shown visually rather than explained abstractly...`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-09',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'youtube-shorts-script-vertical-loop-structure',
+    category: 'youtube',
+    title: `Script a 30-45 second YouTube Short built to loop, not just end`,
+    description: `Writes a tight vertical-video script where the last line reconnects to the first, engineered for the replay behavior the Shorts feed rewards, instead of a script that just stops when the point is made.`,
+    promptText: `Write a 30-45 second YouTube Shorts script for the idea below. Keep it under 90 spoken words total — Shorts die on pacing, not on missing information, so cut anything that isn't the single point.
+
+SHORT IDEA
+{{short_idea}}
+
+SINGLE POINT IT MAKES
+{{single_point}}
+
+VISUAL YOU CAN ACTUALLY SHOOT
+{{available_visual}}
+
+Rules: open on the single point already in motion, no setup sentence before it. Write the last line so it loops naturally back into the first line's logic or phrase, without an explicit 'like and subscribe' or a hard stop — the goal is a viewer who doesn't consciously notice the replay, which is what the Shorts feed rewards over an explicit call to rewatch. Keep every sentence short enough to fit the pacing of the visual you named, not longer than what a viewer can absorb while it's on screen. Do not include a hook-then-explanation-then-conclusion three-act shape; a Short this length only has room for the point and the loop.
+
+Output the script as spoken lines only, each on its own line, with a bracketed visual note next to any line where the visual needs to change. After the script, add one sentence on why the ending reconnects to the opening the way it does.`,
+    variables: [
+      {
+        name: 'short_idea',
+        description: `The specific idea or moment the Short is built around.`,
+        example: `A common cooking mistake: adding cold eggs straight from the fridge into a hot pan for scrambled eggs.`,
+        required: true,
+      },
+      {
+        name: 'single_point',
+        description: `The one thing the viewer should take away, stated in one sentence.`,
+        example: `Cold eggs hitting a hot pan cook unevenly, which is why scrambled eggs turn rubbery in spots.`,
+        required: true,
+      },
+      {
+        name: 'available_visual',
+        description: `What you can actually film — the real constraint on pacing.`,
+        example: `A stovetop shot showing two pans side by side, one with fridge-cold eggs and one with room-temperature eggs.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`youtube-shorts`, `vertical-video`, `video-scripting`, `loop-structure`, `short-form-content`],
+    whyItWorks: `The Shorts feed's recommendation system is built around a completion and replay signal that behaves differently from long-form watch time — a viewer who watches to the end and immediately watches again, even unconsciously because the ending flows back into the opening, produces a stronger positive signal than a viewer who watches once and scrolls away satisfied, because the platform reads replays as a proxy for the content being worth showing to more people. GPT-5.1's default instinct on a short script is to still write a miniature three-act structure — setup, point, conclusion — because that's the shape most 'script' requests in its training data take, but a 30-45 second Short doesn't have room for a conclusion that isn't also doing the work of the next loop's opening, so an explicit instruction against that shape is necessary to override the default. Capping word count at 90 words forces the same discipline a real Shorts editor applies: at typical spoken pace that's close to the physical ceiling of what fits before the video's own runtime ends, so any padding sentence directly steals time from the point itself rather than just making the script longer. Explicitly ruling out an overt 'like and subscribe' or hard stop matters because those lines create a clear endpoint that signals 'this is over' to the viewer's attention, which works against the loop; an ending that reconnects logically or phonetically to the opening line instead lets the replay happen before the viewer consciously registers the video ended.`,
+    exampleOutput: `Cold eggs straight from the fridge hit a hot pan — [visual: cold-egg pan starts spitting and browning at the edges] — and that temperature shock cooks the outside before the inside's even started. Room-temp eggs, same pan, same heat — [visual: side-by-side room-temp pan cooking evenly] — cook through together, no rubbery spots. So the pan was never the problem. The eggs were cold before they ever hit it.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-10',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'youtube-tiktok-script-native-hook-structure',
+    category: 'youtube',
+    title: `Write a TikTok script that doesn't read like a repurposed YouTube video`,
+    description: `Produces a TikTok-native script built around the platform's specific attention pattern and text-overlay conventions, with an explicit list of the YouTube-style habits to strip out.`,
+    promptText: `Write a TikTok script for the idea below. Before you write it, understand that the most common failure in this exact task is writing something that would work fine as a YouTube Short but reads subtly off on TikTok — the platforms reward different things and I need you to write for TikTok specifically, not a generic vertical-video script.
+
+IDEA
+{{content_idea}}
+
+CREATOR'S EXISTING VOICE
+{{creator_voice}}
+
+WHAT FORMAT THIS FITS
+{{format_type}}
+
+WHAT NOT TO DO (read this before writing)
+Do not open with a wide establishing shot description or a scene-setting line — TikTok's native pattern is a face or hands already mid-action within the first frame. Do not write narration that sounds produced or scripted-sounding; TikTok's algorithm and audience both favor a delivery that sounds like the creator is talking directly to one person, including small imperfections like a trailing thought or a self-correction, not a polished voiceover cadence. Do not write a script assuming background music carries emotional weight the way it might on YouTube — assume the sound could be off and the point must land from on-screen text and the visual alone. Do not write more than one core idea per script; TikTok's short average session per video punishes anything that needs two ideas to make sense. Do not default to a generic trending-audio-style opening line ('POV: you just found out...') unless the idea genuinely fits that specific format — naming it as a stylistic choice, not reaching for it automatically.
+
+WHAT TO DO
+Write the script as a combination of spoken/on-screen dialogue and bracketed text-overlay cues, since TikTok viewers frequently watch muted and the text overlay often carries the actual information. Match the pacing and vocabulary to the creator voice provided rather than a neutral narrator voice. Keep the whole thing short enough to say in 15-25 seconds unless the format type specifically calls for longer.
+
+OUTPUT FORMAT
+1. The script, with spoken lines and [on-screen text: ...] cues interleaved in the order they'd appear.
+2. A one-line note on which specific YouTube-style habit you deliberately avoided for this one, since that's the actual risk in this task.`,
+    variables: [
+      {
+        name: 'content_idea',
+        description: `The specific idea, tip, or moment the video is built on.`,
+        example: `A quick fix for a stuck zipper using a pencil to graphite-coat the teeth.`,
+        required: true,
+      },
+      {
+        name: 'creator_voice',
+        description: `How this specific creator actually talks, in their own register.`,
+        example: `Fast, slightly deadpan, drops articles sometimes, says 'okay so' a lot, never oversells.`,
+        required: true,
+      },
+      {
+        name: 'format_type',
+        description: `The specific TikTok format this fits (POV, tutorial, duet-bait, storytime, etc).`,
+        example: `Quick tutorial/life-hack format, no storytime framing.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`tiktok-script`, `short-form-content`, `video-scripting`, `social-media`, `vertical-video`],
+    whyItWorks: `TikTok's algorithm weighs completion rate and rewatch within a session shaped by a much shorter average scroll interval than YouTube's, and its audience has been trained by the platform's own dominant content style to expect an unproduced, direct-address delivery — a script that reads as polished narration, the default GPT-5.1 reaches for when asked for a generic 'short video script,' registers as subtly off to a TikTok-native viewer even if they couldn't articulate why, because it's optimized for a different platform's attention pattern. Explicitly listing the failure modes to avoid, rather than just describing what TikTok is, matters because GPT-5.1's training data almost certainly contains far more polished YouTube-style scripts than authentic TikTok transcripts, so without a specific negative instruction the model's statistical default pulls toward the more common, more 'produced' pattern regardless of which platform was named in the request. The instruction to assume the sound could be off addresses a real, measurable behavior — a large share of TikTok is watched muted in public or social settings — that a script optimized purely for spoken delivery ignores entirely, silently losing the point for a meaningful fraction of the actual audience. Naming the trending-audio-style opener as an available but not default choice prevents the model from reaching for a stylistic tic that was viral six months ago and now reads as dated or try-hard, a pattern-matching trap models fall into when they've absorbed a lot of a format's greatest hits without a sense of what's become stale.`,
+    exampleOutput: `[on-screen text: stuck zipper? try this] Okay so — [close-up, holding a pencil to the zipper teeth] — you don't need a new zipper. Just rub a pencil right on the teeth. [on-screen text: graphite = lubricant] It's graphite, it's slick, it's basically what WD-40 wishes it was for fabric. [zip pulls smoothly] There. Free. Note: avoided a scene-setting establishing shot at the open — started already mid-action on the pencil, which is the TikTok-native habit versus a YouTube-style cold open with a wider shot first.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-11',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'youtube-content-repurposing-long-form-to-multi-platform',
+    category: 'youtube',
+    title: `Turn one long-form video transcript into a platform-specific repurposing plan, not just clipped copies`,
+    description: `Analyzes a transcript to find the moments actually worth extracting, then maps each one to the platform and format it fits best, instead of chopping the same three clips into every channel.`,
+    promptText: `You are building a repurposing plan from one piece of long-form content, not just picking a few 'best clips' and posting the same clip everywhere. Different platforms reward different things, and the moment that works as a YouTube Short might fail on LinkedIn and vice versa — I need you to reason about that fit, not just extract highlights.
+
+SOURCE CONTENT
+{{source_transcript_or_summary}}
+
+PLATFORMS I ACTUALLY POST TO
+{{target_platforms}}
+
+WHAT ALREADY WORKS FOR ME ON EACH
+{{platform_performance_notes}}
+
+STEP 1 - FIND THE MOMENTS
+Read the source and identify 5-8 distinct moments worth extracting: a strong claim, a demonstration, a specific number or result, a disagreement or correction of a common belief, a personal story beat. For each, note the timestamp or location in the source and, in one line, why it stands on its own without the surrounding context.
+
+STEP 2 - MAP TO PLATFORM, NOT THE OTHER WAY AROUND
+For each moment, decide which platform (if any) it actually fits, based on the platform's real constraints — a moment that needs 45 seconds of buildup to land doesn't belong on a platform where the first two seconds decide everything; a moment that's a specific number or result with no visual dependency can become a text-first post; a moment that only makes sense with the original speaker's tone or face doesn't translate to a caption-only format. Do not force every moment onto every platform — some moments should map to only one, some to none, and say so plainly rather than padding the plan.
+
+STEP 3 - ADAPT, DON'T JUST TRIM
+For each moment-to-platform pairing, note what actually needs to change beyond the length — the hook line, whether text overlay replaces spoken context, whether the CTA needs to differ.
+
+WHAT NOT TO DO
+Do not recommend posting the identical clip with only the aspect ratio changed across all platforms — that's not a repurposing plan, it's just resizing. Do not manufacture a platform fit for a moment that doesn't have one just to hit a quota.
+
+OUTPUT FORMAT
+A table: Moment | Source location | Best-fit platform (or 'none') | What needs to be adapted | One-line hook rewrite for that platform. End with a short note on which platform got the fewest strong moments and whether that's a source-content gap or a platform-fit issue.`,
+    variables: [
+      {
+        name: 'source_transcript_or_summary',
+        description: `The transcript or a detailed summary of the long-form piece to repurpose.`,
+        example: `42-minute podcast interview transcript with a nutritionist debunking three common protein-intake myths, including a specific study citation and a personal anecdote about a client.`,
+        required: true,
+      },
+      {
+        name: 'target_platforms',
+        description: `The specific platforms you actually post to.`,
+        example: `YouTube Shorts, Instagram Reels, LinkedIn (text posts), and the newsletter.`,
+        required: true,
+      },
+      {
+        name: 'platform_performance_notes',
+        description: `What you already know works or flops on each platform for this account.`,
+        example: `Shorts do best with a contrarian claim in the first line; LinkedIn posts do better as a numbered myth-busting list than as a story.`,
+        required: false,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`content-repurposing`, `multi-platform`, `content-strategy`, `video-scripting`, `workflow-automation`],
+    whyItWorks: `The default failure mode in repurposing — and the one GPT-5.1 falls into if just asked to 'suggest clips for social media' — is treating platforms as interchangeable output formats that differ only in aspect ratio and length, when in fact each platform's own recommendation system rewards a different kind of moment: a short-form vertical feed rewards a moment that lands its point in the first two seconds with no buildup dependency, while a text-based professional platform rewards a moment that can be argued or listed without needing tone or visual context at all. Forcing the model to find moments first and only then reason about platform fit, rather than starting from 'here's five clips for Instagram,' prevents it from bending a moment to fit a platform it doesn't actually suit, which is the exact 'resize and repost' pattern that produces content that technically exists everywhere but underperforms everywhere because it was optimized for none of them. Explicitly permitting 'none' as a valid platform fit matters because a model asked to fill a repurposing plan will, by default, try to make every extracted moment useful somewhere to seem maximally helpful, which produces forced, weak pairings; giving explicit permission to say a moment doesn't repurpose well removes the pressure to pad the output and keeps the recommendations honest. The final gap-diagnosis question — is a platform's weak showing a source problem or a fit problem — matters practically because the fix is different in each case: a source gap means the next long-form piece needs to be recorded with that platform's needs in mind, while a fit problem means stop trying to force that platform from this kind of source content at all.`,
+    exampleOutput: `Moment: the specific 1.6g/kg protein figure and its study citation. Source: 8:40. Best-fit: LinkedIn (text-first). What needs adapting: strip the anecdote framing, open with the number as a claim, cite the study inline rather than verbally. Hook rewrite: 'Most people are eating 40% more protein than they need. Here's the study.' Weakest platform: the newsletter got only one strong moment — this source leans conversational and story-driven rather than reference-heavy, which is a source-content gap, not a fit issue with the newsletter format itself.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-12',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'youtube-podcast-outline-interview-episode-structure',
+    category: 'youtube',
+    title: `Build an interview podcast episode outline that gets a guest to the good stories without a rigid Q&A script`,
+    description: `Produces a flexible outline organized around the specific stories and tensions worth surfacing from a guest, with built-in follow-up branches, instead of a linear list of questions to read off.`,
+    promptText: `You are building an outline for an interview-format podcast episode. This is not a script of questions to read verbatim — it's a map of the territory worth covering, with follow-up branches, so the host can actually listen and react instead of just running down a list.
+
+GUEST AND WHY THEY'RE INTERESTING
+{{guest_background}}
+
+EPISODE ANGLE
+{{episode_angle}}
+
+WHAT THE AUDIENCE ALREADY KNOWS ABOUT THIS GUEST OR TOPIC
+{{audience_context}}
+
+THE ONE STORY OR TENSION WORTH GETTING TO
+{{key_story_target}}
+
+PHASE 1 - OPENING TERRITORY (first 5-8 minutes)
+Draft 2-3 opening questions designed to get the guest talking naturally and establish context the audience needs, not generic icebreakers. For each, note one likely follow-up direction depending on how they answer.
+
+PHASE 2 - THE MIDDLE, BUILT AROUND THE KEY STORY
+Map out the sequence of questions or prompts most likely to lead naturally to the key story or tension named above, without asking for it directly and bluntly if that would make the guest perform rather than actually tell it — build toward it the way a real conversation would, through an adjacent, easier question first. Include at least one planned follow-up branch for if the guest gives a short or guarded answer to the lead-in.
+
+PHASE 3 - THE HARD OR SPECIFIC QUESTION
+Write the direct version of the question that gets at the key story or tension, positioned for where in the conversation it will land best, plus a fallback rephrasing if the first version gets deflected.
+
+PHASE 4 - CLOSE
+One or two questions that give the guest a natural way to wrap (advice, what's next, where to find them), avoiding a flat 'anything else you want to add.'
+
+WHAT NOT TO DO
+Do not write this as a linear numbered question list with no branching — a real conversation doesn't go in a straight line, and an outline that pretends it will forces the host to either abandon the outline entirely or awkwardly steer the guest back to the script. Do not front-load the hardest question before there's any rapport.
+
+OUTPUT FORMAT
+The four phases as labeled sections, each question followed by its follow-up branch(es) indented beneath it, so the host can see the whole decision tree at a glance rather than just a flat list.`,
+    variables: [
+      {
+        name: 'guest_background',
+        description: `Who the guest is and specifically why they're worth talking to.`,
+        example: `A former commercial airline pilot who now investigates near-miss incidents; interesting because he has stories his current employer won't let him tell publicly, only ones from years ago.`,
+        required: true,
+      },
+      {
+        name: 'episode_angle',
+        description: `The specific angle or theme this episode is taking, not just the guest's general bio.`,
+        example: `How small procedural shortcuts, not dramatic failures, cause most near-misses.`,
+        required: true,
+      },
+      {
+        name: 'audience_context',
+        description: `What the audience already knows so the outline doesn't re-explain basics or waste time on things they've heard before.`,
+        example: `Regular listeners already know what a near-miss report is from a previous episode; no need to re-explain the basic concept.`,
+        required: true,
+      },
+      {
+        name: 'key_story_target',
+        description: `The one specific story, admission, or tension you most want to get to in this conversation.`,
+        example: `A specific incident he's mentioned in passing on Twitter but never told in full, involving a shortcut he took under time pressure.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`podcast-outline`, `interview-format`, `content-planning`, `audio-content`, `podcasting`],
+    whyItWorks: `A guest who feels like they're being run through a checklist tends to give shorter, more rehearsed answers than one who feels like they're in an actual conversation, because a visible linear script signals to the guest exactly where the conversation is headed and invites a prepared, safer answer rather than the more revealing one that comes from feeling genuinely listened to — which is precisely the difference between an outline with follow-up branches and the flat numbered question list GPT-5.1 defaults to when simply asked for 'interview questions.' Structuring the middle phase to approach the key story through an easier adjacent question first, rather than asking for it directly and early, mirrors how skilled interviewers actually work: a guarded story told on demand reads as a rehearsed anecdote, while the same story reached through a natural conversational on-ramp tends to come out with more specific, unplanned detail, because the guest is answering the question actually in front of them rather than performing for an anticipated one. Requiring a fallback rephrasing for the direct question addresses a concrete, common failure in unscripted interviews — a guest deflecting or giving a short non-answer to the first phrasing — that a single-question outline leaves the host with no prepared way to handle, forcing an improvised follow-up in the moment that's often weaker than one planned in advance. The explicit instruction against a flat linear list matters because a numbered list is the model's statistical default for 'outline,' and using that shape here would produce something that looks organized but actively works against the goal, since a host trying to follow it verbatim ends up steering the guest back onto rails instead of following what's actually said.`,
+    exampleOutput: `Phase 2 (excerpt): Q - 'What's the most common cause of a near-miss report, in your experience — not the dramatic version people imagine?' Follow-up branch if he gives a general/procedural answer: 'Was there a specific shift where you saw that play out?' Follow-up branch if he mentions time pressure specifically: 'You've mentioned before that time pressure got you into a tight spot once yourself — is that the kind of thing you mean?'`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-13',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'youtube-podcast-show-notes-seo-timestamps',
+    category: 'youtube',
+    title: `Turn a podcast episode transcript into show notes that actually get found in search, not just a summary paragraph`,
+    description: `Produces structured show notes with timestamped chapters, a searchable summary, and pull-quotes built from what listeners actually say they came for, instead of a generic three-sentence recap.`,
+    promptText: `Write show notes for the podcast episode below. Most show notes are a throwaway three-sentence summary that describes the episode without ever using the words a listener would actually search for — I want notes that function as a real landing page for this episode.
+
+EPISODE TRANSCRIPT OR DETAILED SUMMARY
+{{episode_transcript}}
+
+GUEST NAME AND CREDENTIAL (if applicable)
+{{guest_credential}}
+
+SPECIFIC TERMS OR QUESTIONS LISTENERS SEARCH FOR IN THIS TOPIC AREA
+{{search_terms}}
+
+RULES
+Write an opening summary of 2-3 sentences that states the specific claims or topics covered, using the actual terms a searcher would type, not vague description ('we talk about productivity' is wrong; 'why time-blocking fails for people with unpredictable schedules' is right). Build a timestamped chapter list from the actual structure of the transcript, with each chapter title describing what's specifically discussed there, not a generic label like 'Discussion continues.' Pull 2-3 direct quotes from the transcript that are specific and quotable on their own, attributed correctly, not paraphrased. List any specific resource, book, tool, or study mentioned by name in the episode, since those exact-match terms are often what brings search traffic to an episode page. Do not editorialize or add promotional language not grounded in what was actually said.
+
+WHAT NOT TO DO
+Do not write a summary so generic it could describe half the episodes in the show's catalog. Do not invent a resource or quote that wasn't actually in the transcript — flag it as 'not found in transcript' rather than guessing if something referenced isn't clearly identifiable.
+
+OUTPUT FORMAT
+1. Episode summary (2-3 sentences).
+2. Timestamped chapter list.
+3. 2-3 pull-quotes with speaker attribution.
+4. Resources/tools/studies mentioned, by name.
+5. A suggested episode title distinct from the summary, if the current working title is generic.`,
+    variables: [
+      {
+        name: 'episode_transcript',
+        description: `The transcript or a detailed, chronological summary of the episode.`,
+        example: `55-minute conversation with a sleep researcher about why consistent wake times matter more than total hours slept, including a mentioned 2023 study and a personal experiment the host tried.`,
+        required: true,
+      },
+      {
+        name: 'guest_credential',
+        description: `The guest's name and relevant credential, for attribution accuracy.`,
+        example: `Dr. Elena Kowalski, sleep researcher at a university lab, author of one book on circadian rhythm.`,
+        required: false,
+      },
+      {
+        name: 'search_terms',
+        description: `Actual phrases or questions people search for in this topic area, if known.`,
+        example: `'why do I wake up tired even after 8 hours', 'consistent wake time vs sleep hours'.`,
+        required: false,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`show-notes`, `podcast-seo`, `podcasting`, `content-repurposing`, `seo`],
+    whyItWorks: `Show notes function as a web page that search engines can actually index, unlike the audio itself, which means the specific words used in the summary directly determine whether the episode surfaces for a relevant search — a vague summary like 'we talk about sleep' shares almost no vocabulary overlap with an actual search query like 'why do I wake up tired after 8 hours,' while a summary written to include that specific phrasing has a real chance of matching it. GPT-5.1's default instinct on 'write show notes' is to produce a polished but generic recap, because that's the dominant shape of the training examples for the phrase 'show notes' — this prompt overrides that by explicitly requiring the summary to use searcher vocabulary rather than description, and by requiring named resources and direct quotes, which are the two elements most likely to contain the specific proper nouns and phrases a search engine can match against. The instruction to flag an uncertain resource as 'not found in transcript' rather than guess directly addresses a known model failure mode — filling a plausible-sounding gap with an invented but wrong detail — which is especially damaging in show notes because a wrong book title or study citation is exactly the kind of error a listener or the guest themselves is likely to notice and flag publicly. Requiring chapter titles that describe what's specifically discussed, rather than generic section labels, also serves a secondary function beyond search: podcast platforms increasingly surface chapter markers directly in the player UI, so a vague chapter title is a missed opportunity twice over, both for search indexing and for in-app navigation.`,
+    exampleOutput: `Summary: Sleep researcher Dr. Elena Kowalski explains why waking up tired after a full 8 hours often comes down to inconsistent wake times rather than total sleep duration, and walks through a 2023 study showing circadian misalignment's effect on perceived rest. [12:40] The wake-time-versus-hours distinction, explained. [24:15] The 2023 study and what it actually measured. [38:02] Host's own two-week wake-time experiment and what changed. Quote: 'Your body doesn't care how many hours you got if it never knows what time morning is supposed to be.' — Dr. Elena Kowalski.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-14',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'youtube-content-series-multi-episode-arc-planning',
+    category: 'youtube',
+    title: `Plan a multi-part YouTube content series with an arc, not just a shared title card`,
+    description: `Maps out a 4-8 episode series where each installment builds on a real narrative or skill progression, with an explicit test for whether any episode actually needs to exist, instead of a loosely related batch under one series name.`,
+    promptText: `You are planning a multi-episode YouTube series. A series is not just several videos on the same broad topic with matching thumbnails — it needs a reason episode 3 requires episode 2 to have happened, or it's just a playlist with a shared label, and I want you to actually test for that.
+
+SERIES TOPIC AND GOAL
+{{series_topic}}
+
+TARGET EPISODE COUNT
+{{episode_count}}
+
+AUDIENCE STARTING POINT
+{{audience_starting_point}}
+
+WHAT SUCCESS LOOKS LIKE BY THE FINAL EPISODE
+{{end_state_goal}}
+
+STEP 1 - DEFINE THE ARC
+State in one paragraph what specifically changes for the viewer from episode 1 to the final episode — a skill they build, a project that progresses, a question that gets progressively answered. If you can't state a real change, say so plainly rather than forcing an arc onto what's actually a topic cluster, and recommend a standalone-video approach instead.
+
+STEP 2 - DRAFT THE EPISODE SEQUENCE
+For the target episode count, draft a one-line premise per episode, in order, each one explicitly building on what the previous episode established — name what specific thing from the prior episode this one assumes the viewer already has or knows.
+
+STEP 3 - THE NECESSITY TEST
+For each episode, ask directly: could this be cut and merged into an adjacent episode without losing anything, or does it genuinely need its own installment? Be honest here even if it shrinks the series below the target count — a series padded to hit a round number loses viewers partway through when they notice the padding.
+
+STEP 4 - THE HOOK BETWEEN EPISODES
+For each episode except the last, write the specific line or moment that should close it to make someone want the next one, distinct from a generic 'see you next time' — tied to the actual unresolved thing the next episode picks up.
+
+WHAT NOT TO DO
+Do not just split one long topic into equal-sized chunks by word count — that's a topic sliced into parts, not a series with an arc. Do not recommend more episodes than the necessity test actually supports just to match the requested count.
+
+OUTPUT FORMAT
+1. The arc statement (or the honest note that no real arc exists).
+2. The episode sequence with premises and dependencies.
+3. Necessity test results per episode, flagging any that should be cut or merged.
+4. The between-episode hook for each episode.`,
+    variables: [
+      {
+        name: 'series_topic',
+        description: `The overall subject or project the series covers.`,
+        example: `Building a small backyard greenhouse from scratch, on a beginner budget, over one season.`,
+        required: true,
+      },
+      {
+        name: 'episode_count',
+        description: `The number of episodes you're aiming for.`,
+        example: `6 episodes.`,
+        required: true,
+      },
+      {
+        name: 'audience_starting_point',
+        description: `What the viewer knows or has at the start of episode 1.`,
+        example: `No greenhouse experience, has a backyard, has never built anything larger than a shelf.`,
+        required: true,
+      },
+      {
+        name: 'end_state_goal',
+        description: `What the viewer or project has achieved by the final episode.`,
+        example: `A functioning greenhouse with a first successful crop planted, and the confidence to modify the design themselves.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`content-series`, `youtube-strategy`, `content-planning`, `video-scripting`, `audience-retention`],
+    whyItWorks: `A real series creates a specific incentive a standalone video collection never can: a viewer who watched episode 2 has a reason to seek out episode 3 that a viewer who's never seen the channel before doesn't share, and that dependency is what actually drives session-to-session return visits rather than one-off views — but that dependency only exists if later episodes genuinely require earlier ones, not if they're just thematically related. GPT-5.1 asked to 'plan a video series' will readily produce a clean-looking numbered list of episode topics, because that's an easy pattern to generate, but without an explicit test it won't verify that the list is actually sequential rather than just a categorized topic breakdown, which is why the necessity test step is the load-bearing part of this prompt — it forces the model to argue against its own default output rather than just present it as finished. Being willing to say 'no real arc exists, use standalone videos instead' matters because a model under instruction to plan a series will otherwise manufacture a thin justification for sequencing that doesn't actually hold, producing a series structure that looks organized in the outline but doesn't function as one once published, since viewers who skip an episode won't be lost the way a genuine dependency chain would lose them. The between-episode hook requirement addresses the actual mechanism that makes a series retain audience across episodes released days or weeks apart — a generic sign-off doesn't create anticipation, but a specific unresolved thread tied to a named next step does, which is also why it's written per-episode against what that episode specifically sets up rather than as one reusable closing line.`,
+    exampleOutput: `Arc statement: the viewer goes from no building experience to having a functioning greenhouse with a first crop planted — each episode hands off a specific physical component (frame, glazing, ventilation, irrigation) that the next episode's install depends on already being in place. Necessity test: episode 4 (originally planned as 'finishing touches') doesn't survive the test — it doesn't depend on anything unique and can merge into episode 5 (irrigation), bringing the series to 5 episodes instead of the requested 6. Between-episode hook (ep. 2 to 3): 'The frame's up, but it's not weatherproof yet — next time we seal it, and I'll show you the one mistake that cost me a full week of glazing work.'`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-14',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
 ]

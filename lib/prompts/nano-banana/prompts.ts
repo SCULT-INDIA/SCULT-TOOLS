@@ -1788,4 +1788,496 @@ One portrait image where the pet is unmistakably the same specific animal from t
       },
     ],
   },
+  {
+    slug: 'nano-banana-product-shot-multi-angle-hero-set',
+    category: 'nano-banana',
+    title: `Generate a consistent multi-angle hero shot set for one product listing with Nano Banana`,
+    description: `A reusable style-lock brief for shooting several angles of the same product across separate generations so they still read as one coherent photoshoot instead of four unrelated renders.`,
+    promptText: `Act as a product photographer producing one image in a multi-angle hero set for a single listing — this exact same style spec will be re-used to shoot other angles afterward in this same conversation, so nothing here should be angle-specific except the one field marked as such.
+
+LOCKED STYLE SPEC (reuse identically across the whole set)
+PRODUCT: {{product_description}}
+SURFACE & BACKGROUND: {{surface_and_background}}
+LIGHTING RIG: {{lighting_setup}}
+Treat this spec as a contract for every image in the set — if I ask for another angle later in this conversation, hold every word above unchanged and only swap the angle instruction below.
+
+THIS SHOT'S ANGLE
+{{this_shot_angle}}. Frame it as its own independently useful hero image, not as a partial crop of a wider scene.
+
+WHAT MUST MATCH ACROSS THE WHOLE SET, EVEN THOUGH YOU'RE ONLY MAKING ONE IMAGE NOW
+Color temperature, shadow direction, surface color, and background tone must be identical to what a viewer would expect if this image sat side-by-side with the next angle in the set. Do not warm up, cool down, or re-expose this shot relative to the locked spec above just because this particular angle happens to catch more or less of the background.
+
+FRAMING
+Fill roughly {{frame_fill_percentage}} of the frame with the product, centered, with the horizon or surface line level — no tilt unless the angle itself is a deliberately dramatic one.
+
+WHAT TO KEEP OUT OF FRAME
+No hands, no second product, no props beyond the surface and background named above, no watermark-style artifacts, no text overlays.
+
+OUTPUT
+One photorealistic image — one angle of the set — styled so that regenerating this same brief later with only the angle field changed would produce a shot that convincingly belongs next to this one in a single product gallery.`,
+    variables: [
+      {
+        name: 'product_description',
+        description: `The product, including material and finish, worded exactly as it should appear in every angle of the set.`,
+        example: `a stainless-steel double-wall insulated water bottle with a matte navy powder-coat finish`,
+        required: true,
+      },
+      {
+        name: 'surface_and_background',
+        description: `The surface and backdrop, held constant across every shot in the set.`,
+        example: `centered on a pale ash-wood plinth against a seamless soft-grey paper sweep`,
+        required: true,
+      },
+      {
+        name: 'lighting_setup',
+        description: `The lighting rig, described with position and relative intensity so it can be repeated identically.`,
+        example: `large overhead softbox as key, a fill card from the right at about half the key's intensity, no rim light`,
+        required: true,
+      },
+      {
+        name: 'this_shot_angle',
+        description: `The specific angle for this particular generation.`,
+        example: `straight-on front view at lens height, cap facing camera`,
+        required: true,
+      },
+      {
+        name: 'frame_fill_percentage',
+        description: `How much of the frame the product should occupy.`,
+        example: `70%`,
+        required: false,
+      },
+    ],
+    targetTools: [`Nano Banana (Gemini 3.1 Flash Image)`, `Gemini app`],
+    tags: [`nano-banana`, `gemini`, `product-photography`, `ecommerce`, `multi-angle`, `consistency`],
+    whyItWorks: `Nano Banana has no exposed seed parameter or style-lock control the way some diffusion tools do, so consistency across a set of separately generated angles has to be engineered entirely through the prose the model reads each time, not through a shared random state — which is exactly why this prompt separates a reusable, copy-pasteable style-spec block from the one field that's actually allowed to change between calls. Left unstructured, asking for "the same product from another angle" in a follow-up message tends to drift: the model re-imagines the lighting and surface tone slightly fresh each time rather than treating the earlier description as binding, since a conversational edit or regeneration isn't guaranteed to weight prior turns as strict constraints on new ones. Explicitly telling the model that an angle catching more or less background must not justify re-exposing or re-color-grading the shot heads off the specific failure where a three-quarter angle that reveals more backdrop comes out visibly brighter or warmer than a straight-on shot of the same product, which is a common and otherwise subtle tell that a supposed matched set was actually four independent generations. Naming the surface and lighting rig with the same level of physical specificity used in single-shot studio prompts (position, relative intensity) rather than vague adjectives is what makes the spec block genuinely reusable rather than open to reinterpretation on each regeneration — a rig described only as "good lighting" gives the model a different plausible interpretation every time it's asked to render it again.`,
+    exampleOutput: `A clean, evenly lit front-angle product shot with a light natural contact shadow; running the same locked spec again with only the angle field swapped to a three-quarter view produces a visually matching companion shot, though small color-temperature drift between generations is still common enough that one follow-up nudge ("match the warmth of the first shot exactly") is often needed to fully unify a four-angle set.`,
+    verifiedAgainst: [
+      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-08' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-08',
+        note: `Initial publish, verified against Nano Banana (Gemini 3.1 Flash Image) across a four-angle product set.`,
+      },
+    ],
+  },
+  {
+    slug: 'nano-banana-ecommerce-lifestyle-in-context-shot',
+    category: 'nano-banana',
+    title: `Show a product being used in a real setting for an e-commerce listing's lifestyle image`,
+    description: `A lifestyle-scene brief for the "shown in real life" gallery slot that comes after the clean hero shot — built to avoid the over-staged, over-polished look that makes lifestyle images read as fake.`,
+    promptText: `Generate one photorealistic lifestyle image for an e-commerce listing's secondary gallery slot — this is not a studio catalog shot, it's the "shown in real life" image that sits after the clean hero photo.
+
+THE PRODUCT
+{{product_description}} — it must be the unmistakable visual focus of the frame even though it's shown in context rather than isolated on a plain backdrop.
+
+THE SCENE
+Show it {{usage_context}}. The setting should look like an ordinary, lived-in moment, not a staged studio set dressed to look casual — include the small imperfections a real space actually has (a slightly uneven throw blanket, a coffee ring on a side table, whatever genuinely fits this scene) rather than an artificially pristine environment.
+
+WHO'S IN FRAME, IF ANYONE
+{{human_presence}}. If a person is included, show only the relevant body part interacting with the product (a hand, a forearm) rather than a full face, unless full-figure lifestyle framing is explicitly requested here.
+
+LIGHT
+{{lighting_mood}}, matching the time of day and setting described above — don't default to even studio lighting just because the product needs to read clearly.
+
+DO NOT
+- Do not make the background sharper or more detailed than the product itself.
+- Do not add any competitor logo, brand mark, or text anywhere in the scene besides what's printed on the product.
+- Do not pose the product in a way it wouldn't physically sit or balance in real life.
+- Do not oversaturate colors beyond what the described lighting would naturally produce.
+
+OUTPUT
+One image, shot like a real photograph a customer's own environment might produce, product clearly legible and still the visual anchor of the frame despite being shown in context rather than isolated.`,
+    variables: [
+      {
+        name: 'product_description',
+        description: `The product and its key visual identifiers.`,
+        example: `a woven rattan storage basket with a leather carry strap`,
+        required: true,
+      },
+      {
+        name: 'usage_context',
+        description: `The real-world moment or setting the product is shown in.`,
+        example: `sitting at the foot of an unmade bed in a sunlit bedroom, holding a folded throw blanket and a paperback`,
+        required: true,
+      },
+      {
+        name: 'human_presence',
+        description: `Whether a person appears, and how much of them is shown.`,
+        example: `a hand reaching in to place a folded sweater inside, wrist and forearm only`,
+        required: false,
+      },
+      {
+        name: 'lighting_mood',
+        description: `The quality and mood of light matching the scene's time of day.`,
+        example: `warm late-afternoon sunlight coming in low through a side window, long soft shadows`,
+        required: true,
+      },
+    ],
+    targetTools: [`Nano Banana (Gemini 3.1 Flash Image)`, `Gemini app`],
+    tags: [`nano-banana`, `gemini`, `ecommerce`, `lifestyle-photography`, `product-photography`, `listing-images`],
+    whyItWorks: `Nano Banana's underlying training leans heavily on grounded, real-world photography, which means it's genuinely capable of rendering a believably lived-in scene — but left without direction it tends to average toward a generically tidy, evenly detailed result, since a broad training distribution pulls both foreground and background toward the same moderate level of polish rather than deliberately favoring one. That's the specific problem this prompt targets: explicitly stating that the background must not out-detail the product, and asking for named small imperfections rather than a pristine set, counteracts the model's default pull toward uniform tidiness and pushes the output toward the specific visual hierarchy a lifestyle photo actually needs — product sharp and central, environment authentic but secondary. Second, because Nano Banana has no negative-prompt channel, every unwanted element (a competitor logo appearing on background packaging, an oversaturated color grade) has to be ruled out as a positive instruction inside the same prose the model is reading, which is why the DO NOT list is stated directly rather than assumed. Third, restricting a human presence to a hand or forearm rather than a full figure is a deliberate hedge against a specific and well-documented failure mode: full-figure human generation introduces far more chances for anatomical or proportional error than a cropped limb does, and a lifestyle product shot rarely needs a full face in frame anyway, so narrowing what's asked for narrows what can go wrong.`,
+    exampleOutput: `A warmly lit, slightly imperfect bedroom scene with the basket clearly in focus and a hand tucking a sweater inside; expect the first pass to occasionally over-tidy the background despite the instruction, in which case a follow-up like "make the throw blanket a little more rumpled, less perfectly folded" typically fixes it in one round.`,
+    verifiedAgainst: [
+      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-09' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-09',
+        note: `Initial publish, verified against Nano Banana (Gemini 3.1 Flash Image) on a homeware lifestyle listing image.`,
+      },
+    ],
+  },
+  {
+    slug: 'nano-banana-corporate-headshot-from-casual-selfie',
+    category: 'nano-banana',
+    title: `Turn a casual selfie into a professional headshot without changing the person's actual face`,
+    description: `An identity-preserving edit brief for an uploaded selfie — swaps background, attire, and lighting to a studio headshot look while explicitly locking the person's real facial identity in place.`,
+    promptText: `You are editing the selfie I've uploaded in this conversation into a professional headshot suitable for {{target_context}}. This is an edit of the same person, not a new person who merely resembles them — their exact facial structure, proportions, skin tone, and any distinguishing features (moles, scars, asymmetry) must be preserved in identity, even as everything around them changes.
+
+SOURCE PHOTO
+{{source_selfie_description}}
+
+WHAT CHANGES
+Replace the background with {{background_style}}, and change their clothing to {{attire_change}}. Adjust the lighting to read as a professional headshot session — soft, even, flattering key light with gentle falloff, not the harsh or uneven light a phone camera in a casual setting typically produces.
+
+WHAT DOES NOT CHANGE
+Their face shape, facial features, expression style, skin texture, hair (unless told otherwise), and apparent age must stay exactly as they are in the source photo. Do not slim, smooth, symmetrize, or idealize their face beyond what {{retouching_limits}} allows — a professional headshot should look like a great photo of this specific person on their best day, not a different, more generic-looking person.
+
+FRAMING
+Standard headshot crop — head and upper shoulders, eyes roughly on the upper third line, looking toward camera or at a natural slight angle matching the source photo's head angle if it was already close to camera-facing.
+
+IF SOMETHING CAN'T BE DONE CLEANLY
+If the source photo's angle, lighting, or resolution makes it genuinely impossible to produce a clean studio-quality result without materially altering their face to compensate, say so directly rather than delivering a subtly different-looking person and calling it done.
+
+OUTPUT
+One headshot-cropped image of the same person, professionally lit and dressed, identity fully intact.`,
+    variables: [
+      {
+        name: 'source_selfie_description',
+        description: `What the uploaded selfie shows, for context.`,
+        example: `a phone selfie taken indoors under mixed overhead light, casual t-shirt, slight upward camera angle`,
+        required: true,
+      },
+      {
+        name: 'target_context',
+        description: `Where the headshot will actually be used.`,
+        example: `a LinkedIn profile photo and company website team page`,
+        required: true,
+      },
+      {
+        name: 'background_style',
+        description: `The replacement background.`,
+        example: `a softly blurred neutral charcoal-grey studio backdrop`,
+        required: true,
+      },
+      {
+        name: 'attire_change',
+        description: `What they should appear to be wearing instead.`,
+        example: `a dark navy blazer over a plain white collared shirt`,
+        required: true,
+      },
+      {
+        name: 'retouching_limits',
+        description: `How much cosmetic smoothing is acceptable, if any.`,
+        example: `light skin evenness only — keep visible pores, natural under-eye area, and any freckles exactly as they are`,
+        required: false,
+      },
+    ],
+    targetTools: [`Nano Banana (Gemini 3.1 Flash Image)`, `Gemini app`],
+    tags: [`nano-banana`, `gemini`, `headshot`, `photo-editing`, `linkedin`, `portrait-retouching`],
+    whyItWorks: `Nano Banana's conversational edit mode works from an uploaded reference image, but a large simultaneous change to background, lighting, and clothing gives the model more room than a small local edit does, and more room is exactly where identity drift creeps in — under a big enough scene change, an image model will sometimes quietly regenerate a face that's subtly more symmetrical, younger, or generically attractive rather than a strict edit of the one that was uploaded, because that idealized direction is what its training data skews toward for "professional headshot" as a category. Stating explicitly that this must remain the same person, not a person who merely resembles them, and naming the specific features that must stay put (moles, asymmetry, skin texture) gives the model a concrete checklist to hold onto instead of an implicit expectation it can drift away from unnoticed. The retouching-limits field matters for the same reason a photographer's retouching brief matters with a human editor: "professional headshot" alone is ambiguous between a light touch-up and a heavily smoothed beauty-retouch look, and without specifying which one is wanted the model defaults toward the more aggressively polished interpretation it's seen more often labeled that way. Finally, giving the model explicit permission to say the result can't be produced cleanly — rather than forcing a silent best-effort attempt — matters because a headshot with a subtly wrong face is worse than no output at all for this specific use case, where the entire point is that the viewer recognizes the actual person.`,
+    verifiedAgainst: [
+      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-10' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-10',
+        note: `Initial publish, verified against Nano Banana (Gemini 3.1 Flash Image) on a casual-selfie-to-headshot edit.`,
+      },
+    ],
+  },
+  {
+    slug: 'nano-banana-packaging-concept-physical-mockup',
+    category: 'nano-banana',
+    title: `Turn a flat label or box design into a photorealistic packaging concept render`,
+    description: `A packaging-mockup brief that wraps flat artwork onto real package geometry with physically accurate material response, plus explicit safeguards against the garbled-text failure mode image models are prone to.`,
+    promptText: `Act as a packaging designer rendering a physical concept mockup of a label or box design for internal review — the goal is a believable object sitting on a surface, not a flat mockup template with artwork pasted over it.
+
+THE PACKAGE
+{{package_type_and_dimensions}}.
+
+THE ARTWORK APPLIED TO IT
+{{label_artwork_description}}. Wrap this artwork onto the package's actual physical geometry — on a cylindrical container, the label should show the correct amount of curve and any edge-of-label distortion a real wraparound label would have; on a box, panels should fold correctly at real edges with visible, physically accurate creases.
+
+MATERIAL AND FINISH
+{{material_and_finish}}. Render the finish's real optical behavior — a matte finish should scatter light diffusely with no hard specular hotspot, a glossy or foil finish should show a distinct, correctly-angled highlight that moves with the lighting described below, not a uniform sheen painted flat across the surface.
+
+EXACT TEXT TO RENDER
+{{brand_text_content}}. Reproduce this text exactly as given, character for character — do not paraphrase it, invent alternate wording, or substitute a similar-looking brand name. If any word here is at risk of rendering illegibly at the size implied by the package, keep that specific word larger or simpler rather than let it blur into unreadable characters.
+
+ENVIRONMENT AND LIGHTING
+{{environment_and_lighting}}.
+
+WHAT TO KEEP OUT OF FRAME
+No second product, no competing packaging in frame, no invented additional text or claims beyond what's specified above, no barcode unless one was described.
+
+OUTPUT
+One photorealistic image of the physical package as a finished object, artwork correctly wrapped to its geometry, ready to drop into an internal concept-review deck.`,
+    variables: [
+      {
+        name: 'package_type_and_dimensions',
+        description: `The package's physical type and approximate proportions.`,
+        example: `a 250ml cylindrical aluminum can, standard beverage-can proportions`,
+        required: true,
+      },
+      {
+        name: 'label_artwork_description',
+        description: `The visual design being applied — layout, colors, and imagery.`,
+        example: `a full-wrap label, deep teal background, a hand-drawn citrus illustration on the front third, thin gold rule lines top and bottom`,
+        required: true,
+      },
+      {
+        name: 'material_and_finish',
+        description: `The physical material and surface finish.`,
+        example: `brushed aluminum body with a matte-varnish label finish, no gloss`,
+        required: true,
+      },
+      {
+        name: 'brand_text_content',
+        description: `The exact text that must appear, verbatim.`,
+        example: `BRIGHTWELL — Sparkling Yuzu — Net 250ml`,
+        required: true,
+      },
+      {
+        name: 'environment_and_lighting',
+        description: `Where the package sits and how it's lit.`,
+        example: `standing on a pale concrete surface, soft overhead studio light with a gentle rim light from behind`,
+        required: true,
+      },
+    ],
+    targetTools: [`Nano Banana (Gemini 3.1 Flash Image)`, `Gemini app`],
+    tags: [`nano-banana`, `gemini`, `packaging-design`, `product-mockup`, `brand-identity`, `concept-render`],
+    whyItWorks: `Text rendering is the single most failure-prone part of any image-generation model, including Gemini-based Nano Banana — even models that handle short text reasonably well still misspell, duplicate, or garble longer strings a meaningful percentage of the time, which is exactly why this prompt isolates the exact brand text as its own labeled field with an explicit character-for-character instruction rather than folding it loosely into the general artwork description, and why it gives the model permission to prioritize legibility of specific words over strict layout fidelity when the two conflict — a slightly larger word that's still readable beats a perfectly-sized one that renders as illegible noise. Second, wrapping flat artwork onto real package geometry is a distinct failure mode from text: without an explicit instruction, models frequently render packaging labels as a flat decal sitting on top of a curved surface rather than actually respecting that surface's curvature, because pasting a flat design over an object is visually simpler than correctly distorting it — naming the specific curvature and crease behavior expected pushes the model toward the harder, correct interpretation. Third, describing the finish in terms of its actual optical behavior (diffuse scatter versus a moving specular highlight) rather than a single adjective like "shiny" matters because Nano Banana's photographic training gives it real learned behavior for how different finishes respond to light — the same reason this works in general product photography prompts — so spelling out which behavior is wanted lets it apply the right physics instead of defaulting to a generic uniform sheen.`,
+    exampleOutput: `A photorealistic can render with the label correctly curved around the cylinder and the exact wording legible; on a first pass, a long secondary tagline sometimes renders slightly soft — a follow-up like "keep the tagline text sharp even if you have to enlarge it slightly" usually resolves that in one more turn.`,
+    verifiedAgainst: [
+      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-11' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-11',
+        note: `Initial publish, verified against Nano Banana (Gemini 3.1 Flash Image) on a beverage-can concept render.`,
+      },
+    ],
+  },
+  {
+    slug: 'nano-banana-product-mockup-flat-design-onto-object',
+    category: 'nano-banana',
+    title: `Place a flat design onto a realistic object mockup with proper wrap and material behavior`,
+    description: `A short, direct mockup brief for putting a flat design onto a real-world object — mug, tee, phone case — so it reads as physically applied rather than a sticker pasted over a template photo.`,
+    promptText: `Render one photorealistic mockup: {{object_type}} with the following design applied to it, shown as a real physical object rather than a flat sticker pasted onto a template.
+
+1. DESIGN TO APPLY: {{design_description}} — reproduce this exactly as described, no alterations to its colors, layout, or any text it contains.
+2. WHERE IT SITS: Apply the design to {{placement_area}}, wrapped and warped to match that surface's actual curvature and any folds or seams a real object of this kind has — a design on a mug should curve around the cylinder and compress slightly near the handle-side edge; a design on fabric should follow the fabric's natural drape, with any visible weave texture showing faintly through thin ink.
+3. HOW THE MATERIAL BEHAVES: {{material_behavior}}.
+4. WHERE IT'S SHOWN: {{scene_setting}}, lit so the object reads as a real photographed product rather than a rendered template.
+5. WHAT NOT TO DO: don't leave the design perfectly flat and undistorted regardless of the surface underneath it, don't add any second design or competing branding, don't crop the object so its overall shape is unrecognizable.
+
+OUTPUT
+One image of the finished object with the design convincingly applied, suitable for a mockup gallery or a print-on-demand product listing preview.`,
+    variables: [
+      {
+        name: 'object_type',
+        description: `The object the design is being mocked up onto.`,
+        example: `a ceramic coffee mug, glossy white glaze`,
+        required: true,
+      },
+      {
+        name: 'design_description',
+        description: `The exact flat design being applied, including colors and any text.`,
+        example: `a two-color line-art illustration of a mountain range with the word 'WANDER' in a thin serif font beneath it`,
+        required: true,
+      },
+      {
+        name: 'placement_area',
+        description: `Where on the object the design sits.`,
+        example: `wrapping the front-facing half of the mug, centered between the handle and the opposite side`,
+        required: true,
+      },
+      {
+        name: 'material_behavior',
+        description: `How the underlying material should visually respond to the design and light.`,
+        example: `the glossy glaze should show a soft reflected highlight passing across the design, not flatten it into a matte sticker`,
+        required: true,
+      },
+      {
+        name: 'scene_setting',
+        description: `The backdrop and context the mockup is shown in.`,
+        example: `sitting on a wooden kitchen counter beside a folded linen napkin, soft morning window light`,
+        required: false,
+      },
+    ],
+    targetTools: [`Nano Banana (Gemini 3.1 Flash Image)`, `Gemini app`],
+    tags: [`nano-banana`, `gemini`, `product-mockup`, `print-on-demand`, `merch-design`, `ecommerce`],
+    whyItWorks: `The default failure mode for design-onto-object mockups is the flat-sticker look: without an explicit instruction, an image model tends to composite a 2D design onto a 3D object the same way a quick Photoshop overlay would, ignoring the object's actual curvature and material response because rendering a design as if it were physically printed or dyed into the surface is a harder inference than simply placing it visually on top. Naming the specific physical deformation expected — curvature compression near a mug handle, drape and weave show-through on fabric — gives the model a concrete target instead of leaving it to default to the visually simpler flat overlay. Second, the material-behavior field exists because Nano Banana's photographic grounding means it can render a genuinely convincing reflected highlight moving across a glossy surface, but only when told that behavior is wanted; left unprompted, it will often flatten the design into a uniformly lit decal that ignores the glaze's actual glossiness entirely. Third, keeping the design-reproduction instruction strict and separate from the placement instructions matters because a model asked to "apply a design realistically" sometimes takes that as license to reinterpret the design's colors or proportions along the way, softening or shifting them toward what looks more natural on the object — stating explicitly that the design's colors, layout, and text must not change keeps creative liberty confined to the wrap and lighting, not the design content itself.`,
+    verifiedAgainst: [
+      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-12' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-12',
+        note: `Initial publish, verified against Nano Banana (Gemini 3.1 Flash Image) on a mug and a t-shirt mockup.`,
+      },
+    ],
+  },
+  {
+    slug: 'nano-banana-3d-product-render-cgi-hero',
+    category: 'nano-banana',
+    title: `Generate a clean CGI-style 3D hero render of a product for a landing page`,
+    description: `A render-engine-vocabulary brief that pushes Nano Banana toward a polished, rendered-object look — ambient occlusion, material roughness, clean geometry — instead of its default pull toward photographic realism.`,
+    promptText: `Act as a 3D visualization artist producing a CGI-style hero render for a landing page — not a photograph, a clean rendered object with the smooth precision of a studio 3D render.
+
+PHASE 1 — GEOMETRY
+{{product_geometry_description}}. Keep every surface, edge, and proportion clean and precise the way an actual CAD-to-render pipeline would produce them — sharp, deliberate edges where the product has them, smooth continuous curves where it doesn't, no organic photographic imperfection like dust, fingerprints, or micro-scratches unless explicitly part of the material spec below.
+
+PHASE 2 — MATERIALS
+{{material_specs}}. Render each material's roughness and reflectivity distinctly — a brushed-metal surface should scatter reflections into soft, elongated streaks rather than a mirror-sharp reflection, while a glossy plastic should show a tight, bright, well-defined highlight; do not render every material with the same generic shiny finish.
+
+PHASE 3 — LIGHTING AND GLOBAL ILLUMINATION
+{{render_style}}. Use soft, bounced ambient occlusion in every crevice and where the product meets its stage, the way real global-illumination rendering would darken contact points and corners rather than leaving every surface uniformly lit.
+
+PHASE 4 — STAGE AND BACKGROUND
+{{background_and_stage}} — a clean rendered environment, not a photographed backdrop, with a soft gradient or simple studio-style stage appropriate for a hero product render.
+
+PHASE 5 — CAMERA AND COMPOSITION
+{{angle_and_composition}}, with the product as the singular subject, generous clean space around it for landing-page text overlays if this image is later cropped or has copy placed over it.
+
+WHAT TO AVOID
+No photographic noise, no lens flare unless explicitly requested, no busy background detail competing with the product, no floating shadow disconnected from where the product actually contacts its stage.
+
+OUTPUT
+One image with the polished, precise look of a rendered 3D hero asset — the kind used on a product landing page above the fold — not a photograph of a physical object.`,
+    variables: [
+      {
+        name: 'product_geometry_description',
+        description: `The product's shape and structural detail, described precisely.`,
+        example: `a wireless earbuds charging case, rounded rectangular form, a precise seam line where the lid hinges open`,
+        required: true,
+      },
+      {
+        name: 'material_specs',
+        description: `Each visible material and its finish, per surface.`,
+        example: `body in matte white polymer, hinge and edge trim in brushed aluminum, charging LED as a small emissive dot`,
+        required: true,
+      },
+      {
+        name: 'render_style',
+        description: `The lighting/GI setup for the render.`,
+        example: `a soft three-point studio light rig with a large diffuse key overhead and subtle bounce fill from below`,
+        required: true,
+      },
+      {
+        name: 'background_and_stage',
+        description: `The rendered environment the product sits in or on.`,
+        example: `floating slightly above a simple pale-grey rendered plane, soft radial gradient background fading to white`,
+        required: true,
+      },
+      {
+        name: 'angle_and_composition',
+        description: `Camera angle and framing intent.`,
+        example: `a three-quarter hero angle, slightly elevated, lid open at a natural resting angle`,
+        required: true,
+      },
+    ],
+    targetTools: [`Nano Banana (Gemini 3.1 Flash Image)`, `Gemini app`],
+    tags: [`nano-banana`, `gemini`, `3d-render`, `cgi`, `product-render`, `landing-page`],
+    whyItWorks: `Nano Banana's training distribution skews heavily toward grounded photography, which is a genuine strength for photorealistic product shots but works against it here: without deliberate steering, the model's default pull is back toward photographic texture and imperfection rather than the clean, precise look of an actual rendered CGI asset. This prompt counters that by borrowing the specific vocabulary of a render pipeline — ambient occlusion, roughness versus reflectivity per material, CAD-precision edges — because those terms are strongly associated in the model's training data with rendered imagery specifically, not photography, and naming them shifts the output's register in a way that a vague request for "a 3D-looking image" does not reliably do. Second, specifying material behavior per surface rather than as one overall description matters because a multi-material product rendered without that distinction tends to default toward a single generic shiny finish applied uniformly, since "product render" as a category is disproportionately represented by simple glossy hero shots in training data — explicitly contrasting brushed-metal streak reflections against tight plastic highlights forces the model to differentiate rather than flatten every surface to the same look. Third, calling out ambient occlusion at contact points directly addresses a specific and common render-prompt failure: models asked for a "clean" render often over-correct into flat, uniformly bright lighting with no contact shadow at all, which reads as an object floating unnaturally rather than a grounded, physically lit render — asking for it by its actual technical name gives the model a concrete rendering behavior to reproduce instead of an ambiguous aesthetic goal.`,
+    verifiedAgainst: [
+      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-13' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-13',
+        note: `Initial publish, verified against Nano Banana (Gemini 3.1 Flash Image) on a multi-material electronics hero render.`,
+      },
+    ],
+  },
+  {
+    slug: 'nano-banana-food-photography-editorial-plate',
+    category: 'nano-banana',
+    title: `Style and shoot an editorial food photo that makes a dish look genuinely appetizing`,
+    description: `A food-styling checklist brief that grounds "make it look appetizing" in concrete, literal sensory cues — steam, glisten, torn garnish — rather than leaving that vague goal for the model to guess at.`,
+    promptText: `Act as a food stylist and photographer shooting one editorial image of a finished dish for {{use_case}} — this needs to make someone hungry within a glance, not just document what the food looks like.
+
+THE DISH
+{{dish_description}}.
+
+STYLING CHECKLIST (work through each one, don't skip)
+- Freshness cues: {{garnish_and_texture_cues}} — show the specific texture detail that signals this was just plated: a glisten of oil, visible steam if the dish is hot, a torn (not perfectly sliced) herb, a slightly melting element if that fits the dish.
+- Plating and props: {{plating_and_props}}. Keep props secondary to the food — nothing on the table should be sharper or more colorful than the dish itself.
+- Imperfection: real plating has small, deliberate imperfections — a sauce smear inside the rim, an uneven pile, a crumb off to the side — include one or two rather than rendering the plate as a perfectly symmetrical, machine-arranged composition.
+
+LIGHT AND MOOD
+{{lighting_and_mood}}. Let the light catch the glossy or wet elements of the dish specifically (sauce, oil, glaze) since that's what reads as fresh and appetizing on camera, rather than lighting the whole plate at flat, even brightness.
+
+ANGLE
+Shoot from {{angle}} — choose whichever reveals the dish's most appetizing dimension (height and layers from a low three-quarter angle, or the full composition from directly overhead), and make sure steam, drips, or garnish placement were described with that specific angle in mind.
+
+WHAT TO AVOID
+No hands or utensils mid-action unless specifically requested, no visible brand logos on plateware, no oversaturated color grading that reads as artificial rather than genuinely fresh, no ingredients on the plate that weren't part of the dish description.
+
+OUTPUT
+One image styled and lit like an editorial food photograph — the kind that runs at the top of a recipe or restaurant menu page — where the food itself is unmistakably the most detailed, best-lit thing in frame.`,
+    variables: [
+      {
+        name: 'dish_description',
+        description: `The finished dish, including its main components.`,
+        example: `a bowl of miso-glazed black cod over sesame rice, with a scattering of scallion and a lime wedge`,
+        required: true,
+      },
+      {
+        name: 'use_case',
+        description: `Where the photo will actually be used.`,
+        example: `the hero image at the top of an online recipe post`,
+        required: true,
+      },
+      {
+        name: 'garnish_and_texture_cues',
+        description: `The specific freshness or texture detail to emphasize.`,
+        example: `a light glaze glisten on the cod's surface and a thin curl of steam rising off the rice`,
+        required: true,
+      },
+      {
+        name: 'plating_and_props',
+        description: `Plateware and any surrounding props.`,
+        example: `a shallow matte-black ceramic bowl, a linen napkin and simple wooden chopsticks off to one side`,
+        required: true,
+      },
+      {
+        name: 'lighting_and_mood',
+        description: `The lighting quality and overall mood.`,
+        example: `soft, directional natural window light from one side, warm but not golden-hour orange`,
+        required: true,
+      },
+      {
+        name: 'angle',
+        description: `The camera angle.`,
+        example: `a low three-quarter angle, close enough to show the glaze texture`,
+        required: false,
+      },
+    ],
+    targetTools: [`Nano Banana (Gemini 3.1 Flash Image)`, `Gemini app`],
+    tags: [`nano-banana`, `gemini`, `food-photography`, `editorial`, `recipe-content`, `styling`],
+    whyItWorks: `"Make it look appetizing" is not something an image model can act on directly — it's a subjective aesthetic judgment, not a rendering instruction, so left at that level of abstraction Nano Banana has to guess which of many possible visual choices actually produces that effect. This prompt works by translating that vague goal into the literal, physical cues that genuinely drive appetite appeal in real food photography — a glaze's glisten, a curl of steam, a torn rather than knife-cut herb — each of which is a concrete, renderable detail the model's photographic training has actually learned to reproduce convincingly, rather than an abstract mood it has to invent a visual proxy for on its own. Second, explicitly asking for one or two small plating imperfections addresses a specific tell that separates real food photography from an obviously synthetic image: machine-perfect symmetry and uniform placement is something an image model defaults toward when optimizing for a "clean" result, but real plated food never looks that precise, so a photo that's too symmetrical reads immediately as staged or artificial rather than appetizing. Third, the instruction to keep props secondary and less detailed than the food itself matters because food photography prompts routinely lose the food to a beautifully rendered background or prop styling that the model, without direction, treats as equally important — naming the food as the mandatory sharpest and most detailed element in frame keeps the composition's hierarchy correct even when the props described are visually interesting in their own right.`,
+    exampleOutput: `A warmly lit bowl of glazed fish with a faint steam wisp and a light glaze sheen catching the window light, garnish slightly asymmetric rather than perfectly centered; if the first pass renders the plating too neat, a follow-up like "loosen up the rice pile and let the glaze pool a little unevenly" typically gets it there in one more turn.`,
+    verifiedAgainst: [
+      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-14' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-14',
+        note: `Initial publish, verified against Nano Banana (Gemini 3.1 Flash Image) on a recipe-hero-image style dish photo.`,
+      },
+    ],
+  },
 ]

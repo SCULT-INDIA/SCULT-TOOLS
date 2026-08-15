@@ -8,15 +8,15 @@
 <h3 align="center">Free tools that do the boring work for you.</h3>
 
 <p align="center">
-<b>15 production tools · 254 AI prompts · zero signups · zero ads · zero tracking.</b><br>
+<b>15 production tools · 1,170 AI prompts · zero signups · zero ads · zero tracking.</b><br>
 Built and run in production by <a href="https://scult.in"><b>Scult</b></a> — an AI-first digital agency in Noida, Delhi NCR, India.
 </p>
 
 <p align="center">
 <a href="https://github.com/Pranjulrathour/Tools.scult.in/actions/workflows/ci.yml"><img src="https://github.com/Pranjulrathour/Tools.scult.in/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-<a href="https://github.com/Pranjulrathour/Tools.scult.in/actions/workflows/ci.yml"><img src="https://img.shields.io/badge/tests-772%20passing-2ea44f?style=flat-square" alt="Tests"></a>
+<a href="https://github.com/Pranjulrathour/Tools.scult.in/actions/workflows/ci.yml"><img src="https://img.shields.io/badge/tests-829%20passing-2ea44f?style=flat-square" alt="Tests"></a>
 <a href="#the-tools-catalogue"><img src="https://img.shields.io/badge/tools-15-631AFF?style=flat-square" alt="Tools"></a>
-<a href="#the-prompt-library"><img src="https://img.shields.io/badge/AI%20prompts-254-631AFF?style=flat-square" alt="Prompts"></a>
+<a href="#the-prompt-library"><img src="https://img.shields.io/badge/AI%20prompts-1%2C170-631AFF?style=flat-square" alt="Prompts"></a>
 <a href="#accessibility"><img src="https://img.shields.io/badge/WCAG-2.2%20AA-000000?style=flat-square" alt="Accessibility"></a>
 <a href="#tech-stack"><img src="https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=next.js&logoColor=white" alt="Next.js"></a>
 <a href="#tech-stack"><img src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript"></a>
@@ -79,7 +79,7 @@ Built and run in production by <a href="https://scult.in"><b>Scult</b></a> — a
 
 ## About
 
-**[tools.scult.in](https://tools.scult.in)** is a free hub of **15 browser-based utilities** plus a **254-prompt AI prompt library**, built by [**Scult**](https://scult.in) — an AI-first digital agency based in Noida, Delhi NCR — as the same internal toolkit its own delivery team uses on client work.
+**[tools.scult.in](https://tools.scult.in)** is a free hub of **15 browser-based utilities** plus a **1,170-prompt AI prompt library**, built by [**Scult**](https://scult.in) — an AI-first digital agency based in Noida, Delhi NCR — as the same internal toolkit its own delivery team uses on client work.
 
 Every tool started as something the team needed on a real project: an invoice that had to reconcile to the paisa, JSON-LD that had to validate on the first try, a favicon set that didn't need an upload server. They were built properly, so they were published — no account wall, no trial clock, no email gate in front of a result.
 
@@ -109,7 +109,7 @@ Full terms: [License](#license) · [LICENSE.md](LICENSE.md).
 </td>
 <td width="50%" valign="top">
 
-### 📚 254 AI prompts
+### 📚 1,170 AI prompts
 
 - Organized by **tool**, not by vague theme — ChatGPT, Claude, Cursor, Midjourney, Veo and more
 - Every prompt explains **why** it works, not just what to paste
@@ -238,7 +238,7 @@ Every tool below is production-live at `tools.scult.in/<category>/<slug>`. **�
 
 ## The Prompt Library
 
-**254 free, tested prompts** at [`tools.scult.in/prompts`](https://tools.scult.in/prompts), organized into **46 tool-specific categories** across **9 groups** — never a vague "marketing prompts" dump. Each prompt ships with fillable variables, an explanation of *why* it works, and the exact model version it was verified against.
+**1,170 free, tested prompts** at [`tools.scult.in/prompts`](https://tools.scult.in/prompts), organized into **53 tool-specific categories** across **9 groups** — never a vague "marketing prompts" dump. Each prompt ships with fillable variables, an explanation of *why* it works, and the exact model version it was verified against.
 
 <table>
 <tr><th>Group</th><th>Categories</th></tr>
@@ -264,7 +264,7 @@ Every tool below is production-live at `tools.scult.in/<category>/<slug>`. **�
 </tr>
 <tr>
 <td>📈 <b>Marketing &amp; SEO</b></td>
-<td>SEO &amp; GEO/AEO · Ads &amp; Campaigns · Email Marketing · Sales &amp; Outreach · <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" height="20"></td>
+<td>SEO &amp; GEO/AEO · Ads &amp; Campaigns · Email Marketing · Sales &amp; Outreach · <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" height="20"> · E-Commerce &amp; Product</td>
 </tr>
 <tr>
 <td>🎨 <b>Design</b></td>
@@ -272,11 +272,11 @@ Every tool below is production-live at `tools.scult.in/<category>/<slug>`. **�
 </tr>
 <tr>
 <td>💼 <b>Business</b></td>
-<td>Startup &amp; Strategy · Finance &amp; Analysis · Consulting &amp; Frameworks · Business Ops &amp; Client Comms</td>
+<td>Startup &amp; Strategy · Finance &amp; Analysis · Consulting &amp; Frameworks · Business Ops &amp; Client Comms · Data &amp; BI · HR &amp; Management · Legal &amp; Compliance · Healthcare &amp; Wellness · Customer Support &amp; Ops</td>
 </tr>
 <tr>
 <td>✍️ <b>Content Creation</b></td>
-<td><img src="https://img.shields.io/badge/YouTube-FF0000?style=flat-square&logo=youtube&logoColor=white" height="20"> · <img src="https://img.shields.io/badge/Instagram-E4405F?style=flat-square&logo=instagram&logoColor=white" height="20"> · <img src="https://img.shields.io/badge/X-black?style=flat-square&logo=x&logoColor=white" height="20"> · Blog Writing · Everyday Writing</td>
+<td><img src="https://img.shields.io/badge/YouTube-FF0000?style=flat-square&logo=youtube&logoColor=white" height="20"> · <img src="https://img.shields.io/badge/Instagram-E4405F?style=flat-square&logo=instagram&logoColor=white" height="20"> · <img src="https://img.shields.io/badge/X-black?style=flat-square&logo=x&logoColor=white" height="20"> · Blog Writing · Everyday Writing · Career &amp; Job Search</td>
 </tr>
 <tr>
 <td>🎓 <b>Education &amp; Study</b></td>
@@ -312,7 +312,7 @@ Every tool below is production-live at `tools.scult.in/<category>/<slug>`. **�
 | Styling | **Tailwind CSS v4**, CSS-first `@theme` | No `tailwind.config.js` — every token lives in [`app/globals.css`](app/globals.css) |
 | Icons | [`@lobehub/icons`](https://www.npmjs.com/package/@lobehub/icons) + [`simple-icons`](https://www.npmjs.com/package/simple-icons) | Official brand marks, never redrawn lookalikes |
 | Lint + format | **Biome** | Replaces ESLint + Prettier with one faster tool |
-| Tests | **Vitest** + Testing Library | 772 tests across 25 files, ~85%+ coverage on tool logic |
+| Tests | **Vitest** + Testing Library | 829 tests across 30 files, ~85%+ coverage on tool logic |
 | Fonts | Fraunces + Cabin, self-hosted via `next/font` | No external font requests |
 | Hosting | **Vercel** | Edge-deployed, Vercel Analytics enabled |
 | CI | **GitHub Actions** | Lint → typecheck → unit tests → build → dependency audit, on every push and PR |
@@ -342,7 +342,7 @@ components/
 lib/
   tools/registry.ts           THE source of truth for the 15-tool catalogue
   tools/<slug>/logic.ts        pure, unit-tested computation per tool
-  prompts/registry.ts         THE source of truth for the 254-prompt library
+  prompts/registry.ts         THE source of truth for the 1,170-prompt library
   prompts/<slug>/prompts.ts   one file per prompt category
   seo/jsonld.tsx              structured-data builders
 

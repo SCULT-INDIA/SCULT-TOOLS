@@ -304,6 +304,18 @@ export const PROMPT_CATEGORIES: readonly PromptCategory[] = [
     icon: 'AtSign',
     serviceTarget: 'google-ads-management',
   },
+  {
+    slug: 'ecommerce-product',
+    group: 'marketing',
+    name: 'E-Commerce & Product',
+    blurb: 'Listing copy, merchandising and post-purchase prompts for online stores.',
+    intro:
+      'Prompts for the writing every online store repeats at scale — product descriptions and listings that actually convert, review response and mining, cross-sell/upsell copy, post-purchase sequences — scoped to real marketplace and storefront constraints, not generic sales copy.',
+    tier: 2,
+    tile: 'yellow',
+    icon: 'ShoppingCart',
+    serviceTarget: 'google-ads-management',
+  },
 
   // ---- Design ----
   {
@@ -414,6 +426,65 @@ export const PROMPT_CATEGORIES: readonly PromptCategory[] = [
     icon: 'Briefcase',
     serviceTarget: 'custom-software',
   },
+  {
+    slug: 'data-bi',
+    group: 'business',
+    name: 'Data & BI',
+    blurb: 'Analytics, dashboard and data-storytelling prompts.',
+    intro:
+      'Prompts for the analyst layer above the query itself — turning a raw dataset or spreadsheet formula into a defensible finding, choosing the right chart and KPI for a dashboard, and writing the executive narrative that explains what the numbers actually mean without overclaiming causation.',
+    tier: 2,
+    tile: 'green',
+    icon: 'ChartScatter',
+  },
+  {
+    slug: 'hr-management',
+    group: 'business',
+    name: 'HR & Management',
+    blurb: 'Job descriptions, reviews and people-management prompts.',
+    intro:
+      'People-management writing that shapes how someone experiences their job — job descriptions that attract the right candidate, performance reviews and feedback conversations with real specifics instead of platitudes, 1:1 agendas and change-management communication.',
+    tier: 2,
+    tile: 'blue',
+    icon: 'Users',
+  },
+  {
+    slug: 'legal-compliance',
+    group: 'business',
+    name: 'Legal & Compliance',
+    blurb: 'Contract summaries, policy drafts and compliance-checklist prompts.',
+    intro:
+      'Prompts scoped honestly for non-lawyers doing real work adjacent to legal documents — plain-English contract summaries, clause comparison, policy and privacy-notice drafts, compliance checklists — always framed as a first pass for a professional to review, never a substitute for licensed legal advice.',
+    tier: 3,
+    tile: 'lavender',
+    icon: 'Scale',
+    contentBoundary:
+      'Drafting, summarizing and organizing support only — every prompt states plainly that output is not legal advice and needs review by a qualified lawyer before being relied on or sent externally.',
+  },
+  {
+    slug: 'healthcare-wellness',
+    group: 'business',
+    name: 'Healthcare & Wellness',
+    blurb: 'Patient communication, wellness and health-content prompts.',
+    intro:
+      'Prompts for the communication layer around care — organizing symptoms before an appointment, turning clinical notes into plain-English patient handouts, wellness habit and nutrition-question framing — always scoped as organizational and educational support, never diagnosis or treatment.',
+    tier: 3,
+    tile: 'green',
+    icon: 'HeartPulse',
+    contentBoundary:
+      'Organizational, educational and communication support only — no diagnosis, treatment recommendation, or medication guidance. Every prompt states plainly that a qualified clinician must review anything before it is acted on.',
+  },
+  {
+    slug: 'customer-support',
+    group: 'business',
+    name: 'Customer Support & Ops',
+    blurb: 'Ticket responses, macros and support-operations prompts.',
+    intro:
+      'Support prompts for the actual daily queue — complaint and refund responses that de-escalate instead of templating past the problem, ticket triage and summarization, macros and tone guides, plus the operations layer above tickets: SLA tracking, agent coaching, and voice-of-customer synthesis.',
+    tier: 2,
+    tile: 'yellow',
+    icon: 'Headset',
+  },
 
   // ---- Content Creation ----
   {
@@ -471,6 +542,17 @@ export const PROMPT_CATEGORIES: readonly PromptCategory[] = [
     tier: 3,
     tile: 'lavender',
     icon: 'Type',
+  },
+  {
+    slug: 'career-jobsearch',
+    group: 'content',
+    name: 'Career & Job Search',
+    blurb: 'Resume, cover-letter and interview-prep prompts.',
+    intro:
+      'The job-search stack end to end — resume tailoring and ATS optimization, cover letters, LinkedIn profile rewrites, interview prep with real STAR-format practice, salary negotiation and offer comparison — written for someone applying right now, not generic career advice.',
+    tier: 2,
+    tile: 'blue',
+    icon: 'IdCard',
   },
 
   // ---- Education & Study ----

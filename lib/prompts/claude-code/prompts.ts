@@ -2330,4 +2330,310 @@ export const prompts: readonly Prompt[] = [
       },
     ],
   },
+  {
+    slug: 'claude-code-migration-rules-file',
+    category: 'claude-code',
+    title: `Write a MIGRATION.md ledger Claude Code re-reads every session of a multi-week migration`,
+    description: `A persistent rules-and-ledger file for long-running code migrations — the kind that outlives any single Claude Code session — tracking what has been moved, what is frozen, and how to verify each step before touching the next file.`,
+    promptText: `Write this as MIGRATION.md at the repository root. This file is not a one-off report — it is a living ledger a fresh Claude Code session will read at the start of every future sitting on this migration, possibly weeks apart, with no memory of earlier sessions beyond what is written here. Its job is to make a half-finished migration resumable by a session that has never seen it before.
+
+MIGRATION
+{{migration_name}} — moving from {{source_state}} to {{target_state}}.
+
+STRATEGY
+State the chosen approach explicitly — strangler-fig (old and new run side by side behind a seam until the old path is deleted) or big-bang (one atomic cutover) — and why: {{migration_strategy}}. Never let a session default to whichever approach is easier for the file it happens to be looking at; the strategy is fixed for the whole migration.
+
+FREEZE LINE
+Name the exact boundary of what is in scope. Anything outside {{source_state}}'s stated boundary is frozen — do not refactor it, rename it, or 'improve it while I'm in there,' even if it looks related. A migration that scope-creeps into adjacent code is a migration that never finishes and is hard to review as one coherent change.
+
+LEDGER
+Maintain a table of every unit being migrated (file, module, or route) with three columns: status (pending / in progress / migrated / verified), the commit or PR that moved it, and any compatibility shim it still depends on. Update this table as the last step of every session, not as an afterthought — a session that migrates three files and forgets to update the ledger has made the next session's job harder than doing nothing at all.
+
+VERIFICATION PER UNIT
+A unit only moves to 'verified' after running {{verification_command}} against it specifically, not just the full suite passing in aggregate. State what 'passing' means for this migration precisely — same output, same behavior under the old code path's known edge cases, or a named acceptance test — since 'the tests are green' can be true while the migration is still behaviorally wrong.
+
+ROLLBACK
+For each migrated-but-not-yet-verified unit, state how to revert it alone without reverting the whole migration. If no per-unit rollback is possible for this strategy, say so plainly rather than leaving it implied.
+
+HARD RULES
+- Never delete the old code path for a unit until its ledger row says verified.
+- Never migrate a unit not yet reached in {{migration_strategy}}'s intended order just because it looks quick.
+- Never mark a unit verified based on the migration compiling — compiling is not passing.
+
+WHEN A SESSION ENDS MID-MIGRATION
+Leave the ledger in a state where the very next row needing attention is unambiguous — the next session should be able to read this file top to bottom and know exactly where to resume without re-deriving it from a git log.`,
+    variables: [
+      {
+        name: 'migration_name',
+        description: `What is being migrated, named precisely.`,
+        example: `Express 4 to Fastify 4 on the internal billing API`,
+        required: true,
+      },
+      {
+        name: 'source_state',
+        description: `The current state and its scope boundary, so freeze-line scope is unambiguous.`,
+        example: `12 Express route files under src/api/billing/, using Express-style middleware chains`,
+        required: true,
+      },
+      {
+        name: 'target_state',
+        description: `What the end state looks like once migration is complete.`,
+        example: `Same 12 routes reimplemented as Fastify plugins with schema-based request validation`,
+        required: true,
+      },
+      {
+        name: 'migration_strategy',
+        description: `Strangler-fig or big-bang, and the reasoning for choosing it.`,
+        example: `Strangler-fig — both servers run behind a feature-flagged router until every route is migrated and verified, since billing cannot tolerate a single atomic cutover risk`,
+        required: true,
+      },
+      {
+        name: 'verification_command',
+        description: `The exact command or check that proves a single migrated unit behaves correctly.`,
+        example: `npm run test:contract -- --grep billing (runs recorded-request contract tests against both old and new route for identical input)`,
+        required: true,
+      },
+    ],
+    targetTools: [`Claude Code`],
+    tags: [`migration`, `ledger-file`, `strangler-fig`, `long-running-tasks`, `verification`],
+    whyItWorks: `A migration that spans many Claude Code sessions has a failure mode that a single-session task does not: each new session starts with a fresh context window and no memory of what a previous session decided, so unless the state of the migration is written down somewhere Claude Code will read automatically, every session either re-derives the plan from scratch or, worse, silently assumes a different plan than the one actually in progress. The ledger table exists specifically to make 'where are we' a lookup instead of an investigation — a session that reads a table of pending/migrated/verified rows can pick up exactly where the last one stopped, whereas a session that has to infer progress from a git log or a half-remembered conversation is likely to either redo finished work or, more dangerously, assume something is done when it is only compiling. The distinction between migrated and verified is the single most load-bearing rule in the file, because a migrated-but-unverified unit that a later session assumes is safe to build on top of is exactly how a migration produces a regression that surfaces weeks after the fact, once nobody is looking at that code anymore. Fixing the strategy — strangler-fig versus big-bang — as a stated fact rather than a per-session judgment call matters because the two strategies imply opposite answers to questions like 'is it safe to delete the old path yet,' and an agent that re-decides the strategy file-by-file will produce an inconsistent migration that is neither fully incremental nor a clean cutover. The freeze-line rule targets a well-documented agentic-coding failure mode directly: an agent given latitude inside a file it is already touching tends to also fix nearby things it notices, which turns a reviewable, single-purpose migration diff into a sprawling change nobody can review with confidence, and is why the instruction states explicitly that adjacent, related-looking code stays untouched regardless of how easy the fix would be.`,
+    exampleOutput: `## Ledger
+| Unit | Status | PR | Shim depended on |
+|---|---|---|---|
+| POST /invoices | verified | #412 | none |
+| GET /invoices/:id | migrated | #418 | legacy auth middleware wrapper |
+| POST /refunds | pending | — | — |
+
+Next session: GET /invoices/:id needs contract verification before its shim can be removed; POST /refunds has not been started.`,
+    verifiedAgainst: [
+      { tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-08' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-08',
+        note: `Initial publish, verified against Claude Code Sonnet 4.6.`,
+      },
+    ],
+  },
+  {
+    slug: 'claude-code-language-port-conversion-brief',
+    category: 'claude-code',
+    title: `Brief Claude Code to port a codebase between languages without smuggling over the source language's idioms`,
+    description: `A four-phase task brief for porting a module or service from one programming language to another, forcing an explicit idiom-mapping pass before any file gets touched so the result reads as native target-language code, not translated source code.`,
+    promptText: `You are porting {{source_language}} code to {{target_language}}. Work in four phases, in order, and do not begin Phase 2 until Phase 1 is written down and confirmed.
+
+PHASE 1 — INVENTORY AND IDIOM MAP
+List every file or module in scope: {{scope_description}}. For each source-language idiom that has no direct equivalent in {{target_language}} — error handling style, iteration patterns, null/optional handling, concurrency primitives — write down the target-language idiom it maps to, using these notes as the starting point: {{idiom_notes}}. This map is the single most important output of this phase; a port that skips it tends to produce {{target_language}} code that still thinks in {{source_language}}, which compiles but reads as foreign to anyone who maintains it afterward.
+
+PHASE 2 — PORT ONE REPRESENTATIVE FILE FIRST
+Before touching the rest of the scope, port the single file most representative of the module's overall pattern. Stop and show it. This is the checkpoint where a wrong idiom-mapping decision gets caught once, cheaply, rather than propagated across every remaining file.
+
+PHASE 3 — PORT THE REMAINDER
+Apply the confirmed pattern from Phase 2 across the rest of the scope, file by file. For anything genuinely out of scope for this pass — {{out_of_scope}} — leave it in {{source_language}} with a clear marker rather than porting it partially or guessing at its intent.
+
+PHASE 4 — PARITY VERIFICATION
+Run {{parity_test_command}} against both the original and the ported code on identical input and confirm matching output, not just that the port compiles or passes its own new tests written after the fact. A test suite written by the same pass that wrote the port will tend to test what the port actually does rather than what the original guaranteed — parity means checking against the original's behavior, including its edge cases and error paths, not just against the new code's own assumptions.
+
+WHAT NOT TO DO
+- Do not port line-by-line or function-by-function as a literal transliteration; a for-loop that exists because {{source_language}} lacks a construct {{target_language}} has natively should become that native construct, not a hand-rolled loop.
+- Do not silently drop or reinterpret error-handling semantics — if {{source_language}} distinguishes recoverable from fatal errors in a way {{target_language}} handles differently, say so explicitly rather than picking one arbitrarily.
+- Do not introduce a target-language dependency not already in {{target_language}}'s ecosystem or the project's existing dependency list without naming it and asking first.
+- Do not mark the port complete based on Phase 3 alone; Phase 4 is not optional cleanup, it is the actual acceptance criterion.
+
+End each phase by stating explicitly what was decided and what is still open, so a reviewer or a later session can pick up from that exact point.`,
+    variables: [
+      {
+        name: 'source_language',
+        description: `The language being ported from.`,
+        example: `Python 3.11`,
+        required: true,
+      },
+      {
+        name: 'target_language',
+        description: `The language being ported to.`,
+        example: `Go 1.22`,
+        required: true,
+      },
+      {
+        name: 'scope_description',
+        description: `The exact files or module boundary in scope for this port.`,
+        example: `the report_generator/ package (9 files) that builds nightly PDF usage reports`,
+        required: true,
+      },
+      {
+        name: 'idiom_notes',
+        description: `Known idiom mismatches worth flagging up front between the two languages.`,
+        example: `Python's try/except with broad catches maps to Go's explicit error-return checking, not to panic/recover; Python generators map to Go channels only where laziness is actually needed elsewhere it's a plain slice`,
+        required: true,
+      },
+      {
+        name: 'parity_test_command',
+        description: `How to run both versions against the same input and compare output.`,
+        example: `python scripts/compare_outputs.py --python-cmd 'python -m report_generator' --go-cmd './bin/report_generator' --fixtures tests/fixtures/`,
+        required: true,
+      },
+      {
+        name: 'out_of_scope',
+        description: `What is explicitly not part of this porting pass.`,
+        example: `the email-delivery wrapper that calls report_generator, which stays Python and just shells out to the new binary`,
+        required: false,
+      },
+    ],
+    targetTools: [`Claude Code`],
+    tags: [`language-porting`, `code-conversion`, `idiom-mapping`, `parity-testing`, `task-brief`],
+    whyItWorks: `The core failure mode of an AI-assisted language port is transliteration — code that compiles in the target language but is structurally still thinking in the source language, which is worse than it sounds because it passes review at a glance and only becomes a maintenance liability months later when someone tries to extend it the target-language way and the transliterated parts fight back. Forcing an explicit idiom map as its own phase, before any porting happens, catches this at the point where it's cheapest to fix: a wrong mapping decision written down and confirmed against one representative file costs a few minutes, while the same wrong decision discovered after all nine files have been ported costs a full re-pass. Porting one representative file before the rest applies the same checkpoint logic Claude Code benefits from in any multi-file task — an agent working file-by-file with no interim checkpoint tends to compound an early wrong assumption silently across every subsequent file, because nothing in the loop forces reconsideration until the very end, by which point the fix touches everything rather than one file. The parity-testing phase is deliberately specified as comparing against the original's behavior on identical input rather than 'passing tests,' because a test suite authored in the same pass that wrote the port is written by something that already believes the port is correct — it will tend to encode the port's own assumptions as the expected behavior rather than catch a case where the port silently changed behavior, which is precisely the blind spot that matters most in a language conversion where semantics like error handling or numeric precision can shift without anyone writing new code that looks obviously wrong. The what-not-to-do section names transliteration, dropped error semantics, and unauthorized new dependencies specifically because these are the three ways a port can look finished while quietly being wrong, none of which show up as a compile error or an obvious code-review red flag.`,
+    exampleOutput: `Phase 1 idiom map (excerpt):
+- Python \`except ValueError\` broad catch -> Go explicit \`if err != nil\` with \`errors.Is(err, ErrInvalidInput)\`
+- Python list comprehension building report rows -> Go slice with explicit append loop (no lazy-eval need here)
+
+Phase 4 parity check: 47/47 fixture reports byte-identical between python and go binaries; 1 discrepancy found in currency rounding, traced to Go's default float formatting — fixed by matching Python's decimal.ROUND_HALF_UP explicitly.`,
+    verifiedAgainst: [
+      { tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-10' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-10',
+        note: `Initial publish, verified against Claude Code Sonnet 4.6.`,
+      },
+    ],
+  },
+  {
+    slug: 'claude-code-architecture-review-brief',
+    category: 'claude-code',
+    title: `Get an architecture review from Claude Code that cites file and line, not a generic 'consider microservices' essay`,
+    description: `A tightly bounded prompt for a structured architecture review — layering violations, coupling hotspots, and a prioritized list of concrete findings, each backed by an actual file reference rather than abstract best-practice advice.`,
+    promptText: `Review the architecture of {{codebase_scope}}. Read the actual code and dependency structure before writing anything — do not produce a generic architecture essay that would apply to any codebase.
+
+What I actually want checked: {{architecture_concerns}}.
+
+The expected layering, if the project has one, is: {{layering_expectations}}. Check whether the code actually respects it — trace real import statements and call chains, not what the folder names imply.
+
+Produce exactly these sections:
+
+1. LAYERING VIOLATIONS — every place a supposedly lower layer imports from or depends on a higher one, or a domain module imports a framework/vendor SDK directly instead of going through an abstraction. Cite the actual file and line for each one found. If none are found, say so plainly rather than inventing a marginal one to have something to report.
+
+2. COUPLING HOTSPOTS — modules with an unusually high number of inbound or outbound dependencies relative to the rest of the codebase, named specifically with the count, not just asserted as 'this module does a lot.'
+
+3. RISK RANKING — of everything found above, rank by (a) how many other modules would need to change if this were fixed, and (b) how likely this pattern is to cause a bug the next time someone extends the code nearby. State both factors per item, not a single unexplained severity label.
+
+4. FIXES, SCOPED TO WHAT WAS ACTUALLY ASKED — for each item in the risk ranking, one concrete, minimally invasive fix. Do not propose a framework swap, a full rewrite, or a different architecture paradigm unless the finding genuinely requires it — most layering violations are fixed by introducing one interface or moving one import, not by starting over.
+
+Depth for this pass: {{review_depth}}.
+
+WHAT NOT TO DO
+- Do not flag naming conventions, formatting, or code style — this is an architecture review, not a lint pass.
+- Do not recommend microservices, a new database, or a different language as a default suggestion; only raise it if a specific finding above actually points there, and say which finding.
+- Do not pad the report with restated best practices that aren't tied to a specific thing found in this codebase.
+- Do not claim a violation exists without naming the file and line where it lives — an unverifiable claim is worse than no claim, since it can send a reviewer chasing something that isn't there.`,
+    variables: [
+      {
+        name: 'codebase_scope',
+        description: `The exact directory, service, or module boundary being reviewed.`,
+        example: `the services/ and rag/ directories of the RAG API, excluding tests/`,
+        required: true,
+      },
+      {
+        name: 'architecture_concerns',
+        description: `The specific worry prompting this review, not a generic 'is it good.'`,
+        example: `whether the retrieval service still talks directly to the Qdrant SDK anywhere instead of going through VectorStorePort, after last month's refactor`,
+        required: true,
+      },
+      {
+        name: 'layering_expectations',
+        description: `The intended architecture, so violations can be checked against a real target rather than an assumed ideal.`,
+        example: `Presentation (api/) -> Application (services/) -> Domain (rag/) -> Infrastructure (vectorstore/, llm/); domain code must never import a vendor SDK directly`,
+        required: true,
+      },
+      {
+        name: 'review_depth',
+        description: `How exhaustive this pass should be, to bound scope realistically.`,
+        example: `Focused pass — the two directories named above only, not a full-repo audit`,
+        required: true,
+      },
+    ],
+    targetTools: [`Claude Code`],
+    tags: [`architecture-review`, `layering`, `coupling-analysis`, `code-audit`, `clean-architecture`],
+    whyItWorks: `Claude Code's advantage over a review done from memory or from a diagram is that it can actually open every file, trace an import statement to where it resolves, and follow a call chain across module boundaries with tools like Grep and Glob rather than trusting what a folder name implies about layering — which is exactly why the prompt insists on citing file and line for every finding: a claim that isn't tied to an actual location is unfalsifiable, and an unfalsifiable architecture finding is worse than none because a reviewer then has to go hunting for something that may not exist. Bounding the review to a named scope and a specific stated concern, rather than an open-ended 'review the architecture,' matters because a generic review prompt reliably produces a generic essay — one that lists best practices any codebase could benefit from, restates SOLID principles in the abstract, and reaches for a familiar big recommendation like microservices or a rewrite regardless of whether the actual code supports that conclusion, since that's the median answer for the median unscoped prompt of this shape. Requiring the risk ranking to state two separate factors, blast radius and likelihood of recurrence, rather than a single severity label, forces the model to reason about each finding on its own evidence instead of defaulting to a template severity scale that doesn't actually reflect this codebase's specific coupling. The what-not-to-do section exists because architecture review and code style review get conflated by default — a review asked for broadly will often pad its findings with naming and formatting nits because those are easy, verifiable, and plentiful, which crowds out the harder structural findings the review actually exists to surface, and explicitly ruling that out redirects the effort toward the layering and coupling questions that were the actual point of asking.`,
+    exampleOutput: `1. Layering violations: rag/retrieval/hybrid.py:34 imports \`qdrant_client\` directly instead of going through \`vectorstore.base.VectorStorePort\` — introduced in the reranking commit, bypasses the port added for the pgvector swap.
+2. Coupling hotspots: services/query_service.py has 11 inbound imports (highest in services/), mostly other services reaching into it for its retry helper.
+3. Risk ranking: #1 above ranked highest — low blast radius (one file) but high recurrence risk, since it reintroduces the exact coupling VectorStorePort was built to prevent.`,
+    verifiedAgainst: [
+      { tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-12' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-12',
+        note: `Initial publish, verified against Claude Code Sonnet 4.6.`,
+      },
+    ],
+  },
+  {
+    slug: 'claude-code-tech-debt-ledger',
+    category: 'claude-code',
+    title: `Set up a TECH_DEBT.md ledger Claude Code appends to instead of fixing things on the sly`,
+    description: `A rules file that turns technical debt from a vague, unprioritized complaint into a tracked, file-and-line-referenced ledger with effort and impact scored per item, so debt gets paid down deliberately instead of opportunistically rewritten mid-task.`,
+    promptText: `Set up TECH_DEBT.md at the repository root and establish the rule Claude Code follows around it from now on: when work in {{debt_scan_scope}} surfaces something that is technical debt — not a bug, not a missing feature, but a shortcut, an outdated pattern, or a known-fragile piece of code — it gets logged here, not silently fixed as a side effect of whatever task happens to be touching it nearby.
+
+For an initial pass, scan {{debt_scan_scope}} now and populate the ledger with what you find, one row per item:
+
+| Item | Location | Severity | Effort | Why it matters |
+
+- Location must be an actual file and line or function, not a vague area description — an item nobody can find again by reading the ledger is not tracked, it is just noted.
+- Severity and effort are scored using this rubric: {{severity_rubric}}. Score both independently; a high-severity item can still be low-effort to fix, and conflating the two is how a ledger ends up ranked by how scary something sounds rather than by what should actually be worked on next.
+- 'Why it matters' is one sentence stating the concrete consequence if this stays unfixed — a slow query under real load, a silent data-corruption edge case, a dependency past end-of-life — not a generic 'this is bad practice.'
+
+If a ledger already exists at {{existing_ledger_path}}, read it first and merge into it rather than starting a second, competing list — reconcile any item that appears in both, and mark anything the existing ledger lists as fixed that this scan can now confirm is actually resolved in the current code.
+
+PRIORITIZATION
+At the end of the ledger, order items by {{prioritization_criteria}}, and state the ordering rule explicitly at the top of that section so a future session extending the list applies the same rule rather than inventing a new ordering.
+
+RULE GOING FORWARD
+When future work touches code near a logged debt item but the current task does not actually require fixing it, leave it alone and leave the ledger entry as is — do not fix it silently because you happen to be right there. If the current task's own scope genuinely requires touching the debt item to complete correctly, fix it, then update its ledger row to fixed with the commit reference, rather than leaving a now-inaccurate row for the next session to trip over.
+
+Do not log anything here that is actually a bug (something already broken now) or a feature gap (something that was never built) — both belong in the issue tracker, not this ledger; TECH_DEBT.md is only for working code that is more fragile, harder to change, or costlier to run than it should be.`,
+    variables: [
+      {
+        name: 'debt_scan_scope',
+        description: `The part of the codebase to scan for debt and where the ongoing rule applies.`,
+        example: `the ingestion pipeline (rag/loaders/ and rag/chunking/)`,
+        required: true,
+      },
+      {
+        name: 'severity_rubric',
+        description: `How severity and effort should each be scored, concretely.`,
+        example: `Severity: low/medium/high based on blast radius if it fails in production; Effort: hours estimate assuming one engineer familiar with this module`,
+        required: true,
+      },
+      {
+        name: 'existing_ledger_path',
+        description: `Path to an existing debt-tracking file or issue label, if one already exists, to merge into.`,
+        example: `docs/TECH_DEBT.md (last updated three months ago, seven open items)`,
+        required: false,
+      },
+      {
+        name: 'prioritization_criteria',
+        description: `The rule for ordering the ledger, so priority reflects an actual decision, not insertion order.`,
+        example: `highest severity first, then lowest effort as a tiebreaker, so cheap high-severity fixes surface at the very top`,
+        required: true,
+      },
+    ],
+    targetTools: [`Claude Code`],
+    tags: [`technical-debt`, `ledger-file`, `code-audit`, `prioritization`, `maintenance`],
+    whyItWorks: `Technical debt tracked only in conversation or in someone's memory decays the same way any unwritten institutional knowledge does — it gets rediscovered repeatedly, argued about from scratch each time, and eventually just becomes ambient background complaint rather than something anyone acts on, which is why the ledger's most important structural feature is the same one that makes CLAUDE.md itself useful: it is a file a fresh Claude Code session reads automatically, so the debt list survives across sessions instead of resetting to zero every time context runs out. Requiring an actual file and line per item, rather than an area description, is what makes the difference between a ledger and a complaint list — 'the ingestion pipeline is messy' cannot be acted on by a future session or verified as fixed later, while 'rag/loaders/pdf_loader.py:88, silent except that swallows corrupt-PDF errors' can be found, fixed, and checked off with no ambiguity about whether it's the same item someone meant three weeks ago. Scoring severity and effort as two independent numbers rather than one blended priority is a deliberate correction against the natural bias to rank by how alarming something sounds — a severity-only ranking will bury a five-minute fix to a genuinely risky pattern beneath a terrifying-sounding but multi-week rewrite, when the actual next best action is almost always the cheap fix to the dangerous thing, not the expensive fix to anything. The rule against fixing debt silently mid-task exists because an agent that notices nearby debt while working tends to want to clean it up on the spot, which feels helpful in the moment but produces an unreviewable diff that mixes the actual requested change with an unrelated opportunistic rewrite, and quietly removes the paper trail the ledger exists to provide — the rule instead routes that impulse into either leaving a now-accurate ledger entry for deliberate future work, or fixing it only when the current task's own scope genuinely requires it, at which point it's a legitimate part of that diff rather than a surprise inside it.`,
+    exampleOutput: `| Item | Location | Severity | Effort | Why it matters |
+|---|---|---|---|---|
+| Broad except swallows parse errors | rag/loaders/pdf_loader.py:88 | high | 2h | corrupt PDFs fail silently, no error surfaces to the ingestion job status |
+| Chunk size hardcoded, not from Settings | rag/chunking/fixed.py:14 | medium | 1h | can't tune per ingestion job without a code change and redeploy |
+
+Ordering rule: severity desc, effort asc as tiebreaker -> broad except fix ranked first (high severity, only 2h).`,
+    verifiedAgainst: [
+      { tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-14' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-14',
+        note: `Initial publish, verified against Claude Code Sonnet 4.6.`,
+      },
+    ],
+  },
 ]

@@ -2060,4 +2060,439 @@ OUTPUT FORMAT
       },
     ],
   },
+  {
+    slug: 'python-sql-query-postgres-parameterized-analytics-query',
+    category: 'python',
+    title: `Turn a plain-English analytics question into a parameterized Postgres query that won't get you paged for a table scan`,
+    description: `Writes a parameterized (never string-formatted) Postgres query for a specific analytics question, plus the EXPLAIN-based check to run before it goes anywhere near production data.`,
+    promptText: `You are a senior backend engineer writing one specific SQL query against a Postgres database for a real analytics question — not a generic "SQL tutorial" answer, and not pseudocode.
+
+QUESTION TO ANSWER
+{{business_question}}
+
+RELEVANT TABLES AND COLUMNS
+{{schema_snippet}}
+
+ESTIMATED ROW COUNTS
+{{row_counts}}
+
+HOW THIS QUERY WILL BE RUN
+{{execution_context}}
+
+RULES
+Write the query using named bind parameters (\`%(param_name)s\` for psycopg2-style, or \`:param_name\` if the execution context says it's SQLAlchemy) — never interpolate a Python f-string or \`.format()\` value directly into the SQL text, even for a value you think is safe, because the habit is what causes the incidents, not any single query. State explicitly which parameters are user-controlled input versus internal constants, since only the former strictly need to be parameterized but treating both the same way avoids a future edit accidentally reintroducing string formatting. If the question requires aggregating across a table you were told has millions of rows, do not default to a query that would force a sequential scan — check the given row counts against the WHERE and JOIN columns and flag any column being filtered or joined on that doesn't sound indexed based on the schema snippet, rather than silently writing a slow query and calling it done. Prefer \`EXISTS\` over \`IN (SELECT ...)\` for anti-join or existence checks against a large table, and explain in one line why, in this specific case, rather than asserting it as a rule of thumb. If the business question is ambiguous about a boundary condition (inclusive/exclusive date range, how to treat NULLs in a grouping column, whether a soft-deleted row counts), do not silently pick one interpretation — state the ambiguity and the interpretation you chose.
+
+WHAT NOT TO DO
+Do not wrap the answer in a generic explanation of what SQL joins are. Do not add a second, alternate version of the query "in case this isn't what you meant" — commit to one query that matches the stated question, or ask a clarifying question if the ambiguity is severe enough that guessing wrong would produce a materially different number.
+
+OUTPUT FORMAT
+1. The parameterized query, formatted and commented at any non-obvious join or filter.
+2. The parameter dictionary shape (name -> example value -> user-controlled or internal).
+3. The \`EXPLAIN (ANALYZE, BUFFERS)\` command to run against it before trusting the result, plus what to look for in the output (sequential scan on a large table, a nested loop over an unindexed column) that would mean the query needs rework.
+4. Any boundary-condition ambiguity you resolved and how.`,
+    variables: [
+      {
+        name: 'business_question',
+        description: `The actual question in plain English, as specific as you can make it.`,
+        example: `For each subscription plan, what's the 30-day retention rate for customers who signed up in the last 6 months?`,
+        required: true,
+      },
+      {
+        name: 'schema_snippet',
+        description: `The relevant table and column names — doesn't need to be the full schema, just what this query touches.`,
+        example: `subscriptions(id, customer_id, plan_id, started_at, canceled_at), customers(id, signup_channel)`,
+        required: true,
+      },
+      {
+        name: 'row_counts',
+        description: `Rough size of the tables involved, so the model can flag scan risk.`,
+        example: `subscriptions ~14M rows, customers ~2.1M rows`,
+        required: true,
+      },
+      {
+        name: 'execution_context',
+        description: `How and where the query will actually run.`,
+        example: `Runs nightly via a psycopg2 cron job against a read replica, result written to a reporting table.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT`],
+    tags: [`sql`, `postgresql`, `query-optimization`, `sql-injection`, `data-engineering`],
+    whyItWorks: `The instruction to name bind-parameter placeholders instead of accepting any query that "looks parameterized" closes the specific gap where a model asked generically for a "safe SQL query" will happily produce a parameterized WHERE clause but then interpolate a table or column name via an f-string elsewhere in the same query, because it's pattern-matching on the visible injection risk (a value in a WHERE clause) rather than reasoning about the underlying rule (never let user-influenced text reach the SQL string directly). Supplying row counts and asking the model to reason about which filter/join columns are likely unindexed works because GPT-5.1 has no access to your actual \`pg_indexes\` catalog and will otherwise default to writing a correct-looking query without ever surfacing that correctness and performance are different questions — giving it the row counts turns an invisible risk into something it can actually reason about and flag, rather than silently assuming an index exists because the schema snippet happens to look like a foreign key. Forcing a stated resolution for boundary ambiguities (inclusive date ranges, NULL handling in GROUP BY) matters because these are exactly the places where a wrong silent guess produces a plausible-looking wrong number rather than an obvious error — the query still runs and returns rows, so nobody notices the interpretation was wrong until a report doesn't reconcile. Requiring the EXPLAIN command as a deliverable rather than just the query converts the output from "a SQL answer" into an actual verification step the user is expected to run before trusting the query in production, which matches how a senior engineer actually ships analytics SQL rather than pasting it straight from a chat window.`,
+    exampleOutput: `SELECT plan_id, COUNT(*) FILTER (WHERE canceled_at IS NULL OR canceled_at > started_at + interval '30 days') * 1.0 / COUNT(*) AS retention_30d FROM subscriptions s JOIN customers c ON c.id = s.customer_id WHERE s.started_at >= %(window_start)s GROUP BY plan_id; -- window_start is user-controlled (report date range), the interval literal is internal. Run EXPLAIN (ANALYZE, BUFFERS) first and check that started_at hits an index rather than a sequential scan across 14M rows.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-08',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'python-database-schema-normalized-schema-with-migration-plan',
+    category: 'python',
+    title: `Design a normalized table schema for a new feature without breaking the tables already in production`,
+    description: `Produces a normalized schema for a new feature plus a phased migration plan against your existing tables, so the design doesn't just look right on a whiteboard but actually ships without a destructive rewrite.`,
+    promptText: `You are a database architect designing the schema for a new feature that has to coexist with tables already live in production — this is not a greenfield design exercise, so every decision has to account for what already exists and what would break if handled carelessly.
+
+FEATURE BEING ADDED
+{{feature_description}}
+
+EXISTING RELEVANT TABLES
+{{existing_tables}}
+
+DATABASE ENGINE AND VERSION
+{{database_engine}}
+
+EXPECTED SCALE AND ACCESS PATTERN
+{{scale_and_access_pattern}}
+
+CONSTRAINTS THAT CANNOT CHANGE
+{{hard_constraints}}
+
+PHASE 1 — SCHEMA DESIGN
+Design the new tables and any columns added to existing tables, normalized to at least 3NF unless the stated access pattern gives a specific, named reason to denormalize (a read path that would otherwise require a join across more than three tables on every request, for example) — and if you do denormalize anything, say exactly which normal-form rule you're breaking and why the access pattern justifies it, rather than denormalizing by default and calling it a performance decision after the fact. Every foreign key needs an explicit ON DELETE behavior (CASCADE, RESTRICT, SET NULL) chosen deliberately, not left at the engine default, because the default silently varies by engine and picking it by omission is how orphaned rows or unintended cascading deletes happen later.
+
+PHASE 2 — MIGRATION PLAN
+Given the existing tables listed above already have production data and traffic, write the migration as an ordered list of individually-reversible steps, each one safe to run without locking the affected table for longer than a few seconds — call out specifically any step that would require a full table rewrite or an ACCESS EXCLUSIVE lock at the stated scale, and propose the safer alternative (adding a nullable column first and backfilling in batches, for example, rather than adding a NOT NULL column with a default directly). Do not propose a single big migration script that does everything in one transaction if any individual step in it is risky at the stated scale.
+
+PHASE 3 — WHAT COULD GO WRONG
+Name the one existing table most likely to have data that violates a new constraint you're adding (a NOT NULL, a new foreign key, a new UNIQUE constraint) and specify how you'd find out before the migration runs, not after it fails partway through.
+
+OUTPUT FORMAT
+1. Schema as DDL (CREATE TABLE / ALTER TABLE statements).
+2. One-paragraph explanation of any deliberate denormalization.
+3. The ordered, reversible migration step list.
+4. The pre-migration data-validation query for the risk named in Phase 3.`,
+    variables: [
+      {
+        name: 'feature_description',
+        description: `What the new feature does, in enough detail to infer what data it needs to store.`,
+        example: `Let a customer save multiple shipping addresses and pick a default one at checkout.`,
+        required: true,
+      },
+      {
+        name: 'existing_tables',
+        description: `The current tables this feature will touch or extend, with their key columns.`,
+        example: `customers(id, name, email), orders(id, customer_id, shipping_address_text) — address is currently a single free-text column on orders.`,
+        required: true,
+      },
+      {
+        name: 'database_engine',
+        description: `The specific engine and version, since migration mechanics differ.`,
+        example: `PostgreSQL 15, running on RDS`,
+        required: true,
+      },
+      {
+        name: 'scale_and_access_pattern',
+        description: `Table sizes and how the data is typically read/written, to justify normalization vs. denormalization calls.`,
+        example: `orders table has ~40M rows and is read on every checkout page load; write volume is ~50k orders/day.`,
+        required: true,
+      },
+      {
+        name: 'hard_constraints',
+        description: `Anything that must not change — uptime requirements, an API contract, a reporting job that reads the raw table directly.`,
+        example: `No downtime allowed during business hours (9am-9pm ET); a nightly BI job queries orders.shipping_address_text directly and can't break.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT`],
+    tags: [`database-design`, `schema-migration`, `postgresql`, `normalization`, `sql`],
+    whyItWorks: `Asking for a migration plan as ordered, individually-reversible steps rather than a single design deliverable forces the model out of academic schema design mode, where a textbook-correct 3NF layout is treated as the whole answer, and into the actual constraint that matters in a live system: an ALTER TABLE that looks trivial in DDL can take an ACCESS EXCLUSIVE lock and block every other query against that table for the duration of a full rewrite, which for a 40-million-row table is not a hypothetical, it's an outage. Requiring an explicit ON DELETE behavior on every foreign key instead of accepting the engine default closes a specific failure mode where a model asked for "a schema" writes syntactically correct DDL that compiles fine and then produces silent data-integrity drift in production months later, because the default cascade behavior was never a deliberate choice anyone reviewed. The Phase 3 requirement — naming the one existing table most likely to violate a new constraint — matters because the standard failure pattern with adding NOT NULL or UNIQUE to an already-populated table isn't a design flaw, it's a migration that runs fine in a schema-design review and then fails at 2am partway through backfilling real production rows that don't satisfy the new rule, which is exactly the class of failure a pre-migration validation query catches before the migration is ever run rather than after it's half-applied. Requiring a stated reason for any denormalization, rather than letting the model default to whichever shape looks cleaner, keeps a genuine access-pattern-driven trade-off distinguishable from an unexamined shortcut in the eventual code review.`,
+    exampleOutput: `CREATE TABLE addresses (id BIGSERIAL PRIMARY KEY, customer_id BIGINT NOT NULL REFERENCES customers(id) ON DELETE CASCADE, line1 TEXT NOT NULL, city TEXT NOT NULL, is_default BOOLEAN NOT NULL DEFAULT false); Migration step 1: add addresses table (no lock impact, new table). Step 2: add nullable orders.address_id column via ALTER TABLE ... ADD COLUMN (fast, metadata-only in PG11+). Step 3: backfill address_id in batches of 5,000 rows to avoid long-running transactions. Step 4: only after backfill is verified complete, add the NOT NULL constraint using NOT VALID + VALIDATE CONSTRAINT to avoid a full table scan lock.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-09',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'python-cli-tool-click-cli-with-config-precedence',
+    category: 'python',
+    title: `Scaffold a Python CLI tool whose flags, config file, and environment variables don't silently fight each other`,
+    description: `Builds a Click-based CLI with subcommands, a clearly defined config-precedence order, and exit codes a shell script can actually branch on — not just a toy argparse demo.`,
+    promptText: `Build a Python CLI tool using Click. This needs to work as a real command-line tool other people or scripts will invoke, not a demo script — that means config precedence, exit codes, and error messages all have to be deliberate, not accidental.
+
+WHAT THE TOOL DOES
+{{tool_purpose}}
+
+SUBCOMMANDS NEEDED
+{{subcommands}}
+
+CONFIG SOURCES
+{{config_sources}}
+
+WHO/WHAT WILL INVOKE THIS
+{{invocation_context}}
+
+RULES
+Define one explicit precedence order for settings that can come from more than one of: a config file, environment variables, and CLI flags — state the order plainly (e.g. CLI flag overrides env var overrides config file overrides built-in default) and implement it that way consistently across every setting, rather than letting each option's implementation drift independently, which is how tools end up with one flag that overrides the config file and another that silently doesn't. Every subcommand needs a docstring Click will surface in \`--help\` that states what it does and, for anything destructive, what it will NOT undo. Distinguish exit codes deliberately: 0 for success, a distinct non-zero code for "ran correctly but found nothing to do / a validation failure the user caused" versus a different code for "an unexpected internal error" — because the invocation context above determines whether a calling script needs to branch on that distinction, and collapsing everything to exit code 1 makes that impossible. Validate all user input at the CLI boundary with clear error messages that name which argument was wrong and why, before any side-effecting logic runs — never let a malformed flag surface as a stack trace.
+
+WHAT NOT TO DO
+Do not use \`print()\` for anything other than the tool's actual output going to stdout; route diagnostic/progress messages to stderr via Click's \`echo(..., err=True)\` so stdout stays pipeable. Do not silently swallow an exception to "keep the CLI clean" — a caught exception must either be handled with a specific recovery action or re-raised with added context, never passed and ignored.
+
+OUTPUT FORMAT
+1. The full Click CLI code (entry point, subcommands, config loading in precedence order).
+2. A short table: exit code -> meaning -> when it happens.
+3. One example \`--help\` output for the main command.
+4. A one-paragraph note on how a calling script should check success/failure of this tool.`,
+    variables: [
+      {
+        name: 'tool_purpose',
+        description: `What the CLI tool actually does, in one or two sentences.`,
+        example: `Syncs a local directory of markdown files to a remote S3 bucket, skipping files that haven't changed since the last sync.`,
+        required: true,
+      },
+      {
+        name: 'subcommands',
+        description: `The subcommands (or single command if it's a flat tool) with a short description each.`,
+        example: `sync (does the actual upload), status (shows what would change without uploading), init (writes a starter config file)`,
+        required: true,
+      },
+      {
+        name: 'config_sources',
+        description: `Which of config file / env vars / CLI flags this tool needs to support and what settings live where.`,
+        example: `bucket name and AWS profile can come from a .syncrc file or env vars; --dry-run and --verbose are flag-only.`,
+        required: true,
+      },
+      {
+        name: 'invocation_context',
+        description: `Who or what actually runs this tool, since that determines how strict exit codes and error output need to be.`,
+        example: `Runs both interactively by engineers and inside a nightly CI job that needs to fail the pipeline on a real error but not on 'nothing to sync'.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT`],
+    tags: [`python`, `cli`, `click`, `developer-tools`, `automation`],
+    whyItWorks: `Requiring one explicit, stated precedence order applied consistently across every configurable setting addresses a specific bug pattern in hand-rolled CLI tools: without an explicit rule, each setting tends to get its config-file/env-var/flag resolution logic written independently as the tool grows subcommand by subcommand, and inconsistent precedence between settings is invisible until a user's env var mysteriously overrides one flag but not another — asking for a single named rule up front, rather than letting each setting's precedence emerge from wherever the code happened to put it, is what actually prevents that drift. The exit-code table requirement matters specifically because the invocation context states this tool runs inside CI as well as interactively, and a CI pipeline can only make correct pass/fail decisions if "nothing to sync" and "the AWS credentials were invalid" produce genuinely different exit codes — a model asked generically to "build a CLI tool" defaults to exit 0 for success and exit 1 for everything else, which is exactly the collapse that makes automated pipelines either too permissive (masking real failures) or too strict (failing on a no-op run). Routing diagnostics to stderr via Click's \`err=True\` rather than plain \`print()\` is a mechanical requirement, not a style preference — a calling script that captures this tool's stdout to parse or log its actual output will silently ingest progress noise as data if diagnostics aren't kept off stdout, which is a common and hard-to-debug failure in composed shell pipelines specifically because it doesn't crash, it just corrupts the downstream data quietly.`,
+    exampleOutput: `Exit codes: 0 = synced successfully or nothing to do; 2 = user error (bad config, invalid flag combination) — CI should treat as a build config problem; 1 = unexpected internal failure (network error, S3 auth failure) — CI should retry or alert. \`--help\` shows: Usage: filesync [OPTIONS] COMMAND [ARGS]... Commands: init, status, sync. Config precedence: CLI flag > FILESYNC_* env var > .syncrc > built-in default.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-10',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'python-script-one-off-data-cleanup-with-dry-run',
+    category: 'python',
+    title: `Write a one-off Python cleanup script that won't need a second one to undo it`,
+    description: `Produces a one-off data cleanup or migration script with a mandatory dry-run mode and idempotency built in, for the kind of throwaway script that quietly becomes load-bearing the moment it touches real data.`,
+    promptText: `Write a one-off Python script for a specific data cleanup job. Even though this is a "throwaway" script, it's going to run against real data exactly once (or a few times if something goes wrong the first time), so it needs a dry-run mode and idempotency, not just a happy-path implementation.
+
+WHAT NEEDS TO HAPPEN
+{{cleanup_task}}
+
+DATA SOURCE
+{{data_source}}
+
+HOW MANY RECORDS, ROUGHLY
+{{record_volume}}
+
+WHAT COUNTS AS SUCCESS
+{{success_criteria}}
+
+RULES
+The script must support a \`--dry-run\` flag that runs the exact same selection and transformation logic as the real run and prints/logs what it would change, without writing anything — implement this by having both modes call the same function to decide what changes, with only the final write step gated behind the flag, so the dry-run output can never drift from what the real run would actually do. Make every write idempotent: if the script is run twice against the same data (because it was killed halfway through, or someone re-runs it out of caution), running it again should produce the same end state rather than double-applying a change or erroring out. If the record volume is large enough that holding everything in memory at once is questionable, process in batches with progress output, and make sure a crash partway through a batch doesn't leave that batch in a half-applied state. Log every record that gets modified (its identifier and what changed) to a file, not just a summary count, so there's a concrete audit trail if something needs to be manually reversed later.
+
+WHAT NOT TO DO
+Do not write this as an inline script with no functions — structure it as at least a \`find_candidates()\`, \`apply_change(record)\`, and \`main()\` so dry-run and real-run can share logic. Do not catch a broad exception around the whole batch loop just to keep it running past errors; catch specific expected exceptions per-record, log them, and let genuinely unexpected exceptions stop the script rather than silently skip records.
+
+OUTPUT FORMAT
+1. The full script.
+2. One paragraph on how to verify the dry-run output before running for real.
+3. One paragraph on what the audit log lets someone manually reverse if needed.`,
+    variables: [
+      {
+        name: 'cleanup_task',
+        description: `Exactly what needs to change, described precisely enough to know the selection criteria and the transformation.`,
+        example: `Find all user records where email is stored in mixed case and normalize them to lowercase, merging any resulting duplicate accounts by keeping the older one.`,
+        required: true,
+      },
+      {
+        name: 'data_source',
+        description: `Where the data actually lives and how the script connects to it.`,
+        example: `PostgreSQL production database, connecting via a read-write service account with a 30-second statement timeout.`,
+        required: true,
+      },
+      {
+        name: 'record_volume',
+        description: `Roughly how many records this will touch, to decide whether batching matters.`,
+        example: `About 900,000 user rows total, expecting roughly 12,000 to actually need changes.`,
+        required: true,
+      },
+      {
+        name: 'success_criteria',
+        description: `What running this script successfully actually looks like, including how duplicates or edge cases should be handled.`,
+        example: `Every email is lowercase, no two active accounts share the same normalized email, and the older account wins any merge.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT`],
+    tags: [`python`, `data-cleanup`, `scripting`, `idempotency`, `data-migration`],
+    whyItWorks: `Requiring dry-run and real-run to share the same selection/transformation function and differ only at the final write step closes the most common failure mode in hand-written cleanup scripts: when dry-run logic is written as a separate code path (a duplicated function, or an if/else branching much earlier than the write itself), it drifts from the real path the very first time someone edits one branch without the other, and the dry-run output stops being a trustworthy preview of what will actually happen — which defeats the entire point of having one. Making every write idempotent matters specifically because the stated context is a one-off script touching production data exactly once or twice, and the realistic failure scenario isn't a clean single run, it's the script getting killed by a timeout or a network blip partway through 900,000 rows and someone needing to just run it again — without idempotency, a naive re-run either double-merges accounts that already got merged or throws unhandled uniqueness errors on rows already processed, and the fix under production pressure is worse than the original bug. The per-record audit log requirement, rather than a summary count, is what actually makes a cleanup reversible: a count of "12,003 records updated" gives no way to identify which twelve thousand or what their prior values were, whereas a log of record-id-to-before/after gives someone a concrete list to manually or programmatically reverse if the success criteria turn out to have been mis-specified after the fact. Catching only specific expected exceptions per record, instead of wrapping the whole loop in a broad except, prevents the script from silently skipping records it doesn't know how to handle and reporting false success.`,
+    exampleOutput: `def find_candidates(conn): ... def apply_change(record, dry_run): logger.info(f'{record.id}: {record.email} -> {record.email.lower()}'); if not dry_run: cursor.execute(...). Running with --dry-run against the 900k rows logged 12,014 planned changes to cleanup_audit.log with old/new email pairs; review that file for any unexpected merges before re-running without the flag.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-11',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'python-fastapi-endpoint-validated-endpoint-with-auth-dependency',
+    category: 'python',
+    title: `Write a FastAPI endpoint whose 422 and 401 responses actually tell the caller what went wrong`,
+    description: `Builds one FastAPI endpoint with Pydantic request/response models, an auth dependency, and distinct, informative error responses — the version that survives a frontend integrating against it, not just a Swagger demo.`,
+    promptText: `Write one FastAPI endpoint. This will be integrated against by a real frontend or another service, so the error responses matter as much as the happy path — a 422 or 401 with a vague generic body just moves the debugging work onto whoever's calling this.
+
+ENDPOINT
+{{endpoint_spec}}
+
+AUTH REQUIREMENT
+{{auth_requirement}}
+
+REQUEST/RESPONSE SHAPE
+{{request_response_shape}}
+
+BUSINESS RULES TO ENFORCE
+{{business_rules}}
+
+RULES
+Define explicit Pydantic models for both the request body and the response — never return a bare dict, since that's how a response silently drifts out of sync with what the frontend expects as the code evolves and nobody notices until a field goes missing in production. Implement the auth requirement as a FastAPI dependency, not inline logic in the endpoint function, so it can be reused and unit-tested independently of this one route. For every business rule listed, decide and state the specific HTTP status code and response body it should produce when violated — a validation failure Pydantic can catch automatically should return its normal 422, but a business-rule violation (a duplicate, an out-of-range state transition, a permission the user's role doesn't have) needs its own distinct status code and a response body that names which rule was violated, not just "Bad Request". Use FastAPI's dependency injection for anything this endpoint needs (a DB session, the current user) rather than instantiating it inside the function body, so the endpoint stays testable with \`TestClient\` and overridden dependencies rather than requiring a real database connection to test.
+
+WHAT NOT TO DO
+Do not catch a broad \`Exception\` inside the endpoint just to return a clean error — let unexpected exceptions propagate to FastAPI's exception handling (or a registered exception handler) so they show up in logs/monitoring as the internal errors they are, rather than getting silently reshaped into a generic 400 that hides a real bug. Do not put business logic directly in the route function if it's more than a few lines — call into a separate function so the route stays a thin adapter between HTTP and the actual logic.
+
+OUTPUT FORMAT
+1. The Pydantic request and response models.
+2. The auth dependency.
+3. The route function.
+4. A table: condition -> status code -> response body shape.
+5. A short \`TestClient\`-based test for the main business-rule failure case.`,
+    variables: [
+      {
+        name: 'endpoint_spec',
+        description: `The HTTP method, path, and what it does.`,
+        example: `POST /api/v1/projects/{project_id}/invite — invites a user by email to join a project.`,
+        required: true,
+      },
+      {
+        name: 'auth_requirement',
+        description: `Who's allowed to call this and how identity is established.`,
+        example: `Requires a valid JWT bearer token; only users with the 'owner' or 'admin' role on that specific project may invite others.`,
+        required: true,
+      },
+      {
+        name: 'request_response_shape',
+        description: `What the request body needs and what a successful response should return.`,
+        example: `Request: {email: str, role: 'member' | 'admin'}. Response: the created invitation record with id, status, and expiry.`,
+        required: true,
+      },
+      {
+        name: 'business_rules',
+        description: `The non-validation rules that determine success or failure, beyond basic field types.`,
+        example: `Can't invite an email already invited or already a member; a 'member' role cannot invite anyone with 'admin' role; project must not have hit its 50-seat limit.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT`],
+    tags: [`fastapi`, `python`, `api-design`, `pydantic`, `backend`],
+    whyItWorks: `Requiring an explicit Pydantic response model rather than a bare dict return matters because FastAPI only validates and documents what you tell it to — a route that returns \`dict(...)\` still works and still renders in the interactive docs with an inferred shape, so the discipline gap is completely invisible in local testing and only surfaces as a silent contract break once a field gets renamed or dropped and the frontend that was relying on the old shape breaks without FastAPI ever raising an error, because there was no explicit contract to violate. Pulling the auth check into a dependency rather than inline route logic is what makes \`TestClient\` testing of the business rules actually tractable: FastAPI's \`app.dependency_overrides\` mechanism lets a test swap in a fake authenticated user without touching a real JWT or database, which is only possible if the auth logic is a dependency in the first place — inline auth logic forces every test of every business rule to also stand up real authentication, which is exactly the kind of friction that gets tests skipped under deadline pressure. Requiring a distinct status code and named-rule response body per business rule, rather than letting Pydantic's automatic 422 cover everything, addresses a real confusion GPT-5.1 defaults toward: it tends to treat "validation" as one bucket, so a request that's shaped correctly but violates a business invariant (inviting someone already invited) gets folded into the same 422 as a malformed field, and the calling frontend has no reliable way to distinguish "you sent bad JSON" from "this specific business rule was violated" without parsing error message text, which is fragile the moment the message wording changes.`,
+    exampleOutput: `class InviteRequest(BaseModel): email: EmailStr; role: Literal['member','admin']. 409 Conflict -> {'error': 'already_invited', 'detail': 'user@example.com already has a pending invitation'}. 403 Forbidden -> {'error': 'insufficient_role', 'detail': 'members cannot invite admins'}. def test_invite_duplicate_returns_409(client, override_owner_user): ... assert response.status_code == 409 and response.json()['error'] == 'already_invited'`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-12',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'python-error-handling-exception-hierarchy-retryable-vs-fatal',
+    category: 'python',
+    title: `Design a Python exception hierarchy that tells your retry logic which failures are worth retrying`,
+    description: `Produces a custom exception hierarchy and error-handling strategy for a service module that distinguishes retryable failures from fatal ones, instead of one flat except-Exception block deciding everything the same way.`,
+    promptText: `Design an error-handling strategy for one specific Python module, including a custom exception hierarchy. The point is to make retryable failures and fatal failures behave differently everywhere this module is called, not to catch everything the same way.
+
+MODULE AND WHAT IT DOES
+{{module_description}}
+
+EXTERNAL DEPENDENCIES IT CALLS
+{{external_dependencies}}
+
+HOW IT'S CURRENTLY CALLED
+{{calling_context}}
+
+FAILURE MODES ALREADY SEEN
+{{known_failure_modes}}
+
+RULES
+Design a small exception hierarchy rooted in one base exception for this module, with subclasses that separate failures along the dimension that actually matters to a caller: is this worth retrying automatically (a transient network timeout, a rate limit, a lock-contention error) or not (a malformed input, a permission denial, a resource that genuinely doesn't exist)? Every subclass needs a one-line docstring stating specifically when it's raised and what a caller should do about it — "raised when X happens, caller should retry with backoff" versus "raised when Y happens, caller should not retry, this needs a code or data fix." For each external dependency listed, map its actual failure modes (a specific exception type it raises, or an HTTP status code it returns) onto your new hierarchy explicitly — do not let a third-party exception type leak up through this module uncaught, since that forces every caller to know about and handle a library-specific exception instead of this module's own contract. Attach enough context to each raised exception (the input that caused it, an identifier, not just a message string) that a caller or a log line can act on it without re-deriving what happened from scratch.
+
+WHAT NOT TO DO
+Do not create an exception subclass for every conceivable failure if two failures genuinely warrant the same caller behavior — a hierarchy with fifteen leaf types that all just mean "don't retry" is not more useful than three, it's just more surface area to keep in sync. Do not catch a broad \`Exception\` anywhere in this module's own code without immediately re-raising as one of the new custom types with context added — a caught-and-silently-logged exception here means the caller never finds out the operation didn't actually succeed.
+
+OUTPUT FORMAT
+1. The exception hierarchy as Python classes, each with its docstring.
+2. A table mapping each known external failure mode to the custom exception it should become.
+3. One code example showing the module raising the right custom exception with context attached.
+4. One code example showing a caller using the hierarchy to decide retry vs. give up.`,
+    variables: [
+      {
+        name: 'module_description',
+        description: `What the module does and its general shape.`,
+        example: `A module that uploads generated PDF reports to S3 and records the resulting object key in the database.`,
+        required: true,
+      },
+      {
+        name: 'external_dependencies',
+        description: `What external systems, APIs, or libraries this module actually calls.`,
+        example: `boto3 for S3 uploads, a Postgres connection via SQLAlchemy for recording the object key.`,
+        required: true,
+      },
+      {
+        name: 'calling_context',
+        description: `Who calls this module and roughly what they currently do (or don't do) when it fails.`,
+        example: `Called from a Celery task; right now a failure just logs a traceback and the task is marked failed with no retry.`,
+        required: true,
+      },
+      {
+        name: 'known_failure_modes',
+        description: `Specific failures that have actually happened or are realistically expected, with as much detail as you have.`,
+        example: `S3 throttling (SlowDown errors) under burst load; occasional Postgres connection drops; occasionally being asked to upload a report for a job_id that was already deleted.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT`],
+    tags: [`python`, `error-handling`, `exceptions`, `reliability`, `backend`],
+    whyItWorks: `Rooting the hierarchy in the retryable-versus-fatal distinction rather than a taxonomy of what went wrong mechanically matters because that's the actual decision a caller has to make with the exception, and it's a decision the built-in exception hierarchy can't express — \`boto3\` raising a \`ClientError\` for a throttled request and a \`ClientError\` for a permanently missing bucket look identical at the type level, so any caller catching that broad type has no structural way to know which behavior to apply and typically defaults to either always retrying (which spins forever on a permission error) or never retrying (which fails immediately on a transient throttle that would have succeeded on attempt two). Requiring the docstring to state what the caller should do, not just when the exception is raised, converts the hierarchy from documentation into an actual contract — a caller reading \`RetryableUploadError\` versus \`FatalUploadError\` knows the correct response without having to go read this module's internal implementation to figure out whether the underlying cause was transient. Mapping the specific known failure modes (S3 SlowDown, dropped Postgres connections, a deleted job_id) onto the new hierarchy explicitly forces the translation boundary to actually happen at this module's edge rather than being deferred — the alternative, letting \`boto3\`'s or SQLAlchemy's own exception types propagate up, means every caller across the codebase has to independently know which third-party exception types mean what, and that knowledge silently rots the moment the library's exception types change in a minor version bump. Capping the hierarchy's size by grouping failures that warrant identical caller behavior, rather than one subclass per distinct cause, keeps the hierarchy itself something a caller can hold in their head — an exception hierarchy nobody can remember gets handled with a blanket except-Exception anyway, which defeats the entire design.`,
+    exampleOutput: `class ReportUploadError(Exception): pass
+class RetryableUploadError(ReportUploadError): """Transient failure (throttling, dropped connection) - caller should retry with backoff."""
+class FatalUploadError(ReportUploadError): """Non-retryable failure (missing job, permission denied) - caller should not retry, needs investigation."""
+# S3 SlowDown -> RetryableUploadError(job_id=..., cause='s3_throttle'); Postgres OperationalError -> RetryableUploadError; upload for a deleted job_id -> FatalUploadError(job_id=..., cause='job_not_found')`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-13',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
 ]

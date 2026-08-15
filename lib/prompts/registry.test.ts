@@ -7,7 +7,7 @@ import { PROMPTS } from './registry'
  * enforce for their own registries, missing here until now.
  *
  * `PROMPT_BY_SLUG`/`getPrompt(slug)` in ./registry.ts key on slug ALONE, not
- * on (category, slug) — so a slug reused across two of the 46 independently
+ * on (category, slug) — so a slug reused across two of the 53 independently
  * authored `prompts.ts` files wouldn't create a duplicate URL, it would make
  * one of the two routes silently unreachable (`generateStaticParams` would
  * still emit both paths, but both would resolve to whichever prompt

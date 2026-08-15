@@ -183,7 +183,7 @@ function rank(entries: readonly SearchEntry[], terms: readonly string[]): Search
 
 /** Tools keep first claim on this many dropdown rows when both catalogues
  * match. They are the site's core offering and there are only 15 of them, so
- * a matching tool must never be buried under 254 prompts. */
+ * a matching tool must never be buried under 1,170 prompts. */
 const TOOL_PRIORITY_SLOTS = 5
 
 /**

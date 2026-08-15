@@ -2156,4 +2156,99 @@ Tearing scenario this prevents: without useSyncExternalStore, a header indicator
     ],
     serviceTarget: 'custom-software',
   },
+  {
+    slug: 'react-production-ready-component-from-spec',
+    category: 'react',
+    title: `Turn a loose component spec into a typed, accessible React component you'd actually merge`,
+    description: `Converts a rough description of a reusable React component into a full TypeScript implementation with a defensible prop API, explicit state ownership, keyboard/screen-reader support, and a reviewer's checklist of the edge cases it handles — instead of a demo-quality snippet that only covers the happy path.`,
+    promptText: `You are a senior front-end engineer building a reusable React component that other engineers on the team will import into multiple screens without asking you questions first. Treat this as a component going into a shared design-system package, not a one-off page snippet.
+
+COMPONENT PURPOSE
+{{component_purpose}}
+
+PROP API REQUIREMENTS
+{{prop_api_requirements}}
+
+STATE OWNERSHIP
+{{state_management_constraints}}
+
+ACCESSIBILITY REQUIREMENTS
+{{accessibility_requirements}}
+
+EDGE CASES TO HANDLE
+{{edge_cases}}
+
+RULES FOR THE PROP API
+Design the props so the component supports both controlled and uncontrolled usage only if the state ownership section actually calls for it — do not add a dual-mode API out of habit if the component is meant to own its state internally. Every prop must have an explicit TypeScript type, no untyped \`any\`, and every optional prop must have a stated default described in a comment next to its destructuring, not buried in a separate doc. If two props could contradict each other (for example a \`disabled\` prop and an \`onSelect\` handler that fires anyway), state explicitly in the code comments which one wins and why.
+
+RULES FOR STATE AND EFFECTS
+Own only the state this component is actually responsible for — if the spec says the parent owns selection, do not quietly introduce a shadow copy of that state inside a \`useEffect\` sync, since that is the single most common way this class of component produces stale-selection bugs under fast re-renders. Any side effect (fetching, subscribing, debouncing) must have its cleanup written in the same effect, not left implicit.
+
+RULES FOR ACCESSIBILITY
+Implement the accessibility requirements as actual ARIA attributes and keyboard handlers in the code, not as a comment saying it should be accessible. If the accessibility requirements are underspecified for this kind of component, name the specific gap (for example, no stated behavior for what happens on Escape) and make an explicit, stated choice rather than silently omitting the behavior.
+
+WHAT NOT TO DO
+Do not produce a component that only handles the case where the data is present, non-empty, and loads instantly. Do not add props, animations, or configuration options that were not asked for and that no requirement here implies — a shared component's surface area is a maintenance cost, not a free feature.
+
+OUTPUT FORMAT
+1. The full component file (TypeScript, functional component with hooks).
+2. A short table: prop name, type, default, purpose.
+3. A bullet list of the specific edge cases the code above actually handles, each one pointing to the line or block that handles it.
+4. A bullet list of any requirement above that was ambiguous, and the explicit choice you made to resolve it.`,
+    variables: [
+      {
+        name: 'component_purpose',
+        description: `What the component does and where it will be used, in plain terms.`,
+        example: `A searchable multi-select dropdown used in a reporting dashboard to let users filter a table by one or more account owners.`,
+        required: true,
+      },
+      {
+        name: 'prop_api_requirements',
+        description: `The inputs and callbacks the component must expose, as far as you already know them.`,
+        example: `options: {id, label}[]; value: string[]; onChange(ids: string[]); placeholder?: string; isLoading?: boolean for async option lists.`,
+        required: true,
+      },
+      {
+        name: 'state_management_constraints',
+        description: `Who owns which piece of state — the component internally, or the parent via props.`,
+        example: `The parent owns the selected values (controlled component); the component owns its own open/closed dropdown state and the search-input text internally.`,
+        required: true,
+      },
+      {
+        name: 'accessibility_requirements',
+        description: `Specific accessibility behavior the component must support, not just a general accessibility mandate.`,
+        example: `Full keyboard navigation (arrow keys to move, Enter to toggle, Escape to close), and screen readers must announce how many options are currently selected.`,
+        required: true,
+      },
+      {
+        name: 'edge_cases',
+        description: `Situations beyond the happy path that the component is known to need to survive.`,
+        example: `Empty options list, options still loading, more than 200 options (needs virtualization or at least not freezing the tab), and a selected value whose id no longer exists in the options list.`,
+        required: false,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`react`, `typescript`, `component-design`, `accessibility`, `code-generation`, `design-system`],
+    whyItWorks: `GPT-5.1's default failure mode on an open-ended "build me a React component" request is to produce something that compiles and looks plausible in a demo but silently skips the parts that don't show up in a five-second glance — loading states, empty-list states, cleanup functions, and ARIA behavior all get dropped first because none of them are visible in a rendered screenshot the model is implicitly optimizing toward. Splitting the request into named sections (prop API, state ownership, accessibility, edge cases) forces the model to treat each of those as a requirement it must satisfy individually rather than an implicit quality bar it can round down when generating in one pass, because each section becomes something the final checklist output can be checked against line by line. The explicit state-ownership rule targets a specific, well-documented React bug pattern: models asked to build "flexible" components default to adding a \`useEffect\` that mirrors an external prop into local state "just in case," which is exactly the pattern that produces stale-selection bugs during fast re-renders or rapid prop changes — naming this failure mode directly in the prompt measurably reduces its occurrence because the model has to actively contradict an instruction to produce it, rather than just following its default instinct. Requiring the model to output which line of code handles which edge case creates a self-check step inside the same response: a model that wrote no virtualization logic cannot honestly write "handles 200+ options" next to a line reference, so the mismatch becomes visible in the output itself rather than silently shipped. Explicitly forbidding unrequested props and configuration options counters GPT-5.1's tendency to over-scope shared/reusable components with speculative flexibility, which is the more common way these components become unmaintainable later.`,
+    exampleOutput: `\`\`\`tsx
+export function MultiSelectFilter({ options, value, onChange, isLoading, placeholder = 'Filter...' }: MultiSelectFilterProps) {
+  const [isOpen, setIsOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  // component owns open/closed + search text; selection stays controlled via \`value\`/\`onChange\`
+  ...
+}
+\`\`\`
+Prop table: \`options\` (Option[], required, no default) — the full selectable list. \`value\` (string[], required) — controlled selected ids...
+Edge cases handled: empty options list -> renders "No matches" row (line 42); loading -> disables input and shows spinner (line 18); stale selected id -> filtered out of the rendered chips but preserved in \`value\` until parent updates (line 51).
+Ambiguity resolved: requirements didn't state Home/End key behavior, so Home/End were left unbound rather than guessed.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-11',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
 ]

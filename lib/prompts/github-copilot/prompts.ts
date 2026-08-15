@@ -1631,4 +1631,465 @@ export const prompts: readonly Prompt[] = [
       },
     ],
   },
+  {
+    slug: 'github-copilot-pr-review-checklist-chat',
+    category: 'github-copilot',
+    title: `Turn a PR review into a repo-specific checklist Copilot Chat actually runs against the diff`,
+    description: `A Copilot Chat prompt that reviews a pull request against your team's actual blocking criteria — not a generic 'looks good' pass — by naming the specific risk areas, house conventions, and severity rules before it ever reads the diff.`,
+    promptText: `You are reviewing a pull request in this repository using Copilot Chat, with the PR's diff open or referenced via #file so you have the actual changed lines in context, not a description of them.
+
+PR CONTEXT
+{{pr_context}}
+
+RISK AREAS TO WEIGHT MOST HEAVILY
+{{risk_areas}}
+
+HOUSE CONVENTIONS THIS DIFF MUST FOLLOW
+{{house_conventions}}
+
+BLOCKING VS. NITPICK RULE
+{{blocking_vs_nitpick}}
+
+FILES OUT OF SCOPE FOR THIS REVIEW
+{{out_of_scope_files}}
+
+STEP 1 — SCAN FOR BLOCKING ISSUES FIRST
+Go through the diff once looking only for issues that match the blocking criteria above — do not surface a style nitpick in this pass even if you notice one, since mixing severities in one list is how a genuine blocker gets buried under six formatting comments and skimmed past. For each blocking issue, cite the exact file and line range from the diff you were shown, not a paraphrase of what the file probably does — if you are inferring behavior from a function name rather than reading its body, say so explicitly rather than presenting a guess as a finding.
+
+STEP 2 — CHECK THE RISK AREAS SPECIFICALLY
+For each item under RISK AREAS, state explicitly whether this diff touches it at all. If it does not, say so in one line and move on — do not manufacture a paragraph of analysis about a risk area the diff never goes near just to look thorough.
+
+STEP 3 — HOUSE CONVENTIONS PASS
+Check the diff against each house convention listed above as a yes/no, not a vibe. A convention either was followed in the changed lines or it was not; if you can't tell from what's in context, say which additional file you'd need to see rather than assuming compliance.
+
+STEP 4 — NITPICKS, SEPARATED
+List lower-severity suggestions in their own section, clearly separated from Step 1, and skip the files named as out of scope entirely — do not comment on a vendored or generated file just because it happened to appear in the diff.
+
+OUTPUT FORMAT
+1. Verdict: approve / request changes / needs discussion.
+2. Blocking issues (file:line, what's wrong, what would fix it).
+3. Risk-area check (one line per named risk area).
+4. House-convention check (one line per convention, yes/no/can't-tell).
+5. Nitpicks (separate section, optional to act on).`,
+    variables: [
+      {
+        name: 'pr_context',
+        description: `What this PR is supposed to do, in the author's own words, so Copilot judges the diff against its actual intent rather than guessing at scope.`,
+        example: `Adds rate limiting to the /api/checkout endpoint after last week's incident where a retry loop from a client bug hit it 40,000 times in an hour.`,
+        required: true,
+      },
+      {
+        name: 'risk_areas',
+        description: `The specific things this review should weight most heavily, not a generic checklist.`,
+        example: `Whether the rate-limit key is scoped per-user or per-IP (per-IP would break for users behind a shared corporate proxy), and whether the 429 response includes a Retry-After header.`,
+        required: true,
+      },
+      {
+        name: 'house_conventions',
+        description: `Project-specific conventions this diff is expected to follow.`,
+        example: `All new middleware must be registered in middleware/index.ts, not imported ad hoc in the route file; error responses must use the shared ApiError class.`,
+        required: true,
+      },
+      {
+        name: 'blocking_vs_nitpick',
+        description: `The rule that decides whether an issue blocks merge or is just a suggestion, so severity isn't left to Copilot's judgment alone.`,
+        example: `Anything that could let a request bypass the rate limiter entirely is blocking; naming, comment style, and import order are nitpicks only.`,
+        required: true,
+      },
+      {
+        name: 'out_of_scope_files',
+        description: `Files in the diff that should be skipped entirely, since they aren't hand-authored or aren't part of this change's real scope.`,
+        example: `package-lock.json and any file under generated/ that changed only because of a dependency bump.`,
+        required: false,
+      },
+    ],
+    targetTools: [`GitHub Copilot Chat`],
+    tags: [`code-review`, `pull-requests`, `pr-checklist`, `copilot-chat`, `quality-gates`],
+    whyItWorks: `Copilot Chat's code review reads only the diff and whatever files you've pulled into context with #file or #codebase — it has no memory of your team's actual bar for what blocks a merge versus what's a preference, so an unscoped 'review this PR' prompt defaults to a generic pass that treats a missing Retry-After header and a debatable variable name as the same category of finding. Splitting the pass into a blocking-issues-first step and a separately labeled nitpicks section exploits how the model allocates attention across a response: when severities are interleaved, a genuine blocker sitting between five style comments gets the same visual weight as the nitpicks around it and is the item most likely to get skimmed past by a human reviewer scanning quickly, whereas forcing the blocking scan to happen first and alone means the finding that matters gets read before reviewer attention degrades. Requiring a yes/no/can't-tell answer against each house convention — rather than a free-form paragraph — closes a specific failure mode where Copilot Chat, working only from a diff without the full file, will infer that a convention was probably followed based on surrounding code style even when the actual enforcement point isn't visible in the changed lines; forcing an explicit can't-tell answer surfaces exactly where the review needs a wider context window instead of silently guessing. Naming out-of-scope files matters because a diff that includes a lockfile or generated output will otherwise get commented on as if it were hand-written source, producing a review comment on a file no human is meant to read or edit, which erodes trust in the rest of the review's judgment even where it was accurate.`,
+    exampleOutput: `Verdict: request changes. Blocking: middleware/rateLimiter.ts:14 — the limiter key uses req.ip, which the risk-area note flags as breaking for users behind a shared proxy; switch to a per-user key derived from the session token. House conventions: middleware registration — yes, correctly added to middleware/index.ts; ApiError usage — no, the 429 branch returns a raw object literal instead of ApiError. Nitpicks: rateLimiter.ts:31 — variable name \`cnt\` could be \`requestCount\` for clarity.`,
+    verifiedAgainst: [
+      { tool: 'GitHub Copilot Chat', version: '2026.08', date: '2026-08-09' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-09',
+        note: `Initial publish, verified against GitHub Copilot Chat 2026.08.`,
+      },
+    ],
+  },
+  {
+    slug: 'github-copilot-explain-legacy-function-onboarding',
+    category: 'github-copilot',
+    title: `Get Copilot Chat to explain a gnarly legacy function the way a teammate would, not a syntax tour`,
+    description: `A targeted /explain-style prompt for one confusing piece of legacy code, aimed at the actual reason it's confusing and the business logic behind it, instead of a line-by-line narration of syntax the reader already knows.`,
+    promptText: `Explain the following code the way a senior teammate would talk me through it at my desk, not the way a syntax reference would describe it line by line. I have it selected in the editor / referenced via #file, so read the actual implementation, not just the function signature.
+
+CODE TO EXPLAIN
+{{function_or_file}}
+
+WHY THIS IS CONFUSING
+{{why_confusing}}
+
+WHO'S ASKING
+{{audience_level}}
+
+BUSINESS CONTEXT IF RELEVANT
+{{business_context}}
+
+Skip explaining what a for-loop or an if-statement does — assume I can read the language itself. Spend the explanation on the part I actually flagged as confusing: why the code takes the shape it does, not what each line executes in isolation. If a chunk of logic only makes sense as a workaround for something else — a bug in a library, a constraint from an older version of an API, a business rule that isn't visible anywhere in the code itself — say that explicitly rather than describing the workaround as if it were the most natural way to write this. If you can't tell why a particular section exists from the code alone, say so directly instead of inventing a plausible-sounding rationale; a wrong explanation stated confidently is worse than an honest 'I can't tell why this branch exists from what's shown, it might be defensive code for a case that no longer happens.'
+
+Give me: what this code is for in one sentence, then walk through the confusing part specifically, then flag anything that looks like it could be a latent bug or dead code rather than intentional logic — but label that section clearly as a side observation, not the main explanation, so it doesn't get mistaken for what I actually asked about.`,
+    variables: [
+      {
+        name: 'function_or_file',
+        description: `The specific function, class, or file to explain — reference it by name so Copilot pulls the real implementation from context rather than working from the pasted snippet alone.`,
+        example: `calculateProratedRefund() in billing/refunds.ts`,
+        required: true,
+      },
+      {
+        name: 'why_confusing',
+        description: `The specific thing about this code that doesn't make sense, so the explanation targets it instead of narrating the whole function evenly.`,
+        example: `It multiplies the refund amount by 0.9722 partway through and I can't find any comment explaining where that number comes from.`,
+        required: true,
+      },
+      {
+        name: 'audience_level',
+        description: `Who needs this explanation, so the depth and vocabulary match — a new hire needs different framing than someone debugging a specific incident.`,
+        example: `A backend engineer three weeks into the team, comfortable with TypeScript but new to this billing subsystem.`,
+        required: true,
+      },
+      {
+        name: 'business_context',
+        description: `Any business rule or history that might explain otherwise-arbitrary logic, if you already know part of it.`,
+        example: `We changed our refund policy from 30-day to 28-day windows about a year ago, so some of this might be leftover from that.`,
+        required: false,
+      },
+    ],
+    targetTools: [`GitHub Copilot Chat`],
+    tags: [`code-explanation`, `onboarding`, `legacy-code`, `copilot-chat`, `knowledge-transfer`],
+    whyItWorks: `Copilot Chat's default /explain behavior tends toward a structural walkthrough — describing control flow and syntax in the order it appears — because without a stated target it has no signal for which part of the code the reader already understands versus which part is the actual source of confusion, so it hedges by covering everything at roughly even depth. Naming the confusing part specifically redirects that effort: the model can spend its explanation budget on the one branch or magic number that prompted the question instead of splitting attention evenly across code the reader can already read fine, which is the single biggest difference between an explanation that feels like a wasted read and one that actually resolves the question. The instruction to say 'I can't tell why this exists' rather than inventing a rationale matters specifically for legacy code, where Copilot Chat has a documented tendency to generate a plausible-sounding justification for arbitrary-looking logic — a magic constant or an odd conditional — because plausible narrative completion is what a language model does by default when no comment or commit history explains the real reason; without an explicit permission to say 'unclear,' the model will produce a confident-sounding but fabricated explanation rather than flag the actual gap in available information. Separating the flagged side-observations (possible dead code, latent bugs) from the main explanation prevents a specific confusion where a reader asked 'what does this do' gets an answer that quietly pivots into 'here's a bug I found instead,' burying the original question under an unrelated finding the reader didn't ask for in that message.`,
+    exampleOutput: `This function prorates a refund based on how many days into the billing period the cancellation happened. The 0.9722 multiplier at line 42 isn't explained anywhere in this file or its git blame context available to me — it doesn't match a clean fraction of 28 or 30 days, so I can't confidently tell you where it comes from; it may be a rounding artifact from the old 30-day policy that was never recalculated after the switch to 28-day windows you mentioned. Separately, flagging as a side note: the early return on line 12 looks like it could skip the proration entirely for annual plans, which may or may not be intentional.`,
+    verifiedAgainst: [
+      { tool: 'GitHub Copilot Chat', version: '2026.08', date: '2026-08-08' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-08',
+        note: `Initial publish, verified against GitHub Copilot Chat 2026.08.`,
+      },
+    ],
+  },
+  {
+    slug: 'github-copilot-generate-unit-tests-edge-cases',
+    category: 'github-copilot',
+    title: `Push Copilot's /tests beyond the happy path with edge cases it won't reach for on its own`,
+    description: `A prompt that layers named edge cases and mocking boundaries on top of Copilot Chat's /tests generation, so the resulting suite exercises the failure paths you actually care about instead of one clean happy-path test per function.`,
+    promptText: `Generate unit tests for the function below using {{test_framework}}, matching the conventions of the existing test file so this reads like it was written by the same person, not a separate generated block bolted on afterward.
+
+FUNCTION UNDER TEST
+{{target_function}}
+
+EXISTING TEST FILE FOR STYLE REFERENCE
+{{existing_test_file}}
+
+EDGE CASES THAT MUST BE COVERED
+{{known_edge_cases}}
+
+WHAT TO MOCK VS. WHAT TO LEAVE REAL
+{{mocking_boundary}}
+
+WHAT NOT TO DO
+Do not stop at one happy-path test and call the suite done — a single passing-input test is the case Copilot generates by default with no further instruction, and it is also the least useful one, since it's the case most likely to have already been checked manually before the code shipped. Do not mock something the mocking boundary above says should stay real, even if mocking it would make the test simpler to write — a test that mocks around the exact thing it should be verifying gives false confidence, not real coverage. Do not invent an edge case that isn't listed above and isn't a case any reasonable reading of the function would surface (like null input or an empty array) — pad the suite with cases that matter, not with cases that exist only to inflate the count. Do not rename or restructure existing tests in the reference file; only add new ones in the same style.
+
+For each edge case listed above, write one test that isolates it — don't fold two edge cases into a single test where a failure would be ambiguous about which condition actually broke. If a listed edge case turns out to be already covered by an existing test in the reference file, say so explicitly instead of duplicating it.
+
+OUTPUT FORMAT
+1. New test cases, in the same file and style as the existing reference file.
+2. A one-line note for any listed edge case that was already covered and therefore skipped.
+3. A short list of any edge case you'd recommend adding beyond what was listed, with a one-sentence reason each — as suggestions only, not added to the file unless I ask.`,
+    variables: [
+      {
+        name: 'target_function',
+        description: `The function or method to write tests for, referenced so Copilot reads the real implementation.`,
+        example: `applyDiscountCode(cart, code) in checkout/discounts.ts`,
+        required: true,
+      },
+      {
+        name: 'test_framework',
+        description: `The test framework and runner conventions in use, so generated tests match without manual rewriting.`,
+        example: `Vitest, with describe/it blocks and the existing project's custom \`renderCart()\` test helper`,
+        required: true,
+      },
+      {
+        name: 'known_edge_cases',
+        description: `The specific edge cases you already know matter, so the model targets them instead of guessing.`,
+        example: `Discount code applied twice in one session, code that's valid but the cart total is below the minimum spend, and a code that expired exactly at the current timestamp (boundary, not just past-expiry).`,
+        required: true,
+      },
+      {
+        name: 'mocking_boundary',
+        description: `What should be mocked versus left as real logic, so the test actually exercises what it claims to.`,
+        example: `Mock the external pricing API call, but let the actual discount-calculation math run for real — don't mock the function under test's own internal logic.`,
+        required: true,
+      },
+      {
+        name: 'existing_test_file',
+        description: `The current test file for this module or a sibling one, used purely as a style reference.`,
+        example: `checkout/discounts.test.ts`,
+        required: false,
+      },
+    ],
+    targetTools: [`GitHub Copilot Chat`],
+    tags: [`unit-testing`, `test-generation`, `edge-cases`, `copilot-chat`, `code-quality`],
+    whyItWorks: `Copilot's /tests command, run with no further instruction, is trained to produce output that looks complete at a glance — typically one test per function covering the input the function was clearly designed for — because that's the shape of test that appears most often in the training distribution of committed code, not because it's judged the function's actual risk surface. Naming edge cases explicitly overrides that default by giving the model a concrete, finite list to check off rather than an open-ended 'be thorough' instruction it has no way to bound; an unbounded thoroughness request tends to produce either too few cases (stopping once it feels sufficient) or padding with trivial variations that don't map to a real failure mode. The mocking boundary is the single highest-leverage line in this prompt because Copilot Chat, left to its own judgment, will often mock whatever makes a test easiest to write rather than whatever preserves the test's actual purpose — it has no inherent sense of which dependency is incidental infrastructure (an external API) versus the exact logic the test exists to verify, so an unstated boundary produces tests that pass reliably while verifying almost nothing. Requiring one isolated test per edge case rather than combined multi-condition tests matters for diagnosability: a test asserting two conditions at once tells you it failed, not which condition broke, which defeats the point of writing edge-case tests in the first place — the value of an edge-case suite is in the specificity of its failure signal, not just its pass/fail count. Matching the existing file's style also avoids a subtler cost: a generated block that looks structurally different from hand-written tests around it gets treated by future readers as less trustworthy scaffolding, even when its assertions are correct.`,
+    exampleOutput: `it('rejects a discount code applied twice in the same session', () => { ... expect(applyDiscountCode(cartWithCodeAlreadyApplied, 'SAVE10')).toThrow('Code already applied') }); it('rejects a valid code when cart total is below minimum spend', () => { ... }); it('treats a code expiring at the exact current timestamp as expired, not valid', () => { ... }). Note: the 'invalid code format' edge case is already covered by the existing \`rejects malformed codes\` test in discounts.test.ts, so it was skipped here.`,
+    verifiedAgainst: [
+      { tool: 'GitHub Copilot Chat', version: '2026.08', date: '2026-08-11' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-11',
+        note: `Initial publish, verified against GitHub Copilot Chat 2026.08.`,
+      },
+    ],
+  },
+  {
+    slug: 'github-copilot-integration-test-plan-api-flow',
+    category: 'github-copilot',
+    title: `Write an integration test plan for a multi-service flow, not just another mocked unit test`,
+    description: `Gets Copilot Chat to design an integration test that exercises a real multi-step flow across actual dependencies — a database, a queue, a second internal service — instead of quietly producing another unit test with everything mocked out.`,
+    promptText: `You are designing an integration test for a flow that spans more than one component in this system, where the point of the test is to catch failures that only show up when the real pieces talk to each other — not a unit test with every dependency mocked, which would miss exactly the class of bug this test needs to catch.
+
+FLOW TO TEST
+{{flow_description}}
+
+DEPENDENCIES THAT MUST BE REAL, NOT MOCKED
+{{real_dependencies}}
+
+SPECIFIC FAILURE POINTS THIS SHOULD CATCH
+{{failure_points}}
+
+TEST ENVIRONMENT AVAILABLE
+{{test_environment}}
+
+PHASE 1 — CONFIRM WHAT 'INTEGRATION' MEANS FOR THIS FLOW
+Before writing any test code, state back which components will be exercised for real versus which (if any) still need to be mocked because they're genuinely external to this system (a third-party payment processor sandbox, for example, might reasonably still be a mock or a recorded fixture) — and justify each mock against the failure points listed, so a mock is never added just because it's more convenient to write around.
+
+PHASE 2 — SETUP AND TEARDOWN
+Describe how the test environment gets into a known state before the test runs and back to clean afterward — using the test environment described above — since an integration test that leaves state behind will produce flaky, order-dependent failures in every test that runs after it, which is a worse outcome than not having the test at all.
+
+PHASE 3 — THE TEST ITSELF
+Write the test so it exercises the flow end to end through the real dependencies, asserting on outcomes that could only be wrong if the real integration between components broke — not on internal implementation details that a unit test would already cover. For each of the specific failure points listed, make sure there's an assertion that would actually fail if that specific failure happened; a passing integration test that wouldn't have caught the incident it was written in response to isn't accomplishing anything.
+
+PHASE 4 — WHAT THIS TEST DELIBERATELY DOES NOT COVER
+State explicitly what's still out of scope for this test (edge cases already handled by unit tests, load/concurrency behavior, etc.) so nobody mistakes this one test for full coverage of the flow.
+
+OUTPUT FORMAT
+1. Mock justification (Phase 1).
+2. Setup/teardown code.
+3. The integration test itself.
+4. Explicit out-of-scope note (Phase 4).`,
+    variables: [
+      {
+        name: 'flow_description',
+        description: `The actual multi-step flow this test needs to exercise, described concretely.`,
+        example: `A user submits an order, which writes to the orders table, publishes an OrderCreated event to the queue, and the inventory service consumes that event to decrement stock.`,
+        required: true,
+      },
+      {
+        name: 'real_dependencies',
+        description: `Which components must be real (a real database, a real queue) rather than mocked, since that's the whole point of an integration test.`,
+        example: `Postgres (via a test database), the real RabbitMQ instance running in the test environment, and the actual inventory service — not a stub of it.`,
+        required: true,
+      },
+      {
+        name: 'failure_points',
+        description: `The specific ways this flow has broken or could break, which the test must be able to actually catch.`,
+        example: `The queue event was published before the database transaction committed, so the inventory service sometimes processed an order that didn't fully exist yet.`,
+        required: true,
+      },
+      {
+        name: 'test_environment',
+        description: `What test infrastructure is actually available for setup/teardown — testcontainers, a shared staging environment, docker-compose, etc.`,
+        example: `Testcontainers spins up Postgres and RabbitMQ per test run; the inventory service runs locally via docker-compose.test.yml.`,
+        required: true,
+      },
+    ],
+    targetTools: [`GitHub Copilot Chat`],
+    tags: [`integration-testing`, `test-strategy`, `multi-service`, `copilot-chat`, `reliability`],
+    whyItWorks: `Asked for an 'integration test' with no further constraint, Copilot Chat frequently produces something that is structurally a unit test with a slightly larger surface area — every collaborator mocked, assertions checking that the right mock methods were called rather than that real systems actually agree with each other — because that pattern dominates what 'test' generally means in most training data, and the model has no way to know which of your dependencies are the actual point of the test versus incidental plumbing unless told. Requiring an explicit mock-justification phase before any test code gets written forces that judgment call into the open where you can correct it, rather than discovering three weeks later that the 'integration test' for a queue-consumer flow mocked the queue itself and would never have caught the exact ordering bug it was written to catch. Tying each failure point to a specific required assertion addresses the most common way integration tests silently stop being useful: a test can pass indefinitely while asserting on details that have nothing to do with the actual incident it was supposed to guard against, and without being forced to trace each named failure point to a concrete assertion, Copilot Chat will tend to write generically 'reasonable-looking' assertions that happen not to cover the case that matters. The explicit out-of-scope phase matters organizationally more than technically: a team that reads 'we have an integration test for this flow' tends to over-trust its coverage unless the test itself states plainly what it does not check, and that overconfidence is exactly how gaps get left unaddressed for months after a single integration test was added and assumed to be sufficient.`,
+    exampleOutput: `Mock justification: Postgres, RabbitMQ, and the inventory service all run for real via testcontainers/docker-compose — nothing here is mocked, since the failure point (event published before commit) only manifests when the real transaction-commit timing interacts with the real queue delivery. Test: creates an order via the real order-creation path, asserts the DB row exists AND was committed before asserting the queue message was consumed, specifically checking commit-then-publish ordering rather than just checking both eventually happened. Out of scope: this test does not cover concurrent order creation under load, or the inventory service's own unit-level decrement logic, which is already covered elsewhere.`,
+    verifiedAgainst: [
+      { tool: 'GitHub Copilot Chat', version: '2026.08', date: '2026-08-12' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-12',
+        note: `Initial publish, verified against GitHub Copilot Chat 2026.08.`,
+      },
+    ],
+  },
+  {
+    slug: 'github-copilot-generate-api-reference-from-route-handlers',
+    category: 'github-copilot',
+    title: `Generate an API reference straight from the route handlers, not from what you remember they do`,
+    description: `A Copilot Chat prompt that builds an API reference table by reading the actual route handler code via #codebase, catching drift between what an endpoint was designed to do and what it currently, actually does.`,
+    promptText: `Generate an API reference for the endpoints below by reading their actual current implementation — reference the route files with #file or #codebase so you're documenting the real request handling and response shape, not a remembered or assumed version of it.
+
+ROUTE FILES TO DOCUMENT
+{{route_files}}
+
+AUTH MODEL FOR THESE ROUTES
+{{auth_model}}
+
+RESPONSE-SHAPE NOTES
+{{response_shape_notes}}
+
+WHERE THE OUTPUT SHOULD LIVE
+{{doc_output_path}}
+
+For each endpoint, read the handler function itself, not just its name or route path — a route named /users/:id/orders could still, in its current implementation, only return the last 30 days of orders, or silently exclude cancelled ones, and that kind of behavior is only visible in the function body, never in the route signature. If the code validates the request body with a schema (Zod, Joi, a class-validator DTO, whatever this codebase uses), pull the actual field names, types, and required/optional status from that schema rather than restating them from memory or from any existing doc comment above the function, since a stale doc comment describing an older version of the schema is a common and specific way documentation drifts out of sync with the code it's supposed to describe.
+
+For each endpoint, note explicitly if the current implementation's behavior looks like it might not match what the route name or an existing comment implies it does — flag that as a discrepancy to confirm with me rather than silently documenting either the name's implication or the code's actual behavior as if there were no conflict.
+
+OUTPUT FORMAT (as a markdown table per endpoint, matching the target file at {{doc_output_path}})
+| Field | Value |
+|---|---|
+| Method + path | |
+| Auth required | |
+| Request body / params | |
+| Success response shape | |
+| Error responses | |
+| Notes / discrepancies found | |
+
+After the tables, list separately any endpoint where the implementation didn't match its name or existing docs closely enough that you'd want a human to confirm the intended behavior before this reference is treated as authoritative.`,
+    variables: [
+      {
+        name: 'route_files',
+        description: `The specific route handler files to document, so Copilot reads real implementations rather than working from route names alone.`,
+        example: `api/routes/orders.ts and api/routes/orders.[id].ts`,
+        required: true,
+      },
+      {
+        name: 'auth_model',
+        description: `How auth actually works for these routes, so the reference states it correctly rather than guessing from middleware names.`,
+        example: `Bearer JWT required on all routes except GET /orders/public-status, which is intentionally unauthenticated.`,
+        required: true,
+      },
+      {
+        name: 'response_shape_notes',
+        description: `Anything about response shapes that isn't obvious from the code alone, like a shared envelope format.`,
+        example: `All success responses are wrapped in { data: ..., meta: { requestId } }; errors use { error: { code, message } }.`,
+        required: false,
+      },
+      {
+        name: 'doc_output_path',
+        description: `Where this reference should live, so formatting matches the existing docs convention.`,
+        example: `docs/api/orders.md`,
+        required: true,
+      },
+    ],
+    targetTools: [`GitHub Copilot Chat`],
+    tags: [`api-documentation`, `codebase-context`, `copilot-chat`, `technical-writing`, `drift-detection`],
+    whyItWorks: `Copilot Chat's #codebase and #file context references let it read the actual handler implementation rather than pattern-matching on the route's name and an existing doc comment, which matters specifically because API documentation drift almost never comes from someone documenting nothing — it comes from someone documenting the endpoint as it was designed, and the code quietly changing underneath that description over a series of unrelated PRs. Instructing the model to pull field names and required/optional status from the actual validation schema rather than restating a doc comment closes the single most common drift vector directly: a schema is executable and gets exercised by real requests, so it reflects current behavior by construction, while a doc comment is prose that nobody is forced to update when the schema changes, and Copilot Chat has no inherent preference for the more authoritative source unless told which one to trust when they disagree. The explicit instruction to flag a mismatch between a route's name/existing docs and its actual current behavior — rather than silently picking one version to document — matters because a language model asked to 'document this endpoint' will, by default, try to produce a single coherent-sounding description and will tend to smooth over a contradiction rather than surface it, since a clean unified answer looks more complete than one that flags its own uncertainty; without being told explicitly that a discrepancy is a valuable finding rather than an untidy one, it gets silently resolved in whichever direction sounds more natural, which is exactly the kind of silent resolution that produces documentation nobody can trust. The table format per endpoint also keeps this reference machine-comparable against a previous version stored in the same repo, so future re-runs of this same prompt can be diffed against doc_output_path's prior content to catch exactly what changed.`,
+    exampleOutput: `| Field | Value |
+|---|---|
+| Method + path | GET /users/:id/orders |
+| Auth required | Yes — Bearer JWT, must match :id or have admin role |
+| Request body / params | Query param \`includeCancelled\` (boolean, optional, default false) |
+| Success response shape | { data: Order[], meta: { requestId } } |
+| Error responses | 401 unauthenticated, 403 id mismatch without admin role, 404 user not found |
+| Notes / discrepancies found | The route name implies all orders, but the handler silently filters to the last 30 days unless a \`since\` param is passed — this isn't mentioned anywhere in the existing docs comment; flagging for confirmation. |`,
+    verifiedAgainst: [
+      { tool: 'GitHub Copilot Chat', version: '2026.08', date: '2026-08-13' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-13',
+        note: `Initial publish, verified against GitHub Copilot Chat 2026.08.`,
+      },
+    ],
+  },
+  {
+    slug: 'github-copilot-onboarding-readme-new-contributor',
+    category: 'github-copilot',
+    title: `Write a README a new contributor could follow without pinging you on day one`,
+    description: `Builds a developer-facing README from the repo's actual structure and setup steps, tested against the specific gotchas that trip up a first-time contributor, instead of a generic 'clone and npm install' template.`,
+    promptText: `Write a developer README for this repository, using #codebase so you're describing the actual project structure and scripts as they exist right now, aimed specifically at someone who has never touched this codebase before and has no one sitting next to them to ask.
+
+WHAT THIS PROJECT IS
+{{repo_purpose}}
+
+SETUP STEPS AS THEY CURRENTLY WORK
+{{setup_steps_known}}
+
+GOTCHAS THAT HAVE TRIPPED PEOPLE UP BEFORE
+{{common_gotchas}}
+
+A GOOD FIRST TASK TO POINT SOMEONE AT
+{{first_task_recommendation}}
+
+Write the setup section as steps that were actually verified to work, in order, including any step that feels obvious to someone who already has the repo working — the failure mode this README exists to prevent is a step that got skipped in the writing because it felt too basic to mention, and that's precisely the step a first-timer trips on. For each gotcha listed, don't just state the gotcha — state what it looks like when it goes wrong (the actual error message or symptom) so a new contributor can pattern-match their own screen against this document instead of wondering if they're even hitting the documented issue. Read the actual package.json / equivalent scripts file via #codebase and list the real script names and what each one actually does, not a guessed-at convention like 'probably npm run dev' — if a script's actual behavior doesn't match what its name suggests, note that explicitly.
+
+Do not pad this with sections that don't apply to a first-time contributor's first day — skip a detailed architecture deep-dive or a full contribution-guidelines legal section unless it's directly relevant to getting a working local environment and understanding where to start; those belong in a separate document this README can link to, not inline in the first thing a new contributor reads.
+
+OUTPUT FORMAT
+1. One-paragraph project description.
+2. Setup steps, numbered, verified against actual scripts.
+3. Common gotchas, each with symptom + fix.
+4. Suggested first task with a one-line reason it's a good starting point.
+5. Links to anything this README deliberately left out (deeper architecture docs, contribution guidelines) rather than covering them here.`,
+    variables: [
+      {
+        name: 'repo_purpose',
+        description: `What this project actually does, in plain terms, for someone with zero prior context.`,
+        example: `An internal Next.js app that lets support reps look up a customer's subscription history and issue refunds without going through the billing team directly.`,
+        required: true,
+      },
+      {
+        name: 'setup_steps_known',
+        description: `The setup steps as you currently do them yourself, even the ones that feel too obvious to mention.`,
+        example: `Clone the repo, copy .env.example to .env and fill in the DATABASE_URL from the team vault, run \`pnpm install\`, then \`pnpm db:migrate\` before \`pnpm dev\` — migrate has to run first or the dev server crashes on boot.`,
+        required: true,
+      },
+      {
+        name: 'common_gotchas',
+        description: `Specific things that have actually confused people setting this up before, with enough detail to be checkable.`,
+        example: `If you skip pnpm db:migrate, the dev server throws 'relation \\"subscriptions\\" does not exist' on the first request, which looks like a connection problem but isn't.`,
+        required: true,
+      },
+      {
+        name: 'first_task_recommendation',
+        description: `A real, existing task or area of the codebase that's a good place for a newcomer to start.`,
+        example: `The \`formatRefundAmount()\` util in lib/currency.ts has a known rounding edge case on JPY amounts (no decimal places) tracked in issue #142 — small, contained, and touches a real part of the codebase.`,
+        required: false,
+      },
+    ],
+    targetTools: [`GitHub Copilot Chat`],
+    tags: [`developer-readme`, `onboarding`, `documentation`, `copilot-chat`, `codebase-context`],
+    whyItWorks: `A README written without deliberately fighting this tendency reads fine to the person who wrote it and fails silently for the person who didn't, because the author's own working setup already has every implicit step done, so an omitted step is invisible from where they're writing — Copilot Chat inherits this same blind spot unless explicitly told that the obvious-feeling steps are exactly the ones most likely to be missing, since its draft will otherwise mirror the confident, compressed tone of documentation written by someone who already has the context a first-timer lacks. Pairing every gotcha with its actual symptom rather than just its cause is what makes the difference between a README a stuck contributor can use and one they read after already giving up: a new contributor doesn't start from 'I forgot to run the migration,' they start from a cryptic Postgres error on screen, and a gotchas section organized around causes forces them to already know the cause before the entry becomes useful, which defeats its purpose. Using #codebase to read the actual scripts file rather than letting the model guess at conventional script names (\`npm run dev\`, \`npm start\`) matters because Copilot Chat's training data skews toward common conventions that this specific repo may not follow, and a README that states a script name that doesn't exist is worse than no README, since it actively costs a new contributor time chasing a command that fails immediately. The instruction to keep the scope narrow — setup and a first task, not a full architecture treatise — reflects that a first-day document competing with a comprehensive one for the same real estate tends to bury the five things that actually matter on day one under material that matters on week three, and a new contributor's actual first blocker is almost always 'why won't this run locally,' not 'what's our long-term data model philosophy.'`,
+    exampleOutput: `## Setup
+1. Clone the repo.
+2. Copy \`.env.example\` to \`.env\` and fill in \`DATABASE_URL\` from the team vault.
+3. Run \`pnpm install\`.
+4. Run \`pnpm db:migrate\` — **do this before starting the dev server**, or step 5 will fail.
+5. Run \`pnpm dev\`.
+
+## Common gotchas
+**Symptom:** dev server throws \`relation "subscriptions" does not exist\` on your first request.
+**Cause:** step 4 was skipped.
+**Fix:** stop the dev server, run \`pnpm db:migrate\`, restart.
+
+## First task
+Check out issue #142 — a rounding edge case on JPY refund amounts in \`lib/currency.ts\`. Small, self-contained, touches a real path through the app.`,
+    verifiedAgainst: [
+      { tool: 'GitHub Copilot Chat', version: '2026.08', date: '2026-08-14' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-14',
+        note: `Initial publish, verified against GitHub Copilot Chat 2026.08.`,
+      },
+    ],
+  },
 ]

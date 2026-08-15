@@ -1567,4 +1567,540 @@ The instruction to treat a named style_reference as technique-and-sensibility ra
       },
     ],
   },
+  {
+    slug: 'flux-website-hero-product-screenshot-composite',
+    category: 'flux',
+    title: `Build a SaaS website hero image on Flux.1 Kontext around a real product screenshot`,
+    description: `A Kontext editing brief that takes an actual app screenshot you already have and composites it into a polished marketing-hero scene, instead of asking the model to hallucinate a fake UI from a text description.`,
+    promptText: `SOURCE SCREENSHOT
+{{product_screenshot}}. This is the fixed input — every pixel of the interface inside it (labels, charts, buttons, copy) must stay exactly as shown. Do not redraw, relabel, or "improve" any on-screen text or UI element.
+
+DEVICE FRAME
+Place the screenshot inside {{device_mockup}}, at a angle and perspective that reads as intentional art direction rather than a flat straight-on crop — a slight tilt or three-quarter angle the way a real product page would present it.
+
+SCENE AROUND THE DEVICE
+{{scene_and_background}}. Build the environment around the device, not through it — nothing from the background should overlap or dim the screen's legibility.
+
+BRAND COLOR
+{{brand_accent_color}} should appear as the dominant accent in the scene's lighting, gradient, or one supporting object — enough to feel on-brand without repainting the screenshot itself in that color.
+
+COMPOSITION FOR HEADLINE SPACE
+{{headline_space_location}} must stay genuinely uncluttered: since Kontext has no negative-prompt field, describe that region positively as a soft gradient or out-of-focus background rather than simply asking for empty space. Nothing text-shaped, sign-shaped, or high-contrast should sit there, since a region that reads as "label-shaped" tends to grow illegible pseudo-text on its own.
+
+LIGHT AND DEPTH
+{{lighting_style}}, with the device sitting slightly forward of the background on its own soft contact shadow so it reads as a physical object in a photographed scene, not a flat screenshot pasted onto a stock photo.
+
+WHAT MUST NOT HAPPEN TO THE SCREEN
+The screenshot's interface must remain sharp, legible, and unaltered at full resolution — no chromatic blur across the UI text, no warping of straight edges or grid lines in the interface, and no reflection or glare so strong it obscures any label or number shown.
+
+CHECK BEFORE FINALIZING
+Zoom into the screen region specifically and confirm every word of UI copy still matches {{product_screenshot}} exactly — this is the single most common failure in device-mockup composites, since the model will sometimes quietly re-render small text as a similar-looking but different string.
+
+OUTPUT
+One hero-ready image at {{aspect_ratio}}, the device and its unaltered screen contents convincingly lit and placed in the described scene, with {{headline_space_location}} clean enough to drop a headline directly on top in a design tool.`,
+    variables: [
+      {
+        name: 'product_screenshot',
+        description: `The actual app or dashboard screenshot being composited, described precisely.`,
+        example: `analytics_dashboard_v2.png — a project-management dashboard showing a burndown chart and three colored task columns`,
+        required: true,
+      },
+      {
+        name: 'device_mockup',
+        description: `The device frame the screenshot sits inside.`,
+        example: `a matte silver MacBook Pro screen, three-quarter angle from camera-left`,
+        required: true,
+      },
+      {
+        name: 'scene_and_background',
+        description: `The environment the device is placed into.`,
+        example: `a minimal light-oak desk beside a single potted plant, softly blurred office window light behind it`,
+        required: true,
+      },
+      {
+        name: 'brand_accent_color',
+        description: `The single brand color that should read through the scene.`,
+        example: `a deep indigo appearing in the desk lamp's glow and the plant pot's glaze`,
+        required: false,
+      },
+      {
+        name: 'headline_space_location',
+        description: `Exactly where the clean region for a headline overlay should sit.`,
+        example: `the upper-left third of the frame, above and beside the laptop`,
+        required: true,
+      },
+      {
+        name: 'lighting_style',
+        description: `The overall lighting mood for the hero scene.`,
+        example: `soft north-facing window light, cool and even, no harsh shadows`,
+        required: true,
+      },
+      {
+        name: 'aspect_ratio',
+        description: `The final canvas shape for the hero placement.`,
+        example: `21:9 wide desktop hero banner`,
+        required: false,
+      },
+    ],
+    targetTools: [`Flux.1 Kontext [pro]`],
+    tags: [`flux`, `flux-kontext`, `website-hero`, `product-screenshot`, `device-mockup`, `no-negative-prompt`],
+    whyItWorks: `Kontext's real advantage over a pure text-to-image Flux generation is that it edits from an actual input image rather than inventing one, and a UI screenshot is exactly the kind of content that a text prompt alone reliably gets wrong — asking any diffusion model to "generate a dashboard with a burndown chart" produces plausible-looking but factually garbled charts and mislabeled buttons, because interface text rendered from a description is never guaranteed to match anything real. Anchoring to the actual screenshot and treating it as fixed content to composite around, rather than regenerate, is the only way to guarantee the on-screen copy a visitor reads is the real product, not an approximation of one. The device-angle instruction matters because a flat, straight-on screenshot crop reads as a support-documentation screenshot, not marketing art direction — a slight three-quarter tilt with a real contact shadow is what separates a hero image from a spec sheet. The headline-space section exists for the same reason it recurs across Flux briefs generally: there is no negative-prompt field to say "keep this area empty," so the only lever is describing what that region does contain (a soft gradient, an out-of-focus background) rather than what it lacks, and avoiding any framing that reads as sign-shaped, since text-shaped empty regions are a well-documented trigger for garbled pseudo-text in diffusion and flow-matching models alike. Finally, the explicit "zoom into the screen and check the copy" step exists because compositing a real screenshot doesn't fully guarantee pixel-perfect preservation on every generation — Kontext is strong at this relative to base text-to-image, but a reviewer who assumes it's automatic rather than verifying it will occasionally ship a hero image with subtly wrong on-screen numbers.`,
+    exampleOutput: `A tilted MacBook Pro showing the exact analytics dashboard screenshot, resting on a light-oak desk beside a blurred plant, indigo lamp glow as the brand accent, with the upper-left third of the 21:9 frame left as a soft out-of-focus gradient ready for a headline.`,
+    verifiedAgainst: [
+      { tool: 'Flux', version: 'Flux.1 Kontext [pro]', date: '2026-08-08' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-08',
+        note: `Initial publish, verified against Flux.1 Kontext [pro] for screenshot-accurate device-mockup hero compositing.`,
+      },
+    ],
+  },
+  {
+    slug: 'flux-editorial-illustration-opinion-piece-concept',
+    category: 'flux',
+    title: `Get a conceptual editorial illustration from Flux.1 Kontext that actually argues the article's point`,
+    description: `A three-phase editorial-illustration brief for Flux.1 Kontext that forces a genuine visual metaphor for the article's argument, rather than a generic decorative scene loosely related to the topic.`,
+    promptText: `PHASE 1 — THE ARGUMENT BEING ILLUSTRATED
+State the actual point the article makes, not just its topic: {{article_thesis}}. The image must visually argue this specific point, not simply depict the general subject area.
+
+PHASE 2 — THE VISUAL METAPHOR
+{{visual_metaphor}}. Render this metaphor literally and concretely — a specific object, gesture, or spatial relationship the reader can read the argument from at a glance, not an abstract mood that only loosely gestures at the topic.
+
+PHASE 3 — EXECUTION
+Style: {{illustration_style}}, rendered with {{color_palette}} as the dominant palette. Composition: {{composition_note}}, with the central metaphor occupying the clear visual weight of the frame rather than competing evenly with secondary elements.
+
+WHAT THE FRAME ACTUALLY CONTAINS
+Because there is no negative-prompt field, state this positively: the frame contains only the metaphor's central elements described above and the supporting background — no incidental text, no publication logo, no visible signature, no second competing focal point that dilutes the single argument being made.
+
+TEXTURE AND MEDIUM HONESTY
+If {{illustration_style}} implies a physical medium — risograph, gouache, linocut, etching — render its actual texture and imperfections (grain, slight ink bleed, visible brush or blade marks) rather than a smooth digital illustration that only vaguely gestures at that medium's look.
+
+WHAT TO AVOID SO THE METAPHOR STAYS LEGIBLE
+Avoid literal, on-the-nose visual clichés for the topic (a generic lightbulb for "idea," a maze for "confusion") unless {{visual_metaphor}} specifically calls for one — an editorial illustration that reaches for the first obvious symbol reads as unconsidered, and a magazine art director would reject it for exactly that reason. Prefer the metaphor as described, even if it takes a beat longer for a reader to parse, over an instantly recognizable but shallow substitute.
+
+SCALE FOR PUBLICATION USE
+Compose with a clear focal hierarchy that survives being shrunk to a small article-thumbnail size, not only at full magazine-spread resolution — if the metaphor only reads at large size, it has failed its actual job.
+
+CHECK BEFORE FINALIZING
+Cover the caption/headline area in your head and ask whether the image alone, with no text, still communicates {{article_thesis}} to a reader who has not read the article — if it only makes sense once you already know the argument, the metaphor needs to be more concrete, not more abstract.
+
+OUTPUT
+One editorial illustration at {{aspect_ratio}} that visually argues the stated thesis through the specific metaphor described, in the medium and palette specified, legible at both full size and thumbnail scale.`,
+    variables: [
+      {
+        name: 'article_thesis',
+        description: `The specific argument or claim the article makes, not just its topic.`,
+        example: `remote work hasn't killed office culture, it's just moved the performance of belonging onto Slack`,
+        required: true,
+      },
+      {
+        name: 'visual_metaphor',
+        description: `The concrete visual device that carries the thesis.`,
+        example: `an empty office chair still wearing a name tag, facing a laptop whose screen glows with a crowd of tiny avatar faces`,
+        required: true,
+      },
+      {
+        name: 'illustration_style',
+        description: `The specific illustration medium and stylistic reference.`,
+        example: `flat gouache editorial illustration in the style of a New Yorker cover, visible brush texture`,
+        required: true,
+      },
+      {
+        name: 'color_palette',
+        description: `The dominant color scheme.`,
+        example: `muted teal and warm ochre, with a single desaturated grey for the empty chair`,
+        required: true,
+      },
+      {
+        name: 'composition_note',
+        description: `How the frame is arranged around the metaphor.`,
+        example: `the chair placed slightly off-center left, the glowing laptop screen as the brightest point in the frame drawing the eye second`,
+        required: true,
+      },
+      {
+        name: 'aspect_ratio',
+        description: `The target canvas for the publication placement.`,
+        example: `4:5 for a print magazine feature spread`,
+        required: false,
+      },
+    ],
+    targetTools: [`Flux.1 Kontext [pro]`],
+    tags: [`flux`, `flux-kontext`, `editorial-illustration`, `visual-metaphor`, `publication-design`, `no-negative-prompt`],
+    whyItWorks: `The single biggest failure mode in AI-generated editorial illustration is producing a technically competent image of the topic that argues nothing — a generic scene of "people working from home" instead of a specific visual claim about what remote work actually changed. Forcing PHASE 1 to state the thesis, not the topic, and PHASE 2 to render one concrete metaphor for it, is what keeps Flux from defaulting to the safest, most statistically common depiction of the subject area, which is exactly the generic result an art director would reject. The explicit warning against on-the-nose clichés (a lightbulb for "idea") exists because diffusion models trained on a huge corpus of stock and editorial imagery have those exact clichés as their single most probable output for abstract topics — without an instruction actively steering away from them, a topic like "innovation" reliably collapses into the same handful of overused symbols regardless of what specific argument the prompt actually describes. Naming a real medium (risograph, gouache, linocut) and asking for its actual texture matters because Flux's unguided default for "illustration" trends toward a smooth, characterless digital-vector look; describing the physical imperfections a real print medium would leave behind is the lever that pulls it toward something with genuine editorial texture rather than generic clip-art polish. The thumbnail-legibility check matters specifically for this use case because editorial illustrations are consumed at wildly different sizes — a full-bleed print spread and a tiny article-card thumbnail — and a composition that only communicates its metaphor at large scale has failed the medium's actual job, which is to make a reader stop scrolling before they've even opened the piece.`,
+    exampleOutput: `A gouache-textured illustration in muted teal and ochre: an empty desk chair still wearing a name tag, facing a laptop whose screen glows with a crowd of tiny cartoon avatar faces, composed off-center left so the glowing screen draws the eye second — legible as a single clear idea even shrunk to thumbnail size.`,
+    verifiedAgainst: [
+      { tool: 'Flux', version: 'Flux.1 Kontext [pro]', date: '2026-08-09' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-09',
+        note: `Initial publish, verified against Flux.1 Kontext [pro] for thesis-driven editorial metaphor illustration.`,
+      },
+    ],
+  },
+  {
+    slug: 'flux-isometric-illustration-app-feature-diagram',
+    category: 'flux',
+    title: `Turn a product feature into a clean isometric explainer illustration with Flux.1 Kontext`,
+    description: `A precision-focused isometric illustration brief for Flux.1 Kontext built for product marketing and onboarding graphics, where geometric consistency and label-free clarity matter more than atmosphere.`,
+    promptText: `SUBJECT TO DEPICT
+{{feature_or_object}}, broken into its distinct functional pieces so each one reads as a separate, identifiable block within the isometric structure rather than one fused blob.
+
+ISOMETRIC RULES TO HOLD
+True isometric projection: all primary edges align to exactly three axis directions at 120 degrees apart, with no single-point or two-point perspective convergence anywhere in the frame. Every block, panel, and connector must share the same projection angle — a single element rendered at a slightly different angle than the rest is the most common tell of a broken isometric scene, so hold the projection uniformly across the entire composition.
+
+COLOR SYSTEM
+{{color_palette}}, applied consistently so each functional piece named above is distinguishable by color at a glance, the way a real product diagram uses color coding rather than realistic material shading.
+
+LIGHTING
+{{lighting_style}} — flat, even, and non-directional enough that no single face of any block goes dark or unreadable, since this needs to function as a clear diagram first and an attractive scene second.
+
+SCALE RELATIONSHIPS
+{{scale_relationships}}, kept physically and functionally logical relative to each other — a component that is conceptually small in the real product should not dominate the frame just because it happens to be visually interesting.
+
+WHAT SHOULD NOT APPEAR
+Since there is no negative-prompt field, state this positively: the frame contains only the functional blocks and connectors described above on a plain {{background_treatment}} — no ground plane clutter, no incidental decorative props, no rendered text or labels of any kind (labels are added afterward in a design tool), and no drop shadow heavy enough to obscure the geometry beneath it.
+
+CONNECTORS AND RELATIONSHIPS
+If {{feature_or_object}} implies pieces that connect or exchange something (data, power, a physical link), render that connection as a visible, consistent element — a pipe, a line, a floating arrow-shaped block — styled in the same isometric system as everything else, not a flat 2D arrow overlaid on top of a 3D scene.
+
+CHECK BEFORE FINALIZING
+Trace the top edge of every block across the full frame and confirm they all recede at the same consistent angle — any block that appears to tilt independently of the rest breaks the diagram's credibility even if it looks fine in isolation.
+
+OUTPUT
+One isometric illustration at {{aspect_ratio}}, on a clean {{background_treatment}}, with every functional piece clearly separated by color and consistent projection, ready to receive text labels and callout lines in a design tool afterward.`,
+    variables: [
+      {
+        name: 'feature_or_object',
+        description: `The product feature, system, or object being diagrammed, broken into its functional parts.`,
+        example: `a cloud file-sync feature: local device, sync engine, encrypted transfer pipe, and cloud storage bucket`,
+        required: true,
+      },
+      {
+        name: 'color_palette',
+        description: `The color-coding scheme distinguishing each functional piece.`,
+        example: `warm coral for the local device, cool teal for the sync engine, soft yellow for the transfer pipe, deep navy for the cloud bucket`,
+        required: true,
+      },
+      {
+        name: 'lighting_style',
+        description: `The flat, even lighting treatment appropriate for a diagram.`,
+        example: `soft flat studio lighting with no strong directional shadow, every face evenly lit`,
+        required: true,
+      },
+      {
+        name: 'scale_relationships',
+        description: `How the relative sizes of pieces should be kept logical.`,
+        example: `the cloud bucket rendered largest as the central anchor, the device and sync engine noticeably smaller and positioned to its left`,
+        required: true,
+      },
+      {
+        name: 'background_treatment',
+        description: `What the background behind the isometric composition should be.`,
+        example: `flat pale mint-green background with no gradient or texture`,
+        required: true,
+      },
+      {
+        name: 'aspect_ratio',
+        description: `The target canvas for the final placement.`,
+        example: `1:1 square for an app-onboarding carousel slide`,
+        required: false,
+      },
+    ],
+    targetTools: [`Flux.1 Kontext [pro]`],
+    tags: [`flux`, `flux-kontext`, `isometric-illustration`, `product-marketing`, `diagram-illustration`, `no-negative-prompt`],
+    whyItWorks: `Isometric illustration is one of the styles where Flux's usual strength — loose, atmospheric photographic realism — actually works against the brief, because a true isometric diagram requires rigid, mathematically consistent projection across every element, and diffusion models have a well-documented tendency to let projection angle drift subtly across a busy composition since nothing in an unguided prompt tells it that geometric consistency outranks visual interest. Explicitly stating the 120-degree axis rule and calling out angle drift as the most common failure gives the model a concrete, checkable target instead of a vague style reference, and the closing check-before-finalizing step exists precisely because this failure is often only visible on a deliberate edge-by-edge trace, not at a casual glance. Breaking the subject into named functional pieces with an explicit color-coding scheme matters because Flux's default instinct for a single "isometric illustration of X" prompt is to render one fused, realistically-shaded object rather than a diagram with legible functional separation — real product-marketing isometric art works specifically because each piece is instantly distinguishable, which only happens if the prompt names the pieces and assigns each one a distinct color rather than leaving shading to imply the same information less reliably. The explicit no-text instruction matters more here than in most other Flux use cases: an isometric diagram is compositionally exactly the kind of image where a designer intends to add real callout labels afterward, and any rendered pseudo-text Flux invents on its own has to be manually removed before real labels can go in, so ruling it out up front avoids a wasted round trip.`,
+    verifiedAgainst: [
+      { tool: 'Flux', version: 'Flux.1 Kontext [pro]', date: '2026-08-10' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-10',
+        note: `Initial publish, verified against Flux.1 Kontext [pro] for consistent-projection isometric product diagrams.`,
+      },
+    ],
+  },
+  {
+    slug: 'flux-retro-futurism-vintage-scifi-poster',
+    category: 'flux',
+    title: `Design a retro-futurist poster on Flux.1 Kontext that nails a specific decade's vision of tomorrow`,
+    description: `A mood-anchored retro-futurism brief for Flux.1 Kontext that locks the piece to one specific era's actual visual vocabulary of the future, rather than a generic blend of every decade's sci-fi cliché at once.`,
+    promptText: `WHICH FUTURE, FROM WHEN
+{{era_and_vision}}. This is the single most important constraint in this brief — commit fully to this one decade's actual visual language for imagining the future, not a blended mix of retro-futurist eras.
+
+CENTRAL SUBJECT
+{{central_subject}}, designed and detailed as that specific era would have actually imagined it — its material choices, its proportions, its idea of what "advanced" looks like — rather than a modern object with a retro color filter applied over it.
+
+SETTING
+{{setting_description}}, built from the same era's specific vocabulary of tomorrow: {{era_and_vision}} imagined its future through particular materials, shapes, and preoccupations, and the setting should reflect that specific imagination rather than a generic "futuristic city" silhouette that could belong to any decade.
+
+COLOR AND PRINT CHARACTER
+{{color_and_print_style}}. Treat this as a genuine print-production reference — the actual ink limitations, halftone dot pattern, or color-separation quirks of period posters from that era — not just a warm nostalgic color grade layered over a modern illustration.
+
+TYPOGRAPHY-SHAPED SPACE
+If this poster will carry a title afterward, reserve {{title_space_location}} as a genuinely calm area in the composition's actual period style — the kind of bold geometric block or empty sky a real poster from that era would have left for its logotype — described as positive content (a plain gradient sky, an empty stretch of chrome) since there is no negative-prompt field to simply request blank space.
+
+WHAT WOULD BREAK THE ILLUSION
+Avoid any detail that visibly belongs to a different decade's retro-future vocabulary or to contemporary design — a smartphone-shaped object, a flat-design UI element, a color grade associated with a different specific era than {{era_and_vision}}. Because there is no negative-prompt field, state the actual committed vocabulary strongly enough in every section above that a mismatched detail has no foothold to slip in.
+
+WEATHERING AND ARTIFACT
+{{aging_and_wear_note}} — the print wear, paper texture, or fading a real surviving poster from that era would show, if any is wanted; state plainly if the piece should instead look pristine and freshly printed.
+
+CHECK BEFORE FINALIZING
+Look at the central subject's proportions and materials specifically and ask whether they read as that era's actual optimism about the future, or as a modern object simply recolored — a chrome rocket with contemporary aerodynamic curves is a tell that the design defaulted to a generic "retro" look rather than committing to the one era named above.
+
+OUTPUT
+One poster-format image at {{aspect_ratio}}, fully committed to {{era_and_vision}}'s specific visual vocabulary throughout every element, with {{title_space_location}} left genuinely calm for a title to be added afterward.`,
+    variables: [
+      {
+        name: 'era_and_vision',
+        description: `The specific decade and its particular vision of the future.`,
+        example: `1950s American atomic-age optimism — chrome, tailfins, and confident faith in nuclear-powered domestic convenience`,
+        required: true,
+      },
+      {
+        name: 'central_subject',
+        description: `The main subject of the poster, designed in that era's idiom.`,
+        example: `a bulbous chrome family car with jet-like tailfins, hovering just above a striped highway on a visible cushion of light`,
+        required: true,
+      },
+      {
+        name: 'setting_description',
+        description: `The backdrop and environment built from the same era's vocabulary.`,
+        example: `a suburban cul-de-sac with geodesic-domed houses and a single atomic-symbol water tower on the horizon, deep blue evening sky`,
+        required: true,
+      },
+      {
+        name: 'color_and_print_style',
+        description: `The period-accurate print and color character.`,
+        example: `saturated candy-apple red and chrome silver, visible halftone dot pattern like a 1950s pulp-magazine cover, slightly imperfect color registration`,
+        required: true,
+      },
+      {
+        name: 'title_space_location',
+        description: `Where a calm area is reserved for adding a title afterward.`,
+        example: `the upper third of the sky, left as a smooth gradient from deep blue to warm dusk orange`,
+        required: true,
+      },
+      {
+        name: 'aging_and_wear_note',
+        description: `Whether and how the poster should show period-accurate wear.`,
+        example: `slight edge yellowing and a faint fold crease down the center, like a genuinely surviving print`,
+        required: false,
+      },
+      {
+        name: 'aspect_ratio',
+        description: `The final poster canvas shape.`,
+        example: `2:3 vertical print poster`,
+        required: false,
+      },
+    ],
+    targetTools: [`Flux.1 Kontext [pro]`],
+    tags: [`flux`, `flux-kontext`, `retro-futurism`, `poster-design`, `vintage-illustration`, `no-negative-prompt`],
+    whyItWorks: `"Retro-futurism" as an unqualified prompt term is a genuine trap for Flux: the training data associated with that phrase spans multiple visually incompatible decades — 1950s atomic-age chrome, 1980s synthwave neon grids, 1960s Space Age minimalism — and an unguided generation tends to blend features from several of them into a mismatched pastiche, which is exactly the generic result this brief is built to avoid. Naming one specific decade and vision up front, and repeating that commitment across every section (subject, setting, color, print character), gives the model a single coherent target instead of an averaged compromise between eras. The instruction to design the central subject in that era's actual material logic — not a modern object with a retro color filter — targets a related and equally common failure: a contemporary-shaped car or device rendered in period colors reads immediately as fake to anyone who actually knows the reference era, because the real signal of a period design lives in its proportions and material choices, not its palette alone. Treating the color and print character as an actual print-production reference, down to halftone dot pattern and color-registration imperfections, matters because genuine period posters were physically limited by their printing process in ways a smooth modern illustration doesn't reproduce unless told to — that texture is often the single biggest tell separating a convincing retro poster from a modern illustration with a sepia-toned filter over it. The title-space instruction follows the same no-negative-prompt logic used across every other Flux brief: an empty area only stays empty if it's described as positive content (a smooth gradient sky) styled in the same committed era, rather than requested as an absence Flux has no field to honor.`,
+    verifiedAgainst: [
+      { tool: 'Flux', version: 'Flux.1 Kontext [pro]', date: '2026-08-12' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-12',
+        note: `Initial publish, verified against Flux.1 Kontext [pro] for single-era-committed retro-futurist poster design.`,
+      },
+    ],
+  },
+  {
+    slug: 'flux-interior-design-room-concept-render',
+    category: 'flux',
+    title: `Generate a realistic interior design concept render on Flux.1 Kontext that a client could actually approve`,
+    description: `A materials-and-spatial-logic brief for Flux.1 Kontext aimed at interior designers pitching a room concept, structured so every surface, fixture, and light source reads as physically buildable rather than an inspirational mood-board collage.`,
+    promptText: `ROOM AND FUNCTION
+{{room_type_and_use}}, viewed from {{camera_viewpoint}} so the room's actual layout and traffic flow are legible, not a cropped, decorative-only angle.
+
+SPATIAL HONESTY
+Render the room at {{room_dimensions_note}} — furniture and fixtures scaled believably relative to a real human body and real doorway proportions, since an oversized sofa or an impossibly large window is the fastest way for a client to distrust a concept render as unbuildable fantasy rather than an actual design proposal.
+
+MATERIALS AND FINISHES
+{{materials_and_finishes}}, each rendered with its real, distinguishing physical texture — the actual grain, sheen, or roughness that finish would have in person, not a generic smooth digital surface standing in for it.
+
+FURNITURE AND FIXTURES
+{{furniture_and_fixtures}}, arranged so the walking path through the room stays clear and the arrangement reflects how the room described in {{room_type_and_use}} would actually be used day to day, not simply staged for the most photogenic angle.
+
+LIGHTING
+{{lighting_plan}}. Distinguish clearly between natural light sources and artificial fixtures in how each renders — daylight through a window should read differently in color temperature and falloff than a warm interior lamp, and both should cast physically consistent shadows given the room's actual layout.
+
+COLOR PALETTE
+{{color_palette}}, applied to specific named surfaces (walls, cabinetry, textiles) rather than as a vague overall mood, so a client can trace exactly which element carries which color.
+
+WHAT THE RENDER SHOULD NOT SHOW
+Since there is no negative-prompt field, state this positively: the room contains only the furniture, fixtures, and finishes named above — no unrelated decorative clutter beyond what's listed, no people, no visible brand logos on any product, and no design element inconsistent with {{style_reference}}.
+
+STYLE REFERENCE
+{{style_reference}}, held consistently across every surface and object in the room — a single strong sofa in that style surrounded by mismatched, generically modern accessories reads as an unfinished concept, not a cohesive design.
+
+CHECK BEFORE FINALIZING
+Walk the room mentally from the doorway to its far wall and confirm nothing floats, clips through another surface, or sits at an implausible height relative to the furniture beside it — spatial errors like a floating rug edge or a lamp taller than the doorway are the details that undermine a client's confidence in an otherwise beautiful render.
+
+OUTPUT
+One photorealistic interior render at {{aspect_ratio}}, spatially plausible and materially specific enough that a contractor could reasonably estimate a real build from it.`,
+    variables: [
+      {
+        name: 'room_type_and_use',
+        description: `The room and how it is actually used day to day.`,
+        example: `a compact home-office nook for two people doing video calls and focused writing work`,
+        required: true,
+      },
+      {
+        name: 'camera_viewpoint',
+        description: `The camera angle and height that best shows the room's real layout.`,
+        example: `eye-level, standing in the doorway looking toward the far corner desk`,
+        required: true,
+      },
+      {
+        name: 'room_dimensions_note',
+        description: `The approximate real-world scale to keep proportions honest.`,
+        example: `roughly 3 by 2.5 meters, ceiling height about 2.6 meters`,
+        required: true,
+      },
+      {
+        name: 'materials_and_finishes',
+        description: `The specific named surface materials and finishes.`,
+        example: `matte white oak floating shelves, a warm walnut desk, and a soft bouclé accent chair`,
+        required: true,
+      },
+      {
+        name: 'furniture_and_fixtures',
+        description: `The specific furniture pieces and their arrangement.`,
+        example: `a compact L-shaped desk under the window, a single accent chair in the corner, and a slim bookshelf along the side wall`,
+        required: true,
+      },
+      {
+        name: 'lighting_plan',
+        description: `The natural and artificial light sources in the room.`,
+        example: `afternoon daylight through a single tall window on the left, plus a warm brass desk lamp for evening work`,
+        required: true,
+      },
+      {
+        name: 'color_palette',
+        description: `The specific colors and which named surfaces carry them.`,
+        example: `warm oatmeal walls, walnut desk left natural, sage-green accent chair as the single saturated color`,
+        required: true,
+      },
+      {
+        name: 'style_reference',
+        description: `The overall design style held consistently across the room.`,
+        example: `Japandi — quiet, warm-toned minimalism with visible natural wood grain`,
+        required: true,
+      },
+      {
+        name: 'aspect_ratio',
+        description: `The final render's aspect ratio.`,
+        example: `16:9 for a client presentation deck`,
+        required: false,
+      },
+    ],
+    targetTools: [`Flux.1 Kontext [pro]`],
+    tags: [`flux`, `flux-kontext`, `interior-design`, `concept-render`, `photorealism`, `no-negative-prompt`],
+    whyItWorks: `Client-facing interior renders live or die on spatial plausibility in a way pure mood-board illustration doesn't, and Flux's unguided default for an interior prompt trends toward exactly the opposite: beautifully lit but subtly impossible rooms, with furniture scaled for visual drama rather than real human proportions, because the training distribution for "interior design" imagery is dominated by aspirational photography that was itself sometimes shot with a wide, distorting lens. Explicitly stating real-world room dimensions and instructing furniture to scale against real doorway and body proportions is the direct counter to that bias, and it matters specifically because a client evaluating a concept render is unconsciously checking for buildability, not just beauty — an oversized sofa reads as untrustworthy even to someone who couldn't articulate exactly why. Naming materials with their real physical texture, rather than leaving "walnut desk" to render as a generic brown surface, matters because Flux's default rendering for named materials without texture guidance skews toward a flat, overly clean CGI look; describing the actual grain or sheen a finish would show in person is what pulls the output toward photographic material believability instead. Separating natural and artificial light sources explicitly, and asking for each to render with its own distinct color temperature and falloff, targets a common Flux interior failure where every light source in a scene gets flattened into one uniform, evenly warm wash — real rooms read as real specifically because window daylight and lamp light behave differently and interact with the space's actual geometry, and that distinction has to be stated since it isn't the model's unguided default.`,
+    verifiedAgainst: [
+      { tool: 'Flux', version: 'Flux.1 Kontext [pro]', date: '2026-08-13' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-13',
+        note: `Initial publish, verified against Flux.1 Kontext [pro] for spatially plausible client-facing interior concept renders.`,
+      },
+    ],
+  },
+  {
+    slug: 'flux-architecture-visualization-exterior-facade-render',
+    category: 'flux',
+    title: `Produce a client-ready architectural exterior visualization on Flux.1 Kontext`,
+    description: `A specification-driven exterior architecture render brief for Flux.1 Kontext built for pitching a facade design, treating material callouts, site context, and time-of-day lighting as fixed technical inputs rather than loose atmosphere.`,
+    promptText: `BUILDING SPEC
+{{building_type_and_massing}}. Render the massing and proportions exactly as described — the number of stories, roofline, and overall silhouette are fixed facts about this design, not a starting point to reinterpret.
+
+FACADE MATERIALS
+{{facade_materials}}, each material rendered on its actual specified surface with true physical texture and reflectivity for that material — {{facade_materials}} are the literal building materials being pitched to a client, so a concrete panel must read as concrete, not as a generically smooth grey surface standing in for it.
+
+SITE CONTEXT
+{{site_context}}. Ground the building in this real or realistic surrounding context so the render answers "how will this actually look on its site," not "how does this building look floating in an idealized void."
+
+CAMERA AND VANTAGE POINT
+{{camera_angle}}, at a height and distance a real site visitor or a drone photograph would actually achieve — not an impossible aerial angle no camera could physically occupy, unless {{camera_angle}} explicitly calls for a drone shot.
+
+TIME OF DAY AND LIGHT
+{{time_of_day_and_light}}. Light and shadow must fall consistently across every facade element according to this single stated sun position — a shadow direction that shifts between different parts of the building is an immediate, obvious error that undermines the render's technical credibility with any client familiar with how their own site actually gets sun.
+
+LANDSCAPING AND HUMAN SCALE
+{{landscaping_and_scale_cues}} — include at least one clear human-scale reference (a person, a parked car, a street-level door) so a viewer can judge the building's actual height and proportion at a glance, rather than guessing scale from the architecture alone.
+
+WHAT THE RENDER SHOULD NOT INTRODUCE
+Since there is no negative-prompt field, state this positively: the scene contains only the building, site context, and landscaping described above — no fictional additional structure not in the spec, no signage or branding beyond what {{building_type_and_massing}} calls for, and no weather condition beyond what {{time_of_day_and_light}} specifies.
+
+MATERIAL AND STRUCTURAL CONSISTENCY CHECK
+Confirm that structural elements implied by the massing — window mullions, floor lines, a cantilever's visible support — are physically continuous and consistent across the whole facade, not subtly different in spacing or alignment from one section of the building to another, since a professional architectural audience will notice a mullion grid that doesn't actually line up.
+
+CHECK BEFORE FINALIZING
+Trace the shadow cast by the building itself against {{site_context}} and confirm its direction and length are consistent with the stated sun position in {{time_of_day_and_light}} — an inconsistent cast shadow is one of the fastest ways a rendering reads as synthetic to anyone with architectural literacy.
+
+OUTPUT
+One photorealistic exterior render at {{aspect_ratio}}, with building massing, facade materials, and lighting consistent enough with the stated specification to serve as a genuine client-pitch or planning-submission visual.`,
+    variables: [
+      {
+        name: 'building_type_and_massing',
+        description: `The building type and its fixed massing, story count, and roofline.`,
+        example: `a four-story mixed-use building, ground-floor retail with three floors of apartments above, flat roof with a recessed rooftop terrace`,
+        required: true,
+      },
+      {
+        name: 'facade_materials',
+        description: `The specific materials the facade is actually built from.`,
+        example: `board-formed grey concrete on the ground floor, warm cedar cladding on the upper floors, black-framed floor-to-ceiling windows`,
+        required: true,
+      },
+      {
+        name: 'site_context',
+        description: `The real or realistic surrounding urban or landscape context.`,
+        example: `a mixed-use street corner with two-story brick buildings on either side and street trees along the sidewalk`,
+        required: true,
+      },
+      {
+        name: 'camera_angle',
+        description: `The vantage point and camera height for the shot.`,
+        example: `eye-level street view from the opposite sidewalk corner, showing two full facades at an oblique angle`,
+        required: true,
+      },
+      {
+        name: 'time_of_day_and_light',
+        description: `The specific time of day and resulting sun position.`,
+        example: `late-afternoon sun low from camera-left, warm golden light raking across the cedar cladding`,
+        required: true,
+      },
+      {
+        name: 'landscaping_and_scale_cues',
+        description: `Landscaping and human-scale reference elements.`,
+        example: `young street trees not yet obscuring the facade, one pedestrian at the ground-floor retail entrance for scale`,
+        required: true,
+      },
+      {
+        name: 'aspect_ratio',
+        description: `The final render's aspect ratio for its intended use.`,
+        example: `3:2 for a planning-submission document`,
+        required: false,
+      },
+    ],
+    targetTools: [`Flux.1 Kontext [pro]`],
+    tags: [`flux`, `flux-kontext`, `architecture-visualization`, `exterior-render`, `photorealism`, `no-negative-prompt`],
+    whyItWorks: `Architectural visualization is one of the few Flux use cases with an audience trained to spot exactly the errors an unguided generation is prone to making, which is why this brief front-loads massing and material specification as fixed facts rather than loose creative direction — an architect or planning reviewer will immediately notice if the story count or roofline drifts from the actual design being pitched, in a way a general audience for a lifestyle photograph never would. The single stated sun position, and the explicit instruction that shadow direction must stay consistent across every part of the facade, targets a specific and common Flux failure in complex multi-plane scenes: the model can render a locally convincing shadow on one wall while quietly implying a different, inconsistent light direction on an adjacent surface, because each region of a complex scene is in some sense generated with only loose global coherence unless directional consistency is stated as its own explicit requirement, not assumed to follow automatically from naming a time of day once. Naming facade materials with their real texture and reflectivity, rather than a generic "modern facade," matters because concrete, cedar, and glass each have distinct, physically real surface behavior under the same light, and a render that flattens all of them into the same generic smooth material defeats the entire purpose of a material-pitch visualization, which exists specifically to show a client what each specified material will actually look like. The mullion-grid and structural-continuity check exists because architectural viewers read facade regularity almost the way a typographer reads kerning — small misalignments that a lay viewer would never consciously register are exactly the details a professional audience notices first, and calling that out explicitly as a thing to verify is what catches it before the render goes out under the firm's name.`,
+    verifiedAgainst: [
+      { tool: 'Flux', version: 'Flux.1 Kontext [pro]', date: '2026-08-14' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-14',
+        note: `Initial publish, verified against Flux.1 Kontext [pro] for specification-consistent exterior architectural visualization.`,
+      },
+    ],
+  },
 ]

@@ -5,13 +5,17 @@ import { prompts as aiEngineeringPrompts } from './ai-engineering/prompts'
 import { prompts as blogWritingPrompts } from './blog-writing/prompts'
 import { prompts as brandingPrompts } from './branding/prompts'
 import { prompts as businessOpsPrompts } from './business-ops/prompts'
+import { prompts as careerJobsearchPrompts } from './career-jobsearch/prompts'
 import { prompts as chatgptPrompts } from './chatgpt/prompts'
 import { prompts as claudePrompts } from './claude/prompts'
 import { prompts as claudeCodePrompts } from './claude-code/prompts'
 import { prompts as consultingPrompts } from './consulting/prompts'
 import { prompts as cursorPrompts } from './cursor/prompts'
+import { prompts as customerSupportPrompts } from './customer-support/prompts'
 import { prompts as dallePrompts } from './dalle/prompts'
+import { prompts as dataBiPrompts } from './data-bi/prompts'
 import { prompts as devopsPrompts } from './devops/prompts'
+import { prompts as ecommerceProductPrompts } from './ecommerce-product/prompts'
 import { prompts as emailMarketingPrompts } from './email-marketing/prompts'
 import { prompts as examPrepPrompts } from './exam-prep/prompts'
 import { prompts as figmaPrompts } from './figma/prompts'
@@ -21,9 +25,12 @@ import { prompts as framerPrompts } from './framer/prompts'
 import { prompts as geminiPrompts } from './gemini/prompts'
 import { prompts as githubCopilotPrompts } from './github-copilot/prompts'
 import { prompts as grokPrompts } from './grok/prompts'
+import { prompts as healthcareWellnessPrompts } from './healthcare-wellness/prompts'
+import { prompts as hrManagementPrompts } from './hr-management/prompts'
 import { prompts as ideogramPrompts } from './ideogram/prompts'
 import { prompts as instagramPrompts } from './instagram/prompts'
 import { prompts as klingPrompts } from './kling/prompts'
+import { prompts as legalCompliancePrompts } from './legal-compliance/prompts'
 import { prompts as linkedinPrompts } from './linkedin/prompts'
 import { prompts as midjourneyPrompts } from './midjourney/prompts'
 import { prompts as nanoBananaPrompts } from './nano-banana/prompts'
@@ -79,6 +86,7 @@ export const PROMPTS = [
   ...emailMarketingPrompts,
   ...salesPrompts,
   ...linkedinPrompts,
+  ...ecommerceProductPrompts,
   // design
   ...figmaPrompts,
   ...framerPrompts,
@@ -90,12 +98,18 @@ export const PROMPTS = [
   ...financePrompts,
   ...consultingPrompts,
   ...businessOpsPrompts,
+  ...dataBiPrompts,
+  ...hrManagementPrompts,
+  ...legalCompliancePrompts,
+  ...healthcareWellnessPrompts,
+  ...customerSupportPrompts,
   // content
   ...youtubePrompts,
   ...instagramPrompts,
   ...xTwitterPrompts,
   ...blogWritingPrompts,
   ...writingPrompts,
+  ...careerJobsearchPrompts,
   // education
   ...studentsPrompts,
   ...researchPrompts,

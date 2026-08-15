@@ -59,6 +59,7 @@ export type PromptCategorySlug =
   | 'email-marketing'
   | 'sales'
   | 'linkedin'
+  | 'ecommerce-product'
   // design
   | 'figma'
   | 'framer'
@@ -70,12 +71,18 @@ export type PromptCategorySlug =
   | 'finance'
   | 'consulting'
   | 'business-ops'
+  | 'data-bi'
+  | 'hr-management'
+  | 'legal-compliance'
+  | 'healthcare-wellness'
+  | 'customer-support'
   // content
   | 'youtube'
   | 'instagram'
   | 'x-twitter'
   | 'blog-writing'
   | 'writing'
+  | 'career-jobsearch'
   // education
   | 'students'
   | 'research'

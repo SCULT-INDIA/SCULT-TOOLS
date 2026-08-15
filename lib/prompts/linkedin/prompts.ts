@@ -2269,4 +2269,733 @@ Requiring each draft to end with a specific, named personalization instruction r
       },
     ],
   },
+  {
+    slug: 'linkedin-post-hook-first-draft-from-a-real-work-moment',
+    category: 'linkedin',
+    title: `Turn one specific work moment into a LinkedIn post that doesn't read like everyone else's`,
+    description: `Builds a single LinkedIn post from one concrete thing that actually happened this week, structured around a hook, one real detail, and a takeaway — instead of the generic 'lessons learned' template everyone's feed is drowning in.`,
+    promptText: `You are drafting one LinkedIn post for me, built from a single real thing that happened in my work recently — not a generic industry take, not motivational filler.
+
+WHAT HAPPENED
+{{the_moment}}
+
+WHY IT MATTERED TO ME
+{{why_it_mattered}}
+
+WHO SHOULD READ THIS
+{{target_reader}}
+
+MY VOICE
+{{voice_description}}
+
+THE POINT I WANT LANDED
+{{takeaway}}
+
+RULES FOR THE DRAFT
+Open with the single most specific, concrete detail from what happened — a number, a quote someone said, a decision that felt wrong at the time — not an abstract opening line like "I learned something important this week." The first line has to work as a standalone sentence someone would stop scrolling for; assume nobody reads past line one unless it earns the second. Do not summarize the whole story in the first paragraph — let the specific moment sit, then unpack it. Write in short lines with white space between them the way LinkedIn's feed actually renders, not dense paragraphs — but do not turn every sentence into its own line out of habit; group related thoughts. Use exactly one concrete detail I gave you, not invented ones — if a number, name, or quote isn't in what I gave you, do not fabricate one to make the story sound more impressive. End on the takeaway I specified, stated as something the reader can actually use or reconsider, not a vague inspirational close like "keep pushing forward." Do not add a call to action asking people to comment or share unless I've asked for one.
+
+WHAT NOT TO DO
+Do not write this as a listicle ("3 lessons I learned") unless the moment I gave you actually breaks into three distinct things — forcing a real story into a numbered list format flattens it. Do not open with a rhetorical question ("Ever wonder why...") — it's the single most overused LinkedIn opener and readers now skip past it reflexively. Do not use the word "grateful" or "humbled" unless it's in my own words above.
+
+OUTPUT FORMAT
+1. The post itself, formatted with line breaks as it should appear on LinkedIn.
+2. One alternate opening line, in case the first doesn't land, using a different specific detail from what I gave you.
+3. A one-line note on what I should NOT post if this feels too exposed or specific for a public feed — a gut-check, not a rewrite.`,
+    variables: [
+      {
+        name: 'the_moment',
+        description: `The single concrete thing that happened — specific enough to include a number, quote, or decision.`,
+        example: `A client almost walked after we missed a deadline by 6 hours; I called them directly instead of emailing, and they stayed.`,
+        required: true,
+      },
+      {
+        name: 'why_it_mattered',
+        description: `Why this specific moment stuck with you, in your own words.`,
+        example: `It proved that a five-minute phone call undoes more damage than a perfectly worded apology email ever could.`,
+        required: true,
+      },
+      {
+        name: 'target_reader',
+        description: `Who on LinkedIn you actually want this to reach.`,
+        example: `Agency owners and account managers who've had a client relationship nearly break over a missed deadline.`,
+        required: true,
+      },
+      {
+        name: 'voice_description',
+        description: `How you actually talk, so the draft doesn't sound like a corporate account.`,
+        example: `Direct, a little self-deprecating, no corporate buzzwords like 'synergy' or 'circle back.'`,
+        required: true,
+      },
+      {
+        name: 'takeaway',
+        description: `The one point you want the reader to leave with.`,
+        example: `When you've messed up, the medium of the apology matters as much as the apology itself.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`linkedin-post`, `personal-branding`, `storytelling`, `content-writing`, `b2b-marketing`],
+    whyItWorks: `The instruction to lead with one specific, ungeneralized detail rather than a topic sentence works against a well-documented failure mode of instruction-tuned models: when asked to write a 'LinkedIn post' with no other constraint, GPT-5.1 defaults to a summarizing opening line because that's the statistically safest, most generically applicable structure across the training distribution of business-advice content — which is exactly why so many LinkedIn posts already sound alike. Forcing the model to use only a detail explicitly supplied, and prohibiting invented specifics, closes off the model's tendency to manufacture a more 'impressive' number or quote when the real one feels underwhelming, which is a subtle failure mode particularly likely for high-stakes personal narrative content where the model is otherwise inclined to embellish for effect. Explicitly banning the rhetorical-question opener and the listicle-unless-earned structure matters because both are extremely high-frequency patterns in the model's exposure to LinkedIn-style content specifically, meaning they are the default the model reaches for absent a countervailing instruction, not because they're a genuinely strong choice for every story shape. The final gut-check step exists because a model has no actual stake in the professional consequences of oversharing a specific client name or internal number publicly — asking it to flag exposure risk surfaces that judgment call for the human rather than assuming the model made it silently, since the model cannot know your actual risk tolerance or client relationship without being told.`,
+    exampleOutput: `6 hours late. That's how long we missed a client deadline by last month.
+
+My first instinct was to send an apology email. Polished. Professional. Covering every base.
+
+Instead I picked up the phone.
+
+The client's first words weren't about the deadline — they were relief that someone actually called instead of hiding behind a template.
+
+The apology wasn't what saved the relationship. The medium was.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-08',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'linkedin-carousel-slide-by-slide-outline-from-one-idea',
+    category: 'linkedin',
+    title: `Break one dense idea into a LinkedIn carousel that survives being read on a phone, one thumb-swipe at a time`,
+    description: `Turns a single idea or framework into a slide-by-slide carousel outline — cover hook, one idea per slide, a closing CTA slide — built around how people actually swipe through carousels rather than how a slide deck reads on a laptop.`,
+    promptText: `You are outlining a LinkedIn carousel, slide by slide, from one idea I want to teach or make a case for. This is not a slide-deck outline for a meeting — assume every slide is viewed alone, on a phone screen, for about two seconds, by someone deciding whether to swipe to the next one.
+
+CORE IDEA OR FRAMEWORK
+{{core_idea}}
+
+NUMBER OF SLIDES
+{{slide_count}}
+
+WHO THIS IS FOR
+{{target_reader}}
+
+WHAT PROOF OR EXAMPLE I HAVE
+{{supporting_example}}
+
+DESIRED ACTION AFTER READING
+{{end_action}}
+
+STRUCTURE RULES
+Slide 1 is the cover and carries the entire burden of getting a swipe — it must state a specific, non-obvious claim or promise, not a topic label ("5 tips for X" is a topic label; "the tip that got us fired if we didn't follow it" is a claim). Each interior slide covers exactly one idea, never two ideas competing for the same slide — if the core idea I gave you doesn't cleanly divide into the slide count requested, tell me that instead of padding weak slides with filler. Each slide's text must be readable in under three seconds — that means a short headline plus at most two supporting lines, never a paragraph. Order the slides so each one creates a specific reason to swipe to the next — a question raised, a number teased, an incomplete thought — rather than each slide being a self-contained, disconnected tip that could be read in any order. The second-to-last slide should contain the single most useful, concrete piece of the framework — not save the best part for a slide people may not reach. The final slide is the only slide allowed to ask for an action, and it should ask for one specific thing tied to the end_action given, not a generic "follow for more."
+
+WHAT NOT TO DO
+Do not write slide text as full sentences with subordinate clauses — carousels are read, not read aloud; every slide should look like it was cut down, not expanded up. Do not repeat the cover slide's claim verbatim on slide 2 as a way of "recapping" — that wastes the first swipe.
+
+OUTPUT FORMAT
+A numbered list, one entry per slide: slide number, the exact text for that slide (headline + supporting lines), and a one-line design note (e.g. "large number, high contrast") only where it meaningfully changes how the slide should look.`,
+    variables: [
+      {
+        name: 'core_idea',
+        description: `The single idea, framework, or argument the carousel teaches.`,
+        example: `A 4-step framework for pricing a freelance retainer so you never underquote a project again.`,
+        required: true,
+      },
+      {
+        name: 'slide_count',
+        description: `How many slides you want, including cover and closing.`,
+        example: `8`,
+        required: true,
+      },
+      {
+        name: 'target_reader',
+        description: `Who should find this useful enough to swipe through and save.`,
+        example: `Freelance designers who currently price by the hour and undercharge.`,
+        required: true,
+      },
+      {
+        name: 'supporting_example',
+        description: `Any real number, client story, or before/after you can use as proof.`,
+        example: `Switched a client from hourly to retainer pricing and increased monthly revenue from that account by 40% without doing more work.`,
+        required: false,
+      },
+      {
+        name: 'end_action',
+        description: `What you want the reader to do after finishing the carousel.`,
+        example: `DM me the word 'retainer' and I'll send the pricing calculator I use.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`linkedin-carousel`, `content-design`, `personal-branding`, `framework-teaching`, `b2b-marketing`],
+    whyItWorks: `The instruction to treat each slide as viewed alone for two seconds directly counters the default the model reaches for otherwise: because carousels are visually similar to slide decks in the model's training exposure, an unconstrained request tends to produce slides that read like bullet points from a presentation meant to be narrated, with connecting language ('as we discussed,' 'building on this') that only makes sense if slides are read in sequence with a speaker's context — which is not how a LinkedIn carousel is actually consumed. Requiring the model to flag a mismatch between slide count and how many discrete ideas the core idea actually contains addresses a specific failure mode of forced-length content generation: an LLM asked for exactly N slides will pad thin ideas into N slides rather than pushing back on the count, producing filler slides with no real content, so making the pushback an explicit instruction rather than hoping the model self-corrects meaningfully changes the output. The ordering rule about creating swipe tension is a structural technique specific to how carousels perform on the LinkedIn algorithm, which weights average time-on-post and swipe-through rate; a model with no visibility into that mechanic will default to logically ordering ideas by importance rather than by curiosity gap, so the instruction has to state the actual mechanism (why swipe-inducing order matters) rather than just saying 'make it engaging,' which is unfalsifiable and would be satisfied by any output.`,
+    exampleOutput: `Slide 1: "The pricing mistake that cost me $30K before I fixed it." | Slide 2: "Hourly pricing punishes you for getting faster." (large contrast text) | ... | Slide 7: "The exact formula: (hours saved x hourly rate) x 1.5 = retainer floor." | Slide 8: "DM me 'retainer' for the calculator I use with every new client."`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-09',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'linkedin-personal-brand-positioning-statement-and-pillars',
+    category: 'linkedin',
+    title: `Write a personal brand positioning statement narrow enough that a stranger could describe you back after one profile visit`,
+    description: `Produces a one-line positioning statement plus 3-4 content pillars for your LinkedIn presence, built from what you actually want to be known for and what you're deliberately choosing not to post about, so the brand stays recognizable instead of diluted across every topic you find interesting.`,
+    promptText: `You are helping me define a personal brand positioning statement and content pillars for LinkedIn — the goal is narrow enough that someone could describe what I'm known for after visiting my profile once, not a broad umbrella that covers everything I'm interested in.
+
+WHAT I ACTUALLY DO
+{{current_role}}
+
+WHAT I WANT TO BE KNOWN FOR
+{{desired_reputation}}
+
+WHO NEEDS TO KNOW THIS ABOUT ME
+{{target_audience}}
+
+TOPICS I'M TEMPTED TO POST ABOUT BUT SHOULDN'T
+{{topics_to_avoid}}
+
+WHAT MAKES MY TAKE DIFFERENT FROM OTHERS IN MY FIELD
+{{differentiator}}
+
+WHAT TO PRODUCE
+First, write one positioning statement, a single sentence, in the format "I help [specific audience] [achieve specific outcome] by [the differentiated approach], unlike [the common alternative approach]." Push back if the audience or outcome I gave you is too broad to fit that sentence without becoming vague — a positioning statement that could apply to half the people in the same industry has failed, and I'd rather you tell me it's too broad than hand back something generic. Then derive 3-4 content pillars, each pillar being a specific angle you'd actually post about repeatedly, not a topic area so wide it could contain any post ("leadership" is not a pillar; "the specific mistakes first-time managers make when a report challenges them publicly" is a pillar). For each pillar, give one real post idea that pillar could produce this month, using something true about my actual work rather than a hypothetical. Explicitly list what falls outside these pillars, using the topics I said I'm tempted to post about, and give a one-sentence reason each one dilutes rather than strengthens the positioning — not just "it's off-brand," but why a reader who follows you for the stated positioning would find that post confusing or trust-eroding.
+
+WHAT NOT TO DO
+Do not produce a positioning statement that lists multiple audiences or multiple outcomes joined by "and" — if there are genuinely two audiences, tell me that and ask which one to prioritize rather than serving both weakly. Do not soften the exclusion list into vague professional development advice; be specific about why each excluded topic actually costs you positioning strength.
+
+OUTPUT FORMAT
+1. The positioning statement (or a note on why the inputs are too broad to produce one, plus a narrower alternative to consider).
+2. 3-4 content pillars, each with one concrete post idea.
+3. The exclusion list with reasoning.`,
+    variables: [
+      {
+        name: 'current_role',
+        description: `What you actually do day to day.`,
+        example: `I run a 12-person growth marketing agency focused on B2B SaaS companies under $5M ARR.`,
+        required: true,
+      },
+      {
+        name: 'desired_reputation',
+        description: `What you want people to think of when they think of you.`,
+        example: `The person who tells B2B SaaS founders the truth about why their paid ads aren't converting, instead of just running more ads.`,
+        required: true,
+      },
+      {
+        name: 'target_audience',
+        description: `Who specifically needs to see this positioning.`,
+        example: `Founders of B2B SaaS companies between $1M-$5M ARR who are currently burning budget on paid ads with no attribution.`,
+        required: true,
+      },
+      {
+        name: 'topics_to_avoid',
+        description: `Topics you're tempted to post about that would dilute the brand.`,
+        example: `General startup hustle-culture content, and commentary on politics or news events unrelated to marketing.`,
+        required: true,
+      },
+      {
+        name: 'differentiator',
+        description: `What makes your take genuinely different from others in your field.`,
+        example: `I've killed more of my own agency's ad campaigns than I've scaled, and I say so publicly — most agencies never admit a campaign failed.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`personal-branding`, `content-strategy`, `linkedin-positioning`, `audience-building`, `thought-leadership`],
+    whyItWorks: `Requiring the positioning statement to fit a single-audience, single-outcome sentence structure and instructing the model to push back rather than comply when the inputs are too broad works against a specific behavior: language models optimize for producing a usable-looking answer to whatever was asked, so when given a vague audience like 'professionals' or a vague outcome like 'grow their career,' the default behavior is to write a grammatically valid positioning statement that sounds specific through confident phrasing while remaining true of almost anyone — explicitly instructing the model to flag over-broad inputs rather than paper over them with confident language is what actually forces the narrowing, since without that instruction the model has no incentive to tell you your inputs were the problem. The requirement that each pillar produce a real, checkable post idea from your actual work — rather than a hypothetical — matters because an LLM asked only for 'content pillars' will produce abstract category labels that are easy to generate but don't reveal whether the pillar is actually postable; forcing a concrete example surfaces immediately whether a pillar is too thin to sustain repeated posting. The exclusion list with reasoning is the most load-bearing part structurally: most personal-brand exercises define what to post about and stop there, but positioning is actually defined as much by contrast as by inclusion, and a model asked only for pillars has no mechanism to surface the contrast unless the exclusion and its cost are explicitly requested as separate, reasoned output.`,
+    exampleOutput: `Positioning: "I help B2B SaaS founders under $5M ARR find out why their paid ads aren't converting by killing underperforming campaigns fast and publishing the postmortems, unlike agencies that keep scaling spend to justify their retainer." Pillar 1: "Campaigns I killed and why" — post idea: the $40K ad set we shut down in week 2 and what the CTR data actually showed. Excluded: hustle-culture posts — a founder who trusts you for hard numbers on ad performance loses trust if your feed also reads like a motivational account.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-09',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'linkedin-social-bio-headline-and-about-section-rewrite',
+    category: 'linkedin',
+    title: `Rewrite a LinkedIn headline and About section so it answers 'why should I care' instead of listing your job title`,
+    description: `Rewrites your LinkedIn headline (the 220-character line under your name) and About section around what you help someone accomplish, using your actual title and results as evidence rather than the sentence's subject.`,
+    promptText: `Rewrite my LinkedIn headline and About section. Most headlines are just a job title and company name, which wastes the one line of text that shows up next to my name in every comment, search result, and connection request — I want it to say something a stranger would actually read.
+
+CURRENT TITLE AND COMPANY
+{{current_title}}
+
+WHO I ACTUALLY HELP AND HOW
+{{who_i_help}}
+
+A REAL RESULT OR NUMBER I CAN POINT TO
+{{proof_point}}
+
+WHO IS READING MY PROFILE (recruiters, prospects, peers?)
+{{profile_visitor}}
+
+HOW I WANT TO SOUND
+{{tone}}
+
+HEADLINE RULES
+Write 3 headline options, each under 220 characters. Each must lead with what I help someone do or the outcome I create, with my title as supporting context, not the reverse — "Helping [who] do [what]" earns more attention in a search result or comment thread than "[Title] at [Company]" does, because the latter only means something to someone who already knows what the title implies. Do not stack multiple unrelated credentials with pipe characters ("Speaker | Author | Consultant") — pick the single strongest angle for each of the 3 options rather than trying to fit everything into all three.
+
+ABOUT SECTION RULES
+Open with a first line that would make sense read completely out of context, since LinkedIn truncates the About section after roughly 2-3 lines before a "see more" — that first line has to work as a standalone hook, not the setup to a sentence that continues below the fold. Write in first person, plain language, sentences a person would actually say out loud, not third-person corporate-bio language ("John is a seasoned professional with 15 years of experience"). Include the proof point I gave you as evidence partway through, not buried at the very end where a reader who didn't click "see more" would never reach it. Close with a specific, low-friction way for the right kind of person to reach out — not a generic "feel free to connect," but something tied to who_i_help.
+
+WHAT NOT TO DO
+Do not use the words "passionate," "thought leader," or "results-driven" — they appear in enough bios that they now signal generic rather than credible. Do not invent a credential, number, or outcome I didn't give you.
+
+OUTPUT FORMAT
+1. Three headline options.
+2. One About section, formatted with the natural line breaks LinkedIn renders (short paragraphs, not one dense block).
+3. A one-line note on which headline pairs best with the About section and why.`,
+    variables: [
+      {
+        name: 'current_title',
+        description: `Your actual job title and company.`,
+        example: `Senior Product Manager at a mid-size fintech company.`,
+        required: true,
+      },
+      {
+        name: 'who_i_help',
+        description: `Who you help and what you help them do.`,
+        example: `I help fintech product teams cut feature-launch cycle time by fixing broken handoffs between design and engineering.`,
+        required: true,
+      },
+      {
+        name: 'proof_point',
+        description: `A real, specific result or number you can point to.`,
+        example: `Cut our average feature ship time from 11 weeks to 6 weeks over 2 quarters.`,
+        required: true,
+      },
+      {
+        name: 'profile_visitor',
+        description: `Who is actually likely to land on your profile.`,
+        example: `Mostly other PMs and engineering leads at fintech startups, occasionally recruiters for VP Product roles.`,
+        required: true,
+      },
+      {
+        name: 'tone',
+        description: `The register you want to come across in — plain, formal, technical, etc.`,
+        example: `Direct and plain-spoken, comfortable being specific about numbers, not overly formal.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`linkedin-headline`, `about-section`, `personal-branding`, `profile-optimization`, `career-jobsearch`],
+    whyItWorks: `The instruction to lead the headline with outcome rather than title addresses a mechanical fact about where the headline text actually surfaces: LinkedIn renders it beside every comment and in every search-result snippet, contexts where a reader has no other information to interpret a bare title against, so 'Senior Product Manager' communicates almost nothing to a stranger scrolling a comment thread, while an outcome-first phrase is legible with zero prior context — a model given no constraint defaults to title-first because that mirrors the vast majority of existing LinkedIn headlines it was likely exposed to, meaning the unconstrained output would reproduce exactly the pattern this prompt is trying to escape. Requiring the About section's first line to stand alone addresses LinkedIn's actual truncation behavior (roughly 2-3 lines before 'see more'), a UI constraint the model has no way to model unless told explicitly, since without it the model treats the About section as one continuous block of prose where a strong opening sentence can safely set up a payoff two sentences later — which on the actual platform means most readers never see the payoff at all. Banning specific overused words ('passionate,' 'thought leader,' 'results-driven') is a targeted correction rather than a generic 'avoid buzzwords' instruction, because a vague ban leaves the model free to substitute an equally generic synonym; naming the exact phrases removes the model's easiest escape route back to boilerplate professional-bio language, which is its statistically dominant register for this genre of text absent a specific constraint.`,
+    exampleOutput: `Headline: "Helping fintech product teams cut feature-launch time in half — Senior PM, ex-11-week to 6-week ship cycles." About (opening): "Two years ago it took my team 11 weeks to ship a single feature. Here's what actually changed that number to 6."`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-10',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'linkedin-comment-reply-that-adds-something-not-just-agrees',
+    category: 'linkedin',
+    title: `Draft LinkedIn comment replies that add something specific instead of just agreeing louder`,
+    description: `Writes 2-3 alternative replies to a specific comment on your post or someone else's, each one built to add a genuinely new angle, disagreement, or detail — instead of the reflexive 'Great point!' that makes a comment section look active but says nothing.`,
+    promptText: `Help me reply to a specific comment. I don't want a generic agreement reply — LinkedIn comment sections are full of "Great point!" and "So true!" replies that add nothing and make people scroll past. I want a reply that actually contributes something.
+
+THE ORIGINAL POST OR TOPIC
+{{original_post_summary}}
+
+THE COMMENT I'M REPLYING TO
+{{the_comment}}
+
+MY ACTUAL REACTION TO IT
+{{my_reaction}}
+
+RELATIONSHIP TO THIS PERSON
+{{relationship_context}}
+
+WHAT I KNOW THAT THEY MIGHT NOT
+{{my_added_info}}
+
+REPLY RULES
+Write 3 reply options, each taking a genuinely different approach: one that adds a specific detail or example from my own experience that extends their point rather than just validating it, one that respectfully disagrees or adds nuance if my_reaction suggests I don't fully agree, and one that asks a real follow-up question I'd actually want the answer to (not a rhetorical or softball question). Every option must be short enough to read as a comment, not a mini-post — 1-3 sentences, never a wall of text in a reply thread. If my actual reaction is genuine agreement with nothing to add, say so plainly instead of forcing manufactured disagreement or a fake follow-up question just to hit three distinct options — tell me a short authentic agreement is the right call here and give me that instead. Match the tone to the relationship context — a reply to a stranger's post reads differently than a reply to a close colleague's, and the draft should reflect that difference rather than using one generic professional register for both.
+
+WHAT NOT TO DO
+Do not open any reply with "Great point" or "I love this" or "So true" — restate what specifically resonated or what you'd add instead of a content-free affirmation. Do not write a reply so long it reads as if you're trying to hijack the comment section for your own visibility — the goal is a genuine contribution, not a stealth post.
+
+OUTPUT FORMAT
+Up to 3 short reply options (or one, with a note explaining why fewer than 3 is the right call), each labeled with which approach it takes (add detail / respectful pushback / real question).`,
+    variables: [
+      {
+        name: 'original_post_summary',
+        description: `What the original post was about, briefly.`,
+        example: `A founder posted about how they stopped doing weekly 1:1s and switched to async check-ins to save time.`,
+        required: true,
+      },
+      {
+        name: 'the_comment',
+        description: `The specific comment you're replying to.`,
+        example: `"This only works if your team is already high-trust. For newer teams this would backfire fast."`,
+        required: true,
+      },
+      {
+        name: 'my_reaction',
+        description: `Your honest, specific reaction to the comment — agreement, disagreement, or something to add.`,
+        example: `I actually disagree — we made this switch with a brand-new team and it worked because we over-communicated for the first month.`,
+        required: true,
+      },
+      {
+        name: 'relationship_context',
+        description: `Who this person is to you — stranger, peer, someone you want to build a relationship with.`,
+        example: `Someone in my industry I don't know personally but whose content I respect and want to be on their radar.`,
+        required: true,
+      },
+      {
+        name: 'my_added_info',
+        description: `A specific detail, number, or experience you have that the comment doesn't account for.`,
+        example: `We did this with a team of 4 new hires and it worked because we ran a 2-week overlap of both formats before dropping the weekly 1:1s entirely.`,
+        required: false,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`linkedin-engagement`, `comment-strategy`, `networking`, `personal-branding`, `community-building`],
+    whyItWorks: `The explicit instruction to check whether genuine agreement with nothing to add is the actual honest state, and to permit a short authentic reply rather than force three distinct options, directly counters a structural bias in how language models respond to numbered-output requests: when asked for 'three reply options,' a model will generate three options even when the honest input only supports one, because satisfying the requested count is treated as part of the task unless explicitly told otherwise — this is the same failure mode that produces manufactured disagreement or forced questions in brainstorming tasks generally, and naming it directly is what actually gives the model permission to under-deliver on count when that's the more honest answer. Banning 'Great point' and similar openers by name, rather than a general 'be original' instruction, matters because those specific phrases are extremely high-frequency in professional social-media replies specifically, meaning they sit close to the top of the model's default distribution for this exact context, and only a named ban reliably routes around them rather than a synonym substitution that preserves the same content-free function. Tying tone explicitly to the relationship context prevents a second common failure: an unconstrained model tends to default to one uniformly polished, safe professional register for all replies regardless of audience, because that register is the lowest-risk choice absent other signal — providing the actual relationship forces a genuine register shift (more clipped and familiar for a colleague, more considered and credibility-building for a stranger whose attention you want) rather than one generic voice stretched across different social contexts.`,
+    exampleOutput: `Add detail: "Fair concern — we actually did this with a brand-new 4-person team and it worked because we ran both formats in parallel for 2 weeks before fully dropping the weekly 1:1. The overlap period mattered more than team tenure did." Respectful pushback: "I'd push back slightly — trust was the outcome of overcommunicating early, not a precondition we had going in." Real question: "Curious what async check-in format you'd actually recommend for a team under 6 months old — same cadence, just written instead of live?"`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-11',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'linkedin-case-study-post-results-story-with-real-numbers',
+    category: 'linkedin',
+    title: `Turn a client result into a LinkedIn case-study post that leads with the number, not the client's name`,
+    description: `Structures a client or project win into a LinkedIn post around the before/after numbers and the specific decision that caused the change, built to work as credibility-building proof rather than a thinly-veiled ad.`,
+    promptText: `PHASE 1 — CONFIRM THE STORY HAS A REAL BEFORE/AFTER
+Before drafting anything, check whether what I've given you actually has a measurable before-state and after-state. If it doesn't, tell me what's missing and what to ask the client or pull from records before this can become a credible case-study post — don't draft around a vague improvement.
+
+CLIENT OR PROJECT (anonymized if needed)
+{{client_context}}
+
+THE STARTING NUMBER OR SITUATION
+{{before_state}}
+
+THE RESULTING NUMBER OR SITUATION
+{{after_state}}
+
+THE SPECIFIC DECISION OR CHANGE THAT CAUSED IT
+{{the_intervention}}
+
+TIMEFRAME
+{{timeframe}}
+
+PERMISSION TO NAME THE CLIENT
+{{client_permission}}
+
+PHASE 2 — DRAFT THE POST (only after phase 1 passes)
+Lead with the after-number as the hook, stated plainly, before any context about who the client is — the number earns attention faster than a company name most readers don't recognize does. Follow with the before-state so the gap is immediate and concrete, then name the single specific intervention that caused the change — not a vague "we optimized their strategy," but the actual decision, tactic, or change made. State the timeframe explicitly since an unstated timeframe makes any number impossible to evaluate — a 40% increase over 3 years reads very differently than over 3 weeks. If client_permission indicates you cannot name the client, anonymize consistently throughout ("a mid-size logistics company" used the same way every time it's referenced) rather than accidentally including an identifying detail elsewhere in the post. Close with what this means for the specific type of reader who'd have the same starting problem, phrased as a takeaway they could apply, not a sales pitch to hire you — the credibility is supposed to do the selling implicitly.
+
+WHAT NOT TO DO
+Do not inflate or round the numbers I gave you to sound more impressive. Do not add a hard sales CTA ("DM me to get these results too") unless I explicitly ask for one — a case study that reads as proof outperforms one that reads as an ad, and adding a pitch at the end undercuts the credibility the numbers just built.
+
+OUTPUT FORMAT
+1. A note on whether phase 1 passed, and what's missing if it didn't.
+2. The drafted post, formatted with LinkedIn-appropriate line breaks.
+3. One alternate hook line using the same numbers, in case the first doesn't land.`,
+    variables: [
+      {
+        name: 'client_context',
+        description: `Who the client or project was, and whether they can be named.`,
+        example: `A 40-person logistics company that came to us with a broken lead-routing process.`,
+        required: true,
+      },
+      {
+        name: 'before_state',
+        description: `The measurable starting point.`,
+        example: `Average lead response time was 26 hours, and only 12% of inbound leads got a same-day reply.`,
+        required: true,
+      },
+      {
+        name: 'after_state',
+        description: `The measurable result.`,
+        example: `Average lead response time dropped to 45 minutes, with 91% same-day reply rate.`,
+        required: true,
+      },
+      {
+        name: 'the_intervention',
+        description: `The specific decision or change that caused the result.`,
+        example: `We rerouted inbound leads by territory automatically instead of a single shared inbox one person checked manually.`,
+        required: true,
+      },
+      {
+        name: 'timeframe',
+        description: `How long the change took to produce this result.`,
+        example: `6 weeks from implementation to the after-numbers being stable.`,
+        required: true,
+      },
+      {
+        name: 'client_permission',
+        description: `Whether you have permission to name the client, or must anonymize.`,
+        example: `Cannot name them by contract, must anonymize as 'a logistics company.'`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`case-study`, `linkedin-post`, `b2b-marketing`, `social-proof`, `content-writing`],
+    whyItWorks: `The gating phase 1 check exists because a model asked to write a case-study post will draft something plausible-sounding even from a vague 'we helped them improve' input, since fluent prose generation doesn't require the underlying claim to be verifiable — building in an explicit checkpoint that refuses to proceed without a real before/after number forces the actual evidentiary gap to surface before word-smithing hides it, which matters specifically because a case study's entire persuasive value collapses if a reader can tell the numbers are vague or unverifiable. Requiring the timeframe to be stated explicitly, and flagging that an unstated timeframe makes a percentage meaningless, targets a specific reasoning gap general-purpose instruction following doesn't automatically fill: a percentage change is mathematically incomplete information without a denominator of time, but a model asked simply to 'write a case study post' has no built-in incentive to demand that context unless it's named as a requirement, since the sentence 'we improved response time by 40%' is fluent and complete-sounding on its own even though it's unverifiable as stated. The instruction against a hard sales CTA reflects an actual behavioral pattern rather than a stylistic preference: models tend to close persuasive or promotional content with an explicit call to action by default, because that's the standard shape of marketing copy in their training distribution, but a results-driven case study post specifically works through implicit credibility rather than direct pitching, so the close has to be deliberately overridden rather than left to the model's default marketing-copy instinct.`,
+    exampleOutput: `Phase 1: passed — concrete before/after with timeframe. Post: "91% of inbound leads now get a same-day reply. Six weeks ago it was 12%. The fix wasn't a new CRM or a bigger sales team — it was killing the shared inbox one person was checking manually, and routing leads by territory automatically instead. If your team's average response time is still measured in hours, the bottleneck probably isn't effort. It's the routing."`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-12',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'linkedin-product-launch-post-announcement-that-isnt-an-ad',
+    category: 'linkedin',
+    title: `Write a product launch post that leads with the problem it kills, not the feature list`,
+    description: `Drafts a LinkedIn launch announcement built around the specific problem the product solves and who felt it most, with the feature list positioned as evidence rather than the headline — so it reads as useful news, not an ad people scroll past.`,
+    promptText: `You're drafting a LinkedIn post announcing a product or feature launch. Most launch posts lead with excitement about the product itself ("Thrilled to announce...") and lose the reader before explaining why it matters — I want this one to lead with the problem.
+
+WHAT'S LAUNCHING
+{{product_or_feature}}
+
+THE SPECIFIC PROBLEM IT SOLVES
+{{the_problem}}
+
+WHO FELT THIS PROBLEM MOST
+{{who_felt_it}}
+
+WHAT PEOPLE HAD TO DO BEFORE THIS EXISTED (the workaround)
+{{old_workaround}}
+
+ONE CONCRETE DETAIL ABOUT HOW IT WORKS
+{{how_it_works_detail}}
+
+WHERE TO TRY IT
+{{cta_link_context}}
+
+DRAFT RULES
+Open with the problem stated as something the reader has personally experienced, phrased so a reader who's felt this exact friction recognizes it in the first line — not a description of the product. Name the old workaround explicitly and let its clunkiness or cost do the work of making the new thing look obviously better, rather than asserting the new thing is "better" or "game-changing" without the comparison. Introduce the product only after the problem and workaround are established, and describe it by what it lets someone stop doing or start doing, not by a feature list — use the one concrete detail I gave you about how it works as the proof that this isn't just marketing language. If I did not give you a real number or metric about the impact, do not invent one — describe the mechanism of the improvement instead of a fabricated percentage. End with a specific, low-friction next step tied to where to try it, stated as an invitation to solve the specific problem just described, not a generic "check it out!"
+
+WHAT NOT TO DO
+Do not open with "Excited to announce" or "Thrilled to share" — these phrases signal promotional content that many readers now scroll past by reflex. Do not use exclamation points more than once in the whole post. Do not list more than the one how-it-works detail I gave you — a launch post is not a spec sheet, and trying to cover every feature dilutes the single strongest one.
+
+OUTPUT FORMAT
+1. The post, with LinkedIn-appropriate line breaks.
+2. One alternate opening line that leads with the workaround's cost instead of the problem itself, as a second option.`,
+    variables: [
+      {
+        name: 'product_or_feature',
+        description: `What's actually launching.`,
+        example: `A one-click export feature that turns a dashboard report directly into a shareable PDF.`,
+        required: true,
+      },
+      {
+        name: 'the_problem',
+        description: `The specific pain point this solves.`,
+        example: `Analysts were spending 20-30 minutes manually rebuilding dashboard data into a PDF every time a stakeholder asked for a report.`,
+        required: true,
+      },
+      {
+        name: 'who_felt_it',
+        description: `Who specifically experienced this problem most acutely.`,
+        example: `Data analysts at mid-size companies who report to non-technical stakeholders weekly.`,
+        required: true,
+      },
+      {
+        name: 'old_workaround',
+        description: `What people had to do before this existed.`,
+        example: `Screenshot each chart individually, paste into a slide deck, and manually format it every single week.`,
+        required: true,
+      },
+      {
+        name: 'how_it_works_detail',
+        description: `One concrete, specific detail about the mechanism, not a full feature list.`,
+        example: `It preserves the exact filters and date range the analyst had applied on-screen, so the exported PDF matches what they were actually looking at.`,
+        required: true,
+      },
+      {
+        name: 'cta_link_context',
+        description: `Where or how someone can try it.`,
+        example: `Live now for all existing users under Reports > Export — no separate signup needed.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`product-launch`, `linkedin-post`, `saas-marketing`, `announcement`, `b2b-marketing`],
+    whyItWorks: `Banning 'Excited to announce' and capping exclamation marks targets a specific, high-frequency default: launch-announcement language is one of the most saturated genres of professional social content the model has been exposed to, so its unconstrained default reaches for the same handful of enthusiasm markers that have become so common they now function as a visual signal for readers to skip the post, meaning the ban is correcting for a learned pattern rather than imposing an arbitrary style rule. Requiring the old workaround to be named explicitly, rather than asserting the new product is simply 'better,' works because comparison-through-contrast is mechanically more persuasive than comparison-through-adjective — a reader evaluates 'screenshot each chart, paste into a slide, reformat weekly' against the new one-click flow themselves and draws their own conclusion, whereas the word 'better' asks the reader to trust a claim rather than observe a difference, and a model left unconstrained defaults to the adjective because it's shorter and equally fluent to produce. Limiting the post to exactly one how-it-works detail rather than a full feature rundown counters the model's tendency, when given multiple facts about a product, to include all of them for thoroughness — comprehensiveness reads as helpful in a spec sheet but as unfocused in a social post competing for two seconds of attention, so the cap forces a prioritization decision the model wouldn't otherwise make on its own. The instruction against fabricating a percentage addresses the same evidentiary-integrity risk as in case-study content: launch-post copy conventionally includes an impact metric, so absent an explicit prohibition, a model asked to make the post compelling may supply a plausible-sounding number to fill that conventional slot even when none was given.`,
+    exampleOutput: `Every Monday, our analysts spent 20-30 minutes turning a dashboard into something a VP could actually read — screenshotting charts, pasting into slides, reformatting by hand. That workflow is gone. One-click export now turns your dashboard, with the exact filters and date range you're looking at, straight into a shareable PDF. Live now under Reports > Export for every existing user, no new signup required.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-12',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'linkedin-founder-story-post-origin-with-the-hard-part-kept-in',
+    category: 'linkedin',
+    title: `Write a founder story post that keeps the part where it almost didn't work`,
+    description: `Drafts a founder-origin LinkedIn post built around the specific low point or doubt, not just the polished highlight reel version — because the moment it almost failed is usually the part that makes the story credible.`,
+    promptText: `You're helping me write a founder story post for LinkedIn. Most founder stories on this platform skip straight from "I had an idea" to "and now we're thriving," which reads as a highlight reel nobody fully believes. I want the version that keeps the part where it almost didn't work.
+
+THE ORIGINAL PROBLEM OR IDEA
+{{origin_idea}}
+
+THE SPECIFIC LOW POINT OR MOMENT OF DOUBT
+{{low_point}}
+
+WHAT ACTUALLY CHANGED (not motivation — an actual decision or event)
+{{turning_point}}
+
+WHERE THINGS STAND NOW
+{{current_state}}
+
+WHAT I WANT THE READER TO TAKE FROM THIS
+{{reader_takeaway}}
+
+DRAFT RULES
+Do not open with the founding idea or the company name — open with the low point, told specifically enough that a reader who's never heard of the company still feels the stakes in the first two lines. Only after the low point is established, go back and explain briefly what the original idea was and why it mattered enough to keep going. Describe the turning point as an actual decision or specific event, not an abstract shift in mindset — "I decided to stop hiring for culture fit alone and start requiring a paid trial project" is a turning point; "I realized I needed to trust myself more" is not specific enough to be believable or useful to a reader. State where things stand now honestly, including a real limitation or ongoing challenge if one exists, rather than a clean "and now everything is great" ending — an ending with zero remaining friction reads as manufactured. Close with the reader_takeaway framed as something applicable to the reader's own situation, not a humblebrag disguised as advice.
+
+WHAT NOT TO DO
+Do not use the phrase "little did I know" or "the rest is history." Do not manufacture drama that isn't in what I gave you — if the low point I described is more mundane than dramatic (a slow quarter, not a near-bankruptcy), keep it at that scale rather than inflating it into a crisis for effect, since an inflated story reads as false to anyone who knows the real timeline.
+
+OUTPUT FORMAT
+1. The post, LinkedIn-formatted with line breaks.
+2. A one-line honesty check: does this framing match what actually happened, or did the draft inflate any part beyond what I described? Flag anything you had to soften or dramatize to make the structure work.`,
+    variables: [
+      {
+        name: 'origin_idea',
+        description: `What the original idea or problem was.`,
+        example: `Started a meal-prep delivery service for busy parents because I couldn't find one that handled real dietary restrictions well.`,
+        required: true,
+      },
+      {
+        name: 'low_point',
+        description: `The specific moment things were genuinely difficult or in doubt.`,
+        example: `Six months in, we had 40 subscribers and I was cooking every order myself at 4am before my day job, and seriously considered shutting down.`,
+        required: true,
+      },
+      {
+        name: 'turning_point',
+        description: `The actual, specific decision or event that changed the trajectory.`,
+        example: `I stopped trying to serve every dietary restriction and narrowed to just three specific ones we could do exceptionally well.`,
+        required: true,
+      },
+      {
+        name: 'current_state',
+        description: `Where things actually stand now, including any real remaining challenge.`,
+        example: `1,200 subscribers now, profitable, but still figuring out how to scale kitchen capacity without losing quality.`,
+        required: true,
+      },
+      {
+        name: 'reader_takeaway',
+        description: `What you want the reader to actually apply from this.`,
+        example: `Narrowing who you serve, not broadening it, is usually what gets a struggling business unstuck.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`founder-story`, `linkedin-post`, `personal-branding`, `storytelling`, `startup`],
+    whyItWorks: `Requiring the post to open with the low point rather than the origin idea works against the model's default narrative ordering: when asked for a 'founder story,' the most statistically common shape in the training data runs chronologically — idea, then journey, then result — because that's how founder stories are conventionally told in interviews and bios; forcing a non-chronological open (low point first, origin explained after) produces the specific structural tension that makes a reader keep reading, which a chronological retelling doesn't create because the ending is implicitly telegraphed by the post existing at all ('a company posting about its founding' already signals survival). The instruction to describe the turning point as a specific decision or event rather than a mindset shift targets a concrete failure mode: 'mindset shift' framing ('I realized I needed to trust myself') is the model's easiest fallback because it requires no factual specificity and is always available regardless of what real information was supplied, whereas a specific decision is falsifiable and has to come from the actual input, which is why the example given for what counts as too vague is included directly in the instruction rather than left to be inferred. The honesty-check final step exists because narrative-shaping instructions (build tension, keep the low point, create a turning point) inherently pull the model toward dramatizing a true story into a better-shaped one, and asking it to self-report where it may have inflated the account is the only mechanism available to catch that drift before a founder posts something that a former team member or investor could recognize as embellished beyond what actually happened.`,
+    exampleOutput: `Six months into the business, I was cooking every single order myself at 4am before my day job, for 40 subscribers, and seriously weighing whether to shut it down. The idea had been simple: a meal-prep service for parents who couldn't find one that actually handled real dietary restrictions. What changed wasn't a burst of motivation — it was narrowing from trying to serve every restriction to just three we could do exceptionally well. We're at 1,200 subscribers now, profitable, still working out how to scale kitchen capacity without losing what made this work in the first place. If your business is stuck, the fix is often narrower, not broader.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-13',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'linkedin-social-audit-profile-and-content-gap-review',
+    category: 'linkedin',
+    title: `Audit a LinkedIn profile and recent posts against a stated goal, not against a generic best-practices checklist`,
+    description: `Reviews your headline, About section, and a sample of recent posts against a specific goal you're trying to achieve on LinkedIn, flagging the gap between what your presence currently signals and what it needs to signal for that goal.`,
+    promptText: `Audit my LinkedIn presence — not against a generic best-practices checklist, but against one specific goal I'm actually trying to achieve right now.
+
+MY SPECIFIC GOAL ON LINKEDIN
+{{specific_goal}}
+
+CURRENT HEADLINE
+{{current_headline}}
+
+CURRENT ABOUT SECTION
+{{current_about}}
+
+TOPICS OF MY LAST 5-10 POSTS (titles or brief summaries)
+{{recent_post_topics}}
+
+WHO I NEED TO REACH FOR THIS GOAL
+{{target_audience}}
+
+AUDIT RULES
+First, restate the specific goal in terms of what a stranger scrolling my profile or feed would need to conclude about me for that goal to be achievable — this reframes "grow my personal brand" (too vague to audit against) into something checkable like "a hiring manager for senior PM roles needs to conclude I can operate at that level within 30 seconds on my profile." Then check the headline against that reframed goal specifically — does it signal the right thing to the right audience, or does it currently signal something adjacent or outdated. Do the same for the About section. Then look at the pattern across recent post topics as a set, not post by post — what does the aggregate pattern of topics currently signal about what I care about or am credible in, and does that pattern support or undercut the stated goal. Name the single biggest gap between current presence and the goal — not a list of five minor issues, the one gap that matters most given everything else. Give one concrete next action for the headline, one for the About section, and one for content direction — each specific enough to execute this week, not a general "post more consistently."
+
+WHAT NOT TO DO
+Do not give generic LinkedIn best-practice advice ("use more hashtags," "post at optimal times") unless it's directly tied to the stated goal and audience — an audit against a specific goal should feel different from a generic profile checklist, and if your advice would apply to literally anyone regardless of their goal, cut it. Do not praise what's already working before identifying the gap — lead with the gap, since that's what I'm actually asking for.
+
+OUTPUT FORMAT
+1. The goal, reframed as a checkable 30-second-scroll standard.
+2. Headline assessment (one line: aligned / partially aligned / misaligned, with why).
+3. About section assessment (same format).
+4. Content pattern assessment across the recent post topics as a set.
+5. The single biggest gap.
+6. Three concrete next actions — one per area (headline, About, content direction).`,
+    variables: [
+      {
+        name: 'specific_goal',
+        description: `The concrete outcome you're trying to achieve via LinkedIn right now.`,
+        example: `Get noticed for a Director of Engineering role at a Series B startup within the next 3 months.`,
+        required: true,
+      },
+      {
+        name: 'current_headline',
+        description: `Your current headline text, as it appears now.`,
+        example: `Engineering Manager at TechCorp | Building great teams`,
+        required: true,
+      },
+      {
+        name: 'current_about',
+        description: `Your current About section text, as it appears now.`,
+        example: `Experienced engineering leader with 8 years managing distributed teams across fintech and e-commerce. Passionate about mentorship and scaling engineering culture.`,
+        required: true,
+      },
+      {
+        name: 'recent_post_topics',
+        description: `Titles or one-line summaries of your last 5-10 posts.`,
+        example: `A post celebrating a team member's promotion, a repost of an industry news article with no comment, a post about a conference I attended, two posts about hiring tips.`,
+        required: true,
+      },
+      {
+        name: 'target_audience',
+        description: `Specifically who needs to see and be convinced by your profile for this goal.`,
+        example: `VP Engineering and CTOs at Series B-C startups who might be hiring for a Director role in the next quarter.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`linkedin-audit`, `personal-branding`, `career-jobsearch`, `content-strategy`, `profile-optimization`],
+    whyItWorks: `Reframing a vague goal into a checkable 30-second-scroll standard before doing any assessment is the load-bearing step, because an unconstrained audit request tends to default to a generic best-practices pass (headline length, keyword density, posting cadence) precisely because those checks are always applicable and don't require holding a specific goal in mind while evaluating each element — the reframe forces every subsequent judgment to be made against one stated standard rather than against LinkedIn conventions in general, which is the actual difference between a useful audit and a checklist that would read almost identically for any two different people. Instructing the model to assess recent posts as an aggregate pattern rather than post by post matters because a single post rarely damages a professional goal on its own, but a consistent pattern across ten posts (team celebrations, unremarked reposts, no original technical opinion) signals something cumulative that no individual post-level check would surface — this is analogous to why a single data point can't reveal a trend, and the instruction has to explicitly redirect the model's default unit of analysis from 'post' to 'pattern across posts' to get that read. Requiring exactly one named biggest gap, rather than a list, counters the model's tendency toward exhaustive feedback when asked to 'audit' something — thoroughness is the model's default because listing every possible issue is lower-risk than committing to a single priority judgment, but a person acting on this audit needs a ranked answer to 'what matters most,' not an undifferentiated list they still have to prioritize themselves.`,
+    exampleOutput: `Reframed goal: a VP Engineering or CTO at a Series B-C startup needs to conclude within 30 seconds that you operate at Director level, not just manage a single team well. Headline: partially aligned — 'Building great teams' signals people-management but not scope or technical judgment at the Director level. Content pattern: misaligned — five of the last ten posts have no original point of view, mostly reposts and team celebrations; nothing signals independent technical or organizational judgment. Biggest gap: nothing in the recent post history demonstrates decision-making at the scope a Director role requires. Next actions: rewrite headline to name scope (team size, technical domain); rewrite About's second sentence to state a specific org-design decision you made; publish one post this week detailing an actual engineering-org tradeoff you navigated, not a hiring tip.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-14',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
 ] as const

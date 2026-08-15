@@ -1889,4 +1889,91 @@ Largest opportunity: removing the unnecessary 'use client' from DashboardPage it
     ],
     relatedToolSlug: 'website-speed-test',
   },
+  {
+    slug: 'nextjs-app-router-feature-implementation-plan',
+    category: 'nextjs',
+    title: `Turn a one-line feature request into an App Router implementation plan before touching a single file`,
+    description: `Produces a server/client component boundary, data-fetching strategy, and file-by-file change list for a new Next.js App Router feature, so Claude Code implements it with the right rendering model instead of guessing and defaulting everything to a client component.`,
+    promptText: `You are a senior Next.js engineer planning a new feature for an existing App Router codebase before any code gets written. Your job is not to write the feature yet — it's to produce a implementation plan specific enough that writing the code afterward is mechanical, not exploratory.
+
+FEATURE REQUEST
+{{feature_request}}
+
+RELEVANT EXISTING ROUTES / FILES
+{{existing_routes}}
+
+DATA SOURCE
+{{data_source}}
+
+RENDERING CONSTRAINT
+{{rendering_constraint}}
+
+OUT OF SCOPE
+{{out_of_scope}}
+
+PLANNING RULES
+For every new or modified route segment, state explicitly whether it is a Server Component or a Client Component, and justify the choice by what the segment actually needs — interactivity, browser APIs, or hooks force Client; everything else defaults to Server. Never mark something Client Component by default just because it's simpler to reason about; that habit is exactly what produces bloated client bundles in App Router codebases, and every unnecessary 'use client' boundary drags its entire subtree of imports into the client bundle with it. Name the specific data-fetching approach per segment — a Server Component fetching directly with async/await, a Route Handler backing a client-side call, or a Server Action for a mutation — and state which one, since these are not interchangeable and picking wrong means rewriting the boundary later. Identify every place a loading.tsx, error.tsx, or Suspense boundary is needed, and say why that segment specifically needs one rather than adding boilerplate everywhere by habit. Flag any place the plan would require prop-drilling data through more than two layers of Server Components, and propose colocating the fetch closer to where it's used instead. If the feature touches an existing route, list the exact files that need to change and what changes in each one — do not describe the feature in the abstract without anchoring it to the actual file tree given.
+
+WHAT NOT TO DO
+Do not write any actual component code, JSX, or TypeScript in this pass — this is a plan only. Do not suggest a new library, framework feature, or Next.js version bump unless the stated rendering constraint genuinely cannot be met without it, and if you do suggest one, name the specific trade-off it introduces.
+
+OUTPUT FORMAT
+1. A short paragraph restating the feature in terms of what changes for the end user.
+2. A table: route segment | Server or Client | why | data-fetching approach | new loading/error/Suspense boundary needed (yes/no + why).
+3. A file-by-file list of exact changes for existing files, and new files to create with their paths.
+4. Any prop-drilling or colocation issue found, with the fix.
+5. One line confirming nothing in the plan silently expands scope beyond what was asked.`,
+    variables: [
+      {
+        name: 'feature_request',
+        description: `The feature in plain language, as it was actually requested.`,
+        example: `Add a 'saved searches' panel to the /dashboard route that lets a logged-in user save their current filter combination and re-apply it later.`,
+        required: true,
+      },
+      {
+        name: 'existing_routes',
+        description: `The actual route segments and files this feature touches or lives near.`,
+        example: `app/dashboard/page.tsx (Server Component, fetches results server-side), app/dashboard/filters.tsx (Client Component, holds filter state in useState).`,
+        required: true,
+      },
+      {
+        name: 'data_source',
+        description: `Where the data this feature reads or writes actually lives.`,
+        example: `Postgres via a \`saved_searches\` table, accessed through an existing \`db\` client already used in Server Actions elsewhere in the app.`,
+        required: true,
+      },
+      {
+        name: 'rendering_constraint',
+        description: `Any hosting, caching, or rendering-mode constraint the plan must respect.`,
+        example: `Deployed on Vercel with the dashboard route currently using dynamic rendering (\`export const dynamic = 'force-dynamic'\`) because results are per-user.`,
+        required: false,
+      },
+      {
+        name: 'out_of_scope',
+        description: `What this feature explicitly should not include, to stop the plan from scope-creeping.`,
+        example: `No sharing saved searches between users, no notification when a saved search has new matching results — that's a later ticket.`,
+        required: false,
+      },
+    ],
+    targetTools: [`Claude Code (Sonnet 4.6)`],
+    tags: [`nextjs`, `app-router`, `server-components`, `architecture-planning`, `claude-code`],
+    whyItWorks: `Claude Code, like most coding agents, will happily start writing a component before it has decided whether that component should be a Server or Client Component, and its default under ambiguity in an App Router codebase skews toward adding 'use client' at the top of the file because that unlocks useState and event handlers without the agent having to reason about the boundary at all — this is the single most common architectural regression an unscoped feature request produces, and it silently bloats the client JS bundle by pulling every import in that subtree along with it. Forcing a route-segment-by-route-segment table with an explicit Server/Client decision and a justification means the agent has to commit to a rendering model before generation starts, which is exactly the point where the decision is cheap to get right and expensive to unwind afterward once event handlers and hooks are already threaded through a component that should have stayed on the server. Naming the specific data-fetching mechanism per segment (direct async fetch in a Server Component versus a Route Handler versus a Server Action) matters because these three have different revalidation, caching, and error-surfacing behavior in Next.js, and an agent that picks one without being asked to justify it tends to default to Route Handlers even when a direct server-side fetch would be simpler and avoid an extra network hop. The prop-drilling check catches a specific failure mode of Server Component composition: because Server Components can't hold client-side context providers to pass data down, agents often thread fetched data through multiple layers of props instead of just fetching again closer to where it's consumed, and colocating the fetch is usually cheaper than the plumbing since Next.js dedupes identical fetch calls within a single render pass automatically.`,
+    exampleOutput: `Feature: adds a persistent saved-searches panel so a user's filter combination survives a page refresh and can be reapplied with one click.
+
+| Segment | Server/Client | Why | Data fetching | Boundary needed |
+|---|---|---|---|---|
+| app/dashboard/saved-searches/list.tsx | Server | Read-only render of saved rows, no interactivity | Direct async fetch in the Server Component | loading.tsx yes — query can be slow on first load |
+| app/dashboard/saved-searches/save-button.tsx | Client | Needs onClick + optimistic UI state | Server Action \`saveSearch()\` | none |
+
+Files to change: app/dashboard/page.tsx (import and render the new list), new files: app/dashboard/saved-searches/list.tsx, save-button.tsx, actions.ts.`,
+    verifiedAgainst: [
+      { tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-11' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-11',
+        note: `Initial publish, verified against Claude Code Sonnet 4.6.`,
+      },
+    ],
+  },
 ]

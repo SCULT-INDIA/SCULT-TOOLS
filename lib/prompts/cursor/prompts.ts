@@ -1936,4 +1936,570 @@ Do not propose a fix that merely suppresses the symptom — escaping a string to
       },
     ],
   },
+  {
+    slug: 'cursor-agent-rest-api-endpoint-contract-brief',
+    category: 'cursor',
+    title: `Brief Cursor's Agent mode to design a REST endpoint from a contract, not from whatever shape falls out of the handler`,
+    description: `A contract-first REST endpoint brief for Agent mode that pins down resource semantics, status-code mapping, and error-body shape before implementation starts, so the eventual handler matches an agreed contract instead of whatever shape came out naturally while wiring up the route.`,
+    promptText: `You are designing and implementing a new REST endpoint in Agent mode. Do not start editing route handlers until the contract below is fixed — treat it as the spec the implementation has to match, not a draft you can quietly adjust once the code turns out easier to write one way than another.
+
+ENDPOINT
+{{http_method}} {{endpoint_path}}
+
+RESOURCE SEMANTICS
+{{resource_semantics}}
+
+REQUEST SHAPE
+{{request_shape}}
+
+RESPONSE SHAPE (SUCCESS)
+{{response_shape}}
+
+ERROR CASES AND STATUS CODES
+{{error_cases}}
+
+EXISTING API CONVENTIONS TO MATCH
+{{existing_conventions}}
+
+BEFORE WRITING THE HANDLER
+Restate the contract above back in one paragraph, in your own words, and flag anything ambiguous now — a status code not covered by an error case that could plausibly happen, a field whose type isn't fully specified. Do not proceed to implementation while an ambiguity is unresolved by quietly picking the version that's easiest to code.
+
+IMPLEMENTATION RULES
+- Validate the request shape at the boundary before any business logic runs; reject with the error case that matches, not a generic 400.
+- Match the existing API conventions exactly for error body shape, pagination, and auth handling — a technically-fine response using a different error envelope than every other endpoint in this API is still wrong.
+- Do not add a field to the response that isn't in RESPONSE SHAPE, even if it seems obviously useful — name it and ask, since an extra field becomes a de facto contract the moment a client starts depending on it.
+- Do not silently narrow an error case to a subset of what it should cover (handling one invalid-input variant but not the sibling one in the same case) just because you found one first while testing.
+
+WHEN DONE
+List each error case from above and the exact status code and body the handler now returns for it, so the contract can be checked case by case rather than trusted from a summary. Separately, list any endpoint behavior you added beyond what's stated here.`,
+    variables: [
+      {
+        name: 'http_method',
+        description: `The HTTP verb for this endpoint.`,
+        example: `POST`,
+        required: true,
+      },
+      {
+        name: 'endpoint_path',
+        description: `The exact route path, including any path parameters.`,
+        example: `/api/v1/orders/:orderId/refunds`,
+        required: true,
+      },
+      {
+        name: 'resource_semantics',
+        description: `What this endpoint actually represents doing to the resource, stated precisely enough to disambiguate from a similar-looking action.`,
+        example: `Creates a partial or full refund against an already-captured payment. Idempotent per idempotency key; does not cancel or modify the original order.`,
+        required: true,
+      },
+      {
+        name: 'request_shape',
+        description: `The exact request body/params/query shape, with types.`,
+        example: `{ amount: number (cents, > 0, <= remaining captured amount), reason: 'customer_request' | 'duplicate' | 'fraudulent', idempotencyKey: string }`,
+        required: true,
+      },
+      {
+        name: 'response_shape',
+        description: `The exact success response shape, with types.`,
+        example: `{ refundId: string, orderId: string, amount: number, status: 'pending' | 'succeeded', createdAt: string (ISO 8601) }`,
+        required: true,
+      },
+      {
+        name: 'error_cases',
+        description: `Every error condition this endpoint must handle, mapped to a status code.`,
+        example: `amount exceeds remaining captured amount -> 422 { code: 'amount_exceeds_captured' }; order not found -> 404; duplicate idempotency key with a different body -> 409; order not yet captured -> 409 { code: 'not_captured' }`,
+        required: true,
+      },
+      {
+        name: 'existing_conventions',
+        description: `This API's existing conventions for error envelopes, pagination, and auth, so the new endpoint doesn't introduce a second style.`,
+        example: `All errors return { error: { code, message } }. Auth is a Bearer token checked by requireAuth() middleware, never re-implemented per route.`,
+        required: true,
+      },
+    ],
+    targetTools: [`Cursor 2.2`],
+    tags: [`rest-api`, `agent-mode`, `api-design`, `contract-first`, `error-handling`],
+    whyItWorks: `Agent mode reads the surrounding framework and ORM conventions and will happily let a response shape emerge from whatever the handler naturally produces — a serialized model, a wrapped query result — rather than from a contract that was actually agreed on, which means the eventual response can drift from what a client was built against without either side noticing until an integration breaks. Fixing the contract before any file is touched, and requiring the model to restate it and surface ambiguity first, forces that negotiation to happen as a checkable paragraph rather than as an implicit decision baked silently into working code, which is a much harder thing to renegotiate once a client has already started depending on it. The explicit ban on adding an unrequested response field targets a specific and common agent habit: proactively enriching a response with a field that seems obviously useful — a computed total, a related object — reads as helpful in isolation, but the moment any client starts reading that field, it has become part of the contract whether or not it was ever agreed to be, and removing it later is now a breaking change nobody planned for. Requiring the exact status code and body to be listed per stated error case, rather than a general claim that errors are handled, converts "handles errors" from an unverifiable summary into something that can be checked line by line against the original list — which is also what catches the common failure mode of one error case actually covering two sibling conditions in the contract but the implementation only reaching the one that came up first during manual testing.`,
+    exampleOutput: `Contract restated: this is a per-order partial/full refund, idempotent on idempotencyKey, requiring the order to already be captured. Ambiguity flagged: REQUEST SHAPE doesn't say what happens if amount is omitted entirely — treating it as "full remaining amount" unless told otherwise, flagging this assumption explicitly.
+
+Error case coverage:
+- amount exceeds remaining captured amount -> 422 { error: { code: 'amount_exceeds_captured', message } }
+- order not found -> 404 { error: { code: 'not_found', message } }
+- duplicate idempotency key, different body -> 409 { error: { code: 'idempotency_conflict', message } }
+- order not yet captured -> 409 { error: { code: 'not_captured', message } }
+
+No fields added beyond RESPONSE SHAPE.`,
+    verifiedAgainst: [
+      { tool: 'Cursor', version: '2.2', date: '2026-08-08' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-08',
+        note: `Initial publish, verified against Cursor 2.2 Agent mode.`,
+      },
+    ],
+  },
+  {
+    slug: 'cursor-agent-differential-bug-diagnosis-brief',
+    category: 'cursor',
+    title: `Have Cursor's Agent mode rank competing causes before it touches a production bug it can't reproduce locally`,
+    description: `A differential-diagnosis brief for incidents where local reproduction isn't available — it forces the agent to list multiple candidate causes, score each against the actual evidence in hand, and name the one piece of evidence that would distinguish the top two, instead of committing to the first plausible-sounding explanation.`,
+    promptText: `INCIDENT SYMPTOM
+{{incident_symptom}}
+
+EVIDENCE AVAILABLE
+{{evidence_available}}
+
+RECENT CHANGES THAT COULD BE RELATED
+{{recent_changes}}
+
+This cannot be reproduced locally right now — {{repro_constraint}} — so you are diagnosing from evidence alone, not from a failing test you can iterate against. Do not present a single cause as confirmed unless the evidence actually rules out the alternatives; a story that fits the symptom is not the same as a story the evidence has confirmed over its rivals.
+
+STEP 1 — LIST CANDIDATE CAUSES
+Name at least {{minimum_hypotheses}} distinct, genuinely different candidate causes consistent with the symptom — not one cause phrased three ways. For each, state what you'd expect to see in the evidence if it were true.
+
+STEP 2 — SCORE AGAINST EVIDENCE
+Go through EVIDENCE AVAILABLE line by line and, for each candidate, state whether that evidence supports it, contradicts it, or is silent on it. A candidate contradicted by even one piece of hard evidence gets demoted, not kept in contention just because it's otherwise the most attractive explanation.
+
+STEP 3 — NAME THE DECIDING EVIDENCE
+For the top two candidates still standing, state the one specific additional piece of evidence — a log line, a metric, a specific field on a specific record — that would distinguish between them, and where you'd look for it if it isn't already in EVIDENCE AVAILABLE.
+
+STEP 4 — RECOMMEND, DON'T FIX YET
+Name the single most likely cause and the fix you'd propose for it, but do not write that fix until the Step 3 evidence is actually checked. If checking it isn't possible right now, say so plainly and mark the recommendation unconfirmed rather than presenting it with the same confidence as a checked conclusion.`,
+    variables: [
+      {
+        name: 'incident_symptom',
+        description: `What was observed, from the outside, as precisely as it's known.`,
+        example: `Roughly 2% of checkout requests return a 500 starting at 14:10 UTC, concentrated on orders with more than one line item.`,
+        required: true,
+      },
+      {
+        name: 'evidence_available',
+        description: `The actual evidence in hand right now — logs, metrics, error rates, specific records — not a summary of what you assume it shows.`,
+        example: `Error logs show a null-pointer in calculateShippingTotal for the affected requests. Deploy log shows a shipping-rates service deploy at 14:05 UTC. No corresponding spike in the shipping-rates service's own error rate.`,
+        required: true,
+      },
+      {
+        name: 'recent_changes',
+        description: `Deploys, config changes, or data migrations around the time the symptom started, as candidate correlated causes to weigh.`,
+        example: `shipping-rates service deployed at 14:05 UTC (adds a new zone-based pricing tier). No other deploys in the last 24 hours.`,
+        required: true,
+      },
+      {
+        name: 'repro_constraint',
+        description: `Why this can't be reproduced locally right now, so the diagnosis is understood to rest on evidence rather than a failing test.`,
+        example: `The affected shipping zones only exist in production data; staging has no multi-zone orders to trigger the path.`,
+        required: true,
+      },
+      {
+        name: 'minimum_hypotheses',
+        description: `A floor on distinct candidate causes to force genuine breadth instead of one explanation restated.`,
+        example: `3`,
+        required: false,
+      },
+    ],
+    targetTools: [`Cursor 2.2`],
+    tags: [`bug-diagnosis`, `agent-mode`, `incident-response`, `root-cause-analysis`, `production-debugging`],
+    whyItWorks: `A language model asked to diagnose a bug from a symptom description has a strong pull toward premature convergence on a single coherent, confident-sounding narrative, because that's the shape of answer its training rewards — and a story that merely fits the symptom's surface description is trivially easy to construct for almost any plausible cause, which is exactly why it isn't evidence of anything on its own. Requiring at least a stated minimum of genuinely distinct candidates before any scoring happens breaks that premature convergence by making the model commit to breadth before it's allowed to narrow, and the line-by-line evidence-scoring step in Stage 2 is what actually does the diagnostic work: it forces each candidate to be checked against specific facts rather than against the symptom's prose, which is where hypotheses that sound equally good on the surface start to separate, since real evidence supports some and contradicts others even when both stories are individually coherent. Naming the one piece of deciding evidence that would distinguish the top two remaining candidates matters because it converts "I believe it's X" into a falsifiable claim with a named test, which is the only thing that actually resolves a genuine tie between two evidence-consistent explanations — without it, the model defaults to picking whichever candidate it introduced first or described most fluently, which has no correlation with which one is actually correct. Marking an unconfirmed recommendation as unconfirmed, rather than presenting it with the same tone of certainty as a checked conclusion, matters specifically for incidents: a fix shipped against an unconfirmed cause can make the symptom subside for an unrelated reason — traffic dropping, a concurrent deploy, a cache expiring — and get credited as "fixed" while the actual cause ships unaddressed and recurs later under conditions nobody thought to re-check.`,
+    exampleOutput: `Candidates: (1) new zone-pricing tier in shipping-rates returns a shape calculateShippingTotal doesn't expect for certain zones. (2) unrelated null-check regression already present before 14:05, coincidentally surfaced by unrelated traffic composition. (3) a race condition between cart total and shipping calc, unrelated to the deploy.
+
+Scoring: no error-rate spike in shipping-rates itself contradicts candidate (1) being a shipping-rates bug directly, but supports a shape mismatch on the caller's side. Deploy timing lining up almost exactly with symptom onset contradicts (2) and (3) as coincidence explanations.
+
+Deciding evidence: pull one affected request's raw shipping-rates response body from logging and check whether it includes the new zone-tier field that calculateShippingTotal's null-check doesn't handle.
+
+Recommendation (unconfirmed pending that check): calculateShippingTotal doesn't handle the new zone-tier field shape introduced at 14:05.`,
+    verifiedAgainst: [
+      { tool: 'Cursor', version: '2.2', date: '2026-08-09' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-09',
+        note: `Initial publish, verified against Cursor 2.2 Agent mode on a production incident with no local repro.`,
+      },
+    ],
+  },
+  {
+    slug: 'cursor-agent-behavior-preserving-refactor-brief',
+    category: 'cursor',
+    title: `Force Cursor's Agent mode to prove a refactor changed nothing observable before calling it done`,
+    description: `A pure-structure refactor brief that requires a characterization test capturing current behavior, bugs included, before any code moves, and forbids any change that isn't reachable purely by renaming, extracting, or reorganizing — so a refactor stays a refactor instead of quietly becoming an unannounced behavior change.`,
+    promptText: `REFACTOR TARGET
+{{target_module}}
+
+GOAL STRUCTURE
+{{goal_structure}}
+
+KNOWN QUIRKS TO PRESERVE, NOT FIX
+{{known_quirks}}
+
+This is a structural refactor only — the observable behavior of {{target_module}} must be identical before and after, for every input a real caller could pass. If reaching GOAL STRUCTURE would require changing behavior anywhere, stop and name the conflict rather than refactoring through it.
+
+STEP 1 — CAPTURE CURRENT BEHAVIOR
+Before touching any code, write characterization tests against the current implementation covering: {{behavior_surface}}. These tests describe what the code does today, not what it should do — if something looks like a bug, capture it as current behavior anyway and flag it separately in your notes. Do not silently correct it while writing the test; that would mean testing against a target you already changed.
+
+STEP 2 — REFACTOR
+Restructure the code toward GOAL STRUCTURE using only moves that don't change behavior — extract, inline, rename, reorder, split, merge. If getting to the target shape genuinely requires a behavior difference somewhere, stop before making it and say so instead of quietly deciding the tradeoff yourself.
+
+STEP 3 — CONFIRM
+Run the Step 1 characterization tests against the refactored code, unmodified. Every one must still pass exactly as written. If a test needs to change to keep passing, that is evidence behavior changed, not evidence the test was wrong — report it as a break, not as a test fix.
+
+WHAT NOT TO DO
+- Do not fix a bug you flagged in Step 1 as part of this pass, even though you're already in the code.
+- Do not rename anything not required to reach GOAL STRUCTURE just because you noticed a better name while in there — a drive-by rename is still an unannounced change to anyone reviewing this diff by intent, not by line count.
+- Do not delete or loosen a characterization test that turns out to be inconvenient after the refactor; if it fails, the refactor is the thing in question, not the test.
+
+WHEN DONE
+State the number of characterization tests written, the number passing unmodified after the refactor, and every flagged-but-not-fixed quirk as a separate follow-up item, not folded into this change.`,
+    variables: [
+      {
+        name: 'target_module',
+        description: `The specific file, class, or module being restructured.`,
+        example: `lib/billing/invoiceGenerator.ts`,
+        required: true,
+      },
+      {
+        name: 'goal_structure',
+        description: `The end structural shape, described concretely enough to plan the extraction/split from.`,
+        example: `Split the 400-line generateInvoice function into separate lineItemCalculator, taxCalculator, and formatter modules, each independently testable.`,
+        required: true,
+      },
+      {
+        name: 'behavior_surface',
+        description: `What the characterization tests actually need to cover to count as a real safety net.`,
+        example: `Every branch in the current tax-calculation logic (domestic, international, tax-exempt), rounding behavior at each step, and the exact line-item ordering in the final output.`,
+        required: true,
+      },
+      {
+        name: 'known_quirks',
+        description: `Odd current behaviors that must be preserved even though they look wrong, so they get captured deliberately rather than accidentally fixed mid-refactor.`,
+        example: `Tax-exempt orders currently still show a $0.00 tax line instead of omitting it — downstream PDF template relies on that line always being present.`,
+        required: false,
+      },
+    ],
+    targetTools: [`Cursor 2.2`],
+    tags: [`refactoring`, `agent-mode`, `characterization-tests`, `behavior-preservation`, `code-review`],
+    whyItWorks: `A model asked to refactor code will often quietly conflate "restructure" with "improve," because its training rewards output that looks better along every visible axis at once, and fixing a bug or renaming an awkward variable it notices along the way reads as strictly positive — but a refactor's entire value as a reviewable unit of work depends on the diff being behavior-neutral, and any snuck-in fix inside that diff makes it impossible for a reviewer to tell which lines are structural and which quietly changed what the system does. Requiring characterization tests written against current behavior, bugs and all, before any code moves converts the existing contract from something trusted to memory into something pinned down in an executable, checkable form, and explicitly instructing the model to capture a known bug as current behavior rather than fix it while it's right there closes the most common version of this conflation, where a genuine correctness fix hides inside what's presented as a pure restructure and becomes essentially unreviewable as a result, since a reviewer scanning a "just a refactor" diff has no reason to scrutinize logic for correctness the way they would a feature change. The instruction that a failing characterization test after refactor means the refactor is wrong, not the test, closes a related and easy-to-miss loophole: a model under pressure to make its own tests pass again will edit the test if that's the path of least resistance, which quietly redefines "unchanged" as whatever the new code happens to produce rather than what the old code actually did — the entire point of writing the test first is that it isn't allowed to move once behavior is supposed to be fixed.`,
+    exampleOutput: `Step 1: wrote 14 characterization tests covering domestic/international/tax-exempt branches, rounding at each subtotal step, and line-item ordering. Flagged: tax-exempt orders emit a $0.00 tax line rather than omitting it — captured as-is per KNOWN QUIRKS, not fixed.
+
+Step 2: split generateInvoice into lineItemCalculator.ts, taxCalculator.ts, and formatter.ts. No behavior-changing moves made; one planned extraction (memoizing the tax lookup) was skipped because it would have changed rounding order — flagged instead of made.
+
+Step 3: all 14 characterization tests pass unmodified against the refactored code. 14/14 passing, 0 changed, 1 quirk logged as a separate follow-up (not fixed here).`,
+    verifiedAgainst: [
+      { tool: 'Cursor', version: '2.2', date: '2026-08-10' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-10',
+        note: `Initial publish, verified against Cursor 2.2 Agent mode on a structural refactor with characterization tests.`,
+      },
+    ],
+  },
+  {
+    slug: 'cursor-agent-auth-flow-security-invariant-brief',
+    category: 'cursor',
+    title: `Give Cursor's Agent mode a security invariant list before it touches an authentication flow`,
+    description: `A brief for modifying or extending an authentication or session flow that states non-negotiable security invariants up front and requires the agent to check its own diff against each one before finishing, so a working feature doesn't ship with a quietly weakened security check.`,
+    promptText: `AUTH CHANGE
+{{auth_change}}
+
+CURRENT FLOW
+{{current_flow_summary}}
+
+SECURITY INVARIANTS — none of these may change as a side effect of this work, even temporarily during development
+{{security_invariants}}
+
+TOKEN / SESSION HANDLING RULES
+{{token_handling_rules}}
+
+AFFECTED CLIENTS / SERVICES RELYING ON CURRENT TOKENS
+{{affected_clients}}
+
+Implement the change above. While doing it:
+- Never log a raw token, password, or secret value, even at debug level and even temporarily to check something — log an identifier or a boolean instead.
+- Never weaken an existing check (an expiry, a signature verification, a scope check) to make a test pass or unblock local development with a plan to "tighten it back up later" — if a check is genuinely in the way of the change, say so explicitly and ask, don't route around it.
+- Do not add a new code path that can produce a valid session or token without going through the same verification the existing paths use, even for a supposedly low-risk case like a test harness or an internal admin tool — that becomes the eventual weakest link.
+- If the change touches token expiry, refresh, or revocation, state explicitly what happens to a token that's mid-flight — issued before the change, used after it ships — since a change that silently orphans or silently keeps trusting an old-format token is a real gap even when new tokens are handled correctly.
+
+BEFORE FINISHING
+Go through SECURITY INVARIANTS one at a time and state, for each, whether it still holds after your change and how you'd verify that — not just an assertion that it does. If any invariant is genuinely in tension with the requested change, stop and name the conflict rather than silently deciding which one wins.`,
+    variables: [
+      {
+        name: 'auth_change',
+        description: `The specific change being made to the auth flow.`,
+        example: `Add refresh-token rotation: each refresh issues a new refresh token and invalidates the one used, instead of reusing the same refresh token indefinitely.`,
+        required: true,
+      },
+      {
+        name: 'current_flow_summary',
+        description: `How the existing flow works today, so the change is understood against a known baseline.`,
+        example: `Access tokens expire after 15 minutes; refresh tokens are long-lived (30 days) and currently reusable without rotation.`,
+        required: true,
+      },
+      {
+        name: 'security_invariants',
+        description: `The non-negotiable properties that must hold before and after, stated as checkable facts, not general goals.`,
+        example: `An expired access token is always rejected, no exceptions for internal service calls. A revoked refresh token can never mint a new access token, even once. No endpoint issues a token without passing through the shared verifyCredentials() path.`,
+        required: true,
+      },
+      {
+        name: 'token_handling_rules',
+        description: `Specific rules for how tokens must be stored, transmitted, or compared in this codebase.`,
+        example: `Refresh tokens are compared using a constant-time hash comparison, never a plain string equality check, and are never stored in plaintext in the database.`,
+        required: true,
+      },
+      {
+        name: 'affected_clients',
+        description: `What already holds tokens issued under the current scheme, so mid-flight token behavior is grounded in what actually exists in production.`,
+        example: `The mobile app caches a refresh token client-side for up to 30 days; roughly 40,000 active refresh tokens exist under the current non-rotating scheme at any time.`,
+        required: false,
+      },
+    ],
+    targetTools: [`Cursor 2.2`],
+    tags: [`authentication`, `agent-mode`, `security-review`, `session-management`, `token-rotation`],
+    whyItWorks: `A model implementing an auth change optimizes for the functional signal it's actually given — the feature works, the test suite passes — and a security check that was never named as an invariant is invisible to that optimization, which is exactly how a check gets loosened during development to unblock a local test and never gets tightened back, since nothing in "make refresh rotation work" flags that as a regression on its own. Stating security invariants as literal checkable facts, and requiring the model to walk through each one individually before finishing rather than give a single overall "looks secure" impression, forces an audit against a fixed list instead of a vibe check, which is the only format that reliably catches a narrow regression buried inside an otherwise-working diff. The explicit ban on logging raw secrets targets one of the most common and most easily forgotten transient habits in agent-assisted debugging: adding a console.log of a token to check why a comparison is failing is a completely reasonable debugging instinct, and it is also exactly the kind of line that survives into a shipped diff because nothing about "the feature now works" prompts its removal. The rule against a new bypass path for internal tooling addresses the single most common way a real backdoor actually ships — not through malice, but through a supposedly low-risk shortcut for a test harness or an admin script that's added with good intentions, works fine, and is never revisited once the real feature is done, quietly becoming the weakest link in the whole system. Naming mid-flight token behavior explicitly matters because an auth change is deployed against a live population of already-issued tokens, not a fresh empty database, and a quick local test only ever exercises newly issued tokens — the failure mode of a change that silently keeps trusting or silently orphans an old-format token in production is invisible to any test that doesn't specifically construct that scenario.`,
+    exampleOutput: `Invariant check:
+- Expired access token always rejected: holds — no change to the access-token verification path, confirmed by re-reading verifyAccessToken(), untouched by this diff.
+- Revoked refresh token can never mint a new access token: holds, and now stronger — rotation means a used refresh token is marked revoked and refresh_used_check now runs before every mint, verified by a new test that reuses an already-rotated token and expects a 401.
+- All tokens pass through verifyCredentials(): holds — no new issuance path added.
+
+Mid-flight tokens: refresh tokens issued before this deploy have no rotation record yet; first refresh attempt on one of these is treated as a first use and rotated normally rather than rejected, so the ~40,000 existing tokens keep working without requiring a forced re-login.`,
+    verifiedAgainst: [
+      { tool: 'Cursor', version: '2.2', date: '2026-08-11' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-11',
+        note: `Initial publish, verified against Cursor 2.2 Agent mode on a refresh-token rotation change.`,
+      },
+    ],
+  },
+  {
+    slug: 'cursor-agent-typed-utility-edge-case-brief',
+    category: 'cursor',
+    title: `Pin Cursor's Agent mode to a genuinely typed utility, not one that leans on any to get through the edge cases`,
+    description: `A short, direct brief for a single TypeScript utility function or module that states its exact signature, generic constraints, and edge-case behavior up front, and forbids any or an unnarrowed unknown as a way to dodge a hard case, so the function actually gives callers the safety a utility is supposed to provide.`,
+    promptText: `Write {{utility_name}} in this codebase's utilities.
+
+SIGNATURE
+{{signature}}
+
+WHAT IT DOES
+{{behavior_description}}
+
+EDGE CASES AND THEIR EXACT BEHAVIOR
+{{edge_case_behavior}}
+
+Generic constraints must be real, not decorative — if the signature says a generic extends a specific shape, every code path has to actually rely on that constraint being true, not silently assume something stronger and hope callers happen to satisfy it. Do not widen an input or return type to any, or to unknown without a narrowing check, as a way to get past a case the honest type would make awkward to express — if the correct type is genuinely hard to express, say so and propose the closest correct alternative (a discriminated union, an overload, a generic with a default) rather than quietly reaching for any.
+
+WHAT NOT TO DO
+- Do not return a looser type than the signature promises "just in case" — returning T | undefined where the signature says T is a silent contract change, not a safety net.
+- Do not add a runtime check for an edge case and then leave the type signature unchanged, so the compiler still tells callers a case can't happen that the runtime code clearly handles.
+- Do not use a type assertion to make an edge case compile instead of actually handling it — an assertion papering over a real mismatch is a lie the compiler is now required to repeat to every caller.
+- Do not write this as a generic-looking helper that's actually only ever going to be called with one concrete type in practice — a false generic adds indirection without adding real reuse.
+
+WHEN DONE
+For each edge case listed above, quote the line of code that handles it and confirm the return type at that line matches the signature exactly. If any edge case turns out to need a change from the signature stated in SIGNATURE, say so and explain why, rather than forcing the original signature to fit anyway.`,
+    variables: [
+      {
+        name: 'utility_name',
+        description: `The name of the function or module being written.`,
+        example: `groupByKey`,
+        required: true,
+      },
+      {
+        name: 'signature',
+        description: `The exact TypeScript signature, generics included.`,
+        example: `function groupByKey<T, K extends keyof T>(items: readonly T[], key: K): Map<T[K], T[]>`,
+        required: true,
+      },
+      {
+        name: 'behavior_description',
+        description: `A precise, non-generic description of what the function does with normal input.`,
+        example: `Groups an array of objects into a Map keyed by the value at the given property, preserving original insertion order within each group.`,
+        required: true,
+      },
+      {
+        name: 'edge_case_behavior',
+        description: `Every edge case and exactly what should happen for it, so behavior isn't left to whatever's convenient to implement.`,
+        example: `Empty input array returns an empty Map, not undefined. A key value of undefined or null on some items still groups them together under that exact value, rather than being dropped from the result.`,
+        required: true,
+      },
+    ],
+    targetTools: [`Cursor 2.2`],
+    tags: [`typescript`, `agent-mode`, `type-safety`, `utility-functions`, `generics`],
+    whyItWorks: `When a generic constraint or an edge case makes a signature genuinely awkward to satisfy, the path of least resistance for a model trying to get code to typecheck quickly is to reach for any, an unnarrowed unknown, or a type assertion — all three make the compiler stop complaining without actually resolving the mismatch, which defeats the entire purpose of writing a typed utility in the first place, since the bug the type system would have caught at the call site simply gets relocated to a runtime failure nobody is warned about. Explicitly banning that shortcut while simultaneously naming real alternatives — a discriminated union, an overload, a generic with a default — matters because a bare prohibition with no replacement just pushes the model toward a different, quieter version of the same shortcut; giving it an actual escape hatch that preserves safety changes what it reaches for under the same time pressure that would otherwise produce an any. The rule against a return type that's "loosened just in case" targets a related but distinct failure mode: an overcautious T | undefined return preemptively defends against every edge case at once by pushing a null-check onto every single caller forever, rather than resolving the specific case inside the utility once, which is the entire reason to centralize logic in a utility instead of duplicating a check everywhere it's used. The instruction to catch a runtime check whose type signature was never updated addresses a drift pattern that's especially common in agent-driven edits across a longer session: the model edits the implementation to handle a case it discovers partway through, but the signature was already mentally locked in from the start of the task and doesn't get revisited, leaving the compiler asserting something the runtime code visibly contradicts.`,
+    exampleOutput: `function groupByKey<T, K extends keyof T>(items: readonly T[], key: K): Map<T[K], T[]> {
+  const result = new Map<T[K], T[]>()
+  for (const item of items) {
+    const k = item[key]
+    const group = result.get(k)
+    if (group) group.push(item)
+    else result.set(k, [item])
+  }
+  return result
+}
+// Empty input: loop never runs, returns an empty Map — matches SIGNATURE (Map<T[K], T[]>, never undefined).
+// null/undefined key values: Map.get/set treat them as valid keys directly, so items group correctly under that exact value — no widening to any was needed for this case.`,
+    verifiedAgainst: [
+      { tool: 'Cursor', version: '2.2', date: '2026-08-12' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-12',
+        note: `Initial publish, verified against Cursor 2.2 Agent mode on a strict-mode TypeScript utility.`,
+      },
+    ],
+  },
+  {
+    slug: 'cursor-agent-node-worker-service-brief',
+    category: 'cursor',
+    title: `Brief Cursor's Agent mode to build a Node worker service that survives a restart mid-job`,
+    description: `A brief for a Node.js background or queue-consumer service that states idempotency requirements, graceful shutdown behavior, and what 'processed' actually means, so Agent mode doesn't ship a worker that quietly double-processes a job or drops one on restart.`,
+    promptText: `SERVICE
+{{service_name}} — a Node background worker that {{job_description}}.
+
+QUEUE / TRIGGER SOURCE
+{{queue_source}}
+
+WHAT COUNTS AS "PROCESSED" — the exact moment a job may be considered done and safely acknowledged
+{{processed_definition}}
+
+IDEMPOTENCY REQUIREMENT
+{{idempotency_requirement}}
+
+FAILURE MODE TO AVOID
+{{failure_to_avoid}}
+
+Build this so a process restart, a crash mid-job, or a duplicate delivery from {{queue_source}} never produces {{failure_to_avoid}}. Specifically:
+
+1. Only acknowledge or remove a job from the queue after the PROCESSED_DEFINITION above is actually true, not after the work is merely dispatched or after an in-memory step completes that hasn't been durably recorded yet — an early acknowledgment is how a crash between "dispatched" and "durably done" loses a job silently.
+2. Implement the idempotency requirement as a real check against durable state (a processed-ids table, a unique constraint), not a best-effort in-memory guard that resets to empty on every restart — an in-memory-only guard protects against a same-process retry and nothing else, which is not the case that actually matters here.
+3. Handle SIGTERM by stopping acceptance of new jobs, finishing or safely abandoning the in-flight one according to PROCESSED_DEFINITION, and exiting — do not let the process get killed with a job half-applied and no record of how far it got.
+4. Log enough at each job's start and completion to answer "was this specific job id processed, and exactly once, or not" from logs alone after the fact, without needing to reproduce the failure to find out.
+
+WHEN DONE
+Walk through what happens, step by step, if the process is killed at three points: before dispatch, mid-processing, and after processing but before acknowledgment. State explicitly whether each scenario results in the job being lost, double-processed, or correctly handled exactly once.`,
+    variables: [
+      {
+        name: 'service_name',
+        description: `The name of the worker service.`,
+        example: `invoice-export-worker`,
+        required: true,
+      },
+      {
+        name: 'job_description',
+        description: `What one job of work actually does, in plain terms.`,
+        example: `generates a PDF invoice for a completed order and uploads it to the customer-facing document store`,
+        required: true,
+      },
+      {
+        name: 'queue_source',
+        description: `The trigger mechanism and its delivery guarantees, so the model knows what kind of duplicate/ordering behavior to defend against.`,
+        example: `An SQS queue with at-least-once delivery and no ordering guarantee across messages.`,
+        required: true,
+      },
+      {
+        name: 'processed_definition',
+        description: `The exact durable condition that must be true before a job counts as done.`,
+        example: `The generated PDF's checksum has been written to the invoices.exports table with status='complete' — not merely that the upload API call returned 200.`,
+        required: true,
+      },
+      {
+        name: 'idempotency_requirement',
+        description: `What must be true if the same job is delivered or triggered twice.`,
+        example: `A second delivery of the same orderId must not generate or upload a second PDF; it should detect the existing complete export and no-op.`,
+        required: true,
+      },
+      {
+        name: 'failure_to_avoid',
+        description: `The specific bad outcome that idempotency and durability are meant to prevent, stated concretely.`,
+        example: `a customer receiving two different invoice PDFs for the same order, or an order silently never getting an invoice at all`,
+        required: true,
+      },
+    ],
+    targetTools: [`Cursor 2.2`],
+    tags: [`node-service`, `agent-mode`, `background-jobs`, `idempotency`, `graceful-shutdown`],
+    whyItWorks: `A straightforward "build a worker that processes X from a queue" brief tends to produce code that's correct on the happy path — a message arrives, gets processed, gets acknowledged — because that's the only path a quick manual test naturally exercises, while the failure modes that actually matter for a background service, a restart mid-job, a duplicate delivery, a crash between two specific steps, never surface under that kind of testing since they require literally killing the process at a precise moment, which nobody does by hand during a normal review. Stating a literal PROCESSED_DEFINITION turns "handle it correctly" into a checkable line: does the code acknowledge before or after that specific durable condition, rather than an implicit assumption that's easy to get subtly wrong — acknowledging on dispatch instead of on durably-recorded completion is a one-line difference that looks harmless in a diff and only manifests as silent data loss under a crash that's hard to reproduce on demand. The instruction to implement idempotency against durable state rather than in-memory targets a specific and common shortcut: an in-memory Set of processed ids is trivial to write, passes any test that doesn't literally restart the process, and provides zero protection against exactly the restart scenario the idempotency requirement exists for in the first place — the two implementations look identical in a demo and diverge only in production, under precisely the condition hardest to catch in code review. Requiring the walk-through of process-killed-at-three-points at the end forces explicit reasoning about the code's failure behavior instead of letting a reader assume it handles it because the happy path looks fine — a background worker's actual correctness lives almost entirely in these restart-boundary cases, which a review skimming the main logic will not naturally exercise.`,
+    exampleOutput: `Process killed before dispatch: message remains unacknowledged in SQS, redelivered after visibility timeout — no job lost, no duplicate created since nothing started.
+
+Process killed mid-processing (PDF generated, not yet uploaded): message still unacknowledged, redelivered. On redelivery, checks invoices.exports for this orderId, finds no 'complete' row, re-generates and uploads — correctly handled, no duplicate customer-facing invoice since the previous attempt never reached upload.
+
+Process killed after upload but before acknowledgment: message redelivered. Checks invoices.exports, finds a 'complete' row with a matching checksum already written before the crash, no-ops and acknowledges — correctly handled exactly once, no second PDF generated or uploaded.`,
+    verifiedAgainst: [
+      { tool: 'Cursor', version: '2.2', date: '2026-08-13' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-13',
+        note: `Initial publish, verified against Cursor 2.2 Agent mode building an SQS-backed Node worker.`,
+      },
+    ],
+  },
+  {
+    slug: 'cursor-agent-performance-budget-implementation-brief',
+    category: 'cursor',
+    title: `Give Cursor's Agent mode a performance budget to build inside, not a bottleneck to fix afterward`,
+    description: `A brief for building a new feature against a stated performance budget from the start, requiring the agent to price each meaningful implementation decision against that budget as it goes, instead of optimizing only after something has already shipped and been measured as slow.`,
+    promptText: `FEATURE
+{{feature_description}}
+
+PERFORMANCE BUDGET FOR THIS FEATURE — a hard constraint on the implementation, not an afterthought to check once it's done
+{{performance_budget}}
+
+WHAT COUNTS TOWARD THE BUDGET
+{{budget_scope}}
+
+BASELINE, BEFORE THIS FEATURE EXISTS
+{{current_baseline}}
+
+As you build this, do not treat the budget as something to verify only at the end. At each meaningful implementation decision — adding a dependency, choosing a data-fetching pattern, adding a re-render trigger — state briefly what it's expected to cost against the budget, using BUDGET_SCOPE as what actually counts. If a design choice would plausibly blow the budget, say so before writing it and propose the cheaper alternative, rather than building the expensive version first and discovering the number afterward when it's a bigger diff to undo.
+
+DEPENDENCY / LIBRARY RULE
+Do not add a new dependency to satisfy part of this feature without first checking its cost against the budget (bundle size, cold-start cost, whatever BUDGET_SCOPE names) — a library that solves the problem elegantly but alone consumes a third of the total budget is not a free win just because it works.
+
+WHEN DONE
+Measure the actual cost against BUDGET_SCOPE the same way CURRENT_BASELINE was measured, and report the number next to the budget, not just "should be fine." If it's over budget, do not report it as done with a caveat — identify the specific contributor responsible for the overage and either fix it now or state explicitly what would need to change and why that's out of scope for this pass.`,
+    variables: [
+      {
+        name: 'feature_description',
+        description: `What the feature does, concretely enough to plan implementation decisions from.`,
+        example: `Add a live search-as-you-type dropdown to the product listing page, querying the catalog API on each keystroke after a short debounce.`,
+        required: true,
+      },
+      {
+        name: 'performance_budget',
+        description: `The specific numeric ceiling this feature must stay under.`,
+        example: `Adds no more than 15KB gzipped to the page's JS bundle, and the dropdown's first result must render within 250ms of the debounce firing on a throttled 4G profile.`,
+        required: true,
+      },
+      {
+        name: 'budget_scope',
+        description: `Exactly what is measured and counted toward the budget, so the number is unambiguous.`,
+        example: `Bundle size measured via the existing webpack-bundle-analyzer build step, scoped to the product-listing route's chunk only. Render time measured via Chrome DevTools Performance panel, from debounce-fire to first result painted.`,
+        required: true,
+      },
+      {
+        name: 'current_baseline',
+        description: `The measured cost of the page before this feature exists, using the same method the final measurement must use.`,
+        example: `Product-listing route chunk is currently 142KB gzipped; page interactive at 1.1s on the same throttled 4G profile.`,
+        required: true,
+      },
+    ],
+    targetTools: [`Cursor 2.2`],
+    tags: [`performance-optimization`, `agent-mode`, `performance-budget`, `frontend`, `proactive-optimization`],
+    whyItWorks: `A "make it fast" instruction given only after a feature already exists puts the model in the position of reducing a cost it has already committed a specific shape to — a chosen data-fetching pattern, a re-render trigger, a dependency — which is measurably harder and more invasive than never incurring that cost in the first place, since by the time anyone measures it, the expensive choice is already threaded through several files and unwinding it is a second, larger diff on top of the first. Stating the budget upfront as a constraint on the choices being made, rather than a target to hit afterward, changes which question the model is actually answering at each step — from "does this work" to "does this work within this number" — and those two questions produce genuinely different code, not the same code that just happens to get measured differently later. The instruction to price a new dependency against the budget before adding it targets a specific and reliable blind spot: an agent evaluating whether a library is a good choice for a feature will confidently answer "does this solve the stated functional problem," but virtually never checks it against a performance budget unless explicitly asked to, because those are two different questions and only one of them is implied by "pick a library that does X." Requiring the final measurement to use the exact same method as CURRENT_BASELINE, rather than a fresh ad hoc check, matters because two numbers produced by two different measurement methodologies aren't actually comparable even though they look like they are — and a looser, less careful measurement taken at the end, under time pressure to call the feature done, is exactly where a real budget overage hides behind noise in how it was measured rather than getting caught.`,
+    exampleOutput: `Dependency check: considered use-debounce (2KB gzipped) vs. hand-rolling a 15-line debounce hook (0KB) — hand-rolled version chosen, since the library's extra API surface isn't needed here and every KB counts against the 15KB ceiling.
+
+Data-fetching: chose a single AbortController-cancelled fetch per keystroke over a library-based query cache, since a full query-cache dependency would have consumed roughly a third of the bundle budget on its own for a feature that only needs cancel-on-new-keystroke behavior.
+
+Final measurement (same method as baseline): product-listing chunk now 153.4KB gzipped (+11.4KB, under the 15KB ceiling). First result paints at 210ms after debounce fire on throttled 4G (under the 250ms ceiling).`,
+    verifiedAgainst: [
+      { tool: 'Cursor', version: '2.2', date: '2026-08-14' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-14',
+        note: `Initial publish, verified against Cursor 2.2 Agent mode building a bundle- and render-time-budgeted feature.`,
+      },
+    ],
+  },
 ]

@@ -1426,4 +1426,230 @@ OUTPUT FORMAT
     serviceTarget: 'seo-companies-for-small-business',
     relatedToolSlug: 'faq-schema-generator',
   },
+  {
+    slug: 'blog-writing-blog-outline-competitive-gap-analysis',
+    category: 'blog-writing',
+    title: `Build a blog outline by diffing against what's already ranking, not from a blank template`,
+    description: `Turns a target keyword and the pages already ranking for it into an outline that covers the table-stakes subtopics every top result shares, then adds a specific unique-angle section those pages are missing.`,
+    promptText: `You are building the outline for one specific blog post aimed at ranking for one specific keyword — not a generic outline template, but a structure built by diffing against the pages that already rank for this term.
+
+TARGET KEYWORD
+{{target_keyword}}
+
+CURRENTLY RANKING (TOP 3-5 RESULTS)
+{{top_ranking_pages}}
+
+OUR UNIQUE ANGLE
+{{unique_angle}}
+
+READER'S INTENT STAGE
+{{reader_intent_stage}}
+
+TARGET LENGTH
+{{target_word_count}}
+
+STEPS
+1. From the ranking pages I've described, infer the subtopics they cover in common — treat that shared coverage as table stakes the outline must include, since ranking below a competitor rarely happens because our unique angle is better elsewhere while we're silently missing a section every other result has.
+2. Identify what none of the ranking pages cover well, using the unique angle I gave you as the seed, and place that as a distinct, named section rather than folding it invisibly into an existing H2 where a skimming reader (or a summarizing AI Overview) won't register it as new information.
+3. Order sections by the reader's actual intent stage, not by what's easiest to write first — a reader in an early research stage needs framing and comparison before a deep implementation section; a reader already comparing named options needs the comparison near the top, not buried under generic background.
+4. For each H2, write one line stating the single question that section must answer and the minimum subpoints (as H3s) needed to answer it completely enough that a reader wouldn't need to open a second tab.
+5. Flag any H2 where satisfying it well would push the piece meaningfully past the target length, and propose either cutting it to a summary with a link to a dedicated piece, or flag that the target length itself may be unrealistic for this keyword's competitive coverage bar.
+
+WHAT NOT TO DO
+Do not propose an outline that reads as interchangeable with any other post on this general subject — every H2 should be something you could only have written after reading what I told you about the ranking pages and the unique angle. Do not pad the outline with a generic "conclusion" or "final thoughts" section unless it does real work (a specific next step, not a restated summary).
+
+OUTPUT FORMAT
+1. A one-sentence statement of the table-stakes coverage gap this outline closes.
+2. The full outline: H1, then H2s with their one-line purpose and H3 subpoints.
+3. A flagged note on length risk if any section threatens the target word count.`,
+    variables: [
+      {
+        name: 'target_keyword',
+        description: `The exact keyword or search query this post needs to rank for.`,
+        example: `async standup tool for remote teams`,
+        required: true,
+      },
+      {
+        name: 'top_ranking_pages',
+        description: `A short description of what the current top 3-5 ranking pages cover, in your own words.`,
+        example: `Three SaaS comparison posts, all structured as '7 best tools' listicles covering Geekbot, Range, and Standuply, each with a features table and pricing but no discussion of async standup failure modes.`,
+        required: true,
+      },
+      {
+        name: 'unique_angle',
+        description: `Specific data, experience, or product access you have that the ranking pages don't.`,
+        example: `We ran a 6-month internal study across 40 remote teams tracking why async standups get abandoned after the first month.`,
+        required: true,
+      },
+      {
+        name: 'reader_intent_stage',
+        description: `Where the reader is in their research when they land on this page.`,
+        example: `Actively comparing 3-4 named tools before a trial signup, not just learning what async standups are.`,
+        required: true,
+      },
+      {
+        name: 'target_word_count',
+        description: `The realistic length target for this post.`,
+        example: `1,800-2,200 words`,
+        required: false,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`blog-outline`, `seo-content`, `content-strategy`, `competitive-analysis`, `content-planning`],
+    whyItWorks: `Most outline prompts ask the model to structure a topic in the abstract, which produces a generically competent skeleton because the model has no signal about what would actually beat the pages currently occupying the result — this prompt instead forces a two-pass structure: first infer the shared coverage baseline from the described competitors, then treat the unique angle as a deliberate addition against that baseline rather than the whole premise of the post. That ordering matters because GPT-5.1 left to its own devices will often lead with whatever angle feels most interesting rather than what's structurally required to be competitive, and a post that's creative but missing a subtopic every ranking page covers will underperform regardless of how good the unique section is. Naming the reader's intent stage explicitly changes section ordering rather than just tone — a comparison-stage reader abandons a post that opens with generic definitional framing, so forcing the model to sequence by intent stage rather than by natural writing order (background, then detail, then comparison) closes a common structural failure mode. The length-risk flag exists because outline generation and length estimation are two different judgments the model tends to conflate — asking for the flag as a separate, explicit step prevents an outline that looks complete on paper from silently implying a 4,000-word draft when the target was 2,000, which only surfaces once someone starts writing against it.`,
+    exampleOutput: `Coverage gap closed: none of the ranking listicles address *why* async standups get abandoned, only which tool to pick. H1: Async Standup Tools for Remote Teams (And Why Most Teams Stop Using Them). H2: What actually breaks after week 3 — not a tool problem, a habit problem (H3: the three abandonment patterns from our 40-team study). H2: How to evaluate a tool against those failure modes, not just a features table...`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-08',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'blog-writing-content-calendar-launch-window-balance',
+    category: 'blog-writing',
+    title: `Plan a month of blog posts that don't let a product launch crowd out evergreen SEO`,
+    description: `Builds a four-week content calendar for a small team balancing launch-tied announcement posts against evergreen SEO posts that need to keep publishing on schedule, with explicit owner and keyword assignments per slot.`,
+    promptText: `You are building a four-week blog content calendar for a small team that has a product launch landing in the middle of the window — the risk I need you to actively manage is the launch crowding out every evergreen SEO post that was already supposed to publish that month.
+
+PHASE 1 — INPUTS
+TEAM AND CAPACITY
+{{team_capacity}}
+
+LAUNCH DATE AND CONTEXT
+{{launch_date_context}}
+
+EVERGREEN TOPICS ALREADY QUEUED
+{{queued_evergreen_topics}}
+
+PUBLISHING CADENCE
+{{publishing_cadence}}
+
+PHASE 2 — BUILD THE CALENDAR
+Allocate slots across the four weeks first for the minimum viable launch coverage (an announcement post, and if capacity allows a follow-up post addressing likely objections or a comparison to what the launch replaces) — treat this as a fixed, non-negotiable block rather than something that expands to fill available time, since launch content has a habit of absorbing every slot around it once it starts getting attention. Then fill the remaining slots with the queued evergreen topics in the order that keeps the site publishing something every scheduled slot, never leaving a gap with the excuse that "the team was busy with launch." For each slot, assign: the topic, the target keyword if it's an SEO post, a one-line angle, and which team member from the capacity list is realistically positioned to own it based on what you were told about their bandwidth — do not assign two heavy pieces to the same person in the same week even if the calendar math would otherwise allow it.
+
+PHASE 3 — RISK CHECK
+Identify which evergreen topic is most likely to get bumped if the launch runs long, and propose in advance which specific slot it moves to rather than leaving "we'll fit it in later" as the plan — a displaced post with no assigned new slot reliably never gets published.
+
+PHASE 4 — OUTPUT
+Produce a week-by-week table: Week | Date | Topic | Type (launch/evergreen) | Target keyword | Owner | Status risk note (only where relevant). Follow the table with the one contingency slot identified in Phase 3.`,
+    variables: [
+      {
+        name: 'team_capacity',
+        description: `Who's writing, and their realistic bandwidth this month.`,
+        example: `Two writers: Priya (full-time, can handle 3 posts) and Dev (also doing launch comms, realistically 1 post max this month).`,
+        required: true,
+      },
+      {
+        name: 'launch_date_context',
+        description: `When the launch lands and what it is, briefly.`,
+        example: `Launching a new integrations marketplace on the 15th, mid-month.`,
+        required: true,
+      },
+      {
+        name: 'queued_evergreen_topics',
+        description: `The evergreen/SEO posts already planned or in the backlog for this period.`,
+        example: `1) 'How to migrate from spreadsheet tracking to a PM tool' (target keyword: spreadsheet to project management migration), 2) 'Async vs sync team communication' (no hard keyword target yet), 3) a customer case study draft that's 80% done.`,
+        required: true,
+      },
+      {
+        name: 'publishing_cadence',
+        description: `How often the blog is expected to publish.`,
+        example: `Twice a week, Tuesday and Thursday.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`content-calendar`, `editorial-planning`, `content-strategy`, `team-workflow`, `product-launch`],
+    whyItWorks: `A generic content calendar prompt treats every slot as interchangeable and lets the model spread topics evenly across the month, which looks tidy but ignores the actual failure pattern teams hit around a launch: launch content is high-visibility and gets protected, so evergreen posts quietly slide and never get rescheduled because no one owns the decision to move them. Fixing the launch block's size first, before allocating evergreen slots, mirrors how a real editorial calendar has to be built under a hard constraint rather than optimized top-down — GPT-5.1 tends to distribute topics evenly by default unless explicitly told a subset of the calendar is fixed and non-negotiable, so naming that block explicitly prevents it from treating a launch follow-up post as just one more flexible item. Forcing a named owner per slot, checked against stated bandwidth rather than assigned mechanically, catches the common scheduling error of loading two demanding pieces onto the person who's already stretched thin because of the launch itself — a plan that's mathematically balanced across the team but ignores who's actually available that week isn't a usable calendar, it's a spreadsheet exercise. The Phase 3 risk check exists because asking a model to output a plan without asking it to also name what breaks first under pressure produces a calendar that looks complete but has no answer for the near-certain case where the launch runs long — naming the specific post likely to get bumped and its replacement slot in advance is the difference between a contingency and a post that silently disappears from the pipeline.`,
+    exampleOutput: `Week 2 | Tue 8/11 | Launch announcement: Integrations Marketplace is live | Launch | — | Dev | — || Week 2 | Thu 8/13 | Migrating from spreadsheets to a PM tool | Evergreen | spreadsheet to project management migration | Priya | — || Week 3 | Tue 8/18 | Launch follow-up: answering the 5 questions we got most | Launch | — | Dev | at risk if launch support volume is high...`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-11',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'blog-writing-editorial-brief-first-time-freelancer',
+    category: 'blog-writing',
+    title: `Write an editorial brief a freelance writer who's never written for you can actually follow unsupervised`,
+    description: `Produces a self-contained editorial brief for a first-time freelance writer, covering voice, structure, sourcing rules, and explicit do/don't boundaries, so the draft that comes back doesn't need a full rewrite pass to fix things the writer had no way of knowing.`,
+    promptText: `You are writing an editorial brief for a freelance writer who has never written for us before and will not have access to ask us clarifying questions before the first draft is due — the brief has to be self-contained enough that gaps in it become gaps in the draft, not something a phone call would have caught.
+
+POST TOPIC AND GOAL
+{{topic_and_goal}}
+
+BRAND VOICE (WITH A REFERENCE EXAMPLE)
+{{voice_reference}}
+
+REQUIRED STRUCTURE
+{{required_structure}}
+
+SOURCES THE WRITER SHOULD USE
+{{approved_sources}}
+
+DEADLINE AND WORD COUNT
+{{deadline_and_length}}
+
+Write the brief so a writer who knows nothing about us going in could produce a publishable-quality draft from it alone. State the voice as a comparison to the reference example rather than adjectives — describe specifically what the reference does (sentence length pattern, how it opens paragraphs, where it uses examples versus abstraction) so the writer has something concrete to match rather than a mood to guess at. State the required structure as a list of sections with a one-line purpose each, in the order they should appear, not just a suggested word-count split. List the approved sources explicitly and instruct the writer to flag, rather than silently substitute, any claim they can't support from those sources — a freelance writer without our context will otherwise reach for whatever ranks well in a quick search, which may contradict facts we already know are wrong or outdated.
+
+WHAT NOT TO DO (INCLUDE THIS AS ITS OWN SECTION IN THE BRIEF)
+Spell out common freelance-brief mistakes to specifically avoid for this piece: don't let the brief describe the topic so broadly that the writer could reasonably interpret it three different ways; don't leave the SEO keyword implicit inside a sentence when it should be a labeled field; don't assume the writer knows internal terms, product names, or acronyms we use casually — define every one that appears in the brief itself. If the brief as I've described it to you still leaves an ambiguity a first-time writer could plausibly misread, surface that ambiguity explicitly and resolve it rather than passing it through unaddressed.
+
+OUTPUT FORMAT
+1. The full brief, formatted with labeled sections: Topic & Angle, Audience, Voice (with the comparison points), Structure, Sources & Fact-Checking Rules, Do Not section, Deadline & Word Count.
+2. A short separate note listing any ambiguity you caught and resolved that wasn't fully specified in what I gave you.`,
+    variables: [
+      {
+        name: 'topic_and_goal',
+        description: `The specific topic and what the post needs to accomplish for the business.`,
+        example: `A post explaining our new usage-based pricing change, aimed at existing customers who might worry their bill is about to increase.`,
+        required: true,
+      },
+      {
+        name: 'voice_reference',
+        description: `A link or description of an existing post whose voice the writer should match, plus what specifically makes it sound like us.`,
+        example: `Our 'Why we killed seat-based pricing' post — short paragraphs, opens each section with a concrete customer scenario before explaining the reasoning, avoids exclamation points entirely.`,
+        required: true,
+      },
+      {
+        name: 'required_structure',
+        description: `The sections the post must contain, in order.`,
+        example: `1) What's changing (plain terms), 2) Why we made this change, 3) How to check if your bill changes, 4) What to do if you have questions.`,
+        required: true,
+      },
+      {
+        name: 'approved_sources',
+        description: `What the writer is allowed to treat as fact, and where it comes from.`,
+        example: `Our public pricing page and the internal pricing FAQ doc I'm attaching — no third-party pricing comparison sites, since our numbers there are already out of date.`,
+        required: true,
+      },
+      {
+        name: 'deadline_and_length',
+        description: `When the draft is due and the expected length.`,
+        example: `First draft due in 5 days, 900-1,100 words.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`editorial-brief`, `freelance-writing`, `content-ops`, `brand-voice`, `editorial-workflow`],
+    whyItWorks: `A brief written for someone who already knows the brand can lean on shorthand — "keep it on-brand," "usual structure" — that a first-time freelancer has no way to decode, so the core mechanism here is forcing every instruction to be checkable by someone with zero prior context, which is a materially higher bar than writing a brief for an internal writer. Describing voice through concrete comparison points against a named reference post, rather than adjectives, matters because GPT-5.1 (and any writer, human or model) treats "conversational but professional" as satisfiable in dozens of contradictory ways, while "opens each section with a concrete scenario before the explanation" is a specific, matchable pattern that produces a draft closer to the reference on the first pass instead of the third revision. Naming approved sources explicitly and requiring flagged claims rather than silent substitutions closes a specific risk in freelance content ops: a writer working from a generic web search will often reach for the most SEO-visible source rather than the most accurate one, and a brand can end up publishing an outdated or simply wrong claim that a source the brand actually trusts would never have supported. The dedicated "what not to do" section exists because brief-writing has a known failure mode where the brief-writer assumes shared context that was never actually written down — asking the model to actively hunt for and resolve exactly that kind of ambiguity, rather than just format the fields it was given, is what prevents an internally coherent-looking brief from still landing ambiguously in the hands of someone outside the building.`,
+    exampleOutput: `Topic & Angle: Reassure existing customers that our move to usage-based pricing is fair and easy to check, not a stealth price hike. Voice: Match 'Why we killed seat-based pricing' — short paragraphs (2-3 sentences), each section opens with a concrete customer scenario before the explanation, no exclamation points... Ambiguity resolved: your structure didn't specify whether 'how to check your bill' means a formula or a link to a calculator — I've assumed a link to the existing calculator tool, flag if that's wrong.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-14',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
 ]

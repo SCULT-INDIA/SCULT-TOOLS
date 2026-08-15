@@ -438,4 +438,211 @@ export const prompts: readonly Prompt[] = [
     changelog: [{ date: '2026-08-03', note: 'Initial publish.' }],
     relatedToolSlug: 'email-signature-generator',
   },
+  {
+    slug: 'branding-design-system-token-audit-and-component-inventory',
+    category: 'branding',
+    title: `Turn a pile of inconsistent screens into a design system starter kit with a token audit and a component priority list`,
+    description: `Feeds ChatGPT a description of your current, inconsistent UI and gets back a proposed token structure (color, spacing, type, radius), a prioritized list of which components to systematize first, and the specific inconsistencies to kill before anyone touches Figma.`,
+    promptText: `You are acting as a design systems lead brought in to propose the starting structure for a design system for a product that currently has none — just screens built ad hoc by different people over time.
+
+PRODUCT AND CURRENT STATE
+{{product_and_current_state}}
+
+KNOWN INCONSISTENCIES
+{{known_inconsistencies}}
+
+TEAM SIZE AND TOOLING
+{{team_and_tooling}}
+
+WHAT MUST SHIP FIRST
+{{first_deliverable_deadline}}
+
+Do not propose a full token taxonomy lifted from a well-known public design system (Material, Carbon, Polaris) and relabeled — propose a token structure sized to the inconsistencies actually described above, and say explicitly which layers (primitive tokens, semantic tokens, component tokens) this team genuinely needs versus which would be premature abstraction for a team this size. For each known inconsistency listed, name the specific token or rule that would have prevented it, not a generic "establish a color palette" recommendation — trace the fix back to the actual symptom. Propose a component inventory ordered by a stated prioritization logic (frequency of reuse across the product, visual inconsistency severity, or blocking status on the first deliverable) and say which logic you used and why, since these three orderings can produce different lists and a silent choice between them hides a real trade-off. Flag anywhere the described tooling (or its absence) would make a proposed structure unworkable in practice — for example, recommending component-level tokens when the team has no shared component library yet to attach them to.
+
+OUTPUT FORMAT
+1. Token structure: which layers to build now, which to defer, with 2-3 example tokens per layer named specifically enough to paste into a tokens file.
+2. A table of the top 6-10 components to systematize first, each with the inconsistency it currently has and the prioritization logic used to rank it.
+3. A short list of naming convention rules for the tokens (e.g. how color-role tokens should be named) so two different people building screens converge instead of diverging further.
+4. One paragraph on what to explicitly defer past the first deliverable, and why deferring it now is safer than building it early.`,
+    variables: [
+      {
+        name: 'product_and_current_state',
+        description: `What the product is and how its UI currently got built.`,
+        example: `A B2B scheduling SaaS with about 40 screens, built by three different contract designers over 18 months with no shared file or style guide.`,
+        required: true,
+      },
+      {
+        name: 'known_inconsistencies',
+        description: `Specific, concrete inconsistencies already spotted, not a vague sense that things don't match.`,
+        example: `Primary buttons appear in four different blues across the app; card corner radius is 4px in some flows and 12px in others; there are at least three different type scales in use for body text.`,
+        required: true,
+      },
+      {
+        name: 'team_and_tooling',
+        description: `Team size, roles, and what design/dev tooling already exists.`,
+        example: `Two product designers, four frontend engineers, everyone on Figma but no shared component library yet, frontend uses a homegrown React component set with no token file.`,
+        required: true,
+      },
+      {
+        name: 'first_deliverable_deadline',
+        description: `What has to ship first and by when, so the recommendation is scoped to what's achievable.`,
+        example: `A redesigned onboarding flow (5 screens) needs to ship in 3 weeks and should be the first thing built with the new system.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`design-system`, `design-tokens`, `component-library`, `ui-consistency`, `figma-workflow`],
+    whyItWorks: `The instruction to name which token layer (primitive, semantic, component) is actually needed rather than defaulting to the full three-tier structure directly counters GPT-5.1's tendency to reach for the most complete, textbook-looking answer regardless of team size — a two-designer team with no component library yet gains nothing from component-level tokens and actually loses time maintaining a layer with no consumer, but a model asked generically to "propose a token structure" will reliably produce the full stack because that's the modal pattern in its training data on design systems content, most of which comes from large companies like Google or IBM writing about systems built for hundreds of contributors. Requiring each recommendation to trace back to a specific listed inconsistency forces the token proposal to stay diagnostic rather than aspirational — it's a structural check against the common failure mode where a systems proposal reads as generically correct but doesn't actually address the specific mess described, because nothing in the prompt held the model accountable to using the input data rather than pattern-matching to "what design systems usually contain." Naming the prioritization logic explicitly (reuse frequency vs. inconsistency severity vs. deadline-blocking) surfaces a real trade-off that's usually made silently and inconsistently by whoever's writing the plan; making the model commit to and state one logic means a reviewer can actually disagree with the ordering on its stated merits rather than accept an unexplained list. The tooling-gap flag matters because a proposal that's internally coherent as design theory can still be operationally impossible — recommending component tokens with no shared component library to attach them to is the kind of gap a model won't self-catch unless explicitly told to check for it, since nothing about the recommendation looks wrong in isolation.`,
+    exampleOutput: `Token structure: build primitive + semantic layers now (color-primitive-blue-500, color-role-action-primary); defer component-level tokens until a shared React component library exists. Top components to fix first (ranked by inconsistency severity, since three colliding blues is actively confusing users): 1. Primary button, 2. Card container, 3. Body text scale... Naming convention: role-based, not value-based (color-role-action-primary, not color-blue-1). Defer: full component token layer — building it now with no shared component library means maintaining tokens nothing consumes yet.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-08',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'branding-color-palette-accessible-brand-system-from-one-anchor-color',
+    category: 'branding',
+    title: `Expand one brand anchor color into a full, contrast-checked palette instead of guessing at five more hex codes`,
+    description: `Takes one anchor brand color plus context on where it'll be used and produces a working palette (primary, secondary, neutrals, semantic states) with explicit WCAG contrast reasoning, not just a swatch grid that looks nice and fails accessibility review later.`,
+    promptText: `Act as a color systems consultant. I have one anchor brand color already decided (not negotiable, do not suggest replacing it) and need it expanded into a working palette for a real product, not a moodboard.
+
+ANCHOR COLOR
+{{anchor_color}}
+
+WHERE IT WILL BE USED
+{{usage_contexts}}
+
+BRAND FEELING TO PRESERVE
+{{brand_feeling}}
+
+ACCESSIBILITY REQUIREMENT
+{{accessibility_requirement}}
+
+Step 1 — Diagnose the anchor color first: state its approximate hue/saturation/lightness character and what that means for how far it can shift before it stops reading as "the brand color" versus becoming a believable tint or shade of it. Do this before proposing anything, since a palette built without first understanding the anchor's own limits tends to either drift too far (loses brand recognition) or stay too close (fails contrast requirements).
+Step 2 — Propose a full palette: 2-3 tints/shades of the anchor for primary UI use, one secondary/accent color that is NOT simply the anchor's complement unless you argue for why complementary is right here, a neutral gray scale with a hint of the anchor's hue rather than a pure gray (state the hex), and semantic colors for success/warning/error/info that read as their own category rather than random hues that happen to be red or green.
+Step 3 — For every color intended for text-on-background or button-on-background use, state the actual contrast ratio against both a light and dark surface and flag explicitly which combinations fail the stated accessibility requirement, rather than presenting a swatch grid where contrast has to be checked later by someone else.
+Step 4 — Name one realistic scenario where this palette would visibly break (e.g., a disabled-state button becoming indistinguishable from its enabled state, or a success/error pair that reads identically to a colorblind user) and propose the specific fix.
+
+Do not present hex codes as a flat list with no reasoning attached — every color must be traceable to a stated purpose and a stated contrast result.
+
+OUTPUT FORMAT
+1. Anchor diagnosis (2-3 sentences).
+2. Full palette as a table: role, hex, contrast ratio against white and against near-black, pass/fail against the stated requirement.
+3. The one realistic failure scenario and its fix.
+4. A one-paragraph note on what NOT to do with this palette (e.g. don't use the accent color for large background fills).`,
+    variables: [
+      {
+        name: 'anchor_color',
+        description: `The one brand color already locked in, as a hex code or clear description.`,
+        example: `#2F6FED, a mid-tone blue used in the logo, already approved by the founders — cannot be changed.`,
+        required: true,
+      },
+      {
+        name: 'usage_contexts',
+        description: `Where the palette actually needs to work — surfaces, not just "the website."`,
+        example: `A web app dashboard (light mode default, dark mode planned for later), plus marketing site hero sections and email templates.`,
+        required: true,
+      },
+      {
+        name: 'brand_feeling',
+        description: `The feeling the brand is going for, so tints/shades don't drift into a different mood.`,
+        example: `Trustworthy fintech feel — calm and precise, not playful or loud; avoid anything that reads as a consumer social app.`,
+        required: true,
+      },
+      {
+        name: 'accessibility_requirement',
+        description: `The specific standard to check against, so pass/fail has a real bar.`,
+        example: `WCAG 2.1 AA for all text and interactive elements (4.5:1 for normal text, 3:1 for large text and UI components).`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`color-palette`, `brand-identity`, `accessibility`, `wcag-contrast`, `ui-color-system`],
+    whyItWorks: `Forcing the anchor-color diagnosis as an explicit first step before any palette proposal counters a specific failure mode in how language models handle color: without being told to reason about the anchor's own HSL character first, GPT-5.1 tends to generate palettes by free-associating adjacent hues that look plausible in isolation but drift the brand's actual hue family, producing a palette that reads as generically "blue-ish tech company" rather than as recognizably this brand's blue. Requiring a stated contrast ratio for every text/button color, rather than a swatch grid, matters because contrast ratio is a real calculable number (relative luminance of foreground versus background) and a model asked only to "make an accessible palette" will describe colors as accessible in prose without the arithmetic actually working out — stating the ratio forces the kind of reasoning where a wrong claim is falsifiable by anyone who runs the same two hex codes through a contrast checker afterward, which keeps the answer honest in a way vague accessibility language doesn't. The instruction to justify rather than default to a complementary accent color addresses the reflexive habit (both in human design tutorials and in what the model has absorbed from them) of reaching for color-wheel complements as an unexamined default; naming a realistic failure scenario like a disabled-versus-enabled button collision forces consideration of state variations that a static five-swatch palette never has to confront, since palettes are usually evaluated as pretty grids rather than as systems that have to survive real interactive states like hover, disabled, and error simultaneously present on one screen.`,
+    exampleOutput: `Anchor diagnosis: #2F6FED is a mid-saturation, mid-lightness blue — it has room to go two steps lighter before losing blue identity, but only one step darker before reading as navy/black. Palette: Primary-600 #2F6FED (4.6:1 on white, pass), Primary-100 #E8F0FE (background only, do not use for text)... Failure scenario: the proposed success-green and the primary blue both sit at similar lightness, which would read as near-identical for a deuteranopia user — fix: shift success green darker by one step to widen the perceptual gap.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-11',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
+  {
+    slug: 'branding-typography-pairing-and-scale-for-brand-voice-consistency',
+    category: 'branding',
+    title: `Pick a typeface pairing and scale that actually matches how the brand talks, instead of two fonts that just look nice together`,
+    description: `Gets ChatGPT to reason from your brand voice and real content examples to a heading/body typeface pairing, a type scale, and specific rules for where each font is allowed to appear, so typography reinforces the brand instead of just being a font-pairing pick.`,
+    promptText: `Help me choose a typography system — not just "a nice font pairing," but a full decision covering typeface pairing, a type scale, and usage rules, reasoned from how this brand actually communicates.
+
+BRAND VOICE
+{{brand_voice}}
+
+REAL CONTENT SAMPLE
+{{content_sample}}
+
+CONSTRAINTS
+{{constraints}}
+
+WHAT NEEDS TO SUPPORT THIS DECISION
+{{platforms_needing_type}}
+
+First, extract from the real content sample what the brand voice actually does on the page — is it terse and declarative, does it lean on long explanatory sentences, does it use a lot of numbers and data callouts — and connect specific typeface characteristics (x-height, contrast between thick/thin strokes, geometric versus humanist letterforms) to that observed voice, rather than describing fonts in isolation with adjectives like "modern" or "friendly" that don't connect back to anything concrete about this brand. Propose exactly one heading typeface and one body typeface (not a shortlist to choose from later), and justify the pairing specifically in terms of contrast that serves a purpose — different enough that headings are instantly distinguishable from body text at a glance, similar enough in mood that they don't read as two unrelated brands sharing a page. State whether both fonts are freely licensed for the listed platforms or whether a licensing check is needed before this becomes final — do not assume licensing is fine. Propose a type scale (the actual size/weight/line-height steps from H1 down to caption text) using a stated ratio or rationale, not arbitrary numbers. Write explicit rules for where the heading font is and is not allowed to appear — a common failure is a heading typeface creeping into body copy or UI buttons where it hurts readability at small sizes.
+
+WHAT NOT TO DO
+Do not recommend a currently-trendy pairing purely because it's popular in the design community right now — every recommendation must trace back to the voice analysis or the stated constraints. Do not propose more than one option per role; a shortlist defers the actual decision rather than making it.
+
+OUTPUT FORMAT
+1. Voice-to-letterform reasoning (short paragraph).
+2. The chosen pairing (heading + body) with the specific justification.
+3. Licensing status for the listed platforms, flagged if unconfirmed.
+4. The type scale as a table (level, size, weight, line-height).
+5. Usage rules: where the heading font is and isn't allowed to appear.`,
+    variables: [
+      {
+        name: 'brand_voice',
+        description: `How the brand is described, in the team's own words.`,
+        example: `Confident and no-nonsense — we're a data infrastructure company that talks to engineers directly, not a consumer brand trying to be warm.`,
+        required: true,
+      },
+      {
+        name: 'content_sample',
+        description: `An actual excerpt of real brand writing, not a description of the voice.`,
+        example: `'Your pipeline drops packets under load. We show you exactly which node, at exactly which second, with a one-command rollback.' — from the homepage hero.`,
+        required: true,
+      },
+      {
+        name: 'constraints',
+        description: `Budget, licensing, or technical constraints that narrow real options.`,
+        example: `Must be free for commercial web use (Google Fonts or equivalent) and must render well at small sizes in a data-dense dashboard UI.`,
+        required: true,
+      },
+      {
+        name: 'platforms_needing_type',
+        description: `Every place this typography actually needs to work, since coverage varies by platform.`,
+        example: `Marketing website, product dashboard UI, and PDF export of usage reports.`,
+        required: true,
+      },
+    ],
+    targetTools: [`ChatGPT (GPT-5.1)`],
+    tags: [`typography`, `font-pairing`, `brand-voice`, `type-scale`, `design-system`],
+    whyItWorks: `Anchoring the typeface reasoning in an actual content excerpt rather than an abstract voice description matters because adjectives like "modern" or "approachable" are exactly the vocabulary GPT-5.1 defaults to when asked to reason about fonts in the abstract, and that vocabulary doesn't actually constrain which typeface gets picked — dozens of typefaces could plausibly be called modern. Giving it a real sentence of brand writing to analyze first forces the reasoning chain through something concrete and checkable: a terse, declarative sentence with specific numbers in it ("exactly which node, at exactly which second") points toward a typeface with higher legibility at small sizes and less decorative contrast than one would pick for a brand whose real writing is long and warm, and that connection is something a reader can actually verify against the sample rather than take on faith. Requiring exactly one recommendation per role rather than a shortlist closes off the model's tendency to hedge by presenting three options "to choose from" — a shortlist looks thorough but actually defers the decision back to the person who asked for it made, defeating the point of asking in the first place. The explicit licensing check matters because a font recommendation that sounds authoritative can still be commercially unusable, and a model asked generically about typefaces has no built-in incentive to flag licensing unless told to, since the aesthetic recommendation and the legal usability of a font are two entirely separate facts it isn't otherwise prompted to reconcile. The usage-rules section addresses a specific, common real-world failure — a striking display headline font that was never designed for body sizes ending up applied to UI buttons or dense paragraph text where its low x-height or heavy stroke contrast actively hurts readability — a failure that only gets caught if the prompt explicitly asks where the font should NOT go, since "where to use it" alone leaves the boundary undefined.`,
+    exampleOutput: `Voice-to-letterform: the sample is terse, numeric, and declarative — this points toward a typeface with a large x-height and low stroke contrast for legibility at small dashboard sizes, not a high-contrast editorial serif. Pairing: heading — Inter Tight (Bold); body — Inter (Regular)... Licensing: both free for commercial use via Google Fonts, confirmed for all three listed platforms. Usage rule: heading font never appears below 16px or inside UI buttons — use body font at all UI control sizes.`,
+    verifiedAgainst: [
+      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
+    ],
+    changelog: [
+      {
+        date: '2026-08-14',
+        note: `Initial publish, verified against ChatGPT GPT-5.1.`,
+      },
+    ],
+  },
 ]

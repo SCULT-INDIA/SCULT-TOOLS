@@ -60,7 +60,7 @@ export function AnnouncementBar() {
               every prompt body in the shared bundle. Update it when the
               library grows — same convention as the "15 free tools" line
               this bar carried before. */}
-          New: 254 free AI prompts —{' '}
+          New: 1,170 free AI prompts —{' '}
           <Link
             href="/prompts"
             className="font-semibold underline decoration-1 underline-offset-2 hover:opacity-70"
