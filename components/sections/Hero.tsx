@@ -8,7 +8,6 @@ import { UneedBadge } from '@/components/ui/UneedBadge'
 import { PROMPTS } from '@/lib/prompts/registry'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { TOOLS } from '@/lib/tools/registry'
-import styles from './HeroDarkModeFixes.module.css'
 
 /**
  * The homepage hero, matched to the user's approved mockup: an open white
@@ -63,7 +62,7 @@ export function Hero() {
         >
           Free tools that do the{' '}
           <em
-            className={`text-accent-gradient font-semibold not-italic ${styles.accentGradientFix}`}
+            className="text-accent-gradient font-semibold not-italic"
           >
             boring
           </em>{' '}
@@ -94,7 +93,7 @@ export function Hero() {
             checkmark row above the constellation was already trimmed. Still
             clear of the subhead's own line-height, verified below. */}
         <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
-          <Link href="/all" className={`btn-brutal ${styles.ctaContrastFix}`}>
+          <Link href="/all" className="btn-brutal">
             EXPLORE ALL {TOOLS.length} TOOLS
           </Link>
           <Link href="/prompts" className="btn-brutal btn-violet">

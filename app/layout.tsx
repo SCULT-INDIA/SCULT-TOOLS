@@ -5,23 +5,9 @@ import Script from 'next/script'
 import { CtaClickTracker } from '@/components/layout/CtaClickTracker'
 import { Footer } from '@/components/layout/Footer'
 import { HeaderGate } from '@/components/layout/HeaderGate'
-import { ThemeProvider } from '@/components/theme/ThemeProvider'
 import { FloatingActions } from '@/components/ui/FloatingActions'
 import { SITE } from '@/lib/site'
 import './globals.css'
-
-/**
- * Standard no-flash-of-wrong-theme bootstrap (the same idea `next-themes`
- * ships, hand-rolled here since that package is not a dependency of this
- * project — see package.json). Must run synchronously, before anything
- * paints, and must agree byte-for-byte with the storage key and value set
- * read by `components/theme/ThemeProvider.tsx`.
- *
- * A plain `<script dangerouslySetInnerHTML>`, not `next/script` — `next/script`'s
- * default strategy is `afterInteractive`, which defers execution until after
- * hydration and would let the wrong theme paint first. This has to block.
- */
-const THEME_BOOTSTRAP_SCRIPT = `(function(){try{var k='theme';var s=localStorage.getItem(k);var t=s==='light'||s==='dark'||s==='system'?s:'system';var r=t==='system'?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):t;document.documentElement.setAttribute('data-theme',r);}catch(e){}})();`
 
 /**
  * Fonts are self-hosted: next/font downloads them at build time and serves them
@@ -172,19 +158,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       // Next 16 removed automatic smooth scrolling; opt back in explicitly.
       data-scroll-behavior="smooth"
       className={`${fraunces.variable} ${cabin.variable} ${marker.variable}`}
-      // The theme bootstrap script below sets `data-theme` on this element
-      // before hydration, which will never match the attribute-less markup
-      // React rendered on the server. That mismatch is the entire point
-      // (it's what avoids a flash of the wrong theme), so it has to be told
-      // not to warn about it.
-      suppressHydrationWarning
     >
       <head>
-        {/* Must be the very first thing in <head> — a blocking, synchronous
-            script that runs before any themed content paints. See the
-            THEME_BOOTSTRAP_SCRIPT comment above for why this can't be a
-            next/script. */}
-        <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }} />
         <OrganizationJsonLd />
         {/* No <link rel="canonical"> here on purpose. A hardcoded canonical in the
             root layout applies to EVERY route, which would declare every tool page
@@ -192,70 +167,68 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             `alternates.canonical` in generateMetadata. */}
       </head>
       <body>
-        <ThemeProvider>
-          <a href="#main" className="skip-link">
-            Skip to content
-          </a>
-          <HeaderGate />
-          <main id="main" tabIndex={-1} className="scroll-mt-28">
-            {children}
-          </main>
-          <Footer />
-          <FloatingActions />
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
+        <HeaderGate />
+        <main id="main" tabIndex={-1} className="scroll-mt-28">
+          {children}
+        </main>
+        <Footer />
+        <FloatingActions />
 
-          {/* One delegated listener for every outbound conversion link on the
-              site — see the component for why it is not an onClick per link. */}
-          <CtaClickTracker />
+        {/* One delegated listener for every outbound conversion link on the
+            site — see the component for why it is not an onClick per link. */}
+        <CtaClickTracker />
 
-          {/* GA4 loads after interaction so it never competes with the LCP.
-              Same property as the parent site, so a tools -> agency journey is one
-              session rather than a referral that resets attribution. */}
-          {SITE.gaId ? (
-            <>
-              <Script
-                src={`https://www.googletagmanager.com/gtag/js?id=${SITE.gaId}`}
-                strategy="afterInteractive"
-              />
-              <Script id="ga4" strategy="afterInteractive">
-                {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+        {/* GA4 loads after interaction so it never competes with the LCP.
+            Same property as the parent site, so a tools -> agency journey is one
+            session rather than a referral that resets attribution. */}
+        {SITE.gaId ? (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${SITE.gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());gtag('config','${SITE.gaId}',{cookie_domain:'.scult.in'});`}
-              </Script>
-            </>
-          ) : null}
-
-          {/* Microsoft Clarity — heatmaps and session replay. GA4 answers "how
-              many people copied the output"; Clarity answers "why the other
-              half didn't", which is the question that actually changes a tool's
-              design.
-
-              Loaded `afterInteractive` for the same reason as GA4: it must
-              never compete with the LCP. Clarity's own snippet is kept
-              verbatim (rather than replaced with a bare <script src>) because
-              the `c[a].q` queue shim it installs is what lets `clarity(...)`
-              be called before the remote tag finishes loading — the same
-              early-call safety that lib/analytics.ts relies on for dataLayer.
-
-              PRIVACY: this site's whole promise is that tool input stays in the
-              browser, and session replay is the one thing that could quietly
-              break it — people paste real client JSON and real invoice figures
-              into these tools. Masking is therefore NOT left at Clarity's
-              "Balanced" default; the project is set to Strict masking in the
-              Clarity dashboard, which redacts page text and all input values
-              before anything is transmitted. app/privacy/page.tsx discloses
-              this, and the two must be kept in sync — if masking is ever
-              relaxed, that page stops being true. */}
-          {SITE.clarityId ? (
-            <Script id="clarity" strategy="afterInteractive">
-              {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${SITE.clarityId}");`}
             </Script>
-          ) : null}
+          </>
+        ) : null}
 
-          {/* Vercel Analytics — a no-op off Vercel's own infrastructure (it
-              posts to /_vercel/insights, which only exists on a Vercel
-              deployment), so this is safe to render unconditionally in every
-              environment, including local dev and any other host. */}
-          <Analytics />
-        </ThemeProvider>
+        {/* Microsoft Clarity — heatmaps and session replay. GA4 answers "how
+            many people copied the output"; Clarity answers "why the other
+            half didn't", which is the question that actually changes a tool's
+            design.
+
+            Loaded `afterInteractive` for the same reason as GA4: it must
+            never compete with the LCP. Clarity's own snippet is kept
+            verbatim (rather than replaced with a bare <script src>) because
+            the `c[a].q` queue shim it installs is what lets `clarity(...)`
+            be called before the remote tag finishes loading — the same
+            early-call safety that lib/analytics.ts relies on for dataLayer.
+
+            PRIVACY: this site's whole promise is that tool input stays in the
+            browser, and session replay is the one thing that could quietly
+            break it — people paste real client JSON and real invoice figures
+            into these tools. Masking is therefore NOT left at Clarity's
+            "Balanced" default; the project is set to Strict masking in the
+            Clarity dashboard, which redacts page text and all input values
+            before anything is transmitted. app/privacy/page.tsx discloses
+            this, and the two must be kept in sync — if masking is ever
+            relaxed, that page stops being true. */}
+        {SITE.clarityId ? (
+          <Script id="clarity" strategy="afterInteractive">
+            {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${SITE.clarityId}");`}
+          </Script>
+        ) : null}
+
+        {/* Vercel Analytics — a no-op off Vercel's own infrastructure (it
+            posts to /_vercel/insights, which only exists on a Vercel
+            deployment), so this is safe to render unconditionally in every
+            environment, including local dev and any other host. */}
+        <Analytics />
       </body>
     </html>
   )

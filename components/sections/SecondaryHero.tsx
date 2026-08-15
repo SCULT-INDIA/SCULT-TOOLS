@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { Icon } from '@/components/ui/Icon'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { TOOLS } from '@/lib/tools/registry'
-import styles from './HeroDarkModeFixes.module.css'
 
 /**
  * Reference: band 2 — the second hero. Large serif headline left, a collage
@@ -45,7 +44,7 @@ export function SecondaryHero() {
               </li>
             ))}
           </ul>
-          <Link href="/all" className={`btn-brutal mt-8 ${styles.ctaContrastFix}`}>
+          <Link href="/all" className="btn-brutal mt-8">
             SEE ALL {TOOLS.length} TOOLS
           </Link>
         </div>

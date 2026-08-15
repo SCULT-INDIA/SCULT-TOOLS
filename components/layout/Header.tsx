@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { ThemeToggle } from '@/components/theme/ThemeToggle'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { getToolCount } from '@/lib/tools/registry'
 import scultLogo from '@/public/brand/scult-tools-blue.png'
@@ -102,7 +101,6 @@ export function Header() {
               <div className="hidden lg:block">
                 <GitHubStarButton />
               </div>
-              <ThemeToggle />
               {/* Renamed from "TOOLS": at this breakpoint the main <nav>
                   (Tools dropdown + "All tools") is hidden, so this button IS
                   the only way to reach the catalogue — "TOOLS" read as a

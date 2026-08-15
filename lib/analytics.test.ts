@@ -67,7 +67,7 @@ describe('trackEvent', () => {
     // mutating the array some other way.
     const push = vi.spyOn(win().dataLayer as unknown[], 'push')
 
-    trackEvent('theme_change', { from: 'system', to: 'dark' })
+    trackEvent('bookmark_hint_shown', { tool_name: 'json-formatter' })
 
     expect(push).toHaveBeenCalledTimes(1)
     expect(Object.prototype.toString.call(push.mock.calls[0]?.[0])).toBe(

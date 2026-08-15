@@ -82,19 +82,7 @@ export function ToolShell({ tool, children }: { tool: Tool; children: React.Reac
               browser-tab favicon, so tab and page agree on what
               represents this tool. The disc is baked in, so no tile is
               needed; the faint ring only makes the disc's edge read
-              against the page's own white.
-
-              Dark mode: the disc's white fill is opaque pixels in the PNG
-              itself (verified: RGBA with alpha=255 white across the whole
-              rounded-square, not a transparent/CSS-colored background), so
-              it cannot be retinted via a token swap here — a full fix needs
-              the asset regenerated, out of this shell's scope. `ring-line`
-              also goes near-invisible in dark mode (~1.16:1, decorative by
-              design), so today the disc has no visible frame once the page
-              around it goes dark. `tool-h1-icon` is a hook for a proposed
-              `:root[data-theme='dark'] .tool-h1-icon` rule that strengthens
-              just this ring so the disc reads as a deliberate light badge
-              rather than an unstyled white blob; see globalsCssProposals. */}
+              against the page's own white. */}
           <h1 className="font-bold text-[34px] leading-[1.08] tracking-[-1px] md:text-[48px] lg:text-[54px]">
             <Image
               src={`/tool-icons/${tool.slug}.png`}
