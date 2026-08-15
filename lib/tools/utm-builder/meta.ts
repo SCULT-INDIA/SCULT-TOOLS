@@ -1,5 +1,45 @@
 import type { Tool } from '../types'
 
+const NAMING_SUPPORT: Tool['supportContent'] = [
+  {
+    heading: 'A naming convention that keeps your reports clean',
+    blocks: [
+      {
+        type: 'prose',
+        paragraphs: [
+          'The single biggest cause of messy campaign data isn\'t the tool — it\'s inconsistency. "Facebook", "facebook" and "FB" become three different sources in GA4. A fixed convention fixes that.',
+        ],
+      },
+      {
+        type: 'list',
+        intro: 'The rules:',
+        items: [
+          'Always lowercase — GA4 is case-sensitive, so "Email" and "email" are counted separately.',
+          'No spaces — use hyphens instead ("diwali-sale", not "Diwali Sale").',
+          'Pick fixed values for source and medium once, and never improvise a new spelling later.',
+        ],
+      },
+      {
+        type: 'table',
+        columns: ['Channel', 'utm_source', 'utm_medium'],
+        rows: [
+          ['Google Ads', 'google', 'cpc'],
+          ['Facebook/Instagram ads', 'facebook / instagram', 'paid-social'],
+          ['Organic social post', 'facebook / instagram / linkedin', 'social'],
+          ['Email newsletter', 'newsletter', 'email'],
+          ['Partner or affiliate', '(partner name)', 'referral'],
+        ],
+      },
+      {
+        type: 'prose',
+        paragraphs: [
+          'Campaign naming pattern: season-offer-year → "diwali-sale-2026". Keep a shared note of your values so everyone on the team uses the same ones, then build every link with the builder above so the format is consistent by default.',
+        ],
+      },
+    ],
+  },
+]
+
 export const meta: Tool = {
   slug: 'utm-builder',
   category: 'seo',
@@ -50,5 +90,18 @@ export const meta: Tool = {
       q: 'Do UTMs affect SEO?',
       a: 'They can create duplicate URLs if crawled. Use a canonical tag pointing at the clean URL, and avoid UTMs on internal links.',
     },
+    {
+      q: 'Does the builder work with any URL?',
+      a: "Yes — paste any destination URL. If it already has a query string or a fragment, the tags are appended correctly rather than overwriting what's already there.",
+    },
+    {
+      q: 'Where do I actually see the campaign data?',
+      a: "In GA4 under Traffic acquisition, and in the session source/medium reports — that's where source, medium and campaign show up once real clicks start coming in.",
+    },
+    {
+      q: 'Is it free?',
+      a: 'Yes, free and unlimited — no signup, no cap on how many links you build.',
+    },
   ],
+  supportContent: NAMING_SUPPORT,
 }

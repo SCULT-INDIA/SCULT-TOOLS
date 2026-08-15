@@ -1,5 +1,47 @@
 import type { Tool } from '../types'
 
+/**
+ * The content handover's draft framed this tool as three selectable
+ * "templates" by billing purpose (Freelancer / Service / GST). The real
+ * `INVOICE_TEMPLATES` in logic.ts are purely visual styles (Classic,
+ * Minimal, Agency) — its own docblock says switching templates "can never
+ * change what a client is actually billed." GST is an independent mode
+ * toggle, not a template. Reframed to match; also corrected "₹ or $" to
+ * the real eight supported currencies.
+ */
+const TEMPLATES_SUPPORT: Tool['supportContent'] = [
+  {
+    heading: 'What every invoice includes',
+    blocks: [
+      {
+        type: 'prose',
+        paragraphs: [
+          "You don't need Word, Excel, or a paid app to send a clean invoice. Fill in your details in your browser and print straight to PDF in under a minute — nothing is uploaded, and there's no signup.",
+        ],
+      },
+      {
+        type: 'list',
+        intro:
+          'Pick a visual style — Classic, Minimal, or Agency — independent of everything below:',
+        items: [
+          'Your business name, logo, and contact details.',
+          'Client name and address.',
+          'Invoice number and issue/due dates, with Net 7/14/30 payment terms to fill the due date automatically.',
+          'Itemised lines — description, quantity, rate, amount — with subtotal, discount, tax and grand total calculated for you.',
+          'A discount applied before tax, matching standard GST/VAT treatment.',
+          'Any of eight currencies (₹, $, €, £ and more), useful for billing international clients.',
+        ],
+      },
+      {
+        type: 'prose',
+        paragraphs: [
+          'Switch on GST mode for an Indian tax invoice with GSTIN and automatic CGST/SGST/IGST splits — this produces a standard GST tax invoice, not a government e-invoice (no IRN or signed QR code). Confirm your specific GST treatment with a professional; this is guidance, not tax advice.',
+        ],
+      },
+    ],
+  },
+]
+
 export const meta: Tool = {
   slug: 'invoice-generator',
   category: 'business',
@@ -69,5 +111,14 @@ export const meta: Tool = {
       q: 'Why is the discount applied before tax?',
       a: 'Because that is the standard GST/VAT treatment of a discount shown on the invoice: the taxable value is the price after the discount, and tax is charged on that. Applying tax first would overstate the tax you collect.',
     },
+    {
+      q: 'Does it calculate totals and tax automatically?',
+      a: 'Yes — enter quantities and rates, and the subtotal, discount, tax and grand total all update as you type, using integer minor-unit math so the numbers reconcile exactly rather than drifting from floating-point rounding.',
+    },
+    {
+      q: 'Can I bill in a currency other than rupees?',
+      a: 'Yes — eight currencies: INR, USD, EUR, GBP, AED, AUD, CAD and SGD, each formatted in its own local convention.',
+    },
   ],
+  supportContent: TEMPLATES_SUPPORT,
 }

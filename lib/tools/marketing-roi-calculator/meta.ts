@@ -1,5 +1,57 @@
 import type { Tool } from '../types'
 
+/**
+ * Corrections against lib/tools/marketing-roi-calculator/logic.ts and
+ * MarketingRoiCalculator.tsx: the draft describes separate tabs for CPC,
+ * CPM, CAC and LTV plus a ₹/$ currency toggle — none of that exists. This
+ * tool computes exactly one thing: ROI and ROAS side by side (with margin
+ * and other costs folded in), formatted in rupees only. Content rewritten
+ * to the real formulas and outputs instead of the invented feature set.
+ */
+const ROI_ROAS_SUPPORT: Tool['supportContent'] = [
+  {
+    heading: 'The maths behind the verdict',
+    blocks: [
+      {
+        type: 'prose',
+        paragraphs: [
+          'Spend ₹50,000, get ₹1,50,000 of attributed revenue back, at a 25% gross margin — a 3× ROAS that looks healthy on its own.',
+        ],
+      },
+      {
+        type: 'table',
+        columns: ['Figure', 'Formula', 'Result'],
+        rows: [
+          ['Gross profit', 'revenue × margin', '₹1,50,000 × 25% = ₹37,500'],
+          ['Total cost', 'spend + other costs', '₹50,000'],
+          ['Net profit', 'gross profit − total cost', '₹37,500 − ₹50,000 = −₹12,500'],
+          ['ROI %', 'net profit ÷ total cost × 100', '−25%'],
+          ['ROAS', 'revenue ÷ spend', '3.00×'],
+          ['Break-even ROAS', '1 ÷ margin', '4.00× (needed just to break even)'],
+        ],
+      },
+      {
+        type: 'prose',
+        paragraphs: [
+          'Same campaign, two opposite stories: ROAS says 3× and looks fine; ROI says −25% because it charges the 75% of revenue that never became profit. The gap is entirely the margin — which is why break-even ROAS (1 ÷ margin) is the number worth watching, not ROAS on its own.',
+        ],
+      },
+      {
+        type: 'list',
+        intro:
+          'Break-even ROAS at common margins — the ROAS you need just to cover costs:',
+        items: [
+          '50% margin → 2.00× break-even ROAS',
+          '33% margin → 3.03× break-even ROAS',
+          '25% margin → 4.00× break-even ROAS',
+          '20% margin → 5.00× break-even ROAS',
+          '10% margin → 10.00× break-even ROAS',
+        ],
+      },
+    ],
+  },
+]
+
 export const meta: Tool = {
   slug: 'marketing-roi-calculator',
   category: 'seo',
@@ -66,5 +118,14 @@ export const meta: Tool = {
       q: 'What gross margin should I use?',
       a: 'Gross margin = (revenue − direct cost of delivering it) ÷ revenue. For e-commerce that means after COGS, shipping and payment fees; for services, after delivery labour. If you only know your blended company margin, use that — it is far closer to the truth than the 100% that a plain ROAS number silently assumes.',
     },
+    {
+      q: 'Is my data saved anywhere?',
+      a: 'No. Every figure is computed in your browser as you type — nothing is sent to a server or stored.',
+    },
+    {
+      q: 'Does it support US dollars or other currencies?',
+      a: 'Not yet — figures are formatted in rupees only. The underlying maths (ROI, ROAS, break-even ROAS) works the same in any currency; just read the numbers without the ₹ symbol.',
+    },
   ],
+  supportContent: ROI_ROAS_SUPPORT,
 }

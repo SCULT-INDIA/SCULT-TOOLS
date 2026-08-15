@@ -1,5 +1,56 @@
 import type { Tool } from '../types'
 
+/** The content handover's draft listed icon.svg as one of the output files
+ * and recommended "SVG where possible" — this tool's own `limitations`
+ * already says otherwise: "No SVG output — that needs real vector source
+ * art, not a rasterised wrapper." Corrected to the real four-file set. */
+const SIZES_SUPPORT: Tool['supportContent'] = [
+  {
+    heading: 'The only favicon sizes you actually need',
+    blocks: [
+      {
+        type: 'prose',
+        paragraphs: [
+          "You don't need a dozen files anymore. This set covers browsers, mobile, and PWA installs.",
+        ],
+      },
+      {
+        type: 'table',
+        columns: ['File', 'Size', 'Used for'],
+        rows: [
+          [
+            'favicon.ico',
+            '16 / 32 / 48px (multi-size)',
+            'Browser tabs and legacy lookups',
+          ],
+          ['apple-touch-icon.png', '180×180', 'iOS home screen'],
+          ['icon-192.png', '192×192', 'Android and PWA installs'],
+          ['icon-512.png', '512×512', 'PWA splash screen and install prompt'],
+        ],
+      },
+      {
+        type: 'code',
+        intro: 'The HTML to paste in your <head>:',
+        snippets: [
+          {
+            label: 'HTML',
+            lang: 'html',
+            code: `<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">`,
+          },
+        ],
+      },
+      {
+        type: 'prose',
+        paragraphs: [
+          "This generator outputs the full set — from an uploaded image, typed text, or an emoji — plus the exact code above. There's no SVG output; a favicon needs to stay legible at 16px, and that's a rasterising job, not a vector one.",
+        ],
+      },
+    ],
+  },
+]
+
 export const meta: Tool = {
   slug: 'favicon-generator',
   category: 'dev',
@@ -68,5 +119,14 @@ export const meta: Tool = {
       q: 'Can I legally use an emoji as my favicon?',
       a: 'Generally yes for the common sets: the emoji artwork bundled with major operating systems is licensed for rendering text, and open sets like Twemoji and Noto Emoji are explicitly free to use commercially with attribution. If your brand depends on it, verify the licence of the specific emoji font your system rendered.',
     },
+    {
+      q: 'Does it give me the HTML code to paste?',
+      a: "Yes — alongside the generated files, it outputs the exact <link> tags for your <head>, so there's no guessing at the right attributes.",
+    },
+    {
+      q: 'Is it free?',
+      a: 'Yes — free, no signup, and no limit on how many times you regenerate the set.',
+    },
   ],
+  supportContent: SIZES_SUPPORT,
 }

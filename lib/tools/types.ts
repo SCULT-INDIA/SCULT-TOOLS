@@ -98,6 +98,41 @@ export interface Tool {
   readonly faq: readonly { readonly q: string; readonly a: string }[]
   /** India-only tools say so, which improves relevance for the right audience. */
   readonly indiaOnly?: boolean
+  /**
+   * Optional deeper support content for the how-it-works page — examples,
+   * formulas, cheat sheets, checklists — rendered between "What it doesn't
+   * do" and "Frequently asked". A small closed set of block types rather
+   * than markdown: every shape this content actually needs (code, tables,
+   * lists, prose) is covered here without adding a markdown-rendering
+   * dependency for four block shapes.
+   */
+  readonly supportContent?: readonly SupportSection[]
+}
+
+/** One block of a support section. A closed set, not markdown, so the
+ * renderer stays a simple typed switch — see `Tool.supportContent`. */
+export type SupportBlock =
+  | { readonly type: 'prose'; readonly paragraphs: readonly string[] }
+  | {
+      readonly type: 'code'
+      readonly intro?: string
+      readonly snippets: readonly {
+        readonly label: string
+        readonly lang: string
+        readonly code: string
+        readonly note?: string
+      }[]
+    }
+  | { readonly type: 'list'; readonly intro?: string; readonly items: readonly string[] }
+  | {
+      readonly type: 'table'
+      readonly columns: readonly string[]
+      readonly rows: readonly (readonly string[])[]
+    }
+
+export interface SupportSection {
+  readonly heading: string
+  readonly blocks: readonly SupportBlock[]
 }
 
 /** Slugs that may never be used by a category or tool, because routes own them. */

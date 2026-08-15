@@ -1,5 +1,52 @@
 import type { Tool } from '../types'
 
+/** The content handover's draft named the three layouts "Minimal / Standard
+ * / Branded" — the real `TEMPLATES` array in EmailSignatureGenerator.tsx is
+ * Classic (photo left, text right), Stacked (centred, minimal) and
+ * Corporate (two columns, accent rule). Renamed to match what's actually
+ * there. Gmail steps reuse this tool's own already-verified FAQ answer
+ * rather than the draft's separate, "⚠️CHECK"-flagged version. */
+const INSTALL_SUPPORT: Tool['supportContent'] = [
+  {
+    heading: 'Templates that render everywhere (even Outlook)',
+    blocks: [
+      {
+        type: 'prose',
+        paragraphs: [
+          "A signature that looks great in Gmail can break in Outlook, because Outlook renders HTML with Microsoft Word's engine, not a browser engine. This generator builds table-based, inline-CSS signatures that survive both. Pick a layout, add your details, and install it below.",
+        ],
+      },
+      {
+        type: 'list',
+        intro: 'The three layouts:',
+        items: [
+          'Classic — photo on the left, text on the right.',
+          'Stacked — centred and minimal.',
+          'Corporate — two columns with an accent rule.',
+        ],
+      },
+      {
+        type: 'list',
+        intro: 'Install in Gmail:',
+        items: [
+          'Click Copy signature in the generator.',
+          'In Gmail, open Settings → See all settings, and scroll to the Signature section on the General tab.',
+          'Create a new signature, paste into the box, and click Save Changes at the bottom.',
+        ],
+      },
+      {
+        type: 'list',
+        intro: 'Install in Outlook:',
+        items: [
+          'Copy the signature from the generator.',
+          'Desktop Outlook: File → Options → Mail → Signatures. Outlook on the web: Settings → Mail → Compose and reply.',
+          'Paste into a new signature and set it as your default.',
+        ],
+      },
+    ],
+  },
+]
+
 export const meta: Tool = {
   slug: 'email-signature-generator',
   category: 'business',
@@ -59,5 +106,10 @@ export const meta: Tool = {
       q: 'Is my information uploaded anywhere?',
       a: 'No. The signature is assembled entirely in your browser and copied from there to your clipboard. Nothing you type — names, phone numbers, links — ever leaves your device or touches a server.',
     },
+    {
+      q: 'Is it free?',
+      a: 'Yes — free, no signup, and no limit on how many times you regenerate or copy it.',
+    },
   ],
+  supportContent: INSTALL_SUPPORT,
 }

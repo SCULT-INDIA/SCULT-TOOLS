@@ -1,5 +1,63 @@
 import type { Tool } from '../types'
 
+/** Invented example lines only, per an explicit decision not to reproduce
+ * real trademarked brand slogans even for illustration. */
+const EXAMPLES_SUPPORT: Tool['supportContent'] = [
+  {
+    heading: 'Slogan examples to spark yours',
+    blocks: [
+      {
+        type: 'prose',
+        paragraphs: [
+          'A great slogan is short, memorable, and says something true about the brand. Browse by tone, then generate your own above.',
+        ],
+      },
+      {
+        type: 'list',
+        intro: 'Bold / confident',
+        items: ['"Built to outlast."', '"No shortcuts. Ever."', '"Win the day."'],
+      },
+      {
+        type: 'list',
+        intro: 'Playful / friendly',
+        items: [
+          '"Snack happy."',
+          '"Life\'s better in colour."',
+          '"Small box, big smile."',
+        ],
+      },
+      {
+        type: 'list',
+        intro: 'Premium / minimal',
+        items: [
+          '"Quietly exceptional."',
+          '"Crafted, not manufactured."',
+          '"Less, but better."',
+        ],
+      },
+      {
+        type: 'list',
+        intro: 'Benefit-led (good for services)',
+        items: [
+          '"Get paid faster."',
+          '"Your site, twice as fast."',
+          '"More leads, less guesswork."',
+        ],
+      },
+      {
+        type: 'list',
+        intro: 'What makes these work:',
+        items: [
+          'Short — most memorable slogans are under six words.',
+          'One idea — a single, clear promise, not three.',
+          'Rhythm or contrast — the ear remembers cadence and opposites.',
+          'True to the brand — it should sound like you, not like everyone else in your category.',
+        ],
+      },
+    ],
+  },
+]
+
 export const meta: Tool = {
   slug: 'slogan-generator',
   category: 'business',
@@ -64,5 +122,10 @@ export const meta: Tool = {
       q: 'Where is my shortlist saved?',
       a: 'In your browser’s localStorage, on this device only. Nothing is sent to a server — which also means clearing site data deletes the shortlist, so copy keepers out before you do.',
     },
+    {
+      q: 'How many slogans can I generate?',
+      a: 'As many as you like — each regeneration pulls a fresh batch of ten, excluding anything already shown or shortlisted, so keep going until one clicks.',
+    },
   ],
+  supportContent: EXAMPLES_SUPPORT,
 }

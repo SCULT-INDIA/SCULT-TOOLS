@@ -1,5 +1,53 @@
 import type { Tool } from '../types'
 
+/** Uses the exact READING_WPM (238) / SPEAKING_WPM (130) constants from
+ * logic.ts rather than the draft's rough "200-250" / "130-150" ranges —
+ * this tool's own FAQ already states the precise figures, so the new
+ * content matches rather than re-approximating them. */
+const READING_SUPPORT: Tool['supportContent'] = [
+  {
+    heading: 'Reading time, worked out',
+    blocks: [
+      {
+        type: 'list',
+        intro: 'At 238 words per minute (silent reading):',
+        items: [
+          '500 words ≈ 2.1 minutes',
+          '1,000 words ≈ 4.2 minutes',
+          '2,000 words ≈ 8.4 minutes',
+        ],
+      },
+      {
+        type: 'prose',
+        paragraphs: [
+          "Reading aloud is slower — this tool uses 130 words per minute for speaking time — which is why a script that reads fine on screen can run long once you actually present it. If you're timing a talk, plan around 130 wpm, not 238.",
+        ],
+      },
+    ],
+  },
+  {
+    heading: "What keyword density means (and doesn't)",
+    blocks: [
+      {
+        type: 'prose',
+        paragraphs: [
+          "Keyword density is how often a word appears relative to your total word count — if \"invoice\" shows up 12 times in a 1,000-word article, that's 1.2% density. It's a sanity check, not a target: too high reads like keyword stuffing and can look manipulative to search engines; too low might mean you haven't actually covered the topic you meant to.",
+        ],
+      },
+      {
+        type: 'list',
+        intro: 'Quick uses for this counter:',
+        items: [
+          'Hit an assignment or article word target.',
+          'Estimate reading or speaking time for a post or script before you commit to it.',
+          'Check a meta description or social post fits its character limit — the platform badges show exactly how much room is left.',
+          'Spot an accidentally over-used word with the density readout.',
+        ],
+      },
+    ],
+  },
+]
+
 export const meta: Tool = {
   slug: 'word-counter',
   category: 'productivity',
@@ -64,5 +112,18 @@ export const meta: Tool = {
       q: 'What keyword density should I aim for?',
       a: 'There is no magic percentage. Use the table to spot accidental repetition and confirm the topic you meant to write about actually dominates — then stop. Optimising toward a density number is keyword stuffing, which hurts more than it helps.',
     },
+    {
+      q: 'Does it count characters with and without spaces?',
+      a: 'Yes — both counts update live as you type, alongside words, sentences and paragraphs.',
+    },
+    {
+      q: 'Is there a word or character limit?',
+      a: 'No practical limit for normal writing — paste a full article or blog post and it counts instantly, since everything runs in your own browser rather than against a server-side cap.',
+    },
+    {
+      q: 'Is it free?',
+      a: 'Yes, completely free with no signup, and no limit on how much text you paste in.',
+    },
   ],
+  supportContent: READING_SUPPORT,
 }

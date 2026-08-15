@@ -1,5 +1,66 @@
 import type { Tool } from '../types'
 
+/**
+ * The content handover's draft for this cluster was unfinished — two FAQ
+ * answers were literal "⚠️CHECK" placeholders and the methodology section
+ * was the writer's guess pending alignment with the built tool. Written
+ * from scratch here against the real scoring logic
+ * (lib/tools/ai-visibility-checker/logic.ts: AI_BOTS, computeScore,
+ * buildReport) instead, not edited from that draft.
+ */
+const SCORE_SUPPORT: Tool['supportContent'] = [
+  {
+    heading: 'How to read your score',
+    blocks: [
+      {
+        type: 'prose',
+        paragraphs: [
+          "The score is a weighted blend of five checks, out of 100: crawler access (40 points), structured data (20), on-page basics (20), llms.txt (10) and your sitemap (10). Crawler access is weighted heaviest on purpose — if an AI crawler can't fetch your homepage at all, nothing else on this list matters for that engine.",
+        ],
+      },
+      {
+        type: 'table',
+        columns: ['Score', 'Band', 'What it means'],
+        rows: [
+          ['80–100', 'AI-visible', 'AI engines can fetch, parse and cite your homepage.'],
+          [
+            '50–79',
+            'Partially visible',
+            'Reachable, but missing structured data, basics, or llms.txt/sitemap signals.',
+          ],
+          [
+            '0–49',
+            'Mostly invisible to AI',
+            'At least one AI crawler is blocked, or several other checks are failing at once.',
+          ],
+        ],
+      },
+      {
+        type: 'prose',
+        paragraphs: [
+          'A high score means you are eligible to be read and cited — it is not a guarantee of citation. Content quality and topical authority decide the rest, same as classic SEO.',
+        ],
+      },
+    ],
+  },
+  {
+    heading: 'A quick GEO checklist',
+    blocks: [
+      {
+        type: 'list',
+        intro: 'In the same order the score weighs them:',
+        items: [
+          'robots.txt allows the AI crawlers you actually want reaching you — GPTBot and OAI-SearchBot (OpenAI), ClaudeBot and anthropic-ai (Anthropic), PerplexityBot, Google-Extended, CCBot, Bytespider and meta-externalagent are the ten this tool checks.',
+          'Your homepage names what it is with JSON-LD — an Organization, WebSite, LocalBusiness or Person block, not just page-specific schema like FAQPage.',
+          "The basics are covered: title, meta description, one H1, at least two H2s, a lang attribute, a complete Open Graph set, a canonical link, real alt text on your images, and enough visible text that the page isn't thin.",
+          'A /llms.txt file exists with a short, curated map of your important pages.',
+          'Your sitemap is declared in robots.txt (or responds at /sitemap.xml) so crawlers can discover pages beyond the homepage.',
+        ],
+      },
+    ],
+  },
+]
+
 export const meta: Tool = {
   slug: 'ai-visibility-checker',
   category: 'geo',
@@ -49,15 +110,11 @@ export const meta: Tool = {
   faq: [
     {
       q: 'Should I allow GPTBot to crawl my site?',
-      a: 'If you want your content to be reachable by ChatGPT and future OpenAI models, yes. If you sell that content or object to it training models, blocking GPTBot is a reasonable choice — just know that OAI-SearchBot (ChatGPT search) is a separate bot, so you can allow search visibility while opting out of training.',
+      a: 'If you want your content to be reachable by ChatGPT and future OpenAI models, yes. If you sell that content or object to it training models, blocking GPTBot is a reasonable choice — just know that OAI-SearchBot (ChatGPT search) is a separate bot, so you can allow search visibility while opting out of training. Either way, robots.txt is a request that reputable crawlers honour, not an enforcement mechanism — it is still worth setting deliberately, as the standard, documented signal of your intent.',
     },
     {
       q: 'What is llms.txt?',
       a: 'A proposed standard: a markdown file at /llms.txt that gives AI systems a curated map of your most important pages with short summaries. It is not universally consumed yet, but it costs ten minutes to publish and several AI tools already read it — an easy, low-risk win.',
-    },
-    {
-      q: 'What does a score of 80+ actually mean?',
-      a: 'That AI engines can fetch your homepage, parse structured data about it, and read the basic signals they quote in answers. It means you are eligible to be cited, not guaranteed to be — content quality and topical authority decide the rest.',
     },
     {
       q: 'I put "Disallow: /" under "User-agent: GPTBot" but left "User-agent: *" wide open — is GPTBot still blocked?',
@@ -68,16 +125,21 @@ export const meta: Tool = {
       a: 'Classic Googlebot and AI crawlers are different user-agents with different robots rules. Many sites (or their CDN/firewall defaults) block GPTBot, CCBot or PerplexityBot without ever touching Googlebot, so organic traffic stays healthy while AI engines cannot read the site at all.',
     },
     {
-      q: 'Does blocking AI bots protect my content from AI completely?',
-      a: 'No. robots.txt is a request that reputable crawlers honour, not an enforcement mechanism, and your content can still enter training data through third-party datasets, syndication or scraping. It is still worth setting deliberately — it is the standard, documented signal of your intent.',
-    },
-    {
       q: 'What is the difference between the noai signal and blocking a crawler in robots.txt?',
       a: 'robots.txt is a fetch-level gate, checked before a crawler requests the page at all. noai (and noimageai) is a page-level request sent inside the meta robots tag or the X-Robots-Tag header, asking a crawler that has already fetched the page not to use its content for AI training. Neither is enforced by anything on your server — both depend on the crawler operator choosing to honour them. This checker reports noai but does not score it, because opting out is a business decision, not a defect. A noindex or nofollow signal in that same tag is reported separately and much more severely, since it can suppress a page from AI answers entirely regardless of every other check.',
     },
     {
-      q: 'Can this tool check more than my homepage?',
-      a: 'Not right now — every check runs against your homepage only. A full-site crawl is a heavier, different product (a queue, not a single request), and one homepage is the honest scope for a free tool that runs synchronously with no email gate.',
+      q: 'Which AI engines does it check?',
+      a: 'Ten crawlers across six companies: GPTBot and OAI-SearchBot (OpenAI), ClaudeBot and anthropic-ai (Anthropic), PerplexityBot, Google-Extended, CCBot, Bytespider and meta-externalagent. The report shows a verdict for each one individually.',
+    },
+    {
+      q: 'Is my data stored?',
+      a: "No account and no database — this runs as a single server-side request with a 6-hour cache (so re-checking the same URL soon after is instant, not a fresh crawl). The only thing saved anywhere is your own check history, kept in this browser's local storage so you can see how many points moved since last time; it never leaves your device. Each check is a live snapshot, not a stored record — robots.txt, your homepage HTML and your sitemap can all change at any time, so re-checking after a fix is the way to confirm it actually landed.",
+    },
+    {
+      q: 'Is it free?',
+      a: 'Yes, free with no signup — even though, unlike most tools on this site, it runs as a real server request rather than entirely in your browser.',
     },
   ],
+  supportContent: SCORE_SUPPORT,
 }

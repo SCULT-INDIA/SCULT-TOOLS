@@ -1,5 +1,56 @@
 import type { Tool } from '../types'
 
+const MINIFY_SUPPORT: Tool['supportContent'] = [
+  {
+    heading: 'Minify vs beautify — what they do',
+    blocks: [
+      {
+        type: 'prose',
+        paragraphs: [
+          'The same JSON can be stored two ways. Beautified JSON is indented and spread over multiple lines so a human can read it. Minified JSON removes every unnecessary space and line break so a machine can transfer it as fast as possible. Both are valid, identical data — only the formatting differs.',
+        ],
+      },
+      {
+        type: 'code',
+        snippets: [
+          {
+            label: 'Beautified — for reading & debugging',
+            lang: 'json',
+            code: `{
+  "user": {
+    "id": 42,
+    "name": "Aarav",
+    "roles": ["admin", "editor"]
+  }
+}`,
+          },
+          {
+            label: 'Minified — for transfer & storage',
+            lang: 'json',
+            code: '{"user":{"id":42,"name":"Aarav","roles":["admin","editor"]}}',
+          },
+        ],
+      },
+      {
+        type: 'list',
+        intro:
+          "Beautify when: debugging an API response or log, reviewing a config file or someone else's data, or writing documentation and examples.",
+        items: [
+          'Minify when sending over the network — smaller payloads load faster.',
+          'Minify when storing at scale — less space in databases and caches.',
+          "Minify for production builds, where readability doesn't matter and size does.",
+        ],
+      },
+      {
+        type: 'prose',
+        paragraphs: [
+          'Rule of thumb: work in beautified JSON, ship minified JSON. If a person is reading it, beautify. If a machine is consuming it, minify.',
+        ],
+      },
+    ],
+  },
+]
+
 export const meta: Tool = {
   slug: 'json-formatter',
   category: 'dev',
@@ -43,5 +94,18 @@ export const meta: Tool = {
       q: 'What indent should I use?',
       a: 'Two spaces is the most common convention. Minify for anything going over the wire.',
     },
+    {
+      q: "What's the difference between format, minify, and validate?",
+      a: 'Format (beautify) adds indentation and line breaks so JSON is readable. Minify strips whitespace to make it as small as possible for transfer. Validate checks the JSON is syntactically correct and points you to the error if not.',
+    },
+    {
+      q: 'Is there a size limit?',
+      a: "No hard limit — it handles large files comfortably since parsing runs locally with the browser's native JSON.parse. Very large files depend on your own device's memory, not a server-side cap.",
+    },
+    {
+      q: 'Is it free?',
+      a: 'Yes — free, no signup, and it keeps working offline once the page has loaded.',
+    },
   ],
+  supportContent: MINIFY_SUPPORT,
 }

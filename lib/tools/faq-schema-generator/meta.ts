@@ -1,5 +1,60 @@
 import type { Tool } from '../types'
 
+/**
+ * The content handover's original draft framed FAQ rich results as
+ * "since 2023, mostly authoritative sites" — true as of that policy change,
+ * but stale next to this tool's own `limitations`/`howItWorks`, which
+ * already record the fuller retirement (7 May 2026). Written to match the
+ * more current, more specific fact already in this file, not the draft.
+ */
+const EXAMPLES_SUPPORT: Tool['supportContent'] = [
+  {
+    heading: 'A valid FAQ schema example',
+    blocks: [
+      {
+        type: 'prose',
+        paragraphs: [
+          'Here is clean, valid FAQPage JSON-LD you can copy — or generate it from your own questions above.',
+        ],
+      },
+      {
+        type: 'code',
+        snippets: [
+          {
+            label: 'FAQPage',
+            lang: 'json',
+            code: `{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is the FAQ schema generator free?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes, it's completely free with no signup." }
+    },
+    {
+      "@type": "Question",
+      "name": "Where do I paste the code?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Inside your page's head, in a script type=\\"application/ld+json\\" tag." }
+    }
+  ]
+}`,
+          },
+        ],
+      },
+      {
+        type: 'list',
+        intro: 'The rules that actually matter for this markup:',
+        items: [
+          "The same questions and answers must be visible on the page — never mark up content a visitor can't also read.",
+          'Answers in the schema must match the visible answers exactly, word for word.',
+          'Google retired FAQ rich results entirely on 7 May 2026, so this markup will not add an expandable Q&A under your search snippet — its value now is AI answer engines parsing your page, and keeping the schema ready in case eligibility ever returns.',
+        ],
+      },
+    ],
+  },
+]
+
 export const meta: Tool = {
   slug: 'faq-schema-generator',
   category: 'seo',
@@ -70,5 +125,14 @@ export const meta: Tool = {
       q: 'Can I use HTML inside the answers?',
       a: 'Google allows a small whitelist in Answer text (links, lists, bold, paragraphs), but anything beyond plain text is ignored in rich results. Keep answers as plain prose and put rich formatting in the visible HTML instead.',
     },
+    {
+      q: 'Is it free, and does it run in my browser?',
+      a: 'Yes to both — free with no signup, and the JSON-LD is generated entirely on your device. Nothing you type is uploaded anywhere.',
+    },
+    {
+      q: 'How many questions can I add?',
+      a: 'As many as you need — add, remove or reorder rows freely. The only limit is the ~1,200-character discipline the tool flags per answer.',
+    },
   ],
+  supportContent: EXAMPLES_SUPPORT,
 }

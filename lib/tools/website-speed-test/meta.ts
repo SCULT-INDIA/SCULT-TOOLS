@@ -1,5 +1,62 @@
 import type { Tool } from '../types'
 
+/** Thresholds verified against lib/tools/website-speed-test/logic.ts
+ * (categoryForScore, METRIC_THRESHOLDS) — the draft's numbers were already
+ * correct, this just confirms it rather than trusting the "⚠️CHECK" as-is. */
+const FIXES_SUPPORT: Tool['supportContent'] = [
+  {
+    heading: 'Score bands at a glance',
+    blocks: [
+      {
+        type: 'table',
+        columns: ['Score', 'Band', 'Core Web Vital', 'Good threshold'],
+        rows: [
+          ['90–100', 'Good', 'LCP (loading)', '≤ 2.5 s'],
+          ['50–89', 'Needs improvement', 'INP (responsiveness)', '≤ 200 ms'],
+          ['0–49', 'Poor', 'CLS (visual stability)', '≤ 0.10'],
+        ],
+      },
+    ],
+  },
+  {
+    heading: 'The fixes that move the needle',
+    blocks: [
+      {
+        type: 'list',
+        intro: 'Fix LCP (loading) first — it usually has the biggest single-image win:',
+        items: [
+          'Compress and correctly size your largest image; serve WebP or AVIF instead of JPEG/PNG where you can.',
+          'Preload the hero image so the browser fetches it immediately, and lazy-load everything below the fold.',
+          'Improve server response time — caching, better hosting, or a CDN in front of a slow origin.',
+        ],
+      },
+      {
+        type: 'list',
+        intro: 'Fix INP (responsiveness):',
+        items: [
+          'Reduce heavy JavaScript and break up long-running tasks so the main thread frees up between them.',
+          "Remove or defer non-essential third-party scripts — chat widgets and ad/analytics tags are the most common culprits, and this tool's own report ranks them by main-thread cost.",
+        ],
+      },
+      {
+        type: 'list',
+        intro: 'Fix CLS (visual stability):',
+        items: [
+          'Set explicit width and height on every image and embed so the browser reserves space before it loads.',
+          'Reserve space for ads or banners up front instead of letting them push content down once they load.',
+          "Preload web fonts so text doesn't visibly reflow when the real font swaps in.",
+        ],
+      },
+      {
+        type: 'prose',
+        paragraphs: [
+          "Image compression, caching, and setting image dimensions fix most sites' biggest problems fastest. Heavier issues — a lot of custom JavaScript, or hosting that's genuinely slow — usually need a developer, not a plugin. Re-test after each change to confirm it actually moved the score.",
+        ],
+      },
+    ],
+  },
+]
+
 export const meta: Tool = {
   slug: 'website-speed-test',
   category: 'seo',
@@ -53,12 +110,8 @@ export const meta: Tool = {
       a: 'The mobile test simulates a mid-range phone with a 4x CPU slowdown on a slow 4G connection, while desktop assumes fast hardware and broadband. Most real traffic is mobile, which is exactly why Google tests it under pressure — and ranks you on it.',
     },
     {
-      q: 'What is the difference between lab data and field data?',
-      a: 'Lab data is one simulated page load run by Lighthouse — controlled and repeatable, good for debugging. Field data is the 75th-percentile experience of real Chrome users over the last 28 days (the CrUX dataset), and it is what Google actually uses to assess Core Web Vitals.',
-    },
-    {
-      q: 'Why does this report show no field (real-user) data for my page?',
-      a: 'Field data comes from the Chrome UX Report, which only publishes a page once enough real Chrome users have visited it over the trailing 28 days. Below that threshold, PageSpeed Insights falls back to origin-level data — real users across the whole site rather than this specific page — and if the origin is too small too, there is no field data at all, so the report falls back to this run’s lab metrics instead. Interaction to Next Paint can only ever come from field data, so a page with no field data also has no INP reading.',
+      q: 'What is the difference between lab data and field data, and why might my report show none?',
+      a: 'Lab data is one simulated page load run by Lighthouse — controlled and repeatable, good for debugging. Field data is the 75th-percentile experience of real Chrome users over the last 28 days (the CrUX dataset), and it is what Google actually uses to assess Core Web Vitals. Field data only appears once enough real Chrome users have visited a page over that window; below that threshold, PageSpeed Insights falls back to origin-level data, and if the origin is too small too, there is none at all — the report then falls back to this run’s lab metrics instead. Interaction to Next Paint can only ever come from field data, so a page with no field data also has no INP reading.',
     },
     {
       q: 'Does page speed affect Google rankings?',
@@ -76,5 +129,10 @@ export const meta: Tool = {
       q: 'Do third-party scripts (ads, analytics, chat widgets) really slow a page down?',
       a: 'Yes — every embedded script adds its own network request and runs JavaScript on the same main thread as your own code, which is exactly what Total Blocking Time and Interaction to Next Paint measure. A single heavy ad network or chat widget can cost more than the rest of the page combined. Lighthouse’s audits already account for this: when a third-party script is expensive enough to be worth fixing, it can appear in the top-five opportunities like any other audit, sorted by estimated saving.',
     },
+    {
+      q: 'Is it free?',
+      a: "Yes, free with no signup — even though, like the AI Visibility Checker, it runs as a real server request against Google's PageSpeed Insights API rather than entirely in your browser.",
+    },
   ],
+  supportContent: FIXES_SUPPORT,
 }

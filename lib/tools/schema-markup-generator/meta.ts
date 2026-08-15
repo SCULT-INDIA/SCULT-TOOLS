@@ -1,5 +1,104 @@
 import type { Tool } from '../types'
 
+/**
+ * Reference JSON-LD, not literal tool output — schema.org-correct examples
+ * for the five types most sites need, matched to what this tool actually
+ * supports (Article, Product, LocalBusiness, Event, BreadcrumbList — see
+ * `SchemaTypeId` in lib/tools/schema-markup-generator/logic.ts). The
+ * content handover's original draft listed FAQ as one of the four example
+ * types; this tool has no FAQPage output at all (that's the separate FAQ
+ * Schema Generator), so it's dropped here rather than shown incorrectly.
+ */
+const EXAMPLES_SUPPORT: Tool['supportContent'] = [
+  {
+    heading: 'Copy-paste JSON-LD examples',
+    blocks: [
+      {
+        type: 'prose',
+        paragraphs: [
+          'Below are valid, schema.org-correct examples for the types this generator covers. Copy one, swap in your own details, and paste the whole block inside a `<script type="application/ld+json">` tag — or skip the copy-paste entirely and build it from your own fields above.',
+        ],
+      },
+      {
+        type: 'code',
+        snippets: [
+          {
+            label: 'Article',
+            lang: 'json',
+            code: `{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Add Schema Markup",
+  "author": { "@type": "Person", "name": "Jane Doe" },
+  "datePublished": "2026-08-09",
+  "image": "https://example.com/cover.jpg"
+}`,
+          },
+          {
+            label: 'Product',
+            lang: 'json',
+            code: `{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Wireless Headphones",
+  "image": ["https://example.com/photo.jpg"],
+  "description": "Noise-cancelling over-ear headphones.",
+  "offers": {
+    "@type": "Offer",
+    "price": "4999",
+    "priceCurrency": "INR",
+    "availability": "https://schema.org/InStock"
+  }
+}`,
+          },
+          {
+            label: 'LocalBusiness',
+            lang: 'json',
+            code: `{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Acme Studio",
+  "telephone": "+91-98765-43210",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "123 MG Road",
+    "addressLocality": "Bengaluru",
+    "addressRegion": "KA",
+    "postalCode": "560001",
+    "addressCountry": "IN"
+  }
+}`,
+          },
+          {
+            label: 'BreadcrumbList',
+            lang: 'json',
+            code: `{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://example.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://example.com/blog/" }
+  ]
+}`,
+          },
+        ],
+      },
+      {
+        type: 'list',
+        intro:
+          'The errors Google flags most in the Rich Results Test — fix these before anything else:',
+        items: [
+          'Missing required field — a Product with no offers, or a Review with no author. Add the required property; this generator will not let you skip these for the types it covers.',
+          'Invalid JSON syntax — a stray trailing comma or an unclosed brace. Generating the block instead of hand-typing it avoids this entirely.',
+          'Wrong value type — a price written as "₹4,999" instead of "4999", or a date not in ISO format. Use plain numbers and YYYY-MM-DD dates.',
+          "Schema that doesn't match visible content — marking up Q&A pairs, prices, or details that are not actually shown on the page. This is a Google policy issue, not just a warning.",
+          'Wrong @type — using Organization where LocalBusiness fits better for local search. Pick the most specific type that actually describes the page.',
+        ],
+      },
+    ],
+  },
+]
+
 export const meta: Tool = {
   slug: 'schema-markup-generator',
   category: 'seo',
@@ -72,5 +171,14 @@ export const meta: Tool = {
       q: 'Can I put more than one schema type on the same page?',
       a: 'Yes. Multiple <script type="application/ld+json"> blocks on one page are fine — an article page commonly carries Article, BreadcrumbList and Organization markup side by side. Generate each one here and paste them as separate blocks.',
     },
+    {
+      q: 'Which schema types does this generator support?',
+      a: 'Nine: Article, Organization, LocalBusiness, Product, Person, Event, WebSite, BreadcrumbList and HowTo — the types that cover the vast majority of real pages. Niche types like Recipe or JobPosting aren’t built in yet.',
+    },
+    {
+      q: 'Is my data uploaded anywhere?',
+      a: 'No — the JSON-LD is assembled entirely in your browser from what you type. Nothing is sent to a server, and nothing is saved once you leave the page.',
+    },
   ],
+  supportContent: EXAMPLES_SUPPORT,
 }

@@ -1,5 +1,40 @@
 import type { Tool } from '../types'
 
+const IDEAS_SUPPORT: Tool['supportContent'] = [
+  {
+    heading: 'Name ideas, by industry',
+    blocks: [
+      {
+        type: 'prose',
+        paragraphs: [
+          'Stuck on where to start? Use these as a springboard, then generate unlimited variations above and check availability before you commit to anything.',
+        ],
+      },
+      {
+        type: 'list',
+        items: [
+          'Tech / SaaS: Nextbyte, Cloudline, Stackwell, Codemint, Loopize, Bitgrove',
+          'Food & beverage: Spiceroot, Fork & Flame, Cravehouse, Freshbowl, Chai Chapter',
+          'Fashion / D2C: Threadfolk, Vela, Loomly, Stitchgrove, Wovn',
+          'Agency / services: Brightpitch, Northstar Studio, Clearloop, Craftly',
+          'Fitness / wellness: Pulsefit, Zenroot, Movewell, Vitala',
+          'Finance / fintech: Ledgerly, Coinpath, Fundwise, Payloom',
+        ],
+      },
+      {
+        type: 'list',
+        intro: "What to do once you've picked one:",
+        items: [
+          "Check it's actually free to use — company registry, trademark, domain, and social handles, in that order.",
+          'Say it out loud. Easy to pronounce and spell over the phone?',
+          'Check the .com and .in — a matching domain matters more than people expect.',
+          "Make sure it can grow with you — don't box yourself into one product or one city.",
+        ],
+      },
+    ],
+  },
+]
+
 export const meta: Tool = {
   slug: 'business-name-generator',
   category: 'business',
@@ -66,4 +101,5 @@ export const meta: Tool = {
       a: 'The pronounceability check looks for runs of three or more consonant sounds outside common English onsets like “str” or “spr”. Names that fail tend to be misheard and misspelled, which quietly costs word-of-mouth referrals.',
     },
   ],
+  supportContent: IDEAS_SUPPORT,
 }
