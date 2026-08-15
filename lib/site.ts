@@ -14,6 +14,13 @@ export const SITE = {
     'Free online tools plus a verified AI prompt library — SEO, business, developer and design utilities, and copy-paste prompts for ChatGPT, Claude, Cursor, Midjourney and more. Built by Scult, an AI-first digital agency.',
   locale: 'en-IN',
   gaId: process.env.NEXT_PUBLIC_GA_ID ?? '',
+  /**
+   * Microsoft Clarity project ID — heatmaps and session replay, answering the
+   * question GA4 structurally cannot: not "how many people clicked" but "where
+   * did they get stuck". Left empty in any environment that doesn't set it, so
+   * local dev and previews never pollute the production recordings.
+   */
+  clarityId: process.env.NEXT_PUBLIC_CLARITY_ID ?? '',
   /** Injected at build time by next.config.ts — see the note there. */
   buildYear: process.env.NEXT_PUBLIC_BUILD_YEAR ?? '2026',
 } as const

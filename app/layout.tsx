@@ -218,6 +218,33 @@ gtag('js',new Date());gtag('config','${SITE.gaId}',{cookie_domain:'.scult.in'});
             </>
           ) : null}
 
+          {/* Microsoft Clarity — heatmaps and session replay. GA4 answers "how
+              many people copied the output"; Clarity answers "why the other
+              half didn't", which is the question that actually changes a tool's
+              design.
+
+              Loaded `afterInteractive` for the same reason as GA4: it must
+              never compete with the LCP. Clarity's own snippet is kept
+              verbatim (rather than replaced with a bare <script src>) because
+              the `c[a].q` queue shim it installs is what lets `clarity(...)`
+              be called before the remote tag finishes loading — the same
+              early-call safety that lib/analytics.ts relies on for dataLayer.
+
+              PRIVACY: this site's whole promise is that tool input stays in the
+              browser, and session replay is the one thing that could quietly
+              break it — people paste real client JSON and real invoice figures
+              into these tools. Masking is therefore NOT left at Clarity's
+              "Balanced" default; the project is set to Strict masking in the
+              Clarity dashboard, which redacts page text and all input values
+              before anything is transmitted. app/privacy/page.tsx discloses
+              this, and the two must be kept in sync — if masking is ever
+              relaxed, that page stops being true. */}
+          {SITE.clarityId ? (
+            <Script id="clarity" strategy="afterInteractive">
+              {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${SITE.clarityId}");`}
+            </Script>
+          ) : null}
+
           {/* Vercel Analytics — a no-op off Vercel's own infrastructure (it
               posts to /_vercel/insights, which only exists on a Vercel
               deployment), so this is safe to render unconditionally in every
