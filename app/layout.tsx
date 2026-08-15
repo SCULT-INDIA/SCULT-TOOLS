@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cabin, Fraunces, Permanent_Marker } from 'next/font/google'
 import Script from 'next/script'
+import { CtaClickTracker } from '@/components/layout/CtaClickTracker'
 import { Footer } from '@/components/layout/Footer'
 import { HeaderGate } from '@/components/layout/HeaderGate'
 import { ThemeProvider } from '@/components/theme/ThemeProvider'
@@ -201,6 +202,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
           <Footer />
           <FloatingActions />
+
+          {/* One delegated listener for every outbound conversion link on the
+              site — see the component for why it is not an onClick per link. */}
+          <CtaClickTracker />
 
           {/* GA4 loads after interaction so it never competes with the LCP.
               Same property as the parent site, so a tools -> agency journey is one

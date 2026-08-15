@@ -1,3 +1,5 @@
+import { SITE } from '@/lib/site'
+
 /**
  * The single entry point to GA4 custom events — every other tracker in
  * this file, and every call site across the codebase, funnels through this
@@ -72,6 +74,76 @@ export function trackPromptEvent(
   extra?: Record<string, string | number | boolean>,
 ): void {
   trackEvent('prompt_action', { category, prompt: promptSlug, action, ...extra })
+}
+
+/**
+ * What a click on an outbound link to the parent site is worth recording.
+ * `campaign` is the `utm_campaign` value `parentLink()` already stamped on
+ * the URL — the tool slug, or a hand-written placement name like
+ * `pricing-section` — so it doubles as the CTA's identity without any call
+ * site having to name itself twice.
+ */
+export type ParentCtaLink = {
+  campaign: string
+  destination: string
+}
+
+/**
+ * Decides whether an href is one of our own outbound conversion links, and
+ * pulls the campaign out of it if so. Pure and side-effect free precisely so
+ * it can be tested without a DOM — the listener that calls it (see
+ * `components/layout/CtaClickTracker.tsx`) cannot be.
+ *
+ * The match is deliberately narrow: parent host AND our own `utm_source`.
+ * Host alone would also catch the plain prose links to scult.in scattered
+ * through the copy, which are not CTAs and would inflate the conversion
+ * count. Requiring the `utm_source` this codebase stamps in `parentLink()`
+ * means only links built by that helper — i.e. actual conversion links —
+ * ever qualify.
+ *
+ * Returns null for anything else, including unparseable hrefs (`#`,
+ * `mailto:`, a malformed value from hand-written markup) — a tracker must
+ * never be the thing that throws inside a click handler.
+ */
+export function parseParentCtaHref(href: string, base: string): ParentCtaLink | null {
+  let url: URL
+  let parent: URL
+  try {
+    url = new URL(href, base)
+    parent = new URL(SITE.parentUrl)
+  } catch {
+    return null
+  }
+  if (url.host !== parent.host) return null
+  if (url.searchParams.get('utm_source') !== SITE.host) return null
+  return {
+    campaign: url.searchParams.get('utm_campaign') || 'unknown',
+    // Path + hash, not the full href: the UTM query is already captured in
+    // `campaign`, and keeping it would make every destination look unique in
+    // GA4 rather than grouping "everyone who went to /#book-meeting".
+    destination: `${url.pathname}${url.hash}`,
+  }
+}
+
+/**
+ * The conversion event. `parentLink()` in lib/site.ts exists so the CRM can
+ * answer "which tool produced this client" — but UTM tags alone only tell
+ * that story from scult.in's side, once someone has already arrived. This is
+ * the other half: the click itself, recorded on the tools side, so the funnel
+ * "used a tool -> clicked through to the agency" is one query instead of two
+ * properties that have to be reconciled by hand.
+ *
+ * Not redundant with GA4's Enhanced Measurement outbound-click tracking: that
+ * fires an untyped `click` for EVERY external link — GitHub, Instagram, the
+ * Clarity docs — carries no campaign, and is therefore useless as a key
+ * event. This one fires only for conversion links and can be marked as a key
+ * event without poisoning the conversion count.
+ */
+export function trackCtaClick(
+  campaign: string,
+  extra?: Record<string, string | number | boolean>,
+): void {
+  trackEvent('cta_click', { cta_location: campaign, ...extra })
 }
 
 /**
