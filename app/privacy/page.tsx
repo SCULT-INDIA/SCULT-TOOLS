@@ -176,6 +176,17 @@ export default function PrivacyPage() {
               after the page is interactive, so it never slows anything down.
             </li>
             <li>
+              <strong className="text-ink">Heatmaps and session replay.</strong> We use
+              Microsoft Clarity to see where people get stuck — which buttons get missed,
+              where a layout confuses. It is set to{' '}
+              <strong className="text-ink">strict masking</strong>, which means the text
+              on the page and everything you type are replaced with placeholder blocks
+              before anything is sent. A replay shows us that you clicked a field and how
+              long you hesitated; it does not show us the invoice, the JSON, or the words
+              you pasted in. Like the analytics above, it loads only after the page is
+              interactive.
+            </li>
+            <li>
               <strong className="text-ink">Local preferences.</strong> A dismissed
               announcement bar is remembered in your browser's own localStorage. That
               never leaves your device and we cannot read it.
