@@ -2,6 +2,7 @@ import { ArrowUpRight, Heart, Mail, ShieldCheck, Sparkles } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { BrandIcon } from '@/components/ui/BrandIcon'
+import { UneedBadge } from '@/components/ui/UneedBadge'
 import { getCategoriesByGroup, PROMPT_GROUPS } from '@/lib/prompts/categories'
 import { getPromptsByCategory } from '@/lib/prompts/registry'
 import { parentLink, SITE } from '@/lib/site'
@@ -42,6 +43,11 @@ import { LiveUptime } from './LiveUptime'
  * review platform, no customer count and no such partnerships, so inventing
  * equivalents would be fabricated credentials. Those slots carry claims that are
  * true and checkable about this site instead — same shape, same visual weight.
+ *
+ * One of those did become real: the Uneed listing below is an actual directory
+ * placement (uneed.best/tool/scult-tool), not a fabricated equivalent, so it
+ * renders their own embed artwork rather than being reshaped into our chip
+ * style — it's their badge, not a claim we're making about ourselves.
  */
 
 /** Verifiable claims, standing in for the reference's third-party badges. */
@@ -328,7 +334,7 @@ export function Footer() {
 
           <LiveUptime />
 
-          <div className="flex flex-wrap justify-center gap-3 md:justify-end">
+          <div className="flex flex-wrap items-center justify-center gap-3 md:justify-end">
             {BADGES.map(({ Icon, title, sub }) => (
               // Literal black text: the badge chip is fixed white in both
               // themes, so adaptive ink (near-white in dark mode) vanishes
@@ -344,6 +350,7 @@ export function Footer() {
                 </span>
               </div>
             ))}
+            <UneedBadge />
           </div>
         </div>
 

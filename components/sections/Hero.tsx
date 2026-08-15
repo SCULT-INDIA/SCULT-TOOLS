@@ -4,6 +4,7 @@ import Link from 'next/link'
 import scultMark from '@/app/icon.png'
 import { SearchBox } from '@/components/layout/SearchBox'
 import { Icon } from '@/components/ui/Icon'
+import { UneedBadge } from '@/components/ui/UneedBadge'
 import { PROMPTS } from '@/lib/prompts/registry'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { TOOLS } from '@/lib/tools/registry'
@@ -43,6 +44,15 @@ export function Hero() {
     // not one more internal gap. This moves the whole block up at once.
     <section aria-labelledby="hero-heading" className="pt-6 pb-8 text-center md:pt-8">
       <div className="container-site">
+        {/* Real third-party recognition, sitting above the eyebrow so it adds
+            its own block with its own margin rather than touching any of the
+            "mt-*" spacing tuned against the eyebrow/CTA/constellation stack
+            below (see the file's other comments) — this can't disturb that
+            math because nothing below measures its distance FROM this. */}
+        <div className="flex justify-center pb-3">
+          <UneedBadge className="h-8 w-auto" />
+        </div>
+
         <p className="eyebrow">
           {TOOLS.length} tools · {PROMPTS.length} AI prompts · zero signups
         </p>
