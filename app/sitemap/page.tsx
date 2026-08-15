@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { BLOG_POSTS } from '@/lib/blog/registry'
+import type { BlogPillar } from '@/lib/blog/types'
 import { GUIDES } from '@/lib/guides/registry'
 import { getCategoriesByGroup, PROMPT_GROUPS } from '@/lib/prompts/categories'
 import { getPromptsByCategory, PROMPTS } from '@/lib/prompts/registry'
@@ -67,8 +69,25 @@ const JUMP_SECTIONS: readonly { id: string; label: string }[] = [
   { id: 'tools', label: 'Tools' },
   { id: 'prompts', label: 'Prompt library' },
   { id: 'guides', label: 'Guides' },
+  { id: 'blog', label: 'Blog' },
   { id: 'trust', label: 'About & trust' },
   { id: 'machine', label: 'Machine-readable' },
+]
+
+const BLOG_PILLAR_LABEL: Record<BlogPillar, string> = {
+  tool: 'Tools',
+  prompt: 'Prompts',
+  service: 'Services',
+  roundup: 'Roundups',
+  playbook: 'Playbooks',
+}
+
+const BLOG_PILLARS: readonly BlogPillar[] = [
+  'tool',
+  'prompt',
+  'service',
+  'roundup',
+  'playbook',
 ]
 
 /**
@@ -101,8 +120,8 @@ export default function SitemapPage() {
           Every page on this site
         </h1>
         <p className="mt-5 max-w-[62ch] text-[17px] text-ink-muted leading-7 md:text-lead">
-          {TOOLS.length} tools, {PROMPTS.length} prompts, {GUIDES.length} guides and every
-          trust page, grouped by section.
+          {TOOLS.length} tools, {PROMPTS.length} prompts, {GUIDES.length} guides,{' '}
+          {BLOG_POSTS.length} blog posts and every trust page, grouped by section.
         </p>
         <p className="mt-3 max-w-[62ch] text-[15px] text-ink-muted">
           Prefer a machine-readable version?{' '}
@@ -217,6 +236,44 @@ export default function SitemapPage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section
+        id="blog"
+        aria-labelledby="blog-heading"
+        className="container-site scroll-mt-32 py-8"
+      >
+        <h2 id="blog-heading" className="text-[26px] tracking-[-0.5px] md:text-[30px]">
+          Blog
+        </h2>
+        <p className="mt-3 text-[15px] text-ink-muted">
+          <Link href="/blog" className={`font-medium ${LINK_CLASS}`}>
+            Browse all {BLOG_POSTS.length} posts →
+          </Link>
+        </p>
+        {BLOG_PILLARS.map((pillar) => {
+          const posts = BLOG_POSTS.filter((post) => post.pillar === pillar)
+          if (posts.length === 0) return null
+          return (
+            <div key={pillar} className="mt-6">
+              <p className="font-semibold text-[15px] text-ink-subtle uppercase tracking-wide">
+                {BLOG_PILLAR_LABEL[pillar]} ({posts.length})
+              </p>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {posts.map((post) => (
+                  <li key={post.slug}>
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="chip-tool px-4 py-2 text-[14px]"
+                    >
+                      {post.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        })}
       </section>
 
       <section

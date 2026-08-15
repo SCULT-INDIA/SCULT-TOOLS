@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { BLOG_POSTS } from '@/lib/blog/registry'
 import { GUIDES } from '@/lib/guides/registry'
 import { PROMPT_CATEGORIES } from '@/lib/prompts/categories'
 import { getPromptsByCategory, PROMPTS } from '@/lib/prompts/registry'
@@ -55,6 +56,12 @@ const STATIC_PAGES: readonly {
     lastModified: '2026-08-09',
     changeFrequency: 'monthly',
     priority: 0.6,
+  },
+  {
+    path: '/blog',
+    lastModified: '2026-08-15',
+    changeFrequency: 'weekly',
+    priority: 0.7,
   },
   {
     path: '/changelog',
@@ -211,6 +218,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...GUIDES.map((guide) => ({
       url: absoluteUrl(`/guides/${guide.slug}`),
       lastModified: guide.updatedAt,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    })),
+    ...BLOG_POSTS.map((post) => ({
+      url: absoluteUrl(`/blog/${post.slug}`),
+      lastModified: post.updatedAt,
       changeFrequency: 'monthly' as const,
       priority: 0.6,
     })),

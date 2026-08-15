@@ -1,3 +1,4 @@
+import type { BlogPost } from '@/lib/blog/types'
 import type { Guide } from '@/lib/guides/types'
 import type { Prompt, PromptCategory } from '@/lib/prompts/types'
 import { absoluteUrl, SITE } from '@/lib/site'
@@ -189,6 +190,29 @@ export function guideJsonLd(guide: Guide): object {
     publisher: PUBLISHER,
     inLanguage: SITE.locale,
     dateModified: guide.updatedAt,
+  }
+}
+
+/**
+ * A blog post is authored editorial content, same as a guide — `Article` is
+ * the right schema.org type here too. No `author` field, for the same reason
+ * `guideJsonLd` has none: there is no real named author to attribute this to.
+ * `publisher` follows the same rule as every other node in this file: it
+ * references the PARENT's @id, never a second orphaned entity.
+ */
+export function blogPostJsonLd(post: BlogPost): object {
+  const url = absoluteUrl(`/blog/${post.slug}`)
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    '@id': `${url}#article`,
+    headline: post.title,
+    url,
+    description: post.description,
+    isAccessibleForFree: true,
+    publisher: PUBLISHER,
+    inLanguage: SITE.locale,
+    dateModified: post.updatedAt,
   }
 }
 

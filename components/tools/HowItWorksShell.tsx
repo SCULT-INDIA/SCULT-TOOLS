@@ -1,7 +1,9 @@
 import { ArrowLeft, ArrowUpRight, TriangleAlert } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { SupportSections } from '@/components/tools/SupportContentBlocks'
 import { ToolCard } from '@/components/ui/ToolCard'
+import { BLOG_POSTS } from '@/lib/blog/registry'
 import { GUIDES } from '@/lib/guides/registry'
 import { PROMPTS } from '@/lib/prompts/registry'
 import { formatUpdatedDate } from '@/lib/site'
@@ -43,6 +45,7 @@ export function HowItWorksShell({ tool }: { tool: Tool }) {
   // reverse lookup belongs at the component layer, not the registry layer.
   const relatedGuides = GUIDES.filter((g) => g.relatedTools.includes(tool.slug))
   const relatedPrompts = PROMPTS.filter((p) => p.relatedToolSlug === tool.slug)
+  const relatedPosts = BLOG_POSTS.filter((p) => p.relatedTools.includes(tool.slug))
 
   return (
     <article className="container-site max-w-[46rem] pt-8 pb-20">
@@ -164,6 +167,30 @@ export function HowItWorksShell({ tool }: { tool: Tool }) {
         </section>
       ) : null}
 
+      {/* Deeper support content — examples, formulas, cheat sheets,
+          checklists, drawn from the 2026-08 content-handover integration.
+          Sits after limitations and before FAQ, matching the content
+          guide's own recommended order (how-to → result explanation →
+          examples/templates → FAQ). Every tool with supportContent also has
+          a matching screenshot at this fixed path (captured for all 15
+          tools in the same handover pass) — shown once as the section's
+          lead image rather than added as a data field, since it is exactly
+          one image per tool, not a variable-count piece of content. */}
+      {tool.supportContent && tool.supportContent.length > 0 ? (
+        <>
+          <div className="mt-10 overflow-hidden rounded-lg border border-line-grey">
+            <Image
+              src={`/tool-screenshots/${tool.slug}-viewport.png`}
+              alt={`${tool.title} shown in the browser`}
+              width={1440}
+              height={900}
+              className="h-auto w-full"
+            />
+          </div>
+          <SupportSections sections={tool.supportContent} />
+        </>
+      ) : null}
+
       {/* FAQ — same content as the FAQPage JSON-LD this route emits (see the
           page file); rendering it here is what makes that markup honest
           rather than invisible structured data. Plain <details>, matching
@@ -236,7 +263,7 @@ export function HowItWorksShell({ tool }: { tool: Tool }) {
         </section>
       ) : null}
 
-      {relatedGuides.length > 0 || relatedPrompts.length > 0 ? (
+      {relatedGuides.length > 0 || relatedPrompts.length > 0 || relatedPosts.length > 0 ? (
         <section aria-labelledby="how-reading" className="mt-12">
           <h2
             id="how-reading"
@@ -265,6 +292,19 @@ export function HowItWorksShell({ tool }: { tool: Tool }) {
                 className="card-modern flex items-center justify-between gap-3 p-5"
               >
                 <span className="text-[15px] text-ink-body">{prompt.title}</span>
+                <ArrowUpRight
+                  className="size-4 shrink-0 text-ink-subtle"
+                  aria-hidden="true"
+                />
+              </Link>
+            ))}
+            {relatedPosts.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="card-modern flex items-center justify-between gap-3 p-5"
+              >
+                <span className="text-[15px] text-ink-body">{post.title}</span>
                 <ArrowUpRight
                   className="size-4 shrink-0 text-ink-subtle"
                   aria-hidden="true"

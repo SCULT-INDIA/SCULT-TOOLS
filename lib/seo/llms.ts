@@ -1,3 +1,4 @@
+import { BLOG_POSTS } from '@/lib/blog/registry'
 import { GUIDES } from '@/lib/guides/registry'
 import { getCategoriesByGroup, PROMPT_GROUPS } from '@/lib/prompts/categories'
 import { getPromptsByCategory, PROMPTS } from '@/lib/prompts/registry'
@@ -185,6 +186,11 @@ export function buildLlmsTxt(): string {
     )
   }
 
+  lines.push('', '## Blog')
+  for (const post of BLOG_POSTS) {
+    lines.push(`- [${post.title}](${absoluteUrl(`/blog/${post.slug}`)}): ${post.description}`)
+  }
+
   lines.push(...buildPromptSection())
   lines.push(...buildTrustSection())
 
@@ -240,6 +246,14 @@ export function buildLlmsFullTxt(): string {
     for (const section of guide.sections) {
       lines.push('', `**${section.heading}**`, ...section.body)
     }
+  }
+
+  // Blog posts stay link-level here, same call as the prompt library below —
+  // inlining 100 posts' full 3,000-word bodies would make this file enormous
+  // for a section that (unlike a guide) is designed to stand as its own page.
+  lines.push('', '## Blog')
+  for (const post of BLOG_POSTS) {
+    lines.push(`- [${post.title}](${absoluteUrl(`/blog/${post.slug}`)}): ${post.description}`)
   }
 
   lines.push(...buildPromptSection())
