@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { FeedbackButton } from '@/components/tools/FeedbackButton'
 import { BookmarkButton } from '@/components/ui/BookmarkButton'
 import { formatUpdatedDate } from '@/lib/site'
 import { getCategory } from '@/lib/tools/categories'
@@ -127,12 +128,14 @@ export function ToolShell({ tool, children }: { tool: Tool; children: React.Reac
         </header>
       </div>
 
-      {/* Fixed top-right, the one corner FloatingActions' WhatsApp/Scult
-          pair (bottom-left/bottom-right) doesn't claim — independent of
-          its position in the DOM since it's fixed, placed here rather
-          than inside the centred header div above so it never inherits
-          that div's text-align/flex context by accident. */}
+      {/* Fixed corners: Bookmark keeps top-right, the one FloatingActions'
+          WhatsApp/Scult pair (bottom-left/bottom-right) doesn't claim.
+          Feedback takes the last open corner, top-left — independent of
+          DOM position since both are fixed, placed here rather than inside
+          the centred header div above so neither inherits that div's
+          text-align/flex context by accident. */}
       <BookmarkButton />
+      <FeedbackButton toolSlug={tool.slug} toolTitle={tool.h1} />
 
       {/* 3. THE TOOL — the page's centre of gravity, immediately after the
              header. Measured at 1366x768: the workspace now starts ~350px down
