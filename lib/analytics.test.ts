@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
-import { parseParentCtaHref } from './analytics'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { parseParentCtaHref, trackEvent, trackToolEvent } from './analytics'
 
 const BASE = 'https://tools.scult.in/dev/qr-code-generator'
 
@@ -13,6 +13,100 @@ const BASE = 'https://tools.scult.in/dev/qr-code-generator'
  */
 const CTA =
   'https://scult.in/?utm_source=tools.scult.in&utm_medium=tool&utm_campaign=qr-code-generator#book-meeting'
+
+type Win = Window & { dataLayer?: unknown[] }
+
+function win(): Win {
+  return window as Win
+}
+
+describe('trackEvent', () => {
+  beforeEach(() => {
+    win().dataLayer = []
+  })
+
+  it('queues an Arguments object, NOT an array', () => {
+    // The regression this module exists to prevent. gtag.js accepts a plain
+    // array, logs it as a "data layer command", and then silently never sends
+    // it — verified in GA4 DebugView against production, where the array form
+    // produced zero events. Only an Arguments object becomes a GTAG command
+    // and is transmitted. The two are indistinguishable in a debugger, which
+    // is exactly why this needs an explicit assertion.
+    trackEvent('tool_action', { tool_name: 'qr-code-generator', action: 'copy_data' })
+
+    const entry = win().dataLayer?.[0]
+    expect(Array.isArray(entry)).toBe(false)
+    expect(Object.prototype.toString.call(entry)).toBe('[object Arguments]')
+  })
+
+  it('queues the command in gtag argument order', () => {
+    trackEvent('search', { search_term: 'invoice' })
+
+    const entry = win().dataLayer?.[0] as IArguments
+    expect(entry[0]).toBe('event')
+    expect(entry[1]).toBe('search')
+    expect(entry[2]).toEqual({ search_term: 'invoice' })
+    expect(entry).toHaveLength(3)
+  })
+
+  it('still passes a third argument when there are no params', () => {
+    // Kept explicit so a future "omit params when empty" optimisation cannot
+    // silently change the command's arity, which is the part gtag.js reads.
+    trackEvent('bookmark_hint_shown')
+
+    const entry = win().dataLayer?.[0] as IArguments
+    expect(entry).toHaveLength(3)
+    expect(entry[1]).toBe('bookmark_hint_shown')
+    expect(entry[2]).toBeUndefined()
+  })
+
+  it('goes through dataLayer.push, so gtag.js processes it once loaded', () => {
+    // gtag.js patches `dataLayer.push` to handle commands as they arrive.
+    // Pushing through that patched method is the whole mechanism by which an
+    // event reaches GA4 after load, so assert we actually call it rather than
+    // mutating the array some other way.
+    const push = vi.spyOn(win().dataLayer as unknown[], 'push')
+
+    trackEvent('theme_change', { from: 'system', to: 'dark' })
+
+    expect(push).toHaveBeenCalledTimes(1)
+    expect(Object.prototype.toString.call(push.mock.calls[0]?.[0])).toBe(
+      '[object Arguments]',
+    )
+    push.mockRestore()
+  })
+
+  it('creates dataLayer when the bootstrap script has not run at all', () => {
+    // Not just "gtag missing" — the whole array can be absent if a tracking
+    // effect beats the inline snippet that normally creates it.
+    win().dataLayer = undefined
+
+    trackEvent('page_not_found', { path: '/nope' })
+
+    expect(win().dataLayer).toHaveLength(1)
+  })
+
+  it('appends rather than clobbering anything already queued', () => {
+    win().dataLayer = ['pre-existing']
+
+    trackEvent('mailto_click', { context: 'footer' })
+
+    expect(win().dataLayer).toHaveLength(2)
+    expect(win().dataLayer?.[0]).toBe('pre-existing')
+  })
+
+  it('sends tool_name and action through the same path via trackToolEvent', () => {
+    trackToolEvent('invoice-generator', 'download_pdf', { currency: 'INR' })
+
+    const entry = win().dataLayer?.[0] as IArguments
+    expect(entry[1]).toBe('tool_action')
+    expect(entry[2]).toEqual({
+      tool_name: 'invoice-generator',
+      action: 'download_pdf',
+      currency: 'INR',
+    })
+  })
+})
 
 describe('parseParentCtaHref', () => {
   it('recognises a link built by parentLink and pulls out the campaign', () => {
