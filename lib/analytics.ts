@@ -1,30 +1,71 @@
 import { SITE } from '@/lib/site'
 
 /**
+ * Queues a gtag command in the ONE shape gtag.js will actually dispatch.
+ *
+ * gtag.js does not treat every `dataLayer` entry alike. Its own inline shim
+ * is `function gtag(){dataLayer.push(arguments)}` — an **Arguments object**,
+ * not an array — and that distinction is load-bearing. Pushing a plain
+ * `['event', name, params]` array is accepted and parsed, but classified as
+ * a generic data-layer command (the GTM shape) and never sent to GA4. Its
+ * own debug output names the two cases separately:
+ *
+ *     Processing data layer command: ["event","x",{…}]   <- parsed, dropped
+ *     Processing GTAG command:       ["event","y",{…}]   <- sent
+ *
+ * Verified in GA4 DebugView against production: the array form produced zero
+ * events, the gtag form arrived. So the queue path has to construct a real
+ * Arguments object, which is only possible by invoking a function.
+ *
+ * The parameters are declared but unused on purpose — they exist so this
+ * type-checks at the call site and so `arguments` carries exactly the three
+ * values gtag.js expects, in order.
+ */
+function queueGtagCommand(queue: unknown[]) {
+  // A function expression, never an arrow: arrows have no `arguments` binding
+  // of their own, and `arguments` is the whole point here.
+  return function gtag(
+    _command: 'event',
+    _name: string,
+    _params?: Record<string, string | number | boolean>,
+  ): void {
+    // The Arguments object IS the fix — see this function's doc comment.
+    // Rest parameters would produce an array and reintroduce the exact bug.
+    // biome-ignore lint/complexity/noArguments: gtag.js only dispatches Arguments objects, never arrays.
+    queue.push(arguments)
+  }
+}
+
+/**
  * The single entry point to GA4 custom events — every other tracker in
  * this file, and every call site across the codebase, funnels through this
  * rather than touching `window.gtag`/`dataLayer` directly.
  *
- * Pushes straight onto `window.dataLayer` rather than calling
- * `window.gtag(...)` — a real, confirmed race, not a hypothetical one: the
- * root layout's GA script tag uses `strategy="afterInteractive"`, which
- * only runs once the page has hydrated, and a fast-rendering route (the
- * 404 boundary was the one that surfaced this) can mount an on-load
- * tracking effect BEFORE that script has executed, at which point
- * `window.gtag` genuinely does not exist yet — a `typeof gtag === 'function'`
- * guard would silently drop that event forever, not just delay it.
- * `dataLayer` is a plain array gtag.js itself reads on load and drains for
- * any entries queued before it arrived (this is the exact mechanism the
- * root layout's own inline bootstrap script relies on — its local `gtag()`
- * shim is nothing but `dataLayer.push(arguments)`), so pushing the same
- * `['event', name, params]` shape directly is queue-safe however early it
- * runs, and creating `dataLayer` here if it doesn't exist yet (rather than
- * requiring the bootstrap script to have run first) closes the race
- * completely rather than narrowing it.
+ * Always goes through `dataLayer`, and deliberately does NOT branch on
+ * whether `window.gtag` exists yet. There is no state in which the two would
+ * differ: the root layout's bootstrap defines `window.gtag` as nothing but
+ * `function gtag(){dataLayer.push(arguments)}` and never replaces it, and
+ * gtag.js patches `dataLayer.push` to process commands as they arrive. So
+ * calling `gtag(...)` after load and pushing here after load both end up in
+ * the same patched `push`, with the same Arguments object.
  *
- * Still a safe no-op during SSR (no `window`) and in tests (jsdom has no
- * reason to process a dataLayer that nothing reads) — this only ever
- * populates an array, never throws.
+ * That leaves one path that is correct in both states:
+ *
+ *   - BEFORE the layout's `afterInteractive` script has run, `window.gtag`
+ *     genuinely does not exist — a fast-rendering route (the 404 boundary is
+ *     the one that surfaced it) can mount an on-load tracking effect first.
+ *     A `typeof gtag === 'function'` guard would drop such an event forever
+ *     rather than delaying it. Creating `dataLayer` here and queueing onto it
+ *     means gtag.js drains the event whenever it does arrive.
+ *
+ *   - AFTER it has loaded, the same push is processed immediately.
+ *
+ * The one thing that must not change is the SHAPE: an Arguments object, not
+ * an array, or gtag.js parses the entry and silently discards it. See
+ * `queueGtagCommand`.
+ *
+ * Safe no-op during SSR (no `window`). In jsdom nothing drains the queue, so
+ * this only ever populates an array — it never throws.
  */
 export function trackEvent(
   name: string,
@@ -33,7 +74,7 @@ export function trackEvent(
   if (typeof window === 'undefined') return
   const w = window as Window & { dataLayer?: unknown[] }
   w.dataLayer = w.dataLayer || []
-  w.dataLayer.push(['event', name, params])
+  queueGtagCommand(w.dataLayer)('event', name, params)
 }
 
 /**
