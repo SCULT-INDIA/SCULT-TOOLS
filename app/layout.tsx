@@ -22,6 +22,18 @@ import './globals.css'
  *
  * opsz is kept live because the display face runs from 70px down to 16px; a
  * single optical size would give display-weight hairlines to small headings.
+ *
+ * `preload: false` on purpose, despite Fraunces rendering the LCP element on
+ * nearly every route: this specific combination of variable axes (full
+ * SOFT/WONG/opsz ranges — next/font/google has no API to narrow a requested
+ * axis to the one fixed value globals.css actually uses) makes the file
+ * ~118KB, and preloading put it on the critical path competing for bandwidth
+ * against render-blocking CSS under throttled conditions, directly delaying
+ * first paint. `display: 'swap'` plus next/font's automatically-generated,
+ * metrics-matched fallback (ascent/descent/line-gap-override, size-adjust —
+ * confirmed in the compiled output) already means the LCP text paints
+ * immediately in the fallback face with no layout shift; Fraunces itself now
+ * loads at normal (not elevated) priority and swaps in whenever it arrives.
  */
 const fraunces = Fraunces({
   subsets: ['latin'],
@@ -33,15 +45,17 @@ const fraunces = Fraunces({
   // be dead weight on the critical path. If a true italic is ever wanted,
   // add `style: ['normal', 'italic']` here first, or the browser will fake
   // it with a synthetic oblique.
-  // Preloaded because it renders the LCP element on nearly every route.
-  preload: true,
+  preload: false,
 })
 
+// Same reasoning as Fraunces above: the metrics-matched fallback makes
+// preloading unnecessary for avoiding layout shift, so it's off to keep body
+// text out of the critical-path bandwidth contest.
 const cabin = Cabin({
   subsets: ['latin'],
   variable: '--font-cabin',
   display: 'swap',
-  preload: true,
+  preload: false,
 })
 
 const marker = Permanent_Marker({
