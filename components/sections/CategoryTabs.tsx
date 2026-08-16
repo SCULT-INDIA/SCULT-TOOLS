@@ -4,7 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { CATEGORIES } from '@/lib/tools/categories'
-import { getToolsByCategory } from '@/lib/tools/registry'
+
+interface CategoryTabTool {
+  readonly slug: string
+  readonly category: string
+  readonly title: string
+}
 
 /**
  * Reference: band 5 — a full-bleed violet section with a row of 7 text tabs
@@ -15,10 +20,18 @@ import { getToolsByCategory } from '@/lib/tools/registry'
  * with a live list of that category's real tools, styled as stacked cards —
  * genuine content standing in for what was a decorative product photo.
  */
-export function CategoryTabs() {
+export function CategoryTabs({
+  toolsByCategory,
+}: {
+  /** Slim `{slug, category, title}` per category, computed server-side in
+   * `app/page.tsx` — importing `getToolsByCategory` here directly would pull
+   * the full `TOOLS` registry (every tool's full FAQ/how-it-works/limitations
+   * copy) into this client component just to read three short fields. */
+  toolsByCategory: Readonly<Record<string, readonly CategoryTabTool[]>>
+}) {
   const [active, setActive] = useState(0)
   const category = CATEGORIES[active]
-  const tools = category ? getToolsByCategory(category.slug) : []
+  const tools = category ? (toolsByCategory[category.slug] ?? []) : []
 
   return (
     <section aria-labelledby="category-tabs" className="bg-violet-700 py-16 text-white">

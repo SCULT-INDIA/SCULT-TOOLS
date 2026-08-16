@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { PROMPT_COUNT, PROMPT_INDEX, TOOL_COUNT, TOOL_ENTRIES } from '@/lib/search'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { getToolCount } from '@/lib/tools/registry'
 import scultLogo from '@/public/brand/scult-tools-blue.png'
@@ -91,7 +92,12 @@ export function Header() {
                 catalogue — no reason to withhold it for two more
                 breakpoints just because the full link row still needs lg. */}
             <div className="hidden w-[200px] shrink-0 md:block lg:w-[240px]">
-              <SearchBox />
+              <SearchBox
+                toolEntries={TOOL_ENTRIES}
+                promptEntries={PROMPT_INDEX}
+                toolCount={TOOL_COUNT}
+                promptCount={PROMPT_COUNT}
+              />
             </div>
 
             <div className="flex items-center gap-2">
@@ -118,7 +124,13 @@ export function Header() {
               >
                 CHECK AI VISIBILITY
               </Link>
-              <MobileDrawer />
+              <MobileDrawer
+                categories={menuItems}
+                toolEntries={TOOL_ENTRIES}
+                promptEntries={PROMPT_INDEX}
+                toolCount={TOOL_COUNT}
+                promptCount={PROMPT_COUNT}
+              />
             </div>
           </div>
         </div>

@@ -14,7 +14,8 @@ import { UniversalIncludes } from '@/components/sections/UniversalIncludes'
 import { Icon } from '@/components/ui/Icon'
 import { JsonLd } from '@/lib/seo/jsonld'
 import { parentLink, SITE } from '@/lib/site'
-import { TOOLS } from '@/lib/tools/registry'
+import { CATEGORIES } from '@/lib/tools/categories'
+import { getToolsByCategory, TOOLS } from '@/lib/tools/registry'
 
 export const metadata: Metadata = {
   alternates: { canonical: '/' },
@@ -76,6 +77,16 @@ function homeFaqJsonLd(): object {
 
 export default function Home() {
   const clientSide = TOOLS.filter((t) => t.runsInBrowser).length
+  const toolsByCategory = Object.fromEntries(
+    CATEGORIES.map((c) => [
+      c.slug,
+      getToolsByCategory(c.slug).map((t) => ({
+        slug: t.slug,
+        category: t.category,
+        title: t.title,
+      })),
+    ]),
+  )
 
   return (
     <>
@@ -106,7 +117,7 @@ export default function Home() {
       {/* 6. FULL SERVICE GRID — removed at the user's request. */}
 
       {/* =================================================== 7. CATEGORY TABS */}
-      <CategoryTabs />
+      <CategoryTabs toolsByCategory={toolsByCategory} />
 
       {/* 8. SEARCH SPOTLIGHT — removed at the user's request. */}
 

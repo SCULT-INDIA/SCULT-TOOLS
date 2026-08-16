@@ -4,6 +4,7 @@ import { Cabin, Fraunces, Permanent_Marker } from 'next/font/google'
 import Script from 'next/script'
 import { CtaClickTracker } from '@/components/layout/CtaClickTracker'
 import { Footer } from '@/components/layout/Footer'
+import { Header } from '@/components/layout/Header'
 import { HeaderGate } from '@/components/layout/HeaderGate'
 import { FloatingActions } from '@/components/ui/FloatingActions'
 import { SITE } from '@/lib/site'
@@ -170,7 +171,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <HeaderGate />
+        <HeaderGate>
+          <Header />
+        </HeaderGate>
         <main id="main" tabIndex={-1} className="scroll-mt-28">
           {children}
         </main>

@@ -7,12 +7,11 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { Icon } from '@/components/ui/Icon'
 import { trackSearch } from '@/lib/analytics'
 import {
-  PROMPT_COUNT,
   type PromptSearchEntry,
+  rankSearch,
   type SearchHit,
-  searchSite,
-  TOOL_COUNT,
-} from '@/lib/search'
+  type ToolSearchEntry,
+} from '@/lib/search-client'
 
 /** SSR-safe: defaults to the non-Mac label so server and first client render
  * agree, then corrects itself post-mount if the platform is actually Mac. */
@@ -44,9 +43,20 @@ const TILE_BG: Record<PromptSearchEntry['tile'], string> = {
  * so the flat keyboard index maps 1:1 onto the two labelled groups below.
  */
 export function SearchBox({
+  toolEntries,
+  promptEntries,
+  toolCount,
+  promptCount,
   size = 'default',
   onNavigate,
 }: {
+  /** The tool/prompt search index, computed server-side in `lib/search.ts`
+   * (which owns the full registries) and passed down as plain data — see
+   * that file's docblock for why this can't be imported here directly. */
+  toolEntries: readonly ToolSearchEntry[]
+  promptEntries: readonly PromptSearchEntry[]
+  toolCount: number
+  promptCount: number
   size?: 'default' | 'large'
   /** Called right before navigating to a picked result — e.g. the mobile
    * drawer closes itself here, since it has no other way to know a search
@@ -64,11 +74,11 @@ export function SearchBox({
   const rootRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const next = searchSite(query)
+    const next = rankSearch(toolEntries, promptEntries, query)
     setHits(next)
     setActive(0)
     setOpen(next.length > 0)
-  }, [query])
+  }, [query, toolEntries, promptEntries])
 
   // Debounced, and only for a query worth calling "a real search" (2+
   // chars) — this is a content-gap signal ("people search for X and find
@@ -235,7 +245,7 @@ export function SearchBox({
           aria-label="Search tools and prompts"
           placeholder={
             large
-              ? `Search ${TOOL_COUNT} free tools & ${PROMPT_COUNT} prompts…`
+              ? `Search ${toolCount} free tools & ${promptCount} prompts…`
               : 'Search tools & prompts…'
           }
           value={query}

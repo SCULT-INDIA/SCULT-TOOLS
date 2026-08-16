@@ -2,7 +2,20 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import type { BlogPillar, BlogPost } from '@/lib/blog/types'
+import type { BlogPillar } from '@/lib/blog/types'
+
+/** Only the fields this index card actually renders — NOT the full
+ * `BlogPost` (whose `sections` field carries each post's entire ~3,000-word
+ * body). Passing the full array here once put all 100 posts' complete text
+ * into this client component's bundle payload for a page that only ever
+ * shows a title/description/pillar/reading-time card. */
+export interface BlogIndexEntry {
+  readonly slug: string
+  readonly pillar: BlogPillar
+  readonly title: string
+  readonly description: string
+  readonly readingMinutes: number
+}
 
 const PILLAR_LABEL: Record<BlogPillar, string> = {
   tool: 'Tools',
@@ -26,7 +39,7 @@ const FILTERS: readonly { key: BlogPillar | 'all'; label: string }[] = [
  * server round-trip needed at 100 posts, same call this codebase already
  * made for `CategoryTabs`'s tool-category tabs.
  */
-export function BlogIndexList({ posts }: { posts: readonly BlogPost[] }) {
+export function BlogIndexList({ posts }: { posts: readonly BlogIndexEntry[] }) {
   const [active, setActive] = useState<BlogPillar | 'all'>('all')
   const visible = active === 'all' ? posts : posts.filter((p) => p.pillar === active)
 

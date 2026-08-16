@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { NotFoundTracker } from '@/components/layout/NotFoundTracker'
 import { SearchBox } from '@/components/layout/SearchBox'
+import { PROMPT_COUNT, PROMPT_INDEX, TOOL_COUNT, TOOL_ENTRIES } from '@/lib/search'
 import { CATEGORIES } from '@/lib/tools/categories'
 
 export default function NotFound() {
@@ -19,7 +20,13 @@ export default function NotFound() {
       </p>
 
       <div className="mx-auto mt-8 max-w-md">
-        <SearchBox size="large" />
+        <SearchBox
+          size="large"
+          toolEntries={TOOL_ENTRIES}
+          promptEntries={PROMPT_INDEX}
+          toolCount={TOOL_COUNT}
+          promptCount={PROMPT_COUNT}
+        />
       </div>
 
       <div className="mt-10 flex flex-wrap justify-center gap-2">

@@ -6,6 +6,7 @@ import { SearchBox } from '@/components/layout/SearchBox'
 import { Icon } from '@/components/ui/Icon'
 import { UneedBadge } from '@/components/ui/UneedBadge'
 import { PROMPTS } from '@/lib/prompts/registry'
+import { PROMPT_COUNT, PROMPT_INDEX, TOOL_COUNT, TOOL_ENTRIES } from '@/lib/search'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { TOOLS } from '@/lib/tools/registry'
 
@@ -49,7 +50,7 @@ export function Hero() {
             below (see the file's other comments) — this can't disturb that
             math because nothing below measures its distance FROM this. */}
         <div className="flex justify-center pb-3">
-          <UneedBadge className="h-8 w-auto" />
+          <UneedBadge className="h-8 w-auto" heightPx={32} />
         </div>
 
         <p className="eyebrow">
@@ -145,7 +146,13 @@ export function Hero() {
 
         {/* Mobile-only search — see the docblock. */}
         <div className="mx-auto mt-8 max-w-xl lg:hidden">
-          <SearchBox size="large" />
+          <SearchBox
+            size="large"
+            toolEntries={TOOL_ENTRIES}
+            promptEntries={PROMPT_INDEX}
+            toolCount={TOOL_COUNT}
+            promptCount={PROMPT_COUNT}
+          />
         </div>
       </div>
 

@@ -5,9 +5,15 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@/components/ui/Icon'
-import { CATEGORIES } from '@/lib/tools/categories'
-import { getToolCount } from '@/lib/tools/registry'
+import type { PromptSearchEntry, ToolSearchEntry } from '@/lib/search-client'
 import { SearchBox } from './SearchBox'
+
+interface DrawerCategory {
+  readonly slug: string
+  readonly name: string
+  readonly icon: string
+  readonly count: number
+}
 
 /**
  * Mobile navigation, matching the reference: a 260px panel sliding in from the
@@ -21,7 +27,23 @@ import { SearchBox } from './SearchBox'
  * colors (the violet wordmark, the violet-700 category icons) do not adapt
  * per theme, only the surfaces around them do.
  */
-export function MobileDrawer() {
+export function MobileDrawer({
+  categories,
+  toolEntries,
+  promptEntries,
+  toolCount,
+  promptCount,
+}: {
+  /** Slim, server-computed per-category tool counts — see `Header.tsx`'s
+   * `menuItems`, which this reuses rather than calling `getToolCount` again
+   * here (that would pull the full `TOOLS` registry into this client
+   * component just to read a length per category). */
+  categories: readonly DrawerCategory[]
+  toolEntries: readonly ToolSearchEntry[]
+  promptEntries: readonly PromptSearchEntry[]
+  toolCount: number
+  promptCount: number
+}) {
   const [open, setOpen] = useState(false)
   const panelRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
@@ -128,7 +150,13 @@ export function MobileDrawer() {
             search result (unlike clicking a link below) doesn't already run
             through this component's own `setOpen(false)` handlers. */}
         <div className="border-line border-b p-4">
-          <SearchBox onNavigate={() => setOpen(false)} />
+          <SearchBox
+            toolEntries={toolEntries}
+            promptEntries={promptEntries}
+            toolCount={toolCount}
+            promptCount={promptCount}
+            onNavigate={() => setOpen(false)}
+          />
         </div>
 
         <nav aria-label="Categories" className="flex flex-col gap-1 overflow-y-auto p-4">
@@ -142,7 +170,7 @@ export function MobileDrawer() {
           >
             All tools
           </Link>
-          {CATEGORIES.map((c) => (
+          {categories.map((c) => (
             <Link
               key={c.slug}
               href={`/${c.slug}`}
@@ -154,7 +182,7 @@ export function MobileDrawer() {
             >
               <Icon name={c.icon} className="size-4 shrink-0 text-violet-700" />
               <span className="flex-1">{c.name}</span>
-              <span className="text-[13px] text-ink-subtle">{getToolCount(c.slug)}</span>
+              <span className="text-[13px] text-ink-subtle">{c.count}</span>
             </Link>
           ))}
           <Link

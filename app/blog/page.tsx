@@ -47,7 +47,15 @@ export default function BlogPage() {
         </p>
 
         <div className="mt-10">
-          <BlogIndexList posts={BLOG_POSTS} />
+          <BlogIndexList
+            posts={BLOG_POSTS.map((post) => ({
+              slug: post.slug,
+              pillar: post.pillar,
+              title: post.title,
+              description: post.description,
+              readingMinutes: post.readingMinutes,
+            }))}
+          />
         </div>
       </section>
     </>
