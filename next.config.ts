@@ -80,43 +80,6 @@ const nextConfig: NextConfig = {
         source: '/fonts/:path*',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
-      {
-        /**
-         * HTML documents on this site render exclusively from build-time
-         * registries (tools/prompts/blog/guides) — nothing changes between
-         * deploys. An edge region that hasn't served a given route recently
-         * pays a real, synchronous revalidation cost on the next request —
-         * the likely explanation for PageSpeed's "Document request
-         * latency"/slow-TTFB finding, since Google's crawler is unlikely to
-         * share a warm edge region with this site's actual
-         * (India-concentrated) traffic.
-         *
-         * `s-maxage=300` (tried first) did NOT resolve that finding across
-         * several real re-tests spaced 15-40+ minutes apart — long enough
-         * for a 5-minute window to have already expired every single time,
-         * so a region only PageSpeed (not real traffic) ever hits would
-         * never once observe a warm cache. `s-maxage=3600` is long enough
-         * to survive realistic gaps between test/traffic hits to the same
-         * region; `stale-while-revalidate` still means a genuine miss after
-         * that serves the previous (correct) copy INSTANTLY while
-         * refreshing in the background, rather than blocking the request.
-         *
-         * User-confirmed trade-off: Vercel is understood to invalidate its
-         * edge cache on every new deploy independent of a route's TTL, but
-         * that isn't verifiable from here with certainty — if it's wrong,
-         * a future deploy's changes could take up to an hour to reach a
-         * region whose cache hasn't been touched since. `max-age=0` keeps
-         * end-user BROWSERS revalidating on every visit regardless — this
-         * is a CDN-tier header only.
-         */
-        source: '/((?!api).*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400',
-          },
-        ],
-      },
     ]
   },
 }

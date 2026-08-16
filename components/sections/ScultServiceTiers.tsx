@@ -151,7 +151,7 @@ function TierCard({
             {tier.priceUsd}
           </span>
         </p>
-        <p className="mt-1 text-[14px] text-ink-subtle">starting · {tier.priceInr}</p>
+        <p className="mt-1 text-[14px] text-ink-muted">starting · {tier.priceInr}</p>
       </div>
 
       <ul className="mx-auto mt-7 flex w-full max-w-[24rem] flex-1 flex-col gap-3">
