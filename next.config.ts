@@ -34,6 +34,15 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'www.uneed.best', pathname: '/EMBED3B.png' },
     ],
+    /**
+     * Default is 4 hours — still short enough for Lighthouse's "efficient
+     * cache lifetimes" audit to flag it. Unlike the HTML Cache-Control
+     * above, this carries no deploy-staleness risk: it's Vercel's own
+     * on-demand image-optimization cache, a resized/reformatted copy of a
+     * THIRD-PARTY image, revalidated against Uneed's origin on its own
+     * schedule — nothing about it is tied to this site's own deploys.
+     */
+    minimumCacheTTL: 2678400, // 31 days
   },
 
   async redirects() {
@@ -75,35 +84,36 @@ const nextConfig: NextConfig = {
         /**
          * HTML documents on this site render exclusively from build-time
          * registries (tools/prompts/blog/guides) — nothing changes between
-         * deploys. Vercel's default per-route Cache-Control for a Next.js
-         * page is short (`max-age=0, must-revalidate` plus an internal
-         * few-minute Next.js stale window), so an edge region that hasn't
-         * served a given route recently pays a real, synchronous
-         * revalidation cost on the next request — the likely explanation
-         * for PageSpeed's "Document request latency"/slow-TTFB finding,
-         * since Google's crawler is unlikely to share a warm edge region
-         * with this site's actual (India-concentrated) traffic.
+         * deploys. An edge region that hasn't served a given route recently
+         * pays a real, synchronous revalidation cost on the next request —
+         * the likely explanation for PageSpeed's "Document request
+         * latency"/slow-TTFB finding, since Google's crawler is unlikely to
+         * share a warm edge region with this site's actual
+         * (India-concentrated) traffic.
          *
-         * Deliberately NOT a long-lived `s-maxage` (e.g. a year): this repo
-         * has no confirmed way to force-purge Vercel's edge cache on
-         * deploy for a hand-set Cache-Control header (as opposed to
-         * Next's own framework-managed cache keys, which Vercel is known to
-         * invalidate automatically on every deploy) — a wrong assumption
-         * there would mean stale content surviving a future deploy for as
-         * long as the TTL, which is a far worse failure than today's
-         * few-minutes staleness. `s-maxage=300` keeps the CDN-fresh window
-         * identical to Next's own current default; `stale-while-revalidate`
-         * is the actual fix — once that window passes, a cache miss now
-         * serves the previous (still-correct) copy INSTANTLY while
-         * refreshing in the background, rather than blocking the request on
-         * a synchronous regeneration. `max-age=0` keeps end-user browsers
-         * revalidating on every visit — this is a CDN-tier header only.
+         * `s-maxage=300` (tried first) did NOT resolve that finding across
+         * several real re-tests spaced 15-40+ minutes apart — long enough
+         * for a 5-minute window to have already expired every single time,
+         * so a region only PageSpeed (not real traffic) ever hits would
+         * never once observe a warm cache. `s-maxage=3600` is long enough
+         * to survive realistic gaps between test/traffic hits to the same
+         * region; `stale-while-revalidate` still means a genuine miss after
+         * that serves the previous (correct) copy INSTANTLY while
+         * refreshing in the background, rather than blocking the request.
+         *
+         * User-confirmed trade-off: Vercel is understood to invalidate its
+         * edge cache on every new deploy independent of a route's TTL, but
+         * that isn't verifiable from here with certainty — if it's wrong,
+         * a future deploy's changes could take up to an hour to reach a
+         * region whose cache hasn't been touched since. `max-age=0` keeps
+         * end-user BROWSERS revalidating on every visit regardless — this
+         * is a CDN-tier header only.
          */
         source: '/((?!api).*)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=0, s-maxage=300, stale-while-revalidate=3600',
+            value: 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400',
           },
         ],
       },
