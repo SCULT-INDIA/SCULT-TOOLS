@@ -54,7 +54,7 @@ export function CategoryTabs({
               className={`whitespace-nowrap pb-3 text-[15px] transition-colors ${
                 i === active
                   ? 'border-cta border-b-2 font-semibold text-white'
-                  : 'text-white/60 hover:text-white'
+                  : 'text-white/80 hover:text-white'
               }`}
             >
               {c.name}

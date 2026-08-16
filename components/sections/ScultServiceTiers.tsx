@@ -171,6 +171,13 @@ function TierCard({
 
       <a
         href={parentLink('/services/custom-software-development', campaign)}
+        // Every tier's CTA points to the same service page by design (Scult
+        // scopes the actual engagement on the discovery call, not from
+        // which pricing-tier button was clicked) — but "Essential" and
+        // "Growth" share the exact same visible label ("Start a Project"
+        // too, so a screen-reader user navigating by a flat links list
+        // would otherwise have no way to tell which tier's CTA they're on.
+        aria-label={`${tier.cta} — ${tier.name} tier`}
         className="btn-brutal mt-7 w-full justify-center uppercase tracking-[0.04em]"
       >
         {tier.cta}

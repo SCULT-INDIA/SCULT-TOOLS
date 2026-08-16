@@ -104,7 +104,7 @@ export function PromptCopyBlock({
             <span className="size-2.5 rounded-full bg-[#ff5f57]" />
             <span className="size-2.5 rounded-full bg-cta" />
             <span className="size-2.5 rounded-full bg-green" />
-            <span className="ml-2 font-bold font-mono text-[11px] text-white/40 uppercase tracking-[0.18em]">
+            <span className="ml-2 font-bold font-mono text-[11px] text-white/50 uppercase tracking-[0.18em]">
               Prompt
             </span>
           </span>

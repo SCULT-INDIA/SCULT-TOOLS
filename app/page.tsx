@@ -231,14 +231,14 @@ export default function Home() {
             </div>
 
             <div className="p-6">
-              <p className="font-bold text-[11px] text-white/50 uppercase tracking-[0.14em]">
+              <p className="font-bold text-[11px] text-white/65 uppercase tracking-[0.14em]">
                 Visibility score
               </p>
               <div className="mt-2 flex items-baseline gap-2">
                 <span className="font-display text-[56px] text-white leading-none">
                   84
                 </span>
-                <span className="text-[16px] text-white/45">/100</span>
+                <span className="text-[16px] text-white/65">/100</span>
                 <span className="ml-auto rounded-pill bg-cta px-2.5 py-1 font-bold text-[12px] text-ink">
                   AI-visible
                 </span>
