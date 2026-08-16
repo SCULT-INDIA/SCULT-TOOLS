@@ -29,6 +29,11 @@ const nextConfig: NextConfig = {
     // Next 16 defaults qualities to [75]; we state it explicitly.
     qualities: [75],
     formats: ['image/avif', 'image/webp'],
+    // The Uneed directory badge (components/ui/UneedBadge.tsx) is the one
+    // remote image this site renders — everything else is self-hosted.
+    remotePatterns: [
+      { protocol: 'https', hostname: 'www.uneed.best', pathname: '/EMBED3B.png' },
+    ],
   },
 
   async redirects() {
