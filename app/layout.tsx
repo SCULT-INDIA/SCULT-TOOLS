@@ -1,8 +1,8 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cabin, Fraunces, Permanent_Marker } from 'next/font/google'
-import Script from 'next/script'
 import { CtaClickTracker } from '@/components/layout/CtaClickTracker'
+import { DeferredAnalyticsScripts } from '@/components/layout/DeferredAnalyticsScripts'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { HeaderGate } from '@/components/layout/HeaderGate'
@@ -217,33 +217,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             site — see the component for why it is not an onClick per link. */}
         <CtaClickTracker />
 
-        {/* GA4 loads after interaction so it never competes with the LCP.
-            Same property as the parent site, so a tools -> agency journey is one
-            session rather than a referral that resets attribution. */}
-        {SITE.gaId ? (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${SITE.gaId}`}
-              strategy="afterInteractive"
-            />
-            <Script id="ga4" strategy="afterInteractive">
-              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
-gtag('js',new Date());gtag('config','${SITE.gaId}',{cookie_domain:'.scult.in'});`}
-            </Script>
-          </>
-        ) : null}
-
-        {/* Microsoft Clarity — heatmaps and session replay. GA4 answers "how
-            many people copied the output"; Clarity answers "why the other
-            half didn't", which is the question that actually changes a tool's
-            design.
-
-            Only the remote tag is loaded here. The queue shim it depends on is
-            a plain synchronous <script> in <head> — see CLARITY_QUEUE_SCRIPT
-            for why that split is not optional.
-
-            `afterInteractive` for the same reason as GA4: it must never
-            compete with the LCP.
+        {/* GA4 + Clarity, deferred to the visitor's first interaction (or a
+            short fallback delay) rather than mounted unconditionally — see
+            DeferredAnalyticsScripts for why, and for the GA4 bootstrap /
+            Clarity ordering details, both unchanged from before. Same GA4
+            property as the parent site, so a tools -> agency journey is one
+            session rather than a referral that resets attribution.
 
             PRIVACY: this site's whole promise is that tool input stays in the
             browser, and session replay is the one thing that could quietly
@@ -254,12 +233,7 @@ gtag('js',new Date());gtag('config','${SITE.gaId}',{cookie_domain:'.scult.in'});
             before anything is transmitted. app/privacy/page.tsx discloses
             this, and the two must be kept in sync — if masking is ever
             relaxed, that page stops being true. */}
-        {SITE.clarityId ? (
-          <Script
-            src={`https://www.clarity.ms/tag/${SITE.clarityId}`}
-            strategy="afterInteractive"
-          />
-        ) : null}
+        <DeferredAnalyticsScripts gaId={SITE.gaId} clarityId={SITE.clarityId} />
 
         {/* Vercel Analytics — a no-op off Vercel's own infrastructure (it
             posts to /_vercel/insights, which only exists on a Vercel
