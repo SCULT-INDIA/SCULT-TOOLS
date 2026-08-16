@@ -59,7 +59,14 @@ export function Header() {
       <div className="py-3">
         <div className="container-site">
           <div className="nav-pill flex h-[60px] items-center justify-between gap-4 px-4 md:h-[68px] lg:h-[83px] lg:gap-6 lg:px-[30px]">
-            <Link href="/" className="inline-flex shrink-0 items-center">
+            {/* prefetch={false}: this logo sits in the sticky header, so it is
+                in the initial viewport on every single page. Next's default
+                viewport-prefetch would fetch the homepage's full RSC payload
+                on every page load whether or not anyone clicks it — confirmed
+                in a live PageSpeed trace as a ~230KB request competing with
+                critical-path CSS/fonts for bandwidth. Disabling it costs
+                nothing but a slightly later fetch on the click itself. */}
+            <Link href="/" prefetch={false} className="inline-flex shrink-0 items-center">
               {/* Explicit width/height (matching the source's 16:9 ratio, sized
                   to the largest CSS display height this ever renders at) —
                   without them next/image falls back to the source PNG's full
@@ -112,14 +119,20 @@ export function Header() {
                   the only way to reach the catalogue — "TOOLS" read as a
                   menu trigger it isn't; "ALL TOOLS" names its real,
                   single-destination action. */}
+              {/* prefetch={false} on both: same header-is-always-visible
+                  reasoning as the logo above — these fire a full RSC-payload
+                  fetch on every page load purely because they're on-screen,
+                  not because anyone's about to click them. */}
               <Link
                 href="/all"
+                prefetch={false}
                 className="btn-brutal btn-brutal-sm hidden whitespace-nowrap sm:inline-flex lg:hidden"
               >
                 ALL TOOLS
               </Link>
               <Link
                 href="/geo/ai-visibility-checker"
+                prefetch={false}
                 className="btn-brutal btn-brutal-sm hidden whitespace-nowrap lg:inline-flex"
               >
                 CHECK AI VISIBILITY

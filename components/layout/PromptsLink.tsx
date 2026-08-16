@@ -13,8 +13,12 @@ export function PromptsLink() {
   const isActive = pathname === '/prompts' || pathname.startsWith('/prompts/')
 
   return (
+    // prefetch={false}: same reasoning as AllToolsLink — header nav is
+    // visible on every page load, so default prefetch fetched /prompts'
+    // full RSC payload unconditionally.
     <Link
       href="/prompts"
+      prefetch={false}
       aria-current={isActive ? 'page' : undefined}
       className={`hover:text-violet-600 ${isActive ? 'text-violet-700' : ''}`}
     >

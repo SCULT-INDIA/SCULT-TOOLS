@@ -93,14 +93,25 @@ export function Hero() {
         {/* `mt-6` (was `mt-9`): next lowest-cost gap in the stack once the
             checkmark row above the constellation was already trimmed. Still
             clear of the subhead's own line-height, verified below. */}
+        {/* prefetch={false} on all three: these sit above the fold, so
+            Next's viewport-prefetch fires on every homepage load regardless
+            of intent to click — a live PageSpeed trace showed the
+            ai-visibility-checker prefetch alone at ~220KB, directly
+            competing with critical-path CSS/fonts for bandwidth. Clicking
+            still navigates instantly either way; only the eager background
+            fetch is disabled. */}
         <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
-          <Link href="/all" className="btn-brutal">
+          <Link href="/all" prefetch={false} className="btn-brutal">
             EXPLORE ALL {TOOLS.length} TOOLS
           </Link>
-          <Link href="/prompts" className="btn-brutal btn-violet">
+          <Link href="/prompts" prefetch={false} className="btn-brutal btn-violet">
             BROWSE {PROMPTS.length} PROMPTS
           </Link>
-          <Link href="/geo/ai-visibility-checker" className="btn-brutal btn-white">
+          <Link
+            href="/geo/ai-visibility-checker"
+            prefetch={false}
+            className="btn-brutal btn-white"
+          >
             CHECK AI VISIBILITY
           </Link>
         </div>
@@ -268,6 +279,7 @@ export function Hero() {
             both effects on one element would mean hover does nothing. */}
         <Link
           href="/all"
+          prefetch={false}
           aria-label={`Browse all ${TOOLS.length} tools`}
           className="absolute top-1/2 left-1/2 size-[84px] -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110"
         >
@@ -306,8 +318,13 @@ export function Hero() {
  */
 function CategoryCard({ category }: { category: (typeof CATEGORIES)[number] }) {
   return (
+    // prefetch={false}: six of these render above the fold on every
+    // homepage load (constellation on desktop, grid on mobile) — Next's
+    // default viewport-prefetch was firing six category-page RSC fetches
+    // unconditionally, on top of the CTA prefetches above.
     <Link
       href={`/${category.slug}`}
+      prefetch={false}
       className="flex flex-col items-center gap-2.5 rounded-2xl border border-line-grey bg-white px-5 py-4 shadow-card transition-transform hover:z-10 hover:scale-105"
       style={{ background: `var(--color-tile-${category.tile})` }}
     >
