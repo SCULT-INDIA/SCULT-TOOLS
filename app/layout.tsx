@@ -53,6 +53,34 @@ const marker = Permanent_Marker({
   preload: false,
 })
 
+/**
+ * The Microsoft Clarity queue shim, and nothing else.
+ *
+ * Clarity ships one snippet that does two jobs: it defines `window.clarity` as
+ * a queue, then injects the remote tag. Shipping that snippet through
+ * `next/script` looked equivalent and was not — in production `window.clarity`
+ * was `undefined` by the time the tag ran, and the tag's very first statement
+ * is a call to it:
+ *
+ *     a[c]("metadata", …)          // a = window, c = "clarity"
+ *
+ * so it threw `TypeError: a[c] is not a function` on line 1, never reached the
+ * line that loads the actual recorder (`scripts.clarity.ms/…/clarity.js`), and
+ * Clarity recorded nothing at all. The tag itself was fetched fine — 200, and
+ * the correct project — which is what made this so quiet: every check short of
+ * opening the console said it was installed.
+ *
+ * Splitting the snippet fixes it by removing the ordering assumption entirely.
+ * This half is server-rendered into <head> as a plain synchronous script, so
+ * it has run during HTML parse, before anything `afterInteractive` can
+ * execute. The tag half is a `next/script` `src` in <body>, so it still stays
+ * off the LCP path.
+ *
+ * Do not "simplify" this back into one inline `next/script`. It reads as
+ * tidier and silently collects no data.
+ */
+const CLARITY_QUEUE_SCRIPT = `window.clarity=window.clarity||function(){(window.clarity.q=window.clarity.q||[]).push(arguments)};`
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
@@ -161,6 +189,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${fraunces.variable} ${cabin.variable} ${marker.variable}`}
     >
       <head>
+        {/* Must be a plain synchronous <script>, and must be in <head> —
+            see CLARITY_QUEUE_SCRIPT. */}
+        {SITE.clarityId ? (
+          <script dangerouslySetInnerHTML={{ __html: CLARITY_QUEUE_SCRIPT }} />
+        ) : null}
         <OrganizationJsonLd />
         {/* No <link rel="canonical"> here on purpose. A hardcoded canonical in the
             root layout applies to EVERY route, which would declare every tool page
@@ -205,12 +238,12 @@ gtag('js',new Date());gtag('config','${SITE.gaId}',{cookie_domain:'.scult.in'});
             half didn't", which is the question that actually changes a tool's
             design.
 
-            Loaded `afterInteractive` for the same reason as GA4: it must
-            never compete with the LCP. Clarity's own snippet is kept
-            verbatim (rather than replaced with a bare <script src>) because
-            the `c[a].q` queue shim it installs is what lets `clarity(...)`
-            be called before the remote tag finishes loading — the same
-            early-call safety that lib/analytics.ts relies on for dataLayer.
+            Only the remote tag is loaded here. The queue shim it depends on is
+            a plain synchronous <script> in <head> — see CLARITY_QUEUE_SCRIPT
+            for why that split is not optional.
+
+            `afterInteractive` for the same reason as GA4: it must never
+            compete with the LCP.
 
             PRIVACY: this site's whole promise is that tool input stays in the
             browser, and session replay is the one thing that could quietly
@@ -222,9 +255,10 @@ gtag('js',new Date());gtag('config','${SITE.gaId}',{cookie_domain:'.scult.in'});
             this, and the two must be kept in sync — if masking is ever
             relaxed, that page stops being true. */}
         {SITE.clarityId ? (
-          <Script id="clarity" strategy="afterInteractive">
-            {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${SITE.clarityId}");`}
-          </Script>
+          <Script
+            src={`https://www.clarity.ms/tag/${SITE.clarityId}`}
+            strategy="afterInteractive"
+          />
         ) : null}
 
         {/* Vercel Analytics — a no-op off Vercel's own infrastructure (it
