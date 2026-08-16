@@ -6,7 +6,7 @@ import { SearchBox } from '@/components/layout/SearchBox'
 import { Icon } from '@/components/ui/Icon'
 import { UneedBadge } from '@/components/ui/UneedBadge'
 import { PROMPTS } from '@/lib/prompts/registry'
-import { PROMPT_COUNT, PROMPT_INDEX, TOOL_COUNT, TOOL_ENTRIES } from '@/lib/search'
+import { PROMPT_COUNT, TOOL_COUNT } from '@/lib/search'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { TOOLS } from '@/lib/tools/registry'
 
@@ -159,8 +159,6 @@ export function Hero() {
         <div className="mx-auto mt-8 max-w-xl lg:hidden">
           <SearchBox
             size="large"
-            toolEntries={TOOL_ENTRIES}
-            promptEntries={PROMPT_INDEX}
             toolCount={TOOL_COUNT}
             promptCount={PROMPT_COUNT}
           />

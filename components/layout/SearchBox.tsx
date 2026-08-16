@@ -6,12 +6,8 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useId, useRef, useState } from 'react'
 import { Icon } from '@/components/ui/Icon'
 import { trackSearch } from '@/lib/analytics'
-import {
-  type PromptSearchEntry,
-  rankSearch,
-  type SearchHit,
-  type ToolSearchEntry,
-} from '@/lib/search-client'
+import { type PromptSearchEntry, rankSearch, type SearchHit } from '@/lib/search-client'
+import { useSearchIndex } from '@/lib/use-search-index'
 
 /** SSR-safe: defaults to the non-Mac label so server and first client render
  * agree, then corrects itself post-mount if the platform is actually Mac. */
@@ -43,18 +39,17 @@ const TILE_BG: Record<PromptSearchEntry['tile'], string> = {
  * so the flat keyboard index maps 1:1 onto the two labelled groups below.
  */
 export function SearchBox({
-  toolEntries,
-  promptEntries,
   toolCount,
   promptCount,
   size = 'default',
   onNavigate,
 }: {
-  /** The tool/prompt search index, computed server-side in `lib/search.ts`
-   * (which owns the full registries) and passed down as plain data — see
-   * that file's docblock for why this can't be imported here directly. */
-  toolEntries: readonly ToolSearchEntry[]
-  promptEntries: readonly PromptSearchEntry[]
+  /** Catalogue sizes for the placeholder text only. These stay server-passed
+   * props — they are two integers, and deriving them from the lazily-fetched
+   * index instead would leave the placeholder reading "Search 0 free tools"
+   * until the fetch landed. The index itself is NOT a prop any more: it used
+   * to be, and serializing it into the RSC stream put ~900KB into every
+   * page's HTML. See `lib/search-payload.ts`. */
   toolCount: number
   promptCount: number
   size?: 'default' | 'large'
@@ -72,6 +67,15 @@ export function SearchBox({
   const [hits, setHits] = useState<readonly SearchHit[]>([])
   const inputRef = useRef<HTMLInputElement>(null)
   const rootRef = useRef<HTMLDivElement>(null)
+
+  // The index arrives over the network on first intent to search rather than
+  // in the page HTML. `wantsIndex` flips on hover or focus — both fire well
+  // before the first keystroke, so by the time there is a query to rank the
+  // fetch has normally already resolved. Until it does, `toolEntries` and
+  // `promptEntries` are empty, `rankSearch` returns [], and the dropdown
+  // simply stays shut — the same state as an empty query, so no new UI.
+  const [wantsIndex, setWantsIndex] = useState(false)
+  const { toolEntries, promptEntries } = useSearchIndex(wantsIndex)
 
   useEffect(() => {
     const next = rankSearch(toolEntries, promptEntries, query)
@@ -251,7 +255,14 @@ export function SearchBox({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={onKeyDown}
-          onFocus={() => hits.length > 0 && setOpen(true)}
+          // Hover is the earliest honest signal of intent on a pointer device
+          // and costs nothing if it turns out to be a passing cursor: the
+          // fetch is shared and cached for the rest of the page's life.
+          onPointerEnter={() => setWantsIndex(true)}
+          onFocus={() => {
+            setWantsIndex(true)
+            if (hits.length > 0) setOpen(true)
+          }}
           className={`field rounded-pill ${large ? 'py-3.5 pl-12 pr-16 text-[17px]' : 'pl-11 pr-11'}`}
         />
         {showShortcutHint ? (

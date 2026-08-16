@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@/components/ui/Icon'
-import type { PromptSearchEntry, ToolSearchEntry } from '@/lib/search-client'
 import { SearchBox } from './SearchBox'
 
 interface DrawerCategory {
@@ -29,8 +28,6 @@ interface DrawerCategory {
  */
 export function MobileDrawer({
   categories,
-  toolEntries,
-  promptEntries,
   toolCount,
   promptCount,
 }: {
@@ -39,8 +36,7 @@ export function MobileDrawer({
    * here (that would pull the full `TOOLS` registry into this client
    * component just to read a length per category). */
   categories: readonly DrawerCategory[]
-  toolEntries: readonly ToolSearchEntry[]
-  promptEntries: readonly PromptSearchEntry[]
+  /** Forwarded to the nested SearchBox for its placeholder text only. */
   toolCount: number
   promptCount: number
 }) {
@@ -151,8 +147,6 @@ export function MobileDrawer({
             through this component's own `setOpen(false)` handlers. */}
         <div className="border-line border-b p-4">
           <SearchBox
-            toolEntries={toolEntries}
-            promptEntries={promptEntries}
             toolCount={toolCount}
             promptCount={promptCount}
             onNavigate={() => setOpen(false)}

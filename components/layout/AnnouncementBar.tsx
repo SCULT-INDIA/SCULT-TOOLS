@@ -61,8 +61,17 @@ export function AnnouncementBar() {
               library grows — same convention as the "15 free tools" line
               this bar carried before. */}
           New: 1,170 free AI prompts —{' '}
+          {/* prefetch={false}: this bar is the first thing in the sticky
+              header on every page, so it is always in the initial viewport —
+              Next's viewport-prefetch was fetching the /prompts RSC payload on
+              every single page load. It showed up in a PageSpeed trace as a
+              221KB request; that page was heavy for the same reason every page
+              was (see lib/search-payload.ts), and even now that the payload is
+              small there is no reason to spend a round trip on a link most
+              visitors never click. */}
           <Link
             href="/prompts"
+            prefetch={false}
             className="font-semibold underline decoration-1 underline-offset-2 hover:opacity-70"
           >
             browse the library
