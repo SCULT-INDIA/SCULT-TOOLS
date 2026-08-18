@@ -4,11 +4,11 @@
  * Purpose
  *   Backend for "Request a prompt" (components/prompts/RequestPromptButton.tsx).
  *   A visitor's description of the prompt they want gets emailed straight to
- *   connect@scult.in via Resend's HTTP API — the exact same mechanism as
- *   /api/feedback (see lib/prompts/request-prompt/logic.ts for why the
- *   validation shape matches it deliberately). No `resend` npm package, no
- *   client-visible key — this route is the only place `RESEND_API_KEY` is
- *   ever read here, and it never appears in any response body.
+ *   connect@scult.in via `lib/resend.ts`'s shared sender — the exact same
+ *   mechanism as /api/feedback (see lib/prompts/request-prompt/logic.ts for
+ *   why the validation shape matches it deliberately). No `resend` npm
+ *   package, no client-visible key — `RESEND_API_KEY` is read only inside
+ *   `lib/resend.ts`, and never appears in any response body.
  *
  * Inputs   JSON body: { description, category?, pageUrl, email?, company? }
  *          (`company` is a honeypot — see logic.ts).
@@ -16,6 +16,13 @@
  *          raw Resend response.
  * Failure  invalid input -> 400/422, too many submissions -> 429,
  *          Resend/email misconfigured or unreachable -> 502.
+ *
+ *   A 200 here means Resend ACCEPTED the send, not that it was delivered —
+ *   see `lib/resend.ts`'s docblock for a real production case where those
+ *   are different (the sandbox `onboarding@resend.dev` sender silently
+ *   fails to deliver to anyone but the Resend account's own signup email).
+ *   Check Vercel's function logs for this route's `sendMail:` lines, not
+ *   just this endpoint's HTTP status, if a submission goes missing.
  */
 
 import { NextResponse } from 'next/server'
@@ -24,9 +31,7 @@ import {
   validateRequestPrompt,
 } from '@/lib/prompts/request-prompt/logic'
 import { checkRateLimit, clientIpFromHeaders } from '@/lib/rate-limit'
-
-const RESEND_ENDPOINT = 'https://api.resend.com/emails'
-const RESEND_TIMEOUT_MS = 10_000
+import { escapeHtml, sendMail } from '@/lib/resend'
 
 /** Same destination and override hook as /api/feedback — one inbox for both. */
 const TO_EMAIL = process.env.FEEDBACK_TO_EMAIL ?? 'connect@scult.in'
@@ -37,15 +42,6 @@ const RATE_LIMIT_WINDOW_MS = 10 * 60_000
 
 function errorJson(error: string, status: number): NextResponse {
   return NextResponse.json({ error }, { status })
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
@@ -81,61 +77,36 @@ export async function POST(request: Request): Promise<NextResponse> {
     const status = validated.error === 'bot' ? 400 : 422
     return errorJson(requestPromptErrorMessage(validated.error), status)
   }
-  const request_ = validated.data
+  const requestData = validated.data
 
-  const apiKey = process.env.RESEND_API_KEY
-  if (!apiKey) {
-    console.error('RESEND_API_KEY is not configured — prompt request dropped.')
-    return errorJson('Prompt requests are not accepting submissions right now.', 502)
-  }
-
-  const fromAddress =
-    process.env.FEEDBACK_FROM_EMAIL ?? 'Scult Tools <onboarding@resend.dev>'
-
-  const subject = request_.category
-    ? `Prompt request: ${request_.category}`
+  const subject = requestData.category
+    ? `Prompt request: ${requestData.category}`
     : 'Prompt request'
   const textLines = [
-    `Category: ${request_.category ?? '(not specified)'}`,
-    `Page: ${request_.pageUrl}`,
-    request_.email ? `Reply-to: ${request_.email}` : 'Reply-to: (not provided)',
+    `Category: ${requestData.category ?? '(not specified)'}`,
+    `Page: ${requestData.pageUrl}`,
+    requestData.email ? `Reply-to: ${requestData.email}` : 'Reply-to: (not provided)',
     '',
-    request_.description,
+    requestData.description,
   ]
   const html = `
-    <p><strong>Category:</strong> ${escapeHtml(request_.category ?? '(not specified)')}</p>
-    <p><strong>Page:</strong> ${escapeHtml(request_.pageUrl)}</p>
-    <p><strong>Reply-to:</strong> ${request_.email ? escapeHtml(request_.email) : '(not provided)'}</p>
+    <p><strong>Category:</strong> ${escapeHtml(requestData.category ?? '(not specified)')}</p>
+    <p><strong>Page:</strong> ${escapeHtml(requestData.pageUrl)}</p>
+    <p><strong>Reply-to:</strong> ${requestData.email ? escapeHtml(requestData.email) : '(not provided)'}</p>
     <hr />
-    <p>${escapeHtml(request_.description).replace(/\n/g, '<br />')}</p>
+    <p>${escapeHtml(requestData.description).replace(/\n/g, '<br />')}</p>
   `
 
-  try {
-    const upstream = await fetch(RESEND_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: fromAddress,
-        to: [TO_EMAIL],
-        subject,
-        text: textLines.join('\n'),
-        html,
-        ...(request_.email ? { reply_to: request_.email } : {}),
-      }),
-      signal: AbortSignal.timeout(RESEND_TIMEOUT_MS),
-    })
+  const result = await sendMail({
+    to: TO_EMAIL,
+    subject,
+    text: textLines.join('\n'),
+    html,
+    replyTo: requestData.email,
+  })
 
-    if (!upstream.ok) {
-      const errBody = await upstream.text().catch(() => '')
-      console.error(`Resend rejected a prompt-request email (${upstream.status}): ${errBody}`)
-      return errorJson('Could not send that request. Try again in a moment.', 502)
-    }
-  } catch (err) {
-    console.error('Resend request failed for a prompt request:', err)
-    return errorJson('Could not send that request. Try again in a moment.', 502)
+  if (!result.ok) {
+    return errorJson(result.message, result.status)
   }
 
   return NextResponse.json({ ok: true })

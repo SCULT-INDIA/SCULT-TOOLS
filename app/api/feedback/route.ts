@@ -4,9 +4,9 @@
  * Purpose
  *   Backend for the per-tool feedback button (components/tools/FeedbackButton.tsx).
  *   A visitor's message + which tool they were on gets emailed straight to
- *   connect@scult.in via Resend's HTTP API. No `resend` npm package, no
- *   client-visible key — this route is the only place `RESEND_API_KEY` is
- *   ever read, and it never appears in any response body.
+ *   connect@scult.in via `lib/resend.ts`'s shared sender. No `resend` npm
+ *   package, no client-visible key — `RESEND_API_KEY` is read only inside
+ *   `lib/resend.ts`, and never appears in any response body.
  *
  * Inputs   JSON body: { toolSlug, toolTitle, pageUrl, message, email?, company? }
  *          (`company` is a honeypot — see logic.ts).
@@ -14,14 +14,19 @@
  *          raw Resend response.
  * Failure  invalid input -> 400, too many submissions -> 429, Resend/email
  *          misconfigured or unreachable -> 502.
+ *
+ *   A 200 here means Resend ACCEPTED the send, not that it was delivered —
+ *   see `lib/resend.ts`'s docblock for a real production case where those
+ *   are different (the sandbox `onboarding@resend.dev` sender silently
+ *   fails to deliver to anyone but the Resend account's own signup email).
+ *   Check Vercel's function logs for this route's `sendMail:` lines, not
+ *   just this endpoint's HTTP status, if a submission goes missing.
  */
 
 import { NextResponse } from 'next/server'
 import { checkRateLimit, clientIpFromHeaders } from '@/lib/rate-limit'
+import { escapeHtml, sendMail } from '@/lib/resend'
 import { feedbackErrorMessage, validateFeedback } from '@/lib/tools/feedback/logic'
-
-const RESEND_ENDPOINT = 'https://api.resend.com/emails'
-const RESEND_TIMEOUT_MS = 10_000
 
 /** Where every feedback message lands — overridable via env, but this is the product requirement. */
 const TO_EMAIL = process.env.FEEDBACK_TO_EMAIL ?? 'connect@scult.in'
@@ -32,15 +37,6 @@ const RATE_LIMIT_WINDOW_MS = 10 * 60_000
 
 function errorJson(error: string, status: number): NextResponse {
   return NextResponse.json({ error }, { status })
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
@@ -80,15 +76,6 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
   const feedback = validated.data
 
-  const apiKey = process.env.RESEND_API_KEY
-  if (!apiKey) {
-    console.error('RESEND_API_KEY is not configured — feedback submission dropped.')
-    return errorJson('Feedback is not accepting submissions right now.', 502)
-  }
-
-  const fromAddress =
-    process.env.FEEDBACK_FROM_EMAIL ?? 'Scult Tools Feedback <onboarding@resend.dev>'
-
   const subject = `Tool feedback: ${feedback.toolTitle}`
   const textLines = [
     `Tool: ${feedback.toolTitle} (${feedback.toolSlug})`,
@@ -105,32 +92,16 @@ export async function POST(request: Request): Promise<NextResponse> {
     <p>${escapeHtml(feedback.message).replace(/\n/g, '<br />')}</p>
   `
 
-  try {
-    const upstream = await fetch(RESEND_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: fromAddress,
-        to: [TO_EMAIL],
-        subject,
-        text: textLines.join('\n'),
-        html,
-        ...(feedback.email ? { reply_to: feedback.email } : {}),
-      }),
-      signal: AbortSignal.timeout(RESEND_TIMEOUT_MS),
-    })
+  const result = await sendMail({
+    to: TO_EMAIL,
+    subject,
+    text: textLines.join('\n'),
+    html,
+    replyTo: feedback.email,
+  })
 
-    if (!upstream.ok) {
-      const errBody = await upstream.text().catch(() => '')
-      console.error(`Resend rejected a feedback email (${upstream.status}): ${errBody}`)
-      return errorJson('Could not send that feedback. Try again in a moment.', 502)
-    }
-  } catch (err) {
-    console.error('Resend request failed for a feedback submission:', err)
-    return errorJson('Could not send that feedback. Try again in a moment.', 502)
+  if (!result.ok) {
+    return errorJson(result.message, result.status)
   }
 
   return NextResponse.json({ ok: true })
