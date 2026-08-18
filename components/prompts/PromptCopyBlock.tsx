@@ -14,13 +14,38 @@ import type { PromptVariable } from '@/lib/prompts/types'
  * Variables ship PRE-FILLED with each variable's example value — the visitor
  * sees a complete, copyable prompt immediately instead of a form standing
  * between them and the content. Substituted values are highlighted in the
- * brand yellow so it's obvious what to personalize. A collapsed "Customize"
- * panel below lets them swap in their own details, live-updating both the
+ * brand yellow so it's obvious what to personalize. The "Customize" panel
+ * beside it lets them swap in their own details, live-updating both the
  * highlights and what the copy button copies.
+ *
+ * This renders inside a full-bleed section in `PromptDetailShell` (not the
+ * article's normal ~50rem reading column) — a split-pane editor+form needs
+ * real width, unlike the surrounding prose, so that breakout is the parent's
+ * job and this component just fills whatever width it's given.
  *
  * Copy feedback is an inline label flip ("Copy" → "Copied!" for ~2s), plus
  * an `aria-live="polite"` announcement — a label-only change is silent to
  * screen readers.
+ *
+ * Layout: prompt on the left, customize fields on the right, from `lg` up —
+ * a fixed-width side panel next to flexible content, per the site's
+ * side-panel convention for "edit details while keeping the main content
+ * visible" (see the equivalent card layout on `/security`, `/privacy`).
+ * Below `lg` the same two blocks simply stack (source order already puts
+ * the prompt first), which is deliberately NOT a collapsed disclosure any
+ * more: on a "copy this and go" utility scanned across many prompts, an
+ * always-visible panel is one glance instead of one extra tap, and the
+ * variable count here is small enough (typically 1-5 fields) that it never
+ * costs the scroll depth a long form would. A prompt with zero variables
+ * renders no panel at all rather than an empty one.
+ *
+ * The panel is `sticky` on `lg` so it stays reachable while a long prompt
+ * scrolls inside its own `<pre>` — offset by `top-28` (7rem), the same
+ * clearance `app/layout.tsx` already uses site-wide to clear the sticky
+ * header, not a value invented for this component. `self-start` stops the
+ * grid from stretching it to match the editor's height, which would
+ * otherwise cancel the sticky positioning by making both columns equally
+ * tall.
  */
 
 /** promptText split into literal text and variable slots, in order. */
@@ -95,8 +120,16 @@ export function PromptCopyBlock({
     }
   }
 
+  const hasFields = variables.length > 0
+
   return (
-    <div>
+    <div
+      className={
+        hasFields
+          ? 'lg:grid lg:grid-cols-[minmax(0,1fr)_420px] lg:items-start lg:gap-8'
+          : undefined
+      }
+    >
       {/* Editor card — fixed dark surface, identical in both themes. */}
       <div className="overflow-hidden rounded-panel border border-ink shadow-brutal-sm">
         <div className="flex items-center justify-between gap-3 border-[#2c2743] border-b bg-[#191527] px-4 py-2.5">
@@ -122,7 +155,7 @@ export function PromptCopyBlock({
           </button>
         </div>
 
-        <pre className="max-h-[30rem] overflow-auto whitespace-pre-wrap bg-[#131020] p-5 font-mono text-[13.5px] text-[#e8e5f5] leading-[1.75]">
+        <pre className="max-h-[34rem] overflow-auto whitespace-pre-wrap bg-[#131020] p-6 font-mono text-[14px] text-[#e8e5f5] leading-[1.8]">
           {segments.map((s, i) =>
             s.kind === 'text' ? (
               // biome-ignore lint/suspicious/noArrayIndexKey: static segmentation, order never changes
@@ -140,20 +173,29 @@ export function PromptCopyBlock({
         </pre>
       </div>
 
-      {variables.length > 0 ? (
-        <details className="group mt-3 rounded-card border border-line-grey bg-offwhite">
-          <summary className="flex cursor-pointer list-none items-center gap-2.5 px-4 py-3.5 font-medium text-[14px] text-ink marker:content-none [&::-webkit-details-marker]:hidden">
-            <SlidersHorizontal className="size-4 text-violet-700" aria-hidden="true" />
-            Customize the{' '}
-            <span className="font-semibold underline decoration-[3px] decoration-cta underline-offset-2">
-              highlighted
-            </span>{' '}
-            details
-            <span className="ml-auto text-[12px] text-ink-subtle group-open:hidden">
-              optional — the prompt above already works
-            </span>
-          </summary>
-          <div className="flex flex-col gap-3 border-line-grey border-t px-4 py-4">
+      {hasFields ? (
+        <div className="mt-6 overflow-hidden rounded-panel border border-line-grey bg-offwhite lg:sticky lg:top-28 lg:mt-0 lg:self-start">
+          {/* Violet header strip — same icon-badge language as "Why this
+              works" below, so this reads as part of the same design system
+              rather than a bolted-on form. */}
+          <div className="border-line-grey border-b bg-violet-50 px-6 py-5">
+            <div className="flex items-center gap-3">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-[10px] bg-violet-700">
+                <SlidersHorizontal className="size-4 text-white" aria-hidden="true" />
+              </span>
+              <h3 className="font-display font-semibold text-[16px] text-black tracking-normal">
+                Customize the{' '}
+                <span className="underline decoration-[3px] decoration-cta underline-offset-2">
+                  highlighted
+                </span>{' '}
+                details
+              </h3>
+            </div>
+            <p className="mt-2 pl-11 text-[12.5px] text-black/70 leading-5">
+              Optional — the prompt already works with the examples shown.
+            </p>
+          </div>
+          <div className="flex flex-col gap-5 p-6">
             {variables.map((variable) => (
               <div key={variable.name}>
                 <label className="label" htmlFor={`var-${variable.name}`}>
@@ -178,7 +220,7 @@ export function PromptCopyBlock({
               </div>
             ))}
           </div>
-        </details>
+        </div>
       ) : null}
 
       <p role="status" aria-live="polite" className="sr-only">

@@ -150,7 +150,20 @@ export function PromptDetailShell({
         </div>
       ) : null}
 
-      <section aria-labelledby="prompt-text" className="mt-12">
+      {/* Full-bleed breakout: the prompt/customize workspace is the one part
+          of this page that benefits from real width — a code-style editor
+          and a multi-field form both cramp hard inside the article's 50rem
+          reading column, which is tuned for prose, not for a split-pane
+          layout. `w-screen` + the negative-margin centering trick breaks
+          this section out to (near) full viewport width while every other
+          section on the page stays at the narrower, prose-friendly measure.
+          Safe against the scrollbar-width mismatch `100vw` carries — see
+          `overflow-x: hidden` on `html` in globals.css, added for exactly
+          this pattern. */}
+      <section
+        aria-labelledby="prompt-text"
+        className="relative left-1/2 mt-12 w-screen max-w-[1440px] -translate-x-1/2 px-5 md:px-10 lg:px-14"
+      >
         <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
           <h2 id="prompt-text" className="text-[24px] tracking-[-0.5px] md:text-[28px]">
             The prompt
