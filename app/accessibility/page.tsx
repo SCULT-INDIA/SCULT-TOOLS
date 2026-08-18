@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
 
@@ -112,6 +113,25 @@ export default function AccessibilityPage() {
             we do not have. If you use assistive technology and something on this site
             does not work the way it should, that is exactly the kind of gap self-testing
             misses — and we would rather know about it than not.
+          </p>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="text-[26px] tracking-[-0.5px] md:text-[30px]">
+            Accessibility as a legal requirement
+          </h2>
+          <p className="mt-3 text-[16px] text-ink-muted leading-7">
+            WCAG is also the standard referenced by accessibility law in a growing number of
+            places — the EU's European Accessibility Act and the ADA in the United States
+            among them. How that fits alongside this site's other data-protection
+            commitments is on the{' '}
+            <Link
+              href="/compliance"
+              className="text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4 hover:text-violet-600"
+            >
+              compliance page
+            </Link>
+            .
           </p>
         </section>
 

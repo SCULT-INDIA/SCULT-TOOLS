@@ -199,6 +199,7 @@ function buildFooterColumns(): readonly FooterColumn[] {
       { key: 'glossary', label: 'Glossary', href: '/glossary' },
       { key: 'security', label: 'Security', href: '/security' },
       { key: 'accessibility', label: 'Accessibility', href: '/accessibility' },
+      { key: 'compliance', label: 'Compliance', href: '/compliance' },
       { key: 'brand', label: 'Brand & press', href: '/brand' },
     ],
   }
@@ -491,6 +492,10 @@ export function Footer() {
             |{' '}
             <Link href="/privacy" className="hover:text-white">
               Privacy Policy
+            </Link>{' '}
+            |{' '}
+            <Link href="/compliance" className="hover:text-white">
+              Compliance
             </Link>
           </p>
         </div>

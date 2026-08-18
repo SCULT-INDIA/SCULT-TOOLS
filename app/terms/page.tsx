@@ -150,7 +150,16 @@ export default function TermsPage() {
           <p className="mt-3 text-[16px] text-ink-muted leading-7">
             These terms are governed by the laws of India. {SITE.parentName} is based in
             Noida, in the Delhi NCR region, and that is where any dispute would be
-            handled.
+            handled. How this site specifically maps to India's Digital Personal Data
+            Protection Act and to international frameworks like GDPR and CCPA is detailed
+            on the{' '}
+            <Link
+              href="/compliance"
+              className="text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4 hover:text-violet-600"
+            >
+              compliance page
+            </Link>
+            , not restated here.
           </p>
         </section>
 

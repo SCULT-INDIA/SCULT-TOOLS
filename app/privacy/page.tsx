@@ -214,6 +214,24 @@ export default function PrivacyPage() {
           </p>
         </section>
 
+        <section className="mt-12">
+          <h2 className="text-[26px] tracking-[-0.5px] md:text-[30px]">
+            How this maps to data protection law
+          </h2>
+          <p className="mt-3 text-[16px] text-ink-muted leading-7">
+            If you want to see this same information mapped against India's DPDP Act, the
+            EU's GDPR and California's CCPA specifically — what each law requires and what
+            we actually do about it — that is on the{' '}
+            <Link
+              href="/compliance"
+              className="text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4 hover:text-violet-600"
+            >
+              compliance page
+            </Link>
+            .
+          </p>
+        </section>
+
         <p className="mt-12 text-[15px] text-ink-subtle leading-7">
           Questions about any of this? {SITE.parentName} is a real company in Noida, Delhi
           NCR — the contact details are on{' '}

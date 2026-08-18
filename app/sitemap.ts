@@ -100,6 +100,12 @@ const STATIC_PAGES: readonly {
     priority: 0.3,
   },
   {
+    path: '/compliance',
+    lastModified: '2026-08-16',
+    changeFrequency: 'monthly',
+    priority: 0.4,
+  },
+  {
     path: '/accessibility',
     lastModified: '2026-08-09',
     changeFrequency: 'yearly',
