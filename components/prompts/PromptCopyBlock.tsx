@@ -174,28 +174,19 @@ export function PromptCopyBlock({
       </div>
 
       {hasFields ? (
-        <div className="mt-6 overflow-hidden rounded-panel border border-line-grey bg-offwhite lg:sticky lg:top-28 lg:mt-0 lg:self-start">
-          {/* Violet header strip — same icon-badge language as "Why this
-              works" below, so this reads as part of the same design system
-              rather than a bolted-on form. */}
-          <div className="border-line-grey border-b bg-violet-50 px-6 py-5">
-            <div className="flex items-center gap-3">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-[10px] bg-violet-700">
-                <SlidersHorizontal className="size-4 text-white" aria-hidden="true" />
-              </span>
-              <h3 className="font-display font-semibold text-[16px] text-black tracking-normal">
-                Customize the{' '}
-                <span className="underline decoration-[3px] decoration-cta underline-offset-2">
-                  highlighted
-                </span>{' '}
-                details
-              </h3>
-            </div>
-            <p className="mt-2 pl-11 text-[12.5px] text-black/70 leading-5">
-              Optional — the prompt already works with the examples shown.
-            </p>
-          </div>
-          <div className="flex flex-col gap-5 p-6">
+        <div className="mt-6 rounded-card border border-line-grey bg-offwhite p-6 lg:sticky lg:top-28 lg:mt-0 lg:self-start">
+          {/* Same small uppercase-label pattern as "Verified against" and
+              "Changelog" below on this page, not a heavier treatment
+              borrowed from elsewhere — this is an optional settings panel,
+              not a highlight box, and should read as quiet as one. */}
+          <h3 className="flex items-center gap-2 font-bold text-[13px] text-ink-subtle uppercase tracking-[0.1em]">
+            <SlidersHorizontal className="size-4 text-violet-700" aria-hidden="true" />
+            Customize
+          </h3>
+          <p className="mt-2.5 text-[13.5px] text-ink-subtle leading-5">
+            Optional — swap in your own details for the highlighted parts above.
+          </p>
+          <div className="mt-5 flex flex-col gap-4">
             {variables.map((variable) => (
               <div key={variable.name}>
                 <label className="label" htmlFor={`var-${variable.name}`}>

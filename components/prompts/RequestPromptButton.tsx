@@ -1,0 +1,313 @@
+'use client'
+
+import { MessageSquarePlus, ShieldCheck, TriangleAlert, X } from 'lucide-react'
+import { useEffect, useId, useRef, useState } from 'react'
+import { trackPromptEvent } from '@/lib/analytics'
+import {
+  REQUEST_DESCRIPTION_MAX,
+  REQUEST_DESCRIPTION_MIN,
+  validateRequestPrompt,
+} from '@/lib/prompts/request-prompt/logic'
+
+/**
+ * "Request a prompt" — a small text-link trigger (not a loud CTA; this is a
+ * secondary path next to the primary "copy and go" flow) that opens a
+ * dialog asking what prompt someone wants, and emails it to connect@scult.in
+ * via /api/request-prompt — the exact same Resend mechanism
+ * components/tools/FeedbackButton.tsx already uses for tool feedback, reused
+ * rather than duplicated (see lib/prompts/request-prompt/logic.ts).
+ *
+ * Dialog structure, a11y contract and visual language are deliberately
+ * copied from FeedbackButton rather than reinvented: focus enters on open,
+ * Escape closes, focus returns to the trigger on close, same
+ * rounded-panel/border-ink/shadow-brutal card, same honeypot pattern. Two
+ * near-identical "ask the user something, email it to us" flows should not
+ * quietly drift into two different UIs.
+ */
+export function RequestPromptButton({ category }: { category?: string }) {
+  const [open, setOpen] = useState(false)
+  const [description, setDescription] = useState('')
+  const [email, setEmail] = useState('')
+  const [company, setCompany] = useState('') // honeypot
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [errorText, setErrorText] = useState('')
+
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const titleId = useId()
+  const descriptionId = useId()
+  const emailId = useId()
+  const errorId = useId()
+
+  function reset(): void {
+    setDescription('')
+    setEmail('')
+    setCompany('')
+    setStatus('idle')
+    setErrorText('')
+  }
+
+  function handleOpen(): void {
+    if (status === 'sent') reset()
+    setOpen(true)
+    trackPromptEvent(category ?? 'unknown', 'request-prompt', 'request_prompt_opened')
+  }
+
+  function handleClose(): void {
+    setOpen(false)
+  }
+
+  useEffect(() => {
+    if (!open) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const focusables = () =>
+      Array.from(
+        dialogRef.current?.querySelectorAll<HTMLElement>(
+          'input, textarea, button:not([disabled])',
+        ) ?? [],
+      )
+    focusables()[0]?.focus()
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setOpen(false)
+        return
+      }
+      if (e.key !== 'Tab') return
+      const items = focusables()
+      if (items.length === 0) return
+      const first = items[0]
+      const last = items[items.length - 1]
+      if (!first || !last) return
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = previousOverflow
+      triggerRef.current?.focus()
+    }
+  }, [open])
+
+  async function handleSubmit(e: React.FormEvent): Promise<void> {
+    e.preventDefault()
+
+    const validated = validateRequestPrompt({
+      description,
+      category,
+      pageUrl: typeof window !== 'undefined' ? window.location.href : '',
+      email,
+      company,
+    })
+    if ('error' in validated) {
+      setStatus('error')
+      setErrorText(
+        validated.error === 'description-too-short'
+          ? `Say a little more about what you need — at least ${REQUEST_DESCRIPTION_MIN} characters.`
+          : validated.error === 'description-too-long'
+            ? `Keep it under ${REQUEST_DESCRIPTION_MAX} characters.`
+            : validated.error === 'invalid-email'
+              ? 'That email address does not look right.'
+              : 'Could not submit that.',
+      )
+      return
+    }
+
+    setStatus('sending')
+    setErrorText('')
+    try {
+      const res = await fetch('/api/request-prompt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(validated.data),
+      })
+      const data = (await res.json().catch(() => ({}))) as { error?: string }
+      if (!res.ok) {
+        setStatus('error')
+        setErrorText(data.error ?? 'Could not send that request. Try again in a moment.')
+        return
+      }
+      setStatus('sent')
+      trackPromptEvent(category ?? 'unknown', 'request-prompt', 'request_prompt_submitted')
+    } catch {
+      setStatus('error')
+      setErrorText('Could not send that request. Check your connection and try again.')
+    }
+  }
+
+  return (
+    <>
+      <button
+        ref={triggerRef}
+        type="button"
+        onClick={handleOpen}
+        className="flex items-center gap-1.5 text-[13px] font-medium text-violet-700 underline decoration-1 underline-offset-4 hover:text-violet-600"
+      >
+        <MessageSquarePlus className="size-3.5" aria-hidden="true" />
+        Request a prompt
+      </button>
+
+      {open ? (
+        <div className="fixed inset-0 z-70 flex items-center justify-center p-4">
+          <div
+            aria-hidden="true"
+            onClick={handleClose}
+            className="absolute inset-0 bg-black/50"
+          />
+          <div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
+            className="relative w-full max-w-[27rem] rounded-panel border border-ink bg-cream p-6 text-left shadow-brutal sm:p-7"
+          >
+            <button
+              type="button"
+              aria-label="Close prompt request form"
+              onClick={handleClose}
+              className="absolute top-4 right-4 rounded-full p-1.5 text-ink-subtle transition-colors hover:bg-violet-50 hover:text-ink"
+            >
+              <X className="size-4" aria-hidden="true" />
+            </button>
+
+            {status === 'sent' ? (
+              <div className="flex flex-col items-center gap-3 py-4 text-center">
+                <span className="flex size-11 items-center justify-center rounded-full bg-violet-100">
+                  <ShieldCheck className="size-5 text-violet-700" aria-hidden="true" />
+                </span>
+                <p
+                  id={titleId}
+                  className="font-display font-semibold text-[20px] text-ink"
+                >
+                  Request received
+                </p>
+                <p className="max-w-[24ch] text-[14px] text-ink-muted leading-6">
+                  Thanks — our team reviews every request, and we'll follow up if you left
+                  an email and this one needs more detail.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  className="btn-brutal btn-brutal-sm btn-violet mt-2 w-full justify-center"
+                >
+                  Done
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <span className="eyebrow">Request a prompt</span>
+                <p
+                  id={titleId}
+                  className="mt-1 font-display font-semibold text-[22px] text-ink leading-tight"
+                >
+                  What do you need a prompt for?
+                </p>
+                <p className="mt-2 text-[14px] text-ink-muted leading-6">
+                  Tell us the job you're trying to do and which tool you use for it. Real
+                  requests get written, verified, and added to the library.
+                </p>
+
+                <label
+                  htmlFor={descriptionId}
+                  className="mt-5 block font-medium text-[13px] text-ink-muted"
+                >
+                  What you need
+                </label>
+                <textarea
+                  id={descriptionId}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                  minLength={REQUEST_DESCRIPTION_MIN}
+                  maxLength={REQUEST_DESCRIPTION_MAX}
+                  rows={4}
+                  aria-describedby={status === 'error' ? errorId : undefined}
+                  className="mt-1.5 w-full resize-none rounded-card border border-line-grey bg-offwhite px-3 py-2.5 text-[14px] text-ink placeholder:text-ink-subtle focus:border-violet-600 focus:outline-none focus:ring-2 focus:ring-violet-100"
+                  placeholder="e.g. a ChatGPT prompt for turning a sales call transcript into a follow-up email"
+                />
+
+                <label
+                  htmlFor={emailId}
+                  className="mt-3.5 block font-medium text-[13px] text-ink-muted"
+                >
+                  Email{' '}
+                  <span className="font-normal text-ink-subtle">
+                    (optional — for a reply)
+                  </span>
+                </label>
+                <input
+                  id={emailId}
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="mt-1.5 w-full rounded-card border border-line-grey bg-offwhite px-3 py-2.5 text-[14px] text-ink placeholder:text-ink-subtle focus:border-violet-600 focus:outline-none focus:ring-2 focus:ring-violet-100"
+                  placeholder="you@example.com"
+                />
+
+                {/* Honeypot — hidden from real users via CSS, not `type="hidden"`, so
+                    a bot's naive "fill every field" script still catches it. */}
+                <div className="absolute left-[-9999px] top-auto" aria-hidden="true">
+                  <label htmlFor="request-prompt-company">Company</label>
+                  <input
+                    id="request-prompt-company"
+                    name="company"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                  />
+                </div>
+
+                {status === 'error' ? (
+                  <p
+                    id={errorId}
+                    role="alert"
+                    className="mt-3 flex items-start gap-1.5 text-[13px] text-red-600"
+                  >
+                    <TriangleAlert
+                      className="mt-0.5 size-3.5 shrink-0"
+                      aria-hidden="true"
+                    />
+                    {errorText}
+                  </p>
+                ) : null}
+
+                <div className="mt-5 flex items-center gap-1.5 text-[12px] text-ink-subtle">
+                  <ShieldCheck className="size-3.5 text-green" aria-hidden="true" />
+                  Reviewed by our team — never shared with third parties.
+                </div>
+
+                <div className="mt-4 flex gap-2.5">
+                  <button
+                    type="button"
+                    onClick={handleClose}
+                    className="btn-brutal btn-brutal-sm btn-white flex-1 justify-center"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={status === 'sending'}
+                    className="btn-brutal btn-brutal-sm btn-violet flex-1 justify-center"
+                  >
+                    {status === 'sending' ? 'Sending…' : 'Send request'}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      ) : null}
+    </>
+  )
+}

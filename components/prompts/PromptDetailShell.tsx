@@ -15,7 +15,9 @@ import { getPromptsByCategory } from '@/lib/prompts/registry'
 import type { Prompt, PromptCategory } from '@/lib/prompts/types'
 import { getTool } from '@/lib/tools/registry'
 import { resolveServiceLink } from '@/lib/tools/service-links'
+import { HowToUseButton } from './HowToUseButton'
 import { PromptCopyBlock } from './PromptCopyBlock'
+import { RequestPromptButton } from './RequestPromptButton'
 import { StaleVerificationNotice } from './StaleVerificationNotice'
 
 const TILE_BG: Record<PromptCategory['tile'], string> = {
@@ -154,15 +156,22 @@ export function PromptDetailShell({
           of this page that benefits from real width — a code-style editor
           and a multi-field form both cramp hard inside the article's 50rem
           reading column, which is tuned for prose, not for a split-pane
-          layout. `w-screen` + the negative-margin centering trick breaks
-          this section out to (near) full viewport width while every other
-          section on the page stays at the narrower, prose-friendly measure.
-          Safe against the scrollbar-width mismatch `100vw` carries — see
-          `overflow-x: hidden` on `html` in globals.css, added for exactly
-          this pattern. */}
+          layout. `w-screen` + the negative-margin centering trick escapes
+          that 50rem parent out to the viewport; `container-site` then takes
+          over exactly as it does everywhere else on the page (the header,
+          the hero), capping it at the SAME 1160px and applying the SAME
+          `padding-inline` — so this section lands on precisely the same
+          left/right edges as every other full-width component on the page,
+          not an independently-chosen width that would misalign against
+          them. (An earlier version capped at 1440px against the raw
+          viewport instead of the site's own container, which read as
+          wider than and out of step with everything above and below it —
+          this is the fix.) Safe against the scrollbar-width mismatch
+          `100vw` carries — see `overflow-x: hidden` on `html` in
+          globals.css, added for exactly this pattern. */}
       <section
         aria-labelledby="prompt-text"
-        className="relative left-1/2 mt-12 w-screen max-w-[1440px] -translate-x-1/2 px-5 md:px-10 lg:px-14"
+        className="container-site relative left-1/2 mt-12 w-screen -translate-x-1/2"
       >
         <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
           <h2 id="prompt-text" className="text-[24px] tracking-[-0.5px] md:text-[28px]">
@@ -176,6 +185,21 @@ export function PromptDetailShell({
             parts are example details you can swap.
           </p>
         </div>
+
+        {/* Two small text-link actions, not a second row of loud CTAs — the
+            one button that matters on this page is "Copy prompt" inside the
+            editor below, and these two stay visually quiet so they don't
+            compete with it. */}
+        <div className="mb-5 flex flex-wrap items-center gap-5">
+          <HowToUseButton
+            category={prompt.category}
+            promptSlug={prompt.slug}
+            targetTools={prompt.targetTools}
+            hasVariables={prompt.variables.length > 0}
+          />
+          <RequestPromptButton category={category.name} />
+        </div>
+
         <PromptCopyBlock
           category={prompt.category}
           promptSlug={prompt.slug}
