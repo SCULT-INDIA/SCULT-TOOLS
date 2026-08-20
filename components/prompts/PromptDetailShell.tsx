@@ -197,10 +197,29 @@ export function PromptDetailShell({
           the exact overlap coordinates: the FAB was still winning despite
           the panel's own z-45. Setting it on this section too raises the
           WHOLE transformed context's priority, which is what actually
-          lets the panel's content win the comparison. */}
+          lets the panel's content win the comparison.
+
+          `w-[calc(100vw/var(--page-zoom))]`, not `w-screen` (100vw): this
+          page renders under `app/globals.css`'s site-wide `zoom:
+          var(--page-zoom)` (1.1), and `100vw` is a viewport-absolute
+          reference that zoom does NOT scale down to compensate — it stays
+          the real device width as a CSS length, then gets rendered 10%
+          bigger by the zoom, same as everything else. The header and hero
+          never hit this because they use plain `container-site` (`width:
+          100%`), a percentage that's zoom-safe by construction (it
+          resolves against its already-zoomed parent). `100vw` has no
+          parent to resolve against, so it needs the same 10% divided back
+          out first, landing on the true device width once zoom re-applies
+          it. Confirmed live: with plain `w-screen` at a 1078px viewport,
+          this section's own rendered box (`getBoundingClientRect`) came out
+          ~108px wider than the viewport — clipped asymmetrically by
+          `overflow-x: hidden` on `html` into a visibly shifted, misaligned
+          strip instead of a clean edge-to-edge section, exactly what showed
+          up as broken alignment. See the fuller writeup on `zoom` itself in
+          globals.css. */}
       <section
         aria-labelledby="prompt-text"
-        className="container-site relative z-[45] left-1/2 mt-12 w-screen -translate-x-1/2"
+        className="container-site relative z-[45] left-1/2 mt-12 w-[calc(100vw/var(--page-zoom))] -translate-x-1/2"
       >
         <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
           <h2 id="prompt-text" className="text-[24px] tracking-[-0.5px] md:text-[28px]">

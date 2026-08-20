@@ -128,6 +128,12 @@
   /* ---- Layout: reference container is max-w-290 -> 1160px ---------------- */
   --container-site: 1160px;
 
+  /* Single source of truth for the `html { zoom }` factor below — anything
+     that has to compute a raw viewport-unit length (100vw) and needs it to
+     land on the true device width once rendered, not the zoomed one, reads
+     this instead of repeating the literal `1.1`. */
+  --page-zoom: 1.1;
+
   --ease-brand: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -159,8 +165,25 @@
        375 (mobile): no new horizontal overflow and Tailwind's responsive
        classes still switch at their real `px` breakpoints, because `zoom`
        does not change what `window.innerWidth`/media queries see — only how
-       big the result of evaluating them is drawn. */
-    zoom: 1.1;
+       big the result of evaluating them is drawn.
+
+       That last point is the trap: `100vw` is a viewport-absolute reference,
+       so it stays put while zoom scales everything else around it. A plain
+       `width: 100%` (or any percentage) is zoom-safe automatically — it
+       resolves against its already-zoomed parent, which is why the header
+       and hero (both plain `container-site`, no `vw`) land on the right
+       edge with no extra work. But a `100vw` full-bleed breakout gets
+       rendered at `100vw * var(--page-zoom)`, 10% wider than the real
+       device width — confirmed live via `getBoundingClientRect()` on the
+       prompt-detail page's breakout section
+       (`components/prompts/PromptDetailShell.tsx`), whose rendered box was
+       ~108px wider than the viewport at a 1078px width, clipped asymmetrically
+       by the `overflow-x: hidden` below into a visibly misaligned strip
+       instead of a clean edge-to-edge section. Any future `100vw`/`50vw`
+       breakout must divide by `var(--page-zoom)` first — e.g.
+       `w-[calc(100vw/var(--page-zoom))]` — to land back on the true device
+       width before this rule's zoom scales it back up. */
+    zoom: var(--page-zoom);
     /* Defensive, not decorative: any future full-bleed/breakout element that
        computes its width from `100vw` will be off by the width of whatever
        scrollbar-gutter this OS/browser reserves, because `vw` resolves
@@ -172,7 +195,9 @@
        Windows). Clipping here traps that residual site-wide before it can
        reach `document.documentElement.scrollWidth`, without needing every
        future breakout to guess a magic number. First needed by the Schema
-       Markup Generator's wide layout (components/tools/SchemaMarkupGenerator.tsx).
+       Markup Generator's wide layout (components/tools/SchemaMarkupGenerator.tsx,
+       since refactored away from needing it) — now exercised for real by the
+       prompt-detail page's breakout section above.
        `hidden`, not `clip`: tried `clip` first since it's the more precise
        signal of intent, but measured that Chrome still let `window.scrollTo`
        move the root scroll position past the "clipped" edge (the root/
