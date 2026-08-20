@@ -2,6 +2,7 @@ import { ArrowUpRight, Heart, Mail, ShieldCheck, Sparkles } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { BrandIcon } from '@/components/ui/BrandIcon'
+import { SaashubBadge } from '@/components/ui/SaashubBadge'
 import { UneedBadge } from '@/components/ui/UneedBadge'
 import { getCategoriesByGroup, PROMPT_GROUPS } from '@/lib/prompts/categories'
 import { getPromptsByCategory } from '@/lib/prompts/registry'
@@ -363,6 +364,7 @@ export function Footer() {
               </div>
             ))}
             <UneedBadge />
+            <SaashubBadge />
           </div>
         </div>
 

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import scultMark from '@/app/icon.png'
 import { SearchBox } from '@/components/layout/SearchBox'
 import { Icon } from '@/components/ui/Icon'
+import { SaashubBadge } from '@/components/ui/SaashubBadge'
 import { UneedBadge } from '@/components/ui/UneedBadge'
 import { PROMPTS } from '@/lib/prompts/registry'
 import { PROMPT_COUNT, TOOL_COUNT } from '@/lib/search'
@@ -49,8 +50,9 @@ export function Hero() {
             "mt-*" spacing tuned against the eyebrow/CTA/constellation stack
             below (see the file's other comments) — this can't disturb that
             math because nothing below measures its distance FROM this. */}
-        <div className="flex justify-center pb-3">
+        <div className="flex flex-wrap items-center justify-center gap-3 pb-3">
           <UneedBadge className="h-8 w-auto" heightPx={32} />
+          <SaashubBadge className="h-8 w-auto" heightPx={32} />
         </div>
 
         <p className="eyebrow">
