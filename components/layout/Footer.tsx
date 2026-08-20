@@ -122,9 +122,16 @@ const SERVICE_LABELS: Record<string, string> = {
  * painted first; the dark arc paints over its lower half, leaving the crescent.
  *
  * The negative top margin is what lets the arc rise *behind* the CTA cards. The
- * cards carry `relative z-10` for the same reason — without a stacking context
- * the arc paints over their lower halves instead of under them. `-mb-px` closes
- * the sub-pixel seam against the footer body, which is the same violet-900.
+ * cards carry `relative z-45` for the same reason — without a stacking context
+ * the arc paints over their lower halves instead of under them. z-45 (not the
+ * original z-10) additionally clears `FloatingActions.tsx`'s fixed `z-40`
+ * WhatsApp/Scult corner buttons: this section renders on every page in the
+ * site, and its cards are tall enough to sit directly behind that bottom
+ * corner on a full scroll-through — confirmed live via
+ * `document.elementFromPoint()` at the exact overlap coordinates, same method
+ * used for the prompt-detail-page fix in `PromptDetailShell.tsx`. `-mb-px`
+ * closes the sub-pixel seam against the footer body, which is the same
+ * violet-900.
  */
 function Dome() {
   return (
@@ -253,7 +260,7 @@ export function Footer() {
   return (
     <>
       {/* 1. Dual closing CTA cards. `relative z-10` is load-bearing — see Dome. */}
-      <section aria-label="Get started" className="container-site relative z-10 pt-16">
+      <section aria-label="Get started" className="container-site relative z-[45] pt-16">
         <div className="grid gap-6 md:grid-cols-2 md:gap-8">
           {/* bg-cta / bg-green are theme-fixed brand fills — text on them must
               be literal black, not adaptive ink (which flips near-white in
@@ -293,8 +300,12 @@ export function Footer() {
       <Dome />
 
       {/* 3-6. The dark body. `isolate` scopes the glow's -z-10 to this element so
-              it cannot slide behind the page background. */}
-      <footer className="relative isolate overflow-hidden bg-violet-900 text-white">
+              it cannot slide behind the page background. `z-[45]`: same reason
+              as the CTA cards above — this body (credibility bar, link grid,
+              "Made with" pill, legal bar) is tall enough on a full page to sit
+              behind `FloatingActions.tsx`'s fixed `z-40` corner buttons
+              without it, confirmed live the same way. */}
+      <footer className="relative z-[45] isolate overflow-hidden bg-violet-900 text-white">
         {/* The reference footer is not flat: it brightens markedly toward the
             bottom centre, which is what stops a tall dark block reading as a dead
             panel.

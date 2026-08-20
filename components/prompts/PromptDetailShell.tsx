@@ -60,7 +60,21 @@ export function PromptDetailShell({
     (latestVerification ? brandForTool(latestVerification.tool) : null)
 
   return (
-    <article className="container-site max-w-[50rem] pt-8 pb-20">
+    // `relative z-[45]`: the first fix for this page only raised the
+    // prompt/customize section above the fixed WhatsApp/Scult buttons in
+    // components/ui/FloatingActions.tsx (z-40) — but every OTHER section on
+    // this page (Why this works, What you get back, Verified against,
+    // Changelog, the related-tool card, the closing CTA) is exactly as tall
+    // and exactly as likely to scroll through the same bottom-corner zone,
+    // confirmed live in a follow-up recording showing the WhatsApp icon
+    // sitting on top of the "Why this works" panel. Elevating the whole
+    // article once, here, covers all of it in one place instead of
+    // chasing each section individually. Scoped to prompt detail pages only
+    // — this does not touch `<main>` in app/layout.tsx, so no other route on
+    // the site is affected. Still safely below the sticky header's z-50
+    // (verified previously) and below the "How to use" / "Request a prompt"
+    // dialogs' z-70.
+    <article className="container-site relative z-[45] max-w-[50rem] pt-8 pb-20">
       <nav aria-label="Breadcrumb" className="mb-5">
         <ol className="flex flex-wrap items-center gap-2 text-[13px] text-ink-subtle">
           <li>
