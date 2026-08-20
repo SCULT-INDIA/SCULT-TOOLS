@@ -174,8 +174,28 @@ export function PromptCopyBlock({
       </div>
 
       {hasFields ? (
-        <div className="mt-6 rounded-card border border-line-grey bg-offwhite p-6 lg:sticky lg:top-28 lg:mt-0 lg:self-start">
-          {/* Same small uppercase-label pattern as "Verified against" and
+        <div className="relative z-[45] mt-6 rounded-card border border-line-grey bg-offwhite p-6 lg:sticky lg:top-28 lg:mt-0 lg:self-start">
+          {/* `relative z-[45]`: this panel is real, interactive form content
+              (five text inputs), not decoration — but it sits in normal
+              document flow below `lg`, and below `lg` it can be tall enough
+              (five fields) to scroll directly through the bottom-corner
+              zone FloatingActions.tsx's WhatsApp/Scult buttons occupy
+              (`fixed ... z-40`, both corners). Confirmed live: on a
+              820x620 viewport, this panel's box visually overlapped BOTH
+              floating buttons across a wide scroll range, with the button
+              icon painted over live input text since it had no z-index of
+              its own (auto, loses every stacking tie against z-40). Rather
+              than touch FloatingActions.tsx site-wide, this panel alone
+              gets z-45 — enough to win against the z-40 floating buttons
+              specifically, still safely below the sticky header's z-50 so
+              normal scroll-behind-header behavior (every section on this
+              page already does this, correctly) is unaffected. The floating
+              buttons become briefly non-interactive while genuinely hidden
+              behind this panel, which is the same trade-off any scrollable
+              content already makes against a fixed corner button — the
+              alternative (fields losing clicks to a decorative icon
+              floating over them) is worse.
+              Same small uppercase-label pattern as "Verified against" and
               "Changelog" below on this page, not a heavier treatment
               borrowed from elsewhere — this is an optional settings panel,
               not a highlight box, and should read as quiet as one. */}

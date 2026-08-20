@@ -168,10 +168,25 @@ export function PromptDetailShell({
           wider than and out of step with everything above and below it —
           this is the fix.) Safe against the scrollbar-width mismatch
           `100vw` carries — see `overflow-x: hidden` on `html` in
-          globals.css, added for exactly this pattern. */}
+          globals.css, added for exactly this pattern.
+
+          `z-[45]` HERE, not (only) on the inner Customize panel that needs
+          it: `-translate-x-1/2` is a `transform`, and any transformed
+          element creates its own CSS stacking context — every z-index set
+          on a descendant is compared only against siblings INSIDE that
+          context, never against anything outside it. The Customize panel's
+          own z-45 (see PromptCopyBlock.tsx) was consequently trapped in
+          here and never actually competed against
+          `components/ui/FloatingActions.tsx`'s fixed `z-40` WhatsApp/Scult
+          corner buttons, which live outside this transformed section
+          entirely — confirmed live via `document.elementFromPoint()` at
+          the exact overlap coordinates: the FAB was still winning despite
+          the panel's own z-45. Setting it on this section too raises the
+          WHOLE transformed context's priority, which is what actually
+          lets the panel's content win the comparison. */}
       <section
         aria-labelledby="prompt-text"
-        className="container-site relative left-1/2 mt-12 w-screen -translate-x-1/2"
+        className="container-site relative z-[45] left-1/2 mt-12 w-screen -translate-x-1/2"
       >
         <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
           <h2 id="prompt-text" className="text-[24px] tracking-[-0.5px] md:text-[28px]">
