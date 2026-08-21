@@ -13,7 +13,7 @@ import { trackPromptEvent } from '@/lib/analytics'
  * ChatGPT prompt with no variables and a Midjourney prompt with four both
  * get accurate steps, not the same paragraph.
  *
- * Same dialog a11y contract as RequestPromptButton/FeedbackButton (focus
+ * Same dialog a11y contract as RequestButton/FeedbackButton (focus
  * trap, Escape, focus restore) — deliberately copied, not reinvented, for
  * the same reason those two match each other.
  */

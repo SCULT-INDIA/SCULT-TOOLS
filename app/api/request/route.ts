@@ -1,33 +1,31 @@
 /**
- * POST /api/feedback
+ * POST /api/request
  *
  * Purpose
- *   Backend for the per-tool feedback button (components/tools/FeedbackButton.tsx).
- *   A visitor's message + which tool they were on is forwarded to SCULT
- *   Studio (studio.scult.in) via `lib/studio.ts`'s shared client. No
+ *   Backend for the generalized "Request a tool / prompt / skill" form
+ *   (components/ui/RequestButton.tsx), reused on tool pages, prompt pages,
+ *   and the footer. `kind` decides which of the three request types SCULT
+ *   Studio (studio.scult.in) records it as — everything else is shared. No
  *   client-visible key — `SCULT_STUDIO_API_KEY` is read only inside
  *   `lib/studio.ts`, and never appears in any response body.
  *
- * Inputs   JSON body: { toolSlug, toolTitle, category?, pageUrl, message,
- *          rating?, email?, visitorId?, company? } (`company` is a
- *          honeypot — see logic.ts).
+ *   Replaces the earlier prompt-only /api/request-prompt entirely.
+ *
+ * Inputs   JSON body: { kind, title, description, affectedTool?, name?,
+ *          email?, pageUrl, visitorId?, company? } (`company` is a
+ *          honeypot — see lib/requests/logic.ts).
  * Outputs  201 `{ ok: true, id }`, or a clean JSON error `{ error }` — never
  *          the raw Studio response.
  * Failure  invalid input -> 400/422, too many submissions -> 429,
  *          Studio misconfigured/unreachable/rejecting -> 502 or 400.
- *
- *   A non-2xx here means Studio rejected the submission, or the key is
- *   missing/invalid/mis-scoped — check Vercel's function logs for this
- *   route's `postToStudio:` lines (lib/studio.ts), which log Studio's own
- *   error detail on every rejection.
  */
 
 import { NextResponse } from 'next/server'
+import { requestErrorMessage, validateRequest } from '@/lib/requests/logic'
 import { checkRateLimit, clientIpFromHeaders } from '@/lib/rate-limit'
-import { submitToolFeedback } from '@/lib/studio'
-import { feedbackErrorMessage, validateFeedback } from '@/lib/tools/feedback/logic'
+import { submitToolRequest } from '@/lib/studio'
 
-/** A human typing feedback submits at most a handful of times; anything more is a script. */
+/** A human asking for something submits at most a handful of times; anything more is a script. */
 const RATE_LIMIT_MAX = 5
 const RATE_LIMIT_WINDOW_MS = 10 * 60_000
 
@@ -37,11 +35,7 @@ function errorJson(error: string, status: number): NextResponse {
 
 export async function POST(request: Request): Promise<NextResponse> {
   const clientIp = clientIpFromHeaders(request.headers)
-  const rateLimit = checkRateLimit(
-    `feedback:${clientIp}`,
-    RATE_LIMIT_MAX,
-    RATE_LIMIT_WINDOW_MS,
-  )
+  const rateLimit = checkRateLimit(`request:${clientIp}`, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW_MS)
   if (!rateLimit.allowed) {
     return NextResponse.json(
       {
@@ -61,26 +55,26 @@ export async function POST(request: Request): Promise<NextResponse> {
     return errorJson('Could not read that submission.', 400)
   }
 
-  const validated = validateFeedback(body as Record<string, unknown>)
+  const validated = validateRequest(body as Record<string, unknown>)
   if ('error' in validated) {
-    // A honeypot hit or a missing tool slug is not a real user error worth
+    // A honeypot hit or an invalid kind is not a real user error worth
     // explaining — report it as a generic 400 rather than teaching a bot
     // which field tripped the trap.
     const status =
-      validated.error === 'bot' || validated.error === 'missing-tool' ? 400 : 422
-    return errorJson(feedbackErrorMessage(validated.error), status)
+      validated.error === 'bot' || validated.error === 'invalid-kind' ? 400 : 422
+    return errorJson(requestErrorMessage(validated.error), status)
   }
-  const feedback = validated.data
+  const req = validated.data
 
-  const result = await submitToolFeedback({
-    toolId: feedback.toolSlug,
-    toolName: feedback.toolTitle,
-    category: feedback.category,
-    message: feedback.message,
-    rating: feedback.rating,
-    email: feedback.email,
-    pageUrl: feedback.pageUrl,
-    visitorId: feedback.visitorId,
+  const result = await submitToolRequest({
+    kind: req.kind,
+    title: req.title,
+    description: req.description,
+    affectedTool: req.affectedTool,
+    name: req.name,
+    email: req.email,
+    pageUrl: req.pageUrl,
+    visitorId: req.visitorId,
   })
 
   if (!result.ok) {

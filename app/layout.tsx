@@ -231,12 +231,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             site — see the component for why it is not an onClick per link. */}
         <CtaClickTracker />
 
-        {/* GA4 + Clarity, deferred to the visitor's first interaction (or a
-            short fallback delay) rather than mounted unconditionally — see
-            DeferredAnalyticsScripts for why, and for the GA4 bootstrap /
-            Clarity ordering details, both unchanged from before. Same GA4
-            property as the parent site, so a tools -> agency journey is one
-            session rather than a referral that resets attribution.
+        {/* GA4 + Clarity + SCULT Studio's track.js, deferred to the visitor's
+            first interaction (or a short fallback delay) rather than
+            mounted unconditionally — see DeferredAnalyticsScripts for why,
+            and for the GA4 bootstrap / Clarity ordering details, both
+            unchanged from before. Same GA4 property as the parent site, so
+            a tools -> agency journey is one session rather than a referral
+            that resets attribution.
 
             PRIVACY: this site's whole promise is that tool input stays in the
             browser, and session replay is the one thing that could quietly
@@ -247,7 +248,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             before anything is transmitted. app/privacy/page.tsx discloses
             this, and the two must be kept in sync — if masking is ever
             relaxed, that page stops being true. */}
-        <DeferredAnalyticsScripts gaId={SITE.gaId} clarityId={SITE.clarityId} />
+        <DeferredAnalyticsScripts
+          gaId={SITE.gaId}
+          clarityId={SITE.clarityId}
+          studioSiteId={SITE.studioSiteId}
+        />
 
         {/* Vercel Analytics — a no-op off Vercel's own infrastructure (it
             posts to /_vercel/insights, which only exists on a Vercel

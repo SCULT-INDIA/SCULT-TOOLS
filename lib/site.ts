@@ -21,6 +21,14 @@ export const SITE = {
    * local dev and previews never pollute the production recordings.
    */
   clarityId: process.env.NEXT_PUBLIC_CLARITY_ID ?? '',
+  /**
+   * SCULT Studio (studio.scult.in) site identifier for its tracking snippet
+   * (`components/layout/DeferredAnalyticsScripts.tsx`) — same "leave empty
+   * outside production" reasoning as `clarityId` above: every environment
+   * that sets this sends real traffic data into Studio, and dev/preview
+   * sessions would pollute it.
+   */
+  studioSiteId: process.env.NEXT_PUBLIC_STUDIO_SITE ?? '',
   /** Injected at build time by next.config.ts — see the note there. */
   buildYear: process.env.NEXT_PUBLIC_BUILD_YEAR ?? '2026',
 } as const

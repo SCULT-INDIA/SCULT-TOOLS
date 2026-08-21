@@ -2,6 +2,7 @@ import { ArrowUpRight, Heart, Mail, ShieldCheck, Sparkles } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { BrandIcon } from '@/components/ui/BrandIcon'
+import { RequestButton } from '@/components/ui/RequestButton'
 import { SaashubBadge } from '@/components/ui/SaashubBadge'
 import { UneedBadge } from '@/components/ui/UneedBadge'
 import { getCategoriesByGroup, PROMPT_GROUPS } from '@/lib/prompts/categories'
@@ -431,6 +432,24 @@ export function Footer() {
                         </Link>
                       </li>
                     ),
+                  )}
+                  {/* The one sitewide entry point for the generalized
+                      request dialog (components/ui/RequestButton.tsx) — tool
+                      pages and prompt pages already trigger it in their own
+                      context, this is the catch-all for a visitor who isn't
+                      on either (or wants to ask for a skill, which has no
+                      page of its own at all). Same plain-text-link styling
+                      as the rest of this list, not the icon-disc treatment
+                      the contact/social row below uses. */}
+                  {column.key === 'site' && (
+                    <li>
+                      <RequestButton
+                        defaultKind="tool_request"
+                        trackContext="footer"
+                        triggerLabel="Request a tool, prompt, or skill"
+                        triggerClassName="inline-flex items-center gap-1.5 text-[14px] text-white/70 hover:text-white"
+                      />
+                    </li>
                   )}
                 </ul>
 

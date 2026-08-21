@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FeedbackButton } from '@/components/tools/FeedbackButton'
 import { BookmarkButton } from '@/components/ui/BookmarkButton'
+import { RequestButton } from '@/components/ui/RequestButton'
 import { formatUpdatedDate } from '@/lib/site'
 import { getCategory } from '@/lib/tools/categories'
 import type { Tool } from '@/lib/tools/types'
@@ -106,6 +107,18 @@ export function ToolShell({ tool, children }: { tool: Tool; children: React.Reac
               How it works
               <ArrowRight className="size-3.5" aria-hidden="true" />
             </Link>
+            {/* Same small text-link treatment as "How it works" beside it —
+                a secondary path, not a second CTA competing with the tool
+                itself below. Defaults to a tool request (this page's own
+                context) but the dialog's kind selector lets a visitor ask
+                for a prompt or a skill instead without leaving this page. */}
+            <RequestButton
+              defaultKind="tool_request"
+              affectedTool={tool.title}
+              trackContext={tool.slug}
+              triggerLabel="Request a tool"
+              triggerClassName="flex items-center gap-1.5 text-[14px] font-medium text-violet-700 underline decoration-1 underline-offset-4 hover:text-violet-600"
+            />
             {/* Makes /faq's "each tool carries a real last-reviewed date on
                 its own page" claim true — see lib/site.ts's formatUpdatedDate
                 docblock. */}
@@ -123,7 +136,7 @@ export function ToolShell({ tool, children }: { tool: Tool; children: React.Reac
           the centred header div above so neither inherits that div's
           text-align/flex context by accident. */}
       <BookmarkButton />
-      <FeedbackButton toolSlug={tool.slug} toolTitle={tool.h1} />
+      <FeedbackButton toolSlug={tool.slug} toolTitle={tool.h1} category={category?.name} />
 
       {/* 3. THE TOOL — the page's centre of gravity, immediately after the
              header. Measured at 1366x768: the workspace now starts ~350px down

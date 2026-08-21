@@ -11,13 +11,13 @@ import Link from 'next/link'
 import { BrandIcon, brandForTool, categoryBrand } from '@/components/ui/BrandIcon'
 import { Icon } from '@/components/ui/Icon'
 import { PromptCard } from '@/components/ui/PromptCard'
+import { RequestButton } from '@/components/ui/RequestButton'
 import { getPromptsByCategory } from '@/lib/prompts/registry'
 import type { Prompt, PromptCategory } from '@/lib/prompts/types'
 import { getTool } from '@/lib/tools/registry'
 import { resolveServiceLink } from '@/lib/tools/service-links'
 import { HowToUseButton } from './HowToUseButton'
 import { PromptCopyBlock } from './PromptCopyBlock'
-import { RequestPromptButton } from './RequestPromptButton'
 import { StaleVerificationNotice } from './StaleVerificationNotice'
 
 const TILE_BG: Record<PromptCategory['tile'], string> = {
@@ -245,7 +245,12 @@ export function PromptDetailShell({
             targetTools={prompt.targetTools}
             hasVariables={prompt.variables.length > 0}
           />
-          <RequestPromptButton category={category.name} />
+          <RequestButton
+            defaultKind="prompt_request"
+            affectedTool={category.name}
+            trackContext={prompt.slug}
+            triggerLabel="Request a prompt"
+          />
         </div>
 
         <PromptCopyBlock

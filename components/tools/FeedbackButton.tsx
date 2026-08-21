@@ -1,6 +1,6 @@
 'use client'
 
-import { MessageSquarePlus, ShieldCheck, TriangleAlert, X } from 'lucide-react'
+import { MessageSquarePlus, ShieldCheck, Star, TriangleAlert, X } from 'lucide-react'
 import { useEffect, useId, useRef, useState } from 'react'
 import { trackToolEvent } from '@/lib/analytics'
 import {
@@ -8,6 +8,7 @@ import {
   FEEDBACK_MESSAGE_MIN,
   validateFeedback,
 } from '@/lib/tools/feedback/logic'
+import { getVisitorId } from '@/lib/visitor'
 
 /**
  * A fixed top-left icon FAB — the fourth corner, completing the set
@@ -38,16 +39,23 @@ import {
  *
  * Dialog semantics follow the same contract as components/layout/MobileDrawer.tsx:
  * focus enters on open, Escape closes, focus returns to the trigger on close.
+ *
+ * The star rating is optional (SCULT Studio's feedback endpoint accepts
+ * `rating: null`) — nothing forces a visitor to pick one before submitting
+ * a message.
  */
 export function FeedbackButton({
   toolSlug,
   toolTitle,
+  category,
 }: {
   toolSlug: string
   toolTitle: string
+  category?: string
 }) {
   const [open, setOpen] = useState(false)
   const [message, setMessage] = useState('')
+  const [rating, setRating] = useState<number | undefined>(undefined)
   const [email, setEmail] = useState('')
   const [company, setCompany] = useState('') // honeypot
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
@@ -62,6 +70,7 @@ export function FeedbackButton({
 
   function reset(): void {
     setMessage('')
+    setRating(undefined)
     setEmail('')
     setCompany('')
     setStatus('idle')
@@ -126,9 +135,12 @@ export function FeedbackButton({
     const validated = validateFeedback({
       toolSlug,
       toolTitle,
+      category,
       pageUrl: typeof window !== 'undefined' ? window.location.href : '',
       message,
+      rating,
       email,
+      visitorId: getVisitorId(),
       company,
     })
     if ('error' in validated) {
@@ -260,6 +272,36 @@ export function FeedbackButton({
                   className="mt-1.5 w-full resize-none rounded-card border border-line-grey bg-offwhite px-3 py-2.5 text-[14px] text-ink placeholder:text-ink-subtle focus:border-violet-600 focus:outline-none focus:ring-2 focus:ring-violet-100"
                   placeholder="Tell us what happened, or what you'd like to see."
                 />
+
+                <div
+                  role="radiogroup"
+                  aria-label="Rating"
+                  className="mt-3.5 flex items-center gap-1"
+                >
+                  {([1, 2, 3, 4, 5] as const).map((n) => (
+                    <button
+                      key={n}
+                      type="button"
+                      role="radio"
+                      aria-checked={rating === n}
+                      aria-label={`${n} star${n === 1 ? '' : 's'}`}
+                      onClick={() => setRating(rating === n ? undefined : n)}
+                      className="p-0.5"
+                    >
+                      <Star
+                        className={`size-5 ${
+                          rating !== undefined && n <= rating
+                            ? 'fill-cta text-cta'
+                            : 'text-line-grey'
+                        }`}
+                        aria-hidden="true"
+                      />
+                    </button>
+                  ))}
+                  <span className="ml-1 text-[12px] text-ink-subtle">
+                    {rating ? `${rating}/5` : 'optional'}
+                  </span>
+                </div>
 
                 <label
                   htmlFor={emailId}

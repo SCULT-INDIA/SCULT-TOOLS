@@ -3,10 +3,11 @@
  * run on the client (instant inline errors) and the server (the only copy
  * that actually matters, since a client check is trivially bypassed).
  *
- * Deliberately tiny: a message and where it came from, plus an optional
- * reply-to email. No rating scale, no category picker — those are product
- * decisions nobody asked for; this just gets a visitor's words to
- * connect@scult.in.
+ * `category` and `rating` exist because SCULT Studio's feedback endpoint
+ * (`lib/studio.ts`) accepts both — `category` defaults to "General" there if
+ * omitted, and `rating` is genuinely optional (no rating UI is forced on the
+ * visitor). `visitorId` is opaque, from `lib/visitor.ts`, never validated
+ * beyond a length cap.
  */
 
 export const FEEDBACK_MESSAGE_MAX = 2000
@@ -15,9 +16,12 @@ export const FEEDBACK_MESSAGE_MIN = 5
 export interface FeedbackInput {
   toolSlug: string
   toolTitle: string
+  category?: string
   pageUrl: string
   message: string
+  rating?: number
   email?: string
+  visitorId?: string
   /** Honeypot field — real users never fill it in; a non-empty value means a bot. */
   company?: string
 }
@@ -25,9 +29,12 @@ export interface FeedbackInput {
 export interface ValidatedFeedback {
   toolSlug: string
   toolTitle: string
+  category?: string
   pageUrl: string
   message: string
+  rating?: number
   email?: string
+  visitorId?: string
 }
 
 export type FeedbackValidationError =
@@ -35,6 +42,7 @@ export type FeedbackValidationError =
   | 'message-too-short'
   | 'message-too-long'
   | 'invalid-email'
+  | 'invalid-rating'
   | 'missing-tool'
 
 /** Simple, deliberately permissive email shape check — this only gates a reply-to header, never an account. */
@@ -62,21 +70,41 @@ export function validateFeedback(
     email = trimmed
   }
 
+  let rating: number | undefined
+  if (input.rating !== undefined && input.rating !== null) {
+    const n = Number(input.rating)
+    if (!Number.isInteger(n) || n < 1 || n > 5) return { error: 'invalid-rating' }
+    rating = n
+  }
+
   const toolTitle =
     typeof input.toolTitle === 'string' && input.toolTitle.trim() !== ''
       ? input.toolTitle.trim()
       : input.toolSlug
 
+  const category =
+    typeof input.category === 'string' && input.category.trim() !== ''
+      ? input.category.trim()
+      : undefined
+
   const pageUrl =
     typeof input.pageUrl === 'string' ? input.pageUrl.trim().slice(0, 500) : ''
+
+  const visitorId =
+    typeof input.visitorId === 'string' && input.visitorId.trim() !== ''
+      ? input.visitorId.trim().slice(0, 200)
+      : undefined
 
   return {
     data: {
       toolSlug: input.toolSlug.trim(),
       toolTitle,
+      category,
       pageUrl,
       message,
+      rating,
       email,
+      visitorId,
     },
   }
 }
@@ -93,5 +121,7 @@ export function feedbackErrorMessage(error: FeedbackValidationError): string {
       return `Keep it under ${FEEDBACK_MESSAGE_MAX} characters.`
     case 'invalid-email':
       return 'That email address does not look right.'
+    case 'invalid-rating':
+      return 'Could not submit that.'
   }
 }

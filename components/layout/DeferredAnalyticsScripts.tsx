@@ -33,18 +33,28 @@ const FALLBACK_DELAY_MS = 4000
  * `FALLBACK_DELAY_MS` without scrolling, clicking, touching, or pressing a
  * key no longer registers a GA4/Clarity pageview. Every other real visit —
  * which is to say, every visit that does anything at all — still does.
+ *
+ * SCULT Studio's `track.js` (studio.scult.in) is mounted here too, same
+ * deferred-until-interaction treatment as GA4/Clarity above — this is the
+ * one place any third-party script gets loaded in this codebase, and
+ * `track.js` is no different: an anonymous visitor id in `localStorage`, a
+ * session id in `sessionStorage`, no cookies. It fires its own pageview on
+ * load and on every client-side route change internally; nothing else in
+ * this app has to drive that.
  */
 export function DeferredAnalyticsScripts({
   gaId,
   clarityId,
+  studioSiteId,
 }: {
   gaId: string
   clarityId: string
+  studioSiteId: string
 }) {
   const [active, setActive] = useState(false)
 
   useEffect(() => {
-    if (active || (!gaId && !clarityId)) return
+    if (active || (!gaId && !clarityId && !studioSiteId)) return
 
     function trigger() {
       setActive(true)
@@ -62,7 +72,7 @@ export function DeferredAnalyticsScripts({
       }
       window.clearTimeout(timer)
     }
-  }, [active, gaId, clarityId])
+  }, [active, gaId, clarityId, studioSiteId])
 
   if (!active) return null
 
@@ -84,6 +94,14 @@ gtag('js',new Date());gtag('config','${gaId}',{cookie_domain:'.scult.in'});`}
       {clarityId ? (
         <Script
           src={`https://www.clarity.ms/tag/${clarityId}`}
+          strategy="afterInteractive"
+        />
+      ) : null}
+
+      {studioSiteId ? (
+        <Script
+          src="https://studio.scult.in/track.js"
+          data-site={studioSiteId}
           strategy="afterInteractive"
         />
       ) : null}
