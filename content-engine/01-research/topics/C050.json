@@ -1,0 +1,218 @@
+{
+  "candidate_id": "C050",
+  "topic": "The real impact of page speed on e-commerce conversion, with actual data",
+  "status": "accepted",
+  "target_keyword": "page speed ecommerce conversion data",
+  "secondary_keywords": [
+    "website speed and conversion rate",
+    "site speed ecommerce sales impact",
+    "ecommerce page load time statistics"
+  ],
+  "long_tail_keywords": [
+    "how much does 1 second page load cost ecommerce conversions",
+    "what conversion rate lift from 0.1 second faster page",
+    "ecommerce page load time conversion rate benchmark 2026"
+  ],
+  "question_keywords": [
+    "how does page speed affect conversion rate",
+    "what is a good page load time for an ecommerce site",
+    "does site speed affect mobile bounce rate",
+    "is the deloitte google page speed study still valid"
+  ],
+  "comparison_keywords": [
+    "gtmetrix vs pagespeed insights vs webpagetest",
+    "mobile vs desktop page speed conversion impact",
+    "1 second vs 5 second load time conversion rate"
+  ],
+  "how_to_keywords": [
+    "how to test ecommerce website speed for free",
+    "how to improve shopify site speed for conversions",
+    "how to check site speed before a sale event"
+  ],
+  "problem_keywords": [
+    "slow loading website losing sales",
+    "high bounce rate mobile ecommerce checkout",
+    "poor core web vitals ecommerce"
+  ],
+  "commercial_keywords": [
+    "best free website speed test tool",
+    "site speed optimization service ecommerce",
+    "page speed audit for online store"
+  ],
+  "entities": [
+    "Google",
+    "Deloitte",
+    "Akamai",
+    "SOASTA",
+    "Amazon",
+    "Walmart",
+    "Google PageSpeed Insights",
+    "GTmetrix",
+    "Cloudflare",
+    "Portent"
+  ],
+  "audience": "Small-to-mid ecommerce store owners, in-house ecommerce/marketing teams, CRO specialists and web developers/agencies pitching performance work",
+  "countries": [],
+  "topic_cluster": "Site performance and conversion rate optimization",
+  "connects_to_tools": [
+    "website-speed-test"
+  ],
+  "connects_to_prompts": [
+    "ecommerce-product"
+  ],
+  "connects_to_service": "Web development (site speed/performance optimization)",
+  "primary_intent": "Informational",
+  "secondary_intent": "Tool discovery",
+  "scores": {
+    "demand": 8,
+    "intent": 7,
+    "relevance": 9,
+    "question_density": 6,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 9,
+    "competitive_gap": 4,
+    "conversion_potential": 8,
+    "evidence_quality": 9,
+    "total": 73
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "How much does a 1-second delay in page load actually cost an ecommerce store in conversions?",
+      "answer_summary": "A widely-cited Deloitte study of 37 retail sites found a 1-second delay costs the average ecommerce store about 7% of conversions; Akamai/SOASTA data on ~10 billion visits found a 1-second delay can cut conversions by up to 22%.",
+      "sources": [
+        "https://www.btng.studio/articles/page-speed-ecommerce-conversions-guide/",
+        "https://note.com/masakazu_urabe/n/nef7804fa20f9"
+      ]
+    },
+    {
+      "question": "What conversion lift can I expect from making my mobile site just 0.1 seconds faster?",
+      "answer_summary": "The Google/Deloitte 'Milliseconds Make Millions' study (37 brands, 30-day sample, 90% confidence) found a 0.1s mobile speed improvement lifted retail conversion 8.4% and average order value 9.2%.",
+      "sources": [
+        "https://www.btng.studio/articles/page-speed-ecommerce-conversions-guide/",
+        "https://note.com/masakazu_urabe/n/nef7804fa20f9"
+      ]
+    },
+    {
+      "question": "What's considered a 'good' page load time for an ecommerce site in 2026?",
+      "answer_summary": "Guides converge on under 3 seconds as acceptable and 1-2 seconds as the target, noting pages loading in 1-2 seconds see the highest average conversion rates (~3.05%).",
+      "sources": [
+        "https://queue-it.com/blog/ecommerce-website-speed-statistics/",
+        "https://www.hostinger.com/tutorials/gtmetrix-for-testing-websites-speed/",
+        "https://mirasvit.com/blog/page-speed-conversion-rate.html"
+      ]
+    },
+    {
+      "question": "How does load time affect mobile bounce rate specifically?",
+      "answer_summary": "Google/SOASTA's machine-learning analysis of mobile ecommerce found bounce probability rises 32% as load time goes from 1s to 3s, and 90% by 5 seconds; Google's DoubleClick research found 53% of mobile visits abandon a page taking over 3 seconds.",
+      "sources": [
+        "https://www.eggknite.com/reports/web-performance-2026",
+        "https://note.com/masakazu_urabe/n/nef7804fa20f9"
+      ]
+    },
+    {
+      "question": "Is GTmetrix or Google PageSpeed Insights better for testing an ecommerce store's speed?",
+      "answer_summary": "Guides note GTmetrix combines Google PageSpeed Insights and YSlow scoring in one report, useful for a fuller picture, while PageSpeed Insights is Google's own free tool; both are commonly used together.",
+      "sources": [
+        "https://www.debugbear.com/software/gtmetrix-speed-test",
+        "https://amasty.com/blog/gtmetrix-overview-and-user-guide/"
+      ]
+    },
+    {
+      "question": "How much revenue did Amazon and Walmart actually attribute to page-speed improvements?",
+      "answer_summary": "Amazon has reported every 100ms of added latency cost it about 1% in sales; Walmart reported each 1-second load-time improvement raised conversions by about 2%.",
+      "sources": [
+        "https://cybertising.com/blog/need-for-speed-milliseconds-make-millions",
+        "https://portent.com/blog/analytics/research-site-speed-hurting-everyones-revenue.htm"
+      ]
+    },
+    {
+      "question": "What's the real conversion-rate gap between a store that loads in 1 second vs one that loads in 5 seconds?",
+      "answer_summary": "Multiple sources cite ecommerce sites loading in 1 second converting roughly 2.5x higher than sites loading in 5 seconds.",
+      "sources": [
+        "https://nitropack.io/blog/how-page-speed-affects-conversion/",
+        "https://fleexy.dev/blog/how-page-speed-affects-conversion-rates-study/"
+      ]
+    },
+    {
+      "question": "How often should I re-test my store's speed, especially around big sales events?",
+      "answer_summary": "Practical guides recommend daily speed checks during high-traffic sales periods since load spikes can degrade performance right when conversion stakes are highest.",
+      "sources": [
+        "https://dohost.us/index.php/2025/07/13/how-to-test-and-analyze-website-speed-gtmetrix-pagespeed-insights-webpagetest/"
+      ]
+    },
+    {
+      "question": "Do these older (2017-2020) page-speed studies still hold up for today's JS-heavy ecommerce sites?",
+      "answer_summary": "Multiple 2025-2026 recap articles re-cite the same Deloitte/Google, Akamai, and SOASTA figures as still-current benchmarks, suggesting the industry treats them as durable rather than superseded.",
+      "sources": [
+        "https://www.eggknite.com/reports/web-performance-2026",
+        "https://cazyweb.com/research/website-performance-and-conversion-evidence/"
+      ]
+    },
+    {
+      "question": "What free tools can a small Shopify or WooCommerce store use to check site speed?",
+      "answer_summary": "Google PageSpeed Insights, GTmetrix, WebPageTest, and Pingdom are the commonly recommended free options for ecommerce site owners.",
+      "sources": [
+        "https://dohost.us/index.php/2025/07/13/how-to-test-and-analyze-website-speed-gtmetrix-pagespeed-insights-webpagetest/",
+        "https://www.conversionbox.ai/website-speed-test/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Ecommerce page speed: why 1 second costs you 7% in sales",
+      "url": "https://www.btng.studio/articles/page-speed-ecommerce-conversions-guide/",
+      "source_type": "industry publication",
+      "used_for": "Deloitte/Google study figures"
+    },
+    {
+      "title": "[Research] The Impact of Speed on E-commerce Revenue: 6 Historical Pieces of Evidence from Google, Deloitte, Akamai, and Others",
+      "url": "https://note.com/masakazu_urabe/n/nef7804fa20f9",
+      "source_type": "industry publication",
+      "used_for": "cross-referencing multiple named studies (Deloitte, Google/SOASTA, Akamai)"
+    },
+    {
+      "title": "93 Powerful Ecommerce Site Speed Statistics for 2026",
+      "url": "https://queue-it.com/blog/ecommerce-website-speed-statistics/",
+      "source_type": "industry publication",
+      "used_for": "conversion-rate-by-load-time benchmark"
+    },
+    {
+      "title": "How Website Performance Affects Conversion Rates (Cloudflare)",
+      "url": "https://www.cloudflare.com/learning/performance/more/website-performance-conversion-rates/",
+      "source_type": "company docs",
+      "used_for": "corroborating latency-conversion relationship"
+    },
+    {
+      "title": "Web Performance Report 2026 (EGGKNITE)",
+      "url": "https://www.eggknite.com/reports/web-performance-2026",
+      "source_type": "industry publication",
+      "used_for": "bounce rate/mobile load time data"
+    },
+    {
+      "title": "Site Speed is (Still) Impacting Your Conversion Rate (Portent)",
+      "url": "https://portent.com/blog/analytics/research-site-speed-hurting-everyones-revenue.htm",
+      "source_type": "industry publication",
+      "used_for": "Amazon/Walmart figures"
+    },
+    {
+      "title": "The GTmetrix Speed Test Tool: A Detailed Guide (DebugBear)",
+      "url": "https://www.debugbear.com/software/gtmetrix-speed-test",
+      "source_type": "company docs",
+      "used_for": "tool comparison guidance"
+    },
+    {
+      "title": "How to Run a Website Speed Test with GTmetrix in 2026 (Hostinger)",
+      "url": "https://www.hostinger.com/tutorials/gtmetrix-for-testing-websites-speed/",
+      "source_type": "company docs",
+      "used_for": "load-time target benchmarks"
+    },
+    {
+      "title": "Website Performance and Conversion: A Review of the Evidence (cazyweb)",
+      "url": "https://cazyweb.com/research/website-performance-and-conversion-evidence/",
+      "source_type": "industry publication",
+      "used_for": "evidence-review corroboration"
+    }
+  ]
+}

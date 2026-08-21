@@ -1,0 +1,1002 @@
+[
+  {
+    "article_num": 1,
+    "candidate_id": "C102",
+    "slug": "how-to-find-ai-answer-engine-citations",
+    "title": "How to Find AI Answer Engine Citations From ChatGPT, Perplexity & AI Overviews",
+    "word_count": 4578,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-001.md",
+    "notes": "Strong evidence brief plus supplementary WebSearch on 2026 AI visibility tools (Semrush free checker, Frase roundup). All FAQ answers grounded in brief sources or well-established general knowledge; no fabricated stats. One data-and-evidence bullet explicitly flags that no universal cross-industry citation-rate benchmark exists."
+  },
+  {
+    "article_num": 2,
+    "candidate_id": "C006",
+    "slug": "rank-on-google-not-cited-by-ai",
+    "title": "Why You Can Rank #1 on Google and Still Not Be Cited by AI",
+    "word_count": 4369,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-002.md",
+    "notes": "Strong, data-rich brief (Ahrefs 1M-keyword study, CiteLens 320-query study, HackerNoon 12% overlap figure) used directly. Several FAQ answers explicitly flagged as 'evidence not sufficiently verified' where the brief had no data (e.g. Claude-specific overlap, freshness effects, geographic scope)."
+  },
+  {
+    "article_num": 3,
+    "candidate_id": "C004",
+    "slug": "schema-markup-for-ai-search",
+    "title": "Schema Markup for AI Search: What Actually Helps vs What Does Nothing",
+    "word_count": 4030,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-003.md",
+    "notes": "Brief marked 'moderate' evidence strength; supplemented with WebSearch confirming the 81%/65% AI-cited-page schema-usage figures and JSON-LD-adoption framing. Article explicitly and repeatedly distinguishes correlational vendor studies from Google's own official 'not required' statement, and flags the causal-vs-correlational gap as unverified rather than stating it as fact."
+  },
+  {
+    "article_num": 4,
+    "candidate_id": "C009",
+    "slug": "faq-schema-vs-faq-page-ai",
+    "title": "FAQ Schema vs a Real FAQ Page: What AI Answer Engines Actually Parse",
+    "word_count": 3912,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-004.md",
+    "notes": "Overlaps topically with article-007 (C045, the Google FAQ rich-result deprecation) since both briefs share sources on the same 2026 event -- deliberately differentiated: this article centers on the JSON-LD-tokenization/visible-text distinction and dual-layer formatting advice, while article-007 centers on the deprecation timeline and 'should I remove it' decision. Flagged the 'LLMs tokenize JSON-LD as raw text' claim as third-party technical analysis, not vendor-confirmed, in both the body and an FAQ answer."
+  },
+  {
+    "article_num": 5,
+    "candidate_id": "C033",
+    "slug": "validate-startup-idea-before-building",
+    "title": "How to Validate a Startup Idea Before Building Anything",
+    "word_count": 4172,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-005.md",
+    "notes": "Supplemented brief with WebSearch confirming 2026-era interview-count and AI-prototyping-tool guidance. connects_to_prompts in brief listed generic 'business'/'marketing' categories (not in the explicit 43-category list given in the task, but present in the brief) -- linked to /prompts/business and /prompts/marketing on that basis rather than inventing a slug. Flagged the lack of a standardized landing-page conversion-rate benchmark as unverified."
+  },
+  {
+    "article_num": 6,
+    "candidate_id": "C008",
+    "slug": "check-if-ai-crawlers-can-access-my-site",
+    "title": "How to Check If GPTBot, ClaudeBot, or Google-Extended Can Access Your Site",
+    "word_count": 4134,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-006.md",
+    "notes": "Strong evidence brief (OpenAI/Anthropic official docs) plus WebSearch confirming the current 2026 training-vs-retrieval-bot taxonomy and the Cloudflare/Perplexity undeclared-crawler finding. No service connection was given in the brief beyond 'Web Development / technical SEO audits', which was linked naturally in the closing paragraph."
+  },
+  {
+    "article_num": 7,
+    "candidate_id": "C045",
+    "slug": "why-faq-schema-not-showing-rich-results",
+    "title": "Why FAQ Rich Results Disappeared From Google Search in 2026",
+    "word_count": 4318,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-007.md",
+    "notes": "Companion piece to article-004 (C009) -- differentiated by focusing on the deprecation timeline, the 2023-restriction backstory, and the 'should I remove it' decision rather than the JSON-LD-parsing mechanics. Added prompts link (/prompts/seo-geo) and service link (web-development) per the brief's connects_to_prompts/connects_to_service fields."
+  },
+  {
+    "article_num": 8,
+    "candidate_id": "C108",
+    "slug": "schema-markup-ecommerce-product-pages",
+    "title": "What Schema Markup Actually Does for Ecommerce Product Pages",
+    "word_count": 4287,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-008.md",
+    "notes": "Primary sources are Google's and Schema.org's own official documentation (strong evidence). Supplemented with WebSearch confirming current 2026 GTIN/Merchant Center requirements and the ~17% CTR figure. The brief's two Hacker News Algolia-search sources were folded into general framing rather than cited as specific individual threads, since the brief itself only pointed to a search-results URL rather than a specific discussion; treated cautiously and paraphrased rather than over-attributed."
+  },
+  {
+    "article_num": 9,
+    "candidate_id": "C022",
+    "slug": "ai-agent-customer-support-small-business",
+    "title": "How Small Businesses Are Actually Deploying AI Agents for Customer Support",
+    "word_count": 4437,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-009.md",
+    "notes": "Most statistics trace to a single aggregated industry source (Digital Applied's 2026 statistics compilation) -- flagged explicitly in the Data and evidence section that independent replication of each individual figure wasn't separately located. Supplemented with WebSearch for current 2026 pricing specifics (Tidio/Gorgias/Intercom Fin) to make the cost comparison section concrete and current."
+  },
+  {
+    "article_num": 10,
+    "candidate_id": "C038",
+    "slug": "topical-authority-ai-search-vs-backlinks",
+    "title": "Topical Authority vs Backlinks: Which Actually Drives AI Search Citations",
+    "word_count": 4391,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-010.md",
+    "notes": "Brief explicitly marked 'moderate' evidence strength -- this is the weakest-evidence article of the ten. The headline 2.3x citation-rate figure and the 25-30-article threshold both trace to single practitioner sources (Ziptie, RankArise) without independent replication found; this is stated directly in the Data and evidence section and repeated in relevant FAQ answers rather than presented as settled fact. connects_to_prompts in the brief ('content cluster / topical map prompts') was not an exact category slug from the given 43-category list, so linked to the real, closely-related /prompts/seo-geo category instead of inventing a slug."
+  },
+  {
+    "article_num": 11,
+    "candidate_id": "C007",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-011.md",
+    "slug": "robots-txt-ai-crawler-directives",
+    "title": "Robots.txt AI Crawler Directives: What GPTBot, ClaudeBot & PerplexityBot Actually Respect",
+    "word_count": 4489,
+    "question_count": 50,
+    "notes": "Strong evidence brief; supplemented with additional web research on PerplexityBot/Perplexity-User distinction and Applebot-Extended (Apple's own support doc + cside.com), both now cited in body and FAQ. No weak spots flagged."
+  },
+  {
+    "article_num": 12,
+    "candidate_id": "C034",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-012.md",
+    "slug": "ai-wrapper-vs-defensible-product",
+    "title": "AI Wrapper vs Defensible Product: What Actually Separates Them",
+    "word_count": 4805,
+    "question_count": 50,
+    "notes": "Added Harvey AI case study and 2026 revenue-multiple data via web research (sacra.com, valueaddvc.com) beyond the original brief to strengthen the data/evidence section. Service link connects to ai-agents-automation as specified; connects_to_prompts (business, development) linked via /prompts/business and /prompts/development."
+  },
+  {
+    "article_num": 13,
+    "candidate_id": "C001",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-013.md",
+    "slug": "how-does-chatgpt-search-choose-sources",
+    "title": "How Does ChatGPT Search Choose Its Sources? The Real Citation Mechanics",
+    "word_count": 4309,
+    "question_count": 50,
+    "notes": "Evidence strength was 'moderate' per brief; supplemented with additional web research (contently, everything-pr aggregate stats, ahrefs top-1000-pages breakdown, pixis GEO guide) to round out FAQ depth. A handful of FAQ answers (freshness/recency, language/country variance, paid promotion) explicitly marked 'evidence not sufficiently verified' rather than guessed."
+  },
+  {
+    "article_num": 14,
+    "candidate_id": "C020",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-014.md",
+    "slug": "ai-coding-subscription-worth-it-small-team",
+    "title": "Is an AI Coding Subscription Worth It for a Small Team? A Real Cost/ROI Breakdown",
+    "word_count": 4657,
+    "question_count": 50,
+    "notes": "Updated 2026 pricing (Cursor Business/Premium, Claude Code Team tiers, Copilot Business/Enterprise) via fresh web research since the brief's cited pricing was from an earlier point in 2026. connects_to_tools (cursor, claude-code, github-copilot) linked as prompt-category pages since those aren't among the 15 scult.in tools but are listed prompt categories."
+  },
+  {
+    "article_num": 15,
+    "candidate_id": "C031",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-015.md",
+    "slug": "ai-wrapper-saas-pricing",
+    "title": "How Indie Hackers Are Actually Pricing AI Wrapper SaaS Products in 2026",
+    "word_count": 4814,
+    "question_count": 50,
+    "notes": "Supplemented with 2026 hybrid-pricing/margin-target research (causo.ai) beyond the brief. Overlaps thematically with article 012 (AI wrapper defensibility) but this one is pricing-specific with distinct case studies (Photo AI margin breakdown, $220 MRR contrast) — kept content non-duplicative."
+  },
+  {
+    "article_num": 16,
+    "candidate_id": "C036",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-016.md",
+    "slug": "solo-founder-customer-support-no-team",
+    "title": "How Solo Founders Handle Customer Support Without a Team",
+    "word_count": 4628,
+    "question_count": 50,
+    "notes": "Added current 2026 Help Scout/Crisp/Intercom pricing comparison via web research to strengthen the tool-cost section beyond the brief's more general tool list. No major evidence gaps."
+  },
+  {
+    "article_num": 17,
+    "candidate_id": "C050",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-017.md",
+    "slug": "page-speed-ecommerce-conversion-data",
+    "title": "The Real Impact of Page Speed on E-Commerce Conversion (With Actual Data)",
+    "word_count": 4388,
+    "question_count": 50,
+    "notes": "Confirmed and expanded the Deloitte/Google 'Milliseconds Make Millions' study methodology details via web.dev's own case-study page. Strong evidence overall; overlaps in subject matter with article 018 (web performance thresholds) but this one is ecommerce-conversion-data focused per its distinct brief."
+  },
+  {
+    "article_num": 18,
+    "candidate_id": "C090",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-018.md",
+    "slug": "how-fast-does-a-website-need-to-be",
+    "title": "How Fast Does a Website Need to Be? Core Web Vitals Thresholds and Diminishing Returns",
+    "word_count": 4643,
+    "question_count": 50,
+    "notes": "Supplemented with web research on diminishing-returns pattern (Portent 100M-pageview analysis) and lab-vs-field data mechanics beyond the brief's four sources. Fixed one typo caught during review (a garbled 'Lighthouel' in FAQ 28)."
+  },
+  {
+    "article_num": 19,
+    "candidate_id": "C093",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-019.md",
+    "slug": "how-much-should-a-small-business-budget-for-a-website",
+    "title": "How Much Should a Small Business Budget for a Website? Real Numbers",
+    "word_count": 4547,
+    "question_count": 50,
+    "notes": "One seed question in the brief cited a Reddit thread by title only with no URL ('How much should a small business realistically budget...'); omitted that specific unverifiable citation rather than fabricating a URL. Added current DIY/freelancer/agency pricing benchmarks and maintenance-cost breakdown via web research. connects_to_prompts in brief were generic descriptions, not exact slugs, so linked to the closest real categories (branding, startup) instead of inventing slugs."
+  },
+  {
+    "article_num": 20,
+    "candidate_id": "C103",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-020.md",
+    "slug": "wikipedia-reddit-ai-citation-dominance",
+    "title": "Why Wikipedia and Reddit Dominate AI Citations (And What It Means for Small Sites)",
+    "word_count": 5108,
+    "question_count": 50,
+    "notes": "Slightly over the ~4,500 target (5,108 words) because the topic had unusually deep, well-sourced evidence (5W audit methodology, cross-platform citation-weighting differences); left as-is rather than padding or cutting substance. Confirmed the 5W audit's dataset count discrepancy (nine vs. later-updated eleven datasets) and noted both figures accurately."
+  },
+  {
+    "article_num": 21,
+    "candidate_id": "C056",
+    "slug": "customer-support-automation-gone-wrong",
+    "title": "Customer Support Automation Gone Wrong: What Klarna, Air Canada and Cursor Actually Learned",
+    "word_count": 4950,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-021.md",
+    "notes": "Strong evidence brief (Klarna, Air Canada tribunal, Cursor). One exact Klarna headcount-after-rehiring figure flagged as not independently verifiable. Fixed a stray non-ASCII character that appeared mid-draft (Q44) before finalizing."
+  },
+  {
+    "article_num": 22,
+    "candidate_id": "C083",
+    "slug": "using-ai-for-exam-prep-without-hurting-learning",
+    "title": "Using AI for Exam Prep Without Hurting Your Learning (What the Research Actually Shows)",
+    "word_count": 4550,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-022.md",
+    "notes": "Flagged explicitly that no large-scale, replicated exam-score study exists to pair with MIT's small-sample EEG study; noted the Nature-journal retraction as a reason for caution. India competitive-exam AI tooling (Q49) explicitly marked unverified rather than naming specific products."
+  },
+  {
+    "article_num": 23,
+    "candidate_id": "C002",
+    "slug": "crawled-vs-cited-ai-search",
+    "title": "Crawled vs. Cited: Why AI Search Engines Read Your Site But Never Mention It",
+    "word_count": 4460,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-023.md",
+    "notes": "Evidence quality was rated 'moderate' in the brief; flagged that no hard crawled-to-cited conversion-rate statistic exists industry-wide, and that llms.txt's actual use by AI providers remains unconfirmed. Linked to the site's real AI Visibility Checker and Schema Markup Generator tools."
+  },
+  {
+    "article_num": 24,
+    "candidate_id": "C021",
+    "slug": "ai-agent-vs-chatbot",
+    "title": "AI Agent vs Chatbot: What Actually Counts as an Agent (and What's Just Agent Washing)",
+    "word_count": 4680,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-024.md",
+    "notes": "connects_to_prompts value 'ai-agent-prompts' from the brief doesn't match a real site category, so linked to the verified real category 'ai-engineering' instead. Salesforce Agentforce and OWASP claims explicitly flagged as not independently verified against the specific criteria discussed."
+  },
+  {
+    "article_num": 25,
+    "candidate_id": "C092",
+    "slug": "what-breaks-a-no-code-app-at-scale",
+    "title": "What Breaks a No-Code App at Scale: Bubble and Airtable's Real Limits",
+    "word_count": 4550,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-025.md",
+    "notes": "Supplemented Reddit-only brief with real official documentation (manual.bubble.io hard limits page, support.airtable.com plan limits) found via additional web research, which resolved a numeric conflict between two secondary Airtable sources. The 'no-code breaks at 10K users' figure is explicitly flagged as unverified community sentiment, not a benchmarked number. Glide/Softr/Xano comparisons in FAQ explicitly marked as not independently verified since sources focused on Bubble/Airtable only."
+  },
+  {
+    "article_num": 26,
+    "candidate_id": "C094",
+    "slug": "google-ads-cost-by-industry",
+    "title": "Google Ads Cost by Industry: Real 2026 Benchmarks and Small-Business Budgets",
+    "word_count": 4600,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-026.md",
+    "notes": "The brief's WordStream source URL was generic (wordstream.com/blog); additional research located and fetched the actual 2026 benchmarks article for the real per-industry CPC/CTR/CVR/CPL table, which is now the article's core data section. India-specific benchmark data was not found and is explicitly flagged as not directly available for non-US markets."
+  },
+  {
+    "article_num": 27,
+    "candidate_id": "C101",
+    "slug": "midjourney-vs-flux-vs-nano-banana-commercial-use",
+    "title": "Midjourney vs Flux vs Nano Banana: Commercial Use, Licensing and Legal Risk Compared",
+    "word_count": 4750,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-027.md",
+    "notes": "The brief flagged Midjourney's own plan-comparison help article as unfetchable (403); additional research via a secondary source (eesel AI) filled this gap with 2026 pricing and the $1M revenue commercial-tier threshold, explicitly noted as sourced secondhand rather than from midjourney.com directly, with a recommendation in the FAQ to confirm on Midjourney's own site for high-stakes decisions."
+  },
+  {
+    "article_num": 28,
+    "candidate_id": "C010",
+    "slug": "ai-overviews-impact-on-ctr",
+    "title": "AI Overviews and CTR: How Much Traffic You've Actually Lost (And the 2026 Recovery Data)",
+    "word_count": 4480,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-028.md",
+    "notes": "Brief's connects_to_service was an ambiguous 'Local SEO / Google Ads' string; resolved to link both real service pages (local-seo-services and google-ads-management) rather than inventing one. Flagged that no single figure exists for AI-Overview-specific traffic loss isolated from other concurrent ranking factors."
+  },
+  {
+    "article_num": 29,
+    "candidate_id": "C019",
+    "slug": "ai-pair-programming-code-review",
+    "title": "How AI Pair Programming Is Changing What Code Review Means on a Team",
+    "word_count": 5030,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-029.md",
+    "notes": "Brief's connects_to_prompts values ('coding-prompts', 'code-review-prompts') don't match real site categories, so linked instead to the real, verified categories from connects_to_tools (claude-code, cursor, github-copilot, devops), which are themselves real prompt-library slugs on the site despite being mislabeled as 'tools' in the brief."
+  },
+  {
+    "article_num": 30,
+    "candidate_id": "C043",
+    "slug": "google-ai-generated-content-policy",
+    "title": "Google's Actual AI-Generated Content Policy (Not the SEO Rumors)",
+    "word_count": 4700,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-030.md",
+    "notes": "Strong, primary-source-heavy brief (Google's own documentation). Flagged that no granular public breakdown exists of what share of AI-content manual actions cite scaled-content-abuse specifically vs. other spam policies. No service connection given in the brief, so none was added."
+  },
+  {
+    "article_num": 31,
+    "candidate_id": "C089",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-031.md",
+    "slug": "gst-compliant-invoicing-freelancers-india",
+    "title": "GST Compliant Invoicing for Freelancers in India: The Complete Guide",
+    "word_count": 4600,
+    "question_count": 50,
+    "notes": "Evidence strength moderate per brief; flagged the current e-invoicing turnover threshold as unverifiable to a single figure since it changes by government notification. Linked to invoice-generator tool (/business/invoice-generator); no service or prompt connection in brief, so none included."
+  },
+  {
+    "article_num": 32,
+    "candidate_id": "C015",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-032.md",
+    "slug": "claude-code-vs-cursor-vs-copilot-cost-comparison",
+    "title": "Claude Code vs Cursor vs Copilot: The Real Cost Comparison for Teams",
+    "word_count": 4250,
+    "question_count": 50,
+    "notes": "Pricing figures are current as of research date but vendors change tiers frequently; flagged overage/per-token pricing beyond seat/pool structure as not independently confirmed. Linked marketing-roi-calculator tool, claude/cursor/chatgpt prompt categories, and ai-agents-automation service (per brief's advisory-angle connection)."
+  },
+  {
+    "article_num": 33,
+    "candidate_id": "C025",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-033.md",
+    "slug": "ai-agent-api-cost-at-scale",
+    "title": "What an AI Agent Actually Costs to Run at Real Production Volume",
+    "word_count": 4200,
+    "question_count": 50,
+    "notes": "Flagged the $3.5B->$8.4B industry-wide spend figure as a secondary-aggregator estimate rather than an audited number. Linked ai-engineering and devops prompt categories and the ai-agents-automation service per brief."
+  },
+  {
+    "article_num": 34,
+    "candidate_id": "C027",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-034.md",
+    "slug": "ai-agent-demo-vs-production-reality",
+    "title": "AI Agent Demo vs Production Reality: Why Most Agents Break With Real Users",
+    "word_count": 4330,
+    "question_count": 50,
+    "notes": "Flagged the '5% of agents work' HN thread title as discussion framing, not an audited statistic. Linked ai-engineering prompt category and ai-agents-automation service per brief."
+  },
+  {
+    "article_num": 35,
+    "candidate_id": "C041",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-035.md",
+    "slug": "programmatic-seo-done-well-vs-badly",
+    "title": "Programmatic SEO Done Well vs Badly: What Actually Separates Them",
+    "word_count": 4430,
+    "question_count": 50,
+    "notes": "Flagged Zapier's 5.8M monthly visits as a third-party estimate, not Zapier-disclosed. connects_to_service in brief was 'seo-geo', mapped to the real scult.in local-seo-services page (closest verified live service URL) rather than inventing a slug. Linked ai-visibility-checker tool per brief."
+  },
+  {
+    "article_num": 36,
+    "candidate_id": "C059",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-036.md",
+    "slug": "chatbot-deflection-rate-measurement",
+    "title": "Chatbot Deflection Rate Measurement: Why the Number You're Reporting Might Be Wrong",
+    "word_count": 4350,
+    "question_count": 50,
+    "notes": "Flagged Forethought's exact current marketing claims and the precise 44-87% methodology as reported-by-source, not independently re-derived. Some FAQ answers explicitly marked 'evidence not sufficiently verified' where sources didn't cover the specific sub-question (e.g. voice-channel benchmarks, context-rot link). Linked customer-support and ai-engineering prompt categories and ai-agents-automation service per brief."
+  },
+  {
+    "article_num": 37,
+    "candidate_id": "C066",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-037.md",
+    "slug": "email-signature-brand-consistency",
+    "title": "Email Signature Brand Consistency: What It Actually Does for a Growing Company",
+    "word_count": 4420,
+    "question_count": 50,
+    "notes": "Flagged the vendor-reported 'survey responses 11 to 55' case study explicitly as unverified vendor marketing. Brief's connects_to_prompts ('business operations','design') mapped to real category slugs business-ops and ui-design (used as /prompts/business-ops and /prompts/ui-design links); connects_to_service 'Branding' mapped to real ui-ux-design-branding service page."
+  },
+  {
+    "article_num": 38,
+    "candidate_id": "C079",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-038.md",
+    "slug": "utm-parameter-mistakes",
+    "title": "UTM Parameter Mistakes That Quietly Break Your Campaign Tracking",
+    "word_count": 4230,
+    "question_count": 50,
+    "notes": "Evidence strength moderate per brief; flagged the 67%/58% UTM-strategy survey figure as a single industry-survey citation rather than a primary dataset. Linked utm-builder and marketing-roi-calculator tools per brief; no service connection in brief, none included."
+  },
+  {
+    "article_num": 39,
+    "candidate_id": "C085",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-039.md",
+    "slug": "youtube-creator-ai-production-workflow",
+    "title": "YouTube Creator AI Production Workflow: What Actually Survives the Slop Crackdown",
+    "word_count": 4550,
+    "question_count": 50,
+    "notes": "Important caveat: the brief's own source URLs for several key claims (subscriber-wipe figure, faceless-creator impact, platform-parallel restrictions) are Google News search-result URLs rather than direct article links, so I could not independently re-fetch the original outlet articles to verify wording beyond what the brief's citations describe -- flagged this explicitly in the Data and evidence section. Linked youtube and veo prompt categories per brief; no tool connection in brief (none listed), none included; no distinct service link section added beyond the general prompt links since brief's service connection was generic 'AI agents/automation' without a specific angle tied to this topic -- omitted a dedicated service paragraph to avoid a forced tie-in."
+  },
+  {
+    "article_num": 40,
+    "candidate_id": "C087",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-040.md",
+    "slug": "content-calendar-solo-creator-three-platforms",
+    "title": "A Real Content Calendar for a Solo Creator Running Three Platforms",
+    "word_count": 4610,
+    "question_count": 50,
+    "notes": "Flagged that specific optimal-posting-time-window data per platform wasn't independently verified beyond the general 'platform-specific scheduling matters' principle. Linked blog-writing/youtube/instagram prompt categories per brief and the branding service (ui-ux-design-branding) as a natural next-step tie-in given brief's 'branding' service connection."
+  },
+  {
+    "article_num": 41,
+    "candidate_id": "C106",
+    "slug": "client-onboarding-checklist",
+    "title": "Client Onboarding Checklist: The 17-Step Process Real Agencies Use",
+    "word_count": 4900,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-041.md",
+    "notes": "Strong evidence base. Service link connects to custom-software (framed around custom client-portal/intake tooling) since 'business-ops' isn't one of SCULT's six named services — flagged as an inferred mapping, not a literal match."
+  },
+  {
+    "article_num": 42,
+    "candidate_id": "C110",
+    "slug": "healthcare-website-compliance-requirements",
+    "title": "Healthcare Website Compliance Requirements: HIPAA, FTC, and ADA Explained",
+    "word_count": 4830,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-042.md",
+    "notes": "Strong evidence base with real settlement figures (Mount Nittany $1.8M, GoodRx $1.5M/$25M). No SCULT tool connects to this topic per the brief, so only the legal-compliance prompt library and web-development service are linked; the 2026 proposed HIPAA Security Rule update is explicitly flagged as proposed, not yet final, per the source."
+  },
+  {
+    "article_num": 43,
+    "candidate_id": "C012",
+    "slug": "claude-md-vs-cursorrules-vs-copilot-instructions",
+    "title": "CLAUDE.md vs .cursorrules vs Copilot Instructions: What Each Actually Does",
+    "word_count": 4350,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-043.md",
+    "notes": "Strong primary-source evidence (Claude Code docs, GitHub Docs, Cursor forum). The Cursor Agent-mode-vs-Edit-mode adherence claim is explicitly flagged as practitioner-sourced rather than officially documented, since it could shift across Cursor versions."
+  },
+  {
+    "article_num": 44,
+    "candidate_id": "C018",
+    "slug": "mcp-server-explained",
+    "title": "MCP Server Explained: What It Actually Lets an AI Coding Assistant Do",
+    "word_count": 4570,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-044.md",
+    "notes": "Combined brief's moderate-evidence sources with fresh 2026 adoption/registry statistics found via additional web research (10,000+ servers, 97M SDK downloads, registry retirement date). Security section leans on named real incidents (Anthropic's own Git MCP server flaws, the GitHub data-heist case) rather than generic risk claims."
+  },
+  {
+    "article_num": 45,
+    "candidate_id": "C023",
+    "slug": "ai-agent-failure-modes-production",
+    "title": "AI Agent Failure Modes in Production: Real Incidents and What Caused Them",
+    "word_count": 4720,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-045.md",
+    "notes": "Strong evidence base anchored on the verified AI Incident Database entry #1152 (Replit) plus the Galileo seven-failure-mode taxonomy. Flagged explicitly that no aggregated industry-wide loss total exists in the sources reviewed, to avoid overstating scale beyond the named incidents."
+  },
+  {
+    "article_num": 46,
+    "candidate_id": "C054",
+    "slug": "qr-code-physical-retail-use-cases",
+    "title": "QR Codes in Physical Retail: Real Use Cases and 2026 Adoption Data",
+    "word_count": 4780,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-046.md",
+    "notes": "Strong stats-heavy brief; added fresh India UPI figures via web research to properly cover the brief's India relevance note. Flagged that the GDA survey's 62% sales-uplift figure doesn't isolate the QR mechanism from the promotional offer itself. Service link uses local-seo per the brief's own 'moderate confidence' framing."
+  },
+  {
+    "article_num": 47,
+    "candidate_id": "C068",
+    "slug": "gdpr-small-saas-analytics",
+    "title": "GDPR and Small SaaS Analytics: What You Actually Need to Comply",
+    "word_count": 4550,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-047.md",
+    "notes": "Brief's HN-sourced questions (point/comment counts on specific threads) are cited as 'per the research brief's HN-sourced findings' since the live HN search URL itself isn't a stable per-claim citation. Added 2026 enforcement statistics (CNIL fines, fine caps) via web research. Feature/pricing comparisons between Plausible/Fathom/Matomo explicitly marked as not independently verified."
+  },
+  {
+    "article_num": 48,
+    "candidate_id": "C081",
+    "slug": "ai-entry-level-developer-hiring-impact",
+    "title": "AI's Impact on Entry-Level Developer Hiring: What the Data Actually Shows",
+    "word_count": 4640,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-048.md",
+    "notes": "Brief had only 5 sourced questions (all from one Stanford paper), so most of the FAQ expansion came from fresh web research (CIO.com, Fed graduate-unemployment data) verified via direct WebFetch of both the Stanford paper and CIO article. Explicitly flagged several dramatic uncaveated percentage claims circulating on secondary blogs (e.g. '60-67% decline') as unverified rather than repeating them as fact. connects_to_service was empty in the brief, so the service-link section was correctly omitted entirely."
+  },
+  {
+    "article_num": 49,
+    "candidate_id": "C035",
+    "slug": "when-to-hire-first-salesperson-startup",
+    "title": "When to Hire Your First Salesperson: What YC and SaaStr Actually Recommend",
+    "word_count": 4990,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-049.md",
+    "notes": "Strong evidence base; supplemented with fresh SaaStr/Techstars stats (70% first-hire failure rate, 50-demo/15-25%-win-rate benchmark) via web research. Brief's 'business-ops' service connection doesn't map to any of SCULT's six named services, so no service-link paragraph was included — only the two named tools (Invoice Generator, Marketing ROI Calculator) and business-ops prompt library are linked, which is flagged here as an omitted service link."
+  },
+  {
+    "article_num": 50,
+    "candidate_id": "C063",
+    "slug": "figma-ai-vs-dedicated-ai-design-tools",
+    "title": "Figma AI vs. Dedicated AI Design Tools: How They Actually Compare",
+    "word_count": 4950,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-050.md",
+    "notes": "Strong evidence base anchored on the verified Figma/Apple-Weather-app incident. Several comparison claims (Figma-vs-v0, unit-economics argument) explicitly flagged as unverified single-source commentary rather than benchmarked fact. Brief's service connection ('UI/UX design') isn't one of SCULT's six named services, so branding-agency was used as the closest real fit, framed around design-system foundation work."
+  },
+  {
+    "article_num": 51,
+    "candidate_id": "C091",
+    "slug": "no-code-vs-custom-development",
+    "title": "No-Code vs Custom Development: How Small Teams Actually Decide",
+    "word_count": 4700,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-051.md",
+    "notes": "Strong Reddit-sourced evidence base per brief. cobeisfresh.com source returned 404 on live fetch so its use rests on the brief's own answer_summary rather than a fresh verification; noted market-size claims from a WebSearch of secondary blogs were deliberately excluded as insufficiently verified rather than cited as fact."
+  },
+  {
+    "article_num": 52,
+    "candidate_id": "C046",
+    "slug": "domain-migration-seo-impact",
+    "title": "Domain Migration SEO Impact: What Really Happens to Your Rankings",
+    "word_count": 4400,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-052.md",
+    "notes": "Verified directly against live Google Search Central documentation via WebFetch, which strengthened the moderate evidence_strength noted in the brief. Declined to invent a specific 'expect X% traffic loss' figure since no single authoritative benchmark exists."
+  },
+  {
+    "article_num": 53,
+    "candidate_id": "C048",
+    "slug": "cart-abandonment-causes-beyond-price",
+    "title": "What Actually Causes Cart Abandonment Beyond Price",
+    "word_count": 4150,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-053.md",
+    "notes": "Verified Baymard figures directly via WebFetch; no tools.scult.in tool connection was given in the brief (connects_to_tools was empty), so only the ecommerce-product prompt category and web-development service are linked."
+  },
+  {
+    "article_num": 54,
+    "candidate_id": "C070",
+    "slug": "vat-invoicing-uk-freelancer-international",
+    "title": "VAT Invoicing for UK Freelancers Selling Internationally",
+    "word_count": 4850,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-054.md",
+    "notes": "gov.uk VAT Notice 741A and registration-threshold pages verified live. The HN/Algolia source is a search-results aggregator rather than individual articles, so those FAQ answers are framed as reflecting documented community discussion/historical pattern rather than a single citable statistic. No service connection was given in the brief (the listed 'connects_to_service' text just restated the tool link), so only the Invoice Generator tool is linked, no service paragraph."
+  },
+  {
+    "article_num": 55,
+    "candidate_id": "C078",
+    "slug": "consulting-retainer-vs-project-pricing",
+    "title": "Consulting Retainer vs Project Pricing: How Small Firms Actually Decide",
+    "word_count": 4400,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-055.md",
+    "notes": "Both Consulting Success source pages verified live via WebFetch, surfacing additional real detail (named client case studies, the two retainer types) beyond the brief. Those named-client examples are flagged in-article as the source's own published success stories, not independently audited. No service connection in brief, so only the Invoice Generator tool is linked."
+  },
+  {
+    "article_num": 56,
+    "candidate_id": "C095",
+    "slug": "marketing-agency-vs-in-house-small-business",
+    "title": "Marketing Agency vs In-House: How Small Businesses Actually Decide",
+    "word_count": 4600,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-056.md",
+    "notes": "Evidence base is entirely Reddit community discussion (brief rates it 'moderate' strength) — Reddit fetch was blocked for direct verification, so all claims rest on the brief's own extracted answer_summaries, clearly framed in-article as qualitative community patterns rather than statistical findings. Mapped the brief's two service-target strings to the real SERVICE_PAGES entries (local-seo-services, google-ads-management) since no exact match existed; no exact prompt category slug was given, so no prompt link was added to avoid inventing one."
+  },
+  {
+    "article_num": 57,
+    "candidate_id": "C052",
+    "slug": "ecommerce-returns-policy-small-brand",
+    "title": "How Small Ecommerce Brands Handle Returns Without Losing Money",
+    "word_count": 4900,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-057.md",
+    "notes": "Verified redo.com, practicalecommerce.com (two articles), and retaildive.com directly via WebFetch, which surfaced slightly different exact numbers on some figures (e.g., redo.com's own $15-30 vs. the brief's blended $15-65 range) — reconciled by attributing the wider range to the combined sources as the brief does. The brief's tool/service connections were both flagged 'weak'/'plausible, not strongly evidenced' — included the Invoice Generator and custom-software links but kept the framing explicitly soft per instructions."
+  },
+  {
+    "article_num": 58,
+    "candidate_id": "C077",
+    "slug": "marketing-attribution-small-business",
+    "title": "Marketing Attribution for Small Business Without an Analyst",
+    "word_count": 4300,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-058.md",
+    "notes": "Both sources (Databox, Google Analytics Help) verified live via WebFetch. No broad statistical adoption-rate data exists for 'last-touch vs multi-touch usage among small businesses' beyond the qualitative expert guidance, flagged explicitly as such rather than inventing a figure. No service connection in brief."
+  },
+  {
+    "article_num": 59,
+    "candidate_id": "C080",
+    "slug": "how-to-calculate-customer-acquisition-cost-correctly",
+    "title": "How to Calculate Customer Acquisition Cost Correctly",
+    "word_count": 4200,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-059.md",
+    "notes": "Shopify CAC article verified live via WebFetch. Flagged that no universal cross-industry benchmark CAC dollar figure could be verified, so the article avoids stating one. No service connection in brief."
+  },
+  {
+    "article_num": 60,
+    "candidate_id": "C084",
+    "slug": "technical-interview-prep-plan-with-ai",
+    "title": "A Technical Interview Prep Plan With AI (Not Instead of Work)",
+    "word_count": 5000,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-060.md",
+    "notes": "Sources are Google News RSS search aggregator links and an HN/Algolia search rather than individual verifiable article URLs, matching how the brief itself sourced this topic — treated as the best available evidence per the brief and flagged the one internally-uncertain claim ('Anthropic cheating scandal' specifics) as unverified beyond the existence of the published piece. No tool connection in brief, only the career-jobsearch prompt category linked."
+  },
+  {
+    "article_num": 61,
+    "candidate_id": "C100",
+    "slug": "ai-hallucination-technical-explanation-detection",
+    "title": "What AI Hallucination Actually Means and How Teams Catch It",
+    "word_count": 5200,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-061.md",
+    "notes": "Evidence strength was 'moderate' per brief (mostly HN Algolia community sources). Supplemented with real, primary Vectara Hallucination Leaderboard and arXiv sources found via web search. Deliberately avoided citing specific cross-model hallucination-rate percentages from low-quality/inconsistent 2026 SEO-aggregator blogs (conflicting model-version names like 'GPT-5.4-nano' looked unreliable) and flagged this explicitly as 'evidence not sufficiently verified' rather than repeating unverifiable numbers. connects_to_tools was empty in brief; linked only the Claude prompt library and the ai-agents-automation service."
+  },
+  {
+    "article_num": 62,
+    "candidate_id": "C003",
+    "slug": "llms-txt-explained",
+    "title": "llms.txt Explained: What It Actually Does in 2026",
+    "word_count": 4300,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-062.md",
+    "notes": "Strong evidence brief, supplemented with real 2026 adoption-rate data (rankability.com, ppc.land) found via search. No connects_to_service in brief, so no service paragraph included -- only linked the ai-visibility-checker tool per brief's connects_to_tools."
+  },
+  {
+    "article_num": 63,
+    "candidate_id": "C005",
+    "slug": "perplexity-vs-google-ai-overviews-sourcing",
+    "title": "How Perplexity Sources Its Answers Differently From Google AI Overviews",
+    "word_count": 4500,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-063.md",
+    "notes": "Moderate evidence brief; flagged Bing Chat/Copilot and Perplexity free-tier source-count comparisons as 'evidence not sufficiently verified' where the brief/research didn't cover them directly. No connects_to_service in brief, so no service paragraph -- only linked ai-visibility-checker."
+  },
+  {
+    "article_num": 64,
+    "candidate_id": "C013",
+    "slug": "ai-code-review-blind-spots",
+    "title": "Why AI Code Review Still Misses the Same Bugs (And How to Compensate)",
+    "word_count": 5150,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-064.md",
+    "notes": "Strong evidence brief with good benchmark data (67-bug study, NIST SATE, ISSTA). Flagged CodeRabbit/Entelligence exact accuracy comparisons as 'evidence not sufficiently verified' since the brief's benchmark only directly measured Claude vs. Copilot. Linked JSON Formatter tool plus Claude/Cursor/GitHub Copilot prompt categories, and both custom-software-development and ai-agents-automation services per the brief's dual service connection."
+  },
+  {
+    "article_num": 65,
+    "candidate_id": "C024",
+    "slug": "rag-vs-fine-tuning-vs-long-context",
+    "title": "RAG vs Fine-Tuning vs Long Context: How Teams Actually Choose",
+    "word_count": 5000,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-065.md",
+    "notes": "Strong evidence brief anchored on primary Databricks research. Brief's connects_to_tools listed 'ai-engineering' which is actually a prompts category slug, not one of the 15 real tools -- did not fabricate a tool link; linked only the real /prompts/ai-engineering category and the ai-agents-automation service."
+  },
+  {
+    "article_num": 66,
+    "candidate_id": "C026",
+    "slug": "langchain-vs-crewai-vs-autogen",
+    "title": "LangChain vs CrewAI vs AutoGen: How They Actually Differ in Practice",
+    "word_count": 4850,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-066.md",
+    "notes": "Moderate evidence brief; supplemented with 2026 web search on adoption/GitHub-star trends and Microsoft's AutoGen-to-Agent-Framework shift, but explicitly flagged the specific GitHub-star/download figures from aggregator sites as needing live verification rather than citing them as fixed numbers, since they change continuously and sources disagreed. Confirmed 'AI Agents & RAG' (brief's connects_to_prompts) is the real display name for the /prompts/ai-engineering slug."
+  },
+  {
+    "article_num": 67,
+    "candidate_id": "C039",
+    "slug": "recover-from-google-core-update-small-business",
+    "title": "How Small Businesses Are Actually Recovering From a Google Core Update",
+    "word_count": 4900,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-067.md",
+    "notes": "Moderate evidence brief; supplemented with real 2026 core-update rollout dates and volatility data via web search. The single documented recovery case (180-article removal) is one data point, not a controlled study -- flagged as such rather than generalized. Mapped brief's 'seo-geo' service connection to the real /services/local-seo-services URL since the topic is specifically local/small-business recovery."
+  },
+  {
+    "article_num": 68,
+    "candidate_id": "C099",
+    "slug": "ai-model-cost-per-task-vs-benchmarks",
+    "title": "How Developers Actually Choose AI Models by Cost Per Task, Not Benchmarks",
+    "word_count": 5050,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-068.md",
+    "notes": "Moderate evidence brief built mostly on real, specific HN Show-HN projects and comments (EEBench, the OCR benchmark, the API router). Supplemented with 2026 LLM pricing search data but flagged exact current per-model prices as 'evidence not sufficiently verified' given inconsistent model-version naming across pricing-comparison blogs -- kept only the more defensible general patterns (batch discount ~50%, cached-token discount magnitude). connects_to_tools/prompts were empty in brief; linked only the ai-agents-automation service."
+  },
+  {
+    "article_num": 69,
+    "candidate_id": "C014",
+    "slug": "ai-agent-codebase-migration",
+    "title": "How Developers Are Actually Using AI Agents for Codebase Migrations",
+    "word_count": 5350,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-069.md",
+    "notes": "Moderate evidence brief anchored on a strong primary source (Anthropic's own Claude Code migration blog post). Flagged manual-vs-AI-migration cost comparisons and Codex-specific migration-planning comparisons as 'evidence not sufficiently verified' since the brief/sources didn't cover them directly. Linked JSON Formatter, Claude/Cursor prompts, and custom-software-development service per brief's dual service connection (used custom-software-development as primary, per the two service options listed)."
+  },
+  {
+    "article_num": 70,
+    "candidate_id": "C069",
+    "slug": "sales-tax-nexus-small-online-seller",
+    "title": "What Sales Tax Nexus Actually Means for a Small Online Seller",
+    "word_count": 4800,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-070.md",
+    "notes": "Strong evidence brief; supplemented with real, current 2026 state-by-state economic nexus threshold data via web search (TaxCloud, Numeral, NexusByState). The brief's connects_to_service field described a tool/prompt connection rather than a naming a real scult.in paid service, so no service-conversation paragraph was included -- only tool/prompt links (invoice-generator, ecommerce-product prompts) per the brief's actual connects_to_tools/prompts."
+  },
+  {
+    "article_num": 71,
+    "candidate_id": "C016",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-071.md",
+    "slug": "ai-coding-tools-monorepo-issues",
+    "title": "AI Coding Tools in a Monorepo: What Actually Breaks (And How to Fix It)",
+    "word_count": 4750,
+    "question_count": 50,
+    "notes": "Strong evidence base from brief plus new WebSearch findings (Sourcegraph 80% problem, Supermemory memory bottleneck, current .cursor/rules/*.mdc conventions). Flagged one FAQ (#36, Cursor vs Claude Code head-to-head) as evidence not sufficiently verified since no controlled benchmark exists. Tool link used JSON Formatter (per brief); prompt links to cursor/claude/devops categories (devops used as closest match for 'development frameworks', which isn't a real category slug). Service link to custom-software-development."
+  },
+  {
+    "article_num": 72,
+    "candidate_id": "C037",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-072.md",
+    "slug": "product-hunt-launch-traffic-after-week-one",
+    "title": "Product Hunt Traffic After Week One: What Actually Happens",
+    "word_count": 4050,
+    "question_count": 50,
+    "notes": "Supplemented brief with fresh 2026 WebSearch data (SHNO traffic-by-rank stats, conversion benchmarks) that strengthened several 'moderate evidence' claims. A few FAQs (29, 32-34, 37, 46, 49) explicitly marked 'evidence not sufficiently verified' where no source addressed the question (e.g. paid launch services, relaunch effectiveness). Service link mapped 'seo-geo' brief tag to local-seo-services (closest real SERVICE_PAGES entry)."
+  },
+  {
+    "article_num": 73,
+    "candidate_id": "C049",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-073.md",
+    "slug": "ai-product-descriptions-at-scale-ecommerce",
+    "title": "AI Product Descriptions at Scale: How Small Ecommerce Brands Actually Do It",
+    "word_count": 4300,
+    "question_count": 50,
+    "notes": "connects_to_tools was empty in the brief so no specific tool slugs were invented; instead linked to Schema/FAQ Schema generators as a natural fit for the structured-data theme discussed in the article body. Service connection was flagged in the brief as 'plausible secondary fit, not strongly evidenced' (AI agents/automation) -- included as a soft, clearly-hedged mention rather than omitted, per instructions to flag weak evidence rather than fabricate certainty."
+  },
+  {
+    "article_num": 74,
+    "candidate_id": "C061",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-074.md",
+    "slug": "accessible-color-palette-generator-guide",
+    "title": "Accessible Color Palette Generators: What Design Teams Actually Need",
+    "word_count": 4250,
+    "question_count": 50,
+    "notes": "WebSearch confirmed and updated the WCAG 3.0/APCA status as of April 2026 (still Working Draft, target ~2029; APCA removed from normative spec) -- this corrected what could otherwise have been an outdated claim. Prompt link uses /prompts/ui-design (closest real category to brief's generic 'design' tag)."
+  },
+  {
+    "article_num": 75,
+    "candidate_id": "C082",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-075.md",
+    "slug": "what-does-ats-actually-look-for-in-a-resume",
+    "title": "What ATS Resume Screening Actually Looks For (The 75% Myth, Debunked)",
+    "word_count": 4200,
+    "question_count": 50,
+    "notes": "Strong evidence brief (evidence_strength: strong), corroborated and extended with fresh 2026 WebSearch data. Per brief, connects_to_tools and connects_to_service were both empty/blank, so both the 'Relevant tools' tools-link paragraph and the service-CTA paragraph were omitted entirely (only the Career & Job Search prompt library is linked), per instructions to skip sections with no genuine connection rather than force one."
+  },
+  {
+    "article_num": 76,
+    "candidate_id": "C096",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-076.md",
+    "slug": "first-90-days-seo-agency",
+    "title": "The First 90 Days After Hiring an SEO Agency: What Actually Happens",
+    "word_count": 4350,
+    "question_count": 50,
+    "notes": "Brief had no connects_to_prompts, so no prompt-library link included. Fresh WebSearch on 'SEO agency onboarding first 90 days' filled in the month-1/2/3 structural detail that the original brief's HN-heavy sourcing didn't fully cover on its own. Pricing figures (e.g. specific retainer ranges) explicitly flagged as not independently verified beyond the one real HN case discussed."
+  },
+  {
+    "article_num": 77,
+    "candidate_id": "C098",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-077.md",
+    "slug": "ai-model-context-window-practical-impact",
+    "title": "AI Context Windows Explained: What Actually Changed and Why It Matters",
+    "word_count": 4600,
+    "question_count": 50,
+    "notes": "Fresh WebSearch on current (2026) Claude/GPT/Gemini context-window specs was essential here since the brief's sourcing was all HN community commentary without hard current numbers. Model names/version numbers (Fable, Opus 4.8, GPT-5.4/5.5, Gemini 3.1) come directly from the environment's simulated 2026 web search results, not from my own training knowledge -- flagged pricing questions (47-48) as not independently verified since current pricing wasn't in the sources reviewed."
+  },
+  {
+    "article_num": 78,
+    "candidate_id": "C017",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-078.md",
+    "slug": "ai-assisted-commit-documentation",
+    "title": "How Teams Document AI-Assisted Commits for Review and Compliance",
+    "word_count": 4700,
+    "question_count": 50,
+    "notes": "Strong evidence brief, substantially extended with fresh WebSearch (Linux kernel's specific Assisted-by trailer format, real adoption-rate data from Andrew Nesbitt's 2026 analysis, the ai-disclosure machine-readable convention). Tool link (Invoice Generator) follows the brief's own connects_to_tools even though the fit is a bit indirect -- noted explicitly as tied to compliance-advisory billing use, not a direct product tie-in."
+  },
+  {
+    "article_num": 79,
+    "candidate_id": "C064",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-079.md",
+    "slug": "brand-style-guide-essentials",
+    "title": "Brand Style Guide Essentials: What Generated Guides Usually Skip",
+    "word_count": 4550,
+    "question_count": 50,
+    "notes": "Fresh WebSearch added the brand-book-vs-style-guide distinction with current 2026 sourcing, which the original brief only touched lightly. Prompt link mapped brief's 'design' tag to /prompts/branding (Brand & Identity category) since that's the more precise real category for this specific topic versus the more generic ui-design."
+  },
+  {
+    "article_num": 80,
+    "candidate_id": "C097",
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-080.md",
+    "slug": "claude-vs-gpt-vs-gemini-long-document-analysis",
+    "title": "Claude vs GPT vs Gemini for Long Document Analysis: What Actually Differs",
+    "word_count": 4550,
+    "question_count": 50,
+    "notes": "This topic's evidence is inherently scattered/conflicting real practitioner reports rather than one controlled benchmark, and the article says so explicitly (in the exec summary, comparisons section, and several FAQs) rather than manufacturing a false ranking. connects_to_tools was empty in the brief so no tool section was included -- only prompt-library and service links. Caught and removed a stray leftover placeholder heading pair during self-review before finalizing."
+  },
+  {
+    "article_num": 81,
+    "candidate_id": "C028",
+    "slug": "ai-agent-roi-measurement",
+    "title": "AI Agent ROI Measurement: How Companies Actually Track It in 2026",
+    "word_count": 4744,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-081.md",
+    "notes": "Evidence strength moderate per brief. One industry benchmark (100-200% first-year ROI range) is flagged in-article as directional/unverified rather than a hard figure. No tool connection in brief; linked business-ops and finance prompt categories plus the ai-agents-automation service."
+  },
+  {
+    "article_num": 82,
+    "candidate_id": "C044",
+    "slug": "content-audit-without-enterprise-seo-tool",
+    "title": "How to Run a Content Audit Without an Enterprise SEO Tool",
+    "word_count": 3894,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-082.md",
+    "notes": "Slightly under 4500-word target; topic's genuine depth (per moderate-evidence brief) was reasonably exhausted without padding. No service connection in brief, so that section was omitted. Linked word-counter tool and seo-geo prompts as specified."
+  },
+  {
+    "article_num": 83,
+    "candidate_id": "C053",
+    "slug": "amazon-vs-shopify-vs-dtc-economics",
+    "title": "Amazon vs Shopify vs DTC Economics: What Actually Changed in 2026",
+    "word_count": 4324,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-083.md",
+    "notes": "US-specific per brief (fee schedules are US-marketplace-specific). Some margin/cost percentage ranges vary across sources (e.g., total Amazon selling cost 30-45% vs 35-55%); presented as ranges rather than a single number. Linked ecommerce-product prompts and web-development service per brief."
+  },
+  {
+    "article_num": 84,
+    "candidate_id": "C072",
+    "slug": "google-search-results-different-by-country",
+    "title": "Why Google Search Results Differ by Country (And What To Do About It)",
+    "word_count": 4471,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-084.md",
+    "notes": "Several community-sourced claims (HN threads) are anecdotal, not statistical; flagged accordingly. No independently verified fix exists for IP misgeolocation correction, stated as an open/unresolved pain point. Linked seo-geo prompts and local-seo service."
+  },
+  {
+    "article_num": 85,
+    "candidate_id": "C086",
+    "slug": "grow-x-twitter-account-without-buying-followers",
+    "title": "How to Grow an X (Twitter) Account Without Buying Followers",
+    "word_count": 4108,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-085.md",
+    "notes": "Brief listed connects_to_tools as 'x-twitter' but this is actually a prompt-category slug, not a tool -- linked it correctly as /prompts/x-twitter. Some engagement-weight multipliers (reposts vs replies) vary across general search sources; presented Sprout Social's specific attributed figures and flagged competing numbers as directional. No service connection in brief."
+  },
+  {
+    "article_num": 86,
+    "candidate_id": "C109",
+    "slug": "rebrand-without-agency",
+    "title": "How to Rebrand Your Business Without Hiring an Agency",
+    "word_count": 4496,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-086.md",
+    "notes": "Cost figures ($300, $4-7k, $100k+) come from Hacker News forum discussion, not a formal cost survey -- explicitly flagged as directional benchmarks, not guaranteed quotes. Linked color-palette-generator tool, branding prompts, and ui-ux-design-branding service."
+  },
+  {
+    "article_num": 87,
+    "candidate_id": "C011",
+    "slug": "ai-coding-assistant-large-codebase-vs-greenfield",
+    "title": "AI Coding Assistants on Large Codebases vs Greenfield Projects",
+    "word_count": 4729,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-087.md",
+    "notes": "Context-window figures (1M tokens, 128K-500K) vary by source/configuration; presented as ranges with the caveat that 'usable' context can differ from advertised figures. No controlled hallucination-rate benchmark was found, so that specific comparative claim is flagged as evidence not sufficiently verified. Linked cursor and claude prompts plus custom-software-development service."
+  },
+  {
+    "article_num": 88,
+    "candidate_id": "C030",
+    "slug": "solo-founder-ai-product-tool-stack",
+    "title": "The Real AI Tool Stack Solo Founders Use to Ship Products in 2026",
+    "word_count": 4202,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-088.md",
+    "notes": "The ~26% faster development figure is a secondhand citation of an RCT, flagged as directional rather than independently re-verified. Brief's connects_to_service value ('no-code-apps') isn't an actual service key, so I mapped it to the closest real service (custom-software-development) in the closing paragraph. Linked no-code-apps and startup prompts."
+  },
+  {
+    "article_num": 89,
+    "candidate_id": "C042",
+    "slug": "technical-seo-vs-content-quality",
+    "title": "Technical SEO vs Content Quality: Which Matters More With Thin Content",
+    "word_count": 4449,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-089.md",
+    "notes": "No specific numeric threshold exists for 'how many thin pages trigger a site-wide quality problem' -- explicitly flagged as unverified rather than inventing a number. Brief's prompt connection ('content quality audit prompts') wasn't an exact existing slug, so it was omitted; linked the website-speed-test tool (from brief) and local-seo service instead."
+  },
+  {
+    "article_num": 90,
+    "candidate_id": "C065",
+    "slug": "design-qa-checklist-before-launch",
+    "title": "The Design QA Checklist Small Teams Use Before Launch",
+    "word_count": 4367,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-090.md",
+    "notes": "Weakest evidence base of the ten (only 2 solid sources in brief, evidence_strength moderate with low question_density). Several advanced/edge-case FAQ answers (multi-theme QA, design-system-specific QA, prioritization frameworks) are explicitly marked as evidence not sufficiently verified rather than invented. Brief's prompt connections ('design', 'development frameworks') weren't exact slugs, so that section was omitted; linked website-speed-test tool and web-development service instead."
+  },
+  {
+    "article_num": 91,
+    "candidate_id": "C055",
+    "slug": "ai-candidate-screening-small-team",
+    "title": "AI Candidate Screening for Small Teams: What Actually Works in 2026",
+    "word_count": 5568,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-091.md",
+    "notes": "Strong evidence brief plus fresh 2026 research (GoPerfect pricing data, Mobley v. Workday June 2026 ruling). Linked hr-management and career-jobsearch prompts and the ai-agents-automation service (verified slug from lib/tools/service-links.ts)."
+  },
+  {
+    "article_num": 92,
+    "candidate_id": "C074",
+    "slug": "saas-pricing-localization-conversion",
+    "title": "Does SaaS Pricing Localization Actually Increase Conversion?",
+    "word_count": 5145,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-092.md",
+    "notes": "Weak/mixed evidence topic handled honestly: the strongest primary source (scastiel.dev) explicitly admits no confirmed revenue data, and vendor-cited lift percentages (20-70%, ProfitWell 18-25%) are flagged throughout as unverified marketing claims, not facts. Linked finance prompts and custom-software-development service."
+  },
+  {
+    "article_num": 93,
+    "candidate_id": "C060",
+    "slug": "ai-drafted-contracts-legal-risk",
+    "title": "AI-Drafted Contracts: What Legal and Compliance Teams Actually Worry About",
+    "word_count": 5211,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-093.md",
+    "notes": "Strong-evidence brief (Mata v. Avianca, LawNext 2025 report) supplemented with a verified 2026 update (Damien Charlotin hallucination tracker ~1,490 cases, Sixth Circuit $30k sanction). No service connection existed in the brief, so none was added -- only the legal-compliance prompts link."
+  },
+  {
+    "article_num": 94,
+    "candidate_id": "C085b",
+    "slug": "instagram-reach-small-accounts-changes",
+    "title": "What Actually Changed About Instagram Reach for Small Accounts",
+    "word_count": 4828,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-094.md",
+    "notes": "Several widely-circulated specific reach-percentage figures (e.g., 28-42% to 10-20%, 9.78% vs 5.00%) could NOT be traced to a checkable primary source after a direct WebFetch check -- explicitly flagged as 'Evidence not sufficiently verified' rather than repeated as fact. Only the verified engagement-rate benchmark (8-10% vs 3-4%, DataSlayer) was used numerically. No service connection in brief; linked instagram prompts only."
+  },
+  {
+    "article_num": 95,
+    "candidate_id": "C107",
+    "slug": "ai-investor-updates",
+    "title": "How Founders Are Actually Using AI to Draft Investor Updates",
+    "word_count": 5013,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-095.md",
+    "notes": "Brief's connects_to_service was 'startup', which has no verified scult.in service-page slug in lib/tools/service-links.ts, so the service paragraph was omitted rather than guessing a URL. Supplemented with fresh research (UpdateMate.AI, Rings AI, Affinity 85% AI-adoption stat). Linked startup and business-ops prompts."
+  },
+  {
+    "article_num": 96,
+    "candidate_id": "C047",
+    "slug": "google-business-profile-advanced-tips",
+    "title": "Google Business Profile Advanced Tips Most Businesses Never Use",
+    "word_count": 4604,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-096.md",
+    "notes": "Brief's two sources (Google Help, Sterling Sky) supplemented with verified 2026 reporting on the new video-verification requirement (July 2026) and the business-model-classification step. The Services-vs-ranking question is explicitly kept as an open/unresolved debate per the evidence rather than resolved either way. Linked seo-geo prompts and the local-seo-services service (verified slug)."
+  },
+  {
+    "article_num": 97,
+    "candidate_id": "C051",
+    "slug": "ugc-review-mining-tools-comparison",
+    "title": "UGC and Review Mining Tools: What They Actually Do Differently",
+    "word_count": 4657,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-097.md",
+    "notes": "Brief's connects_to_service was itself flagged as 'plausible, not strongly evidenced' -- omitted the service paragraph rather than force a weak link; kept only the ecommerce-product prompts link. Supplemented brief with fresh 2026 pricing data (Judge.me/Yotpo/Okendo)."
+  },
+  {
+    "article_num": 98,
+    "candidate_id": "C076",
+    "slug": "multi-currency-invoicing-without-accountant",
+    "title": "Multi-Currency Invoicing Without an Accountant: How Freelancers Do It",
+    "word_count": 5223,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-098.md",
+    "notes": "Explicitly flagged the tax-reconciliation gap (converting currency for display vs. real year-end tax reconciliation) as unsolved by existing tooling, per the brief. Linked the invoice-generator tool (/business/invoice-generator, verified slug), finance prompts, and custom-software-development service."
+  },
+  {
+    "article_num": 99,
+    "candidate_id": "C088",
+    "slug": "small-business-spreadsheet-to-tools-transition",
+    "title": "What Actually Happens When a Small Business Ditches Spreadsheets",
+    "word_count": 5178,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-099.md",
+    "notes": "Brief flagged evidence_strength as weak, and this is the one article where that's foregrounded explicitly in its own section ('Being honest about the evidence here') -- the widely-repeated 88%/94% spreadsheet-error stat was checked via WebFetch and found to have no named primary source, so it's presented as unverified. Linked invoice-generator and marketing-roi-calculator tools plus custom-software-development service."
+  },
+  {
+    "article_num": 100,
+    "candidate_id": "C104",
+    "slug": "freelance-to-agency-transition-communication",
+    "title": "What Client Communication Actually Breaks at the Freelance-to-Agency Transition",
+    "word_count": 5103,
+    "question_count": 50,
+    "file_path": "D:\\PABLO ESCOBAR\\tools.scult.in\\content-engine\\05-drafts\\article-100.md",
+    "notes": "Brief's connects_to_service was 'consulting', with no verified scult.in service-page slug -- linked to the scult.in homepage only (verified base URL) rather than guessing a /services/ path. No connects_to_tools or connects_to_prompts existed in the brief, so no resource-links section beyond that single homepage mention."
+  }
+]

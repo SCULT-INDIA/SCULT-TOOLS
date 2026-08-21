@@ -1,0 +1,189 @@
+{
+  "candidate_id": "C004",
+  "status": "accepted",
+  "topic": "Structured data AI answer engines actually use vs structured data that does nothing for them",
+  "topic_cluster": "Structured Data for AI Search",
+  "target_keyword": "schema markup for ai search",
+  "secondary_keywords": [
+    "structured data for ai overviews",
+    "does schema markup help chatgpt",
+    "faq schema for ai search",
+    "which schema types matter for ai citations"
+  ],
+  "long_tail_keywords": [
+    "does google need schema markup for ai overviews",
+    "is faq schema still useful after google removed faq rich results",
+    "which schema types do chatgpt and perplexity actually use",
+    "does adding schema increase ai citations"
+  ],
+  "question_keywords": [
+    "do ai answer engines require schema markup",
+    "does structured data help you get cited by chatgpt",
+    "is schema markup necessary for ai overviews",
+    "why did google remove faq rich results"
+  ],
+  "comparison_keywords": [
+    "schema markup for ai vs traditional seo",
+    "faqpage schema vs article schema for ai citations"
+  ],
+  "how_to_keywords": [
+    "how to add faq schema for ai search",
+    "how to implement organization schema for ai visibility",
+    "how to use json-ld for ai citations"
+  ],
+  "problem_keywords": [
+    "schema markup not improving ai visibility",
+    "faq schema no longer showing in google search"
+  ],
+  "commercial_keywords": [
+    "schema markup generator",
+    "faq schema generator",
+    "json-ld generator"
+  ],
+  "entities": [
+    "Schema.org",
+    "FAQPage schema",
+    "JSON-LD",
+    "Google AI Overviews",
+    "Gemini",
+    "Organization schema",
+    "BreadcrumbList schema",
+    "rich results"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Tutorial",
+  "audience": "Web developers, technical SEOs, and small business site owners deciding whether to invest time in structured data for AI visibility",
+  "countries": [],
+  "connects_to_tools": [
+    "schema-markup-generator",
+    "faq-schema-generator"
+  ],
+  "connects_to_service": "",
+  "connects_to_prompts": [],
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 10,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 9,
+    "competitive_gap": 6,
+    "conversion_potential": 8,
+    "evidence_quality": 6,
+    "total": 77
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Does Google require schema markup for a page to appear in AI Overviews?",
+      "answer_summary": "No — Google has stated there is no special Schema.org markup required for AI Overviews or AI Mode; structured data helps indirectly through entity understanding rather than being a hard requirement.",
+      "sources": [
+        "https://sitespeak.ai/ai-overview-glossary/structured-data-and-ai-overviews"
+      ]
+    },
+    {
+      "question": "If schema isn't required, why do industry guides say it still helps AI citations?",
+      "answer_summary": "Schema markup feeds entity and content-classification understanding that underlies passage retrieval, and rich-result eligibility (product cards, reviews, org knowledge panels) is one surface AI Overviews can pull from — so it helps indirectly even though it's not a hard gate.",
+      "sources": [
+        "https://sitespeak.ai/ai-overview-glossary/structured-data-and-ai-overviews",
+        "https://www.menra.ai/guides/ai-overviews-structured-data"
+      ]
+    },
+    {
+      "question": "Which specific schema types do AI systems like ChatGPT, Perplexity, and Gemini actually use most?",
+      "answer_summary": "Industry analysis of AI-cited pages points to Organization, FAQPage, Article/BlogPosting, Product/Service, and BreadcrumbList schema as the types most associated with AI-cited content, with one study reporting 81% of AI-cited pages use at least one of these.",
+      "sources": [
+        "https://www.answermaniac.ai/blog/schema-markup-for-ai-chatgpt-citations",
+        "https://wpriders.com/schema-markup-for-ai-search-types-that-get-you-cited/"
+      ]
+    },
+    {
+      "question": "Is FAQ schema still worth using after Google removed FAQ rich results from search in 2026?",
+      "answer_summary": "Yes, according to industry coverage — Google's May 2026 announcement removed the visual FAQ dropdown from standard search results but the company said it would continue using FAQPage structured data to understand pages, and the underlying markup is reported to still assist AI answer extraction.",
+      "sources": [
+        "https://georion.app/blog/faq-schema-for-ai-answers-2026-still-worth-it-after-googles-may-update",
+        "https://nobsmarketplace.com/blog/faq-pages-still-matter-for-ai"
+      ]
+    },
+    {
+      "question": "What does FAQPage schema actually do for an LLM reading a page?",
+      "answer_summary": "It gives the model explicit, machine-readable question-answer pairs, removing the burden of inferring which text block answers which implied question, which is reported to make extraction more reliable for citation.",
+      "sources": [
+        "https://www.frase.io/blog/faq-schema-ai-search-geo-aeo",
+        "https://georion.app/blog/faq-schema-for-ai-answers-2026-still-worth-it-after-googles-may-update"
+      ]
+    },
+    {
+      "question": "Is there real experimental evidence that adding schema markup increases AI citation rates, or is it just correlation?",
+      "answer_summary": "There are experiment-style write-ups (e.g. Otterly.ai) and correlational industry studies claiming schema-marked pages are more likely to appear in AI answers, but these come from SEO/GEO vendors rather than independent, peer-reviewed research, so causality is not firmly established.",
+      "sources": [
+        "https://otterly.ai/blog/schema-markup-real-impact-ai-search/"
+      ]
+    },
+    {
+      "question": "Does adding schema markup risk anything, or is it a safe, no-downside addition?",
+      "answer_summary": "Guides generally frame structured data as low-risk semantic clarification of content already visible on the page rather than a ranking trick, so it's broadly described as safe to add regardless of how much it helps.",
+      "sources": [
+        "https://sitespeak.ai/ai-overview-glossary/structured-data-and-ai-overviews"
+      ]
+    },
+    {
+      "question": "Why do AI search engines need less structured data than traditional search engines did?",
+      "answer_summary": "Because AI search systems are built to interpret unstructured natural-language text directly, unlike older algorithms that relied on schema to parse meaning, reducing (but not eliminating) schema's necessity.",
+      "sources": [
+        "https://www.erlin.ai/blog/schema-markup-ai-visibility-chatgpt-perplexity"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://sitespeak.ai/ai-overview-glossary/structured-data-and-ai-overviews",
+      "title": "Schema for AI Overviews: what Google actually uses (and what is folklore)",
+      "source_type": "industry publication",
+      "used_for": "Google's official 'no special schema required' position and the indirect-benefit explanation"
+    },
+    {
+      "url": "https://www.menra.ai/guides/ai-overviews-structured-data",
+      "title": "Structured Data for Google AI Overviews: Which Schema Types Actually Matter",
+      "source_type": "industry publication",
+      "used_for": "Which schema surfaces AI Overviews can draw from"
+    },
+    {
+      "url": "https://otterly.ai/blog/schema-markup-real-impact-ai-search/",
+      "title": "Schema Markup's Real Impact on AI Search | OtterlyAI Experiment",
+      "source_type": "industry publication",
+      "used_for": "Experiment-based claims about schema's effect on AI citation"
+    },
+    {
+      "url": "https://www.frase.io/blog/faq-schema-ai-search-geo-aeo",
+      "title": "Are FAQ Schemas Important for AI Search, GEO & AEO?",
+      "source_type": "industry publication",
+      "used_for": "Explanation of how FAQPage schema aids LLM extraction"
+    },
+    {
+      "url": "https://georion.app/blog/faq-schema-for-ai-answers-2026-still-worth-it-after-googles-may-update",
+      "title": "FAQ Schema for AI Answers 2026: Still Worth It After Google's May Update?",
+      "source_type": "industry publication",
+      "used_for": "Google's May 2026 FAQ rich-result removal and continued schema use, r/TechSEO reference"
+    },
+    {
+      "url": "https://nobsmarketplace.com/blog/faq-pages-still-matter-for-ai",
+      "title": "FAQ Schema May Matter More for AI Than for Search",
+      "source_type": "industry publication",
+      "used_for": "Argument that FAQ schema's value shifted from search to AI"
+    },
+    {
+      "url": "https://www.answermaniac.ai/blog/schema-markup-for-ai-chatgpt-citations",
+      "title": "Schema Markup for AI: The 5 Types ChatGPT Actually Crawls",
+      "source_type": "industry publication",
+      "used_for": "List of schema types most associated with AI-cited pages"
+    },
+    {
+      "url": "https://www.erlin.ai/blog/schema-markup-ai-visibility-chatgpt-perplexity",
+      "title": "How Schema Impacts Your Brand's Visibility in AI Search Engines like ChatGPT and Perplexity",
+      "source_type": "industry publication",
+      "used_for": "Contrast between schema's original purpose and AI's unstructured-text capability"
+    }
+  ]
+}

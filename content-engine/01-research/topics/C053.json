@@ -1,0 +1,219 @@
+{
+  "candidate_id": "C053",
+  "topic": "What actually changed about Amazon vs Shopify vs direct-to-consumer economics",
+  "status": "accepted",
+  "target_keyword": "amazon vs shopify vs dtc economics",
+  "secondary_keywords": [
+    "amazon fees vs shopify fees comparison",
+    "dtc unit economics 2026",
+    "customer acquisition cost dtc brands"
+  ],
+  "long_tail_keywords": [
+    "is it better to sell on amazon or shopify for margins",
+    "how much do amazon sellers actually keep per sale",
+    "why are dtc brands opening physical stores again"
+  ],
+  "question_keywords": [
+    "what percentage does amazon take from sellers",
+    "is shopify cheaper than amazon for sellers",
+    "why is customer acquisition cost so high for dtc brands now",
+    "how much of a 100 dollar sale does amazon keep vs shopify"
+  ],
+  "comparison_keywords": [
+    "amazon fba vs shopify profit margin",
+    "amazon referral fee vs shopify transaction fee",
+    "dtc vs marketplace selling economics"
+  ],
+  "how_to_keywords": [
+    "how to calculate true margin on amazon vs shopify",
+    "how to reduce customer acquisition cost for a dtc brand",
+    "how to decide between amazon and your own store"
+  ],
+  "problem_keywords": [
+    "rising cac dtc brands",
+    "amazon fees eating profit margin",
+    "meta ad costs too high for dtc"
+  ],
+  "commercial_keywords": [
+    "best platform to sell products online 2026",
+    "amazon vs shopify which is better for margins",
+    "amazon seller fees 2026"
+  ],
+  "entities": [
+    "Amazon",
+    "Shopify",
+    "Amazon FBA",
+    "Meta Ads",
+    "Google Shopping",
+    "L.E.K. Consulting",
+    "Forrester",
+    "Amazon Seller Central"
+  ],
+  "audience": "Aspiring and existing online sellers/brand founders deciding between Amazon marketplace selling and running a Shopify/DTC store, plus ecommerce strategists and agencies advising them",
+  "countries": [
+    "United States (fee schedules, CAC benchmarks, and the 2026 Amazon fee update cited are US-marketplace-specific; Amazon referral/FBA fee structures differ by country marketplace)"
+  ],
+  "topic_cluster": "Ecommerce channel economics: marketplace vs owned DTC",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "ecommerce-product"
+  ],
+  "connects_to_service": "Web development (Shopify store builds for brands shifting toward owned DTC)",
+  "primary_intent": "Comparative",
+  "secondary_intent": "Commercial Investigation",
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 7,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 5,
+    "conversion_potential": 6,
+    "evidence_quality": 6,
+    "total": 60
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "How much of a $100 sale does Amazon keep compared to Shopify?",
+      "answer_summary": "One 2026 channel-benchmark analysis puts it at roughly $44 kept by Amazon vs. $63 kept by Shopify on the same SKU at the same price, once all fees are counted.",
+      "sources": [
+        "https://eightx.co/blog/average-ecommerce-gross-margin-shopify-vs-amazon-2026"
+      ]
+    },
+    {
+      "question": "What are Amazon's referral and FBA fees in 2026?",
+      "answer_summary": "Most categories still charge a 15% referral fee (with some categories lower or much higher, e.g. device accessories at 45%), plus FBA fulfillment fees that rose an average $0.08/unit in 2026, though sub-$10 items got a fee cut of about $0.86/unit.",
+      "sources": [
+        "https://www.repricer.com/blog/amazon-seller-fees/",
+        "https://feedvisor.com/university/referral-fee/",
+        "https://sellingpartners.aboutamazon.com/update-to-u-s-referral-and-fulfillment-by-amazon-fees-for-2026"
+      ]
+    },
+    {
+      "question": "What's the all-in cost of selling on Amazon once every fee is included?",
+      "answer_summary": "One estimate puts total Amazon selling costs (referral, fulfillment, storage, returns, advertising) at roughly 30-45% of an item's selling price in 2026.",
+      "sources": [
+        "https://sentrykit.com/blog/amazon-seller-fba-fees-2026/"
+      ]
+    },
+    {
+      "question": "Why has customer acquisition cost (CAC) risen so much for DTC brands?",
+      "answer_summary": "Reports cite CAC up 40-60% since 2023 (and 222% over eight years cumulatively), driven by structural ad-market forces: Google Shopping CPCs up ~33.72% in 2025 and Meta CPMs hitting all-time highs (~$22.98 in Q4).",
+      "sources": [
+        "https://www.swell.is/content/dtc-ecommerce-statistics",
+        "https://www.lek.com/sites/default/files/PDFs/fighting-acquisition-costs.pdf"
+      ]
+    },
+    {
+      "question": "Why are DTC brands opening physical retail stores again?",
+      "answer_summary": "Coverage frames this as a direct response to unsustainable paid-social CAC — brands are using physical retail and 'rent' as a lower-CAC acquisition channel, summarized as 'rent is the new CAC.'",
+      "sources": [
+        "https://www.shopify.com/blog/dtc-to-brick-and-mortar",
+        "https://www.swell.is/content/dtc-ecommerce-statistics"
+      ]
+    },
+    {
+      "question": "Does Amazon or Shopify give a brand better repeat-purchase/customer-ownership economics?",
+      "answer_summary": "Analysis argues Shopify lets a brand retain the customer relationship (email/SMS/loyalty/subscriptions) so repeat purchases get cheaper over time, whereas Amazon effectively charges a fresh referral fee on every repeat transaction.",
+      "sources": [
+        "https://eightx.co/blog/average-ecommerce-gross-margin-shopify-vs-amazon-2026"
+      ]
+    },
+    {
+      "question": "Which product categories see the widest margin gap between Amazon and Shopify?",
+      "answer_summary": "A contribution-margin breakdown cites beauty/skincare as the widest gap (about 20% Amazon vs. 32% Shopify) and supplements similarly (18% vs. 28%), attributed to light, high-margin SKUs with strong Shopify subscription economics.",
+      "sources": [
+        "https://eightx.co/blog/average-ecommerce-contribution-margin-amazon-vs-shopify-2026"
+      ]
+    },
+    {
+      "question": "How much combined market share do Amazon and Shopify have in US ecommerce now?",
+      "answer_summary": "One 2026 report states Amazon and Shopify together now control about 50% of US ecommerce.",
+      "sources": [
+        "https://novadata.io/resources/news/amazon-shopify-50-percent-us-ecommerce-2026"
+      ]
+    },
+    {
+      "question": "What changed in Amazon's 2026 fee update, and how did it affect sellers?",
+      "answer_summary": "Amazon's official 2026 update kept most referral fee percentages flat but raised FBA fulfillment fees by an average $0.08/unit while cutting fees on sub-$10 items by about $0.86/unit.",
+      "sources": [
+        "https://sellingpartners.aboutamazon.com/update-to-u-s-referral-and-fulfillment-by-amazon-fees-for-2026",
+        "https://amzprep.com/amazon-fba-fees/"
+      ]
+    },
+    {
+      "question": "Is the standard playbook now 'sell on Amazon AND build a Shopify DTC presence' rather than choosing one?",
+      "answer_summary": "Multiple 2026 sources describe the fastest-growing brands as running both channels deliberately — Amazon for reach/discovery, Shopify for owned customer relationships and repeat-purchase margin.",
+      "sources": [
+        "https://eightx.co/blog/average-ecommerce-gross-margin-shopify-vs-amazon-2026",
+        "https://www.webgility.com/blog/https/www.webgility.com/blog/order-to-payouts-process"
+      ]
+    },
+    {
+      "question": "How much has DTC customer acquisition cost increased over the long run (not just recently)?",
+      "answer_summary": "An L.E.K. Consulting analysis cited puts the cumulative CAC increase at 222% over roughly eight years.",
+      "sources": [
+        "https://www.lek.com/sites/default/files/PDFs/fighting-acquisition-costs.pdf"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "SHOPIFY INC. - Form 10-Q - FY2026",
+      "url": "https://www.sec.gov/Archives/edgar/data/0001594805/000159480526000047/shop-20260630.htm",
+      "source_type": "government/academic (SEC filing)",
+      "used_for": "primary financial filing reference for Shopify (not deeply mined but confirms real, current primary source availability)"
+    },
+    {
+      "title": "Average ecommerce gross margin: Shopify vs Amazon FBA, 2026 channel benchmark (Eightx)",
+      "url": "https://eightx.co/blog/average-ecommerce-gross-margin-shopify-vs-amazon-2026",
+      "source_type": "industry publication",
+      "used_for": "per-$100-order margin comparison"
+    },
+    {
+      "title": "Average ecommerce contribution margin: Amazon vs Shopify by vertical, 2026 (Eightx)",
+      "url": "https://eightx.co/blog/average-ecommerce-contribution-margin-amazon-vs-shopify-2026",
+      "source_type": "industry publication",
+      "used_for": "category-level margin gap data"
+    },
+    {
+      "title": "Amazon Seller Fees in 2026: A Complete Breakdown (Repricer)",
+      "url": "https://www.repricer.com/blog/amazon-seller-fees/",
+      "source_type": "company docs",
+      "used_for": "Amazon fee structure detail"
+    },
+    {
+      "title": "Update to U.S. Referral and Fulfillment by Amazon fees for 2026 (Amazon Selling Partners)",
+      "url": "https://sellingpartners.aboutamazon.com/update-to-u-s-referral-and-fulfillment-by-amazon-fees-for-2026",
+      "source_type": "primary/official",
+      "used_for": "official 2026 Amazon fee change confirmation"
+    },
+    {
+      "title": "Amazon and Shopify Now Control 50% of US E-Commerce (Novadata)",
+      "url": "https://novadata.io/resources/news/amazon-shopify-50-percent-us-ecommerce-2026",
+      "source_type": "industry publication",
+      "used_for": "market share context"
+    },
+    {
+      "title": "30 DTC Ecommerce Statistics for 2026: Growth, CAC, Retention & Trends (Swell)",
+      "url": "https://www.swell.is/content/dtc-ecommerce-statistics",
+      "source_type": "industry publication",
+      "used_for": "CAC inflation and ad-cost statistics"
+    },
+    {
+      "title": "Fighting Rising Direct-to-Consumer Customer Acquisition Costs (L.E.K. Consulting)",
+      "url": "https://www.lek.com/sites/default/files/PDFs/fighting-acquisition-costs.pdf",
+      "source_type": "industry publication",
+      "used_for": "long-run CAC increase figure"
+    },
+    {
+      "title": "DTC to Brick-and-Mortar: 11 Brands That Opened Stores (Shopify)",
+      "url": "https://www.shopify.com/blog/dtc-to-brick-and-mortar",
+      "source_type": "company docs",
+      "used_for": "DTC brands expanding to physical retail as CAC response"
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "candidate_id": "C020",
+  "topic": "How to evaluate whether an AI coding subscription is worth it for a small dev team",
+  "status": "accepted",
+  "target_keyword": "is an ai coding subscription worth it for a small team",
+  "secondary_keywords": [
+    "ai coding tool ROI small team",
+    "cursor vs claude code cost comparison team",
+    "ai coding assistant pricing 2026"
+  ],
+  "long_tail_keywords": [
+    "how to evaluate if ai coding subscription is worth it for a small dev team",
+    "cursor business vs claude code team pricing",
+    "how much do companies spend on ai coding tools per developer",
+    "ai coding tool cost per developer per month"
+  ],
+  "question_keywords": [
+    "is cursor worth it for a small team",
+    "how much should a small team budget for ai coding tools",
+    "what's the roi of ai coding assistants",
+    "is claude code cheaper than cursor"
+  ],
+  "comparison_keywords": [
+    "cursor vs claude code vs github copilot pricing",
+    "claude code pro vs cursor pro cost",
+    "cursor teams vs copilot business"
+  ],
+  "how_to_keywords": [
+    "how to calculate roi of ai coding tools",
+    "how to choose an ai coding subscription for your team",
+    "how to run a proof of concept before buying ai coding tools"
+  ],
+  "problem_keywords": [
+    "ai coding subscription token overage costs",
+    "hidden costs of ai coding tools",
+    "ai coding tool budget overruns"
+  ],
+  "commercial_keywords": [
+    "cursor business pricing",
+    "claude code team plan",
+    "github copilot business price",
+    "claude max vs cursor ultra"
+  ],
+  "entities": [
+    "Cursor",
+    "Claude Code",
+    "GitHub Copilot",
+    "Anthropic",
+    "OpenAI Codex",
+    "getdx.com"
+  ],
+  "audience": "engineering leads, startup CTOs, and small dev team budget owners deciding on AI coding tool spend",
+  "primary_intent": "Commercial Investigation",
+  "secondary_intent": "Comparative",
+  "countries": [],
+  "topic_cluster": "AI Coding Tools — Cost & ROI",
+  "connects_to_service": "web-dev-service",
+  "connects_to_tools": [
+    "cursor",
+    "claude-code",
+    "github-copilot"
+  ],
+  "connects_to_prompts": [
+    "coding-prompts"
+  ],
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 9,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 5,
+    "conversion_potential": 7,
+    "evidence_quality": 8,
+    "total": 73
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "How much are people actually paying for AI coding tools monthly?",
+      "answer_summary": "HN discussion threads show wide variance in monthly spend per developer, with teams comparing Cursor, Claude Code, and Copilot bills directly.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=45091878"
+      ]
+    },
+    {
+      "question": "Is it worth spending hundreds of dollars per month on AI coding agents?",
+      "answer_summary": "One developer detailed spending $638 on AI coding agents in six weeks and weighed whether the output justified that spend versus manual work.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=45914307"
+      ]
+    },
+    {
+      "question": "What's the best budget AI coding tool for bang-for-buck?",
+      "answer_summary": "Community threads compare lower-cost options against premium subscriptions to find where the value curve flattens.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=47046139"
+      ]
+    },
+    {
+      "question": "How much are teams spending on AI coding at work overall?",
+      "answer_summary": "Threads show organizations tracking aggregate AI coding tool spend across a team, not just per-seat list price.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=47484203"
+      ]
+    },
+    {
+      "question": "Is Claude Code actually cheaper than Cursor?",
+      "answer_summary": "Independent cost analysis found Claude Code uses roughly 5.5x fewer tokens than Cursor on identical tasks (33K vs 188K tokens), making it cheaper on a usage basis despite a higher sticker price on team plans.",
+      "sources": [
+        "https://apidog.com/blog/claude-code-cursor-cost-analysis/"
+      ]
+    },
+    {
+      "question": "What is the true per-seat cost difference between Cursor and Claude Code team plans?",
+      "answer_summary": "For a 10-seat team, Cursor Teams runs about $400/month while Claude Code's mid-tier plan runs roughly $1,000-$1,250/month — about a 3x premium for Claude Code on list price, though real usage patterns can flip the comparison.",
+      "sources": [
+        "https://www.futureproofing.dev/resources/ai-native-team/claude-code-vs-cursor-pricing-2026"
+      ]
+    },
+    {
+      "question": "Does an AI coding subscription pay for itself versus an hour of developer time?",
+      "answer_summary": "A commonly cited framing is that a $39/month-per-engineer Copilot Team subscription costs less than one hour of that engineer's fully-loaded time per day, making it an easy budget line for many teams.",
+      "sources": [
+        "https://techcrunch.com/2024/01/28/startups-must-strategize-and-budget-for-ai-assisted-software-development-in-2024"
+      ]
+    },
+    {
+      "question": "What ROI have companies actually measured from AI coding tools?",
+      "answer_summary": "An analysis of 400+ engineering organizations found a median productivity gain of only 7.76% (mean 13.1%), with a 90th percentile of 43.9% — well below vendor 'multiple x' marketing claims.",
+      "sources": [
+        "https://getdx.com/blog/ai-coding-assistant-pricing/"
+      ]
+    },
+    {
+      "question": "How long does it take to see measurable ROI from an AI coding subscription?",
+      "answer_summary": "Autocomplete-style benefits show up in 1-3 months, but agentic workflows take 3-6 months to build process around and 6-12 months for sustained, durable impact.",
+      "sources": [
+        "https://getdx.com/blog/ai-coding-assistant-pricing/"
+      ]
+    },
+    {
+      "question": "What hidden costs get missed when budgeting for AI coding subscriptions?",
+      "answer_summary": "Beyond seat price, teams miss token overage charges, premium-model surcharges, governance/compliance setup, and 4-8 hours of onboarding per engineer in the first quarter.",
+      "sources": [
+        "https://getdx.com/blog/ai-coding-assistant-pricing/"
+      ]
+    },
+    {
+      "question": "Should a small team buy Cursor, Claude Code, or both?",
+      "answer_summary": "A common recommendation for 3-10 person teams is Cursor Teams for most engineers plus individual Claude Code Pro subscriptions for the 1-2 engineers doing the heaviest architectural/multi-file work.",
+      "sources": [
+        "https://www.futureproofing.dev/resources/ai-native-team/claude-code-vs-cursor-pricing-2026"
+      ]
+    },
+    {
+      "question": "Do less experienced developers benefit more from AI coding tools than seniors?",
+      "answer_summary": "Research cited in startup guidance found less-experienced developers got far more benefit from AI tools than experienced ones, meaning team composition should factor into the subscription decision.",
+      "sources": [
+        "https://techcrunch.com/2024/01/28/startups-must-strategize-and-budget-for-ai-assisted-software-development-in-2024"
+      ]
+    },
+    {
+      "question": "Can AI coding tools actually make some tasks slower, not faster?",
+      "answer_summary": "Some studies found junior developers took longer to finish certain complex, framework-specific tasks with AI than without, undercutting blanket ROI assumptions.",
+      "sources": [
+        "https://techcrunch.com/2024/01/28/startups-must-strategize-and-budget-for-ai-assisted-software-development-in-2024"
+      ]
+    },
+    {
+      "question": "Is GitHub Copilot enough for a small team, or is Cursor's premium worth it?",
+      "answer_summary": "Consensus is that Copilot covers about 90% of needs for teams mostly writing new code/fixing bugs at half the cost, while Cursor's agent mode earns its premium for cross-file refactors and unfamiliar-codebase work.",
+      "sources": [
+        "https://www.morphllm.com/comparisons/cursor-vs-copilot"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Ask HN: How much are you guys paying for AI coding tools monthly?",
+      "url": "https://news.ycombinator.com/item?id=45091878",
+      "source_type": "community",
+      "used_for": "real spend data points from developers"
+    },
+    {
+      "title": "I spent $638 on AI coding agents in 6 weeks.",
+      "url": "https://news.ycombinator.com/item?id=45914307",
+      "source_type": "community",
+      "used_for": "individual cost/value anecdote"
+    },
+    {
+      "title": "Ask HN: What is the best bang for buck budget AI coding?",
+      "url": "https://news.ycombinator.com/item?id=47046139",
+      "source_type": "community",
+      "used_for": "budget-tier tool comparison discussion"
+    },
+    {
+      "title": "Ask HN: How much are you spending on AI coding at work?",
+      "url": "https://news.ycombinator.com/item?id=47484203",
+      "source_type": "community",
+      "used_for": "team-level spend discussion"
+    },
+    {
+      "title": "Is Claude Code Really Cheaper than Cursor? We did the math",
+      "url": "https://apidog.com/blog/claude-code-cursor-cost-analysis/",
+      "source_type": "industry publication",
+      "used_for": "token-usage cost comparison data"
+    },
+    {
+      "title": "Claude Max vs Cursor Ultra 2026: Per-Seat Cost Compared",
+      "url": "https://www.futureproofing.dev/resources/ai-native-team/claude-code-vs-cursor-pricing-2026",
+      "source_type": "industry publication",
+      "used_for": "per-seat pricing breakdown and small-team recommendation"
+    },
+    {
+      "title": "AI coding assistant pricing and ROI guide (2026)",
+      "url": "https://getdx.com/blog/ai-coding-assistant-pricing/",
+      "source_type": "industry publication",
+      "used_for": "primary ROI framework, benchmark data across 400+ orgs, risk/caveat list"
+    },
+    {
+      "title": "Startups must strategize and budget for AI-assisted software development",
+      "url": "https://techcrunch.com/2024/01/28/startups-must-strategize-and-budget-for-ai-assisted-software-development-in-2024",
+      "source_type": "industry publication",
+      "used_for": "startup budgeting guidance and productivity caveats"
+    },
+    {
+      "title": "Cursor vs Copilot (2026): Cursor $20/mo vs GitHub Copilot $10/mo",
+      "url": "https://www.morphllm.com/comparisons/cursor-vs-copilot",
+      "source_type": "industry publication",
+      "used_for": "pricing comparison and use-case fit guidance"
+    }
+  ]
+}

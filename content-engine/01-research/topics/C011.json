@@ -1,0 +1,211 @@
+{
+  "candidate_id": "C011",
+  "topic": "How AI coding assistants actually differ on large, existing codebases vs greenfield projects",
+  "status": "accepted",
+  "topic_cluster": "AI coding assistants: context, scale, and codebase maturity",
+  "target_keyword": "ai coding assistant large codebase vs greenfield",
+  "secondary_keywords": [
+    "cursor vs claude code large codebase",
+    "ai coding agents legacy code",
+    "brownfield ai development",
+    "ai coding assistant context window monorepo"
+  ],
+  "long_tail_keywords": [
+    "why does cursor hallucinate in large codebases",
+    "does claude code work well on legacy code",
+    "can ai coding agents handle monorepos",
+    "ai coding assistant fails on existing codebase"
+  ],
+  "question_keywords": [
+    "can ai coding assistants handle legacy codebases",
+    "why do ai agents fail on existing codebases",
+    "which ai coding tool is best for a large codebase",
+    "is vibe coding safe on a greenfield project"
+  ],
+  "comparison_keywords": [
+    "cursor vs claude code vs copilot codebase context",
+    "greenfield vs brownfield ai coding",
+    "embeddings vs full context window for code retrieval"
+  ],
+  "how_to_keywords": [
+    "how to use ai coding assistants on legacy codebases",
+    "how to give ai context about a large codebase",
+    "how to do context engineering for ai coding agents"
+  ],
+  "problem_keywords": [
+    "ai coding assistant hallucinating on my codebase",
+    "copilot doesn't understand my codebase structure",
+    "ai agent breaks production code in legacy system"
+  ],
+  "commercial_keywords": [
+    "claude code",
+    "cursor pricing",
+    "github copilot pricing"
+  ],
+  "entities": [
+    "Cursor",
+    "Claude Code",
+    "GitHub Copilot",
+    "context window",
+    "embeddings",
+    "monorepo",
+    "brownfield",
+    "greenfield"
+  ],
+  "primary_intent": "Comparative",
+  "secondary_intent": "Informational",
+  "audience": "Software engineers and engineering leaders deciding which AI coding assistant to use on production/legacy systems vs new projects",
+  "countries": [],
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "Cursor",
+    "Claude"
+  ],
+  "connects_to_service": "Custom Software Development (positions the agency's engineering work against AI-assisted coding limitations)",
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 6,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 6,
+    "conversion_potential": 5,
+    "evidence_quality": 6,
+    "total": 59
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Does Cursor work well on large, existing codebases?",
+      "answer_summary": "Cursor's automatic embedding-based retrieval works well when it successfully pulls the right files into context, but reviewers report it starts hallucinating more on large monorepos or fragmented codebases when it can't.",
+      "sources": [
+        "https://www.nxcode.io/resources/news/cursor-vs-claude-code-vs-github-copilot-2026-ultimate-comparison"
+      ]
+    },
+    {
+      "question": "How does Claude Code's context window compare to Cursor's on big codebases?",
+      "answer_summary": "Comparisons describe Claude Code offering a much larger context window (reported up to roughly 1M tokens in some configurations) versus Cursor's typical 128K-256K token range.",
+      "sources": [
+        "https://www.nxcode.io/resources/news/cursor-vs-claude-code-vs-github-copilot-2026-ultimate-comparison",
+        "https://www.artifilog.com/posts/claude-code-vs-cursor-vs-copilot"
+      ]
+    },
+    {
+      "question": "Why do AI coding agents perform better on greenfield projects than on legacy ones?",
+      "answer_summary": "Greenfield projects have no history, no hidden dependencies, and explicit, visible conventions, whereas legacy systems have real constraints scattered across incident postmortems, Slack threads, and undocumented institutional memory.",
+      "sources": [
+        "https://www.cloudgeometry.com/blog/greenfield-brownfield-ai-coding-real-codebase",
+        "https://tianpan.co/blog/2026-04-19-ai-coding-agents-legacy-codebases"
+      ]
+    },
+    {
+      "question": "Can AI coding agents actually do better on legacy code in some respects?",
+      "answer_summary": "Counterintuitively, yes in some ways — legacy systems often come with years of accumulated documentation, runbooks, and postmortems that a brand-new greenfield project simply doesn't have yet.",
+      "sources": [
+        "https://tianpan.co/blog/2026-04-19-ai-coding-agents-legacy-codebases"
+      ]
+    },
+    {
+      "question": "What's the biggest risk of using AI coding agents on brownfield/production codebases?",
+      "answer_summary": "AI agents can produce plausible-looking, syntactically valid, but semantically wrong changes that slip through code review and reach production, which is especially costly in regulated domains like insurance, banking, or healthcare.",
+      "sources": [
+        "https://tianpan.co/blog/2026-04-19-ai-coding-agents-brownfield-legacy-code"
+      ]
+    },
+    {
+      "question": "Why does code review sometimes fail to catch AI-generated bugs in legacy systems?",
+      "answer_summary": "Reviewers depend on contextual familiarity with the codebase that the AI agent doesn't have, and that context is often scattered across undocumented institutional knowledge rather than in the code itself.",
+      "sources": [
+        "https://tianpan.co/blog/2026-04-19-ai-coding-agents-legacy-codebases"
+      ]
+    },
+    {
+      "question": "What workflow do experienced developers use to combine these tools?",
+      "answer_summary": "A commonly cited hybrid pattern is using Cursor or Copilot for day-to-day editing and Claude Code for more complex, large-context or agentic tasks.",
+      "sources": [
+        "https://www.nxcode.io/resources/news/cursor-vs-claude-code-vs-github-copilot-2026-ultimate-comparison"
+      ]
+    },
+    {
+      "question": "How should teams do context engineering for AI agents working on legacy codebases?",
+      "answer_summary": "Guides recommend feeding agents accumulated context such as runbooks and postmortems, and using scoped instruction/rule files, as part of a documented set of fixes for legacy-code context gaps.",
+      "sources": [
+        "https://www.softude.com/blog/context-engineering-ai-coding-agents-legacy-code-fixes"
+      ]
+    },
+    {
+      "question": "Is it safe to \"vibe code\" a greenfield project?",
+      "answer_summary": "It's considered lower-risk on greenfield projects because there are no real users yet to be harmed by mistakes, though quality standards are expected to rise once users arrive.",
+      "sources": [
+        "https://www.cloudgeometry.com/blog/greenfield-brownfield-ai-coding-real-codebase"
+      ]
+    },
+    {
+      "question": "What does GitHub Copilot lack compared to Claude Code or Cursor for large-codebase understanding?",
+      "answer_summary": "Comparative reviews describe Copilot as lacking Claude Code's large context window and Cursor's codebase-embedding/composer-level understanding.",
+      "sources": [
+        "https://www.nxcode.io/resources/news/cursor-vs-claude-code-vs-github-copilot-2026-ultimate-comparison"
+      ]
+    },
+    {
+      "question": "Why is verification cost framed as lower than production-bug cost when using AI agents on brownfield systems?",
+      "answer_summary": "The argument made is that investing time in verifying AI-authored changes costs far less than the cost of an AI-introduced bug reaching production in a high-stakes brownfield system.",
+      "sources": [
+        "https://tianpan.co/blog/2026-04-19-ai-coding-agents-brownfield-legacy-code"
+      ]
+    },
+    {
+      "question": "Do experts see more risk or more speed benefit from AI coding assistants overall?",
+      "answer_summary": "Industry commentary frames it as a speed-vs-risk tradeoff that experts weigh differently depending on codebase maturity and domain criticality.",
+      "sources": [
+        "https://www.dice.com/career-advice/speed-vs.-risk-experts-weigh-in-on-using-ai-coding-assistants"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Cursor vs Claude Code vs GitHub Copilot 2026: The Ultimate Comparison",
+      "url": "https://www.nxcode.io/resources/news/cursor-vs-claude-code-vs-github-copilot-2026-ultimate-comparison",
+      "source_type": "industry publication",
+      "used_for": "Context window comparisons and hybrid-tool workflow pattern"
+    },
+    {
+      "title": "Claude Code vs Cursor vs Copilot: The Honest 2026 Developer Comparison",
+      "url": "https://www.artifilog.com/posts/claude-code-vs-cursor-vs-copilot",
+      "source_type": "industry publication",
+      "used_for": "Additional context-window and capability comparison"
+    },
+    {
+      "title": "Greenfield vs Brownfield: Why AI Coding Tools Break on Your Real Codebase",
+      "url": "https://www.cloudgeometry.com/blog/greenfield-brownfield-ai-coding-real-codebase",
+      "source_type": "industry publication",
+      "used_for": "Why AI tools perform differently on greenfield vs brownfield code"
+    },
+    {
+      "title": "AI Coding Agents on Legacy Codebases: Why They Fail Where You Need Them Most",
+      "url": "https://tianpan.co/blog/2026-04-19-ai-coding-agents-legacy-codebases",
+      "source_type": "community",
+      "used_for": "Detailed analysis of legacy-codebase failure modes and context gaps"
+    },
+    {
+      "title": "AI Coding Agents on Legacy Codebases: What Works and What Backfires",
+      "url": "https://tianpan.co/blog/2026-04-19-ai-coding-agents-brownfield-legacy-code",
+      "source_type": "community",
+      "used_for": "Risk framing and verification-cost argument for brownfield AI coding"
+    },
+    {
+      "title": "Context Engineering for AI Coding Agents: 6 Proven Fixes",
+      "url": "https://www.softude.com/blog/context-engineering-ai-coding-agents-legacy-code-fixes",
+      "source_type": "company docs",
+      "used_for": "Recommended context-engineering fixes for legacy codebases"
+    },
+    {
+      "title": "Speed vs. Risk: Experts Weigh In on Using AI Coding Assistants",
+      "url": "https://www.dice.com/career-advice/speed-vs.-risk-experts-weigh-in-on-using-ai-coding-assistants",
+      "source_type": "industry publication",
+      "used_for": "Expert framing of speed-vs-risk tradeoff"
+    }
+  ]
+}

@@ -1,0 +1,245 @@
+{
+  "candidate_id": "C091",
+  "topic": "How small teams are actually choosing between no-code and custom development",
+  "status": "accepted",
+  "target_keyword": "no-code vs custom development",
+  "secondary_keywords": [
+    "no-code vs custom software development",
+    "when to choose custom development over no-code",
+    "no-code vs custom code for startups",
+    "low-code vs no-code vs custom development"
+  ],
+  "long_tail_keywords": [
+    "no-code vs custom development for small business",
+    "should I use no-code or hire a developer for my MVP",
+    "no-code vs custom code for e-commerce",
+    "no-code vs custom code for a SaaS product"
+  ],
+  "question_keywords": [
+    "is no-code worth it",
+    "when should you actually choose no-code over custom code",
+    "should I choose no-code/low-code or learn to code",
+    "is bubble.io a scalable solution for a saas"
+  ],
+  "comparison_keywords": [
+    "no-code vs custom code",
+    "no-code vs low-code vs custom development",
+    "bubble vs custom code",
+    "no-code vs traditional coding"
+  ],
+  "how_to_keywords": [
+    "how to decide between no-code and custom development",
+    "how to know when to move from no-code to custom code",
+    "how to export a no-code app to custom code"
+  ],
+  "problem_keywords": [
+    "no-code limitations for small business",
+    "no-code vs custom code security gaps",
+    "no-code technical debt"
+  ],
+  "commercial_keywords": [
+    "custom software development company",
+    "no-code app development agency",
+    "hire a developer instead of no-code",
+    "custom software development service"
+  ],
+  "entities": [
+    "Bubble",
+    "Webflow",
+    "Airtable",
+    "Xano",
+    "no-code",
+    "low-code",
+    "custom software development",
+    "MVP",
+    "SaaS"
+  ],
+  "primary_intent": "Comparative",
+  "secondary_intent": "Commercial Investigation",
+  "audience": "Non-technical founders, small business owners, and startup teams deciding how to build their first product, internal tool, or MVP",
+  "countries": [],
+  "topic_cluster": "No-Code vs Custom Development Decision-Making",
+  "connects_to_service": "custom-software-service",
+  "connects_to_tools": [
+    "no-code-apps (prompt/tool category)"
+  ],
+  "connects_to_prompts": [
+    "MVP planning prompts",
+    "no-code app builder prompts",
+    "software requirements / spec-writing prompts"
+  ],
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 8,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 5,
+    "conversion_potential": 6,
+    "evidence_quality": 8,
+    "total": 67
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "How do you decide whether to automate something with real code versus a no-code tool?",
+      "answer_summary": "Real Redditors say it depends on the team's technical level and willingness to build; many start no-code and move to code only when the no-code approach becomes limiting.",
+      "sources": [
+        "https://www.reddit.com/r/nocode/comments/1qojnz3/how_to_decide_between_custom_code_automations_and/"
+      ]
+    },
+    {
+      "question": "When should you actually choose no-code over custom code?",
+      "answer_summary": "A widely-upvoted framing splits the decision into 'learn vs. scale' — no-code is for learning/validating fast, custom code is for scaling a proven idea.",
+      "sources": [
+        "https://www.reddit.com/r/FounderFAQs/comments/1qk9jvb/when_should_you_actually_choose_nocode_over/"
+      ]
+    },
+    {
+      "question": "Can you start with no-code and later move to custom code?",
+      "answer_summary": "Yes — a common pattern is starting no-code to validate quickly, then exporting/rebuilding in custom code once the idea is proven and needs go beyond what no-code offers.",
+      "sources": [
+        "https://www.reddit.com/r/nocode/comments/u2j0pi/no_code_vs_custom_development/"
+      ]
+    },
+    {
+      "question": "Is no-code better for a non-technical founder with zero coding background?",
+      "answer_summary": "Top advice pushes non-technical founders to first learn basic web app architecture (front end/back end) before picking a tool, rather than assuming no-code alone solves the problem.",
+      "sources": [
+        "https://www.reddit.com/r/nocode/comments/1ek1w8n/leaning_nocode_vs_code_for_non_technical_people/"
+      ]
+    },
+    {
+      "question": "Where do no-code tools actually make sense in practice for real teams?",
+      "answer_summary": "In practice, teams commonly run a hybrid model: no-code for rapid iteration and operational tooling, custom code for the core system that needs to scale.",
+      "sources": [
+        "https://www.reddit.com/r/nocode/comments/1p0jc0x/trying_to_understand_where_nocode_tools_actually/"
+      ]
+    },
+    {
+      "question": "Should I choose no-code/low-code or learn to code?",
+      "answer_summary": "Consensus among non-technical responders is that no-code remains the best option for people without a technical background, though experienced developers push back on this.",
+      "sources": [
+        "https://www.reddit.com/r/nocode/comments/1dyfvac/should_i_choose_nocodelowcode_or_learn_to_code/"
+      ]
+    },
+    {
+      "question": "Do small business owners prefer coding their own website or using no-code tools?",
+      "answer_summary": "Most small-business responders say there's little reason to go fully custom-coded unless there's a specific technical need the business actually has.",
+      "sources": [
+        "https://www.reddit.com/r/smallbusiness/comments/1fpre84/do_you_prefer_coding_your_websites_or_using/"
+      ]
+    },
+    {
+      "question": "Is no-code or custom code better for e-commerce?",
+      "answer_summary": "Custom code (Next.js, Remix, headless architectures) is argued to give better performance, no platform lock-in, and full data ownership versus no-code e-commerce builders.",
+      "sources": [
+        "https://www.reddit.com/r/Backend/comments/1sash6o/nocode_vs_custom_code_for_ecommerce_in_2026_which/"
+      ]
+    },
+    {
+      "question": "What are the pros and cons of buying a low-code/no-code platform versus a custom DIY build for enterprise integrations?",
+      "answer_summary": "IT managers report low-code is excellent for integrations because it's largely self-documenting, whereas a custom DIY build is not, but comes with less platform lock-in.",
+      "sources": [
+        "https://www.reddit.com/r/ITManagers/comments/1gjmy80/pros_and_cons_of_buying_lowcodenocode_platforms/"
+      ]
+    },
+    {
+      "question": "Is a no-code or custom-coded solution better for building an MVP quickly?",
+      "answer_summary": "No-code is favored for speed and non-technical founders bringing simple ideas to life quickly, while a custom-coded solution is favored for unique or complex requirements.",
+      "sources": [
+        "https://www.reddit.com/r/SaaS/comments/1bvm8yu/code_vs_nocode_website_development_in_2024_which/"
+      ]
+    },
+    {
+      "question": "Is no-code cheaper than custom development for a first version of a product?",
+      "answer_summary": "Industry write-ups frame no-code as cheaper and faster for a first version (days of configuration vs. weeks of development), but note it becomes expensive at scale due to platform fees.",
+      "sources": [
+        "https://www.marshalltech.io/insights (No-Code vs Custom Code: Decision Guide 2026)"
+      ]
+    },
+    {
+      "question": "What is the real trade-off between no-code and custom development?",
+      "answer_summary": "Industry blogs converge on: no-code wins on speed and accessibility, custom development wins on scalability and security — the right balance depends on the product's stage and needs.",
+      "sources": [
+        "https://www.cobeisfresh.com/blog/no-code-vs-custom-development"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Code vs No-Code Website Development in 2024 (r/SaaS)",
+      "url": "https://www.reddit.com/r/SaaS/comments/1bvm8yu/code_vs_nocode_website_development_in_2024_which/",
+      "source_type": "community",
+      "used_for": "Real founder discussion on choosing no-code vs custom code for an MVP"
+    },
+    {
+      "title": "How to decide between custom code automations and no-code (r/nocode)",
+      "url": "https://www.reddit.com/r/nocode/comments/1qojnz3/how_to_decide_between_custom_code_automations_and/",
+      "source_type": "community",
+      "used_for": "Decision criteria people actually use"
+    },
+    {
+      "title": "No Code vs. Custom Development (r/nocode)",
+      "url": "https://www.reddit.com/r/nocode/comments/u2j0pi/no_code_vs_custom_development/",
+      "source_type": "community",
+      "used_for": "Hybrid start-no-code-then-migrate pattern"
+    },
+    {
+      "title": "When should you actually choose no-code over custom code (r/FounderFAQs)",
+      "url": "https://www.reddit.com/r/FounderFAQs/comments/1qk9jvb/when_should_you_actually_choose_nocode_over/",
+      "source_type": "community",
+      "used_for": "Learn-vs-scale framing of the decision"
+    },
+    {
+      "title": "Leaning nocode vs code for non-technical people (r/nocode)",
+      "url": "https://www.reddit.com/r/nocode/comments/1ek1w8n/leaning_nocode_vs_code_for_non_technical_people/",
+      "source_type": "community",
+      "used_for": "Non-technical founder perspective"
+    },
+    {
+      "title": "Trying to understand where no-code tools actually make sense (r/nocode)",
+      "url": "https://www.reddit.com/r/nocode/comments/1p0jc0x/trying_to_understand_where_nocode_tools_actually/",
+      "source_type": "community",
+      "used_for": "Hybrid no-code/custom-code team patterns"
+    },
+    {
+      "title": "Should I choose No-Code/Low-Code or learn to code? (r/nocode)",
+      "url": "https://www.reddit.com/r/nocode/comments/1dyfvac/should_i_choose_nocodelowcode_or_learn_to_code/",
+      "source_type": "community",
+      "used_for": "Non-technical audience sentiment"
+    },
+    {
+      "title": "Do you prefer coding your websites or using no-code? (r/smallbusiness)",
+      "url": "https://www.reddit.com/r/smallbusiness/comments/1fpre84/do_you_prefer_coding_your_websites_or_using/",
+      "source_type": "community",
+      "used_for": "Small business owner perspective"
+    },
+    {
+      "title": "No-Code vs. Custom Code for E-commerce in 2026 (r/Backend)",
+      "url": "https://www.reddit.com/r/Backend/comments/1sash6o/nocode_vs_custom_code_for_ecommerce_in_2026_which/",
+      "source_type": "community",
+      "used_for": "E-commerce-specific trade-offs"
+    },
+    {
+      "title": "Pros and cons of buying low-code/no-code platforms (r/ITManagers)",
+      "url": "https://www.reddit.com/r/ITManagers/comments/1gjmy80/pros_and_cons_of_buying_lowcodenocode_platforms/",
+      "source_type": "community",
+      "used_for": "Enterprise/IT-manager integration perspective"
+    },
+    {
+      "title": "No-Code vs Custom Code: Decision Guide 2026",
+      "url": "https://www.marshalltech.io/insights",
+      "source_type": "industry publication",
+      "used_for": "Cost/scale framing of no-code vs custom decision"
+    },
+    {
+      "title": "No-Code vs. Custom Development: Why One Can't Replace the Other",
+      "url": "https://www.cobeisfresh.com/blog/no-code-vs-custom-development",
+      "source_type": "industry publication",
+      "used_for": "Speed/accessibility vs scalability/security framing"
+    }
+  ]
+}

@@ -1,0 +1,171 @@
+{
+  "candidate_id": "C047",
+  "status": "accepted",
+  "topic": "How local businesses are actually using Google Business Profile beyond the basics",
+  "topic_cluster": "Local SEO / Google Business Profile mastery",
+  "target_keyword": "google business profile advanced tips",
+  "secondary_keywords": [
+    "google business profile features most businesses don't use",
+    "gbp optimization beyond the basics",
+    "advanced local seo google business profile"
+  ],
+  "long_tail_keywords": [
+    "how to use google business profile products and services features",
+    "google business profile relationships feature explained",
+    "do gbp services affect local ranking"
+  ],
+  "question_keywords": [
+    "do services in google business profile impact ranking",
+    "what happens if my gbp video verification is rejected",
+    "how to move a google business profile to a new state",
+    "what are relationships in google business profile"
+  ],
+  "comparison_keywords": [
+    "google business profile posts vs products",
+    "gbp messaging vs q&a feature"
+  ],
+  "how_to_keywords": [
+    "how to remove temporarily closed on google maps",
+    "how to do a local seo audit for google business profile",
+    "how to verify a business profile with video"
+  ],
+  "problem_keywords": [
+    "google business profile suspended reasons",
+    "gbp video verification rejected",
+    "duplicate google business profile listing"
+  ],
+  "commercial_keywords": [
+    "local seo audit service",
+    "google business profile management tool"
+  ],
+  "entities": [
+    "Google Business Profile",
+    "Google Maps",
+    "Local Inventory app",
+    "Product Studio",
+    "Sterling Sky"
+  ],
+  "primary_intent": "Tutorial",
+  "secondary_intent": "Problem-solving",
+  "audience": "Local business owners, local SEO agencies/consultants, and multi-location brand marketers managing Google Business Profiles",
+  "countries": [],
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "seo-geo"
+  ],
+  "connects_to_service": "seo-companies-for-small-business",
+  "scores": {
+    "demand": 6,
+    "intent": 6,
+    "relevance": 6,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 5,
+    "tool_discovery_opportunity": 3,
+    "competitive_gap": 5,
+    "conversion_potential": 7,
+    "evidence_quality": 6,
+    "total": 56
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Do services listed in a Google Business Profile actually impact local ranking?",
+      "answer_summary": "It's treated as an open/debated question by local SEO specialists rather than a confirmed ranking factor, and is the subject of dedicated practitioner analysis.",
+      "sources": [
+        "https://www.sterlingsky.ca/blog/"
+      ]
+    },
+    {
+      "question": "What are 'Relationships' in Google Business Profile?",
+      "answer_summary": "Entity connections that define how distinct business listings are physically or organizationally nested within one another (e.g., a practice inside a larger facility).",
+      "sources": [
+        "https://www.sterlingsky.ca/blog/"
+      ]
+    },
+    {
+      "question": "Why was my Google Business Profile video verification rejected?",
+      "answer_summary": "Video verification is now required for many profiles and is commonly rejected for not meeting Google's specific filming requirements; dedicated troubleshooting guidance exists from local SEO specialists.",
+      "sources": [
+        "https://www.sterlingsky.ca/blog/"
+      ]
+    },
+    {
+      "question": "How do I move a Google Business Profile to a new state or location?",
+      "answer_summary": "Relocating a profile across state lines requires specific steps distinct from a simple address edit, covered in dedicated local-SEO guidance.",
+      "sources": [
+        "https://www.sterlingsky.ca/blog/"
+      ]
+    },
+    {
+      "question": "How do I remove 'Temporarily Closed' status from a Google Maps listing?",
+      "answer_summary": "Requires specific status-update steps within the profile dashboard rather than just editing hours.",
+      "sources": [
+        "https://www.sterlingsky.ca/blog/"
+      ]
+    },
+    {
+      "question": "What triggers a Google Business Profile suspension?",
+      "answer_summary": "Multiple triggers exist (policy violations, verification failures, spam signals), detailed in a dedicated local-SEO 'suspensions playbook.'",
+      "sources": [
+        "https://www.sterlingsky.ca/blog/"
+      ]
+    },
+    {
+      "question": "What official features exist for engaging customers beyond posting hours and address?",
+      "answer_summary": "Google's own help documentation lists Posts, direct customer chat/messaging, product-showcase tools (Local Inventory app, Product Studio), and review management as dedicated engagement features.",
+      "sources": [
+        "https://support.google.com/business/"
+      ]
+    },
+    {
+      "question": "What help categories does Google itself provide for Business Profile beyond setup?",
+      "answer_summary": "Official categories include managing photos/video, in-store product offerings, ownership/settings, customer engagement, performance insights, and fixing suspensions/duplicates.",
+      "sources": [
+        "https://support.google.com/business/"
+      ]
+    },
+    {
+      "question": "Does having strong photo/video content matter for a Business Profile?",
+      "answer_summary": "Google treats photo and video management as its own dedicated official feature category, suggesting it's considered a core profile-performance lever rather than an afterthought.",
+      "sources": [
+        "https://support.google.com/business/"
+      ]
+    },
+    {
+      "question": "How can I check how my Google Business Profile is performing?",
+      "answer_summary": "Google provides a dedicated 'Improve your Business Profile performance' help section covering analytics, ranking tips, and advertising links.",
+      "sources": [
+        "https://support.google.com/business/"
+      ]
+    },
+    {
+      "question": "What are the Local Inventory app and Product Studio, and how do they help a listing?",
+      "answer_summary": "Official Google tools for managing in-store product offerings and generating product visuals directly for a Business Profile.",
+      "sources": [
+        "https://support.google.com/business/"
+      ]
+    },
+    {
+      "question": "How do I fix a duplicate Google Business Profile listing?",
+      "answer_summary": "Covered under Google's dedicated 'Fix issues with your Business Profile' help category, alongside suspensions and policy appeals.",
+      "sources": [
+        "https://support.google.com/business/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Google Business Profile Help",
+      "url": "https://support.google.com/business/",
+      "source_type": "primary/official",
+      "used_for": "Full list of official GBP help categories and documented features"
+    },
+    {
+      "title": "Sterling Sky blog",
+      "url": "https://www.sterlingsky.ca/blog/",
+      "source_type": "community",
+      "used_for": "Current (2026) practitioner-level advanced GBP topics: relationships, video verification, suspensions, services-ranking debate, cross-state moves"
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "candidate_id": "C012",
+  "topic": "What a CLAUDE.md, .cursorrules, and a Copilot instructions file actually do differently",
+  "status": "accepted",
+  "topic_cluster": "AI coding assistants: context, scale, and codebase maturity",
+  "target_keyword": "claude.md vs cursorrules vs copilot instructions",
+  "secondary_keywords": [
+    "claude code memory file",
+    "cursor rules mdc format",
+    "copilot custom instructions file",
+    "agents.md convention"
+  ],
+  "long_tail_keywords": [
+    "difference between claude.md and cursorrules",
+    "how does copilot-instructions.md work vs claude.md",
+    "agents.md vs claude.md",
+    "is cursorrules deprecated in favor of cursor rules"
+  ],
+  "question_keywords": [
+    "what is claude.md file",
+    "is .cursorrules deprecated",
+    "does copilot read copilot-instructions.md automatically",
+    "can i use one file for all ai coding assistants",
+    "why does claude ignore my claude.md"
+  ],
+  "comparison_keywords": [
+    "claude.md vs agents.md",
+    "cursorrules vs cursor/rules",
+    "copilot instructions vs claude code rules",
+    "cursor agent mode vs edit mode rules"
+  ],
+  "how_to_keywords": [
+    "how to write a claude.md file",
+    "how to migrate cursorrules to cursor rules",
+    "how to set up copilot-instructions.md",
+    "how to scope rules to specific file paths"
+  ],
+  "problem_keywords": [
+    "claude ignoring my claude.md instructions",
+    "cursor rules not being applied",
+    "copilot not following custom instructions",
+    "claude.md too large context"
+  ],
+  "commercial_keywords": [
+    "claude code",
+    "cursor",
+    "github copilot"
+  ],
+  "entities": [
+    "Anthropic",
+    "Claude Code",
+    "CLAUDE.md",
+    "AGENTS.md",
+    "Cursor",
+    ".cursorrules",
+    ".cursor/rules",
+    "mdc",
+    "GitHub Copilot",
+    "copilot-instructions.md",
+    "VS Code"
+  ],
+  "primary_intent": "Comparative",
+  "secondary_intent": "Tutorial",
+  "audience": "Developers and teams configuring persistent instructions/context for Claude Code, Cursor, and GitHub Copilot across a shared repository",
+  "countries": [],
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "Cursor",
+    "Claude"
+  ],
+  "connects_to_service": "Custom Software Development (AI-agent workflow setup for client engineering teams)",
+  "scores": {
+    "demand": 6,
+    "intent": 8,
+    "relevance": 6,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 5,
+    "conversion_potential": 5,
+    "evidence_quality": 9,
+    "total": 68
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What is CLAUDE.md and how does Claude Code use it?",
+      "answer_summary": "CLAUDE.md is a markdown file giving Claude Code persistent, project/user/org-scoped instructions, loaded at the start of every session, with directory-hierarchy resolution and support for @path imports up to 4 hops deep.",
+      "sources": [
+        "https://code.claude.com/docs/en/memory"
+      ]
+    },
+    {
+      "question": "Is .cursorrules deprecated?",
+      "answer_summary": "Yes — Cursor deprecated the single .cursorrules file around version 0.43 in late 2024 in favor of Project Rules in .cursor/rules/, though the legacy file is still read for backward compatibility.",
+      "sources": [
+        "https://www.flowql.com/en/blog/guides/cursor-rules-deprecated-libraries/",
+        "https://forum.cursor.com/t/generate-cursor-rules-created-a-deprecated-cursorrules-file/113200"
+      ]
+    },
+    {
+      "question": "What's the difference between .cursorrules and the newer .cursor/rules/*.mdc files?",
+      "answer_summary": "The legacy .cursorrules file applies globally with no scoping; .mdc files in .cursor/rules/ support YAML frontmatter, glob-based path scoping, and multiple activation modes.",
+      "sources": [
+        "https://www.morphllm.com/cursor-rules-best-practices"
+      ]
+    },
+    {
+      "question": "How does GitHub Copilot's copilot-instructions.md differ from CLAUDE.md?",
+      "answer_summary": "Copilot's file is a single flat repo-wide markdown file (plus optional path-scoped .instructions.md files), while CLAUDE.md has a fuller multi-scope model (managed/user/project/local), directory-hierarchy loading, and an automatic 'auto memory' system Copilot doesn't have.",
+      "sources": [
+        "https://docs.github.com/en/copilot/how-tos/configure-custom-instructions-in-your-ide/add-repository-instructions-in-your-ide",
+        "https://code.claude.com/docs/en/memory"
+      ]
+    },
+    {
+      "question": "Does Claude Code automatically read AGENTS.md?",
+      "answer_summary": "No — Claude Code only reads CLAUDE.md by default; to reuse an existing AGENTS.md, you import it into CLAUDE.md with '@AGENTS.md' or symlink CLAUDE.md to it.",
+      "sources": [
+        "https://code.claude.com/docs/en/memory"
+      ]
+    },
+    {
+      "question": "Can CLAUDE.md, .cursorrules, and copilot-instructions.md coexist in the same repository without conflict?",
+      "answer_summary": "Yes — since each tool only looks for its own filename/location, all three can live in the same repo without interfering with each other.",
+      "sources": [
+        "https://codersera.com/blog/agents-md-vs-claude-md-vs-cursor-rules-comparison-2026/"
+      ]
+    },
+    {
+      "question": "Does Claude Code's /init command pull in existing Cursor or Copilot rule files?",
+      "answer_summary": "Yes — /init reads .cursor/rules/, .cursorrules, and .github/copilot-instructions.md and incorporates relevant parts into the CLAUDE.md it generates.",
+      "sources": [
+        "https://code.claude.com/docs/en/memory"
+      ]
+    },
+    {
+      "question": "Why does Claude, Cursor, or Copilot sometimes seem to ignore my rules file?",
+      "answer_summary": "These files are context, not enforced configuration, so vague or conflicting instructions, files that never actually loaded (wrong location), or context dilution over a long session can all cause inconsistent adherence; Claude Code's own docs recommend hooks instead of CLAUDE.md for anything that must run every time.",
+      "sources": [
+        "https://code.claude.com/docs/en/memory",
+        "https://sdrmike.medium.com/cursor-rules-why-your-ai-agent-is-ignoring-you-and-how-to-fix-it-5b4d2ac0b1b0"
+      ]
+    },
+    {
+      "question": "What's the recommended maximum size for a CLAUDE.md file?",
+      "answer_summary": "Anthropic recommends keeping each CLAUDE.md file under 200 lines, since longer files consume more context and reduce instruction adherence.",
+      "sources": [
+        "https://code.claude.com/docs/en/memory"
+      ]
+    },
+    {
+      "question": "Does Cursor apply rules differently in Agent mode vs Edit mode?",
+      "answer_summary": "Reported behavior is that Cursor's Agent mode finds, loads, and follows rules properly, while the older 'edit' mode doesn't automatically pick up rules unless manually added to context.",
+      "sources": [
+        "https://sdrmike.medium.com/cursor-rules-why-your-ai-agent-is-ignoring-you-and-how-to-fix-it-5b4d2ac0b1b0"
+      ]
+    },
+    {
+      "question": "What priority order does GitHub Copilot use for personal, repository, and organization instructions?",
+      "answer_summary": "Personal instructions take the highest priority, followed by repository instructions, with organization instructions applied last.",
+      "sources": [
+        "https://docs.github.com/en/copilot/how-tos/configure-custom-instructions-in-your-ide/add-repository-instructions-in-your-ide"
+      ]
+    },
+    {
+      "question": "Can rules be scoped to only certain files or folders in both Claude Code and Cursor?",
+      "answer_summary": "Yes — Claude Code's .claude/rules/ supports YAML 'paths' glob frontmatter to load a rule only for matching files, and Cursor's .mdc files support similar glob-scoped activation.",
+      "sources": [
+        "https://code.claude.com/docs/en/memory",
+        "https://www.morphllm.com/cursor-rules-best-practices"
+      ]
+    },
+    {
+      "question": "What happens to CLAUDE.md content after a long session gets compacted?",
+      "answer_summary": "The project-root CLAUDE.md is re-read from disk and re-injected automatically after /compact, but nested subdirectory CLAUDE.md files and path-scoped rules are not automatically re-injected until Claude reads a matching file again.",
+      "sources": [
+        "https://code.claude.com/docs/en/memory"
+      ]
+    },
+    {
+      "question": "Is there a universal instructions file that works across Claude, Cursor, and Copilot?",
+      "answer_summary": "AGENTS.md is emerging as a cross-tool convention that multiple agents are adopting; Claude Code specifically supports importing an existing AGENTS.md into CLAUDE.md rather than requiring duplication.",
+      "sources": [
+        "https://code.claude.com/docs/en/memory"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "How Claude remembers your project",
+      "url": "https://code.claude.com/docs/en/memory",
+      "source_type": "primary/official",
+      "used_for": "Full official documentation of CLAUDE.md: locations, hierarchy, imports, size limits, /init behavior reading Cursor/Copilot files, compaction behavior, troubleshooting"
+    },
+    {
+      "title": "Adding repository custom instructions for GitHub Copilot in your IDE",
+      "url": "https://docs.github.com/en/copilot/how-tos/configure-custom-instructions-in-your-ide/add-repository-instructions-in-your-ide",
+      "source_type": "primary/official",
+      "used_for": "Official GitHub Copilot custom-instructions file structure and priority order"
+    },
+    {
+      "title": ".cursorrules is deprecated — switch to .cursor/rules (.mdc) instead",
+      "url": "https://www.flowql.com/en/blog/guides/cursor-rules-deprecated-libraries/",
+      "source_type": "industry publication",
+      "used_for": "Confirming .cursorrules deprecation timeline and migration path"
+    },
+    {
+      "title": "/Generate Cursor Rules created a deprecated .cursorrules file?",
+      "url": "https://forum.cursor.com/t/generate-cursor-rules-created-a-deprecated-cursorrules-file/113200",
+      "source_type": "community",
+      "used_for": "Real user confirmation of .cursorrules deprecation status from Cursor's own community forum"
+    },
+    {
+      "title": "Cursor Rules Best Practices: Complete .mdc Guide (2026)",
+      "url": "https://www.morphllm.com/cursor-rules-best-practices",
+      "source_type": "industry publication",
+      "used_for": ".mdc format details, glob scoping, activation modes"
+    },
+    {
+      "title": "AGENTS.md vs CLAUDE.md vs Cursor Rules vs Copilot (2026)",
+      "url": "https://codersera.com/blog/agents-md-vs-claude-md-vs-cursor-rules-comparison-2026/",
+      "source_type": "industry publication",
+      "used_for": "Confirming file coexistence and naming non-conflict across tools"
+    },
+    {
+      "title": "Cursor Rules: Why Your AI Agent Is Ignoring You (and How to Fix It)",
+      "url": "https://sdrmike.medium.com/cursor-rules-why-your-ai-agent-is-ignoring-you-and-how-to-fix-it-5b4d2ac0b1b0",
+      "source_type": "community",
+      "used_for": "Agent-mode vs edit-mode rule adherence behavior, troubleshooting perspective"
+    }
+  ]
+}

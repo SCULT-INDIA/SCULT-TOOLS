@@ -1,0 +1,218 @@
+{
+  "candidate_id": "C013",
+  "status": "accepted",
+  "topic": "Why AI-generated code reviews still miss the same categories of bugs",
+  "topic_cluster": "AI code review limitations",
+  "target_keyword": "ai code review blind spots",
+  "secondary_keywords": [
+    "ai code review limitations",
+    "what ai code review misses",
+    "ai code reviewer accuracy",
+    "ai code review false negatives",
+    "ai code review vs human review"
+  ],
+  "long_tail_keywords": [
+    "why does ai code review miss logic bugs",
+    "can ai code review catch race conditions",
+    "ai code review tools that actually catch bugs",
+    "why ai reviewing ai generated code is risky",
+    "same model writing and reviewing code blind spots"
+  ],
+  "question_keywords": [
+    "what bugs does ai code review miss",
+    "how accurate is ai code review",
+    "can ai catch security vulnerabilities in code review",
+    "why does ai code review miss business logic errors",
+    "is ai code review reliable enough to replace human review"
+  ],
+  "comparison_keywords": [
+    "ai code review vs human code review",
+    "claude vs copilot vs coderabbit code review accuracy",
+    "static analysis vs ai code review"
+  ],
+  "how_to_keywords": [
+    "how to catch logic bugs ai code review misses",
+    "how to set up ai code review without false confidence",
+    "how to review ai generated code effectively"
+  ],
+  "problem_keywords": [
+    "ai code review missed a bug in production",
+    "ai code review too many false positives",
+    "ai code review automation complacency"
+  ],
+  "commercial_keywords": [
+    "best ai code review tool",
+    "coderabbit vs entelligence vs copilot code review",
+    "ai code review tool pricing"
+  ],
+  "entities": [
+    "Claude",
+    "GitHub Copilot",
+    "CodeRabbit",
+    "Entelligence",
+    "Cursor",
+    "NIST SATE",
+    "Gson",
+    "Bun"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Informational",
+  "audience": "software engineers, engineering managers, and tech leads evaluating or already using AI code review tools",
+  "countries": [],
+  "connects_to_tools": [
+    "JSON Formatter & Validator"
+  ],
+  "connects_to_prompts": [
+    "Claude",
+    "Cursor",
+    "development frameworks"
+  ],
+  "connects_to_service": "AI agents/automation and custom software development services",
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 8,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 5,
+    "conversion_potential": 5,
+    "evidence_quality": 8,
+    "total": 64
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What categories of bugs do AI code review tools consistently miss?",
+      "answer_summary": "Race conditions, security/authorization flaws, breaking API changes, and business-logic/intent errors are the recurring miss categories, per multiple benchmark studies.",
+      "sources": [
+        "https://diffdojo.com/blog/ai-code-review-tools-miss-half",
+        "https://www.oreilly.com/radar/ai-code-review-only-catches-half-of-your-bugs/"
+      ]
+    },
+    {
+      "question": "How good are AI code review tools at catching real bugs, quantitatively?",
+      "answer_summary": "A benchmark of 67 real production bugs found the best tool caught only 49% recall (F1 up to 47.2%), with Claude at 42.8% and Copilot at 22.6%; a larger 200k+ PR study found 50-60% field effectiveness.",
+      "sources": [
+        "https://diffdojo.com/blog/ai-code-review-tools-miss-half"
+      ]
+    },
+    {
+      "question": "Why do static-analysis-style AI reviewers plateau around 50-60% detection?",
+      "answer_summary": "NIST SATE evaluations show static analysis tools plateau at 50-60% for security vulnerabilities, and a 2024 ISSTA study found 22% of vulnerable commits went entirely undetected across five tools.",
+      "sources": [
+        "https://www.oreilly.com/radar/ai-code-review-only-catches-half-of-your-bugs/"
+      ]
+    },
+    {
+      "question": "Is it risky to have the same AI model both write and review code?",
+      "answer_summary": "Yes — when the generating and reviewing model share the same training, they can carry the same blind spots into both jobs, creating confirmation bias at scale rather than independent verification.",
+      "sources": [
+        "https://diffdojo.com/blog/ai-code-review-tools-miss-half",
+        "https://hackernoon.com/the-problem-with-using-ai-to-review-ai-written-code"
+      ]
+    },
+    {
+      "question": "Does AI code review change what humans actually review?",
+      "answer_summary": "Yes — commenters and researchers note an AI reviewer changes what the human reviews, not whether the human reviews, and can create 'automation complacency' where a 50% catch rate gets trusted like a 90% one.",
+      "sources": [
+        "https://diffdojo.com/blog/ai-code-review-tools-miss-half"
+      ]
+    },
+    {
+      "question": "What tools are teams using for human code review of AI-assisted code?",
+      "answer_summary": "An Ask HN thread surfaces a mix of AI reviewer add-ons (CodeRabbit-style bots) plus manual review discipline; commenters are split on whether dedicated tools add value over prompting a general model directly.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=49321400"
+      ]
+    },
+    {
+      "question": "Why does AI code review generate so much noise (false positives)?",
+      "answer_summary": "Commenters report AI reviewers deliver many speculative/nitpick comments alongside real findings, making it hard to separate signal from noise, and results can be non-deterministic across runs.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=46766961"
+      ]
+    },
+    {
+      "question": "Can AI code review understand architectural or business context?",
+      "answer_summary": "No — AI reviewers act mainly as an 'advanced linter,' missing duplicate code, cross-module coupling, and separation-of-concerns issues that require broader system/business knowledge.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=46766961",
+        "https://dev.to/jaideepparashar/ai-powered-code-reviews-a-developers-secret-weapon-4enl"
+      ]
+    },
+    {
+      "question": "Does AI-generated code lead to more production incidents despite passing review?",
+      "answer_summary": "A survey of 105 engineering leaders found 61% shipped a production incident originating from AI-generated code within 90 days, even after it passed review and unit tests.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=46312159"
+      ]
+    },
+    {
+      "question": "Do AI reviewers detect hallucinated or non-existent APIs?",
+      "answer_summary": "AI review commonly fails to flag syntactically plausible but invalid code referencing functions or libraries that don't actually exist.",
+      "sources": [
+        "https://arxiv.org/pdf/2603.25146"
+      ]
+    },
+    {
+      "question": "How does human reviewer performance compare to AI on large diffs?",
+      "answer_summary": "Human reviewers also miss logic errors in large diffs, with detection degrading sharply past ~400 lines, meaning AI weaknesses aren't uniquely worse than human ones in every dimension.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=46312159"
+      ]
+    },
+    {
+      "question": "What is a 'design flaw' or 'intent violation' that AI review can't catch?",
+      "answer_summary": "Code that is syntactically correct and passes tests but solves the wrong problem — e.g., a bus-tracking app producing correct-looking but functionally wrong output, or Google's Gson null-key bug persisting through years of review.",
+      "sources": [
+        "https://www.oreilly.com/radar/ai-code-review-only-catches-half-of-your-bugs/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "AI code reviewers miss about half the bugs, and nobody benchmarks the human catching the rest",
+      "url": "https://diffdojo.com/blog/ai-code-review-tools-miss-half",
+      "source_type": "industry publication",
+      "used_for": "benchmark stats (67-bug study, tool F1 scores) and analysis of missed bug categories"
+    },
+    {
+      "title": "AI Code Review Only Catches Half of Your Bugs",
+      "url": "https://www.oreilly.com/radar/ai-code-review-only-catches-half-of-your-bugs/",
+      "source_type": "industry publication",
+      "used_for": "NIST SATE / ISSTA 2024 benchmark data and design-flaw examples"
+    },
+    {
+      "title": "Ask HN: What tools are you using for human code review of AI-assisted code?",
+      "url": "https://news.ycombinator.com/item?id=49321400",
+      "source_type": "community",
+      "used_for": "real practitioner questions/discussion on reviewing AI-assisted code"
+    },
+    {
+      "title": "There is an AI code review bubble (HN discussion)",
+      "url": "https://news.ycombinator.com/item?id=46766961",
+      "source_type": "community",
+      "used_for": "developer skepticism, noise/false-positive complaints"
+    },
+    {
+      "title": "AI helps ship faster but it produces 1.7x more bugs (HN discussion)",
+      "url": "https://news.ycombinator.com/item?id=46312159",
+      "source_type": "community",
+      "used_for": "production incident survey stat, human-review comparison"
+    },
+    {
+      "title": "The Problem With Using AI to Review AI-Written Code",
+      "url": "https://hackernoon.com/the-problem-with-using-ai-to-review-ai-written-code",
+      "source_type": "industry publication",
+      "used_for": "same-model blind spot argument"
+    },
+    {
+      "title": "Factors Influencing the Quality of AI-Generated Code (arXiv)",
+      "url": "https://arxiv.org/pdf/2603.25146",
+      "source_type": "government/academic",
+      "used_for": "hallucinated API detection failure evidence"
+    }
+  ]
+}

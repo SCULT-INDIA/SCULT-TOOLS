@@ -1,0 +1,153 @@
+{
+  "candidate_id": "C064",
+  "topic": "What a real brand style guide needs that a generated one usually skips",
+  "status": "accepted",
+  "target_keyword": "brand style guide essentials",
+  "secondary_keywords": [
+    "what to include in a brand style guide",
+    "brand guidelines template",
+    "generated brand guide mistakes"
+  ],
+  "long_tail_keywords": [
+    "what does a generated brand style guide usually miss",
+    "how detailed should a brand style guide be",
+    "brand style guide for small business"
+  ],
+  "question_keywords": [
+    "what should a brand style guide include",
+    "why do teams ignore their style guide",
+    "does a style guide need a rationale for decisions"
+  ],
+  "comparison_keywords": [
+    "brand style guide vs brand book",
+    "ai generated style guide vs professionally made one"
+  ],
+  "how_to_keywords": [
+    "how to create a brand style guide",
+    "how to make a style guide employees will actually use"
+  ],
+  "problem_keywords": [
+    "style guide too complex to use",
+    "inconsistent brand across materials",
+    "style guide missing usage rules"
+  ],
+  "commercial_keywords": [
+    "brand style guide generator",
+    "hire a designer for brand guidelines"
+  ],
+  "entities": [
+    "Mailchimp brand guidelines",
+    "Pantone",
+    "RGB",
+    "CMYK",
+    "Red Kite Design",
+    "Inkbot Design",
+    "WMATA brand guidelines"
+  ],
+  "audience": "small business owners and startup founders building their first brand identity, marketing managers standardizing brand assets, freelance/agency designers",
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "countries": [],
+  "topic_cluster": "Brand identity systems",
+  "connects_to_tools": [
+    "color-palette-generator"
+  ],
+  "connects_to_prompts": [
+    "design",
+    "business operations"
+  ],
+  "connects_to_service": "Branding",
+  "scores": {
+    "demand": 5,
+    "intent": 6,
+    "relevance": 7,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 6,
+    "conversion_potential": 7,
+    "evidence_quality": 6,
+    "total": 61
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What are the essential sections a brand style guide should include?",
+      "answer_summary": "A commonly cited framework lists seven: brand story, logo usage rules (including what's NOT allowed), exact color codes (Pantone/RGB/HEX/CMYK), typography rules, photography mood boards, illustration guidelines, and brand voice.",
+      "sources": [
+        "https://redkite.design/what-is-style-guide/"
+      ]
+    },
+    {
+      "question": "Should a style guide explain why design decisions were made, not just list the rules?",
+      "answer_summary": "Yes — one branding-agency analysis flags 'missing strategic rationale' (guidelines that exist without explaining why decisions were made) as a critical failure of basic style guides.",
+      "sources": [
+        "https://inkbotdesign.com/brand-design/"
+      ]
+    },
+    {
+      "question": "Why do employees or partner teams end up ignoring the official style guide?",
+      "answer_summary": "A commonly cited reason is that guides become 'overly complex PDFs that teams ignore rather than reference' instead of being a living, easy-to-use source of truth.",
+      "sources": [
+        "https://inkbotdesign.com/brand-design/"
+      ]
+    },
+    {
+      "question": "Is 'less is more' good advice when writing a style guide?",
+      "answer_summary": "No — one design-agency guide states 'less is more doesn't apply to style guides — you should be as detailed as possible,' specifically calling out logo variations, exact color codes, and voice guidance as areas needing detail.",
+      "sources": [
+        "https://redkite.design/what-is-style-guide/"
+      ]
+    },
+    {
+      "question": "Does a brand system need to work for automated/AI systems now, not just human readers?",
+      "answer_summary": "Yes — one branding analysis explicitly notes brands 'now need to work for humans, staff, and AI algorithms that verify and recommend,' beyond single-audience visual design.",
+      "sources": [
+        "https://inkbotdesign.com/brand-design/"
+      ]
+    },
+    {
+      "question": "What's an example of a real, published brand style guide?",
+      "answer_summary": "Mailchimp publishes its brand assets/style guide publicly, and public-sector examples such as WMATA (Washington DC Metro) have published brand and style guideline PDFs that get referenced online.",
+      "sources": [
+        "http://mailchimp.com/about/brand-assets/",
+        "https://www.wmata.com/business/procurement/solicitations/documents/Metro_Brand_and_Style_Guidelines.pdf"
+      ]
+    },
+    {
+      "question": "Do most 'free brand style guide generator' tools cover strategy, or just visual assets?",
+      "answer_summary": "Evidence suggests most easily found generator tools focus on assembling visual assets (logo, colors, fonts) rather than the strategic rationale or governance layer that agency-side write-ups say a real guide needs.",
+      "sources": [
+        "https://boldwebdesign.com.au/brand-style-guide-creator/",
+        "https://inkbotdesign.com/brand-design/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "What Is a Style Guide? — Red Kite Design",
+      "url": "https://redkite.design/what-is-style-guide/",
+      "source_type": "industry publication",
+      "used_for": "Seven-part framework for what a brand style guide should contain"
+    },
+    {
+      "title": "Brand Design 101: The Essentials Every Business Must Know — Inkbot Design",
+      "url": "https://inkbotdesign.com/brand-design/",
+      "source_type": "industry publication",
+      "used_for": "Common gaps/failures in basic style guides (missing rationale, unusable documentation, AI-facing consistency)"
+    },
+    {
+      "title": "Mailchimp Brand Style Guide",
+      "url": "http://mailchimp.com/about/brand-assets/",
+      "source_type": "company docs",
+      "used_for": "Real public example of a company brand style guide"
+    },
+    {
+      "title": "WMATA Brand and Style Guidelines (PDF)",
+      "url": "https://www.wmata.com/business/procurement/solicitations/documents/Metro_Brand_and_Style_Guidelines.pdf",
+      "source_type": "government/academic",
+      "used_for": "Real public-sector example of a formal brand guideline document"
+    }
+  ]
+}

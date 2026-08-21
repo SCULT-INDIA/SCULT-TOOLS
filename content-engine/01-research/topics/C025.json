@@ -1,0 +1,206 @@
+{
+  "candidate_id": "C025",
+  "status": "accepted",
+  "topic": "What an AI agent actually costs to run at real usage volume",
+  "topic_cluster": "AI agent production economics",
+  "target_keyword": "ai agent api cost at scale",
+  "secondary_keywords": [
+    "ai agent cost per task",
+    "ai agent token cost production",
+    "agentic ai cost management",
+    "how much do ai agents cost to run"
+  ],
+  "long_tail_keywords": [
+    "how much does it cost to run an ai agent in production",
+    "why did my ai agent bill explode overnight",
+    "ai agent cost per month for small business",
+    "hidden costs of running ai agents at scale",
+    "prompt caching to reduce ai agent costs"
+  ],
+  "question_keywords": [
+    "how much do ai agents cost to run monthly",
+    "why do ai agents cost more than chatbots",
+    "how many tokens does an ai agent use per task",
+    "what causes ai agent cost overruns"
+  ],
+  "comparison_keywords": [
+    "ai agent cost vs chatbot cost",
+    "inference cost vs orchestration cost"
+  ],
+  "how_to_keywords": [
+    "how to reduce ai agent api costs",
+    "how to set cost limits on ai agents",
+    "how to use prompt caching to cut agent costs",
+    "how to monitor ai agent token spend"
+  ],
+  "problem_keywords": [
+    "ai agent stuck in loop burning tokens",
+    "ai agent bill spiked overnight",
+    "agent cost runaway",
+    "context rot increasing agent costs"
+  ],
+  "commercial_keywords": [
+    "ai agent cost monitoring tool",
+    "llm cost management platform",
+    "ai agent budget enforcement software"
+  ],
+  "entities": [
+    "OpenAI",
+    "Anthropic Claude",
+    "Uber",
+    "Cockroach Labs",
+    "Gartner",
+    "Stanford Digital Economy Lab",
+    "Deloitte",
+    "Claude Code"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Informational",
+  "audience": "Engineering leaders, AI/ML engineers, and founders deciding whether/how to put an AI agent into production and budgeting for it",
+  "countries": [],
+  "connects_to_service": "ai-agents-automation-service",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "AI Agents & RAG",
+    "DevOps & Cloud"
+  ],
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 8,
+    "question_density": 7,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 6,
+    "conversion_potential": 7,
+    "evidence_quality": 8,
+    "total": 69
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Why did my AI agent bill jump from $80 to $400 overnight?",
+      "answer_summary": "A common cause is the agent entering a loop and calling the same tool dozens of times (one developer traced it to 47 repeated calls) before anyone notices; without cost caps or circuit breakers the spend keeps compounding.",
+      "sources": [
+        "https://dev.to/hidai25/my-ai-agent-cost-me-400-overnight-so-i-built-pytest-for-agents-and-open-sourced-it-492c"
+      ]
+    },
+    {
+      "question": "Why do agentic workflows cost so much more than a regular chatbot query?",
+      "answer_summary": "Agentic workflows consume roughly 5-30x more tokens per task than a standard chatbot query because they re-read context repeatedly across multi-step tool calls; re-sent context alone accounts for a majority of total inference bills.",
+      "sources": [
+        "https://www.cockroachlabs.com/blog/agentic-ai-costs-at-scale/"
+      ]
+    },
+    {
+      "question": "What is 'context rot' and how does it affect agent costs?",
+      "answer_summary": "Accuracy degrades for most tested models as input length grows, especially in the middle of long contexts after 20-30 turns, forcing more retries and re-processing which drives cost up further.",
+      "sources": [
+        "https://www.cockroachlabs.com/blog/agentic-ai-costs-at-scale/"
+      ]
+    },
+    {
+      "question": "How much can prompt caching actually save on agent costs?",
+      "answer_summary": "Prompt caching can cut costs roughly 90% on cached tokens (e.g., $0.30 vs $3.00 per million tokens on Claude), with break-even typically reached after about 2.3 cache reuses within an hour-long window.",
+      "sources": [
+        "https://www.cockroachlabs.com/blog/agentic-ai-costs-at-scale/"
+      ]
+    },
+    {
+      "question": "What's a realistic monthly cost range for running an AI agent in production?",
+      "answer_summary": "Estimates found ranged from about $200/month for a lightweight coding assistant to $5,000+/month for a high-volume customer support agent, with mid-size custom agents commonly landing between $1,000-$5,000/month including infrastructure.",
+      "sources": [
+        "https://kanopylabs.com/blog/how-much-do-ai-agents-cost-to-run-monthly"
+      ]
+    },
+    {
+      "question": "Why did a company's inference bill jump from $12,000 to $68,000 in six weeks?",
+      "answer_summary": "A healthcare company's costs spiked due to retrieval faults in its RAG pipeline causing repeated/uncontrolled retries, tripling token cost per operation in some cases.",
+      "sources": [
+        "https://www.cockroachlabs.com/blog/agentic-ai-costs-at-scale/"
+      ]
+    },
+    {
+      "question": "Is inference the biggest cost of running an AI agent?",
+      "answer_summary": "No - inference is estimated at only about 20% of total cost of ownership; the remaining roughly 80% comes from orchestration, monitoring, and governance infrastructure.",
+      "sources": [
+        "https://www.cockroachlabs.com/blog/agentic-ai-costs-at-scale/"
+      ]
+    },
+    {
+      "question": "Why do idle AI agents still cost money even when no one is using them?",
+      "answer_summary": "Agent usage is bursty (heavy use for minutes, then long idle periods) but servers often run 24/7, meaning up to 90% of backend cost under traditional always-on deployment can go to idle time.",
+      "sources": [
+        "https://dev.to/hamza4600/the-hidden-costs-of-ai-agents-what-no-ones-telling-you-51d4"
+      ]
+    },
+    {
+      "question": "What basic safeguards should be in place before putting an agent into production to control cost?",
+      "answer_summary": "Practitioners on Hacker News list token estimation, state persistence, cost monitoring and rate limiting, circuit breakers, retry logic, context caching, and deadlock detection as baseline requirements before shipping.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=45802430"
+      ]
+    },
+    {
+      "question": "How fast can enterprise AI agent spend grow at a large company?",
+      "answer_summary": "At Uber, Claude Code adoption went from 32% to 84% of a 5,000-engineer org between December and March, with per-engineer monthly costs of $500-$2,000, exhausting the annual AI budget by April.",
+      "sources": [
+        "https://www.cockroachlabs.com/blog/agentic-ai-costs-at-scale/"
+      ]
+    },
+    {
+      "question": "How much of AI agent cost is actually recoverable through optimization?",
+      "answer_summary": "Estimates suggest 60-85% of agent inference spend is recoverable through a combination of prompt caching, intelligent model routing, and hard budget enforcement.",
+      "sources": [
+        "https://www.cockroachlabs.com/blog/agentic-ai-costs-at-scale/"
+      ]
+    },
+    {
+      "question": "How much is total industry spend on AI agent/model API costs growing?",
+      "answer_summary": "Model API spend roughly doubled from about $3.5B to $8.4B between late 2024 and mid-2025 across the industry, reflecting how fast agent-related inference spend is scaling.",
+      "sources": [
+        "https://www.gettiaconsulting.com/en/actualites/cout-reel-agent-ia-2026-decomposition-cas-concret",
+        "https://riseuplabs.com/ai-agent-development-cost/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "The Bill Arrives: How to Manage Agentic AI Costs at Scale",
+      "url": "https://www.cockroachlabs.com/blog/agentic-ai-costs-at-scale/",
+      "source_type": "company docs",
+      "used_for": "Core cost breakdown, token multipliers, Uber case study, prompt caching economics, recoverable-cost estimate"
+    },
+    {
+      "title": "My AI agent cost me $400 overnight - dev.to",
+      "url": "https://dev.to/hidai25/my-ai-agent-cost-me-400-overnight-so-i-built-pytest-for-agents-and-open-sourced-it-492c",
+      "source_type": "community",
+      "used_for": "Real first-person cost-overrun incident and root cause (tool-call loop)"
+    },
+    {
+      "title": "The hidden costs of AI agents: what no one's telling you - dev.to",
+      "url": "https://dev.to/hamza4600/the-hidden-costs-of-ai-agents-what-no-ones-telling-you-51d4",
+      "source_type": "community",
+      "used_for": "Bursty usage / idle infrastructure cost point"
+    },
+    {
+      "title": "We spent $47k running AI agents in production - Hacker News",
+      "url": "https://news.ycombinator.com/item?id=45802430",
+      "source_type": "community",
+      "used_for": "Real practitioner discussion, cost-control safeguards, criticism of running agents unmonitored"
+    },
+    {
+      "title": "AI Agent Cost Engineering — Production Token Economics",
+      "url": "https://zylos.ai/research/2026-05-02-ai-agent-cost-engineering-token-economics/",
+      "source_type": "industry publication",
+      "used_for": "Corroborating context on token economics"
+    },
+    {
+      "title": "How Much Do AI Agents Cost to Run in Production Monthly? - Kanopy",
+      "url": "https://kanopylabs.com/blog/how-much-do-ai-agents-cost-to-run-monthly",
+      "source_type": "industry publication",
+      "used_for": "Monthly cost range estimates"
+    }
+  ]
+}

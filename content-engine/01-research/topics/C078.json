@@ -1,0 +1,153 @@
+{
+  "candidate_id": "C078",
+  "topic": "How small consulting firms are actually pricing retainers vs project work",
+  "status": "accepted",
+  "target_keyword": "consulting retainer vs project pricing",
+  "secondary_keywords": [
+    "how to price a consulting retainer",
+    "monthly retainer pricing for consultants",
+    "project-based consulting fees",
+    "consulting pricing models"
+  ],
+  "long_tail_keywords": [
+    "when should a consultant switch from project to retainer pricing",
+    "how much should a consulting retainer cost",
+    "how to price a consulting retainer using the 5x rule",
+    "how many consultants use retainer pricing"
+  ],
+  "question_keywords": [
+    "what is a consulting retainer",
+    "is retainer or project pricing better for consultants",
+    "when should I move a client to a retainer",
+    "how do I calculate a project-based consulting fee"
+  ],
+  "comparison_keywords": [
+    "retainer vs project-based consulting pricing",
+    "hourly vs value-based consulting fees",
+    "value-based pricing vs hourly rate consulting"
+  ],
+  "how_to_keywords": [
+    "how to price consulting services",
+    "how to set a consulting retainer fee",
+    "how to transition a client from project to retainer"
+  ],
+  "problem_keywords": [
+    "feast or famine consulting income",
+    "client won't agree to a retainer",
+    "consulting project scope creep",
+    "underpricing consulting fees"
+  ],
+  "commercial_keywords": [
+    "consulting retainer agreement template",
+    "invoice template for consulting retainer",
+    "consulting fee calculator"
+  ],
+  "entities": [
+    "Consulting Success",
+    "Michael Zipursky",
+    "5X Rule"
+  ],
+  "primary_intent": "Commercial Investigation",
+  "secondary_intent": "Comparative",
+  "audience": "Independent consultants and small consulting firm owners deciding how to structure client pricing",
+  "countries": [],
+  "topic_cluster": "Consulting Business Pricing Models",
+  "connects_to_tools": [
+    "invoice-generator"
+  ],
+  "connects_to_prompts": [],
+  "connects_to_service": "",
+  "scores": {
+    "demand": 6,
+    "intent": 8,
+    "relevance": 7,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 5,
+    "conversion_potential": 6,
+    "evidence_quality": 8,
+    "total": 66
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What percentage of consultants use project-based pricing vs monthly retainers?",
+      "answer_summary": "In a Consulting Success survey of nearly 1,000 consultants: 30% use project-based pricing, 29% hourly, 16% monthly retainer, 15% value-based, 10% daily rates.",
+      "sources": [
+        "https://www.consultingsuccess.com/consulting-fees"
+      ]
+    },
+    {
+      "question": "What is the '5X Rule' for pricing a consulting retainer?",
+      "answer_summary": "Aim to deliver five times the value of what you charge, and price the retainer at roughly 20% of the monthly value generated (e.g., $10K value → $2K retainer).",
+      "sources": [
+        "https://www.consultingsuccess.com/consulting-retainer"
+      ]
+    },
+    {
+      "question": "When should a consultant move a client from a project fee to a retainer?",
+      "answer_summary": "After completing at least one successful project, especially once the client starts asking 'what else can we work on together' or worries about losing access to your expertise.",
+      "sources": [
+        "https://www.consultingsuccess.com/consulting-retainer"
+      ]
+    },
+    {
+      "question": "What are the downsides of project-based consulting pricing?",
+      "answer_summary": "It creates a 'feast-or-famine' revenue cycle, constant pressure to find new clients, and limited scalability since it still trades time for money.",
+      "sources": [
+        "https://www.consultingsuccess.com/consulting-retainer"
+      ]
+    },
+    {
+      "question": "How many consultants want retainer clients but don't currently have them?",
+      "answer_summary": "41% of surveyed consultants say they want retainer clients but lack them, while only 17% say most of their income already comes from retainers.",
+      "sources": [
+        "https://www.consultingsuccess.com/consulting-retainer"
+      ]
+    },
+    {
+      "question": "Do value-based consultants earn more than hourly consultants?",
+      "answer_summary": "51% of consultants using value-based fees report an average project value of $10K+, compared to only 39% of consultants using hourly billing.",
+      "sources": [
+        "https://www.consultingsuccess.com/consulting-fees"
+      ]
+    },
+    {
+      "question": "How do you calculate a project-based consulting fee?",
+      "answer_summary": "List all deliverables, estimate hours per deliverable, multiply by your hourly rate, then apply roughly a 1.5x multiplier to cover revisions and unexpected complexity.",
+      "sources": [
+        "https://www.consultingsuccess.com/consulting-fees"
+      ]
+    },
+    {
+      "question": "What is the most popular consulting pricing model?",
+      "answer_summary": "Project-based pricing is the single most common model at 30% of consultants, narrowly ahead of hourly billing at 29%.",
+      "sources": [
+        "https://www.consultingsuccess.com/consulting-fees"
+      ]
+    },
+    {
+      "question": "What risk comes with retainer pricing that doesn't come with project pricing?",
+      "answer_summary": "Retainers require established trust and clear scope boundaries up front, or they risk scope creep since the engagement isn't bounded by a fixed deliverable list.",
+      "sources": [
+        "https://www.consultingsuccess.com/consulting-retainer"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "How to Set Your Consulting Fees? (3 Formulas & Examples)",
+      "url": "https://www.consultingsuccess.com/consulting-fees",
+      "source_type": "industry publication",
+      "used_for": "Survey statistics on pricing model distribution and project-fee formula"
+    },
+    {
+      "title": "Consulting Retainer Guide: From One-Off Projects To Recurring Revenue",
+      "url": "https://www.consultingsuccess.com/consulting-retainer",
+      "source_type": "industry publication",
+      "used_for": "Retainer vs project pros/cons, transition guidance, 5X Rule, retainer adoption statistics"
+    }
+  ]
+}

@@ -1,0 +1,192 @@
+{
+  "candidate_id": "C098",
+  "topic": "What actually changed about AI model context windows and why it matters practically",
+  "status": "accepted",
+  "target_keyword": "ai model context window practical impact",
+  "secondary_keywords": [
+    "ai context window explained",
+    "how big is claude's context window",
+    "context window vs effective context"
+  ],
+  "long_tail_keywords": [
+    "why do ai context windows matter for real work",
+    "difference between physical and effective context window",
+    "how large context windows changed ai coding agents"
+  ],
+  "question_keywords": [
+    "what is a context window in ai",
+    "why does a bigger context window not always help",
+    "how much context can an ai model actually use well"
+  ],
+  "comparison_keywords": [
+    "128k vs 200k vs 1m context window",
+    "claude context window vs gpt context window"
+  ],
+  "how_to_keywords": [
+    "how to work around small context windows",
+    "how to manage long ai coding sessions"
+  ],
+  "problem_keywords": [
+    "ai context window filling up",
+    "context compaction losing information",
+    "ai forgetting earlier instructions"
+  ],
+  "commercial_keywords": [
+    "claude 200k context pricing",
+    "gemini 1m context window pricing"
+  ],
+  "entities": [
+    "context window",
+    "token limit",
+    "context compaction",
+    "RAG",
+    "GraphRAG",
+    "Claude",
+    "Gemini",
+    "Llama",
+    "GPT-4o"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "Developers and AI engineers building agents, coding assistants, and RAG systems who need to understand what context-window size actually buys them in production",
+  "countries": [],
+  "topic_cluster": "Context window mechanics & practical limits",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "Claude",
+    "ChatGPT"
+  ],
+  "connects_to_service": "AI agents & automation",
+  "scores": {
+    "demand": 6,
+    "intent": 6,
+    "relevance": 7,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 6,
+    "conversion_potential": 4,
+    "evidence_quality": 7,
+    "total": 62
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Why do developers build tools like 'Flatty' to flatten a whole codebase into one text file for an LLM?",
+      "answer_summary": "Real Show HN project converts codebases into single text files specifically to work around upload/context limitations when feeding large projects to LLMs.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=context%20window%20LLM"
+      ]
+    },
+    {
+      "question": "What does 'context compaction' do when a session fills up, and why does it hurt output quality?",
+      "answer_summary": "HN commenters report that once context fills, systems perform aggressive token pruning/compaction that 'severely diminishes model coherence and memory retention' during a session.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=context%20window%20LLM"
+      ]
+    },
+    {
+      "question": "Is a 200k-token context window enough for a full day of agentic coding work?",
+      "answer_summary": "One developer reports real coding sessions running 'about 350k tokens long,' arguing a 200k-token cap 'really isn't a sophisticated enough model' for that workload.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=context%20window%20LLM"
+      ]
+    },
+    {
+      "question": "What's the practical difference between a model's advertised context window and how much it can actually use well?",
+      "answer_summary": "HN discussion draws a real distinction between the marketed 'Physical Context Window' and a smaller 'Effective Context Window,' since proprietary filtering discards tokens deemed less relevant.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=context%20window%20LLM"
+      ]
+    },
+    {
+      "question": "Do large context windows actually help, or is that still an open question?",
+      "answer_summary": "A real HN story titled 'Do large context windows for LLMs help?' exists specifically questioning the practical value of expanded context, indicating this is a genuinely contested question among practitioners.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=context%20window%20LLM"
+      ]
+    },
+    {
+      "question": "Why did the jump from ~4k/8k-token windows to 128k+ actually matter?",
+      "answer_summary": "A technical review of Meta's Llama 3 notes its context was 'bumped up to 8192 from 4096' but was still 'quite small w.r.t. modern standards (e.g. GPT-4 is 128K)' — illustrating how each jump changed what was practically possible.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=context%20window%20marketing%20vs%20actual"
+      ]
+    },
+    {
+      "question": "How are expanded context windows enabling new tools like automatic repo documentation generators?",
+      "answer_summary": "A real Show HN project ('GitRead') uses expanded context windows to auto-generate README files directly from a repository's full content.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=context%20window%20LLM"
+      ]
+    },
+    {
+      "question": "Why do some engineers say to have the LLM write a project plan first rather than rely on it holding everything in context?",
+      "answer_summary": "A concrete practitioner tip on HN: 'Tell LLM to scan your project and create markdown file plan to solve the task first,' treating the plan file as external memory instead of relying on raw context retention.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=context%20window%20LLM"
+      ]
+    },
+    {
+      "question": "Does a bigger context window reduce the need for RAG?",
+      "answer_summary": "Real HN commentary is split: one engineer reports direct context inclusion outperforming RAG for architectural understanding, while another built a GraphRAG system specifically because raw context limits were still a bottleneck.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=context%20window%20marketing%20vs%20actual"
+      ]
+    },
+    {
+      "question": "Why is context window size now a headline spec vendors market prominently (100k, 200k, 1M, 2M)?",
+      "answer_summary": "An HN story titled 'The Secret Sauce behind 100K context window in LLMs' reflects how context size has become a competitive, marketed spec, even though the 'effective vs physical' distinction means the raw number alone is not the full picture.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=context%20window%20LLM"
+      ]
+    },
+    {
+      "question": "Does model performance actually degrade as input size grows, even within the stated limit?",
+      "answer_summary": "A real practitioner comment states 'LLMs have poorer performance the larger the input size' due to training data not saturating evenly across massive context lengths, and notes quadratic cost scaling makes 'stuff everything in context' impractical even when technically possible.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=Gemini%201M%20context%20window%20needle%20haystack"
+      ]
+    },
+    {
+      "question": "Why do 'needle in a haystack' tests exist if the context window is technically large enough to hold the data?",
+      "answer_summary": "Because holding data in context and actually retrieving/reasoning over it are different things — HN commenters describe the test as revealing 'only surface-level capability' versus genuine comprehension.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=needle%20in%20haystack%20test%20LLM"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "HN Algolia search: context window LLM",
+      "url": "https://hn.algolia.com/api/v1/search?query=context%20window%20LLM",
+      "source_type": "community",
+      "used_for": "Core evidence on practical context-window limitations, compaction, and workaround tooling"
+    },
+    {
+      "title": "HN Algolia search: context window marketing vs actual",
+      "url": "https://hn.algolia.com/api/v1/search?query=context%20window%20marketing%20vs%20actual",
+      "source_type": "community",
+      "used_for": "Evidence on the gap between marketed and effective context window size, and RAG-vs-context debates"
+    },
+    {
+      "title": "HN Algolia search: Gemini 1M context window needle haystack",
+      "url": "https://hn.algolia.com/api/v1/search?query=Gemini%201M%20context%20window%20needle%20haystack",
+      "source_type": "community",
+      "used_for": "Real-world reports of degradation and cost scaling with very large context windows"
+    },
+    {
+      "title": "HN Algolia search: needle in haystack test LLM",
+      "url": "https://hn.algolia.com/api/v1/search?query=needle%20in%20haystack%20test%20LLM",
+      "source_type": "community",
+      "used_for": "Distinguishing retrieval capability from genuine long-context reasoning"
+    },
+    {
+      "title": "tools.scult.in homepage overview",
+      "url": "https://tools.scult.in",
+      "source_type": "company docs",
+      "used_for": "Confirming which prompt-library categories and services this topic connects to"
+    }
+  ]
+}

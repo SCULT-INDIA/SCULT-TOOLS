@@ -1,0 +1,216 @@
+{
+  "candidate_id": "C083",
+  "status": "accepted",
+  "topic": "How students are actually using AI tools for exam prep without it backfiring",
+  "topic_cluster": "education-ai-study-exam-prep",
+  "target_keyword": "using AI for exam prep without hurting learning",
+  "secondary_keywords": [
+    "ai study tools that actually work",
+    "chatgpt for studying without cheating",
+    "does ai hurt learning and memory",
+    "cognitive debt ai studying"
+  ],
+  "long_tail_keywords": [
+    "does using chatgpt to study hurt memory retention",
+    "how to use ai to study without losing critical thinking",
+    "ai flashcards vs chatgpt for exam prep",
+    "is it bad to let chatgpt write my study notes"
+  ],
+  "question_keywords": [
+    "does chatgpt make you worse at learning",
+    "is using ai to study considered cheating",
+    "does ai hurt memory and critical thinking",
+    "can ai generate good practice questions for exams"
+  ],
+  "comparison_keywords": [
+    "chatgpt vs anki for studying",
+    "ai tutoring vs traditional studying",
+    "claude vs chatgpt for exam prep"
+  ],
+  "how_to_keywords": [
+    "how to use chatgpt to make flashcards",
+    "how to use ai for active recall studying",
+    "how to study with ai without cheating"
+  ],
+  "problem_keywords": [
+    "chatgpt making me lazy while studying",
+    "ai study habits hurting my grades",
+    "can't remember material after using chatgpt to study"
+  ],
+  "commercial_keywords": [
+    "best ai study app",
+    "ai flashcard generator",
+    "ai exam prep tool"
+  ],
+  "entities": [
+    "MIT Media Lab",
+    "Your Brain on ChatGPT",
+    "cognitive debt",
+    "Anthropic Education Report",
+    "Claude",
+    "Anki",
+    "FSRS",
+    "spaced repetition",
+    "active recall"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "high school and university students, self-directed learners preparing for exams or certifications",
+  "countries": [
+    "Global",
+    "India (distinct government/competitive exam AI-prep ecosystem — REET, RAS, UPSC, JEE-focused AI tools and coaching-adjacent products)"
+  ],
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "Education & Study",
+    "Exam Prep",
+    "Research"
+  ],
+  "connects_to_service": "",
+  "scores": {
+    "demand": 8,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 6,
+    "conversion_potential": 5,
+    "evidence_quality": 9,
+    "total": 72
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Does using ChatGPT to write essays or study reduce brain engagement compared to studying unassisted?",
+      "answer_summary": "MIT Media Lab's EEG-based study found ChatGPT users showed the weakest brain connectivity of three groups and 'consistently underperformed at neural, linguistic, and behavioral levels' over a 4-month period.",
+      "sources": [
+        "https://www.media.mit.edu/publications/your-brain-on-chatgpt/",
+        "https://arxiv.org/abs/2506.08872"
+      ]
+    },
+    {
+      "question": "What happens when someone who has been using AI is suddenly asked to write without it?",
+      "answer_summary": "The same study found these participants showed reduced brain connectivity when switched to unassisted writing, consistent with an accumulated 'cognitive debt' effect.",
+      "sources": [
+        "https://www.media.mit.edu/publications/your-brain-on-chatgpt/"
+      ]
+    },
+    {
+      "question": "Do students who rely on AI feel the resulting work is still 'theirs'?",
+      "answer_summary": "ChatGPT users in the MIT study reported the lowest sense of essay ownership and struggled to accurately quote their own submitted work, versus brain-only writers who scored highest on both.",
+      "sources": [
+        "https://www.media.mit.edu/publications/your-brain-on-chatgpt/"
+      ]
+    },
+    {
+      "question": "How are university students actually using AI tools like Claude for coursework?",
+      "answer_summary": "Anthropic's analysis of ~575,000 academically-relevant conversations found top uses are content creation (39.3% — practice questions, editing, summarizing) and technical/STEM problem-solving (33.5%).",
+      "sources": [
+        "https://www.anthropic.com/news/anthropic-education-report-how-university-students-use-claude"
+      ]
+    },
+    {
+      "question": "Is most student-AI interaction shallow ('just give me the answer') or genuinely collaborative?",
+      "answer_summary": "About 47% of student-AI conversations were classified as 'Direct' — seeking answers/content with minimal engagement — versus more collaborative, multi-turn problem-solving or iterative refinement styles.",
+      "sources": [
+        "https://www.anthropic.com/news/anthropic-education-report-how-university-students-use-claude"
+      ]
+    },
+    {
+      "question": "Are there specific AI uses researchers flag as academically risky rather than helpful?",
+      "answer_summary": "The Anthropic report flagged patterns like using AI to directly answer multiple-choice questions or rewrite text specifically to evade plagiarism detection as problematic use cases.",
+      "sources": [
+        "https://www.anthropic.com/news/anthropic-education-report-how-university-students-use-claude"
+      ]
+    },
+    {
+      "question": "Is there settled science on whether ChatGPT helps or hurts learning performance?",
+      "answer_summary": "A widely-discussed meta-analysis on ChatGPT's effect on student learning performance exists in the Nature-family journal Humanities & Social Sciences Communications, but a related paper in the same journal carries a retraction notice — a reason to treat any single study as provisional.",
+      "sources": [
+        "https://www.nature.com/articles/s41599-025-04787-y",
+        "https://www.nature.com/articles/s41599-026-07310-z"
+      ]
+    },
+    {
+      "question": "What do skeptics say is the real fix for AI-enabled shortcuts in studying and testing?",
+      "answer_summary": "One opinion piece argues the practical fix is structural — more in-class, closed-book testing — rather than trying to detect AI use after submission.",
+      "sources": [
+        "https://news.google.com (City Journal: 'The Solution to AI Cheating Is Simple: More In-Class Testing,' Feb 2026)"
+      ]
+    },
+    {
+      "question": "Can AI generate spaced-repetition flashcards without replacing the actual recall practice?",
+      "answer_summary": "A community-maintained open-source project (AnkiAIUtils, 253 points/43 comments on Hacker News) is built by a medical student specifically to let ChatGPT generate flashcard content/explanations while Anki's spaced-repetition review process itself stays intact.",
+      "sources": [
+        "https://github.com/thiswillbeyourgithub/AnkiAIUtils"
+      ]
+    },
+    {
+      "question": "Do students and educators on Hacker News think AI EdTech products are helpful or gimmicky?",
+      "answer_summary": "An 'Ask HN' thread on whether AI chatbot wrappers are ruining EdTech drew mixed responses: one teacher reported students 'learning more and faster than ever,' while a formal-methods instructor said students 'cannot do formal reasoning' with LLMs alone.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=ChatGPT%20students%20learning"
+      ]
+    },
+    {
+      "question": "Does offloading higher-order thinking to AI show up in measurable task-split patterns?",
+      "answer_summary": "A Bloom's Taxonomy analysis in the Anthropic report found Claude was disproportionately used for higher-order cognitive tasks (Creating 39.8%, Analyzing 30.2%), raising concern that students may be offloading skills meant to be practiced themselves.",
+      "sources": [
+        "https://www.anthropic.com/news/anthropic-education-report-how-university-students-use-claude"
+      ]
+    },
+    {
+      "question": "Is there an institutional-incentive critique of why AI-driven learning loss isn't addressed?",
+      "answer_summary": "One Hacker News commenter argued 'administration wants to keep the dollars coming regardless of if the students are learning' — an anecdotal but recurring critique in the same discussion thread.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=ChatGPT%20students%20learning"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Your Brain on ChatGPT: Accumulation of Cognitive Debt When Using an AI Assistant for Essay Writing Task",
+      "url": "https://www.media.mit.edu/publications/your-brain-on-chatgpt/",
+      "source_type": "government/academic",
+      "used_for": "EEG/cognitive engagement findings on AI-assisted writing/studying"
+    },
+    {
+      "title": "Your Brain on ChatGPT (arXiv preprint)",
+      "url": "https://arxiv.org/abs/2506.08872",
+      "source_type": "government/academic",
+      "used_for": "Corroborating study details and methodology"
+    },
+    {
+      "title": "How University Students Use Claude (Anthropic Education Report)",
+      "url": "https://www.anthropic.com/news/anthropic-education-report-how-university-students-use-claude",
+      "source_type": "company docs",
+      "used_for": "Primary usage-pattern statistics on how students actually use AI for coursework/exam prep"
+    },
+    {
+      "title": "The effect of ChatGPT on students' learning performance, perception, and thinking (+ related retraction notice)",
+      "url": "https://www.nature.com/articles/s41599-025-04787-y",
+      "source_type": "government/academic",
+      "used_for": "Academic study landscape and caution around unsettled findings"
+    },
+    {
+      "title": "AnkiAIUtils (GitHub)",
+      "url": "https://github.com/thiswillbeyourgithub/AnkiAIUtils",
+      "source_type": "community",
+      "used_for": "Real example of AI used to augment (not replace) spaced-repetition study practice"
+    },
+    {
+      "title": "Hacker News search: ChatGPT students learning",
+      "url": "https://hn.algolia.com/api/v1/search?query=ChatGPT%20students%20learning",
+      "source_type": "community",
+      "used_for": "Direct discussion/debate evidence among students and educators"
+    },
+    {
+      "title": "The Solution to AI Cheating Is Simple: More In-Class Testing",
+      "url": "https://news.google.com/rss/search?q=students+AI+exam+prep+backfire+cheating+study",
+      "source_type": "industry publication",
+      "used_for": "Institutional-response angle to AI-enabled study shortcuts"
+    }
+  ]
+}

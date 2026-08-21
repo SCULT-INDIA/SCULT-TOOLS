@@ -1,0 +1,167 @@
+{
+  "candidate_id": "C041",
+  "topic": "The real difference between programmatic SEO done well and done badly",
+  "status": "accepted",
+  "topic_cluster": "Programmatic SEO strategy & scaled content risk",
+  "target_keyword": "programmatic seo done well vs badly",
+  "secondary_keywords": [
+    "programmatic seo examples",
+    "programmatic seo google penalty",
+    "scaled content abuse programmatic seo"
+  ],
+  "long_tail_keywords": [
+    "why did my programmatic seo pages get penalized",
+    "how to do programmatic seo without getting penalized",
+    "programmatic seo case study traffic results"
+  ],
+  "question_keywords": [
+    "does programmatic seo get penalized by google",
+    "is programmatic seo still safe in 2026",
+    "how many pages is too many for programmatic seo"
+  ],
+  "comparison_keywords": [
+    "programmatic seo vs doorway pages",
+    "zapier programmatic seo vs thin templated sites",
+    "ai generated pages vs programmatic seo"
+  ],
+  "how_to_keywords": [
+    "how to build programmatic seo pages that rank",
+    "how to scale content without a google penalty"
+  ],
+  "problem_keywords": [
+    "programmatic seo pages deindexed",
+    "traffic dropped after launching programmatic seo pages",
+    "scaled content abuse penalty recovery"
+  ],
+  "commercial_keywords": [
+    "programmatic seo agency",
+    "programmatic seo tool",
+    "pseo software"
+  ],
+  "entities": [
+    "Zapier",
+    "Google scaled content abuse policy",
+    "doorway pages",
+    "Ian Nuttall",
+    "helpful content update"
+  ],
+  "primary_intent": "Comparative",
+  "secondary_intent": "Tutorial",
+  "audience": "SaaS growth marketers, indie hacker founders, and SEO agencies building template-based pages at scale",
+  "countries": [],
+  "connects_to_service": "seo-geo",
+  "connects_to_tools": [
+    "ai-visibility-checker"
+  ],
+  "connects_to_prompts": [
+    "page-template / content-scaling prompts"
+  ],
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 6,
+    "conversion_potential": 7,
+    "evidence_quality": 8,
+    "total": 69
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What actually separates programmatic SEO done well from done badly?",
+      "answer_summary": "The dividing line is genuine per-page value versus templated pages that just swap in a keyword/location/product name with no unique substance.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/scaled-content-abuse-google-march-update-ai-pages-decimated",
+        "https://growthengineer.ai/blog/programmatic-seo-google-penalty"
+      ]
+    },
+    {
+      "question": "Does Google actually ban programmatic SEO as a technique?",
+      "answer_summary": "No — Google's spam policies don't name 'programmatic SEO'; what's banned is 'scaled content abuse,' an intent-based policy that can apply to any mass-page-production method, automated or not.",
+      "sources": [
+        "https://growthengineer.ai/blog/programmatic-seo-google-penalty"
+      ]
+    },
+    {
+      "question": "What is a doorway page and how does it relate to programmatic SEO penalties?",
+      "answer_summary": "A doorway page is created purely to rank for a query and funnel visitors elsewhere; a cited example was 5,000 'plumber in [city]' pages that all redirected to one contact form.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/scaled-content-abuse-google-march-update-ai-pages-decimated"
+      ]
+    },
+    {
+      "question": "What happened when a site scaled programmatic pages badly?",
+      "answer_summary": "A law firm site that generated roughly 42,000 near-identical city pages (same body text, swapped city/name) reportedly suffered a 96% traffic drop.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/scaled-content-abuse-google-march-update-ai-pages-decimated"
+      ]
+    },
+    {
+      "question": "What does programmatic SEO done well look like at scale?",
+      "answer_summary": "Zapier is repeatedly cited as the reference example: 50,000+ integration pages driving roughly 5.8M monthly organic visits.",
+      "sources": [
+        "https://nogood.io/blog/programmatic-seo/"
+      ]
+    },
+    {
+      "question": "How much AI-assisted publishing volume starts to look automated/spammy to Google?",
+      "answer_summary": "Sustained publishing of 10+ articles per day for months is flagged as a red flag, since human editorial teams typically produce at most 10-15 quality pieces per week.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/scaled-content-abuse-google-march-update-ai-pages-decimated"
+      ]
+    },
+    {
+      "question": "Is there a 'safe' productivity multiplier when using AI to help scale content?",
+      "answer_summary": "A 2-4x productivity boost over a human baseline is described as sustainable, whereas 40-100x increases are a warning sign of scaled abuse.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/scaled-content-abuse-google-march-update-ai-pages-decimated"
+      ]
+    },
+    {
+      "question": "How much traffic can a scaled-content-abuse penalty cost, by site type?",
+      "answer_summary": "Reported ranges include roughly 60-80% for niche info sites with 500+ AI pages, 40-70% for affiliate review sites, and 30-60% for location-based service pages.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/scaled-content-abuse-google-march-update-ai-pages-decimated"
+      ]
+    },
+    {
+      "question": "Should programmatic pages be launched all at once or ramped up gradually?",
+      "answer_summary": "Practitioners recommend ramping gradually (e.g., roughly 1-3 posts/day scaling to 11-19/day) rather than dumping hundreds of pages at once, to avoid triggering a 'sudden programmatic content' signal that can get a site sandboxed.",
+      "sources": [
+        "https://www.indiehackers.com/post/looking-for-programmatic-seo-case-studies-and-success-stories-9439e1f9e7"
+      ]
+    },
+    {
+      "question": "Can newly launched programmatic pages get indexed reliably?",
+      "answer_summary": "One 2026 case study reported 283 of roughly 400 pages indexed, with only about 2% stuck in 'Crawled - Currently Not Indexed' — described by the builder as a strong result for programmatic content.",
+      "sources": [
+        "https://www.indiehackers.com/post/looking-for-programmatic-seo-case-studies-and-success-stories-9439e1f9e7"
+      ]
+    },
+    {
+      "question": "Is duplicate/templated structure risky even without obvious keyword stuffing?",
+      "answer_summary": "Yes — 'data-template pages' that swap only location, product, or keyword variants into an otherwise identical structure are explicitly called out as a scaled-abuse pattern.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/scaled-content-abuse-google-march-update-ai-pages-decimated"
+      ]
+    },
+    {
+      "question": "What's the actual success factor behind programmatic SEO that works?",
+      "answer_summary": "Practitioners frame it as: the goal isn't creating 100,000 pages, it's providing real value on those 100,000 pages — original insight or data per page rather than volume alone.",
+      "sources": [
+        "https://iannuttall.gumroad.com/l/pseo-examples"
+      ]
+    },
+    {
+      "question": "Which industries have used programmatic SEO successfully beyond SaaS?",
+      "answer_summary": "Travel, real estate, and ecommerce platforms, along with sites like eBay, are cited as successful programmatic SEO verticals alongside Zapier.",
+      "sources": [
+        "https://nogood.io/blog/programmatic-seo/"
+      ]
+    }
+  ]
+}

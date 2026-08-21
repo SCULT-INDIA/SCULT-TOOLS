@@ -1,0 +1,205 @@
+{
+  "candidate_id": "C107",
+  "status": "accepted",
+  "topic": "How founders are actually using AI to draft investor updates",
+  "topic_cluster": "Startup Investor Communications & AI Tooling",
+  "target_keyword": "ai investor updates",
+  "secondary_keywords": [
+    "ai investor update generator",
+    "automate investor updates",
+    "investor update template"
+  ],
+  "long_tail_keywords": [
+    "how founders use ai to write investor updates",
+    "turn git commits into an investor update automatically",
+    "ai tool to automate investor reporting from metrics",
+    "fill in the blank investor update template"
+  ],
+  "question_keywords": [
+    "how often should founders send investor updates",
+    "what should be in a monthly investor update",
+    "do founders get value from investor updates",
+    "can ai write my investor update"
+  ],
+  "comparison_keywords": [
+    "visible vs onedraft for investor updates",
+    "chatgpt vs dedicated ai tool for investor updates"
+  ],
+  "how_to_keywords": [
+    "how to write an investor update",
+    "how to automate investor reporting with ai",
+    "how to turn deal documents into lp updates with ai"
+  ],
+  "problem_keywords": [
+    "investor update takes too long to write",
+    "founders don't have time for investor updates",
+    "manual investor reporting from term sheets and cap tables"
+  ],
+  "commercial_keywords": [
+    "investor update software",
+    "ai investor update generator tool",
+    "investor relations ai tool",
+    "lp update automation"
+  ],
+  "entities": [
+    "Visible.vc",
+    "OneDraft.ai",
+    "Gitmore",
+    "Slidekick",
+    "Y Combinator",
+    "Aaron Harris",
+    "DocSend",
+    "Mattermark"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Tool discovery",
+  "audience": "Seed/Series A startup founders and small VC-backed teams who send recurring investor/board updates, plus early-stage VCs processing deal documents into LP updates",
+  "countries": [],
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "startup",
+    "business-ops"
+  ],
+  "connects_to_service": "startup",
+  "scores": {
+    "demand": 5,
+    "intent": 6,
+    "relevance": 7,
+    "question_density": 5,
+    "search_opportunity": 5,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 6,
+    "conversion_potential": 5,
+    "evidence_quality": 5,
+    "total": 57
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Why should founders send investor updates in the first place?",
+      "answer_summary": "Repeated founder blog posts argue updates build trust, keep investors ready to help (intros, follow-on capital), and are worth sending even without formal investors.",
+      "sources": [
+        "https://blog.yalabot.com/why-we-send-our-friends-investor-updates-about-our-startup-a96fd012f453",
+        "http://www.groovehq.com/blog/investor-updates",
+        "http://calacanis.com/2015/01/23/why-investor-updates-are-really-really-important/"
+      ]
+    },
+    {
+      "question": "Do founders actually get value from sending investor updates?",
+      "answer_summary": "Discussed directly in a dedicated post questioning whether the practice pays off for the founder, not just the investor.",
+      "sources": [
+        "http://codingvc.com/do-founders-get-value-from-investor-updates"
+      ]
+    },
+    {
+      "question": "What should a monthly investor update actually include?",
+      "answer_summary": "Common template sections referenced in founder-facing guides include key metrics, wins/lows, asks, and a short narrative — enough that multiple sites publish fill-in-the-blank templates for busy founders.",
+      "sources": [
+        "https://hackernoon.com/a-fill-in-the-blank-investor-update-template-for-busy-founders-d431c227347b",
+        "https://www.slidecamp.io/blog/what-to-include-in-your-startup-monthly-investor-update/"
+      ]
+    },
+    {
+      "question": "What response rate should a founder expect from investors on an update?",
+      "answer_summary": "Visible.vc has published data/content specifically on expected response rates from sending updates through their platform.",
+      "sources": [
+        "https://visible.vc/blog/"
+      ]
+    },
+    {
+      "question": "Can AI automate pulling deal documents (term sheets, SAFEs, cap tables) into structured investor/LP updates?",
+      "answer_summary": "Visible.vc's 'AI Docs' feature lets users drag in deal documents and has AI extract investment data (equity, SAFEs, convertible notes) with source-linked verification, specifically to speed up recurring tasks like preparing LP updates.",
+      "sources": [
+        "https://visible.vc/blog/ai-docs"
+      ]
+    },
+    {
+      "question": "Can engineering/shipping activity be turned into a founder update automatically?",
+      "answer_summary": "Gitmore converts git commits and PRs into AI-summarized reports for Slack/email aimed partly at 'CTOs/Founders' needing cross-repo progress visibility for exactly this kind of reporting.",
+      "sources": [
+        "https://gitmore.io"
+      ]
+    },
+    {
+      "question": "Is there a dedicated tool that automates writing the investor update itself?",
+      "answer_summary": "Yes — OneDraft.ai was launched on Hacker News specifically pitched as automating investor updates by gathering metrics and formatting them ready to send.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=investor%20update%20AI&tags=story"
+      ]
+    },
+    {
+      "question": "Can AI generate the slides for an investor update, not just the text?",
+      "answer_summary": "Slidekick markets AI-generated 'business-grade slides' explicitly including quick investor updates as a use case.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=investor%20update%20AI&tags=story"
+      ]
+    },
+    {
+      "question": "What did early startup pivots look like when communicated in an investor update?",
+      "answer_summary": "Referenced via Mattermark's public investor-update email announcing its pivot, used as a real example of how founders phrase hard news to investors.",
+      "sources": [
+        "http://mattermark.com/we-shut-down-our-old-startup-to-build-mattermark-heres-what-the-investor-update-email-announcing-our-new-direction-said/"
+      ]
+    },
+    {
+      "question": "How do experienced YC partners/advisors frame the investor-update writing process?",
+      "answer_summary": "Referenced as a dedicated 'definitive guide' resource for structuring investor updates from a startup advisor's perspective.",
+      "sources": [
+        "http://www.aaronkharris.com/investor-updates#awesome"
+      ]
+    },
+    {
+      "question": "Is a data-room/AI-Q&A layer part of the same 'automate investor communication' trend?",
+      "answer_summary": "VantageKit was launched on HN as a lightweight data room with staging, analytics, and AI Q&A — adjacent tooling to automated investor updates.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search_by_date?query=investor%20update%20AI"
+      ]
+    },
+    {
+      "question": "Why do some founders send investor-style updates even with no outside investors?",
+      "answer_summary": "Framed directly in a blog post arguing the discipline of writing updates is valuable independent of whether you have investors to send them to.",
+      "sources": [
+        "http://www.groovehq.com/blog/investor-updates"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Visible.vc Blog",
+      "url": "https://visible.vc/blog/",
+      "source_type": "company docs",
+      "used_for": "Identifying Visible's AI feature set and investor-update-adjacent content"
+    },
+    {
+      "title": "From Documents to Decisions: Announcing AI Docs",
+      "url": "https://visible.vc/blog/ai-docs",
+      "source_type": "company docs",
+      "used_for": "Concrete example of AI turning deal documents into LP/investor update-ready data"
+    },
+    {
+      "title": "Gitmore — AI-powered git activity reporting",
+      "url": "https://gitmore.io",
+      "source_type": "company docs",
+      "used_for": "Example tool converting dev activity into founder/stakeholder updates via AI"
+    },
+    {
+      "title": "Hacker News (Algolia) search: 'investor updates'",
+      "url": "https://hn.algolia.com/api/v1/search?query=investor%20updates&tags=story",
+      "source_type": "community",
+      "used_for": "Surfacing 15+ years of organic founder discussion threads and blog posts about investor updates"
+    },
+    {
+      "title": "Hacker News (Algolia) search: 'investor update AI'",
+      "url": "https://hn.algolia.com/api/v1/search?query=investor%20update%20AI&tags=story",
+      "source_type": "community",
+      "used_for": "Identifying Show HN launches of AI tools automating investor updates (OneDraft.ai, Slidekick)"
+    },
+    {
+      "title": "Hacker News (Algolia) search by date: 'investor update AI'",
+      "url": "https://hn.algolia.com/api/v1/search_by_date?query=investor%20update%20AI",
+      "source_type": "community",
+      "used_for": "Recent (2026) tool launches adjacent to AI-assisted investor communication"
+    }
+  ]
+}

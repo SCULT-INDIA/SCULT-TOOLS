@@ -1,0 +1,779 @@
+[
+  {
+    "candidate_id": "C001",
+    "cluster": "GEO/AEO",
+    "topic": "How ChatGPT search actually decides which pages to cite",
+    "target_keyword_hypothesis": "how does chatgpt search choose sources",
+    "connects_to": "ai-visibility-checker;seo-geo"
+  },
+  {
+    "candidate_id": "C002",
+    "cluster": "GEO/AEO",
+    "topic": "The difference between being crawled and being cited by an AI answer engine",
+    "target_keyword_hypothesis": "crawled vs cited ai search",
+    "connects_to": "ai-visibility-checker;schema-markup-generator"
+  },
+  {
+    "candidate_id": "C003",
+    "cluster": "GEO/AEO",
+    "topic": "What llms.txt actually does and whether it changes AI crawler behavior",
+    "target_keyword_hypothesis": "llms.txt explained",
+    "connects_to": "ai-visibility-checker"
+  },
+  {
+    "candidate_id": "C004",
+    "cluster": "GEO/AEO",
+    "topic": "Structured data AI answer engines actually use vs structured data that does nothing for them",
+    "target_keyword_hypothesis": "schema markup for ai search",
+    "connects_to": "schema-markup-generator;faq-schema-generator"
+  },
+  {
+    "candidate_id": "C005",
+    "cluster": "GEO/AEO",
+    "topic": "How Perplexity sources its answers differently from Google's AI Overviews",
+    "target_keyword_hypothesis": "perplexity vs google ai overviews sourcing",
+    "connects_to": "ai-visibility-checker"
+  },
+  {
+    "candidate_id": "C006",
+    "cluster": "GEO/AEO",
+    "topic": "Why a page can rank on Google but never get cited by an AI answer engine",
+    "target_keyword_hypothesis": "rank on google not cited by ai",
+    "connects_to": "ai-visibility-checker;seo-geo"
+  },
+  {
+    "candidate_id": "C007",
+    "cluster": "GEO/AEO",
+    "topic": "Robots.txt directives every AI crawler actually respects (GPTBot ClaudeBot PerplexityBot)",
+    "target_keyword_hypothesis": "robots.txt ai crawler directives",
+    "connects_to": "ai-visibility-checker"
+  },
+  {
+    "candidate_id": "C008",
+    "cluster": "GEO/AEO",
+    "topic": "How to check if GPTBot ClaudeBot or Google-Extended can actually reach your site",
+    "target_keyword_hypothesis": "check if ai crawlers can access my site",
+    "connects_to": "ai-visibility-checker"
+  },
+  {
+    "candidate_id": "C009",
+    "cluster": "GEO/AEO",
+    "topic": "FAQ schema vs a genuine FAQ page: what AI answer engines actually parse",
+    "target_keyword_hypothesis": "faq schema vs faq page ai",
+    "connects_to": "faq-schema-generator"
+  },
+  {
+    "candidate_id": "C010",
+    "cluster": "GEO/AEO",
+    "topic": "What AI overviews changed about click-through rate and how site owners are responding",
+    "target_keyword_hypothesis": "ai overviews impact on ctr",
+    "connects_to": "ai-visibility-checker;website-speed-test"
+  },
+  {
+    "candidate_id": "C011",
+    "cluster": "AI coding",
+    "topic": "How AI coding assistants actually differ on large, existing codebases vs greenfield projects",
+    "target_keyword_hypothesis": "ai coding assistant large codebase vs greenfield",
+    "connects_to": "cursor;claude-code;github-copilot"
+  },
+  {
+    "candidate_id": "C012",
+    "cluster": "AI coding",
+    "topic": "What a CLAUDE.md, .cursorrules, and a Copilot instructions file actually do differently",
+    "target_keyword_hypothesis": "claude.md vs cursorrules vs copilot instructions",
+    "connects_to": "claude-code;cursor;github-copilot"
+  },
+  {
+    "candidate_id": "C013",
+    "cluster": "AI coding",
+    "topic": "Why AI-generated code reviews still miss the same categories of bugs",
+    "target_keyword_hypothesis": "ai code review blind spots",
+    "connects_to": "claude-code;devops"
+  },
+  {
+    "candidate_id": "C014",
+    "cluster": "AI coding",
+    "topic": "How developers are actually using AI agents for codebase migrations",
+    "target_keyword_hypothesis": "ai agent codebase migration",
+    "connects_to": "ai-engineering;devops"
+  },
+  {
+    "candidate_id": "C015",
+    "cluster": "AI coding",
+    "topic": "The real cost difference between running Claude Code, Cursor, and Copilot at team scale",
+    "target_keyword_hypothesis": "claude code vs cursor vs copilot cost comparison",
+    "connects_to": "claude-code;cursor;github-copilot"
+  },
+  {
+    "candidate_id": "C016",
+    "cluster": "AI coding",
+    "topic": "What actually breaks when AI coding tools touch a monorepo",
+    "target_keyword_hypothesis": "ai coding tools monorepo issues",
+    "connects_to": "devops;claude-code"
+  },
+  {
+    "candidate_id": "C017",
+    "cluster": "AI coding",
+    "topic": "How teams are documenting AI-assisted commits for code review and compliance",
+    "target_keyword_hypothesis": "ai assisted commit documentation",
+    "connects_to": "devops;business-ops"
+  },
+  {
+    "candidate_id": "C018",
+    "cluster": "AI coding",
+    "topic": "MCP servers explained: what they actually let an AI coding assistant do",
+    "target_keyword_hypothesis": "mcp server explained",
+    "connects_to": "claude-code;ai-engineering"
+  },
+  {
+    "candidate_id": "C019",
+    "cluster": "AI coding",
+    "topic": "Why AI pair-programming changes what \"code review\" means on a team",
+    "target_keyword_hypothesis": "ai pair programming code review",
+    "connects_to": "claude-code;devops"
+  },
+  {
+    "candidate_id": "C020",
+    "cluster": "AI coding",
+    "topic": "How to evaluate whether an AI coding subscription is worth it for a small dev team",
+    "target_keyword_hypothesis": "is ai coding subscription worth it small team",
+    "connects_to": "cursor;claude-code;github-copilot"
+  },
+  {
+    "candidate_id": "C021",
+    "cluster": "AI agents",
+    "topic": "What actually counts as an \"AI agent\" vs a chatbot with tool access",
+    "target_keyword_hypothesis": "ai agent vs chatbot definition",
+    "connects_to": "ai-engineering;ai-agents-automation-service"
+  },
+  {
+    "candidate_id": "C022",
+    "cluster": "AI agents",
+    "topic": "How small businesses are actually deploying AI agents for customer support",
+    "target_keyword_hypothesis": "ai agent customer support small business",
+    "connects_to": "customer-support;ai-agents-automation-service"
+  },
+  {
+    "candidate_id": "C023",
+    "cluster": "AI agents",
+    "topic": "The real failure modes of autonomous AI agents in production",
+    "target_keyword_hypothesis": "ai agent production failure modes",
+    "connects_to": "ai-engineering"
+  },
+  {
+    "candidate_id": "C024",
+    "cluster": "AI agents",
+    "topic": "RAG vs fine-tuning vs long context: how teams are actually choosing",
+    "target_keyword_hypothesis": "rag vs fine-tuning vs long context",
+    "connects_to": "ai-engineering"
+  },
+  {
+    "candidate_id": "C025",
+    "cluster": "AI agents",
+    "topic": "What an AI agent actually costs to run at real usage volume",
+    "target_keyword_hypothesis": "ai agent api cost at scale",
+    "connects_to": "ai-engineering;ai-agents-automation-service"
+  },
+  {
+    "candidate_id": "C026",
+    "cluster": "AI agents",
+    "topic": "How AI agent frameworks (LangChain, CrewAI, AutoGen) actually differ in practice",
+    "target_keyword_hypothesis": "langchain vs crewai vs autogen",
+    "connects_to": "ai-engineering"
+  },
+  {
+    "candidate_id": "C027",
+    "cluster": "AI agents",
+    "topic": "Why most \"AI agent\" demos don't survive contact with real user input",
+    "target_keyword_hypothesis": "ai agent demo vs production reality",
+    "connects_to": "ai-engineering"
+  },
+  {
+    "candidate_id": "C028",
+    "cluster": "AI agents",
+    "topic": "How companies are actually measuring AI agent ROI internally",
+    "target_keyword_hypothesis": "ai agent roi measurement",
+    "connects_to": "ai-agents-automation-service;business-ops"
+  },
+  {
+    "candidate_id": "C029",
+    "cluster": "Startup/indie",
+    "topic": "What Y Combinator's own advice on AI startups has actually changed since 2023",
+    "target_keyword_hypothesis": "yc advice ai startups changed",
+    "connects_to": "startup"
+  },
+  {
+    "candidate_id": "C030",
+    "cluster": "Startup/indie",
+    "topic": "The real tool stack solo founders are shipping AI products with",
+    "target_keyword_hypothesis": "solo founder ai product tool stack",
+    "connects_to": "startup;no-code-apps"
+  },
+  {
+    "candidate_id": "C031",
+    "cluster": "Startup/indie",
+    "topic": "How indie hackers are actually pricing AI-wrapper SaaS products",
+    "target_keyword_hypothesis": "ai wrapper saas pricing",
+    "connects_to": "startup;finance"
+  },
+  {
+    "candidate_id": "C032",
+    "cluster": "Startup/indie",
+    "topic": "What Product Hunt launch data says about which AI product categories are saturated",
+    "target_keyword_hypothesis": "product hunt ai categories saturated",
+    "connects_to": "startup"
+  },
+  {
+    "candidate_id": "C033",
+    "cluster": "Startup/indie",
+    "topic": "How first-time founders are validating an idea before writing code",
+    "target_keyword_hypothesis": "validate startup idea before building",
+    "connects_to": "startup;business-name-generator"
+  },
+  {
+    "candidate_id": "C034",
+    "cluster": "Startup/indie",
+    "topic": "The actual difference between a wrapper product and a defensible AI product",
+    "target_keyword_hypothesis": "ai wrapper vs defensible product",
+    "connects_to": "startup;ai-agents-automation-service"
+  },
+  {
+    "candidate_id": "C035",
+    "cluster": "Startup/indie",
+    "topic": "What YC-backed companies say about when to hire your first salesperson",
+    "target_keyword_hypothesis": "when to hire first salesperson startup",
+    "connects_to": "startup;business-ops"
+  },
+  {
+    "candidate_id": "C036",
+    "cluster": "Startup/indie",
+    "topic": "How solo founders are handling customer support without a team",
+    "target_keyword_hypothesis": "solo founder customer support no team",
+    "connects_to": "customer-support;startup"
+  },
+  {
+    "candidate_id": "C037",
+    "cluster": "Startup/indie",
+    "topic": "What actually happens to a Product Hunt launch's traffic after week one",
+    "target_keyword_hypothesis": "product hunt launch traffic after week one",
+    "connects_to": "startup"
+  },
+  {
+    "candidate_id": "C038",
+    "cluster": "SEO/content",
+    "topic": "Why topical authority actually matters more for AI search than backlinks alone",
+    "target_keyword_hypothesis": "topical authority ai search vs backlinks",
+    "connects_to": "seo-geo;ai-visibility-checker"
+  },
+  {
+    "candidate_id": "C039",
+    "cluster": "SEO/content",
+    "topic": "How small businesses are actually recovering from a Google core update",
+    "target_keyword_hypothesis": "recover from google core update small business",
+    "connects_to": "seo-geo"
+  },
+  {
+    "candidate_id": "C040",
+    "cluster": "SEO/content",
+    "topic": "What internal linking actually does for a site under 200 pages",
+    "target_keyword_hypothesis": "internal linking small site seo",
+    "connects_to": "seo-geo;website-speed-test"
+  },
+  {
+    "candidate_id": "C041",
+    "cluster": "SEO/content",
+    "topic": "The real difference between programmatic SEO done well and done badly",
+    "target_keyword_hypothesis": "programmatic seo done well vs badly",
+    "connects_to": "seo-geo"
+  },
+  {
+    "candidate_id": "C042",
+    "cluster": "SEO/content",
+    "topic": "How much technical SEO actually matters if the content is thin",
+    "target_keyword_hypothesis": "technical seo vs content quality",
+    "connects_to": "seo-geo;website-speed-test"
+  },
+  {
+    "candidate_id": "C043",
+    "cluster": "SEO/content",
+    "topic": "What Google's own documentation actually says about AI-generated content",
+    "target_keyword_hypothesis": "google ai generated content policy",
+    "connects_to": "seo-geo"
+  },
+  {
+    "candidate_id": "C044",
+    "cluster": "SEO/content",
+    "topic": "How small teams are actually running content audits without an enterprise tool",
+    "target_keyword_hypothesis": "content audit small team no enterprise tool",
+    "connects_to": "seo-geo;word-counter"
+  },
+  {
+    "candidate_id": "C045",
+    "cluster": "SEO/content",
+    "topic": "Why some FAQ pages get rich results and others don't",
+    "target_keyword_hypothesis": "why faq schema not showing rich results",
+    "connects_to": "faq-schema-generator"
+  },
+  {
+    "candidate_id": "C046",
+    "cluster": "SEO/content",
+    "topic": "What actually happens to rankings when a site migrates domains",
+    "target_keyword_hypothesis": "domain migration seo impact",
+    "connects_to": "website-speed-test;seo-geo"
+  },
+  {
+    "candidate_id": "C047",
+    "cluster": "SEO/content",
+    "topic": "How local businesses are actually using Google Business Profile beyond the basics",
+    "target_keyword_hypothesis": "google business profile advanced tips",
+    "connects_to": "seo-geo"
+  },
+  {
+    "candidate_id": "C048",
+    "cluster": "E-commerce",
+    "topic": "What actually drives cart abandonment beyond price",
+    "target_keyword_hypothesis": "cart abandonment causes beyond price",
+    "connects_to": "ecommerce-product"
+  },
+  {
+    "candidate_id": "C049",
+    "cluster": "E-commerce",
+    "topic": "How small e-commerce brands are using AI for product descriptions at scale",
+    "target_keyword_hypothesis": "ai product descriptions at scale ecommerce",
+    "connects_to": "ecommerce-product"
+  },
+  {
+    "candidate_id": "C050",
+    "cluster": "E-commerce",
+    "topic": "The real impact of page speed on e-commerce conversion, with actual data",
+    "target_keyword_hypothesis": "page speed ecommerce conversion data",
+    "connects_to": "website-speed-test;ecommerce-product"
+  },
+  {
+    "candidate_id": "C051",
+    "cluster": "E-commerce",
+    "topic": "What UGC and review mining tools actually do differently",
+    "target_keyword_hypothesis": "ugc review mining tools comparison",
+    "connects_to": "ecommerce-product"
+  },
+  {
+    "candidate_id": "C052",
+    "cluster": "E-commerce",
+    "topic": "How small e-commerce brands are handling returns without losing money",
+    "target_keyword_hypothesis": "ecommerce returns policy small brand",
+    "connects_to": "ecommerce-product;invoice-generator"
+  },
+  {
+    "candidate_id": "C053",
+    "cluster": "E-commerce",
+    "topic": "What actually changed about Amazon vs Shopify vs direct-to-consumer economics",
+    "target_keyword_hypothesis": "amazon vs shopify vs dtc economics",
+    "connects_to": "ecommerce-product"
+  },
+  {
+    "candidate_id": "C054",
+    "cluster": "E-commerce",
+    "topic": "How QR codes are actually being used in physical retail post-pandemic",
+    "target_keyword_hypothesis": "qr code physical retail use cases",
+    "connects_to": "qr-code-generator;ecommerce-product"
+  },
+  {
+    "candidate_id": "C055",
+    "cluster": "HR/ops",
+    "topic": "How small teams are actually using AI for first-round candidate screening",
+    "target_keyword_hypothesis": "ai candidate screening small team",
+    "connects_to": "hr-management"
+  },
+  {
+    "candidate_id": "C056",
+    "cluster": "HR/ops",
+    "topic": "What actually goes wrong when companies automate customer support too fast",
+    "target_keyword_hypothesis": "customer support automation gone wrong",
+    "connects_to": "customer-support;ai-agents-automation-service"
+  },
+  {
+    "candidate_id": "C057",
+    "cluster": "HR/ops",
+    "topic": "How remote teams are actually documenting processes with AI tools",
+    "target_keyword_hypothesis": "remote team process documentation ai",
+    "connects_to": "business-ops;hr-management"
+  },
+  {
+    "candidate_id": "C058",
+    "cluster": "HR/ops",
+    "topic": "What the real onboarding checklist looks like for a 5-person startup",
+    "target_keyword_hypothesis": "startup onboarding checklist small team",
+    "connects_to": "hr-management;business-ops"
+  },
+  {
+    "candidate_id": "C059",
+    "cluster": "HR/ops",
+    "topic": "How customer support teams are actually measuring AI chatbot deflection rate",
+    "target_keyword_hypothesis": "chatbot deflection rate measurement",
+    "connects_to": "customer-support"
+  },
+  {
+    "candidate_id": "C060",
+    "cluster": "HR/ops",
+    "topic": "What legal and compliance teams actually worry about with AI-drafted contracts",
+    "target_keyword_hypothesis": "ai drafted contracts legal risk",
+    "connects_to": "legal-compliance"
+  },
+  {
+    "candidate_id": "C061",
+    "cluster": "Design",
+    "topic": "How design teams are actually using AI for accessible color palettes",
+    "target_keyword_hypothesis": "ai accessible color palette design workflow",
+    "connects_to": "color-palette-generator;ui-design"
+  },
+  {
+    "candidate_id": "C062",
+    "cluster": "Design",
+    "topic": "What actually makes a logo work at favicon size and most don't test for it",
+    "target_keyword_hypothesis": "logo favicon size testing",
+    "connects_to": "favicon-generator;branding"
+  },
+  {
+    "candidate_id": "C063",
+    "cluster": "Design",
+    "topic": "How Figma's AI features actually compare to dedicated AI design tools",
+    "target_keyword_hypothesis": "figma ai features vs dedicated ai design tools",
+    "connects_to": "figma;ui-design"
+  },
+  {
+    "candidate_id": "C064",
+    "cluster": "Design",
+    "topic": "What a real brand style guide needs that a generated one usually skips",
+    "target_keyword_hypothesis": "brand style guide essentials",
+    "connects_to": "branding;color-palette-generator"
+  },
+  {
+    "candidate_id": "C065",
+    "cluster": "Design",
+    "topic": "How small teams are actually running design QA before a launch",
+    "target_keyword_hypothesis": "design qa checklist before launch",
+    "connects_to": "ui-design;website-speed-test"
+  },
+  {
+    "candidate_id": "C066",
+    "cluster": "Design",
+    "topic": "What email signature design actually does for brand consistency at a growing company",
+    "target_keyword_hypothesis": "email signature brand consistency",
+    "connects_to": "email-signature-generator;branding"
+  },
+  {
+    "candidate_id": "C067",
+    "cluster": "Design",
+    "topic": "How presentation design tools (Gamma, Canva, Beautiful.ai) actually differ for pitch decks",
+    "target_keyword_hypothesis": "gamma vs canva vs beautiful ai pitch decks",
+    "connects_to": "presentations;startup"
+  },
+  {
+    "candidate_id": "C068",
+    "cluster": "Global",
+    "topic": "How GDPR actually affects a small SaaS company's analytics setup",
+    "target_keyword_hypothesis": "gdpr small saas analytics",
+    "connects_to": "seo-geo;legal-compliance"
+  },
+  {
+    "candidate_id": "C069",
+    "cluster": "Global",
+    "topic": "What US sales tax nexus actually means for a small online seller",
+    "target_keyword_hypothesis": "sales tax nexus small online seller",
+    "connects_to": "ecommerce-product;invoice-generator"
+  },
+  {
+    "candidate_id": "C070",
+    "cluster": "Global",
+    "topic": "How VAT invoicing actually works for a UK freelancer selling internationally",
+    "target_keyword_hypothesis": "vat invoicing uk freelancer international",
+    "connects_to": "invoice-generator"
+  },
+  {
+    "candidate_id": "C071",
+    "cluster": "Global",
+    "topic": "What Singapore and UAE actually offer startups that other hubs don't",
+    "target_keyword_hypothesis": "singapore uae startup incentives compared",
+    "connects_to": "startup"
+  },
+  {
+    "candidate_id": "C072",
+    "cluster": "Global",
+    "topic": "How Google Search behaves differently by country for the same query",
+    "target_keyword_hypothesis": "google search results differ by country",
+    "connects_to": "seo-geo"
+  },
+  {
+    "candidate_id": "C073",
+    "cluster": "Global",
+    "topic": "What US vs EU vs India say differently about AI and data privacy right now",
+    "target_keyword_hypothesis": "ai data privacy rules us eu india compared",
+    "connects_to": "legal-compliance;seo-geo"
+  },
+  {
+    "candidate_id": "C074",
+    "cluster": "Global",
+    "topic": "How currency and pricing localization actually affects SaaS conversion",
+    "target_keyword_hypothesis": "saas pricing localization conversion",
+    "connects_to": "ecommerce-product;finance"
+  },
+  {
+    "candidate_id": "C075",
+    "cluster": "Data/finance",
+    "topic": "What actually goes wrong when small businesses build their first dashboard",
+    "target_keyword_hypothesis": "first business dashboard mistakes",
+    "connects_to": "data-bi;marketing-roi-calculator"
+  },
+  {
+    "candidate_id": "C076",
+    "cluster": "Data/finance",
+    "topic": "How freelancers are actually tracking multi-currency invoices without an accountant",
+    "target_keyword_hypothesis": "multi currency invoicing without accountant",
+    "connects_to": "invoice-generator;finance"
+  },
+  {
+    "candidate_id": "C077",
+    "cluster": "Data/finance",
+    "topic": "What marketing attribution actually means for a business with no dedicated analyst",
+    "target_keyword_hypothesis": "marketing attribution small business no analyst",
+    "connects_to": "marketing-roi-calculator;utm-builder"
+  },
+  {
+    "candidate_id": "C078",
+    "cluster": "Data/finance",
+    "topic": "How small consulting firms are actually pricing retainers vs project work",
+    "target_keyword_hypothesis": "consulting retainer vs project pricing",
+    "connects_to": "consulting;invoice-generator"
+  },
+  {
+    "candidate_id": "C079",
+    "cluster": "Data/finance",
+    "topic": "What UTM parameters actually break when marketers set them up wrong",
+    "target_keyword_hypothesis": "utm parameter mistakes",
+    "connects_to": "utm-builder"
+  },
+  {
+    "candidate_id": "C080",
+    "cluster": "Data/finance",
+    "topic": "How small businesses are actually calculating customer acquisition cost correctly",
+    "target_keyword_hypothesis": "calculate customer acquisition cost correctly",
+    "connects_to": "marketing-roi-calculator;finance"
+  },
+  {
+    "candidate_id": "C081",
+    "cluster": "Career",
+    "topic": "How AI is actually changing entry-level hiring for developer roles",
+    "target_keyword_hypothesis": "ai entry level developer hiring impact",
+    "connects_to": "career-jobsearch;github-copilot"
+  },
+  {
+    "candidate_id": "C082",
+    "cluster": "Career",
+    "topic": "What resume screening tools actually look for that candidates don't expect",
+    "target_keyword_hypothesis": "resume screening tools what they check",
+    "connects_to": "career-jobsearch"
+  },
+  {
+    "candidate_id": "C083",
+    "cluster": "Career",
+    "topic": "How students are actually using AI tools for exam prep without it backfiring",
+    "target_keyword_hypothesis": "ai exam prep tools without backfiring",
+    "connects_to": "education"
+  },
+  {
+    "candidate_id": "C084",
+    "cluster": "Career",
+    "topic": "What a real technical interview prep plan looks like with AI as one input, not the whole plan",
+    "target_keyword_hypothesis": "technical interview prep plan with ai",
+    "connects_to": "career-jobsearch"
+  },
+  {
+    "candidate_id": "C085",
+    "cluster": "Content creators",
+    "topic": "How solo YouTube creators are actually structuring an AI-assisted production workflow",
+    "target_keyword_hypothesis": "youtube creator ai production workflow",
+    "connects_to": "youtube;video-audio-prompts"
+  },
+  {
+    "candidate_id": "C085b",
+    "cluster": "Content creators",
+    "topic": "What actually changed about Instagram reach for small accounts in the algorithm",
+    "target_keyword_hypothesis": "instagram reach small accounts algorithm change",
+    "connects_to": "instagram"
+  },
+  {
+    "candidate_id": "C086",
+    "cluster": "Content creators",
+    "topic": "How X (Twitter) creators are actually growing an account without buying followers",
+    "target_keyword_hypothesis": "grow x twitter account without buying followers",
+    "connects_to": "x-twitter"
+  },
+  {
+    "candidate_id": "C087",
+    "cluster": "Content creators",
+    "topic": "What a real content calendar looks like for a solo creator running three platforms",
+    "target_keyword_hypothesis": "content calendar solo creator three platforms",
+    "connects_to": "blog-writing;youtube;instagram"
+  },
+  {
+    "candidate_id": "C088",
+    "cluster": "Cross-cutting",
+    "topic": "What actually happens when a small business switches from spreadsheets to real tools",
+    "target_keyword_hypothesis": "small business spreadsheet to tools transition",
+    "connects_to": "invoice-generator;marketing-roi-calculator"
+  },
+  {
+    "candidate_id": "C089",
+    "cluster": "Cross-cutting",
+    "topic": "How freelancers in India are actually handling GST-compliant invoicing",
+    "target_keyword_hypothesis": "gst compliant invoicing freelancer india",
+    "connects_to": "invoice-generator"
+  },
+  {
+    "candidate_id": "C090",
+    "cluster": "Cross-cutting",
+    "topic": "What actually makes a website \"fast enough\" and what's diminishing returns",
+    "target_keyword_hypothesis": "website fast enough diminishing returns",
+    "connects_to": "website-speed-test"
+  },
+  {
+    "candidate_id": "C091",
+    "cluster": "Cross-cutting",
+    "topic": "How small teams are actually choosing between no-code and custom development",
+    "target_keyword_hypothesis": "no-code vs custom development decision",
+    "connects_to": "no-code-apps;custom-software-service"
+  },
+  {
+    "candidate_id": "C092",
+    "cluster": "Cross-cutting",
+    "topic": "What actually breaks a no-code app when it needs to scale",
+    "target_keyword_hypothesis": "no-code app scaling breaking points",
+    "connects_to": "no-code-apps;custom-software-service"
+  },
+  {
+    "candidate_id": "C093",
+    "cluster": "Cross-cutting",
+    "topic": "How much a small business should actually budget for their first website",
+    "target_keyword_hypothesis": "first website budget small business",
+    "connects_to": "web-development-service"
+  },
+  {
+    "candidate_id": "C094",
+    "cluster": "Cross-cutting",
+    "topic": "What Google Ads actually costs for a small local business by industry",
+    "target_keyword_hypothesis": "google ads cost by industry small business",
+    "connects_to": "google-ads-management-service"
+  },
+  {
+    "candidate_id": "C095",
+    "cluster": "Cross-cutting",
+    "topic": "How small businesses are actually deciding between hiring an agency and doing marketing in-house",
+    "target_keyword_hypothesis": "agency vs in house marketing decision",
+    "connects_to": "seo-geo;google-ads-management-service"
+  },
+  {
+    "candidate_id": "C096",
+    "cluster": "Cross-cutting",
+    "topic": "What actually happens in the first 90 days after hiring an SEO agency",
+    "target_keyword_hypothesis": "first 90 days seo agency",
+    "connects_to": "seo-geo;seo-service"
+  },
+  {
+    "candidate_id": "C097",
+    "cluster": "AI models",
+    "topic": "How Claude, GPT, and Gemini actually differ on long-document analysis tasks",
+    "target_keyword_hypothesis": "claude vs gpt vs gemini long document analysis",
+    "connects_to": "claude;chatgpt;gemini"
+  },
+  {
+    "candidate_id": "C098",
+    "cluster": "AI models",
+    "topic": "What actually changed about AI model context windows and why it matters practically",
+    "target_keyword_hypothesis": "ai model context window practical impact",
+    "connects_to": "claude;chatgpt"
+  },
+  {
+    "candidate_id": "C099",
+    "cluster": "AI models",
+    "topic": "How developers are actually choosing between AI models by cost per task, not benchmarks",
+    "target_keyword_hypothesis": "ai model cost per task vs benchmarks",
+    "connects_to": "ai-engineering"
+  },
+  {
+    "candidate_id": "C100",
+    "cluster": "AI models",
+    "topic": "What \"AI hallucination\" actually means technically and how teams catch it in practice",
+    "target_keyword_hypothesis": "ai hallucination technical explanation catching it",
+    "connects_to": "ai-engineering;claude"
+  },
+  {
+    "candidate_id": "C101",
+    "cluster": "AI models",
+    "topic": "How image generation models (Midjourney, Flux, Nano Banana) actually differ for commercial use",
+    "target_keyword_hypothesis": "midjourney vs flux vs nano banana commercial use",
+    "connects_to": "midjourney;flux;nano-banana"
+  },
+  {
+    "candidate_id": "C102",
+    "cluster": "GEO/AEO",
+    "topic": "What a \"citation\" from an AI answer engine actually looks like and how to find yours",
+    "target_keyword_hypothesis": "how to find ai answer engine citations",
+    "connects_to": "ai-visibility-checker"
+  },
+  {
+    "candidate_id": "C103",
+    "cluster": "GEO/AEO",
+    "topic": "How Wikipedia and Reddit ended up as dominant AI training/citation sources, and what that means for smaller sites",
+    "target_keyword_hypothesis": "wikipedia reddit ai citation dominance",
+    "connects_to": "ai-visibility-checker;seo-geo"
+  },
+  {
+    "candidate_id": "C104",
+    "cluster": "Business ops",
+    "topic": "What client communication actually breaks down at freelance-to-agency transition",
+    "target_keyword_hypothesis": "freelance to agency transition communication",
+    "connects_to": "business-ops;consulting"
+  },
+  {
+    "candidate_id": "C105",
+    "cluster": "Business ops",
+    "topic": "How small agencies are actually handling scope creep with AI-assisted contracts",
+    "target_keyword_hypothesis": "scope creep ai assisted contracts",
+    "connects_to": "business-ops;legal-compliance"
+  },
+  {
+    "candidate_id": "C106",
+    "cluster": "Business ops",
+    "topic": "What a real client onboarding checklist looks like for a service business",
+    "target_keyword_hypothesis": "client onboarding checklist service business",
+    "connects_to": "business-ops;invoice-generator"
+  },
+  {
+    "candidate_id": "C107",
+    "cluster": "Startup/indie",
+    "topic": "How founders are actually using AI to draft investor updates",
+    "target_keyword_hypothesis": "ai investor updates draft",
+    "connects_to": "startup;business-ops"
+  },
+  {
+    "candidate_id": "C108",
+    "cluster": "SEO/content",
+    "topic": "What schema markup actually does for e-commerce product pages beyond rich snippets",
+    "target_keyword_hypothesis": "ecommerce product schema markup beyond snippets",
+    "connects_to": "schema-markup-generator;ecommerce-product"
+  },
+  {
+    "candidate_id": "C109",
+    "cluster": "Design",
+    "topic": "How small teams are actually running a rebrand without a big agency budget",
+    "target_keyword_hypothesis": "rebrand small budget without agency",
+    "connects_to": "branding;color-palette-generator"
+  },
+  {
+    "candidate_id": "C110",
+    "cluster": "Cross-cutting",
+    "topic": "What actually separates a healthcare or wellness business's website compliance needs from a normal small business site",
+    "target_keyword_hypothesis": "healthcare wellness website compliance needs",
+    "connects_to": "healthcare-wellness;legal-compliance"
+  }
+]

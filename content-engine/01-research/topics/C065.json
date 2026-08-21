@@ -1,0 +1,144 @@
+{
+  "candidate_id": "C065",
+  "topic": "How small teams are actually running design QA before a launch",
+  "status": "accepted",
+  "target_keyword": "design qa checklist before launch",
+  "secondary_keywords": [
+    "design QA process",
+    "pre-launch design review",
+    "website launch checklist design"
+  ],
+  "long_tail_keywords": [
+    "how do small teams do design qa before launching a website",
+    "design qa checklist for startups",
+    "what to check before launching a website design"
+  ],
+  "question_keywords": [
+    "what is design qa",
+    "when should design qa start",
+    "why do small teams skip design qa"
+  ],
+  "comparison_keywords": [
+    "design qa vs functional qa testing",
+    "manual design qa vs automated visual regression testing"
+  ],
+  "how_to_keywords": [
+    "how to do a design qa review",
+    "how to catch design bugs before launch",
+    "how to run a pre-launch checklist"
+  ],
+  "problem_keywords": [
+    "design doesn't match final build",
+    "inconsistent spacing after handoff",
+    "website launched with visual bugs"
+  ],
+  "commercial_keywords": [
+    "website speed test tool",
+    "design qa checklist template"
+  ],
+  "entities": [
+    "Webflow University",
+    "Galaxy Weblinks",
+    "WCAG accessibility",
+    "Lighthouse",
+    "design handoff"
+  ],
+  "audience": "small in-house design/dev teams, startup founders launching a site without a dedicated QA team, freelance designers handing off to developers",
+  "primary_intent": "Tutorial",
+  "secondary_intent": "Problem-solving",
+  "countries": [],
+  "topic_cluster": "Pre-launch design & QA process",
+  "connects_to_tools": [
+    "website-speed-test"
+  ],
+  "connects_to_prompts": [
+    "design",
+    "development frameworks"
+  ],
+  "connects_to_service": "UI/UX design, web development",
+  "scores": {
+    "demand": 5,
+    "intent": 6,
+    "relevance": 7,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 5,
+    "conversion_potential": 6,
+    "evidence_quality": 6,
+    "total": 59
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What is design QA and how is it different from regular functional QA testing?",
+      "answer_summary": "Design QA is described as a cross-verification process done by designers to check that the built product matches the intended design (visual consistency, spacing, interactions), distinct from functional/bug testing.",
+      "sources": [
+        "https://www.galaxyweblinks.com/blog/why-design-qa-should-be-a-non-negotiable-part-of-your-process"
+      ]
+    },
+    {
+      "question": "When in a project should design QA start?",
+      "answer_summary": "As soon as functional prototypes exist — guidance recommends starting review 'the moment you get your hands on functional prototypes' rather than waiting until final pre-launch.",
+      "sources": [
+        "https://www.galaxyweblinks.com/blog/why-design-qa-should-be-a-non-negotiable-part-of-your-process"
+      ]
+    },
+    {
+      "question": "Why do small teams often skip or shortchange design QA?",
+      "answer_summary": "Cited reasons include the misconception that a designer's job ends at handoff, time pressure limiting review iterations, and friction between designers and developers over feedback.",
+      "sources": [
+        "https://www.galaxyweblinks.com/blog/why-design-qa-should-be-a-non-negotiable-part-of-your-process"
+      ]
+    },
+    {
+      "question": "What should be on a pre-launch design QA checklist?",
+      "answer_summary": "Recommended checks include visual consistency (spacing/alignment/styles across pages), responsive behavior across desktop/tablet/mobile, no leftover placeholder content, working forms/links, mobile tap-target sizing, and correct staging/domain/SSL setup.",
+      "sources": [
+        "https://university.webflow.com/resources/pre-launch-checklist"
+      ]
+    },
+    {
+      "question": "Is it worth spending extra designer time before launch to avoid developer rework after?",
+      "answer_summary": "Industry framing argues yes: 'a few extra hours of your designers is better than a few extra days of your developers' hunting down inconsistencies post-release.",
+      "sources": [
+        "https://www.galaxyweblinks.com/blog/why-design-qa-should-be-a-non-negotiable-part-of-your-process"
+      ]
+    },
+    {
+      "question": "Does design QA need to check accessibility, not just visual polish?",
+      "answer_summary": "Yes — accessibility compliance is listed as one of the essential design QA checklist components alongside visual consistency and interaction behavior.",
+      "sources": [
+        "https://www.galaxyweblinks.com/blog/why-design-qa-should-be-a-non-negotiable-part-of-your-process"
+      ]
+    },
+    {
+      "question": "What non-visual technical items should be checked right before a website launch?",
+      "answer_summary": "Items include verifying the staging environment, connecting the custom domain, enabling SSL, and configuring analytics/third-party integrations.",
+      "sources": [
+        "https://university.webflow.com/resources/pre-launch-checklist"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Why Design QA should be a non-negotiable part of your process — Galaxy Weblinks",
+      "url": "https://www.galaxyweblinks.com/blog/why-design-qa-should-be-a-non-negotiable-part-of-your-process",
+      "source_type": "industry publication",
+      "used_for": "Definition of design QA, when it should start, why small teams skip it, checklist components"
+    },
+    {
+      "title": "Pre-launch Checklist — Webflow University",
+      "url": "https://university.webflow.com/resources/pre-launch-checklist",
+      "source_type": "company docs",
+      "used_for": "Concrete pre-launch design/technical checklist items for small teams"
+    },
+    {
+      "title": "UX StackExchange question on design QA checklist (search result)",
+      "url": "https://marginalia-search.com/search?query=design+qa+checklist+before+launch",
+      "source_type": "community",
+      "used_for": "Confirmation that design QA checklists are an actively discussed community topic"
+    }
+  ]
+}

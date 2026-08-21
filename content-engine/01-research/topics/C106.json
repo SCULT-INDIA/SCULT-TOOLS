@@ -1,0 +1,244 @@
+{
+  "candidate_id": "C106",
+  "status": "accepted",
+  "topic": "What a real client onboarding checklist looks like for a service business",
+  "topic_cluster": "Service Business Operations & Client Management",
+  "target_keyword": "client onboarding checklist",
+  "secondary_keywords": [
+    "client onboarding process",
+    "new client onboarding template",
+    "service business onboarding checklist",
+    "agency client onboarding checklist"
+  ],
+  "long_tail_keywords": [
+    "client onboarding checklist for service businesses",
+    "how long should client onboarding take",
+    "17 step client onboarding checklist for agencies",
+    "client onboarding checklist for freelancers"
+  ],
+  "question_keywords": [
+    "what is a client onboarding process",
+    "how do you onboard a new client",
+    "what should be included in a client onboarding checklist",
+    "why is client onboarding important for retention"
+  ],
+  "comparison_keywords": [
+    "HoneyBook vs Bonsai vs Dubsado for client onboarding",
+    "client onboarding software vs spreadsheet checklist",
+    "product snippets vs merchant listings"
+  ],
+  "how_to_keywords": [
+    "how to create a client onboarding checklist",
+    "how to onboard a new client step by step",
+    "how to collect client logins securely",
+    "how to run a client kickoff meeting"
+  ],
+  "problem_keywords": [
+    "client onboarding mistakes",
+    "why clients churn after onboarding",
+    "scope creep during onboarding",
+    "nightmare client warning signs"
+  ],
+  "commercial_keywords": [
+    "client onboarding software",
+    "client portal software",
+    "client onboarding checklist template download",
+    "invoice and contract software for client onboarding"
+  ],
+  "entities": [
+    "Bonsai",
+    "HoneyBook",
+    "Dubsado",
+    "Trello",
+    "Salesforce",
+    "Slack",
+    "Automattic for Agencies",
+    "ManageEngine",
+    "ConnectWise",
+    "Clio",
+    "SmartAsset",
+    "LastPass",
+    "1Password"
+  ],
+  "primary_intent": "Tutorial",
+  "secondary_intent": "Tool discovery",
+  "audience": "Freelancers, agencies, consultants, and professional service firms (accounting, legal, MSP, financial advisory, creative/marketing agencies) who manage recurring new-client intake",
+  "countries": [],
+  "connects_to_tools": [
+    "invoice-generator"
+  ],
+  "connects_to_prompts": [
+    "business-ops"
+  ],
+  "connects_to_service": "business-ops",
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 7,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 7,
+    "competitive_gap": 5,
+    "conversion_potential": 7,
+    "evidence_quality": 8,
+    "total": 69
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What is a client onboarding checklist/process and why does it matter?",
+      "answer_summary": "It's the structured process of turning a signed client into an active one — setting expectations, collecting info/access, and building trust from day one; poor onboarding is cited as one of the top causes of client churn.",
+      "sources": [
+        "https://www.hellobonsai.com/blog/client-onboarding-checklist",
+        "https://automattic.com/for-agencies/blog/agency-client-onboarding/"
+      ]
+    },
+    {
+      "question": "Why is client onboarding tied to retention/churn?",
+      "answer_summary": "Automattic's agency guide states poor onboarding is 'the third most common reason for client or customer churn.'",
+      "sources": [
+        "https://automattic.com/for-agencies/blog/agency-client-onboarding/"
+      ]
+    },
+    {
+      "question": "How long does a full client onboarding cycle typically take?",
+      "answer_summary": "Bonsai's guide states client onboarding usually takes three to six months to become fully efficient, with checkpoints along the way.",
+      "sources": [
+        "https://www.hellobonsai.com/blog/client-onboarding-checklist"
+      ]
+    },
+    {
+      "question": "What are the concrete steps in a thorough client onboarding checklist?",
+      "answer_summary": "Automattic's agency checklist lists 17 steps: client research, welcome package, onboarding questionnaire, secure credential collection, dedicated onboarding specialist, kickoff meeting, internal alignment, timeline/milestones, reporting cadence, client portal, communication channels, sign-off on deliverables, quick wins, QA checks, check-ins, health scoring, and a post-onboarding satisfaction survey.",
+      "sources": [
+        "https://automattic.com/for-agencies/blog/agency-client-onboarding/"
+      ]
+    },
+    {
+      "question": "How should you securely collect client logins and account access?",
+      "answer_summary": "Use a password manager (e.g. LastPass, 1Password) to share and store credentials rather than emailing them in plain text.",
+      "sources": [
+        "https://automattic.com/for-agencies/blog/agency-client-onboarding/"
+      ]
+    },
+    {
+      "question": "What should a client onboarding questionnaire ask?",
+      "answer_summary": "Target audience, brand voice, business goals, internal staff capabilities, and KPIs, so the team can tailor the engagement instead of guessing.",
+      "sources": [
+        "https://automattic.com/for-agencies/blog/agency-client-onboarding/"
+      ]
+    },
+    {
+      "question": "How do you avoid scope creep and 'nightmare clients' during onboarding?",
+      "answer_summary": "Nightmare projects are usually an onboarding failure, not a bad client — ambiguous success criteria, fuzzy scope, and unclear channels cause it; formal sign-off at each phase and a defined working agreement prevent it.",
+      "sources": [
+        "https://bullenweg.com/client-onboarding-the-process-that-prevents-nightmares-later/",
+        "https://automattic.com/for-agencies/blog/agency-client-onboarding/"
+      ]
+    },
+    {
+      "question": "What tools do service businesses actually use to run onboarding?",
+      "answer_summary": "CRM (Salesforce), project/task boards (Trello), messaging (Slack), and dedicated client-onboarding/portal software (Bonsai, and Automattic's agency tools) for centralizing contracts, timelines, and invoices.",
+      "sources": [
+        "https://www.hellobonsai.com/blog/client-onboarding-checklist",
+        "https://automattic.com/for-agencies/blog/agency-client-onboarding/"
+      ]
+    },
+    {
+      "question": "How do you measure whether onboarding is actually working?",
+      "answer_summary": "Track client health scores, satisfaction surveys sent 1-2 weeks after onboarding, milestone/deadline adherence, adoption rate, and NPS.",
+      "sources": [
+        "https://automattic.com/for-agencies/blog/agency-client-onboarding/",
+        "https://www.leadfuze.com/client-onboarding-process/"
+      ]
+    },
+    {
+      "question": "What is a 'client health score' and how is it built?",
+      "answer_summary": "A composite metric tracking satisfaction, communication frequency, and engagement indicators used to flag at-risk accounts early.",
+      "sources": [
+        "https://automattic.com/for-agencies/blog/agency-client-onboarding/"
+      ]
+    },
+    {
+      "question": "How should you map the customer journey during onboarding?",
+      "answer_summary": "Identify critical milestones/touchpoints (e.g. in Trello) from first purchase to the client's 'Aha!' moment, then set high-touch communication early and taper off after that milestone.",
+      "sources": [
+        "https://www.leadfuze.com/client-onboarding-process/"
+      ]
+    },
+    {
+      "question": "When is a good time to ask an onboarded client for a referral?",
+      "answer_summary": "Around day 30, once the client has had time to see initial value.",
+      "sources": [
+        "https://www.leadfuze.com/client-onboarding-process/"
+      ]
+    },
+    {
+      "question": "Does the onboarding checklist differ by vertical (MSP, legal, financial advisory, agency)?",
+      "answer_summary": "Yes — MSPs (ManageEngine, ConnectWise) emphasize access/security and RFP-style scoping, financial advisors (SmartAsset) emphasize compliance/documentation, and creative/marketing agencies (Automattic, Bonsai) emphasize kickoff meetings and brand questionnaires.",
+      "sources": [
+        "https://www.manageengine.com/products/service-desk-msp/msp-onboarding-checklist.html",
+        "https://smartasset.com/advisor-resources/client-onboarding-checklist",
+        "https://www.connectwise.com/blog/msp-onboarding-checklist"
+      ]
+    },
+    {
+      "question": "What's an early sign that onboarding, not the client, is the problem?",
+      "answer_summary": "Sales and delivery describing the engagement differently, confusing invoices, and clients going quiet rather than formally complaining — signs the process, not the client, broke down.",
+      "sources": [
+        "https://bullenweg.com/client-onboarding-the-process-that-prevents-nightmares-later/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "How to create an effective client onboarding checklist: A step-by-step guide",
+      "url": "https://www.hellobonsai.com/blog/client-onboarding-checklist",
+      "source_type": "company docs",
+      "used_for": "Checklist phases, mistakes, tools, and FAQ structure for freelancer/creative-service onboarding"
+    },
+    {
+      "title": "Agency Client Onboarding: 17-Step Checklist for a Smooth Start",
+      "url": "https://automattic.com/for-agencies/blog/agency-client-onboarding/",
+      "source_type": "company docs",
+      "used_for": "Detailed 17-step checklist, churn statistic, health-score and survey timing"
+    },
+    {
+      "title": "Client Onboarding: The Process That Prevents Nightmares Later",
+      "url": "https://bullenweg.com/client-onboarding-the-process-that-prevents-nightmares-later/",
+      "source_type": "community",
+      "used_for": "First-hand practitioner framing of onboarding failure modes and direct quotes"
+    },
+    {
+      "title": "Client Onboarding Process: Free Checklist for Service Providers",
+      "url": "https://www.leadfuze.com/client-onboarding-process/",
+      "source_type": "company docs",
+      "used_for": "Customer-journey mapping, success metrics, referral timing"
+    },
+    {
+      "title": "MSP client onboarding process: 10 checklist [+ RFP template]",
+      "url": "https://www.manageengine.com/products/service-desk-msp/msp-onboarding-checklist.html",
+      "source_type": "company docs",
+      "used_for": "Confirming vertical-specific (MSP) onboarding checklist variant"
+    },
+    {
+      "title": "Client Onboarding Checklist for Financial Advisors",
+      "url": "https://smartasset.com/advisor-resources/client-onboarding-checklist",
+      "source_type": "industry publication",
+      "used_for": "Confirming vertical-specific (financial advisory) onboarding checklist variant"
+    },
+    {
+      "title": "Building an MSP onboarding checklist for clients",
+      "url": "https://www.connectwise.com/blog/msp-onboarding-checklist",
+      "source_type": "company docs",
+      "used_for": "Additional MSP-vertical checklist confirmation"
+    },
+    {
+      "title": "Marginalia Search results for 'client onboarding checklist service business'",
+      "url": "https://marginalia-search.com/search?query=client+onboarding+checklist+service+business",
+      "source_type": "aggregator",
+      "used_for": "Surfacing the breadth of real, distinct sources discussing this topic across verticals"
+    }
+  ]
+}

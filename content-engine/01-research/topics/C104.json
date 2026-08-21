@@ -1,0 +1,143 @@
+{
+  "candidate_id": "C104",
+  "topic": "What client communication actually breaks down at freelance-to-agency transition",
+  "status": "accepted",
+  "target_keyword": "freelance to agency transition communication",
+  "secondary_keywords": [
+    "client communication breakdown scaling agency",
+    "freelancer to agency owner problems",
+    "losing clients when scaling freelance business"
+  ],
+  "long_tail_keywords": [
+    "why do clients leave when a freelancer becomes an agency",
+    "how to keep clients happy when hiring subcontractors",
+    "freelancer to micro-agency communication mistakes",
+    "how to scale freelance business while keeping clients"
+  ],
+  "question_keywords": [
+    "why did my client leave after I hired help",
+    "should I stay the only point of contact with clients",
+    "how do agencies manage client expectations differently than freelancers",
+    "how do i move beyond being a freelancer"
+  ],
+  "comparison_keywords": [
+    "freelancer vs agency client experience",
+    "solo freelancer vs micro-agency for clients"
+  ],
+  "how_to_keywords": [
+    "how to scale freelance business without losing clients",
+    "how to introduce subcontractors to clients without losing trust",
+    "how to move from freelancer to agency"
+  ],
+  "problem_keywords": [
+    "clients confused after freelancer scales up",
+    "losing client trust when growing a team",
+    "middlemen taking a cut of freelance work"
+  ],
+  "commercial_keywords": [
+    "agency client management software",
+    "freelance to agency consulting services",
+    "agency communication handbook"
+  ],
+  "entities": [
+    "Hacker News",
+    "Entrepreneur",
+    "micro-agency",
+    "subcontractors",
+    "value-based pricing",
+    "retainers"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Tutorial",
+  "audience": "Solo freelancers and consultants (design, dev, marketing) who are hiring their first subcontractors/employees or starting to run projects through a small agency structure",
+  "countries": [],
+  "topic_cluster": "Business operations — scaling from solo freelance to agency",
+  "connects_to_prompts": [],
+  "connects_to_tools": [],
+  "connects_to_service": "consulting",
+  "scores": {
+    "demand": 5,
+    "intent": 6,
+    "relevance": 7,
+    "question_density": 6,
+    "search_opportunity": 5,
+    "ai_answer_opportunity": 5,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 6,
+    "conversion_potential": 6,
+    "evidence_quality": 6,
+    "total": 56
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What specifically goes wrong with clients when a freelancer starts scaling up?",
+      "answer_summary": "A widely-discussed Hacker News thread ('Ask HN: How to move beyond freelancer?', 322 points/123 comments) opened with a freelancer's frustration that middlemen/agencies were marking up his work roughly 3x while he did the actual delivery — a common friction point driving freelancers to formalize into their own agency.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=9289500"
+      ]
+    },
+    {
+      "question": "Should I remain the sole point of contact with clients as I hire subcontractors?",
+      "answer_summary": "Advice from both the Entrepreneur scaling piece and HN commenters converges on keeping yourself as the single face of client communication and quality control, rather than exposing clients directly to new subcontractors, at least early on.",
+      "sources": [
+        "https://www.entrepreneur.com/growing-a-business/smart-freelancers-scale-to-micro-agencies-before-burnout/500296"
+      ]
+    },
+    {
+      "question": "Why do clients pick a particular freelancer/agency rather than another with similar skills?",
+      "answer_summary": "Top HN commentary argues clients call back \"because they remember who you are and like you,\" not purely because of work quality — implying that relationship continuity is the thing most at risk when a freelancer becomes a multi-person agency.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=9289500"
+      ]
+    },
+    {
+      "question": "Does switching from hourly billing help or hurt client relationships during this transition?",
+      "answer_summary": "Commenters advised moving to daily/project-based or value-based pricing instead of hourly billing, arguing it protects revenue and better communicates outcome-focused value to clients as the business scales beyond one person.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=9289500"
+      ]
+    },
+    {
+      "question": "Is it better to find a business partner to handle client-facing work when scaling?",
+      "answer_summary": "One frequently-cited piece of advice is to bring in a partner specifically to handle sales, contract negotiation, and difficult client conversations, freeing the original freelancer to focus on delivery quality.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=9289500"
+      ]
+    },
+    {
+      "question": "Can a freelancer scale without turning into a full multi-employee agency?",
+      "answer_summary": "The Entrepreneur article frames a middle path — a 'micro-agency' using vetted subcontractors on a project basis — as a way to scale revenue and capacity while still being the one who 'remains the face of the work — and the one managing quality, communication and strategy.'",
+      "sources": [
+        "https://www.entrepreneur.com/growing-a-business/smart-freelancers-scale-to-micro-agencies-before-burnout/500296"
+      ]
+    },
+    {
+      "question": "What non-communication factors commonly get blamed when a freelance-to-agency transition struggles?",
+      "answer_summary": "HN commenters point to weak sales/marketing skills, clients' difficulty judging consultant quality up front, and lack of written contracts as recurring root causes tangled up with communication breakdowns.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=9289500"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Ask HN: How to move beyond \"freelancer\"?",
+      "url": "https://news.ycombinator.com/item?id=9289500",
+      "source_type": "community",
+      "used_for": "Primary forum evidence — 322-point/123-comment thread on freelancer-to-agency transition pain points, sourced via HN Algolia API"
+    },
+    {
+      "title": "How to Scale Your Freelance Business While Keeping Your Clients, Systems and Sanity Intact",
+      "url": "https://www.entrepreneur.com/growing-a-business/smart-freelancers-scale-to-micro-agencies-before-burnout/500296",
+      "source_type": "industry publication",
+      "used_for": "Micro-agency scaling advice and single-point-of-contact client strategy"
+    },
+    {
+      "title": "9 things you should do to step up from a freelancer to an agency (headline/snippet only, full article 403)",
+      "url": "https://yourstory.com/2020/07/career-tips-transition-freelancer-agency",
+      "source_type": "industry publication",
+      "used_for": "Corroborating that this is a recurring, previously-covered topic"
+    }
+  ]
+}

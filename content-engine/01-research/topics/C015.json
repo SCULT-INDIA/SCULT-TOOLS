@@ -1,0 +1,179 @@
+{
+  "candidate_id": "C015",
+  "status": "accepted",
+  "topic": "The real cost difference between running Claude Code, Cursor, and Copilot at team scale",
+  "topic_cluster": "AI coding tool cost comparison",
+  "target_keyword": "claude code vs cursor vs copilot cost comparison",
+  "secondary_keywords": [
+    "ai coding tools pricing 2026",
+    "claude code team pricing",
+    "cursor team pricing",
+    "github copilot business pricing",
+    "ai coding tool cost per developer"
+  ],
+  "long_tail_keywords": [
+    "how much does claude code cost per developer per month",
+    "cursor teams standard vs premium seat pricing",
+    "github copilot business vs enterprise pricing difference",
+    "how much do companies actually spend on ai coding tools per month",
+    "why is claude code max plan so expensive for teams"
+  ],
+  "question_keywords": [
+    "which is cheaper claude code cursor or copilot",
+    "how much does claude code cost for a team",
+    "what is the average cost per developer for ai coding tools",
+    "does claude code team plan require premium seats",
+    "how do ai coding tool usage limits work"
+  ],
+  "comparison_keywords": [
+    "claude code vs cursor pricing",
+    "cursor vs github copilot cost",
+    "claude code max vs cursor ultra",
+    "copilot business vs claude code team"
+  ],
+  "how_to_keywords": [
+    "how to estimate ai coding tool budget for a team",
+    "how to monitor claude code spending",
+    "how to reduce token usage costs in claude code"
+  ],
+  "problem_keywords": [
+    "claude code team plan too expensive",
+    "cursor unpredictable billing agent mode",
+    "company burned through ai coding budget"
+  ],
+  "commercial_keywords": [
+    "claude code team plan",
+    "cursor business plan",
+    "github copilot enterprise seat price",
+    "best value ai coding tool for teams"
+  ],
+  "entities": [
+    "Anthropic",
+    "Claude Code",
+    "Cursor",
+    "GitHub Copilot",
+    "Uber",
+    "OpenAI Codex"
+  ],
+  "primary_intent": "Commercial Investigation",
+  "secondary_intent": "Comparative",
+  "audience": "engineering managers, CTOs, and finance/procurement stakeholders deciding on AI coding tool budgets for teams",
+  "countries": [],
+  "connects_to_tools": [
+    "Marketing ROI Calculator"
+  ],
+  "connects_to_prompts": [
+    "Claude",
+    "Cursor",
+    "ChatGPT"
+  ],
+  "connects_to_service": "custom software development / AI agents and automation service (advisory angle)",
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 8,
+    "question_density": 7,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 5,
+    "conversion_potential": 7,
+    "evidence_quality": 8,
+    "total": 69
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What does Cursor cost for a team, seat by seat?",
+      "answer_summary": "Cursor Teams Standard is $40/seat monthly ($32 annual) with a dual usage pool; Teams Premium is $120/seat monthly ($96 annual) with 5x Standard's included usage.",
+      "sources": [
+        "https://daily.dev/blog/ai-coding-tools-cost-cursor-vs-copilot-vs-claude-code-pricing/"
+      ]
+    },
+    {
+      "question": "What does GitHub Copilot cost at Business vs Enterprise tier?",
+      "answer_summary": "Copilot Business is $19/seat with $19 in pooled AI credits; Enterprise effectively runs about $60/seat once the required GitHub Enterprise Cloud base ($21/user) is factored in, with $39 in pooled credits.",
+      "sources": [
+        "https://daily.dev/blog/ai-coding-tools-cost-cursor-vs-copilot-vs-claude-code-pricing/"
+      ]
+    },
+    {
+      "question": "What does Claude Code's Team plan cost per seat?",
+      "answer_summary": "Team Standard runs about $25/seat ($20 annual) and Team Premium about $125/seat ($100 annual), with Claude Code typically only available on Premium seats, minimum 5 seats.",
+      "sources": [
+        "https://daily.dev/blog/ai-coding-tools-cost-cursor-vs-copilot-vs-claude-code-pricing/",
+        "https://news.ycombinator.com/item?id=46516263"
+      ]
+    },
+    {
+      "question": "What is a realistic monthly cost per developer for heavy AI coding tool usage?",
+      "answer_summary": "Anthropic's own /cost telemetry shows an average of $6/developer/day (90% under $12/day); broader industry surveys find nearly 25% of tech leaders already spend $200-$500 per developer monthly, with ~6% exceeding $2,000.",
+      "sources": [
+        "https://daily.dev/blog/ai-coding-tools-cost-cursor-vs-copilot-vs-claude-code-pricing/"
+      ]
+    },
+    {
+      "question": "How much did Uber spend on Claude Code, and what does that reveal about enterprise costs?",
+      "answer_summary": "A widely discussed report claimed Uber exhausted its entire 2026 AI budget on Claude Code within four months; HN commenters attributed this to long uncompressed conversations, many parallel subagents/worktrees, and 'reward high token usage as productivity' incentive problems.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=47976415"
+      ]
+    },
+    {
+      "question": "Is $150-200/month per developer for Claude Code worth it?",
+      "answer_summary": "Commenters argue yes if it delivers even a 30% productivity gain for an $8k/month engineer (worth $2,400+), making even $1,000/month subscriptions rational for employers, though skeptics ask for proof the spend converts to real business value.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=46516263",
+        "https://news.ycombinator.com/item?id=47976415"
+      ]
+    },
+    {
+      "question": "Why is Cursor's team billing considered a bigger cost risk than Copilot's?",
+      "answer_summary": "Cursor's usage-based agent mode plus premium seat tiers (up to $120/seat) create wider variance and higher ceilings than Copilot's flatter, credit-pooled Business tier at $19/seat.",
+      "sources": [
+        "https://daily.dev/blog/ai-coding-tools-cost-cursor-vs-copilot-vs-claude-code-pricing/"
+      ]
+    },
+    {
+      "question": "Do standard code completions cost extra on GitHub Copilot?",
+      "answer_summary": "No — standard completions remain unmetered on paid Copilot plans; only agent mode and premium models consume metered AI Credits at $0.01/credit.",
+      "sources": [
+        "https://daily.dev/blog/ai-coding-tools-cost-cursor-vs-copilot-vs-claude-code-pricing/"
+      ]
+    },
+    {
+      "question": "What usage profile determines whether a developer spends $20 vs $200+/month?",
+      "answer_summary": "Light solo use (chat/autocomplete) runs $10-$20/month, daily professional agent use runs $60-$100/month, and agentic power users running multi-step autonomous tasks or parallel agents run $200+/month.",
+      "sources": [
+        "https://daily.dev/blog/ai-coding-tools-cost-cursor-vs-copilot-vs-claude-code-pricing/"
+      ]
+    },
+    {
+      "question": "Is Claude Code Team plan the same as the $200 Max 20x plan?",
+      "answer_summary": "No — a Hacker News commenter clarifies their company's team plan was actually $150/seat, not the same as the individual $200/month Max 20x subscription tier, a common point of confusion.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=46516263"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "What AI coding tools really cost in 2026: Cursor vs Copilot vs Claude Code pricing",
+      "url": "https://daily.dev/blog/ai-coding-tools-cost-cursor-vs-copilot-vs-claude-code-pricing/",
+      "source_type": "industry publication",
+      "used_for": "detailed pricing tables and real-world cost scenario breakdowns for all three tools"
+    },
+    {
+      "title": "My company pays for the team Claude code plan... (HN discussion)",
+      "url": "https://news.ycombinator.com/item?id=46516263",
+      "source_type": "community",
+      "used_for": "real team-plan pricing anecdotes and value-proposition debate"
+    },
+    {
+      "title": "Uber torches 2026 AI budget on Claude Code in four months (HN discussion)",
+      "url": "https://news.ycombinator.com/item?id=47976415",
+      "source_type": "community",
+      "used_for": "enterprise-scale cost overrun example and root causes"
+    }
+  ]
+}

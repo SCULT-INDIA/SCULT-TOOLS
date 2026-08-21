@@ -1,0 +1,181 @@
+{
+  "candidate_id": "C034",
+  "topic": "The actual difference between a wrapper product and a defensible AI product",
+  "status": "accepted",
+  "target_keyword": "ai wrapper vs defensible product",
+  "secondary_keywords": [
+    "what makes an ai product defensible",
+    "ai moat vs wrapper",
+    "is my ai startup just a wrapper",
+    "ai product defensibility"
+  ],
+  "long_tail_keywords": [
+    "how to build a moat around an ai wrapper",
+    "when is the 'just a wrapper' criticism fair",
+    "how to turn an ai wrapper into a defensible business",
+    "what gives an ai startup a competitive moat"
+  ],
+  "question_keywords": [
+    "what makes an ai wrapper defensible",
+    "is cursor just an openai wrapper",
+    "how do ai startups avoid being just a wrapper",
+    "what is an ai wrapper startup",
+    "can a wrapper product become a real business"
+  ],
+  "comparison_keywords": [
+    "ai wrapper vs defensible ai product",
+    "cursor vs jasper ai wrapper comparison",
+    "thin wrapper vs proprietary ai product"
+  ],
+  "how_to_keywords": [
+    "how to build defensibility into an ai product",
+    "how to add a data moat to an ai wrapper",
+    "how to differentiate from other gpt wrappers"
+  ],
+  "problem_keywords": [
+    "ai wrapper no moat",
+    "competitor copied my ai wrapper in days",
+    "ai startup easily replicated"
+  ],
+  "commercial_keywords": [
+    "ai product strategy consulting",
+    "ai agent development service",
+    "custom ai integration"
+  ],
+  "entities": [
+    "Cursor",
+    "Jasper",
+    "GitHub Copilot",
+    "Harvey",
+    "OpenAI",
+    "Anthropic",
+    "Gemini",
+    "RAG"
+  ],
+  "evidence_strength": "strong",
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 9,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 9,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 6,
+    "conversion_potential": 7,
+    "evidence_quality": 8,
+    "total": 74
+  },
+  "primary_intent": "Comparative",
+  "secondary_intent": "Informational",
+  "audience": "AI founders, technical co-founders, and investors evaluating whether an AI product idea (or portfolio company) has real defensibility versus being an easily-replicated thin wrapper on a foundation model API",
+  "countries": [],
+  "topic_cluster": "startup-strategy / ai-product-defensibility",
+  "connects_to_service": "ai-agents-automation-service",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "development",
+    "business"
+  ],
+  "questions": [
+    {
+      "question": "What exactly is an 'AI wrapper' and why is it used as a criticism?",
+      "answer_summary": "An AI wrapper is a software layer sitting between the user and a foundation model (handling prompts, API calls, formatting) with no proprietary intelligence of its own; the critique is that since anyone can call the same OpenAI/Anthropic/Google APIs, such products have no defensible moat.",
+      "sources": [
+        "https://www.startups.com/lexicon/ai-wrapper",
+        "https://hatchworks.com/blog/gen-ai/ai-wrapper-product-strategy/"
+      ]
+    },
+    {
+      "question": "When is calling a startup 'just a wrapper' a fair criticism versus a lazy dismissal?",
+      "answer_summary": "It's fair when the product's only feature is prompt-in/model-response-out with no proprietary data, no workflow integration, and no distribution/brand moat (easily replicated in days); it's lazy when applied to products like GitHub Copilot or Cursor that built real switching costs (IDE integration, developer brand, adoption) on top of the model.",
+      "sources": [
+        "https://www.startups.com/lexicon/ai-wrapper"
+      ]
+    },
+    {
+      "question": "How did Cursor avoid the 'just a wrapper' fate that hit Jasper?",
+      "answer_summary": "Cursor started as a wrapper around GPT-4/Claude but built deep IDE integration and developer workflow lock-in, reaching a reported $2B+ ARR and $29.3B valuation; Jasper, by contrast, stayed a 'clean UI on OpenAI's API' and lost users once ChatGPT itself became capable enough to replace it.",
+      "sources": [
+        "https://www.startups.com/lexicon/ai-wrapper"
+      ]
+    },
+    {
+      "question": "What are the concrete building blocks of a defensible moat for an AI product?",
+      "answer_summary": "Sources converge on: proprietary/compounding data (a 'data flywheel'), deep workflow integration that raises switching costs, domain-specific expertise, distribution/existing relationships, brand trust for high-stakes use cases, and engineering complexity (orchestration, safety systems) that isn't trivial to copy.",
+      "sources": [
+        "https://www.startups.com/lexicon/ai-wrapper",
+        "https://hatchworks.com/blog/gen-ai/ai-wrapper-product-strategy/",
+        "https://sajalsharma.com/posts/product-defensibility-ai-applications/"
+      ]
+    },
+    {
+      "question": "Can an AI wrapper evolve into a defensible product over time, or is the category doomed?",
+      "answer_summary": "Analyses argue evolution is possible: a wrapper can become defensible if it starts accumulating proprietary usage data, embeds itself into core customer workflows, and layers in more sophisticated techniques (e.g., RAG, fine-tuning) that compound with use rather than staying a static prompt template.",
+      "sources": [
+        "https://hatchworks.com/blog/gen-ai/ai-wrapper-product-strategy/"
+      ]
+    },
+    {
+      "question": "Why don't AI wrappers have real moats against ChatGPT/foundation model providers directly?",
+      "answer_summary": "The core argument is that the foundation model providers themselves can absorb the wrapper's use case natively (as happened to several 'GPT wrapper' UI products), since the wrapper depends entirely on someone else's underlying intelligence rather than owning any unique asset.",
+      "sources": [
+        "https://maccelerator.la/en/blog/startup-strategy/why-ai-wrappers-don-t-have-moats/"
+      ]
+    },
+    {
+      "question": "Is workflow integration or proprietary data the stronger form of AI defensibility?",
+      "answer_summary": "Commentary favors workflow embedding as the more immediately powerful lever (it raises switching costs the moment a product becomes part of daily operations), while proprietary data compounds more slowly but produces a harder-to-copy long-term advantage once accumulated.",
+      "sources": [
+        "https://hatchworks.com/blog/gen-ai/ai-wrapper-product-strategy/",
+        "https://sajalsharma.com/posts/product-defensibility-ai-applications/"
+      ]
+    },
+    {
+      "question": "Are ChatGPT-wrapper products still making meaningful revenue despite the criticism?",
+      "answer_summary": "Yes -- multiple wrapper products are reported generating tens of thousands of dollars or more in revenue, indicating the 'it's just a wrapper' label doesn't automatically make a product commercially non-viable in the near term, even if long-run defensibility is uncertain.",
+      "sources": [
+        "https://quasa.io/media/chatgpt-wrappers-generating-tens-of-thousands-in-revenue-why-it-s-just-a-wrapper-is-not-a-dealbreaker"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://www.startups.com/lexicon/ai-wrapper",
+      "title": "AI Wrapper: definition, the dismissive critique of AI startups, and when 'wrapper' is fair vs lazy",
+      "source_type": "industry publication",
+      "used_for": "Core definitions, fair-vs-lazy criteria, Cursor/Jasper/GitHub Copilot/Harvey examples"
+    },
+    {
+      "url": "https://hatchworks.com/blog/gen-ai/ai-wrapper-product-strategy/",
+      "title": "AI Wrapper Product Strategy: Most Founders Get the Moat Wrong",
+      "source_type": "industry publication",
+      "used_for": "Moat-building framework, wrapper-to-defensible evolution argument"
+    },
+    {
+      "url": "https://sajalsharma.com/posts/product-defensibility-ai-applications/",
+      "title": "What's the Moat? Product Defensibility for AI Applications",
+      "source_type": "industry publication",
+      "used_for": "Defensibility criteria (data, workflow, domain expertise)"
+    },
+    {
+      "url": "https://maccelerator.la/en/blog/startup-strategy/why-ai-wrappers-don-t-have-moats/",
+      "title": "Why AI Wrappers Don't Have Moats (And Why That Should Terrify You)",
+      "source_type": "industry publication",
+      "used_for": "Counter-argument on foundation-model absorption risk"
+    },
+    {
+      "url": "https://quasa.io/media/chatgpt-wrappers-generating-tens-of-thousands-in-revenue-why-it-s-just-a-wrapper-is-not-a-dealbreaker",
+      "title": "ChatGPT Wrappers Generating Tens of Thousands in Revenue",
+      "source_type": "industry publication",
+      "used_for": "Evidence that wrapper products can still be commercially viable short/mid-term"
+    },
+    {
+      "url": "https://www.ideas2it.com/blogs/ai-wrapper-trap",
+      "title": "AI Wrapper Trap: AI Feature vs Defensible Product?",
+      "source_type": "industry publication",
+      "used_for": "Additional framing on wrapper vs defensible product distinction"
+    }
+  ],
+  "rejection_reason": ""
+}

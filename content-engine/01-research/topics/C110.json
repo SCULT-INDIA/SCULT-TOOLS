@@ -1,0 +1,235 @@
+{
+  "candidate_id": "C110",
+  "status": "accepted",
+  "topic": "What actually separates a healthcare or wellness business's website compliance needs from a normal small business site",
+  "topic_cluster": "Healthcare & Wellness Website Legal Compliance",
+  "target_keyword": "healthcare website compliance requirements",
+  "secondary_keywords": [
+    "hipaa website compliance",
+    "wellness website compliance",
+    "medical practice website requirements"
+  ],
+  "long_tail_keywords": [
+    "is google analytics a hipaa violation on a healthcare website",
+    "do wellness apps need to follow hipaa",
+    "ada accessibility requirements for a medical practice website",
+    "health breach notification rule for non covered entities"
+  ],
+  "question_keywords": [
+    "is my wellness website hipaa compliant",
+    "does the health breach notification rule apply to non covered entities",
+    "what makes a healthcare website legally different from a regular small business site",
+    "is using meta pixel on a hospital website illegal"
+  ],
+  "comparison_keywords": [
+    "hipaa vs ftc health breach notification rule",
+    "covered entity vs non covered wellness app",
+    "hipaa compliance service vs doing it yourself"
+  ],
+  "how_to_keywords": [
+    "how to make a healthcare website hipaa compliant",
+    "how to audit website tracking pixels for hipaa compliance",
+    "how to make a medical website ada accessible"
+  ],
+  "problem_keywords": [
+    "website tracking pixel hipaa violation",
+    "hospital website meta pixel lawsuit",
+    "ada lawsuit against medical practice website",
+    "patient data shared with google and meta"
+  ],
+  "commercial_keywords": [
+    "hipaa compliance software",
+    "hipaa compliant website hosting",
+    "website accessibility audit service",
+    "hipaa compliance as a service"
+  ],
+  "entities": [
+    "HHS Office for Civil Rights",
+    "HIPAA",
+    "FTC",
+    "Health Breach Notification Rule",
+    "ADA Title III",
+    "GoodRx",
+    "Meta Pixel",
+    "Google Analytics",
+    "Mount Nittany Health",
+    "Banner Health",
+    "LifeStance Health Group",
+    "Delve"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Informational",
+  "audience": "Healthcare providers (clinics, practices, hospitals), telehealth and wellness-app founders, and the agencies/developers building websites for them, especially non-HIPAA-covered wellness businesses unaware they may still face FTC oversight",
+  "countries": [
+    "United States"
+  ],
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "legal-compliance"
+  ],
+  "connects_to_service": "healthcare-wellness",
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 9,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 7,
+    "conversion_potential": 8,
+    "evidence_quality": 9,
+    "total": 69
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Is using Google Analytics or Meta Pixel on a healthcare website a HIPAA violation?",
+      "answer_summary": "HHS OCR confirmed in December 2022 that deploying third-party tracking technologies without a Business Associate Agreement is a HIPAA violation when individually identifiable health information is involved.",
+      "sources": [
+        "https://www.hipaajournal.com/ocr-website-tracking-technology-without-baa-hipaa-violation/"
+      ]
+    },
+    {
+      "question": "Is website tracking technology an active HIPAA enforcement priority?",
+      "answer_summary": "Yes — HHS OCR announced in April 2023 that noncompliant use of website tracking technologies is an active enforcement priority against covered entities.",
+      "sources": [
+        "https://www.hipaajournal.com/noncompliant-use-of-website-tracking-technologies-is-an-enforcement-priority-for-ocr/"
+      ]
+    },
+    {
+      "question": "How widespread is the tracking-pixel problem across hospital websites?",
+      "answer_summary": "An analysis found 96% of non-federal acute care hospital websites use tracking technology that transmits visitor data to third parties like Meta, Google, LinkedIn, and Snapchat.",
+      "sources": [
+        "https://www.hipaajournal.com/96pc-hospital-websites-tracking-technologies-2024/"
+      ]
+    },
+    {
+      "question": "What actually happens (financially) when a healthcare provider gets this wrong?",
+      "answer_summary": "Mount Nittany Health agreed to an $1.8 million settlement after tracking code allegedly disclosed data for roughly 74,000 patients to Meta and Google; Banner Health and LifeStance Health Group settled similar pixel lawsuits.",
+      "sources": [
+        "https://www.hipaajournal.com/mount-nittany-health-sued-over-alleged-website-tracking-code-phi-disclosures/",
+        "https://www.hipaajournal.com/banner-health-lifestance-health-group-pixel-settlements/"
+      ]
+    },
+    {
+      "question": "Do wellness businesses that AREN'T HIPAA-covered entities still have to worry about this?",
+      "answer_summary": "Yes — the FTC settled with GoodRx (a non-HIPAA-covered entity) for $1.5M and later $25M over sharing health data with advertisers, using the FTC Act and the Health Breach Notification Rule, and in 2024 finalized a rule update explicitly extending that rule to health apps/technologies outside HIPAA's scope.",
+      "sources": [
+        "https://www.hipaajournal.com/court-approves-ftc-settlement-goodrx/",
+        "https://www.hipaajournal.com/goodrx-25-million-settlement-tracking-technology-lawsuit/",
+        "https://www.hipaajournal.com/ftc-health-breach-notification-rule-final-rule-2024/"
+      ]
+    },
+    {
+      "question": "What is a Business Associate Agreement (BAA) and when does a healthcare website need one?",
+      "answer_summary": "A BAA is required whenever a third-party vendor (analytics, ad pixel, hosting) may process individually identifiable health information on behalf of a covered entity; OCR's 2022 guidance treats using such tools without one as a violation.",
+      "sources": [
+        "https://www.hipaajournal.com/ocr-website-tracking-technology-without-baa-hipaa-violation/"
+      ]
+    },
+    {
+      "question": "Is there a simple 'HIPAA for beginners' resource for a new medical/health startup building a site?",
+      "answer_summary": "A long-running Ask HN thread exists precisely because founders entering health find HIPAA intimidating and ask the community for practical starting-point resources rather than just 'talk to a lawyer.'",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=HIPAA%20for%20dummies%20medical%20startup"
+      ]
+    },
+    {
+      "question": "Is 'HIPAA compliance as a service' (badges/certifications) enough on its own?",
+      "answer_summary": "A Healthcare CIO's critique of a YC-backed HIPAA-compliance-as-a-service launch stressed the need for real documentation and compliance reports, not just a compliance badge.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=healthcare%20website%20HIPAA%20compliance"
+      ]
+    },
+    {
+      "question": "What does ADA Title III actually require of a medical practice's website?",
+      "answer_summary": "DOJ guidance says businesses open to the public, explicitly including hospitals and medical offices, must ensure their websites provide full and equal access — via alt text, captcaptions, accessible forms, keyboard navigation, color contrast, and resizable text.",
+      "sources": [
+        "https://www.ada.gov/resources/web-guidance/"
+      ]
+    },
+    {
+      "question": "Why have ADA web-accessibility lawsuits increased so sharply, and does that hit medical practices particularly hard?",
+      "answer_summary": "An accessibility engineer on Hacker News noted a 200% increase in ADA lawsuit filings, with firms proactively scanning sites for defects and sending remediation-or-litigation demands — a pattern that also touches medical practice sites given their public-facing, transaction-like booking/portal features.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=website+accessibility+lawsuit+ADA+healthcare"
+      ]
+    },
+    {
+      "question": "Is there formal DOJ/ADA guidance that names healthcare providers specifically, or is it generic?",
+      "answer_summary": "The guidance is general Title III guidance that lists hospitals and medical offices only as examples of covered businesses — it does not carve out extra healthcare-specific web rules beyond the general accessibility standard.",
+      "sources": [
+        "https://www.ada.gov/resources/web-guidance/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "OCR Confirms Use of Website and Other Tracking Technologies Without a BAA is a HIPAA Violation",
+      "url": "https://www.hipaajournal.com/ocr-website-tracking-technology-without-baa-hipaa-violation/",
+      "source_type": "industry publication",
+      "used_for": "Core regulatory rule on tracking technology and BAAs"
+    },
+    {
+      "title": "Noncompliant Use of Website Tracking Technologies is an Enforcement Priority for OCR",
+      "url": "https://www.hipaajournal.com/noncompliant-use-of-website-tracking-technologies-is-an-enforcement-priority-for-ocr/",
+      "source_type": "industry publication",
+      "used_for": "Confirming active enforcement priority status"
+    },
+    {
+      "title": "96% of Hospitals Still Use Website Tracking Technologies That Share Data with Third Parties",
+      "url": "https://www.hipaajournal.com/96pc-hospital-websites-tracking-technologies-2024/",
+      "source_type": "industry publication",
+      "used_for": "Scale statistic on how widespread the compliance gap is"
+    },
+    {
+      "title": "Mount Nittany Health Agrees $1.8 Million Settlement for Using Website Tracking Technologies",
+      "url": "https://www.hipaajournal.com/mount-nittany-health-sued-over-alleged-website-tracking-code-phi-disclosures/",
+      "source_type": "industry publication",
+      "used_for": "Concrete settlement case study and dollar/patient-count figures"
+    },
+    {
+      "title": "Banner Health; LifeStance Health Group Settle Tracking Technology Lawsuits",
+      "url": "https://www.hipaajournal.com/banner-health-lifestance-health-group-pixel-settlements/",
+      "source_type": "industry publication",
+      "used_for": "Additional settlement precedent"
+    },
+    {
+      "title": "Judge Approves FTC's $1.5 Million Settlement with GoodRx",
+      "url": "https://www.hipaajournal.com/court-approves-ftc-settlement-goodrx/",
+      "source_type": "industry publication",
+      "used_for": "Evidence that non-HIPAA-covered wellness businesses face separate FTC exposure"
+    },
+    {
+      "title": "GoodRx Agrees to $25 Million Settlement to Resolve Tracking Technology Lawsuit",
+      "url": "https://www.hipaajournal.com/goodrx-25-million-settlement-tracking-technology-lawsuit/",
+      "source_type": "industry publication",
+      "used_for": "Follow-on private litigation exposure for non-covered wellness businesses"
+    },
+    {
+      "title": "FTC Issues Final Rule Updating Health Breach Notification Rule",
+      "url": "https://www.hipaajournal.com/ftc-health-breach-notification-rule-final-rule-2024/",
+      "source_type": "industry publication",
+      "used_for": "Confirming the rule now explicitly extends to health apps/sites outside HIPAA's scope"
+    },
+    {
+      "title": "Guidance on Web Accessibility and the ADA",
+      "url": "https://www.ada.gov/resources/web-guidance/",
+      "source_type": "government/academic",
+      "used_for": "Primary ADA Title III web accessibility requirements, with healthcare named as a covered example"
+    },
+    {
+      "title": "Hacker News (Algolia) search: 'healthcare website HIPAA compliance'",
+      "url": "https://hn.algolia.com/api/v1/search?query=healthcare%20website%20HIPAA%20compliance",
+      "source_type": "community",
+      "used_for": "Founder-side discussion of HIPAA-for-beginners needs and critique of compliance-as-a-service offerings"
+    },
+    {
+      "title": "Hacker News (Algolia) search: 'website accessibility lawsuit ADA healthcare'",
+      "url": "https://hn.algolia.com/api/v1/search?query=website+accessibility+lawsuit+ADA+healthcare",
+      "source_type": "community",
+      "used_for": "Evidence on the scale of ADA lawsuit growth and litigation-based enforcement pattern"
+    }
+  ]
+}

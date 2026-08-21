@@ -1,0 +1,1305 @@
+<title>Research Checkpoint</title>
+<style>
+:root {
+  --paper: #faf8f4;
+  --paper-raised: #ffffff;
+  --ink: #1c1730;
+  --ink-muted: #5c5570;
+  --ink-subtle: #8b84a0;
+  --line: #e3dfea;
+  --line-strong: #cbc4dd;
+  --violet-50: #f4effe;
+  --violet-100: #ebe6fe;
+  --violet-600: #631aff;
+  --violet-700: #4b20de;
+  --violet-900: #16018e;
+  --good: #1a8f5c;
+  --good-bg: #e6f5ee;
+  --warn: #a5720a;
+  --warn-bg: #fbf0dc;
+  --bad: #b3341f;
+  --bad-bg: #fbe9e4;
+  --shadow: 0 1px 3px 0 rgb(28 23 48 / 0.06), 0 1px 2px -1px rgb(28 23 48 / 0.06);
+  --shadow-md: 0 4px 12px -2px rgb(28 23 48 / 0.08), 0 2px 6px -2px rgb(28 23 48 / 0.05);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #14101f;
+    --paper-raised: #1c1730;
+    --ink: #f1eef8;
+    --ink-muted: #b5aecb;
+    --ink-subtle: #837c99;
+    --line: #322a48;
+    --line-strong: #443a5e;
+    --violet-50: #241a42;
+    --violet-100: #2d2050;
+    --violet-600: #9b7bff;
+    --violet-700: #b39bff;
+    --violet-900: #e6ddff;
+    --good: #4fd39a;
+    --good-bg: #163829;
+    --warn: #e0b03e;
+    --warn-bg: #3a2e10;
+    --bad: #ff8b74;
+    --bad-bg: #3a1d16;
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.4);
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #14101f;
+  --paper-raised: #1c1730;
+  --ink: #f1eef8;
+  --ink-muted: #b5aecb;
+  --ink-subtle: #837c99;
+  --line: #322a48;
+  --line-strong: #443a5e;
+  --violet-50: #241a42;
+  --violet-100: #2d2050;
+  --violet-600: #9b7bff;
+  --violet-700: #b39bff;
+  --violet-900: #e6ddff;
+  --good: #4fd39a;
+  --good-bg: #163829;
+  --warn: #e0b03e;
+  --warn-bg: #3a2e10;
+  --bad: #ff8b74;
+  --bad-bg: #3a1d16;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Cabin', -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; text-wrap: balance; margin: 0; }
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--violet-700);
+  font-weight: 600;
+}
+header.top { margin-bottom: 2.5rem; }
+header.top h1 { font-size: 34px; font-weight: 600; letter-spacing: -0.5px; margin-top: 0.5rem; color: var(--ink); }
+header.top p.dek { color: var(--ink-muted); max-width: 62ch; margin-top: 0.75rem; font-size: 15.5px; }
+
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin-bottom: 2.5rem; }
+.stat { background: var(--paper-raised); padding: 1.1rem 1.3rem; }
+.stat .n { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; font-size: 26px; font-weight: 600; color: var(--ink); display: block; }
+.stat .l { color: var(--ink-subtle); font-size: 12.5px; margin-top: 0.2rem; }
+
+section { margin-bottom: 3rem; }
+section > h2 { font-size: 20px; font-weight: 600; margin-bottom: 0.3rem; }
+section > p.section-note { color: var(--ink-muted); font-size: 13.5px; margin: 0 0 1.25rem; max-width: 68ch; }
+
+.pillar-row { display: grid; grid-template-columns: 220px 1fr 32px; align-items: center; gap: 0.9rem; padding: 0.4rem 0; }
+.pillar-name { font-size: 13.5px; color: var(--ink-muted); }
+.pillar-track { height: 8px; background: var(--violet-50); border-radius: 5px; overflow: hidden; }
+.pillar-fill { height: 100%; background: var(--violet-600); border-radius: 5px; }
+.pillar-count { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; font-size: 13px; color: var(--ink-subtle); text-align: right; }
+
+.table-shell { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--paper-raised); box-shadow: var(--shadow); }
+.table-scroll { overflow-x: auto; max-height: 640px; overflow-y: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+thead th {
+  position: sticky; top: 0; background: var(--paper-raised);
+  text-align: left; padding: 0.65rem 0.8rem; font-size: 11px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink-subtle); border-bottom: 1px solid var(--line-strong);
+  font-weight: 600; z-index: 1;
+}
+tbody td { padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--violet-50); }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+td.mono { font-family: 'JetBrains Mono', monospace; }
+td.id { color: var(--ink-subtle); font-size: 12px; }
+td.topic { color: var(--ink); max-width: 420px; }
+td.pillar-cell { color: var(--ink-muted); font-size: 12.5px; white-space: nowrap; }
+td.score { font-weight: 600; }
+
+.chip { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 99px; font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+.chip-strong { background: var(--good-bg); color: var(--good); }
+.chip-moderate { background: var(--warn-bg); color: var(--warn); }
+.chip-weak { background: var(--bad-bg); color: var(--bad); }
+
+.callout {
+  border: 1px solid var(--line-strong); border-left: 4px solid var(--bad);
+  background: var(--paper-raised); border-radius: 0 10px 10px 0; padding: 1.4rem 1.6rem; box-shadow: var(--shadow);
+}
+.callout h3 { font-size: 17px; margin-bottom: 0.5rem; }
+.callout .rej-topic { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-subtle); margin-bottom: 0.9rem; }
+.callout .rej-reason { color: var(--ink-muted); font-size: 14px; line-height: 1.65; margin-bottom: 1.1rem; }
+.rej-q { padding: 0.7rem 0; border-top: 1px solid var(--line); }
+.rej-q-text { font-weight: 600; font-size: 13.5px; margin: 0 0 0.25rem; }
+.rej-q-answer { color: var(--ink-muted); font-size: 13px; margin: 0; }
+
+.dropped-box { border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1.4rem; background: var(--paper-raised); }
+.dropped-box ul { margin: 0; padding-left: 1.1rem; columns: 2; column-gap: 2rem; }
+.dropped-box li { font-size: 13px; color: var(--ink-muted); margin-bottom: 0.4rem; break-inside: avoid; }
+.dim { color: var(--ink-subtle); }
+
+.next-steps { background: var(--violet-900); color: white; border-radius: 14px; padding: 1.8rem 2rem; }
+:root:not([data-theme="dark"]) .next-steps { background: var(--violet-900); color: #fff; }
+.next-steps h2 { color: #fff; }
+.next-steps p { color: rgba(255,255,255,0.82); max-width: 62ch; }
+.next-steps ol { color: rgba(255,255,255,0.92); padding-left: 1.3rem; }
+.next-steps li { margin-bottom: 0.4rem; }
+
+footer.meta { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); color: var(--ink-subtle); font-size: 12px; font-family: 'JetBrains Mono', monospace; }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Cabin:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">Content Engine — Phase 1 Checkpoint</span>
+    <h1>100 topics, researched and scored</h1>
+    <p class="dek">20 agents independently researched 111 candidate topics for tools.scult.in's new blog batch — real web evidence only, no invented statistics or sentiment. One topic was rejected outright for insufficient evidence; the strongest 100 by score are below, ready for the article-writing phase.</p>
+  </header>
+
+  <div class="stat-row">
+    <div class="stat"><span class="n">100</span><span class="l">topics selected</span></div>
+    <div class="stat"><span class="n">55</span><span class="l">strong evidence</span></div>
+    <div class="stat"><span class="n">44</span><span class="l">moderate evidence</span></div>
+    <div class="stat"><span class="n">1</span><span class="l">weak evidence</span></div>
+    <div class="stat"><span class="n">595</span><span class="l">sources cited</span></div>
+    <div class="stat"><span class="n">1074</span><span class="l">seed questions found</span></div>
+  </div>
+
+  <section>
+    <h2>Coverage by pillar</h2>
+    <p class="section-note">Grounded in the site's real tool/prompt/service inventory — every pillar links back to something that actually exists on tools.scult.in.</p>
+    <div class="pillar-row">
+    <span class="pillar-name">GEO/AEO</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:12%"></div></div>
+    <span class="pillar-count">12</span>
+  </div>
+<div class="pillar-row">
+    <span class="pillar-name">SEO/content</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:10%"></div></div>
+    <span class="pillar-count">10</span>
+  </div>
+<div class="pillar-row">
+    <span class="pillar-name">AI coding</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:10%"></div></div>
+    <span class="pillar-count">10</span>
+  </div>
+<div class="pillar-row">
+    <span class="pillar-name">Cross-cutting</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:10%"></div></div>
+    <span class="pillar-count">10</span>
+  </div>
+<div class="pillar-row">
+    <span class="pillar-name">Startup/indie</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:8%"></div></div>
+    <span class="pillar-count">8</span>
+  </div>
+<div class="pillar-row">
+    <span class="pillar-name">AI agents</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:8%"></div></div>
+    <span class="pillar-count">8</span>
+  </div>
+<div class="pillar-row">
+    <span class="pillar-name">E-commerce</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:7%"></div></div>
+    <span class="pillar-count">7</span>
+  </div>
+<div class="pillar-row">
+    <span class="pillar-name">Design</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:6%"></div></div>
+    <span class="pillar-count">6</span>
+  </div>
+<div class="pillar-row">
+    <span class="pillar-name">AI models</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:5%"></div></div>
+    <span class="pillar-count">5</span>
+  </div>
+<div class="pillar-row">
+    <span class="pillar-name">Data/finance</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:5%"></div></div>
+    <span class="pillar-count">5</span>
+  </div>
+<div class="pillar-row">
+    <span class="pillar-name">Global</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:5%"></div></div>
+    <span class="pillar-count">5</span>
+  </div>
+<div class="pillar-row">
+    <span class="pillar-name">HR/ops</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:4%"></div></div>
+    <span class="pillar-count">4</span>
+  </div>
+<div class="pillar-row">
+    <span class="pillar-name">Career</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:4%"></div></div>
+    <span class="pillar-count">4</span>
+  </div>
+<div class="pillar-row">
+    <span class="pillar-name">Content creators</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:4%"></div></div>
+    <span class="pillar-count">4</span>
+  </div>
+<div class="pillar-row">
+    <span class="pillar-name">Business ops</span>
+    <div class="pillar-track"><div class="pillar-fill" style="width:2%"></div></div>
+    <span class="pillar-count">2</span>
+  </div>
+  </section>
+
+  <section>
+    <h2>The one rejection</h2>
+    <p class="section-note">Exactly what the research standard is for: an agent found real, adjacent evidence but refused to stretch it into the topic as framed.</p>
+    <div class="callout">
+      <h3>How small agencies are actually handling scope creep with AI-assisted contracts</h3>
+      <p class="rej-topic">[C105] — score 37/100, evidence: weak</p>
+      <p class="rej-reason">Real, related evidence exists but does not support the specific claim in the topic framing. General scope-creep advice for agencies is well documented (Search Engine Land's 7-step framework), and a genuine, if very early-stage, product category of AI-powered contract-review tools that flag scope-creep risk does exist (several small 2025-2026 Show HN launches: Lexray, SimpleMetrics, Fivani, ContractGhost, ContractShield). However, none of these had more than 1-3 upvotes/near-zero discussion, no case studies or agency testimonials were found, and the flagship scope-creep article found makes zero mention of AI at all. There is no evidence found of an established or documented practice of 'small agencies actually handling scope creep with AI-assisted contracts' — what exists is a handful of unproven, low-traction side projects plus one throwaway comment ('Tell HN: AI programming has turned my scope creep to scope leap', 2 points). Writing a confident 4,500-word article claiming this is how agencies 'actually' operate would outrun the evidence.</p>
+      <div class="rej-q"><p class="rej-q-text">What causes scope creep in agency contracts and how do agencies prevent it (non-AI)?</p><p class="rej-q-answer">Search Engine Land's 7-step framework: define concrete deliverables, separate strategy from execution pricing, pre-build a change-order process, price for value not hours, set communication boundaries, audit scope quarterly, and say no in writing — with no mention of AI tooling anywhere in the piece.</p></div>
+<div class="rej-q"><p class="rej-q-text">Do any AI tools exist specifically to catch scope-creep risk in contracts before signing?</p><p class="rej-q-answer">A small number of 2025-2026 Show HN launches (Lexray, SimpleMetrics, Fivani, ContractGhost, ContractShield) pitch AI contract analysis that flags scope-related risks (vague acceptance criteria, overly broad IP clauses, milestones that invite scope creep), but each has only 1-3 points and little to no discussion, indicating early/unproven traction rather than established practice.</p></div>
+<div class="rej-q"><p class="rej-q-text">Is 'AI-assisted contracts' a phrase people actually search or discuss in relation to scope creep?</p><p class="rej-q-answer">No direct evidence of this specific phrase or framing was found in forum discussion; the closest was a single low-engagement Hacker News aside ('Tell HN: AI programming has turned my scope creep to scope leap', 2 points/4 comments) referring to AI coding output causing scope expansion, not AI-assisted contracts as a scope-creep defense.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>All 100 topics, ranked</h2>
+    <p class="section-note">Sorted by total score (demand + intent + relevance + question density + search opportunity + AI-answer opportunity + tool-discovery opportunity + competitive gap + conversion potential + evidence quality, each 1-10).</p>
+    <div class="table-shell">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>#</th><th>ID</th><th>Topic</th><th>Pillar</th><th>Score</th><th>Evidence</th><th>Sources</th><th>Questions</th></tr></thead>
+          <tbody><tr>
+    <td class="num">1</td>
+    <td class="mono id">C102</td>
+    <td class="topic">What a &quot;citation&quot; from an AI answer engine actually looks like and how to find yours</td>
+    <td class="pillar-cell">GEO/AEO</td>
+    <td class="mono num score">79</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">10</td>
+    <td class="mono num">8</td>
+  </tr>
+<tr>
+    <td class="num">2</td>
+    <td class="mono id">C006</td>
+    <td class="topic">Why a page can rank on Google but never get cited by an AI answer engine</td>
+    <td class="pillar-cell">GEO/AEO</td>
+    <td class="mono num score">78</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">5</td>
+    <td class="mono num">9</td>
+  </tr>
+<tr>
+    <td class="num">3</td>
+    <td class="mono id">C004</td>
+    <td class="topic">Structured data AI answer engines actually use vs structured data that does nothing for them</td>
+    <td class="pillar-cell">GEO/AEO</td>
+    <td class="mono num score">77</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">8</td>
+    <td class="mono num">8</td>
+  </tr>
+<tr>
+    <td class="num">4</td>
+    <td class="mono id">C009</td>
+    <td class="topic">FAQ schema vs a genuine FAQ page: what AI answer engines actually parse</td>
+    <td class="pillar-cell">GEO/AEO</td>
+    <td class="mono num score">77</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">8</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">5</td>
+    <td class="mono id">C033</td>
+    <td class="topic">How first-time founders are validating an idea before writing code</td>
+    <td class="pillar-cell">Startup/indie</td>
+    <td class="mono num score">77</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">6</td>
+    <td class="mono num">9</td>
+  </tr>
+<tr>
+    <td class="num">6</td>
+    <td class="mono id">C008</td>
+    <td class="topic">How to check if GPTBot, ClaudeBot, or Google-Extended can actually reach your site</td>
+    <td class="pillar-cell">GEO/AEO</td>
+    <td class="mono num score">76</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">9</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">7</td>
+    <td class="mono id">C045</td>
+    <td class="topic">Why some FAQ pages get rich results and others don't</td>
+    <td class="pillar-cell">SEO/content</td>
+    <td class="mono num score">76</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">9</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">8</td>
+    <td class="mono id">C108</td>
+    <td class="topic">What schema markup actually does for e-commerce product pages beyond rich snippets</td>
+    <td class="pillar-cell">SEO/content</td>
+    <td class="mono num score">76</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">5</td>
+    <td class="mono num">10</td>
+  </tr>
+<tr>
+    <td class="num">9</td>
+    <td class="mono id">C022</td>
+    <td class="topic">How small businesses are actually deploying AI agents for customer support</td>
+    <td class="pillar-cell">AI agents</td>
+    <td class="mono num score">75</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">5</td>
+    <td class="mono num">13</td>
+  </tr>
+<tr>
+    <td class="num">10</td>
+    <td class="mono id">C038</td>
+    <td class="topic">Why topical authority actually matters more for AI search than backlinks alone</td>
+    <td class="pillar-cell">SEO/content</td>
+    <td class="mono num score">75</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">0</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">11</td>
+    <td class="mono id">C007</td>
+    <td class="topic">Robots.txt directives every AI crawler actually respects (GPTBot, ClaudeBot, PerplexityBot)</td>
+    <td class="pillar-cell">GEO/AEO</td>
+    <td class="mono num score">74</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">9</td>
+    <td class="mono num">14</td>
+  </tr>
+<tr>
+    <td class="num">12</td>
+    <td class="mono id">C034</td>
+    <td class="topic">The actual difference between a wrapper product and a defensible AI product</td>
+    <td class="pillar-cell">Startup/indie</td>
+    <td class="mono num score">74</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">6</td>
+    <td class="mono num">8</td>
+  </tr>
+<tr>
+    <td class="num">13</td>
+    <td class="mono id">C001</td>
+    <td class="topic">How ChatGPT search actually decides which pages to cite</td>
+    <td class="pillar-cell">GEO/AEO</td>
+    <td class="mono num score">73</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">7</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">14</td>
+    <td class="mono id">C020</td>
+    <td class="topic">How to evaluate whether an AI coding subscription is worth it for a small dev team</td>
+    <td class="pillar-cell">AI coding</td>
+    <td class="mono num score">73</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">9</td>
+    <td class="mono num">14</td>
+  </tr>
+<tr>
+    <td class="num">15</td>
+    <td class="mono id">C031</td>
+    <td class="topic">How indie hackers are actually pricing AI-wrapper SaaS products</td>
+    <td class="pillar-cell">Startup/indie</td>
+    <td class="mono num score">73</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">7</td>
+    <td class="mono num">13</td>
+  </tr>
+<tr>
+    <td class="num">16</td>
+    <td class="mono id">C036</td>
+    <td class="topic">How solo founders are handling customer support without a team</td>
+    <td class="pillar-cell">Startup/indie</td>
+    <td class="mono num score">73</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">5</td>
+    <td class="mono num">9</td>
+  </tr>
+<tr>
+    <td class="num">17</td>
+    <td class="mono id">C050</td>
+    <td class="topic">The real impact of page speed on e-commerce conversion, with actual data</td>
+    <td class="pillar-cell">E-commerce</td>
+    <td class="mono num score">73</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">9</td>
+    <td class="mono num">10</td>
+  </tr>
+<tr>
+    <td class="num">18</td>
+    <td class="mono id">C090</td>
+    <td class="topic">What actually makes a website &quot;fast enough&quot; and what's diminishing returns</td>
+    <td class="pillar-cell">Cross-cutting</td>
+    <td class="mono num score">73</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">4</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">19</td>
+    <td class="mono id">C093</td>
+    <td class="topic">How much a small business should actually budget for their first website</td>
+    <td class="pillar-cell">Cross-cutting</td>
+    <td class="mono num score">73</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">9</td>
+    <td class="mono num">10</td>
+  </tr>
+<tr>
+    <td class="num">20</td>
+    <td class="mono id">C103</td>
+    <td class="topic">How Wikipedia and Reddit ended up as dominant AI training/citation sources, and what that means for smaller sites</td>
+    <td class="pillar-cell">GEO/AEO</td>
+    <td class="mono num score">73</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">7</td>
+    <td class="mono num">10</td>
+  </tr>
+<tr>
+    <td class="num">21</td>
+    <td class="mono id">C056</td>
+    <td class="topic">What actually goes wrong when companies automate customer support too fast</td>
+    <td class="pillar-cell">HR/ops</td>
+    <td class="mono num score">72</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">10</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">22</td>
+    <td class="mono id">C083</td>
+    <td class="topic">How students are actually using AI tools for exam prep without it backfiring</td>
+    <td class="pillar-cell">Career</td>
+    <td class="mono num score">72</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">7</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">23</td>
+    <td class="mono id">C002</td>
+    <td class="topic">The difference between being crawled and being cited by an AI answer engine</td>
+    <td class="pillar-cell">GEO/AEO</td>
+    <td class="mono num score">71</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">8</td>
+    <td class="mono num">9</td>
+  </tr>
+<tr>
+    <td class="num">24</td>
+    <td class="mono id">C021</td>
+    <td class="topic">What actually counts as an &quot;AI agent&quot; vs a chatbot with tool access</td>
+    <td class="pillar-cell">AI agents</td>
+    <td class="mono num score">71</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">10</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">25</td>
+    <td class="mono id">C092</td>
+    <td class="topic">What actually breaks a no-code app when it needs to scale</td>
+    <td class="pillar-cell">Cross-cutting</td>
+    <td class="mono num score">71</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">11</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">26</td>
+    <td class="mono id">C094</td>
+    <td class="topic">What Google Ads actually costs for a small local business by industry</td>
+    <td class="pillar-cell">Cross-cutting</td>
+    <td class="mono num score">71</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">11</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">27</td>
+    <td class="mono id">C101</td>
+    <td class="topic">How image generation models (Midjourney, Flux, Nano Banana) actually differ for commercial use</td>
+    <td class="pillar-cell">AI models</td>
+    <td class="mono num score">71</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">7</td>
+    <td class="mono num">10</td>
+  </tr>
+<tr>
+    <td class="num">28</td>
+    <td class="mono id">C010</td>
+    <td class="topic">What AI overviews changed about click-through rate and how site owners are responding</td>
+    <td class="pillar-cell">GEO/AEO</td>
+    <td class="mono num score">70</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">9</td>
+    <td class="mono num">11</td>
+  </tr>
+<tr>
+    <td class="num">29</td>
+    <td class="mono id">C019</td>
+    <td class="topic">Why AI pair-programming changes what &quot;code review&quot; means on a team</td>
+    <td class="pillar-cell">AI coding</td>
+    <td class="mono num score">70</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">11</td>
+    <td class="mono num">14</td>
+  </tr>
+<tr>
+    <td class="num">30</td>
+    <td class="mono id">C043</td>
+    <td class="topic">What Google's own documentation actually says about AI-generated content</td>
+    <td class="pillar-cell">SEO/content</td>
+    <td class="mono num score">70</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">7</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">31</td>
+    <td class="mono id">C089</td>
+    <td class="topic">How freelancers in India are actually handling GST-compliant invoicing</td>
+    <td class="pillar-cell">Cross-cutting</td>
+    <td class="mono num score">70</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">3</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">32</td>
+    <td class="mono id">C015</td>
+    <td class="topic">The real cost difference between running Claude Code, Cursor, and Copilot at team scale</td>
+    <td class="pillar-cell">AI coding</td>
+    <td class="mono num score">69</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">3</td>
+    <td class="mono num">10</td>
+  </tr>
+<tr>
+    <td class="num">33</td>
+    <td class="mono id">C025</td>
+    <td class="topic">What an AI agent actually costs to run at real usage volume</td>
+    <td class="pillar-cell">AI agents</td>
+    <td class="mono num score">69</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">6</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">34</td>
+    <td class="mono id">C027</td>
+    <td class="topic">Why most &quot;AI agent&quot; demos don't survive contact with real user input</td>
+    <td class="pillar-cell">AI agents</td>
+    <td class="mono num score">69</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">6</td>
+    <td class="mono num">10</td>
+  </tr>
+<tr>
+    <td class="num">35</td>
+    <td class="mono id">C041</td>
+    <td class="topic">The real difference between programmatic SEO done well and done badly</td>
+    <td class="pillar-cell">SEO/content</td>
+    <td class="mono num score">69</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">0</td>
+    <td class="mono num">13</td>
+  </tr>
+<tr>
+    <td class="num">36</td>
+    <td class="mono id">C059</td>
+    <td class="topic">How customer support teams are actually measuring AI chatbot deflection rate</td>
+    <td class="pillar-cell">HR/ops</td>
+    <td class="mono num score">69</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">8</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">37</td>
+    <td class="mono id">C066</td>
+    <td class="topic">What email signature design actually does for brand consistency at a growing company</td>
+    <td class="pillar-cell">Design</td>
+    <td class="mono num score">69</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">5</td>
+    <td class="mono num">9</td>
+  </tr>
+<tr>
+    <td class="num">38</td>
+    <td class="mono id">C079</td>
+    <td class="topic">What UTM parameters actually break when marketers set them up wrong</td>
+    <td class="pillar-cell">Data/finance</td>
+    <td class="mono num score">69</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">3</td>
+    <td class="mono num">8</td>
+  </tr>
+<tr>
+    <td class="num">39</td>
+    <td class="mono id">C085</td>
+    <td class="topic">How solo YouTube creators are actually structuring an AI-assisted production workflow</td>
+    <td class="pillar-cell">Content creators</td>
+    <td class="mono num score">69</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">5</td>
+    <td class="mono num">10</td>
+  </tr>
+<tr>
+    <td class="num">40</td>
+    <td class="mono id">C087</td>
+    <td class="topic">What a real content calendar looks like for a solo creator running three platforms</td>
+    <td class="pillar-cell">Content creators</td>
+    <td class="mono num score">69</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">3</td>
+    <td class="mono num">11</td>
+  </tr>
+<tr>
+    <td class="num">41</td>
+    <td class="mono id">C106</td>
+    <td class="topic">What a real client onboarding checklist looks like for a service business</td>
+    <td class="pillar-cell">Business ops</td>
+    <td class="mono num score">69</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">8</td>
+    <td class="mono num">14</td>
+  </tr>
+<tr>
+    <td class="num">42</td>
+    <td class="mono id">C110</td>
+    <td class="topic">What actually separates a healthcare or wellness business's website compliance needs from a normal small business site</td>
+    <td class="pillar-cell">Cross-cutting</td>
+    <td class="mono num score">69</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">11</td>
+    <td class="mono num">11</td>
+  </tr>
+<tr>
+    <td class="num">43</td>
+    <td class="mono id">C012</td>
+    <td class="topic">What a CLAUDE.md, .cursorrules, and a Copilot instructions file actually do differently</td>
+    <td class="pillar-cell">AI coding</td>
+    <td class="mono num score">68</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">7</td>
+    <td class="mono num">14</td>
+  </tr>
+<tr>
+    <td class="num">44</td>
+    <td class="mono id">C018</td>
+    <td class="topic">MCP servers explained: what they actually let an AI coding assistant do</td>
+    <td class="pillar-cell">AI coding</td>
+    <td class="mono num score">68</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">11</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">45</td>
+    <td class="mono id">C023</td>
+    <td class="topic">The real failure modes of autonomous AI agents in production</td>
+    <td class="pillar-cell">AI agents</td>
+    <td class="mono num score">68</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">9</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">46</td>
+    <td class="mono id">C054</td>
+    <td class="topic">How QR codes are actually being used in physical retail post-pandemic</td>
+    <td class="pillar-cell">E-commerce</td>
+    <td class="mono num score">68</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">10</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">47</td>
+    <td class="mono id">C068</td>
+    <td class="topic">How GDPR actually affects a small SaaS company's analytics setup</td>
+    <td class="pillar-cell">Global</td>
+    <td class="mono num score">68</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">3</td>
+    <td class="mono num">13</td>
+  </tr>
+<tr>
+    <td class="num">48</td>
+    <td class="mono id">C081</td>
+    <td class="topic">How AI is actually changing entry-level hiring for developer roles</td>
+    <td class="pillar-cell">Career</td>
+    <td class="mono num score">68</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">1</td>
+    <td class="mono num">5</td>
+  </tr>
+<tr>
+    <td class="num">49</td>
+    <td class="mono id">C035</td>
+    <td class="topic">What YC-backed companies say about when to hire your first salesperson</td>
+    <td class="pillar-cell">Startup/indie</td>
+    <td class="mono num score">67</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">9</td>
+    <td class="mono num">9</td>
+  </tr>
+<tr>
+    <td class="num">50</td>
+    <td class="mono id">C063</td>
+    <td class="topic">How Figma's AI features actually compare to dedicated AI design tools</td>
+    <td class="pillar-cell">Design</td>
+    <td class="mono num score">67</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">4</td>
+    <td class="mono num">9</td>
+  </tr>
+<tr>
+    <td class="num">51</td>
+    <td class="mono id">C091</td>
+    <td class="topic">How small teams are actually choosing between no-code and custom development</td>
+    <td class="pillar-cell">Cross-cutting</td>
+    <td class="mono num score">67</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">12</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">52</td>
+    <td class="mono id">C046</td>
+    <td class="topic">What actually happens to rankings when a site migrates domains</td>
+    <td class="pillar-cell">SEO/content</td>
+    <td class="mono num score">66</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">4</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">53</td>
+    <td class="mono id">C048</td>
+    <td class="topic">What actually drives cart abandonment beyond price</td>
+    <td class="pillar-cell">E-commerce</td>
+    <td class="mono num score">66</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">2</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">54</td>
+    <td class="mono id">C070</td>
+    <td class="topic">How VAT invoicing actually works for a UK freelancer selling internationally</td>
+    <td class="pillar-cell">Global</td>
+    <td class="mono num score">66</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">3</td>
+    <td class="mono num">13</td>
+  </tr>
+<tr>
+    <td class="num">55</td>
+    <td class="mono id">C078</td>
+    <td class="topic">How small consulting firms are actually pricing retainers vs project work</td>
+    <td class="pillar-cell">Data/finance</td>
+    <td class="mono num score">66</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">2</td>
+    <td class="mono num">9</td>
+  </tr>
+<tr>
+    <td class="num">56</td>
+    <td class="mono id">C095</td>
+    <td class="topic">How small businesses are actually deciding between hiring an agency and doing marketing in-house</td>
+    <td class="pillar-cell">Cross-cutting</td>
+    <td class="mono num score">66</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">7</td>
+    <td class="mono num">9</td>
+  </tr>
+<tr>
+    <td class="num">57</td>
+    <td class="mono id">C052</td>
+    <td class="topic">How small e-commerce brands are handling returns without losing money</td>
+    <td class="pillar-cell">E-commerce</td>
+    <td class="mono num score">65</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">10</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">58</td>
+    <td class="mono id">C077</td>
+    <td class="topic">What marketing attribution actually means for a business with no dedicated analyst</td>
+    <td class="pillar-cell">Data/finance</td>
+    <td class="mono num score">65</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">2</td>
+    <td class="mono num">8</td>
+  </tr>
+<tr>
+    <td class="num">59</td>
+    <td class="mono id">C080</td>
+    <td class="topic">How small businesses are actually calculating customer acquisition cost correctly</td>
+    <td class="pillar-cell">Data/finance</td>
+    <td class="mono num score">65</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">2</td>
+    <td class="mono num">7</td>
+  </tr>
+<tr>
+    <td class="num">60</td>
+    <td class="mono id">C084</td>
+    <td class="topic">What a real technical interview prep plan looks like with AI as one input, not the whole plan</td>
+    <td class="pillar-cell">Career</td>
+    <td class="mono num score">65</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">6</td>
+    <td class="mono num">10</td>
+  </tr>
+<tr>
+    <td class="num">61</td>
+    <td class="mono id">C100</td>
+    <td class="topic">What &quot;AI hallucination&quot; actually means technically and how teams catch it in practice</td>
+    <td class="pillar-cell">AI models</td>
+    <td class="mono num score">65</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">3</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">62</td>
+    <td class="mono id">C003</td>
+    <td class="topic">What llms.txt actually does and whether it changes AI crawler behavior</td>
+    <td class="pillar-cell">GEO/AEO</td>
+    <td class="mono num score">64</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">7</td>
+    <td class="mono num">8</td>
+  </tr>
+<tr>
+    <td class="num">63</td>
+    <td class="mono id">C005</td>
+    <td class="topic">How Perplexity sources its answers differently from Google's AI Overviews</td>
+    <td class="pillar-cell">GEO/AEO</td>
+    <td class="mono num score">64</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">5</td>
+    <td class="mono num">7</td>
+  </tr>
+<tr>
+    <td class="num">64</td>
+    <td class="mono id">C013</td>
+    <td class="topic">Why AI-generated code reviews still miss the same categories of bugs</td>
+    <td class="pillar-cell">AI coding</td>
+    <td class="mono num score">64</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">7</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">65</td>
+    <td class="mono id">C024</td>
+    <td class="topic">RAG vs fine-tuning vs long context: how teams are actually choosing</td>
+    <td class="pillar-cell">AI agents</td>
+    <td class="mono num score">64</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">7</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">66</td>
+    <td class="mono id">C026</td>
+    <td class="topic">How AI agent frameworks (LangChain, CrewAI, AutoGen) actually differ in practice</td>
+    <td class="pillar-cell">AI agents</td>
+    <td class="mono num score">64</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">6</td>
+    <td class="mono num">9</td>
+  </tr>
+<tr>
+    <td class="num">67</td>
+    <td class="mono id">C039</td>
+    <td class="topic">How small businesses are actually recovering from a Google core update</td>
+    <td class="pillar-cell">SEO/content</td>
+    <td class="mono num score">64</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">0</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">68</td>
+    <td class="mono id">C099</td>
+    <td class="topic">How developers are actually choosing between AI models by cost per task, not benchmarks</td>
+    <td class="pillar-cell">AI models</td>
+    <td class="mono num score">64</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">3</td>
+    <td class="mono num">11</td>
+  </tr>
+<tr>
+    <td class="num">69</td>
+    <td class="mono id">C014</td>
+    <td class="topic">How developers are actually using AI agents for codebase migrations</td>
+    <td class="pillar-cell">AI coding</td>
+    <td class="mono num score">63</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">6</td>
+    <td class="mono num">11</td>
+  </tr>
+<tr>
+    <td class="num">70</td>
+    <td class="mono id">C069</td>
+    <td class="topic">What US sales tax nexus actually means for a small online seller</td>
+    <td class="pillar-cell">Global</td>
+    <td class="mono num score">63</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">2</td>
+    <td class="mono num">13</td>
+  </tr>
+<tr>
+    <td class="num">71</td>
+    <td class="mono id">C016</td>
+    <td class="topic">What actually breaks when AI coding tools touch a monorepo</td>
+    <td class="pillar-cell">AI coding</td>
+    <td class="mono num score">62</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">5</td>
+    <td class="mono num">11</td>
+  </tr>
+<tr>
+    <td class="num">72</td>
+    <td class="mono id">C037</td>
+    <td class="topic">What actually happens to a Product Hunt launch's traffic after week one</td>
+    <td class="pillar-cell">Startup/indie</td>
+    <td class="mono num score">62</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">0</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">73</td>
+    <td class="mono id">C049</td>
+    <td class="topic">How small e-commerce brands are using AI for product descriptions at scale</td>
+    <td class="pillar-cell">E-commerce</td>
+    <td class="mono num score">62</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">11</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">74</td>
+    <td class="mono id">C061</td>
+    <td class="topic">How design teams are actually using AI for accessible color palettes</td>
+    <td class="pillar-cell">Design</td>
+    <td class="mono num score">62</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">4</td>
+    <td class="mono num">9</td>
+  </tr>
+<tr>
+    <td class="num">75</td>
+    <td class="mono id">C082</td>
+    <td class="topic">What resume screening tools actually look for that candidates don't expect</td>
+    <td class="pillar-cell">Career</td>
+    <td class="mono num score">62</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">5</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">76</td>
+    <td class="mono id">C096</td>
+    <td class="topic">What actually happens in the first 90 days after hiring an SEO agency</td>
+    <td class="pillar-cell">Cross-cutting</td>
+    <td class="mono num score">62</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">5</td>
+    <td class="mono num">13</td>
+  </tr>
+<tr>
+    <td class="num">77</td>
+    <td class="mono id">C098</td>
+    <td class="topic">What actually changed about AI model context windows and why it matters practically</td>
+    <td class="pillar-cell">AI models</td>
+    <td class="mono num score">62</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">5</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">78</td>
+    <td class="mono id">C017</td>
+    <td class="topic">How teams are documenting AI-assisted commits for code review and compliance</td>
+    <td class="pillar-cell">AI coding</td>
+    <td class="mono num score">61</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">7</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">79</td>
+    <td class="mono id">C064</td>
+    <td class="topic">What a real brand style guide needs that a generated one usually skips</td>
+    <td class="pillar-cell">Design</td>
+    <td class="mono num score">61</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">4</td>
+    <td class="mono num">7</td>
+  </tr>
+<tr>
+    <td class="num">80</td>
+    <td class="mono id">C097</td>
+    <td class="topic">How Claude, GPT, and Gemini actually differ on long-document analysis tasks</td>
+    <td class="pillar-cell">AI models</td>
+    <td class="mono num score">61</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">6</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">81</td>
+    <td class="mono id">C028</td>
+    <td class="topic">How companies are actually measuring AI agent ROI internally</td>
+    <td class="pillar-cell">AI agents</td>
+    <td class="mono num score">60</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">6</td>
+    <td class="mono num">10</td>
+  </tr>
+<tr>
+    <td class="num">82</td>
+    <td class="mono id">C044</td>
+    <td class="topic">How small teams are actually running content audits without an enterprise tool</td>
+    <td class="pillar-cell">SEO/content</td>
+    <td class="mono num score">60</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">11</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">83</td>
+    <td class="mono id">C053</td>
+    <td class="topic">What actually changed about Amazon vs Shopify vs direct-to-consumer economics</td>
+    <td class="pillar-cell">E-commerce</td>
+    <td class="mono num score">60</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">9</td>
+    <td class="mono num">11</td>
+  </tr>
+<tr>
+    <td class="num">84</td>
+    <td class="mono id">C072</td>
+    <td class="topic">How Google Search behaves differently by country for the same query</td>
+    <td class="pillar-cell">Global</td>
+    <td class="mono num score">60</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">7</td>
+    <td class="mono num">13</td>
+  </tr>
+<tr>
+    <td class="num">85</td>
+    <td class="mono id">C086</td>
+    <td class="topic">How X (Twitter) creators are actually growing an account without buying followers</td>
+    <td class="pillar-cell">Content creators</td>
+    <td class="mono num score">60</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">2</td>
+    <td class="mono num">7</td>
+  </tr>
+<tr>
+    <td class="num">86</td>
+    <td class="mono id">C109</td>
+    <td class="topic">How small teams are actually running a rebrand without a big agency budget</td>
+    <td class="pillar-cell">Design</td>
+    <td class="mono num score">60</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">6</td>
+    <td class="mono num">10</td>
+  </tr>
+<tr>
+    <td class="num">87</td>
+    <td class="mono id">C011</td>
+    <td class="topic">How AI coding assistants actually differ on large, existing codebases vs greenfield projects</td>
+    <td class="pillar-cell">AI coding</td>
+    <td class="mono num score">59</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">7</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">88</td>
+    <td class="mono id">C030</td>
+    <td class="topic">The real tool stack solo founders are shipping AI products with</td>
+    <td class="pillar-cell">Startup/indie</td>
+    <td class="mono num score">59</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">6</td>
+    <td class="mono num">8</td>
+  </tr>
+<tr>
+    <td class="num">89</td>
+    <td class="mono id">C042</td>
+    <td class="topic">How much technical SEO actually matters if the content is thin</td>
+    <td class="pillar-cell">SEO/content</td>
+    <td class="mono num score">59</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">0</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">90</td>
+    <td class="mono id">C065</td>
+    <td class="topic">How small teams are actually running design QA before a launch</td>
+    <td class="pillar-cell">Design</td>
+    <td class="mono num score">59</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">3</td>
+    <td class="mono num">7</td>
+  </tr>
+<tr>
+    <td class="num">91</td>
+    <td class="mono id">C055</td>
+    <td class="topic">How small teams are actually using AI for first-round candidate screening</td>
+    <td class="pillar-cell">HR/ops</td>
+    <td class="mono num score">58</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">9</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">92</td>
+    <td class="mono id">C074</td>
+    <td class="topic">How currency and pricing localization actually affects SaaS conversion</td>
+    <td class="pillar-cell">Global</td>
+    <td class="mono num score">58</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">4</td>
+    <td class="mono num">8</td>
+  </tr>
+<tr>
+    <td class="num">93</td>
+    <td class="mono id">C060</td>
+    <td class="topic">What legal and compliance teams actually worry about with AI-drafted contracts</td>
+    <td class="pillar-cell">HR/ops</td>
+    <td class="mono num score">57</td>
+    <td><span class="chip chip-strong">strong</span></td>
+    <td class="mono num">2</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">94</td>
+    <td class="mono id">C085b</td>
+    <td class="topic">What actually changed about Instagram reach for small accounts in the algorithm</td>
+    <td class="pillar-cell">Content creators</td>
+    <td class="mono num score">57</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">6</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">95</td>
+    <td class="mono id">C107</td>
+    <td class="topic">How founders are actually using AI to draft investor updates</td>
+    <td class="pillar-cell">Startup/indie</td>
+    <td class="mono num score">57</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">6</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">96</td>
+    <td class="mono id">C047</td>
+    <td class="topic">How local businesses are actually using Google Business Profile beyond the basics</td>
+    <td class="pillar-cell">SEO/content</td>
+    <td class="mono num score">56</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">2</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">97</td>
+    <td class="mono id">C051</td>
+    <td class="topic">What UGC and review mining tools actually do differently</td>
+    <td class="pillar-cell">E-commerce</td>
+    <td class="mono num score">56</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">10</td>
+    <td class="mono num">12</td>
+  </tr>
+<tr>
+    <td class="num">98</td>
+    <td class="mono id">C076</td>
+    <td class="topic">How freelancers are actually tracking multi-currency invoices without an accountant</td>
+    <td class="pillar-cell">Data/finance</td>
+    <td class="mono num score">56</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">3</td>
+    <td class="mono num">6</td>
+  </tr>
+<tr>
+    <td class="num">99</td>
+    <td class="mono id">C088</td>
+    <td class="topic">What actually happens when a small business switches from spreadsheets to real tools</td>
+    <td class="pillar-cell">Cross-cutting</td>
+    <td class="mono num score">56</td>
+    <td><span class="chip chip-weak">weak</span></td>
+    <td class="mono num">2</td>
+    <td class="mono num">5</td>
+  </tr>
+<tr>
+    <td class="num">100</td>
+    <td class="mono id">C104</td>
+    <td class="topic">What client communication actually breaks down at freelance-to-agency transition</td>
+    <td class="pillar-cell">Business ops</td>
+    <td class="mono num score">56</td>
+    <td><span class="chip chip-moderate">moderate</span></td>
+    <td class="mono num">3</td>
+    <td class="mono num">7</td>
+  </tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>10 candidates dropped (below the top 100)</h2>
+    <p class="section-note">Accepted by their research agent, but scored lowest of the 110 — buffer capacity, not failures.</p>
+    <div class="dropped-box"><ul><li><span class="mono">C040</span> — What internal linking actually does for a site under 200 pages <span class="mono dim">(55)</span></li>
+<li><span class="mono">C062</span> — What actually makes a logo work at favicon size and most don't test for it <span class="mono dim">(55)</span></li>
+<li><span class="mono">C073</span> — What US vs EU vs India say differently about AI and data privacy right now <span class="mono dim">(54)</span></li>
+<li><span class="mono">C032</span> — What Product Hunt launch data says about which AI product categories are saturated <span class="mono dim">(51)</span></li>
+<li><span class="mono">C067</span> — How presentation design tools (Gamma, Canva, Beautiful.ai) actually differ for pitch decks <span class="mono dim">(51)</span></li>
+<li><span class="mono">C057</span> — How remote teams are actually documenting processes with AI tools <span class="mono dim">(50)</span></li>
+<li><span class="mono">C075</span> — What actually goes wrong when small businesses build their first dashboard <span class="mono dim">(50)</span></li>
+<li><span class="mono">C071</span> — What Singapore and UAE actually offer startups that other hubs don't <span class="mono dim">(48)</span></li>
+<li><span class="mono">C029</span> — What Y Combinator's own advice on AI startups has actually changed since 2023 <span class="mono dim">(45)</span></li>
+<li><span class="mono">C058</span> — What the real onboarding checklist looks like for a 5-person startup <span class="mono dim">(44)</span></li></ul></div>
+  </section>
+
+  <div class="next-steps">
+    <h2>What's next</h2>
+    <p>This is the checkpoint before the much larger phase: writing and independently verifying ~100 &times; 4,500-word articles (roughly 450,000 words, plus 50 sourced questions each).</p>
+    <ol>
+      <li>Review the topic list and pillar balance above — swap or drop anything before it's locked in.</li>
+      <li>If it looks right: proceed to article briefs, then 10 production agents (10 articles each) and 5 verification agents (20 articles each).</li>
+      <li>Everything here is saved under <code>/content-engine/</code> in the repo for reference at every later phase.</li>
+    </ol>
+  </div>
+
+  <footer class="meta">content-engine/01-research/research-master.csv · content-engine/02-topic-map/topical-authority-map.md · content-engine/01-research/topics/*.json</footer>
+</div>

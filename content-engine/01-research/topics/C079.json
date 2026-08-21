@@ -1,0 +1,157 @@
+{
+  "candidate_id": "C079",
+  "topic": "What UTM parameters actually break when marketers set them up wrong",
+  "status": "accepted",
+  "target_keyword": "UTM parameter mistakes",
+  "secondary_keywords": [
+    "common UTM tracking errors",
+    "UTM parameters not working",
+    "UTM naming best practices",
+    "UTM tracking setup"
+  ],
+  "long_tail_keywords": [
+    "why does my UTM link show not set in Google Analytics",
+    "how to fix inconsistent UTM naming conventions",
+    "why is my UTM campaign data split into multiple rows"
+  ],
+  "question_keywords": [
+    "what happens if I don't use UTM parameters",
+    "are UTM parameters case sensitive",
+    "what are the required UTM parameters",
+    "what is utm_term used for",
+    "what is utm_content used for"
+  ],
+  "comparison_keywords": [
+    "utm_source vs utm_medium",
+    "utm_campaign vs utm_content"
+  ],
+  "how_to_keywords": [
+    "how to build a UTM tracking link",
+    "how to standardize UTM naming conventions",
+    "how to audit UTM links for consistency"
+  ],
+  "problem_keywords": [
+    "UTM data not showing in Google Analytics",
+    "duplicate UTM campaigns in reports",
+    "not set in GA4 source medium report",
+    "broken UTM links"
+  ],
+  "commercial_keywords": [
+    "UTM builder tool",
+    "UTM tracking template",
+    "campaign URL builder"
+  ],
+  "entities": [
+    "Google Analytics",
+    "GA4",
+    "Campaign URL Builder",
+    "utm_source",
+    "utm_medium",
+    "utm_campaign",
+    "utm_term",
+    "utm_content"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Tutorial",
+  "audience": "Marketers, PPC/email/social practitioners, and small business owners running their own campaign tracking",
+  "countries": [],
+  "topic_cluster": "Campaign Tracking & UTM Hygiene",
+  "connects_to_tools": [
+    "utm-builder",
+    "marketing-roi-calculator"
+  ],
+  "connects_to_prompts": [],
+  "connects_to_service": "",
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 9,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 9,
+    "competitive_gap": 5,
+    "conversion_potential": 7,
+    "evidence_quality": 7,
+    "total": 69
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What are the required UTM parameters for accurate tracking?",
+      "answer_summary": "Google recommends always using utm_source, utm_medium, and utm_campaign together as the core set.",
+      "sources": [
+        "https://support.google.com/analytics/answer/10917952"
+      ]
+    },
+    {
+      "question": "Are UTM parameter values case-sensitive?",
+      "answer_summary": "Yes — 'utm_source=google' and 'utm_source=Google' are treated as different values, so lowercase is advised as a standard.",
+      "sources": [
+        "https://support.google.com/analytics/answer/10917952"
+      ]
+    },
+    {
+      "question": "Why does my traffic show as (not set) in the source/medium report?",
+      "answer_summary": "Missing UTM parameters on a link cause the visit to show as '(not set)' in reporting, reducing data quality.",
+      "sources": [
+        "https://support.google.com/analytics/answer/10917952"
+      ]
+    },
+    {
+      "question": "Why is my single campaign split into multiple rows in reports?",
+      "answer_summary": "Inconsistent capitalization or naming (e.g. 'SpringSale' vs 'Spring_Sale') is treated as distinct values, fragmenting the data.",
+      "sources": [
+        "https://support.google.com/analytics/answer/10917952"
+      ]
+    },
+    {
+      "question": "What is the utm_term parameter for?",
+      "answer_summary": "It's used to identify paid search keywords associated with an ad.",
+      "sources": [
+        "https://support.google.com/analytics/answer/10917952"
+      ]
+    },
+    {
+      "question": "What is the utm_content parameter for?",
+      "answer_summary": "It differentiates between creative variations (e.g. ad copy or images) within the same campaign.",
+      "sources": [
+        "https://support.google.com/analytics/answer/10917952"
+      ]
+    },
+    {
+      "question": "Does skipping UTM tagging break marketing attribution?",
+      "answer_summary": "Yes — attribution guidance flags missing UTM parameters as a root cause of unreliable attribution data.",
+      "sources": [
+        "https://databox.com/marketing-attribution-models"
+      ]
+    },
+    {
+      "question": "What free tool does Google provide for building UTM links?",
+      "answer_summary": "Google's Campaign URL Builder lets marketers add campaign parameters to URLs to measure custom campaigns in Google Analytics.",
+      "sources": [
+        "https://ga-dev-tools.google/campaign-url-builder/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Custom campaigns for web tracking (Analytics Help)",
+      "url": "https://support.google.com/analytics/answer/10917952",
+      "source_type": "company docs",
+      "used_for": "Authoritative definitions of each UTM parameter and the specific naming/case-sensitivity mistakes Google documents"
+    },
+    {
+      "title": "Campaign URL Builder",
+      "url": "https://ga-dev-tools.google/campaign-url-builder/",
+      "source_type": "company docs",
+      "used_for": "Confirming Google's own official UTM link-building tool and its purpose"
+    },
+    {
+      "title": "Marketing attribution models (Databox)",
+      "url": "https://databox.com/marketing-attribution-models",
+      "source_type": "industry publication",
+      "used_for": "Corroborating that missing UTM tags break downstream attribution"
+    }
+  ]
+}

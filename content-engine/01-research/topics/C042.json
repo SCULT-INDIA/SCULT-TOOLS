@@ -1,0 +1,158 @@
+{
+  "candidate_id": "C042",
+  "topic": "How much technical SEO actually matters if the content is thin",
+  "status": "accepted",
+  "topic_cluster": "Technical SEO vs. content quality prioritization",
+  "target_keyword": "technical seo vs content quality",
+  "secondary_keywords": [
+    "does technical seo matter with thin content",
+    "technical seo vs content seo which matters more"
+  ],
+  "long_tail_keywords": [
+    "will fixing technical seo help thin content rank",
+    "can great content overcome bad technical seo",
+    "how much does technical seo matter for a small business site"
+  ],
+  "question_keywords": [
+    "does technical seo matter if my content is thin",
+    "why isn't my technically perfect site ranking",
+    "can you rank with great content and no technical seo"
+  ],
+  "comparison_keywords": [
+    "technical seo vs content seo",
+    "content quality vs site speed for rankings",
+    "crawlability vs content depth"
+  ],
+  "how_to_keywords": [
+    "how to prioritize technical seo vs content fixes",
+    "how to fix thin content pages"
+  ],
+  "problem_keywords": [
+    "site not ranking despite technical seo fixes",
+    "content not ranking despite good technical seo",
+    "thin content penalty"
+  ],
+  "commercial_keywords": [
+    "technical seo audit service",
+    "content audit and rewrite service"
+  ],
+  "entities": [
+    "Google",
+    "John Mueller",
+    "thin content",
+    "Helpful Content Update",
+    "Core Web Vitals"
+  ],
+  "primary_intent": "Comparative",
+  "secondary_intent": "Problem-solving",
+  "audience": "Small business owners and in-house marketers deciding where to invest limited SEO budget — technical fixes vs. content investment",
+  "countries": [],
+  "connects_to_service": "seo-geo",
+  "connects_to_tools": [
+    "website-speed-test"
+  ],
+  "connects_to_prompts": [
+    "content quality audit prompts"
+  ],
+  "scores": {
+    "demand": 6,
+    "intent": 6,
+    "relevance": 8,
+    "question_density": 6,
+    "search_opportunity": 5,
+    "ai_answer_opportunity": 5,
+    "tool_discovery_opportunity": 7,
+    "competitive_gap": 4,
+    "conversion_potential": 6,
+    "evidence_quality": 6,
+    "total": 59
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Does technical SEO matter at all if my content is thin?",
+      "answer_summary": "Technical SEO is necessary but not sufficient — pages need to be crawlable/indexable to have any chance of ranking, but technical fixes alone won't make thin content rank.",
+      "sources": [
+        "https://seogeek.sg/technical-seo-vs-content-what-matters-more/",
+        "https://www.positional.com/blog/thin-content"
+      ]
+    },
+    {
+      "question": "What counts as 'thin content' in Google's eyes?",
+      "answer_summary": "Thin content includes pages with little substance (e.g., ~200-word articles), doorway pages, programmatically generated pages, and low-value heavily promotional/affiliate content.",
+      "sources": [
+        "https://www.positional.com/blog/thin-content"
+      ]
+    },
+    {
+      "question": "Can thin content actually trigger a penalty?",
+      "answer_summary": "Yes — thin content is explicitly named as a violation of Google's spam policies and can lead to ranking penalties.",
+      "sources": [
+        "https://www.positional.com/blog/thin-content"
+      ]
+    },
+    {
+      "question": "Does Google evaluate quality page-by-page or across the whole site?",
+      "answer_summary": "John Mueller has stated that Google's quality algorithms look at the website overall — 'they look at everything that's indexed' — not just the individual page being evaluated.",
+      "sources": [
+        "https://www.gsqi.com/marketing-blog/remove-versus-improve-low-quality-thin-content/"
+      ]
+    },
+    {
+      "question": "Can a small amount of fluff content drag down an otherwise good site?",
+      "answer_summary": "Mueller has warned that low-quality 'fluff' content (he's referred to some SEO content as 'digital mulch') can cause Google's systems to assume the entire site has mediocre content.",
+      "sources": [
+        "https://www.biggerlawfirm.com/googles-john-mueller-warns-fluff-content-can-harm-your-law-firms-whole-site/"
+      ]
+    },
+    {
+      "question": "If I fix all my technical SEO issues, will my thin content start ranking?",
+      "answer_summary": "No — recovery examples typically involve fixing technical issues, removing/improving low-quality content, and adding genuinely higher-quality content together, not technical fixes in isolation.",
+      "sources": [
+        "https://www.gsqi.com/marketing-blog/remove-versus-improve-low-quality-thin-content/"
+      ]
+    },
+    {
+      "question": "Is 'content is king' actually good advice, or an oversimplification?",
+      "answer_summary": "An industry piece titled 'Content Is King: The Greatest Lie Ever Told In SEO' argues content alone is only one piece of the puzzle — without indexing, link signals, and freshness, even great content stays invisible.",
+      "sources": [
+        "https://www.searchenginejournal.com/content-is-king-greatest-lie-ever-told-seo/383516/"
+      ]
+    },
+    {
+      "question": "In what order should a small business fix technical SEO vs. content?",
+      "answer_summary": "A commonly suggested sequence for SMEs is baseline technical cleanup first, then focused content expansion, with technical maintenance ongoing in the background — rather than treating either as a one-time fix-it-and-forget step.",
+      "sources": [
+        "https://seogeek.sg/technical-seo-vs-content-what-matters-more/"
+      ]
+    },
+    {
+      "question": "Can fixing crawl/indexing/speed issues ever move rankings more than adding content?",
+      "answer_summary": "A Hacker News discussion specifically framed as 'technical SEO vs. content optimization: which one moves rankings?' found that in some cases, fixing crawl, indexing, or performance issues had a bigger measured impact than publishing more content.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=47762333"
+      ]
+    },
+    {
+      "question": "What's actually included under 'technical SEO'?",
+      "answer_summary": "Technical SEO covers crawlability, indexation, site architecture, page speed, mobile usability, structured data, canonicalization, and internal linking logic — the infrastructure layer that makes content discoverable.",
+      "sources": [
+        "https://seogeek.sg/technical-seo-vs-content-what-matters-more/"
+      ]
+    },
+    {
+      "question": "Will a technically flawless site with thin service pages actually compete for real queries?",
+      "answer_summary": "No — the consensus framing is that a technically clean site with thin service pages 'will not compete for meaningful queries,' just as a content-heavy site with indexation problems wastes its own content investment.",
+      "sources": [
+        "https://seogeek.sg/technical-seo-vs-content-what-matters-more/"
+      ]
+    },
+    {
+      "question": "Does removing thin content ever help more than adding new content?",
+      "answer_summary": "Yes in some documented recovery cases — sites combined removing/improving existing thin content with technical fixes rather than only adding more new pages.",
+      "sources": [
+        "https://www.gsqi.com/marketing-blog/remove-versus-improve-low-quality-thin-content/"
+      ]
+    }
+  ]
+}

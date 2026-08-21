@@ -1,0 +1,197 @@
+{
+  "candidate_id": "C002",
+  "status": "accepted",
+  "topic": "The difference between being crawled and being cited by an AI answer engine",
+  "topic_cluster": "AI Crawler Access & Citation",
+  "target_keyword": "crawled vs cited ai search",
+  "secondary_keywords": [
+    "ai crawlability vs ai citation",
+    "difference between ai crawling and citing",
+    "ai crawler access vs ai answer"
+  ],
+  "long_tail_keywords": [
+    "why does my site get crawled by ai but never cited",
+    "why does chatgpt never cite my page even though it's indexed",
+    "can an ai engine cite a page it can't crawl",
+    "does javascript block ai crawlers from reading my site"
+  ],
+  "question_keywords": [
+    "what does it mean for a site to be crawled by ai",
+    "can ai cite pages it hasn't crawled",
+    "what's the difference between gptbot and oai-searchbot"
+  ],
+  "comparison_keywords": [
+    "crawled vs cited vs ranked",
+    "ai crawlability vs seo indexability",
+    "ai training crawlers vs ai search crawlers"
+  ],
+  "how_to_keywords": [
+    "how to check if ai bots can crawl your site",
+    "how to allow gptbot and block google-extended",
+    "how to improve ai citation rate"
+  ],
+  "problem_keywords": [
+    "ai bots blocked by robots.txt",
+    "site not appearing in chatgpt despite ranking on google",
+    "javascript content invisible to ai crawlers"
+  ],
+  "commercial_keywords": [
+    "ai crawlability audit tool",
+    "ai visibility checker",
+    "schema markup generator"
+  ],
+  "entities": [
+    "GPTBot",
+    "ClaudeBot",
+    "PerplexityBot",
+    "OAI-SearchBot",
+    "Claude-SearchBot",
+    "robots.txt",
+    "Googlebot",
+    "server-side rendering"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "Technical SEOs, web developers, and site owners diagnosing why AI-indexed content isn't producing AI citations",
+  "countries": [],
+  "connects_to_tools": [
+    "ai-visibility-checker",
+    "schema-markup-generator"
+  ],
+  "connects_to_service": "",
+  "connects_to_prompts": [],
+  "scores": {
+    "demand": 6,
+    "intent": 8,
+    "relevance": 9,
+    "question_density": 7,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 8,
+    "competitive_gap": 6,
+    "conversion_potential": 6,
+    "evidence_quality": 7,
+    "total": 71
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What's the actual difference between a page being 'crawled' and being 'cited' by an AI search engine?",
+      "answer_summary": "Crawled means an AI crawler can discover, access, and parse a page; cited means the AI system actually used that page's content as a source in a generated answer. A page can clear crawlability and still fail later checks that prevent citation.",
+      "sources": [
+        "https://www.amicited.com/blog/ai-training-crawlers-vs-search-crawlers/",
+        "https://www.conductor.com/academy/ai-crawlability/"
+      ]
+    },
+    {
+      "question": "Can an AI answer engine cite a page its crawler cannot access or render?",
+      "answer_summary": "No — crawlability is described as the first, disqualifying gate; if a crawler can't reach or read a page's content, that page cannot be quoted no matter how good the content is.",
+      "sources": [
+        "https://www.amicited.com/blog/ai-training-crawlers-vs-search-crawlers/"
+      ]
+    },
+    {
+      "question": "Why does my site rank well on Google but never get mentioned by ChatGPT or Perplexity?",
+      "answer_summary": "A site can pass Google's crawling/rendering pipeline (which executes JavaScript in a second pass) while failing AI crawlers, which typically issue a single HTTP request and skip JavaScript rendering entirely, making JS-injected content invisible to them.",
+      "sources": [
+        "https://www.averi.ai/blog/javascript-rendering-gap-ai-crawlers",
+        "https://jangwook.net/en/blog/en/ai-crawlers-dont-render-javascript-csr-2026/"
+      ]
+    },
+    {
+      "question": "What is the difference between AI training crawlers and AI search/answer crawlers (e.g. GPTBot vs OAI-SearchBot)?",
+      "answer_summary": "Training crawlers like GPTBot and Google-Extended collect data to train models; separate search-user-agent bots like OAI-SearchBot, Claude-SearchBot, and PerplexityBot fetch pages live to generate an answer. Blocking one doesn't necessarily block the other.",
+      "sources": [
+        "https://www.amicited.com/blog/ai-training-crawlers-vs-search-crawlers/",
+        "https://www.mersel.ai/blog/how-to-block-or-allow-ai-bots-on-your-website"
+      ]
+    },
+    {
+      "question": "Does blocking GPTBot or ClaudeBot in robots.txt remove me from AI search answers?",
+      "answer_summary": "Blocking search-oriented user agents removes a site's eligibility for AI citations; site owners can selectively allow search bots while still blocking training-only crawlers.",
+      "sources": [
+        "https://www.mersel.ai/blog/how-to-block-or-allow-ai-bots-on-your-website"
+      ]
+    },
+    {
+      "question": "Why doesn't JavaScript-rendered content show up in AI answers even though it displays fine in a browser?",
+      "answer_summary": "Most AI crawlers impose tight timeouts and skip executing JavaScript for cost/scale reasons, reading only the raw server-returned HTML, so anything injected client-side (FAQs, pricing, reviews) is effectively invisible to them.",
+      "sources": [
+        "https://www.averi.ai/blog/javascript-rendering-gap-ai-crawlers",
+        "https://jangwook.net/en/blog/en/ai-crawlers-dont-render-javascript-csr-2026/"
+      ]
+    },
+    {
+      "question": "Is there a standard checklist for what makes a page 'AI crawlable'?",
+      "answer_summary": "Industry guides describe AI crawlability checks around robots.txt permissions, server response without required JavaScript, page load within crawler timeouts, and clean discoverable internal linking/sitemaps.",
+      "sources": [
+        "https://www.conductor.com/academy/ai-crawlability/",
+        "https://www.womenintechseo.com/knowledge/ai-crawlability-for-ai-search/"
+      ]
+    },
+    {
+      "question": "How fast can new content realistically be crawled and then cited by an AI search engine?",
+      "answer_summary": "This gap is referred to as 'citation velocity' and varies significantly by platform and content type; there's no fixed universal timeline, but it is generally described as slower and less predictable than traditional Google indexing.",
+      "sources": [
+        "https://www.conductor.com/academy/ai-citation-velocity/"
+      ]
+    },
+    {
+      "question": "Does anyone actually use llms.txt as part of the crawled-to-cited pipeline?",
+      "answer_summary": "As of the discussion, no major AI provider has confirmed that live search/answer crawlers read llms.txt to decide what to cite, separating it from actual crawlability/citation mechanics.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=48410783"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://www.amicited.com/blog/ai-training-crawlers-vs-search-crawlers/",
+      "title": "AI Training Crawlers vs Search Crawlers: Understanding the Difference",
+      "source_type": "industry publication",
+      "used_for": "Core crawled-vs-cited distinction and the 'Five-C' framing of citation prerequisites"
+    },
+    {
+      "url": "https://www.conductor.com/academy/ai-crawlability/",
+      "title": "AI Crawlability: How to Make Your Site Accessible to AI Bots",
+      "source_type": "industry publication",
+      "used_for": "Definition and checklist for AI crawlability"
+    },
+    {
+      "url": "https://www.conductor.com/academy/ai-citation-velocity/",
+      "title": "How Quickly Can Content Be Crawled and Cited by AI Search?",
+      "source_type": "industry publication",
+      "used_for": "Concept of citation velocity / timing between crawl and citation"
+    },
+    {
+      "url": "https://www.mersel.ai/blog/how-to-block-or-allow-ai-bots-on-your-website",
+      "title": "How to Block AI Bots in robots.txt: GPTBot, ClaudeBot & More (2026)",
+      "source_type": "industry publication",
+      "used_for": "Distinction between training and search AI user agents, blocking guidance"
+    },
+    {
+      "url": "https://www.averi.ai/blog/javascript-rendering-gap-ai-crawlers",
+      "title": "The JavaScript Rendering Gap: Why AI Can't See Your Best Content",
+      "source_type": "industry publication",
+      "used_for": "Explanation of why JS-rendered content is invisible to most AI crawlers"
+    },
+    {
+      "url": "https://jangwook.net/en/blog/en/ai-crawlers-dont-render-javascript-csr-2026/",
+      "title": "AI Crawlers Don't Run Your JavaScript",
+      "source_type": "industry publication/community",
+      "used_for": "Technical detail on single-request crawling behavior of AI bots vs Googlebot's two-stage rendering"
+    },
+    {
+      "url": "https://www.womenintechseo.com/knowledge/ai-crawlability-for-ai-search/",
+      "title": "AI Crawlability: What SEOs Need to Know to Stay Visible in AI Search",
+      "source_type": "industry publication",
+      "used_for": "Additional crawlability checklist context"
+    },
+    {
+      "url": "https://news.ycombinator.com/item?id=48410783",
+      "title": "Does any of the LLM providers actually use llms.txt?",
+      "source_type": "community",
+      "used_for": "Developer discussion confirming uncertainty about llms.txt's role in the crawl-to-citation pipeline"
+    }
+  ]
+}

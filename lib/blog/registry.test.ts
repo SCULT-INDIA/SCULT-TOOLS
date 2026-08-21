@@ -62,8 +62,8 @@ describe('hyperlink requirement', () => {
   it('has at least one external (service/book-meeting) link per post', () => {
     for (const post of BLOG_POSTS) {
       const externalLinks = flatten(post).filter(
-        (seg): seg is Extract<Inline, { external?: boolean }> =>
-          typeof seg !== 'string' && seg.external === true,
+        (seg): seg is Extract<Inline, { href: string }> =>
+          typeof seg !== 'string' && 'href' in seg && seg.external === true,
       )
       expect(externalLinks.length, post.slug).toBeGreaterThanOrEqual(1)
     }
@@ -72,8 +72,8 @@ describe('hyperlink requirement', () => {
   it('has at least two internal links per post', () => {
     for (const post of BLOG_POSTS) {
       const internalLinks = flatten(post).filter(
-        (seg): seg is Extract<Inline, { external?: boolean }> =>
-          typeof seg !== 'string' && !seg.external,
+        (seg): seg is Extract<Inline, { href: string }> =>
+          typeof seg !== 'string' && 'href' in seg && !seg.external,
       )
       expect(internalLinks.length, post.slug).toBeGreaterThanOrEqual(2)
     }

@@ -1,0 +1,172 @@
+{
+  "candidate_id": "C048",
+  "status": "accepted",
+  "topic": "What actually drives cart abandonment beyond price",
+  "topic_cluster": "Ecommerce checkout & conversion optimization",
+  "target_keyword": "cart abandonment causes beyond price",
+  "secondary_keywords": [
+    "why do people abandon their cart",
+    "cart abandonment statistics",
+    "reduce cart abandonment checkout"
+  ],
+  "long_tail_keywords": [
+    "why do customers abandon cart even with free shipping",
+    "cart abandonment rate by device mobile vs desktop",
+    "how to reduce cart abandonment without lowering prices"
+  ],
+  "question_keywords": [
+    "why is my cart abandonment rate so high",
+    "does forcing account creation increase cart abandonment",
+    "how many form fields should a checkout have"
+  ],
+  "comparison_keywords": [
+    "guest checkout vs account required cart abandonment",
+    "mobile vs desktop cart abandonment rate"
+  ],
+  "how_to_keywords": [
+    "how to reduce checkout abandonment",
+    "how to simplify an ecommerce checkout process"
+  ],
+  "problem_keywords": [
+    "customers add to cart but don't buy",
+    "high cart abandonment despite low prices",
+    "checkout errors causing lost sales"
+  ],
+  "commercial_keywords": [
+    "cart abandonment recovery software",
+    "checkout optimization service"
+  ],
+  "entities": [
+    "Baymard Institute",
+    "Shopify",
+    "SSL certificate",
+    "guest checkout"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Commercial Investigation",
+  "audience": "Ecommerce store owners/operators, DTC brand marketers, CRO specialists, and Shopify/WooCommerce merchants trying to understand abandonment beyond just price sensitivity",
+  "countries": [],
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "ecommerce-product"
+  ],
+  "connects_to_service": "web-development",
+  "scores": {
+    "demand": 8,
+    "intent": 7,
+    "relevance": 7,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 4,
+    "conversion_potential": 7,
+    "evidence_quality": 9,
+    "total": 66
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What percentage of shoppers abandon their cart because they don't trust the site with payment info?",
+      "answer_summary": "About 19% of shoppers cite not trusting the site with credit card information as a reason for abandoning, per Baymard Institute research.",
+      "sources": [
+        "https://baymard.com/lists/cart-abandonment-rate"
+      ]
+    },
+    {
+      "question": "Does requiring account creation increase cart abandonment?",
+      "answer_summary": "Yes — Baymard puts it around 18%, and Shopify's summary cites roughly a quarter of checkout abandonment being tied to forced account creation.",
+      "sources": [
+        "https://baymard.com/lists/cart-abandonment-rate",
+        "https://www.shopify.com/blog/shopping-cart-abandonment"
+      ]
+    },
+    {
+      "question": "How much does a complicated checkout process contribute to abandonment?",
+      "answer_summary": "Roughly 17-18% of abandonments are attributed to a checkout process being too long or complicated.",
+      "sources": [
+        "https://baymard.com/lists/cart-abandonment-rate",
+        "https://www.shopify.com/blog/shopping-cart-abandonment"
+      ]
+    },
+    {
+      "question": "How many form fields should an optimized checkout have?",
+      "answer_summary": "Average checkouts run around 23-24 form elements; Baymard's optimal-design research suggests this can be cut to roughly 12-14 without losing needed information.",
+      "sources": [
+        "https://baymard.com/lists/cart-abandonment-rate"
+      ]
+    },
+    {
+      "question": "Does slow delivery time cause abandonment separately from shipping cost?",
+      "answer_summary": "Yes — about 20% of shoppers abandon specifically because delivery is too slow, distinct from the cost of shipping itself.",
+      "sources": [
+        "https://baymard.com/lists/cart-abandonment-rate"
+      ]
+    },
+    {
+      "question": "Does an unclear returns policy cause cart abandonment?",
+      "answer_summary": "Yes — roughly 13-16% of abandonments are linked to dissatisfaction with the returns policy shown at checkout.",
+      "sources": [
+        "https://baymard.com/lists/cart-abandonment-rate",
+        "https://www.shopify.com/blog/shopping-cart-abandonment"
+      ]
+    },
+    {
+      "question": "Do website errors or crashes cause cart abandonment?",
+      "answer_summary": "Yes — technical problems like site errors during checkout account for about 17% of abandonments.",
+      "sources": [
+        "https://baymard.com/lists/cart-abandonment-rate"
+      ]
+    },
+    {
+      "question": "Does a limited selection of payment methods cause cart abandonment?",
+      "answer_summary": "Yes — roughly 9-11% of shoppers abandon because their preferred payment method wasn't offered.",
+      "sources": [
+        "https://baymard.com/lists/cart-abandonment-rate",
+        "https://www.shopify.com/blog/shopping-cart-abandonment"
+      ]
+    },
+    {
+      "question": "Is cart abandonment worse on mobile than desktop?",
+      "answer_summary": "Yes — cited abandonment rates run roughly 85% on mobile versus about 73% on desktop and 80% on tablet.",
+      "sources": [
+        "https://www.shopify.com/blog/shopping-cart-abandonment"
+      ]
+    },
+    {
+      "question": "Does not being able to see the order total upfront cause abandonment?",
+      "answer_summary": "Yes — inability to see the full order cost before payment is cited as a distinct abandonment cause, around 12%.",
+      "sources": [
+        "https://baymard.com/lists/cart-abandonment-rate"
+      ]
+    },
+    {
+      "question": "Does a declined credit card count as cart abandonment?",
+      "answer_summary": "Yes — it's tracked as its own distinct cause, around 10%, separate from a shopper voluntarily leaving.",
+      "sources": [
+        "https://baymard.com/lists/cart-abandonment-rate"
+      ]
+    },
+    {
+      "question": "What's the difference between 'browsing abandonment' and 'checkout abandonment'?",
+      "answer_summary": "Browsing abandonment is leaving before starting checkout (often just comparison shopping); checkout abandonment is leaving after starting the payment flow, which is the more fixable segment that research on causes actually targets.",
+      "sources": [
+        "https://baymard.com/lists/cart-abandonment-rate"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "42 Cart Abandonment Rate Statistics",
+      "url": "https://baymard.com/lists/cart-abandonment-rate",
+      "source_type": "government/academic",
+      "used_for": "Primary percentage breakdown of abandonment causes beyond price (trust, account creation, checkout length, delivery speed, returns policy, payment options, order-total visibility, declined cards)"
+    },
+    {
+      "title": "Shopping Cart Abandonment: How to Recover Lost Sales",
+      "url": "https://www.shopify.com/blog/shopping-cart-abandonment",
+      "source_type": "company docs",
+      "used_for": "Cross-validation of Baymard figures and device-level abandonment-rate breakdown"
+    }
+  ]
+}

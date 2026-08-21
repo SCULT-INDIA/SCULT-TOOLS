@@ -1,0 +1,247 @@
+{
+  "candidate_id": "C018",
+  "status": "accepted",
+  "topic": "MCP servers explained: what they actually let an AI coding assistant do",
+  "topic_cluster": "MCP / agentic tool protocol education",
+  "target_keyword": "mcp server explained",
+  "secondary_keywords": [
+    "what is an mcp server",
+    "model context protocol explained",
+    "mcp server for ai coding assistant",
+    "mcp vs function calling",
+    "mcp security risks"
+  ],
+  "long_tail_keywords": [
+    "what does an mcp server let claude do",
+    "how does model context protocol work with ai coding tools",
+    "what can you build with an mcp server for coding",
+    "is mcp the same as a plugin or function calling",
+    "how to install an mcp server for cursor or claude code"
+  ],
+  "question_keywords": [
+    "what is mcp in ai",
+    "what is a model context protocol server",
+    "how is mcp different from function calling",
+    "can an mcp server access my files and database",
+    "is mcp safe to use with ai coding assistants"
+  ],
+  "comparison_keywords": [
+    "mcp vs function calling vs plugins",
+    "mcp vs api vs chatgpt plugins",
+    "mcp vs rag"
+  ],
+  "how_to_keywords": [
+    "how to build an mcp server",
+    "how to connect claude code to github via mcp",
+    "how to set up an mcp server in 5 minutes",
+    "how to secure an mcp server against prompt injection"
+  ],
+  "problem_keywords": [
+    "mcp server prompt injection risk",
+    "mcp server tool poisoning attack",
+    "mcp server github data heist vulnerability"
+  ],
+  "commercial_keywords": [
+    "best mcp servers for developers",
+    "mcp server marketplace",
+    "github mcp server",
+    "aws mcp server"
+  ],
+  "entities": [
+    "Anthropic",
+    "Model Context Protocol",
+    "Claude Code",
+    "GitHub MCP server",
+    "AWS",
+    "Kubernetes",
+    "Docker",
+    "Microsoft",
+    "Palo Alto Networks Unit 42",
+    "Checkmarx"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Tool discovery",
+  "audience": "developers and technical teams new to agentic AI tooling who want to understand or adopt MCP servers with their coding assistants",
+  "countries": [],
+  "connects_to_tools": [
+    "JSON Formatter & Validator"
+  ],
+  "connects_to_prompts": [
+    "Claude",
+    "development frameworks",
+    "ChatGPT",
+    "Cursor"
+  ],
+  "connects_to_service": "AI agents/automation service",
+  "scores": {
+    "demand": 7,
+    "intent": 6,
+    "relevance": 8,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 7,
+    "competitive_gap": 5,
+    "conversion_potential": 5,
+    "evidence_quality": 7,
+    "total": 68
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What is an MCP server, in plain terms?",
+      "answer_summary": "An MCP server is a process that exposes a set of callable tools/functions with typed inputs and outputs that an AI agent can discover and call during a task — often described as a 'USB port' for AI, standardizing how models connect to external tools and data.",
+      "sources": [
+        "https://www.anthropic.com/news/model-context-protocol",
+        "https://dev.to/jamie_thompson/mcp-servers-explained-how-ai-assistants-connect-to-your-tools-598o"
+      ]
+    },
+    {
+      "question": "What problem does MCP actually solve for AI coding assistants?",
+      "answer_summary": "Out of the box, assistants work from stale training data and can't act on real systems; MCP servers connect them to current docs, actual files/databases, live browsers, and real dev tools so the model can execute, not just suggest.",
+      "sources": [
+        "https://dev.to/yigit-konur/the-ultimate-mcp-guide-for-vibe-coding-what-1000-reddit-developers-actually-use-2025-edition-11ie"
+      ]
+    },
+    {
+      "question": "How is MCP different from plain function calling?",
+      "answer_summary": "Function calling lets a model express what it wants to do via structured tool requests within one provider's API; MCP standardizes how those requests get executed and discovered across many tools/services in a model-agnostic, portable way, reducing duplicated integration work as tool count grows.",
+      "sources": [
+        "https://portkey.ai/blog/mcp-vs-function-calling/",
+        "https://www.descope.com/blog/post/mcp-vs-function-calling"
+      ]
+    },
+    {
+      "question": "How is MCP different from closed plugin ecosystems like ChatGPT plugins?",
+      "answer_summary": "ChatGPT-style plugins are specialized tools in a closed toolbox controlled by one vendor, while MCP is an open standard any developer can implement and any compatible AI client can use.",
+      "sources": [
+        "https://www.ikangai.com/model-context-protocol-comparison-mcp-vs-function-calling-plugins-apis/"
+      ]
+    },
+    {
+      "question": "What real capabilities do MCP servers give a coding assistant?",
+      "answer_summary": "Examples include a Kubernetes MCP server for CRUD operations on pods/deployments/services, a GitHub MCP server for managing issues/PRs/branches/releases, and an AWS MCP server for managing S3, DynamoDB, EC2, IAM and other resources — all invokable directly by the agent.",
+      "sources": [
+        "https://dev.to/yigit-konur/the-ultimate-mcp-guide-for-vibe-coding-what-1000-reddit-developers-actually-use-2025-edition-11ie"
+      ]
+    },
+    {
+      "question": "Can MCP servers help an AI assistant debug real running web apps?",
+      "answer_summary": "Yes — the Chrome DevTools MCP server lets an AI agent debug pages directly in Chrome, using DevTools' debugging and performance-insight capabilities to improve fix accuracy.",
+      "sources": [
+        "https://developer.chrome.com/blog/chrome-devtools-mcp"
+      ]
+    },
+    {
+      "question": "Are MCP servers a security risk for AI coding assistants?",
+      "answer_summary": "Yes — compromised or malicious MCP servers can inject persistent instructions, exfiltrate data, or perform 'tool poisoning' by manipulating tool metadata/descriptions to trick the agent into invoking unauthorized tools.",
+      "sources": [
+        "https://checkmarx.com/zero-post/11-emerging-ai-security-risks-with-mcp-model-context-protocol/",
+        "https://unit42.paloaltonetworks.com/model-context-protocol-attack-vectors/"
+      ]
+    },
+    {
+      "question": "Has a real MCP server had documented vulnerabilities?",
+      "answer_summary": "Yes — in November 2025 Anthropic's own official Git MCP server was found to have path validation bypass, argument injection, and unsafe repo initialization flaws that, chained with a filesystem MCP server, could enable remote code execution via prompt injection.",
+      "sources": [
+        "https://checkmarx.com/zero-post/11-emerging-ai-security-risks-with-mcp-model-context-protocol/"
+      ]
+    },
+    {
+      "question": "What is a documented real-world MCP prompt-injection incident?",
+      "answer_summary": "Docker's write-up describes a 'GitHub Prompt Injection Data Heist' where a malicious GitHub issue's text was used to manipulate an agent connected via MCP into leaking private repository data.",
+      "sources": [
+        "https://www.docker.com/blog/mcp-horror-stories-github-prompt-injection/"
+      ]
+    },
+    {
+      "question": "Do I need to worry about which MCP servers I install?",
+      "answer_summary": "Yes — beyond malicious servers, every additional MCP server adds attack surface for LLM prompt injection, so server choice and permission scoping matter for security.",
+      "sources": [
+        "https://checkmarx.com/learn/mcp-security-risks-real-world-incidents-and-security-controls/"
+      ]
+    },
+    {
+      "question": "How quickly can a developer build a basic MCP server?",
+      "answer_summary": "Tutorials demonstrate creating a first MCP server in about 5 minutes using scaffolding tools like create-mcp-server, since a server just needs to expose typed tool definitions with natural-language descriptions.",
+      "sources": [
+        "https://dev.to/ialijr/create-your-first-mcp-server-in-5-minutes-with-create-mcp-server-fch"
+      ]
+    },
+    {
+      "question": "Why do MCP tool definitions matter for how the model uses them?",
+      "answer_summary": "MCP tool definitions include natural-language descriptions the model can read and reason about, so the agent doesn't need the API hardcoded into its instructions — it can discover and decide how to use a new tool dynamically.",
+      "sources": [
+        "https://dev.to/jamie_thompson/mcp-servers-explained-how-ai-assistants-connect-to-your-tools-598o"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Introducing the Model Context Protocol",
+      "url": "https://www.anthropic.com/news/model-context-protocol",
+      "source_type": "primary/official",
+      "used_for": "canonical definition and origin of MCP"
+    },
+    {
+      "title": "MCP Servers Explained: How AI Assistants Connect to Your Tools",
+      "url": "https://dev.to/jamie_thompson/mcp-servers-explained-how-ai-assistants-connect-to-your-tools-598o",
+      "source_type": "community",
+      "used_for": "plain-language explanation and tool-definition discoverability point"
+    },
+    {
+      "title": "The Ultimate MCP Guide for Vibe Coding: What 1000 Reddit Developers Actually Use",
+      "url": "https://dev.to/yigit-konur/the-ultimate-mcp-guide-for-vibe-coding-what-1000-reddit-developers-actually-use-2025-edition-11ie",
+      "source_type": "community",
+      "used_for": "real-world MCP server examples (Kubernetes, GitHub, AWS) and the problem MCP solves"
+    },
+    {
+      "title": "MCP vs Function Calling – How They Actually Work Together",
+      "url": "https://portkey.ai/blog/mcp-vs-function-calling/",
+      "source_type": "company docs",
+      "used_for": "MCP vs function calling distinction"
+    },
+    {
+      "title": "MCP vs. Function Calling: How They Differ and Which to Use",
+      "url": "https://www.descope.com/blog/post/mcp-vs-function-calling",
+      "source_type": "company docs",
+      "used_for": "corroborating MCP vs function calling distinction"
+    },
+    {
+      "title": "Model Context Protocol Comparison: MCP vs Function Calling, Plugins, APIs",
+      "url": "https://www.ikangai.com/model-context-protocol-comparison-mcp-vs-function-calling-plugins-apis/",
+      "source_type": "industry publication",
+      "used_for": "MCP vs closed plugin ecosystems distinction"
+    },
+    {
+      "title": "Chrome DevTools (MCP) for your AI agent",
+      "url": "https://developer.chrome.com/blog/chrome-devtools-mcp",
+      "source_type": "primary/official",
+      "used_for": "concrete MCP capability example (browser debugging)"
+    },
+    {
+      "title": "11 Emerging AI Security Risks with MCP (Model Context Protocol)",
+      "url": "https://checkmarx.com/zero-post/11-emerging-ai-security-risks-with-mcp-model-context-protocol/",
+      "source_type": "industry publication",
+      "used_for": "security risk categories and the Anthropic Git MCP server vulnerability example"
+    },
+    {
+      "title": "New Prompt Injection Attack Vectors Through MCP Sampling",
+      "url": "https://unit42.paloaltonetworks.com/model-context-protocol-attack-vectors/",
+      "source_type": "industry publication",
+      "used_for": "prompt injection risk mechanics"
+    },
+    {
+      "title": "MCP Horror Stories: The GitHub Prompt Injection Data Heist",
+      "url": "https://www.docker.com/blog/mcp-horror-stories-github-prompt-injection/",
+      "source_type": "company docs",
+      "used_for": "real documented MCP prompt-injection incident"
+    },
+    {
+      "title": "Create your first MCP server in 5 minutes with create-mcp-server",
+      "url": "https://dev.to/ialijr/create-your-first-mcp-server-in-5-minutes-with-create-mcp-server-fch",
+      "source_type": "community",
+      "used_for": "evidence of low barrier to building an MCP server"
+    }
+  ]
+}

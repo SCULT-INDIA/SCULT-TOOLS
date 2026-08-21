@@ -1,0 +1,212 @@
+{
+  "candidate_id": "C093",
+  "topic": "How much a small business should actually budget for their first website",
+  "status": "accepted",
+  "target_keyword": "how much should a small business budget for a website",
+  "secondary_keywords": [
+    "small business website cost",
+    "average website cost for small business",
+    "website design cost for small business"
+  ],
+  "long_tail_keywords": [
+    "how much does a 3 page website cost",
+    "how much should I budget for a basic website",
+    "website cost for a small local business",
+    "how much should it cost for a basic website"
+  ],
+  "question_keywords": [
+    "what's a reasonable budget for a small business website",
+    "how much did you spend on your first website",
+    "how much should it cost for basic website",
+    "how much should I budget to have a basic 3 page website"
+  ],
+  "comparison_keywords": [
+    "DIY website builder vs hiring a web designer cost",
+    "cheap website vs custom website cost",
+    "wix vs custom website cost"
+  ],
+  "how_to_keywords": [
+    "how to budget for a website",
+    "how to create a budget for a website",
+    "how to set a website design budget for a small business"
+  ],
+  "problem_keywords": [
+    "website too expensive small business",
+    "hidden costs of website design",
+    "website quotes vary wildly"
+  ],
+  "commercial_keywords": [
+    "web design agency pricing",
+    "website design cost quote",
+    "hire a web developer for small business",
+    "web development service pricing"
+  ],
+  "entities": [
+    "WordPress",
+    "Wix",
+    "Squarespace",
+    "WebFX",
+    "Clutch",
+    "web design agency",
+    "domain",
+    "hosting",
+    "SSL certificate"
+  ],
+  "primary_intent": "Commercial Investigation",
+  "secondary_intent": "Informational",
+  "audience": "Small business owners commissioning their first business website; freelance/agency web designers pricing small-business projects",
+  "countries": [
+    "United States",
+    "United Kingdom",
+    "India"
+  ],
+  "topic_cluster": "Small Business Website Budgeting",
+  "connects_to_service": "web-development-service",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "website copy / landing page copywriting prompts",
+    "small business plan / budgeting prompts"
+  ],
+  "scores": {
+    "demand": 8,
+    "intent": 8,
+    "relevance": 9,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 3,
+    "competitive_gap": 5,
+    "conversion_potential": 9,
+    "evidence_quality": 9,
+    "total": 73
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What's a reasonable budget for a small business website?",
+      "answer_summary": "A web dev/software engineer responder frames DIY builders as the only genuinely 'cheap' route; anything beyond that involves real design/dev cost that scales with scope.",
+      "sources": [
+        "https://www.reddit.com/r/smallbusiness/comments/1pakqge/whats_a_reasonable_budget_for_a_small_business/"
+      ]
+    },
+    {
+      "question": "How much did other small business owners actually spend on their first website?",
+      "answer_summary": "Top responses stress the answer depends on function (informational vs. lead-gen vs. e-commerce) before any number is meaningful.",
+      "sources": [
+        "https://www.reddit.com/r/smallbusiness/comments/1o335f6/how_much_did_you_spend_on_your_first_website/"
+      ]
+    },
+    {
+      "question": "How much are small business owners actually paying for their websites (setup + ongoing)?",
+      "answer_summary": "Responses range hugely — some pay as little as ~£100/year for hosting and self-build, others pay agencies thousands for setup plus recurring monthly fees.",
+      "sources": [
+        "https://www.reddit.com/r/smallbusiness/comments/1hv3n5c/how_much_are_you_paying_for_your_websites/"
+      ]
+    },
+    {
+      "question": "What's the minimum I should spend per page to get a decent website?",
+      "answer_summary": "A commonly cited starter range is roughly $500–$1,000 total for a simple site, with design alone running $500–$1,500 depending on specificity.",
+      "sources": [
+        "https://www.reddit.com/r/Entrepreneur/comments/14udmpw/whats_the_minimum_i_should_spend_per_page_to_get/"
+      ]
+    },
+    {
+      "question": "What's the lowest a designer should charge for a very simple small-business website?",
+      "answer_summary": "Professional designers argue against going below roughly £600–£800 even for a small 1–3 page, mobile-first, conversion-focused local business site.",
+      "sources": [
+        "https://www.reddit.com/r/webdesign/comments/1qp5pb3/whats_the_lowest_youd_charge_for_a_very_simple/"
+      ]
+    },
+    {
+      "question": "How much should a basic small business website cost?",
+      "answer_summary": "Responders note agencies quote wildly different numbers for the same basic scope, and recommend getting multiple quotes rather than anchoring on one number.",
+      "sources": [
+        "https://www.reddit.com/r/smallbusiness/comments/1iby0qy/how_much_should_it_cost_for_basic_website/"
+      ]
+    },
+    {
+      "question": "How much should I budget for a basic 3-page website for a proposal?",
+      "answer_summary": "Responders emphasize that whether copywriting/content is already done materially changes the fair price — a major hidden cost driver.",
+      "sources": [
+        "https://www.reddit.com/r/webdev/comments/1hrxjgw/how_much_should_i_budget_to_have_a_basic_3_page/"
+      ]
+    },
+    {
+      "question": "How much should a small business realistically budget for a website in 2026?",
+      "answer_summary": "Practitioners argue price matters less than whether the site is tied to an actual business strategy — citing cases of $1K sites outperforming $20K redesigns.",
+      "sources": [
+        "Reddit r/smallbusiness thread on realistic small business website budgeting (title: 'How much should a small business realistically budget for...')"
+      ]
+    },
+    {
+      "question": "What does a website cost according to industry benchmarks?",
+      "answer_summary": "Published industry figures put a basic small-business site at $0–$500 for DIY builders and $500–$5,000+ for a professionally designed site, with full custom builds ranging up to roughly $48,000.",
+      "sources": [
+        "https://www.webfx.com/web-design/pricing/how-much-does-a-website-cost/"
+      ]
+    },
+    {
+      "question": "What does a full website project cost when you factor in ongoing retainers?",
+      "answer_summary": "An industry resource cites an average total project cost around $66,000 with monthly retainer/maintenance averaging roughly $7,100/month, and hourly rates of $25–$150 depending on region and skill level.",
+      "sources": [
+        "https://clutch.co/resources/how-to-create-a-budget-for-a-website"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "What's a reasonable budget for a small business website? (r/smallbusiness)",
+      "url": "https://www.reddit.com/r/smallbusiness/comments/1pakqge/whats_a_reasonable_budget_for_a_small_business/",
+      "source_type": "community",
+      "used_for": "Real-world budget expectations and framing"
+    },
+    {
+      "title": "How much did you spend on your first website? (r/smallbusiness)",
+      "url": "https://www.reddit.com/r/smallbusiness/comments/1o335f6/how_much_did_you_spend_on_your_first_website/",
+      "source_type": "community",
+      "used_for": "First-website spending anecdotes"
+    },
+    {
+      "title": "How much are you paying for your websites (r/smallbusiness)",
+      "url": "https://www.reddit.com/r/smallbusiness/comments/1hv3n5c/how_much_are_you_paying_for_your_websites/",
+      "source_type": "community",
+      "used_for": "Range of setup + ongoing costs reported"
+    },
+    {
+      "title": "What's the minimum I should spend per page? (r/Entrepreneur)",
+      "url": "https://www.reddit.com/r/Entrepreneur/comments/14udmpw/whats_the_minimum_i_should_spend_per_page_to_get/",
+      "source_type": "community",
+      "used_for": "Minimum viable spend figures"
+    },
+    {
+      "title": "What's the lowest you'd charge for a simple small business site? (r/webdesign)",
+      "url": "https://www.reddit.com/r/webdesign/comments/1qp5pb3/whats_the_lowest_youd_charge_for_a_very_simple/",
+      "source_type": "community",
+      "used_for": "Designer-side pricing floor"
+    },
+    {
+      "title": "How much should it cost for basic website (r/smallbusiness)",
+      "url": "https://www.reddit.com/r/smallbusiness/comments/1iby0qy/how_much_should_it_cost_for_basic_website/",
+      "source_type": "community",
+      "used_for": "Quote variance discussion"
+    },
+    {
+      "title": "How much should I budget for a basic 3 page website (r/webdev)",
+      "url": "https://www.reddit.com/r/webdev/comments/1hrxjgw/how_much_should_i_budget_to_have_a_basic_3_page/",
+      "source_type": "community",
+      "used_for": "Content/copy as hidden cost driver"
+    },
+    {
+      "title": "How Much Does a Website Cost in 2026? [+Calculator]",
+      "url": "https://www.webfx.com/web-design/pricing/how-much-does-a-website-cost/",
+      "source_type": "industry publication",
+      "used_for": "Published benchmark price ranges by site type"
+    },
+    {
+      "title": "How Much Does it Cost To Build A Website? [With Budget Templates]",
+      "url": "https://clutch.co/resources/how-to-create-a-budget-for-a-website",
+      "source_type": "industry publication",
+      "used_for": "Average total cost and retainer benchmark"
+    }
+  ]
+}

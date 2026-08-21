@@ -1,0 +1,217 @@
+{
+  "candidate_id": "C045",
+  "status": "accepted",
+  "topic": "Why some FAQ pages get rich results and others don't",
+  "topic_cluster": "Structured data & rich-result deprecations",
+  "target_keyword": "why faq schema not showing rich results",
+  "secondary_keywords": [
+    "google faq rich results deprecated",
+    "is faq schema still worth it",
+    "faq rich results removed from google search"
+  ],
+  "long_tail_keywords": [
+    "why did my faq rich snippets disappear from google",
+    "should i remove faq schema from my website 2026",
+    "faq schema for ai search vs google search"
+  ],
+  "question_keywords": [
+    "why are my faq rich results gone",
+    "is faq schema still worth using in 2026",
+    "does faq schema still help seo",
+    "will removing faq schema hurt my rankings"
+  ],
+  "comparison_keywords": [
+    "faq schema vs howto schema deprecation",
+    "faq rich results before vs after may 2026"
+  ],
+  "how_to_keywords": [
+    "how to add faq schema in 2026",
+    "how to check if my faq schema markup is valid"
+  ],
+  "problem_keywords": [
+    "faq rich results disappeared in search console",
+    "faq markup not appearing in google anymore"
+  ],
+  "commercial_keywords": [
+    "faq schema generator tool",
+    "free faq schema markup generator"
+  ],
+  "entities": [
+    "Google",
+    "FAQPage (schema.org)",
+    "Rich Results Test",
+    "Search Console",
+    "HowTo rich results"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Informational",
+  "audience": "Website owners and small-business SEOs who added FAQ schema and are confused about losing rich snippets, plus technical SEOs deciding whether FAQ markup is still worth maintaining for traditional and AI search",
+  "countries": [],
+  "connects_to_tools": [
+    "faq-schema-generator",
+    "schema-markup-generator"
+  ],
+  "connects_to_prompts": [
+    "seo-geo"
+  ],
+  "connects_to_service": "web-development",
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 9,
+    "question_density": 8,
+    "search_opportunity": 8,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 8,
+    "competitive_gap": 6,
+    "conversion_potential": 6,
+    "evidence_quality": 9,
+    "total": 76
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Why did my FAQ rich results disappear from Google Search?",
+      "answer_summary": "Not a site-specific quality issue — Google deprecated the FAQ rich result feature entirely for all sites, effective May 7, 2026.",
+      "sources": [
+        "https://www.searchenginejournal.com/google-drops-faq-rich-results-from-search/574429/",
+        "https://developers.google.com/search/docs/appearance/structured-data/faqpage"
+      ]
+    },
+    {
+      "question": "Is FAQ schema itself deprecated, or just the rich result?",
+      "answer_summary": "Only the visual SERP rich-result display was removed; FAQPage remains a valid schema.org type and the markup itself isn't flagged or penalized.",
+      "sources": [
+        "https://developers.google.com/search/docs/appearance/structured-data/faqpage"
+      ]
+    },
+    {
+      "question": "Do I need to remove FAQ schema from my site now that the rich result is gone?",
+      "answer_summary": "No — Google has said unused/leftover structured data doesn't cause problems for Search, so there's no urgency to strip it out.",
+      "sources": [
+        "https://www.searchenginejournal.com/google-drops-faq-rich-results-from-search/574429/"
+      ]
+    },
+    {
+      "question": "Will losing FAQ rich results hurt my rankings?",
+      "answer_summary": "No — Google has framed this as a search-appearance change only, not a ranking or algorithmic change, though it may affect click-through rate on pages that previously showed the expanded snippet.",
+      "sources": [
+        "https://searchengineland.com/google-to-no-longer-support-faq-rich-results-476957"
+      ]
+    },
+    {
+      "question": "When exactly did Google remove FAQ rich results, and what's the full rollout timeline?",
+      "answer_summary": "Display stopped May 7, 2026; the FAQ search-appearance filter, rich-result report, and Rich Results Test support were removed in June 2026; Search Console API data access ends around August 2026.",
+      "sources": [
+        "https://developers.google.com/search/updates",
+        "https://www.searchenginejournal.com/google-drops-faq-rich-results-from-search/574429/"
+      ]
+    },
+    {
+      "question": "Why were FAQ rich results restricted before they were fully removed?",
+      "answer_summary": "In August 2023 Google had already limited FAQ rich results to well-known, authoritative government and health websites, citing abuse — the 2026 change completed a multi-year phase-out.",
+      "sources": [
+        "https://developers.google.com/search/docs/appearance/structured-data/faqpage"
+      ]
+    },
+    {
+      "question": "Was FAQ schema abused by SEOs before it was removed?",
+      "answer_summary": "Widely reported that FAQ markup had been aggressively over-used by SEO tooling to inflate SERP real estate, similar to other abused rich-result features.",
+      "sources": [
+        "https://www.thehoth.com/blog/google-faq-rich-results-deprecated/"
+      ]
+    },
+    {
+      "question": "What's the actual difference between FAQ schema markup and the FAQ rich result?",
+      "answer_summary": "The markup is structured data describing Q&A content on a page; the rich result was the expandable visual SERP panel that used that markup — Google removed the display, not the underlying data concept.",
+      "sources": [
+        "https://www.thehoth.com/blog/google-faq-rich-results-deprecated/"
+      ]
+    },
+    {
+      "question": "Does the Rich Results Test still validate FAQ schema?",
+      "answer_summary": "No — Rich Results Test support for the FAQ feature was removed in June 2026 alongside the Search Console report.",
+      "sources": [
+        "https://developers.google.com/search/updates"
+      ]
+    },
+    {
+      "question": "Is FAQ schema still worth adding for AI-driven answer engines even without the Google SERP feature?",
+      "answer_summary": "Some practitioners report FAQ structured data still helps AI/LLM crawlers parse Q&A content and cite anecdotal increases in AI-referral traffic after adding it, though this is not independently verified at scale.",
+      "sources": [
+        "https://www.getpassionfruit.com/blog/what-changed-with-google-drops-faq-rich-results-and-what-to-do-now",
+        "https://entropyand.co/blog/faq-schema-still-worth-it"
+      ]
+    },
+    {
+      "question": "Should small businesses still add FAQ schema to new pages in 2026?",
+      "answer_summary": "Guidance is mixed: no direct Google-SERP benefit remains, but it doesn't hurt and may support clarity for AI-driven answer engines.",
+      "sources": [
+        "https://www.getpassionfruit.com/blog/what-changed-with-google-drops-faq-rich-results-and-what-to-do-now"
+      ]
+    },
+    {
+      "question": "Were other rich results removed alongside FAQ?",
+      "answer_summary": "Yes, reporting ties the FAQ removal to a similar removal of How-To rich results.",
+      "sources": [
+        "https://www.redsharkdigital.com/news/google-how-to-faq-rich-results-update"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "FAQPage structured data (FAQPage) documentation",
+      "url": "https://developers.google.com/search/docs/appearance/structured-data/faqpage",
+      "source_type": "primary/official",
+      "used_for": "Confirming deprecation status, 2023 restriction history, and current markup guidance"
+    },
+    {
+      "title": "Latest Google Search Documentation Updates",
+      "url": "https://developers.google.com/search/updates",
+      "source_type": "primary/official",
+      "used_for": "Exact deprecation dates and phased removal timeline"
+    },
+    {
+      "title": "Google Drops FAQ Rich Results From Search",
+      "url": "https://www.searchenginejournal.com/google-drops-faq-rich-results-from-search/574429/",
+      "source_type": "industry publication",
+      "used_for": "Reporting on rollout dates and Google's 'no need to remove markup' stance"
+    },
+    {
+      "title": "Google to no longer support FAQ rich results",
+      "url": "https://searchengineland.com/google-to-no-longer-support-faq-rich-results-476957",
+      "source_type": "industry publication",
+      "used_for": "Confirming ranking-vs-appearance distinction"
+    },
+    {
+      "title": "FAQ rich results for some of our pages suddenly disappeared in April, per Search Console",
+      "url": "https://support.google.com/webmasters/thread/114614455/faq-rich-results-for-some-of-our-pages-suddenly-disappeared-in-april-per-search-console?hl=en",
+      "source_type": "community",
+      "used_for": "Evidence of real site-owner confusion/questions in Google's own community forum"
+    },
+    {
+      "title": "Google Killed FAQ Rich Results: Why Your FAQ Content Still Matters",
+      "url": "https://www.thehoth.com/blog/google-faq-rich-results-deprecated/",
+      "source_type": "industry publication",
+      "used_for": "Markup-vs-rich-result distinction and abuse rationale"
+    },
+    {
+      "title": "FAQ Rich Results Deprecated: Google's May 2026 Change",
+      "url": "https://www.getpassionfruit.com/blog/what-changed-with-google-drops-faq-rich-results-and-what-to-do-now",
+      "source_type": "industry publication",
+      "used_for": "Practical 'should you remove it' guidance"
+    },
+    {
+      "title": "Is FAQ Schema Still Worth It? 2026 Playbook",
+      "url": "https://entropyand.co/blog/faq-schema-still-worth-it",
+      "source_type": "industry publication",
+      "used_for": "AI-search relevance argument for keeping FAQ schema"
+    },
+    {
+      "title": "Google Removes How-To Rich Results + FAQ Updates",
+      "url": "https://www.redsharkdigital.com/news/google-how-to-faq-rich-results-update",
+      "source_type": "industry publication",
+      "used_for": "Cross-reference on simultaneous HowTo rich-result removal"
+    }
+  ]
+}

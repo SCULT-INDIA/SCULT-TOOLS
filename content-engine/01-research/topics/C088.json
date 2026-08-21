@@ -1,0 +1,130 @@
+{
+  "candidate_id": "C088",
+  "status": "accepted",
+  "topic": "What actually happens when a small business switches from spreadsheets to real tools",
+  "topic_cluster": "Small Business Tooling Transition",
+  "target_keyword": "small business spreadsheet to tools transition",
+  "secondary_keywords": [
+    "when to move from excel to software",
+    "outgrowing spreadsheets small business",
+    "signs you need business software",
+    "spreadsheet vs dedicated software small business"
+  ],
+  "long_tail_keywords": [
+    "how to know your small business has outgrown spreadsheets",
+    "moving from google sheets to invoicing software",
+    "switching from excel to a crm as a small business",
+    "small business software vs spreadsheet cost comparison"
+  ],
+  "question_keywords": [
+    "when should a small business stop using spreadsheets",
+    "what are the signs you've outgrown excel",
+    "is invoicing software worth it for a small business",
+    "how much time do spreadsheets waste"
+  ],
+  "comparison_keywords": [
+    "spreadsheets vs project management software",
+    "excel vs dedicated invoicing tool",
+    "google sheets vs crm software"
+  ],
+  "how_to_keywords": [
+    "how to migrate small business data from excel to a dedicated tool",
+    "how to transition off spreadsheets without losing data"
+  ],
+  "problem_keywords": [
+    "spreadsheet errors small business",
+    "scattered data across sheets",
+    "no visibility into sales pipeline",
+    "manual invoice tracking mistakes",
+    "conversation history disappearing across scattered tools"
+  ],
+  "commercial_keywords": [
+    "best small business software to replace spreadsheets",
+    "affordable invoicing software small business",
+    "free alternative to excel for small business"
+  ],
+  "entities": [
+    "monday.com",
+    "FreshBooks",
+    "QuickBooks",
+    "Google Sheets",
+    "Excel",
+    "Asana"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Commercial Investigation",
+  "audience": "Small business owners and solopreneurs currently running invoicing, sales tracking, or marketing tracking out of spreadsheets",
+  "countries": [],
+  "connects_to_tools": [
+    "invoice-generator",
+    "marketing-roi-calculator"
+  ],
+  "connects_to_prompts": [],
+  "connects_to_service": "custom-software",
+  "scores": {
+    "demand": 5,
+    "intent": 6,
+    "relevance": 8,
+    "question_density": 4,
+    "search_opportunity": 5,
+    "ai_answer_opportunity": 5,
+    "tool_discovery_opportunity": 7,
+    "competitive_gap": 6,
+    "conversion_potential": 6,
+    "evidence_quality": 4,
+    "total": 56
+  },
+  "evidence_strength": "weak",
+  "rejection_reason": "",
+  "questions": [
+    {
+      "question": "What's the 'breaking point' that pushes a growing team off spreadsheets?",
+      "answer_summary": "monday.com's blog frames it directly: 'Every growing team hits a breaking point where spreadsheets and email threads stop working,' used as the premise for multiple of their tool-comparison articles.",
+      "sources": [
+        "https://www.monday.com/blog/"
+      ]
+    },
+    {
+      "question": "What specifically goes wrong with spreadsheet-based sales tracking?",
+      "answer_summary": "monday.com's content targets teams struggling with scattered sales data and manual tracking typical of spreadsheet-based pipelines.",
+      "sources": [
+        "https://www.monday.com/blog/"
+      ]
+    },
+    {
+      "question": "Why do recruiting/CRM processes break down in spreadsheets?",
+      "answer_summary": "monday.com notes conversation history 'disappears across scattered tools' when hiring pipelines are tracked in disconnected sheets and inboxes.",
+      "sources": [
+        "https://www.monday.com/blog/"
+      ]
+    },
+    {
+      "question": "Does switching to dedicated invoicing tools actually help solopreneurs scale?",
+      "answer_summary": "FreshBooks features a customer case study of a solopreneur (Jules Webb) building a six-figure business, used to illustrate growth enabled by moving off manual/spreadsheet workflows into dedicated tools.",
+      "sources": [
+        "https://www.freshbooks.com/blog"
+      ]
+    },
+    {
+      "question": "What accounting basics matter once a business moves past ad hoc spreadsheet tracking?",
+      "answer_summary": "FreshBooks covers foundational concepts like the difference between revenue and profit as prerequisites for using a proper accounting system instead of DIY sheets.",
+      "sources": [
+        "https://www.freshbooks.com/blog"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "monday.com Blog (homepage listing)",
+      "url": "https://www.monday.com/blog/",
+      "source_type": "company docs",
+      "used_for": "Confirming 'breaking point' framing and specific spreadsheet pain points (sales pipeline visibility, recruiting/CRM history loss, ITSM)"
+    },
+    {
+      "title": "FreshBooks Blog (homepage listing)",
+      "url": "https://www.freshbooks.com/blog",
+      "source_type": "company docs",
+      "used_for": "Confirming invoicing/accounting-software adoption narrative and a solopreneur growth case study"
+    }
+  ]
+}

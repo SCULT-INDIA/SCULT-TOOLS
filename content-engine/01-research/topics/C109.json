@@ -1,0 +1,194 @@
+{
+  "candidate_id": "C109",
+  "status": "accepted",
+  "topic": "How small teams are actually running a rebrand without a big agency budget",
+  "topic_cluster": "DIY / Budget Branding for Small Teams",
+  "target_keyword": "rebrand without agency",
+  "secondary_keywords": [
+    "diy rebrand small business",
+    "small business rebranding on a budget",
+    "how to rebrand your business yourself"
+  ],
+  "long_tail_keywords": [
+    "how to rebrand a small business without hiring an agency",
+    "cheap ways to rebrand your company logo",
+    "rebranding checklist for small teams",
+    "is it worth paying for a custom logo on 99designs"
+  ],
+  "question_keywords": [
+    "how much does a rebrand cost",
+    "can i rebrand my business myself",
+    "when should a small business rebrand",
+    "is there a cheaper alternative to a custom logo"
+  ],
+  "comparison_keywords": [
+    "hiring an agency vs diy rebrand",
+    "99designs vs freelancer for logo redesign",
+    "canva vs professional designer for brand identity",
+    "custom typeface vs existing font for branding"
+  ],
+  "how_to_keywords": [
+    "how to rebrand your business step by step",
+    "how to choose new brand colors without a designer",
+    "how to rename a product without losing users"
+  ],
+  "problem_keywords": [
+    "rebrand too expensive",
+    "outdated logo hurting business",
+    "logoless before launch",
+    "overthinking logo design"
+  ],
+  "commercial_keywords": [
+    "affordable logo design service",
+    "brand identity generator",
+    "color palette generator for branding",
+    "freelance graphic designer for rebrand"
+  ],
+  "entities": [
+    "99designs",
+    "Canva",
+    "Fiverr",
+    "Helvetica",
+    "Airbnb Cereal",
+    "Discord",
+    "Trino/PrestoSQL",
+    "ReScript/BuckleScript"
+  ],
+  "primary_intent": "Tutorial",
+  "secondary_intent": "Problem-solving",
+  "audience": "Small business owners, solo founders, and small in-house teams considering a name/logo/visual-identity refresh without hiring a branding agency",
+  "countries": [],
+  "connects_to_tools": [
+    "color-palette-generator"
+  ],
+  "connects_to_prompts": [
+    "branding"
+  ],
+  "connects_to_service": "branding",
+  "scores": {
+    "demand": 5,
+    "intent": 6,
+    "relevance": 8,
+    "question_density": 5,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 5,
+    "tool_discovery_opportunity": 7,
+    "competitive_gap": 6,
+    "conversion_potential": 7,
+    "evidence_quality": 5,
+    "total": 60
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Should an early-stage business even worry about branding before it has traction?",
+      "answer_summary": "A long-running Ask HN discussion argues against premature branding investment — 'worry about branding once you get user traction' — while others push back that a minimal identity still matters at launch.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=brand%20identity%20startup%20cheap"
+      ]
+    },
+    {
+      "question": "Is there a cheaper alternative to a paid custom logo service before launch?",
+      "answer_summary": "The classic 'Ask HN: What to do for logos?' thread (56 comments) has the founder asking exactly this — weighing a $300 99designs logo against launching logoless — with the community split on whether it's worth it pre-launch.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=Ask%20HN%20what%20to%20do%20for%20logos"
+      ]
+    },
+    {
+      "question": "Is 99designs worth it for a small business logo/rebrand?",
+      "answer_summary": "Commenters report general satisfaction with 99designs' designer selection and outcome quality despite it costing more than the cheapest freelance options.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=logo%20redesign%20budget"
+      ]
+    },
+    {
+      "question": "What's a realistic budget range for hiring freelance help on branding instead of an agency?",
+      "answer_summary": "HN discussion around freelance/bidding platforms cites a rough 4-7k range as the practical freelance-market alternative to full agency engagement for a startup's branding work.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=logo%20redesign%20budget"
+      ]
+    },
+    {
+      "question": "Do you need a custom typeface/font as part of a rebrand, or is an existing font enough?",
+      "answer_summary": "Commenters on Airbnb's custom-typeface announcement pushed back that 'plenty of successful companies managed to create a distinct brand identity using Helvetica,' questioning whether a bespoke font is a good use of a limited budget.",
+      "sources": [
+        "https://airbnb.design/introducing-airbnb-cereal/",
+        "https://hn.algolia.com/api/v1/search?query=logo%20redesign%20budget"
+      ]
+    },
+    {
+      "question": "How do small teams find affordable freelance designers for a rebrand?",
+      "answer_summary": "An 'Ask HN: Freelance graphic design' thread exists specifically as founders/teams looking for and offering freelance design help outside agency channels.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=logo%20redesign%20budget"
+      ]
+    },
+    {
+      "question": "What actually triggers a rebrand for a small team/product (not just big-company reasons)?",
+      "answer_summary": "Real examples discussed include a straightforward name clash or positioning shift (BuckleScript to ReScript, PrestoSQL to Trino) — technical/positioning rebrands done by small teams, not agency-led exercises.",
+      "sources": [
+        "https://reasonml.org/blog/bucklescript-is-rebranding",
+        "https://trino.io/blog/2020/12/27/announcing-trino.html"
+      ]
+    },
+    {
+      "question": "How risky is renaming/rebranding an existing product with an existing user base?",
+      "answer_summary": "A first-hand 'how to name your startup: a 9 month journey through rebranding' account details the practical difficulty and decision process of renaming a live product.",
+      "sources": [
+        "http://www.learndot.com/findings/how-to-name-your-startup/"
+      ]
+    },
+    {
+      "question": "Is over-designing a logo ('logo bullshit') actually a risk for small businesses?",
+      "answer_summary": "A widely-discussed piece argues small businesses waste time and money over-engineering logo/identity work when the underlying product/positioning matters far more.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=logo%20redesign%20budget"
+      ]
+    },
+    {
+      "question": "What's the realistic cost gap between a full agency-led brand refresh and a DIY/freelance approach?",
+      "answer_summary": "Forum discussion of comprehensive agency-led brand-refresh/web projects for organizations cites six-figure ($100k+) engagements, framing just how large the gap is versus a freelance or DIY approach.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=brand%20refresh%20small%20business"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Hacker News (Algolia) search: 'rebranding'",
+      "url": "https://hn.algolia.com/api/v1/search?query=rebranding",
+      "source_type": "community",
+      "used_for": "Surfacing real rebrand case discussions (Discord, Trino/PrestoSQL, ReScript/BuckleScript, startup renaming)"
+    },
+    {
+      "title": "Hacker News (Algolia) search: 'logo redesign budget'",
+      "url": "https://hn.algolia.com/api/v1/search?query=logo%20redesign%20budget",
+      "source_type": "community",
+      "used_for": "Budget-branding discussion threads (99designs, freelance design, over-designing logos)"
+    },
+    {
+      "title": "Hacker News (Algolia) search: 'brand identity startup cheap'",
+      "url": "https://hn.algolia.com/api/v1/search?query=brand%20identity%20startup%20cheap",
+      "source_type": "community",
+      "used_for": "Debate over whether early-stage businesses should invest in branding before traction"
+    },
+    {
+      "title": "Hacker News (Algolia) search: 'Ask HN what to do for logos'",
+      "url": "https://hn.algolia.com/api/v1/search?query=Ask%20HN%20what%20to%20do%20for%20logos",
+      "source_type": "community",
+      "used_for": "Full detail on the classic 56-comment thread with a specific $300 budget figure"
+    },
+    {
+      "title": "Introducing Airbnb Cereal",
+      "url": "https://airbnb.design/introducing-airbnb-cereal/",
+      "source_type": "company docs",
+      "used_for": "Counterpoint case study on custom-typeface cost/benefit debated by commenters"
+    },
+    {
+      "title": "Hacker News (Algolia) search: 'brand refresh small business'",
+      "url": "https://hn.algolia.com/api/v1/search?query=brand%20refresh%20small%20business",
+      "source_type": "community",
+      "used_for": "Cost-gap evidence between agency-led brand refresh and freelance/DIY work"
+    }
+  ]
+}

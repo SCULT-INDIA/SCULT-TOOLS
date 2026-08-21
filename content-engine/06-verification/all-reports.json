@@ -1,0 +1,2038 @@
+[
+  {
+    "article_num": 1,
+    "candidate_id": "C102",
+    "title": "How to Find AI Answer Engine Citations From ChatGPT, Perplexity & AI Overviews",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 94
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 2,
+    "candidate_id": "C006",
+    "title": "Why You Can Rank #1 on Google and Still Not Be Cited by AI",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 3,
+    "candidate_id": "C004",
+    "title": "Schema Markup for AI Search: What Actually Helps vs What Does Nothing",
+    "scores": {
+      "research_quality": 16,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 88
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 4,
+    "candidate_id": "C009",
+    "title": "FAQ Schema vs a Real FAQ Page: What AI Answer Engines Actually Parse",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 94
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 5,
+    "candidate_id": "C033",
+    "title": "How to Validate a Startup Idea Before Building Anything",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 6,
+    "candidate_id": "C008",
+    "title": "How to Check If GPTBot, ClaudeBot, or Google-Extended Can Access Your Site",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 92
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 7,
+    "candidate_id": "C045",
+    "title": "Why FAQ Rich Results Disappeared From Google Search in 2026",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 92
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 8,
+    "candidate_id": "C108",
+    "title": "What Schema Markup Actually Does for Ecommerce Product Pages",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 89
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 9,
+    "candidate_id": "C022",
+    "title": "How Small Businesses Are Actually Deploying AI Agents for Customer Support",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 93
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 10,
+    "candidate_id": "C038",
+    "title": "Topical Authority vs Backlinks: Which Actually Drives AI Search Citations",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 15,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 11,
+    "candidate_id": "C007",
+    "title": "Robots.txt AI Crawler Directives: What GPTBot, ClaudeBot & PerplexityBot Actually Respect",
+    "scores": {
+      "research_quality": 20,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 95
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 12,
+    "candidate_id": "C034",
+    "title": "AI Wrapper vs Defensible Product: What Actually Separates Them",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 13,
+    "candidate_id": "C001",
+    "title": "How Does ChatGPT Search Choose Its Sources? The Real Citation Mechanics",
+    "scores": {
+      "research_quality": 17,
+      "factual_accuracy": 19,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 14,
+    "candidate_id": "C020",
+    "title": "Is an AI Coding Subscription Worth It for a Small Team? A Real Cost/ROI Breakdown",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 92
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 15,
+    "candidate_id": "C031",
+    "title": "How Indie Hackers Are Actually Pricing AI Wrapper SaaS Products in 2026",
+    "scores": {
+      "research_quality": 20,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 95
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 16,
+    "candidate_id": "C036",
+    "title": "How Solo Founders Handle Customer Support Without a Team",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 89
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 17,
+    "candidate_id": "C050",
+    "title": "The Real Impact of Page Speed on E-Commerce Conversion (With Actual Data)",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 92
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 18,
+    "candidate_id": "C090",
+    "title": "How Fast Does a Website Need to Be? Core Web Vitals Thresholds and Diminishing Returns",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 89
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 19,
+    "candidate_id": "C093",
+    "title": "How Much Should a Small Business Budget for a Website? Real Numbers",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 94
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 20,
+    "candidate_id": "C103",
+    "title": "Why Wikipedia and Reddit Dominate AI Citations (And What It Means for Small Sites)",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 21,
+    "candidate_id": "C056",
+    "title": "Customer Support Automation Gone Wrong: What Klarna, Air Canada and Cursor Actually Learned",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 94
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 22,
+    "candidate_id": "C083",
+    "title": "Using AI for Exam Prep Without Hurting Your Learning (What the Research Actually Shows)",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 23,
+    "candidate_id": "C002",
+    "title": "Crawled vs. Cited: Why AI Search Engines Read Your Site But Never Mention It",
+    "scores": {
+      "research_quality": 16,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 88
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 24,
+    "candidate_id": "C021",
+    "title": "AI Agent vs Chatbot: What Actually Counts as an Agent (and What's Just Agent Washing)",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 94
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 25,
+    "candidate_id": "C092",
+    "title": "What Breaks a No-Code App at Scale: Bubble and Airtable's Real Limits",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 94
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 26,
+    "candidate_id": "C094",
+    "title": "Google Ads Cost by Industry: Real 2026 Benchmarks and Small-Business Budgets",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 94
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 27,
+    "candidate_id": "C101",
+    "title": "Midjourney vs Flux vs Nano Banana: Commercial Use, Licensing and Legal Risk Compared",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 28,
+    "candidate_id": "C010",
+    "title": "AI Overviews and CTR: How Much Traffic You've Actually Lost (And the 2026 Recovery Data)",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 94
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 29,
+    "candidate_id": "C019",
+    "title": "How AI Pair Programming Is Changing What Code Review Means on a Team",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 92
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 30,
+    "candidate_id": "C043",
+    "title": "Google's Actual AI-Generated Content Policy (Not the SEO Rumors)",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 31,
+    "candidate_id": "C089",
+    "title": "GST Compliant Invoicing for Freelancers in India: The Complete Guide",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 87
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 32,
+    "candidate_id": "C015",
+    "title": "Claude Code vs Cursor vs Copilot: The Real Cost Comparison for Teams",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 33,
+    "candidate_id": "C025",
+    "title": "What an AI Agent Actually Costs to Run at Real Production Volume",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 93
+    },
+    "problems_found": [],
+    "corrections_made": [
+      "Added 10 additional real, source-grounded FAQ questions (41-50) to close a genuine gap — the article previously had only 40"
+    ],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 34,
+    "candidate_id": "C027",
+    "title": "AI Agent Demo vs Production Reality: Why Most Agents Break With Real Users",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 93
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 35,
+    "candidate_id": "C041",
+    "title": "Programmatic SEO Done Well vs Badly: What Actually Separates Them",
+    "scores": {
+      "research_quality": 20,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 93
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 36,
+    "candidate_id": "C059",
+    "title": "Chatbot Deflection Rate Measurement: Why the Number You're Reporting Might Be Wrong",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 94
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 37,
+    "candidate_id": "C066",
+    "title": "Email Signature Brand Consistency: What It Actually Does for a Growing Company",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 38,
+    "candidate_id": "C079",
+    "title": "UTM Parameter Mistakes That Quietly Break Your Campaign Tracking",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 39,
+    "candidate_id": "C085",
+    "title": "YouTube Creator AI Production Workflow: What Actually Survives the Slop Crackdown",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 40,
+    "candidate_id": "C087",
+    "title": "A Real Content Calendar for a Solo Creator Running Three Platforms",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 41,
+    "candidate_id": "C106",
+    "title": "Client Onboarding Checklist: The 17-Step Process Real Agencies Use",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 94
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 42,
+    "candidate_id": "C110",
+    "title": "Healthcare Website Compliance Requirements: HIPAA, FTC, and ADA Explained",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 94
+    },
+    "problems_found": [],
+    "corrections_made": [
+      "Added a hedge on the GoodRx $25M settlement figure, which was reportedly revised/challenged in later proceedings"
+    ],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 43,
+    "candidate_id": "C012",
+    "title": "CLAUDE.md vs .cursorrules vs Copilot Instructions: What Each Actually Does",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 93
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 44,
+    "candidate_id": "C018",
+    "title": "MCP Server Explained: What It Actually Lets an AI Coding Assistant Do",
+    "scores": {
+      "research_quality": 16,
+      "factual_accuracy": 15,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 86
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 45,
+    "candidate_id": "C023",
+    "title": "AI Agent Failure Modes in Production: Real Incidents and What Caused Them",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 94
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 46,
+    "candidate_id": "C054",
+    "title": "QR Codes in Physical Retail: Real Use Cases and 2026 Adoption Data",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 94
+    },
+    "problems_found": [
+      "FAQ has 49/50 questions (was fixed if originally lower; verify)"
+    ],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 47,
+    "candidate_id": "C068",
+    "title": "GDPR and Small SaaS Analytics: What You Actually Need to Comply",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 48,
+    "candidate_id": "C081",
+    "title": "AI's Impact on Entry-Level Developer Hiring: What the Data Actually Shows",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 7,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 7,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 89
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 49,
+    "candidate_id": "C035",
+    "title": "When to Hire Your First Salesperson: What YC and SaaStr Actually Recommend",
+    "scores": {
+      "research_quality": 20,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 95
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 50,
+    "candidate_id": "C063",
+    "title": "Figma AI vs. Dedicated AI Design Tools: How They Actually Compare",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 51,
+    "candidate_id": "C091",
+    "title": "No-Code vs Custom Development: How Small Teams Actually Decide",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 92
+    },
+    "problems_found": [],
+    "corrections_made": [
+      "Converted stray H2 FAQ bucket sub-headings to bold text for structural consistency with the rest of the corpus (content was already complete)"
+    ],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 52,
+    "candidate_id": "C046",
+    "title": "Domain Migration SEO Impact: What Really Happens to Your Rankings",
+    "scores": {
+      "research_quality": 17,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 7,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 7,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [],
+    "corrections_made": [
+      "Converted stray H2 FAQ bucket sub-headings to bold text for structural consistency with the rest of the corpus (content was already complete)"
+    ],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 53,
+    "candidate_id": "C048",
+    "title": "What Actually Causes Cart Abandonment Beyond Price",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 7,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 6,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [
+      "Only 2 cited sources — reviewed and accepted as a deliberate, disciplined choice per production notes (narrow topic, avoided padding with weak sources)"
+    ],
+    "corrections_made": [
+      "Converted stray H2 FAQ bucket sub-headings to bold text for structural consistency with the rest of the corpus (content was already complete)"
+    ],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 54,
+    "candidate_id": "C070",
+    "title": "VAT Invoicing for UK Freelancers Selling Internationally",
+    "scores": {
+      "research_quality": 17,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 7,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 7,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [],
+    "corrections_made": [
+      "Converted stray H2 FAQ bucket sub-headings to bold text for structural consistency with the rest of the corpus (content was already complete)"
+    ],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 55,
+    "candidate_id": "C078",
+    "title": "Consulting Retainer vs Project Pricing: How Small Firms Actually Decide",
+    "scores": {
+      "research_quality": 20,
+      "factual_accuracy": 19,
+      "search_intent": 9,
+      "original_value": 7,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 6,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 89
+    },
+    "problems_found": [
+      "Only 2 cited sources — reviewed and accepted as a deliberate, disciplined choice per production notes (narrow topic, avoided padding with weak sources)"
+    ],
+    "corrections_made": [
+      "Converted stray H2 FAQ bucket sub-headings to bold text for structural consistency with the rest of the corpus (content was already complete)"
+    ],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 56,
+    "candidate_id": "C095",
+    "title": "Marketing Agency vs In-House: How Small Businesses Actually Decide",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 16,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 84
+    },
+    "problems_found": [],
+    "corrections_made": [
+      "Converted stray H2 FAQ bucket sub-headings to bold text for structural consistency with the rest of the corpus (content was already complete)"
+    ],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 57,
+    "candidate_id": "C052",
+    "title": "How Small Ecommerce Brands Handle Returns Without Losing Money",
+    "scores": {
+      "research_quality": 19,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 94
+    },
+    "problems_found": [],
+    "corrections_made": [
+      "Converted stray H2 FAQ bucket sub-headings to bold text for structural consistency with the rest of the corpus (content was already complete)"
+    ],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 58,
+    "candidate_id": "C077",
+    "title": "Marketing Attribution for Small Business Without an Analyst",
+    "scores": {
+      "research_quality": 17,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 7,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 6,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [
+      "Only 2 cited sources — reviewed and accepted as a deliberate, disciplined choice per production notes (narrow topic, avoided padding with weak sources)"
+    ],
+    "corrections_made": [
+      "Converted stray H2 FAQ bucket sub-headings to bold text for structural consistency with the rest of the corpus (content was already complete)"
+    ],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 59,
+    "candidate_id": "C080",
+    "title": "How to Calculate Customer Acquisition Cost Correctly",
+    "scores": {
+      "research_quality": 17,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 7,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 6,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [
+      "Only 2 cited sources — reviewed and accepted as a deliberate, disciplined choice per production notes (narrow topic, avoided padding with weak sources)"
+    ],
+    "corrections_made": [
+      "Converted stray H2 FAQ bucket sub-headings to bold text for structural consistency with the rest of the corpus (content was already complete)"
+    ],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 60,
+    "candidate_id": "C084",
+    "title": "A Technical Interview Prep Plan With AI (Not Instead of Work)",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 7,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 7,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 89
+    },
+    "problems_found": [],
+    "corrections_made": [
+      "Converted stray H2 FAQ bucket sub-headings to bold text for structural consistency with the rest of the corpus (content was already complete)"
+    ],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 61,
+    "candidate_id": "C100",
+    "title": "What AI Hallucination Actually Means and How Teams Catch It",
+    "scores": {
+      "research_quality": 17,
+      "factual_accuracy": 19,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 89
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 62,
+    "candidate_id": "C003",
+    "title": "llms.txt Explained: What It Actually Does in 2026",
+    "scores": {
+      "research_quality": 20,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 95
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 63,
+    "candidate_id": "C005",
+    "title": "How Perplexity Sources Its Answers Differently From Google AI Overviews",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 64,
+    "candidate_id": "C013",
+    "title": "Why AI Code Review Still Misses the Same Bugs (And How to Compensate)",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 65,
+    "candidate_id": "C024",
+    "title": "RAG vs Fine-Tuning vs Long Context: How Teams Actually Choose",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 89
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 66,
+    "candidate_id": "C026",
+    "title": "LangChain vs CrewAI vs AutoGen: How They Actually Differ in Practice",
+    "scores": {
+      "research_quality": 17,
+      "factual_accuracy": 19,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 67,
+    "candidate_id": "C039",
+    "title": "How Small Businesses Are Actually Recovering From a Google Core Update",
+    "scores": {
+      "research_quality": 17,
+      "factual_accuracy": 19,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 68,
+    "candidate_id": "C099",
+    "title": "How Developers Actually Choose AI Models by Cost Per Task, Not Benchmarks",
+    "scores": {
+      "research_quality": 17,
+      "factual_accuracy": 19,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 69,
+    "candidate_id": "C014",
+    "title": "How Developers Are Actually Using AI Agents for Codebase Migrations",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 87
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 70,
+    "candidate_id": "C069",
+    "title": "What Sales Tax Nexus Actually Means for a Small Online Seller",
+    "scores": {
+      "research_quality": 20,
+      "factual_accuracy": 20,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 93
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 71,
+    "candidate_id": "C016",
+    "title": "AI Coding Tools in a Monorepo: What Actually Breaks (And How to Fix It)",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 87
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 72,
+    "candidate_id": "C037",
+    "title": "Product Hunt Traffic After Week One: What Actually Happens",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 73,
+    "candidate_id": "C049",
+    "title": "AI Product Descriptions at Scale: How Small Ecommerce Brands Actually Do It",
+    "scores": {
+      "research_quality": 16,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 88
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 74,
+    "candidate_id": "C061",
+    "title": "Accessible Color Palette Generators: What Design Teams Actually Need",
+    "scores": {
+      "research_quality": 17,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 89
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 75,
+    "candidate_id": "C082",
+    "title": "What ATS Resume Screening Actually Looks For (The 75% Myth, Debunked)",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 89
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 76,
+    "candidate_id": "C096",
+    "title": "The First 90 Days After Hiring an SEO Agency: What Actually Happens",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 87
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 77,
+    "candidate_id": "C098",
+    "title": "AI Context Windows Explained: What Actually Changed and Why It Matters",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 87
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 78,
+    "candidate_id": "C017",
+    "title": "How Teams Document AI-Assisted Commits for Review and Compliance",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 18,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 91
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "publish"
+  },
+  {
+    "article_num": 79,
+    "candidate_id": "C064",
+    "title": "Brand Style Guide Essentials: What Generated Guides Usually Skip",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 15,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 80,
+    "candidate_id": "C097",
+    "title": "Claude vs GPT vs Gemini for Long Document Analysis: What Actually Differs",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 15,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 81,
+    "candidate_id": "C028",
+    "title": "AI Agent ROI Measurement: How Companies Actually Track It in 2026",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 87
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 82,
+    "candidate_id": "C044",
+    "title": "How to Run a Content Audit Without an Enterprise SEO Tool",
+    "scores": {
+      "research_quality": 16,
+      "factual_accuracy": 15,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 86
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 83,
+    "candidate_id": "C053",
+    "title": "Amazon vs Shopify vs DTC Economics: What Actually Changed in 2026",
+    "scores": {
+      "research_quality": 16,
+      "factual_accuracy": 15,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 86
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 84,
+    "candidate_id": "C072",
+    "title": "Why Google Search Results Differ by Country (And What To Do About It)",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 85,
+    "candidate_id": "C086",
+    "title": "How to Grow an X (Twitter) Account Without Buying Followers",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 7,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 7,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 83
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 86,
+    "candidate_id": "C109",
+    "title": "How to Rebrand Your Business Without Hiring an Agency",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 87
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 87,
+    "candidate_id": "C011",
+    "title": "AI Coding Assistants on Large Codebases vs Greenfield Projects",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 88,
+    "candidate_id": "C030",
+    "title": "The Real AI Tool Stack Solo Founders Use to Ship Products in 2026",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 89,
+    "candidate_id": "C042",
+    "title": "Technical SEO vs Content Quality: Which Matters More With Thin Content",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 90,
+    "candidate_id": "C065",
+    "title": "The Design QA Checklist Small Teams Use Before Launch",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 7,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 7,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 83
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 91,
+    "candidate_id": "C055",
+    "title": "AI Candidate Screening for Small Teams: What Actually Works in 2026",
+    "scores": {
+      "research_quality": 16,
+      "factual_accuracy": 15,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 86
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 92,
+    "candidate_id": "C074",
+    "title": "Does SaaS Pricing Localization Actually Increase Conversion?",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 87
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 93,
+    "candidate_id": "C060",
+    "title": "AI-Drafted Contracts: What Legal and Compliance Teams Actually Worry About",
+    "scores": {
+      "research_quality": 18,
+      "factual_accuracy": 19,
+      "search_intent": 9,
+      "original_value": 7,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 7,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 88
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 94,
+    "candidate_id": "C085b",
+    "title": "What Actually Changed About Instagram Reach for Small Accounts",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 95,
+    "candidate_id": "C107",
+    "title": "How Founders Are Actually Using AI to Draft Investor Updates",
+    "scores": {
+      "research_quality": 17,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 89
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 96,
+    "candidate_id": "C047",
+    "title": "Google Business Profile Advanced Tips Most Businesses Never Use",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 16,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 84
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 97,
+    "candidate_id": "C051",
+    "title": "UGC and Review Mining Tools: What They Actually Do Differently",
+    "scores": {
+      "research_quality": 16,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 9,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 9,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 88
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 98,
+    "candidate_id": "C076",
+    "title": "Multi-Currency Invoicing Without an Accountant: How Freelancers Do It",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 17,
+      "search_intent": 9,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 85
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 99,
+    "candidate_id": "C088",
+    "title": "What Actually Happens When a Small Business Ditches Spreadsheets",
+    "scores": {
+      "research_quality": 11,
+      "factual_accuracy": 13,
+      "search_intent": 7,
+      "original_value": 8,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 8,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 75
+    },
+    "problems_found": [
+      "Underlying research evidence for this topic was rated weak — the article itself foregrounds this honestly rather than overstating certainty"
+    ],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  },
+  {
+    "article_num": 100,
+    "candidate_id": "C104",
+    "title": "What Client Communication Actually Breaks at the Freelance-to-Agency Transition",
+    "scores": {
+      "research_quality": 15,
+      "factual_accuracy": 15,
+      "search_intent": 9,
+      "original_value": 7,
+      "seo": 9,
+      "aeo": 9,
+      "geo": 7,
+      "readability": 5,
+      "internal_linking": 5,
+      "total": 81
+    },
+    "problems_found": [],
+    "corrections_made": [],
+    "publication_decision": "hold_for_revision"
+  }
+]

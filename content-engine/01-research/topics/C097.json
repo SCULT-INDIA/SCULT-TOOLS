@@ -1,0 +1,203 @@
+{
+  "candidate_id": "C097",
+  "topic": "How Claude, GPT, and Gemini actually differ on long-document analysis tasks",
+  "status": "accepted",
+  "target_keyword": "claude vs gpt vs gemini long document analysis",
+  "secondary_keywords": [
+    "claude vs chatgpt vs gemini",
+    "best ai for long documents",
+    "ai model long context comparison"
+  ],
+  "long_tail_keywords": [
+    "which ai is best for analyzing long documents",
+    "claude vs gpt vs gemini for document summarization",
+    "best llm for reading long pdfs and contracts"
+  ],
+  "question_keywords": [
+    "which ai model handles long documents best",
+    "does gemini actually read the whole document",
+    "why does claude get confused on long documents"
+  ],
+  "comparison_keywords": [
+    "claude vs gpt-4 vs gemini",
+    "claude vs gemini context window",
+    "gpt vs claude long document accuracy"
+  ],
+  "how_to_keywords": [
+    "how to test an ai model on long documents",
+    "how to choose an ai model for document analysis"
+  ],
+  "problem_keywords": [
+    "ai hallucinating on long documents",
+    "ai losing context in long documents",
+    "ai context window degradation"
+  ],
+  "commercial_keywords": [
+    "claude api pricing",
+    "gemini api pricing long context",
+    "best ai for legal document review"
+  ],
+  "entities": [
+    "Claude",
+    "GPT-4",
+    "GPT-5",
+    "Gemini 1.5",
+    "Gemini 2.5",
+    "Anthropic",
+    "OpenAI",
+    "Google DeepMind",
+    "needle-in-haystack test",
+    "context window",
+    "tokenizer"
+  ],
+  "primary_intent": "Comparative",
+  "secondary_intent": "Informational",
+  "audience": "Developers and technical decision-makers building document-heavy applications (contract review, research synthesis, RAG pipelines) who need to pick a model provider",
+  "countries": [],
+  "topic_cluster": "LLM long-context / document-analysis comparison",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "Claude",
+    "ChatGPT",
+    "Gemini"
+  ],
+  "connects_to_service": "AI agents & automation",
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 7,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 5,
+    "conversion_potential": 4,
+    "evidence_quality": 6,
+    "total": 61
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Which AI model actually performs best on needle-in-haystack tests for long documents?",
+      "answer_summary": "Real HN discussion: Gemini models (from 1.5 onward) show near-perfect recall on needle-in-haystack tests; Claude 3 Opus shows sensitivity to where information is placed in long inputs; Llama 4 claims 10M token context with demonstrated needle-finding.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=needle%20in%20haystack%20test%20LLM"
+      ]
+    },
+    {
+      "question": "Does a huge advertised context window (1M+ tokens) mean the model actually understands the whole document?",
+      "answer_summary": "HN commenters disagree sharply: one calls Gemini 2.0's 1M-context PDF ingestion 'hopeless' beyond ~20-40k tokens with real degradation, while another calls Gemini 2.5's long-context handling a 'breakthrough moment' versus older models that 'get lost, hallucinate and are pretty much worthless' past 200k tokens.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=Gemini%201M%20context%20window%20needle%20haystack"
+      ]
+    },
+    {
+      "question": "Why does model performance degrade well before the advertised context limit is reached?",
+      "answer_summary": "A real user report found a model 'works okay out to roughly 20-40k tokens' but 'degrades significantly' beyond that threshold, despite a much larger advertised window, and found GPT-4o better than the tested alternative under 128k tokens.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=Gemini%201M%20context%20window%20needle%20haystack"
+      ]
+    },
+    {
+      "question": "Is it better to paste a whole document/codebase into context, or use RAG/GraphRAG chunking?",
+      "answer_summary": "HN examples split both ways: one developer built a GraphRAG-based PR reviewer specifically to 'work around context window limitations,' while another commenter reports direct full-context inclusion outperforming RAG for architectural understanding.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=context%20window%20marketing%20vs%20actual"
+      ]
+    },
+    {
+      "question": "Does the language of the document change the effective cost/efficiency of long-document analysis across models?",
+      "answer_summary": "A concrete tokenizer comparison on HN found Claude Sonnet 4.5 encodes Tamil at 1.19 chars/token versus Gemini's 4.24 chars/token — roughly a 3.5x cost difference for equivalent non-English document content.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=Claude%20vs%20GPT%20vs%20Gemini"
+      ]
+    },
+    {
+      "question": "Does GPT's larger advertised context window (400k) actually hold up better than Claude's 200k in sustained real use?",
+      "answer_summary": "One HN comment claims GPT-5 offers a 'reliable 400k window' versus Claude's '200k hard limit' for sustained coding/document sessions, though this is a single practitioner's account, not a controlled benchmark.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=Claude%20vs%20GPT%20vs%20Gemini"
+      ]
+    },
+    {
+      "question": "Why do models seem to get 'lazier' about actually reading long documents rather than skimming?",
+      "answer_summary": "An HN commenter frames the needle-in-haystack benchmark itself as testing 'how lazy is my LLM being when it comes to analyzing the input I've provided to it,' distinguishing surface retrieval from genuine reading.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=needle%20in%20haystack%20test%20LLM"
+      ]
+    },
+    {
+      "question": "What's the difference between a model's 'physical' and 'effective' context window?",
+      "answer_summary": "HN discussion distinguishes the marketed 'physical' token limit from the smaller 'effective context window' the model can actually use accurately, with proprietary filtering discarding seemingly irrelevant tokens.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=context%20window%20LLM"
+      ]
+    },
+    {
+      "question": "Do models struggle more with simple retrieval or with complex reasoning over long documents?",
+      "answer_summary": "HN commenters note models handle simple 'needle' retrieval fairly well but 'struggle with complex reasoning over lengthy contexts' — the benchmark only reveals surface-level capability, not deep comprehension.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=needle%20in%20haystack%20test%20LLM"
+      ]
+    },
+    {
+      "question": "Can models handle sustained 300k+ token sessions in real coding/document work?",
+      "answer_summary": "A developer reports coding sessions reaching 'about 350k tokens long' and argues a model capped at 200k 'really isn't a sophisticated enough model' for that kind of sustained document/code work.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=context%20window%20LLM"
+      ]
+    },
+    {
+      "question": "Why might a condensed 'skill' file work better than pasting a full long document into context?",
+      "answer_summary": "A real example: a 55,000-word guide was 'too big for a context window' to get coherent answers from directly, so the author condensed it into a separate skill/reference file with key frameworks instead.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=context%20window%20marketing%20vs%20actual"
+      ]
+    },
+    {
+      "question": "Which models do practitioners actually reach for when summarizing documents day-to-day?",
+      "answer_summary": "HN commenters mention Gemini and ChatGPT as 'fairly well behaved' for summarization, with budget alternatives (Llama 4, Qwen, GLM) seen as 'okay/not bad' but not top-tier, suggesting choice is often driven by budget as much as capability.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=which%20AI%20model%20is%20best%20for%20summarizing"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "HN Algolia search: needle in haystack test LLM",
+      "url": "https://hn.algolia.com/api/v1/search?query=needle%20in%20haystack%20test%20LLM",
+      "source_type": "community",
+      "used_for": "Real practitioner commentary on long-context retrieval benchmarks across Claude/GPT/Gemini/Llama"
+    },
+    {
+      "title": "HN Algolia search: Gemini 1M context window needle haystack",
+      "url": "https://hn.algolia.com/api/v1/search?query=Gemini%201M%20context%20window%20needle%20haystack",
+      "source_type": "community",
+      "used_for": "Conflicting real-world reports on whether huge context windows deliver on long-document tasks"
+    },
+    {
+      "title": "HN Algolia search: Claude vs GPT vs Gemini",
+      "url": "https://hn.algolia.com/api/v1/search?query=Claude%20vs%20GPT%20vs%20Gemini",
+      "source_type": "community",
+      "used_for": "Tokenizer efficiency and context-window-size comparisons between providers"
+    },
+    {
+      "title": "HN Algolia search: context window marketing vs actual",
+      "url": "https://hn.algolia.com/api/v1/search?query=context%20window%20marketing%20vs%20actual",
+      "source_type": "community",
+      "used_for": "RAG vs direct-context tradeoffs and condensed-context workarounds"
+    },
+    {
+      "title": "HN Algolia search: which AI model is best for summarizing",
+      "url": "https://hn.algolia.com/api/v1/search?query=which%20AI%20model%20is%20best%20for%20summarizing",
+      "source_type": "community",
+      "used_for": "Practitioner model preferences for summarization tasks"
+    },
+    {
+      "title": "tools.scult.in homepage overview",
+      "url": "https://tools.scult.in",
+      "source_type": "company docs",
+      "used_for": "Confirming prompt-library categories (Claude, ChatGPT, Gemini) this topic connects to"
+    }
+  ]
+}

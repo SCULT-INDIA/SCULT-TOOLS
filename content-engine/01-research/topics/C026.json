@@ -1,0 +1,190 @@
+{
+  "candidate_id": "C026",
+  "status": "accepted",
+  "topic": "How AI agent frameworks (LangChain, CrewAI, AutoGen) actually differ in practice",
+  "topic_cluster": "AI agent framework selection",
+  "target_keyword": "langchain vs crewai vs autogen",
+  "secondary_keywords": [
+    "ai agent framework comparison",
+    "best ai agent framework 2026",
+    "langgraph vs crewai vs autogen",
+    "which ai agent framework to use"
+  ],
+  "long_tail_keywords": [
+    "langchain vs crewai vs autogen which to use",
+    "is langchain still worth using in 2026",
+    "why are developers abandoning langchain",
+    "crewai vs autogen for multi-agent systems",
+    "ai agent framework for solo developers vs enterprise"
+  ],
+  "question_keywords": [
+    "is langchain dead",
+    "which ai agent framework should i use",
+    "why is langchain losing popularity",
+    "what is the difference between crewai and autogen",
+    "do i need a framework to build ai agents"
+  ],
+  "comparison_keywords": [
+    "langchain vs crewai",
+    "crewai vs autogen",
+    "langgraph vs autogen",
+    "framework vs building agents from scratch",
+    "agent sdk vs framework"
+  ],
+  "how_to_keywords": [
+    "how to choose an ai agent framework",
+    "how to build a multi-agent system with crewai",
+    "how to migrate off langchain"
+  ],
+  "problem_keywords": [
+    "langchain too complex for production",
+    "framework lock-in ai agents",
+    "agent framework overhead",
+    "crewai not enterprise ready"
+  ],
+  "commercial_keywords": [
+    "ai agent framework enterprise support",
+    "crewai soc2 compliance",
+    "langgraph production support"
+  ],
+  "entities": [
+    "LangChain",
+    "LangGraph",
+    "CrewAI",
+    "AutoGen",
+    "Microsoft",
+    "OpenAI Agent SDK",
+    "Model Context Protocol",
+    "LlamaIndex",
+    "Jerry Liu"
+  ],
+  "primary_intent": "Comparative",
+  "secondary_intent": "Tool discovery",
+  "audience": "Developers and technical founders choosing an orchestration approach for building AI agents",
+  "countries": [],
+  "connects_to_service": "ai-engineering",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "AI Agents & RAG"
+  ],
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 6,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 5,
+    "conversion_potential": 5,
+    "evidence_quality": 7,
+    "total": 64
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What's the core architectural difference between LangChain/LangGraph, CrewAI, and AutoGen?",
+      "answer_summary": "LangGraph uses a graph-based execution model with fine-grained control over state and branching; CrewAI models agents as a 'crew' of role-based specialists collaborating on tasks; AutoGen uses a conversational group-chat metaphor with a manager agent deciding who speaks next.",
+      "sources": [
+        "https://fungies.io/ai-agent-frameworks-comparison-2026-langchain-crewai-autogen/",
+        "https://logic.inc/resources/autogen-vs-langchain-vs-crewai"
+      ]
+    },
+    {
+      "question": "Is LangChain becoming less popular / are people abandoning it?",
+      "answer_summary": "Multiple 2026 industry pieces and a widely-discussed 'LangChain is pointless' Reddit/HN thread describe developers seeking alternatives, citing complexity in production; one source claims roughly 45% of developers surveyed are looking for LangChain alternatives, though this specific figure comes from a single blog and should be treated cautiously.",
+      "sources": [
+        "https://dev.to/abdessamad_ammi_202ac2bad/por-que-el-45-de-developers-estan-abandonando-langchain-en-produccion-ebb",
+        "https://generallyintelligent.substack.com/p/lets-talk-about-langchain"
+      ]
+    },
+    {
+      "question": "Which framework is easiest for a solo developer or small team to prototype with?",
+      "answer_summary": "CrewAI is repeatedly cited as the friendliest option for prototyping and small teams due to its simple role-based abstraction, while LangGraph/AutoGen are described as needing more engineering investment.",
+      "sources": [
+        "https://fungies.io/ai-agent-frameworks-comparison-2026-langchain-crewai-autogen/",
+        "https://www.trixlyai.com/blogs/langchain-vs-crewai-vs-autogen-which-ai-agent-framework-should-you-actually-use"
+      ]
+    },
+    {
+      "question": "Which framework is more enterprise-ready in terms of compliance?",
+      "answer_summary": "LangGraph and AutoGen are described as having enterprise certifications, while CrewAI is noted as still working toward SOC 2 compliance rather than already having it.",
+      "sources": [
+        "https://fungies.io/ai-agent-frameworks-comparison-2026-langchain-crewai-autogen/"
+      ]
+    },
+    {
+      "question": "How do the frameworks differ in running/executing code?",
+      "answer_summary": "AutoGen has built-in support for running code securely in Docker containers, making it suited to tasks like data analysis, while CrewAI by default tends to produce a text report unless code-execution tools are separately integrated.",
+      "sources": [
+        "https://scalexi.medium.com/comparing-llm-agent-frameworks-code-execution-capabilities-langgraph-vs-autogen-vs-crew-ai-8bb1aa8c07e0"
+      ]
+    },
+    {
+      "question": "Do I even need a framework, or should I just call the model APIs directly?",
+      "answer_summary": "A growing line of commentary (including LlamaIndex's own co-founder) argues that coding agents, the Model Context Protocol, and purpose-built agent SDKs are eroding the case for heavyweight frameworks altogether, suggesting direct/lighter-weight approaches are increasingly viable.",
+      "sources": [
+        "https://www.mindstudio.ai/blog/llm-frameworks-replaced-by-agent-sdks/"
+      ]
+    },
+    {
+      "question": "How big is each framework's tool/integration ecosystem?",
+      "answer_summary": "LangGraph has the largest ecosystem, cited at 100+ pre-built tools via LangChain; CrewAI ships around 20+ common tools; AutoGen generally requires developers to define tools manually.",
+      "sources": [
+        "https://fungies.io/ai-agent-frameworks-comparison-2026-langchain-crewai-autogen/"
+      ]
+    },
+    {
+      "question": "Which framework converges to a finished result most reliably?",
+      "answer_summary": "A comparative analysis found LangGraph and CrewAI have better convergence/termination behavior with replay features, while AutoGen tends to rely more on human intervention to reach completion.",
+      "sources": [
+        "https://scalexi.medium.com/comparing-llm-agent-frameworks-controllability-and-convergence-langgraph-vs-autogen-vs-crew-ai-part-i-92234321eb6b"
+      ]
+    },
+    {
+      "question": "Which framework should an enterprise team with dedicated ML engineers choose versus a small team?",
+      "answer_summary": "Sources consistently suggest enterprise teams with dedicated ML engineers gravitate toward LangGraph or AutoGen for control, while solo developers/small teams lean toward CrewAI for simplicity.",
+      "sources": [
+        "https://fungies.io/ai-agent-frameworks-comparison-2026-langchain-crewai-autogen/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "AI Agent Frameworks Comparison 2026: LangChain vs CrewAI vs AutoGen vs OpenAI SDK",
+      "url": "https://fungies.io/ai-agent-frameworks-comparison-2026-langchain-crewai-autogen/",
+      "source_type": "industry publication",
+      "used_for": "Primary architecture, ecosystem, and audience-fit comparison"
+    },
+    {
+      "title": "AutoGen vs LangChain vs CrewAI: Comparing Across Tools (2026)",
+      "url": "https://logic.inc/resources/autogen-vs-langchain-vs-crewai",
+      "source_type": "industry publication",
+      "used_for": "Architectural metaphor descriptions"
+    },
+    {
+      "title": "Comparing LLM Agent Frameworks Controllability and Convergence",
+      "url": "https://scalexi.medium.com/comparing-llm-agent-frameworks-controllability-and-convergence-langgraph-vs-autogen-vs-crew-ai-part-i-92234321eb6b",
+      "source_type": "community",
+      "used_for": "Convergence/termination behavior comparison"
+    },
+    {
+      "title": "Comparing LLM Agent Frameworks Code Execution Capabilities",
+      "url": "https://scalexi.medium.com/comparing-llm-agent-frameworks-code-execution-capabilities-langgraph-vs-autogen-vs-crew-ai-8bb1aa8c07e0",
+      "source_type": "community",
+      "used_for": "Code execution comparison"
+    },
+    {
+      "title": "LLM frameworks replaced by agent SDKs - MindStudio",
+      "url": "https://www.mindstudio.ai/blog/llm-frameworks-replaced-by-agent-sdks/",
+      "source_type": "industry publication",
+      "used_for": "Trend of frameworks being displaced by agent SDKs / MCP"
+    },
+    {
+      "title": "Why the 45% of developers are abandoning LangChain in production (dev.to, Spanish)",
+      "url": "https://dev.to/abdessamad_ammi_202ac2bad/por-que-el-45-de-developers-estan-abandonando-langchain-en-produccion-ebb",
+      "source_type": "community",
+      "used_for": "Evidence of developer dissatisfaction/switching sentiment"
+    }
+  ]
+}

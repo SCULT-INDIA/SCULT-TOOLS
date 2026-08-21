@@ -1,0 +1,194 @@
+{
+  "candidate_id": "C070",
+  "topic": "How VAT invoicing actually works for a UK freelancer selling internationally",
+  "status": "accepted",
+  "topic_cluster": "freelancer-vat-compliance",
+  "target_keyword": "vat invoicing uk freelancer international",
+  "secondary_keywords": [
+    "do i charge vat to overseas clients",
+    "vat reverse charge freelancer",
+    "vat registration threshold uk freelancer",
+    "vat place of supply services"
+  ],
+  "long_tail_keywords": [
+    "do uk freelancers charge vat to us clients",
+    "how to invoice an eu client after brexit vat rules",
+    "place of supply rules for freelance services explained",
+    "do i need to charge vat on services to eu business clients"
+  ],
+  "question_keywords": [
+    "do i need to charge vat on services to eu clients",
+    "what is reverse charge vat",
+    "do i need to register for vat as a freelancer",
+    "is vat charged on services sold to non-uk clients"
+  ],
+  "comparison_keywords": [
+    "b2b vs b2c vat rules",
+    "vat moss vs one stop shop",
+    "uk vat vs eu vat rules for freelancers"
+  ],
+  "how_to_keywords": [
+    "how to invoice international clients as a uk freelancer",
+    "how to register for vat in the uk",
+    "how to add a reverse charge note on an invoice"
+  ],
+  "problem_keywords": [
+    "accidentally charged vat to an eu client",
+    "vat threshold exceeded unexpectedly",
+    "hmrc vat penalty freelancer",
+    "cant get an invoice from an unregistered freelancer"
+  ],
+  "commercial_keywords": [
+    "invoice generator with vat for freelancers",
+    "best invoicing software for uk freelancers",
+    "vat compliant invoice template"
+  ],
+  "entities": [
+    "HMRC",
+    "VAT Notice 741A",
+    "reverse charge",
+    "VAT MOSS",
+    "PEPPOL",
+    "£90,000 threshold",
+    "Brexit",
+    "Stripe Tax"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "UK-based freelancers, sole traders, and contractors who invoice clients in the EU, US, or elsewhere outside the UK",
+  "countries": [
+    "United Kingdom"
+  ],
+  "connects_to_tools": [
+    "invoice-generator"
+  ],
+  "connects_to_prompts": [],
+  "connects_to_service": "confirms hypothesis — directly relevant to the invoice-generator tool (VAT treatment determines what a generated invoice should show for an international client)",
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 7,
+    "competitive_gap": 6,
+    "conversion_potential": 7,
+    "evidence_quality": 7,
+    "total": 66
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Do UK freelancers charge VAT on B2B services to overseas business clients?",
+      "answer_summary": "Generally no — the B2B general rule places the supply where the customer belongs, so UK VAT typically isn't charged, provided evidence the customer is genuinely in business (ideally a VAT number) is kept.",
+      "sources": [
+        "https://www.gov.uk/guidance/vat-place-of-supply-of-services-notice-741a"
+      ]
+    },
+    {
+      "question": "Do UK freelancers charge VAT on B2C services to overseas consumers?",
+      "answer_summary": "Generally yes — the B2C general rule places the supply where the supplier belongs (the UK), so UK VAT applies unless a specific exception covers that service type.",
+      "sources": [
+        "https://www.gov.uk/guidance/vat-place-of-supply-of-services-notice-741a"
+      ]
+    },
+    {
+      "question": "What is the VAT reverse charge?",
+      "answer_summary": "When a UK business receives B2B services from a non-UK supplier, the UK customer accounts for the VAT itself (as both notional supplier and customer) instead of being charged VAT by the overseas supplier.",
+      "sources": [
+        "https://www.gov.uk/guidance/vat-place-of-supply-of-services-notice-741a"
+      ]
+    },
+    {
+      "question": "What is the UK VAT registration threshold?",
+      "answer_summary": "£90,000 of taxable turnover over the previous 12 months, or an expectation of exceeding that in the next 30 days.",
+      "sources": [
+        "https://www.gov.uk/vat-registration/when-to-register"
+      ]
+    },
+    {
+      "question": "Can a freelancer register for VAT before hitting the threshold?",
+      "answer_summary": "Yes, voluntary VAT registration is allowed below the £90,000 threshold.",
+      "sources": [
+        "https://www.gov.uk/vat-registration/when-to-register"
+      ]
+    },
+    {
+      "question": "Do reverse-charge services received from abroad count toward my VAT threshold even with no UK sales?",
+      "answer_summary": "Yes — the value of B2B general-rule services received from overseas suppliers counts toward the UK registration threshold.",
+      "sources": [
+        "https://www.gov.uk/guidance/vat-place-of-supply-of-services-notice-741a"
+      ]
+    },
+    {
+      "question": "What was the EU VAT MOSS scheme and why did it matter to freelancers/small businesses?",
+      "answer_summary": "VAT MOSS required VAT on digital services to be charged and remitted based on the customer's country, a change widely covered as creating a compliance 'mess' for small sellers when introduced (e.g. TechCrunch's coverage, and Patreon publicly saying it wasn't handling it for creators).",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=VAT%20MOSS%20digital%20services"
+      ]
+    },
+    {
+      "question": "Is e-invoicing (PEPPOL) becoming relevant for freelancer/business invoicing?",
+      "answer_summary": "Yes — an active 'Ask HN: How are you preparing for PEPPOL?' discussion (67 points, 76 comments) shows businesses treating e-invoicing standards as an approaching compliance requirement.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=VAT%20MOSS%20digital%20services"
+      ]
+    },
+    {
+      "question": "What tools exist to automate VAT handling for freelancers/small businesses?",
+      "answer_summary": "Purpose-built tools like Stripe Tax and dedicated VAT-calculation APIs were built specifically to remove manual VAT-rate lookups from invoicing.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=VAT%20MOSS%20digital%20services"
+      ]
+    },
+    {
+      "question": "Is VAT/billing harder for consumer (B2C) clients than for business (B2B) clients?",
+      "answer_summary": "Yes — a widely referenced piece argues B2C billing is meaningfully harder than B2B billing, largely due to VAT/tax complexity.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=VAT%20MOSS%20digital%20services"
+      ]
+    },
+    {
+      "question": "Did Brexit change VAT/shipping rules between the UK and EU for sellers?",
+      "answer_summary": "Yes — post-Brexit shipping and VAT notice changes for UK-EU ecommerce were discussed as a real compliance shift sellers had to adapt to.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=VAT%20MOSS%20digital%20services"
+      ]
+    },
+    {
+      "question": "How do freelancers get compliant invoices from other unregistered freelancers they subcontract?",
+      "answer_summary": "This is a live question among freelancers/founders, raised directly as 'Ask HN: How to get invoices from un-registered freelancers?'",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=VAT%20MOSS%20digital%20services"
+      ]
+    },
+    {
+      "question": "Are invoicing rule changes for freelancers a global trend, not just a UK/EU issue?",
+      "answer_summary": "Yes — for example, Japan's new invoice system for freelancers drew documented complaints, showing this is a broader pattern freelancers everywhere run into.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=VAT%20MOSS%20digital%20services"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "VAT: place of supply of services (VAT Notice 741A)",
+      "url": "https://www.gov.uk/guidance/vat-place-of-supply-of-services-notice-741a",
+      "source_type": "government/official",
+      "used_for": "B2B/B2C place of supply rules and reverse charge mechanics"
+    },
+    {
+      "title": "VAT registration — When to register",
+      "url": "https://www.gov.uk/vat-registration/when-to-register",
+      "source_type": "government/official",
+      "used_for": "UK VAT registration threshold and voluntary registration rules"
+    },
+    {
+      "title": "Hacker News (Algolia) search results — 'VAT MOSS digital services'",
+      "url": "https://hn.algolia.com/api/v1/search?query=VAT%20MOSS%20digital%20services",
+      "source_type": "community",
+      "used_for": "Historical and ongoing founder/freelancer discussion of VAT compliance pain points and tooling"
+    }
+  ]
+}

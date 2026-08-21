@@ -1,0 +1,236 @@
+{
+  "candidate_id": "C054",
+  "topic": "How QR codes are actually being used in physical retail post-pandemic",
+  "status": "accepted",
+  "target_keyword": "qr code physical retail use cases",
+  "secondary_keywords": [
+    "qr code retail statistics 2026",
+    "qr code marketing use cases",
+    "qr code menu restaurant adoption"
+  ],
+  "long_tail_keywords": [
+    "how retailers use qr codes in store 2026",
+    "qr code adoption statistics after covid",
+    "are qr codes still popular in 2026"
+  ],
+  "question_keywords": [
+    "why do stores use qr codes now",
+    "are qr codes safe to scan in stores",
+    "what happened to qr code menus after covid",
+    "do qr code campaigns actually increase sales"
+  ],
+  "comparison_keywords": [
+    "qr code vs nfc tag retail",
+    "static vs dynamic qr code for retail",
+    "qr code click through rate vs email vs display ads"
+  ],
+  "how_to_keywords": [
+    "how to create a qr code for my store",
+    "how to add a qr code to product packaging",
+    "how to set up scan to pay at a restaurant table"
+  ],
+  "problem_keywords": [
+    "qr code phishing quishing scam retail",
+    "customers not scanning qr codes",
+    "fake qr code sticker fraud"
+  ],
+  "commercial_keywords": [
+    "best qr code generator for business",
+    "qr code generator with tracking analytics",
+    "dynamic qr code pricing"
+  ],
+  "entities": [
+    "Scanova",
+    "QRTRAC",
+    "QR Code Chimp",
+    "GDA survey",
+    "Shopify",
+    "eMarketer",
+    "Uniqode",
+    "Keepnet Labs",
+    "APWG",
+    "Acronis"
+  ],
+  "audience": "Physical retail store owners/managers, restaurant/hospitality operators, and retail marketers running in-store QR campaigns or packaging",
+  "countries": [
+    "India (QR is dominant primarily as a UPI payment mechanism, a materially different use case/terminology than the US/Europe menu-and-marketing-driven usage this topic mostly covers — directly relevant since the site's own QR tool supports UPI)"
+  ],
+  "topic_cluster": "QR codes in physical retail and hospitality marketing",
+  "connects_to_tools": [
+    "qr-code-generator"
+  ],
+  "connects_to_prompts": [
+    "ecommerce-product"
+  ],
+  "connects_to_service": "Local SEO / branding (QR as in-store/local marketing collateral) — plausible, moderate confidence",
+  "primary_intent": "Informational",
+  "secondary_intent": "Tool discovery",
+  "scores": {
+    "demand": 7,
+    "intent": 6,
+    "relevance": 9,
+    "question_density": 6,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 5,
+    "tool_discovery_opportunity": 9,
+    "competitive_gap": 5,
+    "conversion_potential": 7,
+    "evidence_quality": 7,
+    "total": 68
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "How many people actually scan QR codes in stores today, years after the pandemic?",
+      "answer_summary": "An estimated 99.5 million US smartphone users scanned a QR code in 2025, projected to reach 102.6 million in 2026, with 72% of consumers reporting they scanned one in the past month.",
+      "sources": [
+        "https://scanova.io/blog/qr-code-statistics/",
+        "https://www.qrcodechimp.com/qr-code-statistics/"
+      ]
+    },
+    {
+      "question": "What do most in-store QR code scans actually get used for?",
+      "answer_summary": "45% of shoppers report using a QR code to get product information in-store; retail accounts for about 28% of scans overall, spanning product info, loyalty programs, and promotions.",
+      "sources": [
+        "https://scanova.io/blog/qr-code-statistics/"
+      ]
+    },
+    {
+      "question": "Are QR codes still relevant in 2026, or was it just a pandemic-era fad?",
+      "answer_summary": "Adoption data shows continued growth rather than decline: 93% of marketers increased QR code usage in the past 12 months and 86% plan to increase it further; restaurant/hospitality adoption sits at 75%.",
+      "sources": [
+        "https://www.qrcodechimp.com/qr-code-statistics/",
+        "https://wavecnct.com/blogs/qr-code-statistics"
+      ]
+    },
+    {
+      "question": "Do QR code campaigns actually increase retail sales?",
+      "answer_summary": "A 2025 GDA survey found 62% of retailers running QR campaigns saw a direct sales uplift, with discount offers, product videos, and personalized offers being the most effective formats.",
+      "sources": [
+        "https://scanova.io/blog/qr-code-statistics/"
+      ]
+    },
+    {
+      "question": "How do QR code click-through rates compare to email or display ads?",
+      "answer_summary": "Cited figures put QR campaign click-through rates at 3.5-4.3%, outperforming email (~2.5%) and display ads (under 0.5%).",
+      "sources": [
+        "https://scanova.io/blog/qr-code-statistics/"
+      ]
+    },
+    {
+      "question": "Are QR codes safe to scan, and what is 'quishing'?",
+      "answer_summary": "Quishing is QR-code phishing — malicious codes routing scanners to credential-harvesting or malware sites — and multiple security vendors report it grew roughly 5x in 2025, with the APWG documenting a 400% increase heading into 2025.",
+      "sources": [
+        "https://www.uniqode.com/blog/qr-code-security/secure-qr-codes-against-phishing-and-quishing-attacks",
+        "https://keepnetlabs.com/blog/qr-code-phishing-trends-in-depth-analysis-of-rising-quishing-statistics"
+      ]
+    },
+    {
+      "question": "How big a target is retail specifically for QR code scams?",
+      "answer_summary": "Security researchers note retail's high-volume QR deployments across many locations create many attack points, and retail staff had the highest miss-rate for spotting suspicious codes in one analysis.",
+      "sources": [
+        "https://www.acronis.com/en/blog/posts/qr-code-phishing-evasive-threats-2026/"
+      ]
+    },
+    {
+      "question": "Do restaurants still use QR code menus in 2026, or has demand shifted back to printed menus?",
+      "answer_summary": "Sources report roughly 75% of restaurants worldwide still use QR codes for digital menus, now often bundled with scan-order-pay features rather than just a static menu link.",
+      "sources": [
+        "https://blog.menucardstudio.com/digital-qr-menu/qr-code-menu-examples-for-restaurants/",
+        "https://www.supercode.com/blog/qr-codes-for-restaurants"
+      ]
+    },
+    {
+      "question": "Can QR codes be used for full scan-order-pay at a restaurant table?",
+      "answer_summary": "Yes — modern implementations let diners scan, order, and pay entirely from their phone without server involvement, aimed at faster table turns and automatic payment collection.",
+      "sources": [
+        "https://www.supercode.com/blog/qr-codes-for-restaurants",
+        "https://umamiqr.com/blog/qr-code-menu-guide"
+      ]
+    },
+    {
+      "question": "How are retailers putting QR codes on product packaging or takeaway bags?",
+      "answer_summary": "Common uses include linking packaging/receipts to reorder pages, loyalty programs, feedback forms, or gift-card purchase pages, often placed near checkout or on takeaway packaging.",
+      "sources": [
+        "https://www.supercode.com/blog/qr-codes-for-restaurants",
+        "https://ez-qr.com/blog/qr-code-examples"
+      ]
+    },
+    {
+      "question": "How big is the global QR code market, and how fast is it growing?",
+      "answer_summary": "The global QR code market is estimated at $13.04 billion in 2025, projected to reach $33.14 billion by 2030 at a 20.5% CAGR.",
+      "sources": [
+        "https://scanova.io/blog/qr-code-statistics/"
+      ]
+    },
+    {
+      "question": "What was the pandemic-era jump in QR code adoption, and did it stick?",
+      "answer_summary": "Historical data shows US QR usage jumped from 35% in September 2020 to 83% by April 2021, and 59% of shoppers said at the time they expected to keep using QR codes permanently — subsequent 2025-2026 stats suggest that expectation largely held.",
+      "sources": [
+        "https://www.emarketer.com/content/how-qr-codes-help-marketers-seamless-commerce-developing-deeper-understanding-of-customers"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "QR Code Statistics 2026: Impressive Global Usage Data (Scanova)",
+      "url": "https://scanova.io/blog/qr-code-statistics/",
+      "source_type": "company docs",
+      "used_for": "core adoption, retail use-case, and market-size statistics"
+    },
+    {
+      "title": "QR Code Statistics 2026: 60+ Facts and Data (Wave Connect)",
+      "url": "https://wavecnct.com/blogs/qr-code-statistics",
+      "source_type": "industry publication",
+      "used_for": "corroborating adoption trend data"
+    },
+    {
+      "title": "QR Code Statistics for 2026 (QR Code Chimp)",
+      "url": "https://www.qrcodechimp.com/qr-code-statistics/",
+      "source_type": "company docs",
+      "used_for": "scan-volume and marketer-adoption statistics"
+    },
+    {
+      "title": "15 QR Code Menu Examples for Restaurants (menucardstudio)",
+      "url": "https://blog.menucardstudio.com/digital-qr-menu/qr-code-menu-examples-for-restaurants/",
+      "source_type": "industry publication",
+      "used_for": "restaurant QR menu adoption rate and feature examples"
+    },
+    {
+      "title": "QR Codes for Restaurants: Menus & Ordering (Supercode)",
+      "url": "https://www.supercode.com/blog/qr-codes-for-restaurants",
+      "source_type": "company docs",
+      "used_for": "scan-order-pay and packaging use cases"
+    },
+    {
+      "title": "QR Code Quishing Explained (Uniqode)",
+      "url": "https://www.uniqode.com/blog/qr-code-security/secure-qr-codes-against-phishing-and-quishing-attacks",
+      "source_type": "company docs",
+      "used_for": "quishing definition and threat framing"
+    },
+    {
+      "title": "QR Phishing Statistics: Quishing Trends (Keepnet Labs)",
+      "url": "https://keepnetlabs.com/blog/qr-code-phishing-trends-in-depth-analysis-of-rising-quishing-statistics",
+      "source_type": "industry publication",
+      "used_for": "quishing growth statistics"
+    },
+    {
+      "title": "Why QR Code Phishing Is the New 2026 Security Blind Spot (Acronis)",
+      "url": "https://www.acronis.com/en/blog/posts/qr-code-phishing-evasive-threats-2026/",
+      "source_type": "company docs",
+      "used_for": "retail-specific quishing risk data"
+    },
+    {
+      "title": "How QR codes can help marketers (eMarketer)",
+      "url": "https://www.emarketer.com/content/how-qr-codes-help-marketers-seamless-commerce-developing-deeper-understanding-of-customers",
+      "source_type": "industry publication",
+      "used_for": "pandemic-era adoption jump historical data"
+    },
+    {
+      "title": "tools.scult.in homepage",
+      "url": "https://tools.scult.in",
+      "source_type": "primary/official",
+      "used_for": "confirming the site's QR Code Generator (UPI) tool and prompt library category structure"
+    }
+  ]
+}

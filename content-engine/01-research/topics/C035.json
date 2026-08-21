@@ -1,0 +1,206 @@
+{
+  "candidate_id": "C035",
+  "topic": "What YC-backed companies say about when to hire your first salesperson",
+  "status": "accepted",
+  "target_keyword": "when to hire first salesperson startup",
+  "secondary_keywords": [
+    "when should a startup hire its first sales rep",
+    "founder led sales vs hiring salesperson",
+    "who should be a startup's first sales hire",
+    "first sales hire criteria"
+  ],
+  "long_tail_keywords": [
+    "how many customers should i close before hiring a salesperson",
+    "should i hire 1 or 2 sales reps first",
+    "what deal size should my first sales hire have sold before",
+    "is hiring a first sales rep too early a mistake"
+  ],
+  "question_keywords": [
+    "when should a startup hire its first salesperson",
+    "how do i know if i'm ready to hire a sales rep",
+    "should the founder do sales before hiring anyone",
+    "what arr should i be at before hiring an account executive"
+  ],
+  "comparison_keywords": [
+    "founder-led sales vs hiring a sales rep",
+    "hiring 1 sales rep vs 2 sales reps first",
+    "individual contributor vs first-line manager as first sales hire"
+  ],
+  "how_to_keywords": [
+    "how to hire your first b2b saas salesperson",
+    "how to know when to make your first sales hire",
+    "how to structure your first sales hire's compensation"
+  ],
+  "problem_keywords": [
+    "hired first salesperson too early",
+    "first sales hire didn't work out",
+    "founder can't delegate sales"
+  ],
+  "commercial_keywords": [
+    "startup sales hiring guide",
+    "b2b saas first sales hire recruiting"
+  ],
+  "entities": [
+    "Y Combinator",
+    "SaaStr",
+    "Kellblog",
+    "Techstars",
+    "First Round Review",
+    "Tom Blomfield",
+    "Monzo",
+    "GoCardless"
+  ],
+  "evidence_strength": "strong",
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 8,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 5,
+    "conversion_potential": 6,
+    "evidence_quality": 7,
+    "total": 67
+  },
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "Early-stage B2B startup founders (often technical/product-first) deciding whether and when to stop doing all sales themselves and make a first sales hire",
+  "countries": [],
+  "topic_cluster": "startup-ops / first-sales-hire",
+  "connects_to_service": "business-ops",
+  "connects_to_tools": [
+    "Invoice Generator",
+    "Marketing ROI Calculator"
+  ],
+  "connects_to_prompts": [
+    "business",
+    "marketing"
+  ],
+  "questions": [
+    {
+      "question": "Should a startup founder do sales themselves before hiring a salesperson?",
+      "answer_summary": "Strong consensus across YC and SaaStr sources: in the earliest stage the founder should be the primary salesperson, since no one understands the product, vision, or customer pain as well, and early customer feedback from founder-led sales is treated as irreplaceable learning.",
+      "sources": [
+        "https://www.ycombinator.com/blog/sales-advice-for-technical-founders/",
+        "https://www.saastr.com/should-a-startup-founder-handle-sales-when-first-getting-started"
+      ]
+    },
+    {
+      "question": "How many customers should I close myself before hiring a first salesperson?",
+      "answer_summary": "The most repeated benchmark across SaaStr and startup-sales guides is closing roughly 10-20 customers personally first, not just to prove demand but to document a repeatable sales process someone else can be taught.",
+      "sources": [
+        "https://www.saastr.com/at-what-point-should-a-startup-hire-a-salesperson",
+        "https://www.dock.us/library/startup-sales"
+      ]
+    },
+    {
+      "question": "Does my startup need product-market fit before hiring a salesperson?",
+      "answer_summary": "Yes -- guides consistently state PMF should be established first; hiring a sales rep while the product is still changing significantly is considered premature because there's no stable pitch/process yet to hand off.",
+      "sources": [
+        "https://www.pitchdrive.com/academy/founder-led-sales-vs-hiring-when-to-make-your-first-sales-hire"
+      ]
+    },
+    {
+      "question": "What ARR milestone should I hit before hiring my first Account Executive?",
+      "answer_summary": "One cited benchmark (attributed to Bain Capital) suggests aiming for roughly $1M ARR before bringing on a first dedicated Account Executive, though this is presented as a rough guideline rather than a universal rule.",
+      "sources": [
+        "https://quickers.substack.com/p/when-to-hire-your-startups-first"
+      ]
+    },
+    {
+      "question": "What should I look for in my first sales hire's background?",
+      "answer_summary": "Kellblog's widely-referenced criteria: genuine 'sales DNA' (loves winning, has sold since young), prior experience selling to the same buyer persona, experience closing deals at or above your price point, enough executive presence to engage senior buyers, and ideally prior first-line sales management experience so they can later build the team.",
+      "sources": [
+        "https://kellblog.com/2025/06/01/who-to-hire-as-the-first-salesperson-in-your-startup/"
+      ]
+    },
+    {
+      "question": "Is hiring just one salesperson first a mistake?",
+      "answer_summary": "Some startup-sales guidance recommends hiring two reps at once instead of one, so poor early results can be attributed to the individual rather than the process/market -- an implicit A/B test on the sales motion itself.",
+      "sources": [
+        "https://www.saastr.com/dear-saastr-when-should-i-hire-our-first-sales-person-and-who-should-i-hire"
+      ]
+    },
+    {
+      "question": "Why might a first sales hire be 'probably a mistake' according to some accelerators?",
+      "answer_summary": "Techstars argues sales is too strategically important to delegate in the earliest stage -- the founder learns things about customers and the market through direct selling that can't be replaced by a hire, making an early sales hire risk cutting off that feedback loop.",
+      "sources": [
+        "https://www.techstars.com/blog/advice/founders-your-first-sales-hire-is-probably-a-mistake"
+      ]
+    },
+    {
+      "question": "How long should the founder work deals alongside the first sales hire before stepping back?",
+      "answer_summary": "Kellblog frames this as a roughly 6-12 month 'three-legged race' period where founder and first sales hire work nearly every deal together before the rep operates independently and eventually builds out the team.",
+      "sources": [
+        "https://kellblog.com/2025/06/01/who-to-hire-as-the-first-salesperson-in-your-startup/"
+      ]
+    },
+    {
+      "question": "What does Y Combinator's own startup library say about early sales hiring and founder-led sales?",
+      "answer_summary": "YC's Startup Library includes 'The Sales Playbook for Founders' (Tom Blomfield, drawing on Monzo/GoCardless) and 'How to Get Your First 10 Customers' (Max Kolysh), both emphasizing founder-led sales discipline and treating early customers as teachers before any hire is made -- though these are YC library essays/talks rather than a single aggregated 'YC survey' of portfolio companies.",
+      "sources": [
+        "https://www.ycombinator.com/library/Mo-the-sales-playbook-for-founders",
+        "https://www.ycombinator.com/library/SF-how-to-get-your-first-10-customers"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://kellblog.com/2025/06/01/who-to-hire-as-the-first-salesperson-in-your-startup/",
+      "title": "Who To Hire As The First Salesperson In Your Startup",
+      "source_type": "industry publication",
+      "used_for": "Detailed hiring criteria and the founder/first-hire transition timeline"
+    },
+    {
+      "url": "https://www.saastr.com/at-what-point-should-a-startup-hire-a-salesperson",
+      "title": "Dear SaaStr: At What Point Should a Startup Hire a Salesperson?",
+      "source_type": "industry publication",
+      "used_for": "10-customer benchmark and PMF prerequisite"
+    },
+    {
+      "url": "https://www.saastr.com/dear-saastr-when-should-i-hire-our-first-sales-person-and-who-should-i-hire",
+      "title": "Dear SaaStr: When Should I Hire Our First Sales Person, and Who Should I Hire?",
+      "source_type": "industry publication",
+      "used_for": "Two-reps-at-once recommendation, hire-someone-you'd-buy-from heuristic"
+    },
+    {
+      "url": "https://www.techstars.com/blog/advice/founders-your-first-sales-hire-is-probably-a-mistake",
+      "title": "Founders: Your First Sales Hire Is Probably a Mistake",
+      "source_type": "industry publication",
+      "used_for": "Counter-argument on delegating sales too early"
+    },
+    {
+      "url": "https://www.ycombinator.com/blog/sales-advice-for-technical-founders/",
+      "title": "Sales Advice for Technical Founders",
+      "source_type": "primary/official",
+      "used_for": "Direct YC guidance on founder-led sales in earliest stage"
+    },
+    {
+      "url": "https://www.ycombinator.com/library/Mo-the-sales-playbook-for-founders",
+      "title": "The Sales Playbook for Founders",
+      "source_type": "primary/official",
+      "used_for": "YC Startup Library essay by Tom Blomfield on founder sales process"
+    },
+    {
+      "url": "https://www.ycombinator.com/library/SF-how-to-get-your-first-10-customers",
+      "title": "How to Get Your First 10 Customers",
+      "source_type": "primary/official",
+      "used_for": "YC Startup Library content on early customer acquisition before a sales hire"
+    },
+    {
+      "url": "https://www.pitchdrive.com/academy/founder-led-sales-vs-hiring-when-to-make-your-first-sales-hire",
+      "title": "Founder-Led Sales vs. Hiring: When to Make Your First Sales Hire",
+      "source_type": "industry publication",
+      "used_for": "PMF-before-hiring argument"
+    },
+    {
+      "url": "https://quickers.substack.com/p/when-to-hire-your-startups-first",
+      "title": "When to Hire Your Startup's First Sales Professional",
+      "source_type": "community",
+      "used_for": "ARR benchmark reference"
+    }
+  ],
+  "rejection_reason": ""
+}

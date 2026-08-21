@@ -1,0 +1,138 @@
+{
+  "candidate_id": "C080",
+  "topic": "How small businesses are actually calculating customer acquisition cost correctly",
+  "status": "accepted",
+  "target_keyword": "how to calculate customer acquisition cost correctly",
+  "secondary_keywords": [
+    "customer acquisition cost formula",
+    "CAC formula for small business",
+    "blended CAC vs paid CAC"
+  ],
+  "long_tail_keywords": [
+    "what costs to include in customer acquisition cost",
+    "how to calculate CAC for a small business",
+    "why is my CAC calculation wrong",
+    "what is a good CAC to LTV ratio"
+  ],
+  "question_keywords": [
+    "what is a good CAC to LTV ratio",
+    "should CAC include salaries",
+    "what counts as a new customer for CAC",
+    "does CAC vary by customer segment"
+  ],
+  "comparison_keywords": [
+    "CAC vs LTV",
+    "blended CAC vs paid-channel CAC"
+  ],
+  "how_to_keywords": [
+    "how to calculate customer acquisition cost",
+    "how to lower customer acquisition cost",
+    "how to track CAC by channel"
+  ],
+  "problem_keywords": [
+    "customer acquisition cost too high",
+    "CAC calculation is inaccurate",
+    "CAC doesn't match actual profitability",
+    "CAC rising during growth"
+  ],
+  "commercial_keywords": [
+    "customer acquisition cost calculator",
+    "CAC tracking tool",
+    "marketing ROI calculator"
+  ],
+  "entities": [
+    "LTV",
+    "CLV:CAC ratio",
+    "Shopify",
+    "MetricHQ"
+  ],
+  "primary_intent": "Tutorial",
+  "secondary_intent": "Problem-solving",
+  "audience": "Small business owners, startup founders, and marketers calculating unit economics without a finance background",
+  "countries": [],
+  "topic_cluster": "Unit Economics & Marketing ROI",
+  "connects_to_tools": [
+    "marketing-roi-calculator"
+  ],
+  "connects_to_prompts": [],
+  "connects_to_service": "",
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 8,
+    "competitive_gap": 4,
+    "conversion_potential": 6,
+    "evidence_quality": 7,
+    "total": 65
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What is the basic customer acquisition cost formula?",
+      "answer_summary": "Total marketing (and sales) spend divided by the number of new customers acquired in that period; e.g. $500 ÷ 10 customers = $50 CAC.",
+      "sources": [
+        "https://www.shopify.com/blog/customer-acquisition-cost"
+      ]
+    },
+    {
+      "question": "What costs should be included when calculating CAC?",
+      "answer_summary": "Marketing software subscriptions, staff compensation, advertising fees, promotional discounts, content creation, and sales support costs — omitting salaries is called out as a common distortion.",
+      "sources": [
+        "https://www.shopify.com/blog/customer-acquisition-cost"
+      ]
+    },
+    {
+      "question": "Does CAC only count brand-new customers?",
+      "answer_summary": "Yes — the metric is meant to track only new customers, and conflating repeat/retained customers into the count skews the number.",
+      "sources": [
+        "https://www.shopify.com/blog/customer-acquisition-cost"
+      ]
+    },
+    {
+      "question": "What is considered a good LTV to CAC ratio?",
+      "answer_summary": "A ratio between 3:1 and 5:1 is generally considered healthy; below that suggests unsustainable acquisition spend, and well above it can suggest under-investment in growth.",
+      "sources": [
+        "https://www.shopify.com/blog/customer-acquisition-cost"
+      ]
+    },
+    {
+      "question": "What is the CAC formula per MetricHQ?",
+      "answer_summary": "Sum of sales costs plus marketing costs, divided by the count of new customers.",
+      "sources": [
+        "https://www.metrichq.org/finance/customer-acquisition-cost/"
+      ]
+    },
+    {
+      "question": "Does CAC vary by customer segment?",
+      "answer_summary": "Yes — enterprise customers typically require a substantially different (usually higher) acquisition investment than smaller customers, so aggregate CAC can mask real differences.",
+      "sources": [
+        "https://www.metrichq.org/finance/customer-acquisition-cost/"
+      ]
+    },
+    {
+      "question": "Is it normal for CAC to rise during a growth phase?",
+      "answer_summary": "Yes, CAC may intentionally increase during deliberate growth pushes, but many businesses fail to account for this strategic context when judging the number.",
+      "sources": [
+        "https://www.metrichq.org/finance/customer-acquisition-cost/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "How to Calculate (and Lower) Customer Acquisition Cost (Shopify)",
+      "url": "https://www.shopify.com/blog/customer-acquisition-cost",
+      "source_type": "company docs",
+      "used_for": "CAC formula, cost-inclusion mistakes, and LTV:CAC ratio benchmark"
+    },
+    {
+      "title": "Customer Acquisition Cost (MetricHQ)",
+      "url": "https://www.metrichq.org/finance/customer-acquisition-cost/",
+      "source_type": "industry publication",
+      "used_for": "Alternate CAC formula phrasing and segment/timing nuances often missed"
+    }
+  ]
+}

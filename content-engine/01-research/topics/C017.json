@@ -1,0 +1,222 @@
+{
+  "candidate_id": "C017",
+  "status": "accepted",
+  "topic": "How teams are documenting AI-assisted commits for code review and compliance",
+  "topic_cluster": "AI contribution disclosure and governance",
+  "target_keyword": "ai assisted commit documentation",
+  "secondary_keywords": [
+    "ai code disclosure policy",
+    "co-authored-by claude commit",
+    "ai contribution guidelines open source",
+    "ai generated code compliance soc2",
+    "ai code attribution provenance"
+  ],
+  "long_tail_keywords": [
+    "how to disclose ai generated code in commit messages",
+    "why does claude code add co-authored-by to commits by default",
+    "how to disable claude code co-authored-by trailer",
+    "assisted-by vs co-authored-by vs generated-by ai commit trailer",
+    "how open source projects handle ai generated pull requests"
+  ],
+  "question_keywords": [
+    "should ai be listed as a co-author in git commits",
+    "is it legal to credit ai as a co-author on copyright grounds",
+    "how do you disable the claude code commit attribution",
+    "do i have to disclose ai assistance in a pull request",
+    "how do coding agents comply with ai contribution rules"
+  ],
+  "comparison_keywords": [
+    "co-authored-by vs assisted-by vs generated-by trailer",
+    "rust vs linux kernel vs django ai contribution policy"
+  ],
+  "how_to_keywords": [
+    "how to turn off claude code git attribution",
+    "how to write an ai disclosure policy for your engineering org",
+    "how to add an assisted-by trailer to commits",
+    "how to audit ai-generated code for compliance"
+  ],
+  "problem_keywords": [
+    "claude code co-authored-by violates copyright office guidance",
+    "ai attribution creates legal ambiguity for ip ownership",
+    "coding agents don't comply with disclosure rules"
+  ],
+  "commercial_keywords": [
+    "ai code compliance governance tool",
+    "soc2 ai coding tool policy"
+  ],
+  "entities": [
+    "Claude Code",
+    "Anthropic",
+    "U.S. Copyright Office",
+    "Rust",
+    "Linux Kernel",
+    "GNOME",
+    "Django",
+    "Apache Airflow",
+    "NumPy",
+    "CPython",
+    "Homebrew",
+    "GitHub"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Informational",
+  "audience": "engineering leads, open-source maintainers, compliance/legal teams, and DevOps engineers setting policy for AI-assisted contributions",
+  "countries": [
+    "United States"
+  ],
+  "connects_to_tools": [
+    "Invoice Generator"
+  ],
+  "connects_to_prompts": [
+    "Claude",
+    "development frameworks",
+    "business operations"
+  ],
+  "connects_to_service": "business ops / compliance advisory and custom software development service",
+  "scores": {
+    "demand": 5,
+    "intent": 6,
+    "relevance": 7,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 3,
+    "competitive_gap": 7,
+    "conversion_potential": 5,
+    "evidence_quality": 8,
+    "total": 61
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Does Claude Code automatically credit itself as a co-author on commits?",
+      "answer_summary": "Yes, by default Claude Code appends a 'Co-Authored-By: Claude <noreply@anthropic.com>' trailer to git commits and a '🤖 Generated with Claude Code' footer to PR descriptions, both on by default.",
+      "sources": [
+        "https://github.com/anthropics/claude-code/issues/66602",
+        "https://explainx.ai/blog/claude-code-commit-co-author-attribution-disable-guide-2026"
+      ]
+    },
+    {
+      "question": "Is crediting AI as a co-author a copyright problem?",
+      "answer_summary": "A GitHub issue argues it conflicts with U.S. Copyright Office guidance that AI should not be listed as an author/co-author merely because it was used, since only humans can be authors and Git tooling treats every 'Co-authored-by' name as an actual co-author.",
+      "sources": [
+        "https://github.com/anthropics/claude-code/issues/66602"
+      ]
+    },
+    {
+      "question": "How can you disable Claude Code's commit attribution?",
+      "answer_summary": "Developers can set 'includeCoAuthoredBy: false' or a custom attribution config globally, or disable it per-project via a .claude/settings.local.json file.",
+      "sources": [
+        "https://github.com/anthropics/claude-code/issues/66602",
+        "https://codingcocoon.com/posts/removing-claude-code-attribution-from-commits-and-prs/"
+      ]
+    },
+    {
+      "question": "What alternative trailers do projects use instead of Co-Authored-By for AI contributions?",
+      "answer_summary": "Some projects use 'Assisted-by:' for AI suggestions, reserving 'Co-authored-by:' or 'Generated-by:' for higher percentages of AI-generated content, in a layered attribution model (roughly 33% / 35-67% / 67%+ thresholds).",
+      "sources": [
+        "https://mattgoodrich.com/posts/ai-code-attribution-and-provenance/"
+      ]
+    },
+    {
+      "question": "How does the Rust project handle AI-generated contributions?",
+      "answer_summary": "Rust requires 'Assisted-by:' tags for AI-assisted contributions and prohibits using AI for 'good first issue' tickets, emphasizing human authorship accountability.",
+      "sources": [
+        "https://github.com/melissawm/open-source-ai-contribution-policies"
+      ]
+    },
+    {
+      "question": "How does the Linux kernel require AI disclosure?",
+      "answer_summary": "The Linux kernel mandates 'Assisted-by:' disclosure in commit messages plus standard Developer Certificate of Origin sign-off for all contributions, AI-assisted or not.",
+      "sources": [
+        "https://github.com/melissawm/open-source-ai-contribution-policies"
+      ]
+    },
+    {
+      "question": "Do all open source projects require AI disclosure, or do some ban it outright?",
+      "answer_summary": "Policies vary widely: GNOME modules like libadwaita ban AI contributions outright, while Django, Apache Airflow, NumPy, and SciPy allow AI use with mandatory disclosure and human-review requirements, and CPython/Homebrew take lighter, disclosure-encouraged-but-not-required stances.",
+      "sources": [
+        "https://github.com/melissawm/open-source-ai-contribution-policies"
+      ]
+    },
+    {
+      "question": "Do coding agents actually comply with a project's stated AI disclosure rules on their own?",
+      "answer_summary": "Native compliance is inconsistent and low — one benchmark found GPT-5.3-Codex at 17%, Sonnet 4.6 at 37%, GPT-5.5 at 40%, and DeepSeek-V4-Pro at 23% — but compliance jumps to 77-97% when the agent is given explicit feedback or the verbatim policy text.",
+      "sources": [
+        "https://arxiv.org/html/2607.26819v1"
+      ]
+    },
+    {
+      "question": "Can an AI agent falsely claim to be a different model in its commit attribution?",
+      "answer_summary": "Yes — researchers found a 'vendor impersonation' failure mode where agents signed commits as 'Claude' while actually running a different model, meaning a disclosure trailer can be technically present but false.",
+      "sources": [
+        "https://arxiv.org/html/2607.26819v1"
+      ]
+    },
+    {
+      "question": "What should an audit-ready AI disclosure record actually contain?",
+      "answer_summary": "Records should identify the model and version used, the prompt/context, the governing policy, and the accepting human reviewer — captured before merge, not reconstructed after the fact.",
+      "sources": [
+        "https://encore.dev/guides/ai-code-compliance"
+      ]
+    },
+    {
+      "question": "How common is disclosure of AI contributions across open source policies?",
+      "answer_summary": "A meaningful share of surveyed AI policies (about half in one analysis) require disclosure of AI-generated contributions specifically to help maintainers verify content during review.",
+      "sources": [
+        "https://arxiv.org/pdf/2605.16706"
+      ]
+    },
+    {
+      "question": "Can AI coding tools be used while staying SOC 2 compliant?",
+      "answer_summary": "Yes, but it requires restricting which repos AI tools can touch, mandating human review of all AI-assisted commits before merge, and documenting those limitations as part of the compliance policy.",
+      "sources": [
+        "https://www.probo.com/hub/ai-coding-tools-soc2-compliance"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "[BUG] Built-in Co-Authored-By: Claude commit trailer asserts AI co-authorship by default (Issue #66602)",
+      "url": "https://github.com/anthropics/claude-code/issues/66602",
+      "source_type": "primary/official",
+      "used_for": "core evidence on default attribution behavior, copyright argument, and configuration options"
+    },
+    {
+      "title": "open-source-ai-contribution-policies (GitHub list)",
+      "url": "https://github.com/melissawm/open-source-ai-contribution-policies",
+      "source_type": "primary/official (aggregated real policies)",
+      "used_for": "real examples of Rust, Linux kernel, GNOME, Django, Apache Airflow, NumPy/SciPy, CPython, Homebrew AI policies"
+    },
+    {
+      "title": "Who Wrote This Code? A Layered Approach to AI Attribution and Provenance",
+      "url": "https://mattgoodrich.com/posts/ai-code-attribution-and-provenance/",
+      "source_type": "industry publication",
+      "used_for": "layered Assisted-by/Co-authored-by/Generated-by attribution model"
+    },
+    {
+      "title": "A First Look at Coding Agents' Compliance with AI Contribution Rules in Open-Source Communities",
+      "url": "https://arxiv.org/html/2607.26819v1",
+      "source_type": "government/academic",
+      "used_for": "compliance-rate benchmark numbers and vendor impersonation finding"
+    },
+    {
+      "title": "AI Policy, Disclosure, and Human in the Loop (arXiv)",
+      "url": "https://arxiv.org/pdf/2605.16706",
+      "source_type": "government/academic",
+      "used_for": "disclosure-requirement prevalence claim"
+    },
+    {
+      "title": "The Compliance Guide to AI-Written Code",
+      "url": "https://encore.dev/guides/ai-code-compliance",
+      "source_type": "industry publication",
+      "used_for": "audit-record content recommendations"
+    },
+    {
+      "title": "Using AI Coding Tools While Staying SOC 2 Compliant",
+      "url": "https://www.probo.com/hub/ai-coding-tools-soc2-compliance",
+      "source_type": "industry publication",
+      "used_for": "SOC2-specific compliance practice"
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "candidate_id": "C068",
+  "topic": "How GDPR actually affects a small SaaS company's analytics setup",
+  "status": "accepted",
+  "topic_cluster": "privacy-compliance-analytics",
+  "target_keyword": "gdpr small saas analytics",
+  "secondary_keywords": [
+    "is google analytics gdpr compliant",
+    "gdpr compliant analytics alternative",
+    "gdpr cookie consent saas",
+    "google analytics 4 gdpr"
+  ],
+  "long_tail_keywords": [
+    "do i need a cookie consent banner for google analytics eu users",
+    "gdpr compliant analytics for a small saas startup",
+    "is google analytics 4 gdpr compliant in 2026",
+    "what do i need for gdpr compliance as a solo founder"
+  ],
+  "question_keywords": [
+    "is google analytics gdpr compliant",
+    "does gdpr apply to small saas companies",
+    "do i need a data processing agreement with google",
+    "are self-hosted analytics gdpr friendly"
+  ],
+  "comparison_keywords": [
+    "google analytics vs plausible gdpr",
+    "matomo vs google analytics gdpr",
+    "fathom analytics vs google analytics",
+    "plausible vs simple analytics"
+  ],
+  "how_to_keywords": [
+    "how to make google analytics gdpr compliant",
+    "how to add a cookie consent banner to a saas app",
+    "how to anonymize ip addresses in analytics"
+  ],
+  "problem_keywords": [
+    "gdpr fine for using google analytics",
+    "cookie banner hurting conversion rate",
+    "eu user data risk with google analytics",
+    "gdpr compliant analytics is still violating gdpr"
+  ],
+  "commercial_keywords": [
+    "plausible analytics pricing",
+    "gdpr compliant analytics tools 2026",
+    "best privacy-first analytics for saas",
+    "matomo pricing"
+  ],
+  "entities": [
+    "GDPR",
+    "Google Analytics 4",
+    "Plausible",
+    "Matomo",
+    "Fathom Analytics",
+    "ePrivacy Directive",
+    "Hector Analytics",
+    "Prodlytic",
+    "ICO"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Informational",
+  "audience": "Solo founders and small SaaS teams (often EU-facing) deciding how to run web/product analytics without a GDPR violation or a legal team",
+  "countries": [
+    "European Union",
+    "United Kingdom"
+  ],
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "seo-geo"
+  ],
+  "connects_to_service": "Local SEO / Google Ads and analytics-adjacent services (this is a legal-compliance-meets-analytics topic; it connects to SCULT's SEO/Ads services more than to any specific free browser tool)",
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 7,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 5,
+    "conversion_potential": 6,
+    "evidence_quality": 8,
+    "total": 68
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Is Google Analytics GDPR compliant out of the box?",
+      "answer_summary": "No — GA4 collects detailed behavioral data via cookies and can be used for cross-device tracking/advertising, which requires explicit user consent under GDPR Art. 6(1)(a) plus ePrivacy consent for the cookies themselves.",
+      "sources": [
+        "https://plausible.io/blog/google-analytics-gdpr"
+      ]
+    },
+    {
+      "question": "What do I actually need to add to make GA usable under GDPR?",
+      "answer_summary": "A valid cookie consent banner, a signed data processing agreement with Google, IP anonymization, a clear privacy policy, and a working opt-out.",
+      "sources": [
+        "https://plausible.io/blog/google-analytics-gdpr"
+      ]
+    },
+    {
+      "question": "Is 'GDPR compliant analytics' marketing language actually accurate?",
+      "answer_summary": "A widely discussed post argues many tools marketed as 'GDPR compliant analytics' may still be violating GDPR in practice — this generated 75 points and 82 comments on Hacker News.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=GDPR%20analytics"
+      ]
+    },
+    {
+      "question": "What are the main alternatives to Google Analytics for GDPR compliance?",
+      "answer_summary": "Plausible, Matomo, Fathom, and several smaller self-hosted/lightweight tools (Hector Analytics, Prodlytic, Pulsemetrics, Beam Analytics) are the alternatives founders repeatedly discuss.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=GDPR%20analytics"
+      ]
+    },
+    {
+      "question": "Can analytics avoid needing a cookie consent banner entirely?",
+      "answer_summary": "Yes for some tools — Plausible markets itself as GDPR-compliant without requiring a cookie consent banner, a claim that drew 145 points and 137 comments of discussion on Hacker News.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=GDPR%20analytics"
+      ]
+    },
+    {
+      "question": "Do 'statistics/performance' cookies need consent?",
+      "answer_summary": "Consent is required for all non-strictly-necessary cookies; statistics cookies may only avoid separate consent if data is aggregated/anonymized and used exclusively by the site owner.",
+      "sources": [
+        "https://gdpr.eu/cookies/"
+      ]
+    },
+    {
+      "question": "How easy does it need to be to withdraw analytics consent?",
+      "answer_summary": "It must be as easy for a user to withdraw consent as it was to give it.",
+      "sources": [
+        "https://gdpr.eu/cookies/"
+      ]
+    },
+    {
+      "question": "Are self-hosted analytics tools automatically GDPR-friendly?",
+      "answer_summary": "Not automatically — this is directly debated in a piece titled 'Are self-hosted analytics GDPR friendly?', implying self-hosting alone doesn't guarantee compliance.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=GDPR%20analytics"
+      ]
+    },
+    {
+      "question": "Does a small script size matter for compliance marketing?",
+      "answer_summary": "Some vendors market a sub-1KB tracking script as 'GDPR-first,' tying script minimalism to a compliance pitch.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=GDPR%20analytics"
+      ]
+    },
+    {
+      "question": "Does GDPR really apply to a solo founder's small SaaS, not just big companies?",
+      "answer_summary": "Yes — founders explicitly ask this in threads like 'Ask HN: GDPR in 2022 – What do I need to know as a solo founder?', showing the compliance question is squarely a small-operator concern, not just an enterprise one.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=GDPR%20analytics"
+      ]
+    },
+    {
+      "question": "What must be disclosed to users before they consent to cookies?",
+      "answer_summary": "Accurate, specific information about what each cookie tracks and why, written in plain language, before consent is collected.",
+      "sources": [
+        "https://gdpr.eu/cookies/"
+      ]
+    },
+    {
+      "question": "Should a user who refuses analytics cookies still be able to use the product?",
+      "answer_summary": "Yes — refusing non-essential cookies should not block access to the core service.",
+      "sources": [
+        "https://gdpr.eu/cookies/"
+      ]
+    },
+    {
+      "question": "Is cookie/analytics compliance a one-time setup or ongoing work?",
+      "answer_summary": "Ongoing — cookie policies need to stay current as tracking technology and cookies themselves keep evolving.",
+      "sources": [
+        "https://gdpr.eu/cookies/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "How to make Google Analytics GDPR compliant",
+      "url": "https://plausible.io/blog/google-analytics-gdpr",
+      "source_type": "company docs",
+      "used_for": "GA4 compliance requirements and vendor-recommended remediation steps"
+    },
+    {
+      "title": "Cookies, the GDPR, and the ePrivacy Directive",
+      "url": "https://gdpr.eu/cookies/",
+      "source_type": "industry publication",
+      "used_for": "Consent, disclosure, and withdrawal requirements for analytics-type cookies"
+    },
+    {
+      "title": "Hacker News (Algolia) search results — 'GDPR analytics'",
+      "url": "https://hn.algolia.com/api/v1/search?query=GDPR%20analytics",
+      "source_type": "community",
+      "used_for": "Real founder discussion volume, specific pain points, and named alternative tools"
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "candidate_id": "C061",
+  "topic": "How design teams are actually using AI for accessible color palettes",
+  "status": "accepted",
+  "target_keyword": "accessible color palette generator",
+  "secondary_keywords": [
+    "AI color palette generator",
+    "WCAG color contrast checker",
+    "color contrast accessibility tool",
+    "colorblind friendly palette generator"
+  ],
+  "long_tail_keywords": [
+    "how to create an accessible color palette with AI",
+    "AI tool for WCAG compliant color palette",
+    "best AI color palette generator for accessibility",
+    "generate a color palette that passes WCAG contrast"
+  ],
+  "question_keywords": [
+    "is WCAG contrast ratio enough for accessible design",
+    "what is APCA contrast vs WCAG",
+    "can AI generate accessible color palettes",
+    "how much contrast is required for WCAG AA"
+  ],
+  "comparison_keywords": [
+    "WCAG vs APCA contrast",
+    "AI color palette tool vs manual contrast checking"
+  ],
+  "how_to_keywords": [
+    "how to check color contrast for accessibility",
+    "how to build a WCAG-compliant color palette",
+    "how to test colors for colorblindness"
+  ],
+  "problem_keywords": [
+    "color palette fails accessibility audit",
+    "low contrast text hard to read",
+    "WCAG-passing colors still look uncomfortable"
+  ],
+  "commercial_keywords": [
+    "free AI color palette generator",
+    "accessible color palette tool free"
+  ],
+  "entities": [
+    "WCAG",
+    "APCA",
+    "WebAIM",
+    "Coolors",
+    "Adobe Color",
+    "Stark",
+    "Figma",
+    "Paletra",
+    "Clarity",
+    "IRIX"
+  ],
+  "audience": "UI/UX and product designers, design-system owners, front-end developers, accessibility leads at small-to-mid product teams",
+  "primary_intent": "Informational",
+  "secondary_intent": "Tool discovery",
+  "countries": [],
+  "topic_cluster": "Accessible design & color systems",
+  "connects_to_tools": [
+    "color-palette-generator"
+  ],
+  "connects_to_prompts": [
+    "design"
+  ],
+  "connects_to_service": "UI/UX design",
+  "scores": {
+    "demand": 5,
+    "intent": 6,
+    "relevance": 8,
+    "question_density": 5,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 8,
+    "competitive_gap": 6,
+    "conversion_potential": 6,
+    "evidence_quality": 5,
+    "total": 62
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Is a color combination that passes WCAG contrast still comfortable to look at?",
+      "answer_summary": "No — WCAG's 4.5:1 ratio is a binary pass/fail check that doesn't capture perceptual eye strain; a follow-up 'color comfort score' concept was proposed after this gap was raised on Hacker News.",
+      "sources": [
+        "https://news.ycombinator.com/",
+        "https://medium.com/@jan.mittelman/beyond-wcag-a-color-comfort-score-to-catch-eye-straining-combos-dcf75159c9ff"
+      ]
+    },
+    {
+      "question": "What is APCA and how does it differ from WCAG 2.x contrast math?",
+      "answer_summary": "APCA (Advanced Perceptual Contrast Algorithm) is discussed as a likely successor to WCAG's flat contrast ratio, since it also factors in font size/weight and perceptual luminance rather than a single ratio number.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=color%20contrast%20accessibility%20AI"
+      ]
+    },
+    {
+      "question": "What contrast ratio do I need to hit WCAG AA vs AAA?",
+      "answer_summary": "Normal text needs 4.5:1 (AA) or 7:1 (AAA); large text (14pt bold+/18pt+) needs 3:1 (AA) or 4.5:1 (AAA); UI components/graphics need at least 3:1 under WCAG 2.1 AA.",
+      "sources": [
+        "https://webaim.org/resources/contrastchecker/"
+      ]
+    },
+    {
+      "question": "Is there a Mac app that checks a color palette for WCAG/accessibility compliance?",
+      "answer_summary": "Yes — 'Clarity,' a macOS app specifically for checking color accessibility and WCAG compliance, was shown on Hacker News as a Show HN launch.",
+      "sources": [
+        "https://apps.apple.com/us/app/color-accessibility-check/id6752328976?mt=12"
+      ]
+    },
+    {
+      "question": "Can I test a whole palette's pairings against real components at once instead of one pair at a time?",
+      "answer_summary": "Yes — tools like Paletra let you build a palette and test it against WCAG thresholds across UI components in one pass rather than checking foreground/background pairs individually.",
+      "sources": [
+        "https://www.paletra.cc/app"
+      ]
+    },
+    {
+      "question": "Are there AI tools that generate large batches of curated color palettes for designers?",
+      "answer_summary": "Yes — Palettepoint (120K+ curated palettes) and Palettt both market themselves as AI-powered palette generators aimed at designers, shown as recent Show HN launches.",
+      "sources": [
+        "https://palettepoint.com",
+        "https://palettt.com"
+      ]
+    },
+    {
+      "question": "Does color accessibility testing need to cover colorblindness, not just light/dark contrast?",
+      "answer_summary": "Yes — some dedicated color tools (e.g. IRIX color scheme editor) explicitly test contrast ratio, lightness, and color-blindness issues together rather than contrast alone.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=color%20contrast%20accessibility%20AI"
+      ]
+    },
+    {
+      "question": "How do I quickly check one color pair for accessibility without a design tool?",
+      "answer_summary": "WebAIM's free Contrast Checker lets you enter hex values or use an eyedropper to sample on-screen colors and instantly see a pass/fail against AA/AAA thresholds.",
+      "sources": [
+        "https://webaim.org/resources/contrastchecker/"
+      ]
+    },
+    {
+      "question": "Why do indie developers keep building new AI color-palette generators?",
+      "answer_summary": "Hacker News' Show HN section shows repeated recent launches (Gradienty, Palettepoint, Palettt, Hexee Pro, colorpal), suggesting sustained builder interest in AI-assisted palette generation as a recurring project niche, though this is builder-side evidence rather than proof of large end-user search demand.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=color%20palette%20accessibility%20designer%20workflow"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "My Color Combo Passes WCAG – Why Does It Still Hurt? / HN discussion",
+      "url": "https://hn.algolia.com/api/v1/search?query=color%20contrast%20accessibility%20AI",
+      "source_type": "community",
+      "used_for": "Evidence that WCAG contrast math is debated as insufficient for real visual comfort, and that APCA is discussed as an alternative"
+    },
+    {
+      "title": "Beyond WCAG: A Color Comfort Score to Catch Eye-Straining Combos",
+      "url": "https://medium.com/@jan.mittelman/beyond-wcag-a-color-comfort-score-to-catch-eye-straining-combos-dcf75159c9ff",
+      "source_type": "industry publication",
+      "used_for": "Direct evidence of a proposed supplement to WCAG contrast checking"
+    },
+    {
+      "title": "WebAIM Contrast Checker",
+      "url": "https://webaim.org/resources/contrastchecker/",
+      "source_type": "government/academic",
+      "used_for": "Canonical WCAG AA/AAA contrast ratio thresholds and testing method"
+    },
+    {
+      "title": "Show HN: Clarity, Palettepoint, Palettt, Paletra, Gradienty (color tool launches)",
+      "url": "https://hn.algolia.com/api/v1/search?query=color%20palette%20accessibility%20contrast",
+      "source_type": "community",
+      "used_for": "Evidence of ongoing builder interest in AI/accessible color tools and specific product examples"
+    }
+  ]
+}

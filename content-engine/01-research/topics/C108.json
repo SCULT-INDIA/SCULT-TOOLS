@@ -1,0 +1,187 @@
+{
+  "candidate_id": "C108",
+  "status": "accepted",
+  "topic": "What schema markup actually does for e-commerce product pages beyond rich snippets",
+  "topic_cluster": "Ecommerce Structured Data & AEO/GEO Visibility",
+  "target_keyword": "schema markup ecommerce product pages",
+  "secondary_keywords": [
+    "product structured data",
+    "schema.org product markup",
+    "merchant listing structured data"
+  ],
+  "long_tail_keywords": [
+    "what does product schema do besides rich snippets",
+    "does structured data help ai overviews",
+    "product schema for google merchant center feed",
+    "schema markup for generative engine optimization"
+  ],
+  "question_keywords": [
+    "is schema markup required for google shopping",
+    "does structured data help ai search visibility",
+    "what's the difference between product snippets and merchant listings",
+    "do i need structured data if i already submit a merchant center feed"
+  ],
+  "comparison_keywords": [
+    "product snippets vs merchant listings schema",
+    "schema markup vs merchant center feed",
+    "json-ld vs microdata for products"
+  ],
+  "how_to_keywords": [
+    "how to add product schema to an ecommerce site",
+    "how to implement merchant listing structured data",
+    "how to check if structured data is ai-citation ready"
+  ],
+  "problem_keywords": [
+    "product schema not showing rich results",
+    "structured data errors ecommerce",
+    "products not appearing in ai overviews"
+  ],
+  "commercial_keywords": [
+    "schema markup generator tool",
+    "json-ld generator for products",
+    "ecommerce seo audit tool",
+    "geo/aeo readiness checker"
+  ],
+  "entities": [
+    "Google Search Central",
+    "Google Merchant Center",
+    "Schema.org",
+    "JSON-LD",
+    "GTIN",
+    "SKU",
+    "MPN",
+    "BetterAEO",
+    "Cloro.dev",
+    "geo-lint"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Tool discovery",
+  "audience": "Ecommerce site owners, SEO/GEO practitioners, and developers implementing or auditing product structured data",
+  "countries": [],
+  "connects_to_tools": [
+    "schema-markup-generator"
+  ],
+  "connects_to_prompts": [
+    "ecommerce-product"
+  ],
+  "connects_to_service": "web-dev",
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 9,
+    "question_density": 7,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 9,
+    "competitive_gap": 6,
+    "conversion_potential": 8,
+    "evidence_quality": 8,
+    "total": 76
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What does Product structured data actually enable beyond a visual rich snippet in search results?",
+      "answer_summary": "Google's own docs state it enables Google Shopping tab placement, Merchant Center integration, shopping knowledge panels with seller info, popular-product carousels, and enriched Google Images/Lens results — not just a prettier blue link.",
+      "sources": [
+        "https://developers.google.com/search/docs/appearance/structured-data/product"
+      ]
+    },
+    {
+      "question": "What's the difference between 'product snippets' and 'merchant listings' markup?",
+      "answer_summary": "Product snippets are for editorial/review pages without direct purchase; merchant listings are for pages where customers can actually buy, and support sizing, shipping, and return-policy detail.",
+      "sources": [
+        "https://developers.google.com/search/docs/appearance/structured-data/product"
+      ]
+    },
+    {
+      "question": "If I already submit a Merchant Center feed, do I still need on-page structured data?",
+      "answer_summary": "Google explicitly recommends both: 'Providing both structured data on web pages and a Merchant Center feed maximizes your eligibility to experiences and helps Google correctly understand and verify your data.'",
+      "sources": [
+        "https://developers.google.com/search/docs/appearance/structured-data/merchant-listing"
+      ]
+    },
+    {
+      "question": "What specific product attributes should be marked up, and why do they matter to Google Shopping?",
+      "answer_summary": "Properties align to Merchant Center feed attributes (product_type, google_product_category, unit pricing) plus identifiers like GTIN/SKU/MPN, so markup and feed data stay consistent for shopping surfaces.",
+      "sources": [
+        "https://developers.google.com/search/docs/appearance/structured-data/merchant-listing",
+        "https://schema.org/Product"
+      ]
+    },
+    {
+      "question": "Does schema markup help pages surface in AI Overviews / generative search, not just classic organic results?",
+      "answer_summary": "Yes — practitioner discussion frames structured data (including FAQPage/HowTo/Product schema) as one of the direct levers for AI Overview inclusion, alongside entity clarity and E-E-A-T signals.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=structured%20data%20AI%20overviews%20SEO"
+      ]
+    },
+    {
+      "question": "What is GEO (Generative Engine Optimization) and how does schema fit into it?",
+      "answer_summary": "A growing tool category (geo-lint, BetterAEO, Cloro.dev) explicitly scores/validates structured data as part of 'AI-citation readiness' for tools like ChatGPT, Perplexity, and Google AI Overviews.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=structured%20data%20AI%20overviews%20SEO"
+      ]
+    },
+    {
+      "question": "Is Product schema used by anything other than Google?",
+      "answer_summary": "Schema.org documents adoption across 10M+ domains and describes consumers beyond search engines, including comparison tools and supply-chain/product-catalog systems that parse the same markup.",
+      "sources": [
+        "https://schema.org/Product"
+      ]
+    },
+    {
+      "question": "Can third-party tools/scrapers rely on product schema to extract catalog data without an API?",
+      "answer_summary": "Yes — a developer building a car-marketplace data visualization noted that sites using schema.org/Product 'simplify things' for scraping, even without official APIs.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=schema.org%20structured%20data%20ecommerce"
+      ]
+    },
+    {
+      "question": "Does return-policy/shipping data in merchant listing markup actually change buyer behavior?",
+      "answer_summary": "Google's guidance frames this data as functional, not decorative — it surfaces pricing, availability, shipping cost, and return policy directly in the shopping surfaces where buyers decide whether to click through.",
+      "sources": [
+        "https://developers.google.com/search/docs/appearance/structured-data/merchant-listing"
+      ]
+    },
+    {
+      "question": "What product schema properties support 'complex' catalogs (variants, bundles, digital products)?",
+      "answer_summary": "Schema.org's Product type supports variant/group relationships, energy-consumption data, and accessory/consumable/similar-product relationships for more complex catalog structures, not just a flat price+name+image model.",
+      "sources": [
+        "https://schema.org/Product"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Introduction to Product structured data",
+      "url": "https://developers.google.com/search/docs/appearance/structured-data/product",
+      "source_type": "primary/official",
+      "used_for": "Authoritative description of what product structured data actually enables beyond rich snippets"
+    },
+    {
+      "title": "Merchant listing (Product, Offer) structured data",
+      "url": "https://developers.google.com/search/docs/appearance/structured-data/merchant-listing",
+      "source_type": "primary/official",
+      "used_for": "Feed-vs-markup relationship, required properties, and functional (not cosmetic) value of merchant listing data"
+    },
+    {
+      "title": "Schema.org Product",
+      "url": "https://schema.org/Product",
+      "source_type": "primary/official",
+      "used_for": "Full property taxonomy and confirmation of adoption/use beyond search engines"
+    },
+    {
+      "title": "Hacker News (Algolia) search: 'structured data AI overviews SEO'",
+      "url": "https://hn.algolia.com/api/v1/search?query=structured%20data%20AI%20overviews%20SEO",
+      "source_type": "community",
+      "used_for": "Evidence of the emerging GEO/AEO angle and real tools scoring schema for AI-citation readiness"
+    },
+    {
+      "title": "Hacker News (Algolia) search: 'schema.org structured data ecommerce'",
+      "url": "https://hn.algolia.com/api/v1/search?query=schema.org%20structured%20data%20ecommerce",
+      "source_type": "community",
+      "used_for": "Practitioner confirmation that product schema is consumed by third-party tools beyond Google"
+    }
+  ]
+}

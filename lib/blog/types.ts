@@ -12,7 +12,11 @@
  * segment. A paragraph is an array of these, rendered in order.
  */
 
-/** One segment of a paragraph: literal text, or a link over some text. */
+/** One segment of a paragraph: literal text, a link over some text, or a
+ * bold run. Kept as a small closed union rather than reaching for markdown —
+ * same reasoning as the file's own docblock, extended by exactly one case
+ * (`bold`) once the content-engine batch (see `lib/blog/registry.ts`) needed
+ * inline emphasis that plain strings and links couldn't express. */
 export type Inline =
   | string
   | {
@@ -24,12 +28,23 @@ export type Inline =
        * internal site route, rendered via next/link. */
       readonly external?: boolean
     }
+  | {
+      readonly text: string
+      readonly bold: true
+    }
 
 export interface BlogSection {
   readonly heading: string
   /** Each paragraph is an array of segments — plain strings and inline
    * links, concatenated in order into one rendered `<p>`. */
   readonly body: readonly (readonly Inline[])[]
+}
+
+/** One FAQ entry — `answer` is `Inline[]` (not a plain string) so a citation
+ * can link out from inside the answer, same as any other paragraph. */
+export interface BlogFaqItem {
+  readonly question: string
+  readonly answer: readonly Inline[]
 }
 
 /**
@@ -71,4 +86,13 @@ export interface BlogPost {
   readonly updatedAt: string
   /** Honest estimate: roughly total words / 220, rounded up. */
   readonly readingMinutes: number
+  /** Optional FAQ block, rendered after `sections` and eligible for
+   * `FAQPage` JSON-LD when present. Introduced for the content-engine batch
+   * (lib/blog/registry.ts) — earlier posts simply omit it. */
+  readonly faq?: readonly BlogFaqItem[]
+  /** Optional closing "Sources" list — real URLs only, never invented. Kept
+   * separate from the inline citation links already inside `sections`/`faq`
+   * bodies so the closing list can be complete even where a source was
+   * referenced by name without being turned into an inline link. */
+  readonly sources?: readonly string[]
 }

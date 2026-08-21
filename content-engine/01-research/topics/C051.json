@@ -1,0 +1,240 @@
+{
+  "candidate_id": "C051",
+  "topic": "What UGC and review mining tools actually do differently",
+  "status": "accepted",
+  "target_keyword": "ugc review mining tools comparison",
+  "secondary_keywords": [
+    "review analysis software ecommerce",
+    "customer review sentiment analysis tools",
+    "ugc collection platforms shopify"
+  ],
+  "long_tail_keywords": [
+    "difference between review widget and review mining tool",
+    "best tools to analyze customer reviews for ecommerce",
+    "yotpo vs okendo vs judge.me comparison 2026"
+  ],
+  "question_keywords": [
+    "what is review mining",
+    "how do i analyze thousands of customer reviews",
+    "does yotpo do sentiment analysis",
+    "why did people switch from yotpo to judge.me"
+  ],
+  "comparison_keywords": [
+    "yotpo vs okendo vs fera",
+    "judge.me vs loox vs stamped.io",
+    "thematic vs chattermill",
+    "okendo vs yotpo vs trustpilot"
+  ],
+  "how_to_keywords": [
+    "how to mine customer reviews for product insights",
+    "how to turn reviews into marketing copy",
+    "how to add review schema for seo"
+  ],
+  "problem_keywords": [
+    "too many reviews to read manually",
+    "reviews not converting anymore",
+    "review app too expensive for small shopify store"
+  ],
+  "commercial_keywords": [
+    "best review app for shopify",
+    "ugc platform pricing comparison",
+    "cheapest alternative to yotpo"
+  ],
+  "entities": [
+    "Yotpo",
+    "Okendo",
+    "Fera",
+    "Judge.me",
+    "Loox",
+    "Stamped.io",
+    "Trustpilot",
+    "Bazaarvoice",
+    "Thematic",
+    "Chattermill",
+    "Appbot",
+    "Lexalytics",
+    "IBM Watson NLU"
+  ],
+  "audience": "DTC/Shopify brand owners and ecommerce marketers choosing a reviews/UGC platform, plus product and CX teams wanting deeper analysis of review text",
+  "countries": [],
+  "topic_cluster": "Reviews, UGC, and customer feedback analysis tooling",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "ecommerce-product"
+  ],
+  "connects_to_service": "AI agents/automation (feedback analysis workflows) — plausible, not strongly evidenced",
+  "primary_intent": "Comparative",
+  "secondary_intent": "Commercial Investigation",
+  "scores": {
+    "demand": 6,
+    "intent": 6,
+    "relevance": 6,
+    "question_density": 6,
+    "search_opportunity": 5,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 6,
+    "conversion_potential": 5,
+    "evidence_quality": 6,
+    "total": 56
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What's the actual difference between a review display widget (Yotpo/Okendo/Judge.me) and a review mining/analytics tool?",
+      "answer_summary": "Display widgets (Yotpo, Okendo, Judge.me) collect and show reviews on-site to build trust and conversion; review mining tools (Thematic, Chattermill, Appbot) instead process review text with NLP to extract sentiment and recurring themes for product/marketing insight — collection vs. analysis are genuinely different jobs.",
+      "sources": [
+        "https://www.invespcro.com/blog/customer-review-mining/",
+        "https://getthematic.com/insights/review-analysis",
+        "https://www.growthzacks.com/blog/review-mining-ecommerce-copywriting/"
+      ]
+    },
+    {
+      "question": "Which is cheaper for a small Shopify store: Judge.me, Okendo, or Yotpo?",
+      "answer_summary": "Okendo pricing starts near $20/month and Yotpo's paid plans start around $29/month scaling to $499+; multiple migrating users report Judge.me as notably cheaper than both for comparable features.",
+      "sources": [
+        "https://eightx.co/blog/average-ecommerce-gross-margin-shopify-vs-amazon-2026",
+        "https://www.cbinsights.com/compare/judgeme-vs-yotpo",
+        "https://community.shopify.com/t/product-review/356435"
+      ]
+    },
+    {
+      "question": "Why do merchants report switching from Yotpo or Okendo to Judge.me?",
+      "answer_summary": "Users cited in comparison round-ups describe Judge.me as having a more modern interface, easier setup, better support, and lower cost versus Yotpo, and 'equivalent features at a fraction of the price' versus Okendo.",
+      "sources": [
+        "https://www.cbinsights.com/compare/judgeme-vs-yotpo",
+        "https://www.cbinsights.com/compare/judgeme-vs-okendo"
+      ]
+    },
+    {
+      "question": "Can review display platforms do sentiment analysis themselves, or do I need a separate tool?",
+      "answer_summary": "Standard review widgets are built for collection/display; dedicated sentiment/theme-extraction is the domain of separate tools like Chattermill, Thematic, and Lexalytics, which apply NLP to classify sentiment and surface causal themes.",
+      "sources": [
+        "https://chattermill.com/blog/how-to-analyze-large-volumes-of-customer-feedback-complete-guide",
+        "https://getthematic.com/insights/how-analyze-customer-feedback-at-scale"
+      ]
+    },
+    {
+      "question": "How do I analyze thousands of customer reviews without reading them manually?",
+      "answer_summary": "Guidance recommends centralizing reviews across channels, then using an AI/NLP tool to categorize themes and sentiment automatically since manual reading doesn't scale and introduces bias.",
+      "sources": [
+        "https://getthematic.com/insights/how-analyze-customer-feedback-at-scale",
+        "https://www.resonate.cx/blog/customer-feedback-analysis/"
+      ]
+    },
+    {
+      "question": "What is 'review mining' and how is it used in ecommerce copywriting?",
+      "answer_summary": "Review mining means systematically reading reviews across sources to identify the language and purchase motivations customers use, then reusing that language in product copy.",
+      "sources": [
+        "https://www.growthzacks.com/blog/review-mining-ecommerce-copywriting/"
+      ]
+    },
+    {
+      "question": "Do reviews and UGC actually move conversion rate, or is it overstated?",
+      "answer_summary": "A cited industry report found displaying product reviews boosted conversion by 58% in the study referenced, though other sources caution reviews need enough volume per product to move the needle meaningfully.",
+      "sources": [
+        "https://retaildive.com/news/online-product-reviews-boosts-conversion-by-58-study/356465",
+        "https://www.growave.io/blog/how-to-analyze-customer-reviews"
+      ]
+    },
+    {
+      "question": "Is Okendo or Yotpo the better fit for a Shopify-only brand vs. a multi-platform brand?",
+      "answer_summary": "Comparison guides frame Okendo as the stronger fit for Shopify-only stores wanting attribute-rich review forms at lower cost, and Yotpo as better when a brand needs multi-platform reach or a bundled marketing suite.",
+      "sources": [
+        "https://www.ecomstacksolutions.com/blog/yotpo-vs-okendo-ugc-platforms",
+        "https://webappmeister.com/yotpo-vs-okendo/"
+      ]
+    },
+    {
+      "question": "Can tools like Appbot analyze reviews outside of app stores, e.g. ecommerce product reviews?",
+      "answer_summary": "Appbot is built primarily for app-store review aggregation (Apple/Google/Amazon/Microsoft) and theme extraction, illustrating the broader category of review-mining tools that ecommerce-specific vendors like Chattermill/Thematic adapt for product reviews.",
+      "sources": [
+        "https://appfollow.io/blog/customer-sentiment-analysis-tools"
+      ]
+    },
+    {
+      "question": "What's the difference between sentiment analysis and opinion mining for customer feedback?",
+      "answer_summary": "Sentiment analysis assigns an overall tone (positive/negative/neutral); opinion mining goes further to connect that tone to the specific product attribute or issue that caused it.",
+      "sources": [
+        "https://www.thinkowl.com/sentiment-analysis-opinion-mining",
+        "https://www.zonkafeedback.com/blog/opinion-mining-from-customer-feedback"
+      ]
+    },
+    {
+      "question": "Do review widgets help SEO through structured data/review schema?",
+      "answer_summary": "Review widget vendors note many platforms add Review schema markup to qualify pages for rich snippet results in search, a benefit separate from any analytics capability.",
+      "sources": [
+        "https://shapo.io/blog/best-review-widget/"
+      ]
+    },
+    {
+      "question": "How does combining quantitative (CSAT) and qualitative (open-text) review analysis work in practice?",
+      "answer_summary": "Guidance suggests using a quantitative score to flag where a problem exists, then using open-text/theme analysis to understand exactly what customers are describing.",
+      "sources": [
+        "https://www.resonate.cx/blog/customer-feedback-analysis/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "From Insights to Conversions: The Power of Customer Review Mining in Conversion Optimization (Invesp)",
+      "url": "https://www.invespcro.com/blog/customer-review-mining/",
+      "source_type": "industry publication",
+      "used_for": "defining review mining vs display"
+    },
+    {
+      "title": "What Is Review Mining and How to Use It for E-commerce Copywriting (growthzacks)",
+      "url": "https://www.growthzacks.com/blog/review-mining-ecommerce-copywriting/",
+      "source_type": "industry publication",
+      "used_for": "review mining definition and use case"
+    },
+    {
+      "title": "Review Analysis: How to Analyze Customer & Product Reviews (getthematic)",
+      "url": "https://getthematic.com/insights/review-analysis",
+      "source_type": "company docs",
+      "used_for": "review-mining tool category description"
+    },
+    {
+      "title": "How to Analyze Large Volumes of Customer Feedback (Chattermill)",
+      "url": "https://chattermill.com/blog/how-to-analyze-large-volumes-of-customer-feedback-complete-guide",
+      "source_type": "company docs",
+      "used_for": "NLP-based analysis capability distinct from display widgets"
+    },
+    {
+      "title": "10 customer sentiment analysis tools to decode app reviews (Appfollow)",
+      "url": "https://appfollow.io/blog/customer-sentiment-analysis-tools",
+      "source_type": "industry publication",
+      "used_for": "Appbot/Lexalytics tool landscape"
+    },
+    {
+      "title": "Compare Judge.me vs Yotpo (CB Insights)",
+      "url": "https://www.cbinsights.com/compare/judgeme-vs-yotpo",
+      "source_type": "aggregator",
+      "used_for": "merchant switching sentiment and pricing comparison"
+    },
+    {
+      "title": "Compare Judge.me vs Okendo (CB Insights)",
+      "url": "https://www.cbinsights.com/compare/judgeme-vs-okendo",
+      "source_type": "aggregator",
+      "used_for": "merchant switching sentiment and pricing comparison"
+    },
+    {
+      "title": "Product review discussion (Shopify Community)",
+      "url": "https://community.shopify.com/t/product-review/356435",
+      "source_type": "community",
+      "used_for": "real merchant review-app discussion"
+    },
+    {
+      "title": "Online product reviews boost conversion by 58%, study finds (Retail Dive)",
+      "url": "https://retaildive.com/news/online-product-reviews-boosts-conversion-by-58-study/356465",
+      "source_type": "industry publication",
+      "used_for": "conversion impact of reviews"
+    },
+    {
+      "title": "Sentiment Analysis And Opinion Mining Help Decode Customers' Emotions (ThinkOwl)",
+      "url": "https://www.thinkowl.com/sentiment-analysis-opinion-mining",
+      "source_type": "company docs",
+      "used_for": "distinguishing sentiment analysis from opinion mining"
+    }
+  ]
+}

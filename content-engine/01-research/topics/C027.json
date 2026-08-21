@@ -1,0 +1,188 @@
+{
+  "candidate_id": "C027",
+  "status": "accepted",
+  "topic": "Why most \"AI agent\" demos don't survive contact with real user input",
+  "topic_cluster": "AI agent demo-to-production gap",
+  "target_keyword": "ai agent demo vs production reality",
+  "secondary_keywords": [
+    "why ai agents fail in production",
+    "ai agent breaks in production",
+    "ai agent production readiness"
+  ],
+  "long_tail_keywords": [
+    "why does my ai agent work in testing but fail with real users",
+    "ai agent demo works but breaks with real input",
+    "why ai agents hallucinate tools in production",
+    "ai agent fails on typos and messy input",
+    "what makes an ai agent production ready vs a toy"
+  ],
+  "question_keywords": [
+    "why do ai agents fail in production",
+    "what causes ai agents to break with real users",
+    "why does an agent that works locally fail in production",
+    "what makes an ai agent framework production-ready"
+  ],
+  "comparison_keywords": [
+    "demo ai agent vs production ai agent",
+    "happy path testing vs real world input"
+  ],
+  "how_to_keywords": [
+    "how to test ai agents before production",
+    "how to handle messy user input in ai agents",
+    "how to prevent ai agents from calling wrong tools"
+  ],
+  "problem_keywords": [
+    "ai agent hallucinates tools that don't exist",
+    "ai agent calls wrong tool",
+    "ai agent breaks on prompt injection",
+    "ai agent times out on slow api",
+    "ai agent gets stuck picking best of bad options"
+  ],
+  "commercial_keywords": [
+    "ai agent testing framework",
+    "ai agent evaluation tool",
+    "production-grade agent monitoring"
+  ],
+  "entities": [
+    "Hacker News",
+    "dev.to",
+    "RAG",
+    "prompt injection",
+    "EvalView"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Informational",
+  "audience": "Engineers and technical founders building AI agents who are approaching or have hit production deployment",
+  "countries": [],
+  "connects_to_service": "ai-agents-automation-service",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "AI Agents & RAG"
+  ],
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 6,
+    "conversion_potential": 6,
+    "evidence_quality": 8,
+    "total": 69
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Why does an AI agent that works in demos fail once real users touch it?",
+      "answer_summary": "Demos are built and tested on clean, curated 'happy path' inputs; real users introduce typos, all-caps text, ambiguous phrasing, and even prompt injection attempts that the agent was never exposed to during development.",
+      "sources": [
+        "https://dev.to/wassimchegham/why-your-ai-agent-demo-falls-apart-in-production-1320"
+      ]
+    },
+    {
+      "question": "What are the most common failure modes of AI agents in production?",
+      "answer_summary": "Documented failure modes include picking the wrong tool (e.g., a hotel-booking API when asked about hiking trails), hallucinating tools that don't exist, answering confidently without calling any tool, and getting stuck in repeat-call loops.",
+      "sources": [
+        "https://dev.to/wassimchegham/why-your-ai-agent-demo-falls-apart-in-production-1320",
+        "https://dev.to/hidai25/my-ai-agent-cost-me-400-overnight-so-i-built-pytest-for-agents-and-open-sourced-it-492c"
+      ]
+    },
+    {
+      "question": "Why do external API dependencies cause agents to fail?",
+      "answer_summary": "Third-party APIs are unreliable in practice - a flight search that should take 3 seconds can take 30, causing the agent to time out and either hallucinate a result or retry until the user gives up.",
+      "sources": [
+        "https://dev.to/wassimchegham/why-your-ai-agent-demo-falls-apart-in-production-1320"
+      ]
+    },
+    {
+      "question": "What happens when a tool returns incomplete data to the agent?",
+      "answer_summary": "If the agent doesn't recognize that returned data is incomplete, it will still pick the 'best' available option from what is effectively a bad menu, producing a confidently wrong answer.",
+      "sources": [
+        "https://dev.to/wassimchegham/why-your-ai-agent-demo-falls-apart-in-production-1320"
+      ]
+    },
+    {
+      "question": "Is the root problem the underlying model, or something else?",
+      "answer_summary": "Multiple practitioner write-ups argue the model itself usually isn't the bottleneck - the real gap is missing planning, missing guardrails, and inadequate testing for messy real-world conditions.",
+      "sources": [
+        "https://dev.to/thisismairaj/why-most-ai-demos-fail-in-production-60g",
+        "https://dev.to/paul_martin_1/why-ai-agents-fail-in-production-and-why-prompting-harder-wont-fix-it-932"
+      ]
+    },
+    {
+      "question": "What does it take for an AI agent to be considered 'production-ready' rather than a toy?",
+      "answer_summary": "HN discussion converges on needing persistent memory across sessions, real tool use with error recovery, multi-model support, an extensibility/plugin system, the ability to run as a long-lived service, and security boundaries like sandboxing, permission models, and audit logs.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=46998170"
+      ]
+    },
+    {
+      "question": "What percentage of agents that are attempted actually make it to reliable production use?",
+      "answer_summary": "A widely-discussed HN thread framed this directly as 'what makes 5% of AI agents work in production,' reflecting a broad practitioner sense that only a small fraction survive the transition (exact figure not independently verified beyond the discussion framing).",
+      "sources": [
+        "https://news.ycombinator.com/item?id=45456381"
+      ]
+    },
+    {
+      "question": "Why can't teams just prompt their way out of these failures?",
+      "answer_summary": "Practitioners argue that prompting harder doesn't fix structural issues like unreliable tool outputs, missing error recovery, or adversarial/messy input - those require engineering (validation, fallback logic, testing), not better wording.",
+      "sources": [
+        "https://dev.to/paul_martin_1/why-ai-agents-fail-in-production-and-why-prompting-harder-wont-fix-it-932"
+      ]
+    },
+    {
+      "question": "How should teams test agents before shipping to avoid these failures?",
+      "answer_summary": "One practitioner built a YAML-based evaluation framework to check required tool calls happen, cost thresholds aren't exceeded, and behavior stays consistent - reporting ten consecutive incident-free deploys after adopting it.",
+      "sources": [
+        "https://dev.to/hidai25/my-ai-agent-cost-me-400-overnight-so-i-built-pytest-for-agents-and-open-sourced-it-492c"
+      ]
+    },
+    {
+      "question": "Are most 'agentic' products today actually just read-only RAG rather than true agents?",
+      "answer_summary": "An HN commenter observed that most agentic demos are effectively fancy read-only retrieval systems, and that real usefulness (e.g., in operational settings) requires giving the agent actual write-access to take action, which introduces its own safety/trust problems.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=45456381"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Why Your AI Agent Demo Falls Apart in Production - DEV Community",
+      "url": "https://dev.to/wassimchegham/why-your-ai-agent-demo-falls-apart-in-production-1320",
+      "source_type": "community",
+      "used_for": "Primary source for failure-mode taxonomy (tool selection, API timeouts, incomplete data, messy input)"
+    },
+    {
+      "title": "Why AI Agents Fail in Production (and Why Prompting Harder Won't Fix It) - DEV Community",
+      "url": "https://dev.to/paul_martin_1/why-ai-agents-fail-in-production-and-why-prompting-harder-wont-fix-it-932",
+      "source_type": "community",
+      "used_for": "Argument that prompting alone can't fix structural production failures"
+    },
+    {
+      "title": "Why Most AI Demos Fail in Production - DEV Community",
+      "url": "https://dev.to/thisismairaj/why-most-ai-demos-fail-in-production-60g",
+      "source_type": "community",
+      "used_for": "Root-cause framing (planning gap, not model quality)"
+    },
+    {
+      "title": "Ask HN: What makes an AI agent framework production-ready vs. a toy?",
+      "url": "https://news.ycombinator.com/item?id=46998170",
+      "source_type": "community",
+      "used_for": "Practitioner-defined production-readiness checklist"
+    },
+    {
+      "title": "What makes 5% of AI agents work in production? - Hacker News",
+      "url": "https://news.ycombinator.com/item?id=45456381",
+      "source_type": "community",
+      "used_for": "Framing of low real-world success rate and RAG-vs-true-agent distinction"
+    },
+    {
+      "title": "My AI agent cost me $400 overnight - dev.to",
+      "url": "https://dev.to/hidai25/my-ai-agent-cost-me-400-overnight-so-i-built-pytest-for-agents-and-open-sourced-it-492c",
+      "source_type": "community",
+      "used_for": "Concrete failure example and testing-framework remedy"
+    }
+  ]
+}

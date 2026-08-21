@@ -1,0 +1,199 @@
+{
+  "candidate_id": "C085b",
+  "status": "accepted",
+  "topic": "What actually changed about Instagram reach for small accounts in the algorithm",
+  "topic_cluster": "instagram-algorithm-reach-small-creators",
+  "target_keyword": "what changed about instagram reach for small accounts",
+  "secondary_keywords": [
+    "instagram algorithm update 2026 small creators",
+    "why is my instagram reach dropping",
+    "instagram engagement vs reach explained"
+  ],
+  "long_tail_keywords": [
+    "do hashtags help instagram reach anymore",
+    "does reposting to instagram stories boost reach",
+    "do instagram dms increase your reach",
+    "does posting too many stories hurt reach"
+  ],
+  "question_keywords": [
+    "why is instagram reach down for small accounts",
+    "are hashtags a myth on instagram now",
+    "does engagement rate matter more than reach on instagram",
+    "how does instagram rank reels in 2026"
+  ],
+  "comparison_keywords": [
+    "instagram vs tiktok reach 2026",
+    "reels vs feed posts reach"
+  ],
+  "how_to_keywords": [
+    "how to increase reach on instagram for small accounts",
+    "how to interpret instagram reach insights",
+    "how to boost instagram reach without hashtags"
+  ],
+  "problem_keywords": [
+    "instagram reach dropped suddenly",
+    "small account can't grow on instagram",
+    "instagram algorithm punishing small creators"
+  ],
+  "commercial_keywords": [
+    "instagram growth strategy 2026",
+    "best time to post on instagram for reach"
+  ],
+  "entities": [
+    "Adam Mosseri",
+    "Instagram",
+    "Meta",
+    "Reels",
+    "Edits app",
+    "sends per reach"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "small business owners, indie creators, and marketers managing Instagram accounts with limited existing followings",
+  "countries": [
+    "Global"
+  ],
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "Instagram"
+  ],
+  "connects_to_service": "",
+  "scores": {
+    "demand": 7,
+    "intent": 6,
+    "relevance": 6,
+    "question_density": 8,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 3,
+    "competitive_gap": 5,
+    "conversion_potential": 3,
+    "evidence_quality": 6,
+    "total": 57
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Do hashtags still help small accounts get discovered on Instagram?",
+      "answer_summary": "Instagram head Adam Mosseri reportedly called hashtags a 'myth' for reach in late 2025, and the app subsequently limited hashtag functionality.",
+      "sources": [
+        "https://news.google.com (The Times of India, Dec 19-20 2025)"
+      ]
+    },
+    {
+      "question": "Does reposting your feed content to Stories help you reach more people?",
+      "answer_summary": "Instagram has said reposting to Stories does not boost reach, according to coverage of Mosseri's comments.",
+      "sources": [
+        "https://news.google.com (WeRSM, Apr 8 2026)"
+      ]
+    },
+    {
+      "question": "Do Instagram DMs or shares increase how far your content spreads?",
+      "answer_summary": "Instagram's head reportedly said no — DMs specifically do not boost reach.",
+      "sources": [
+        "https://news.google.com (The News International, May 16 2026)"
+      ]
+    },
+    {
+      "question": "Does posting too many Stories in a day hurt your reach?",
+      "answer_summary": "Engadget reported that Instagram fixed a real technical bug that had been causing multiple-Stories posting to tank reach, implying this was a genuine (if since-corrected) algorithmic penalty rather than pure myth.",
+      "sources": [
+        "https://news.google.com (Engadget, Sep 12 2025)"
+      ]
+    },
+    {
+      "question": "Is engagement rate now weighted more heavily than raw reach for how content performs?",
+      "answer_summary": "Storyboard18 reported Mosseri stating that engagement rates matter more than reach for post performance.",
+      "sources": [
+        "https://news.google.com (Storyboard18, May 27 2026)"
+      ]
+    },
+    {
+      "question": "What did Instagram's 2024 algorithm overhaul change for small/original creators?",
+      "answer_summary": "TechCrunch and Engadget reported Instagram began rewarding 'original content' and penalizing content aggregators/repost accounts specifically to surface smaller, original creators more.",
+      "sources": [
+        "https://news.google.com (TechCrunch and Engadget, Apr 30 2024)"
+      ]
+    },
+    {
+      "question": "What is 'sends per reach' and why does it matter for small accounts?",
+      "answer_summary": "Influencer Marketing Hub published a dedicated breakdown treating this as a specific metric creators should track for reach growth.",
+      "sources": [
+        "https://news.google.com (Influencer Marketing Hub, Mar 3 2026)"
+      ]
+    },
+    {
+      "question": "Are small creators affected differently than big influencers by recent algorithm changes?",
+      "answer_summary": "Cyprus Mail specifically covered how algorithm changes affect small creators differently than established influencers.",
+      "sources": [
+        "https://news.google.com (Cyprus Mail, May 11 2026)"
+      ]
+    },
+    {
+      "question": "Does using Instagram's own editing tools (e.g., the Edits app) affect reach?",
+      "answer_summary": "Social Media Today reported Mosseri saying use of the Edits app boosts reach, as part of dispelling a broader 'engagement myth.'",
+      "sources": [
+        "https://news.google.com (Social Media Today, Aug 10 2025)"
+      ]
+    },
+    {
+      "question": "Why do many users feel their likes/reach have declined over time even while posting consistently?",
+      "answer_summary": "The Tab published an explainer specifically addressing this common perception with a stated 'actual reason' behind falling like counts.",
+      "sources": [
+        "https://news.google.com (The Tab, Jan 8 2026)"
+      ]
+    },
+    {
+      "question": "Does Instagram provide official guidance for creators to interpret their own reach/performance data?",
+      "answer_summary": "Social Samosa reported Mosseri sharing detail on how to interpret Instagram's built-in performance insights.",
+      "sources": [
+        "https://news.google.com (Social Samosa, May 27 2026)"
+      ]
+    },
+    {
+      "question": "Are new repost-targeting policies part of the current reach conversation?",
+      "answer_summary": "PetaPixel reported new Instagram policies specifically targeting reposted content as of April 2026.",
+      "sources": [
+        "https://news.google.com (PetaPixel, Apr 30 2026)"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Instagram chief Adam Mosseri says engagement rates matter more than reach",
+      "url": "https://news.google.com/rss/search?q=Adam+Mosseri+Instagram+reach",
+      "source_type": "industry publication",
+      "used_for": "Engagement-vs-reach positioning statement"
+    },
+    {
+      "title": "Instagram Says Reposting To Stories Won't Boost Your Reach",
+      "url": "https://news.google.com/rss/search?q=Adam+Mosseri+Instagram+reach",
+      "source_type": "industry publication",
+      "used_for": "Specific reach myth (Stories reposting) confirmation"
+    },
+    {
+      "title": "After Instagram head Adam Mosseri says hashtags are myths, app limits hashtag usage",
+      "url": "https://news.google.com/rss/search?q=Adam+Mosseri+Instagram+reach",
+      "source_type": "industry publication",
+      "used_for": "Hashtag-myth statement and resulting product change"
+    },
+    {
+      "title": "Instagram is updating its algorithm to surface more content from smaller, original creators",
+      "url": "https://news.google.com/rss/search?q=Instagram+algorithm+reach+small+accounts",
+      "source_type": "industry publication",
+      "used_for": "Foundational 2024 policy change rewarding original/small creators"
+    },
+    {
+      "title": "How small creators are affected by instagram algorithm changes versus big influencers",
+      "url": "https://news.google.com/rss/search?q=Instagram+algorithm+reach+small+accounts",
+      "source_type": "industry publication",
+      "used_for": "Direct small-vs-large-creator impact comparison"
+    },
+    {
+      "title": "Instagram 'Sends per Reach' Playbook",
+      "url": "https://news.google.com/rss/search?q=Adam+Mosseri+Instagram+reach",
+      "source_type": "industry publication",
+      "used_for": "Specific reach-related metric guidance"
+    }
+  ]
+}

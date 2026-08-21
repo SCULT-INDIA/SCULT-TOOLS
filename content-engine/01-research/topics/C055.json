@@ -1,0 +1,232 @@
+{
+  "candidate_id": "C055",
+  "status": "accepted",
+  "topic": "How small teams are actually using AI for first-round candidate screening",
+  "topic_cluster": "AI in small-team hiring",
+  "target_keyword": "ai candidate screening small team",
+  "secondary_keywords": [
+    "ai resume screening small business",
+    "first round ai screening",
+    "ai hiring tools for startups",
+    "automated candidate screening bias",
+    "ai screening for hiring managers without recruiters"
+  ],
+  "long_tail_keywords": [
+    "how small teams use ai to screen candidates",
+    "is it legal to use ai to screen resumes",
+    "cheap ai resume screening tools for small business",
+    "ai candidate screening without an hr department",
+    "how founders screen resumes with chatgpt"
+  ],
+  "question_keywords": [
+    "does ai resume screening reduce or increase bias",
+    "is ai candidate screening legal in the us",
+    "what percentage of candidates reject ai interviews",
+    "should a company disclose ai screening to candidates",
+    "are ai resume screening tools high risk under the eu ai act"
+  ],
+  "comparison_keywords": [
+    "ai resume screening vs human recruiter",
+    "workable vs willo ai screening",
+    "chatgpt resume screening vs dedicated ai screening tool"
+  ],
+  "how_to_keywords": [
+    "how to use ai to screen resumes for a small team",
+    "how to keep human oversight in ai hiring",
+    "how to disclose ai use to job candidates"
+  ],
+  "problem_keywords": [
+    "ai resume screening bias lawsuit",
+    "ai hiring discrimination risk small business",
+    "candidates refusing ai interviews"
+  ],
+  "commercial_keywords": [
+    "best ai resume screening tool for small business",
+    "affordable ai candidate screening software",
+    "ai recruiting software pricing for startups"
+  ],
+  "entities": [
+    "Workable",
+    "Willo",
+    "Greenhouse",
+    "EEOC",
+    "Mobley v. Workday",
+    "EU AI Act",
+    "Brookings Institution",
+    "Title VII",
+    "New Jersey Division on Civil Rights"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Informational",
+  "audience": "Founders, hiring managers, and small people-ops teams (roughly 2-50 employees) doing their own first-round hiring without a dedicated recruiter",
+  "countries": [
+    "United States",
+    "European Union"
+  ],
+  "connects_to_service": "ai-agents-automation",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "hr-management",
+    "career-jobsearch"
+  ],
+  "scores": {
+    "demand": 6,
+    "intent": 6,
+    "relevance": 7,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 4,
+    "conversion_potential": 4,
+    "evidence_quality": 7,
+    "total": 58
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Does AI resume screening reduce bias or actually introduce new bias?",
+      "answer_summary": "AI screening can perpetuate bias through proxy variables (postcode, school, employment gaps) and historical hiring-data patterns; a cited Brookings-related study found selection-rate gaps as large as 8x between demographic groups on the same tools.",
+      "sources": [
+        "https://www.peoplebox.ai/blog/ai-resume-screening-bias-hr-guide/",
+        "https://staffmyagency.com/Article/ai_resume_screening_bias_administrative_and_sales_roles"
+      ]
+    },
+    {
+      "question": "Are AI resume-screening tools legally risky for a small business?",
+      "answer_summary": "Resume-screening AI is classified as high-risk under the EU AI Act and under new state rules such as New Jersey's Division on Civil Rights regulations; Title VII disparate-impact liability still applies even though 2025 federal executive action deprioritized EEOC enforcement.",
+      "sources": [
+        "https://www.reedsmith.com/our-insights/blogs/employment-law-watch/102mqfg/state-ai-hiring-tool-regulations-filling-federal-void/",
+        "https://thecomplyguide.com/eeoc-ai-hiring-enforcement/"
+      ]
+    },
+    {
+      "question": "What happened in Mobley v. Workday and why does it matter for AI screening?",
+      "answer_summary": "Mobley v. Workday is cited as the leading 2025-2026 case shifting AI-hiring-discrimination exposure from federal EEOC action toward private litigation against AI vendors and the employers that use their tools.",
+      "sources": [
+        "https://ratedwithai.com/blog/ai-hiring-discrimination-lawsuits-2026",
+        "https://angelareddock-wright.com/ai-driven-hiring-bias-the-next-frontier-of-eeoc-enforcement/"
+      ]
+    },
+    {
+      "question": "Do candidates trust AI to evaluate them fairly?",
+      "answer_summary": "A Greenhouse survey found only 26% of candidates trust AI to evaluate them fairly, and 70% were never clearly told AI would be involved in their screening.",
+      "sources": [
+        "https://www.greenhouse.com/newsroom/63-of-job-seekers-have-faced-an-ai-interview-most-havent-had-a-good-one-yet"
+      ]
+    },
+    {
+      "question": "What share of candidates walk away from a hiring process because of AI screening?",
+      "answer_summary": "38% of candidates have walked away from a hiring process because it included an AI interview, and another 12% say they would; pre-recorded AI-scored video interviews are the single biggest trigger.",
+      "sources": [
+        "https://staffinghub.com/candidate-experience/ai-candidate-experience-staffing-opportunity/"
+      ]
+    },
+    {
+      "question": "Should a small company disclose that AI is screening applicants?",
+      "answer_summary": "81% of candidates say they'd accept AI screening with guardrails — upfront disclosure, an explanation of what's being measured, and a human-review option — rather than rejecting AI outright.",
+      "sources": [
+        "https://www.greenhouse.com/newsroom/63-of-job-seekers-have-faced-an-ai-interview-most-havent-had-a-good-one-yet"
+      ]
+    },
+    {
+      "question": "What are affordable AI screening tools built for small teams rather than enterprise TA departments?",
+      "answer_summary": "Options pitched at small/budget-conscious teams include Willo (Starter plan around $49/month) and Workable, positioned as assist-not-replace tools versus enterprise suites.",
+      "sources": [
+        "https://www.willo.video/blog/ai-tools-for-candidate-screening",
+        "https://recruiterflow.com/blog/ai-screening-tools/"
+      ]
+    },
+    {
+      "question": "Can AI screening actually cut cost-per-hire for a small team?",
+      "answer_summary": "Vendors and adopters claim 20-40% reductions in cost-per-hire when AI handles screening and scheduling, though these are self-reported figures rather than independently audited.",
+      "sources": [
+        "https://fabrichq.ai/blogs/10-best-ai-hiring-tools-for-startups-and-enterprises"
+      ]
+    },
+    {
+      "question": "Why do LLMs sometimes prefer AI-written resumes over human-written ones?",
+      "answer_summary": "Research cited found LLMs favored AI-written resumes over human-written resumes by 67-82%, an artifact of writing style rather than candidate quality, which is a specific failure mode small teams using generic chatbots for screening should watch for.",
+      "sources": [
+        "https://www.thetoolnerd.com/p/ai-hiring-bias-in-screening-resumes"
+      ]
+    },
+    {
+      "question": "What's the difference between AI 'assisting' a human reviewer and AI making the hiring decision?",
+      "answer_summary": "Guides recommend well-designed AI with human oversight and continuous auditing as the safer middle ground versus letting a model rank-and-reject candidates unsupervised.",
+      "sources": [
+        "https://www.peoplebox.ai/blog/ai-resume-screening-bias-hr-guide/"
+      ]
+    },
+    {
+      "question": "Are jobseekers organizing against AI-only hiring processes?",
+      "answer_summary": "Employment lawyers report a 2026 shift from passive frustration to organized pushback — candidates filing state labor-agency complaints and sending demand letters over AI hiring decisions.",
+      "sources": [
+        "https://technosports.co.in/workers-push-back-on-ai-job-screening/"
+      ]
+    },
+    {
+      "question": "What are candidates' biggest specific complaints about AI-driven screening?",
+      "answer_summary": "Top triggers for walking away are pre-recorded video interviews scored by AI with no human present (33%), no disclosure that AI would be used (27%), and AI monitoring during the process (26%).",
+      "sources": [
+        "https://www.greenhouse.com/newsroom/63-of-job-seekers-have-faced-an-ai-interview-most-havent-had-a-good-one-yet"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "63% of Job Seekers Have Faced an AI Interview. Most Haven't Had a Good One Yet",
+      "url": "https://www.greenhouse.com/newsroom/63-of-job-seekers-have-faced-an-ai-interview-most-havent-had-a-good-one-yet",
+      "source_type": "company docs",
+      "used_for": "candidate sentiment survey stats, disclosure rates, trust numbers"
+    },
+    {
+      "title": "What to Do When 38% of Candidates Are Walking Away From AI Interviews",
+      "url": "https://staffinghub.com/candidate-experience/ai-candidate-experience-staffing-opportunity/",
+      "source_type": "industry publication",
+      "used_for": "candidate walk-away statistics"
+    },
+    {
+      "title": "State AI hiring tool regulations filling federal void",
+      "url": "https://www.reedsmith.com/our-insights/blogs/employment-law-watch/102mqfg/state-ai-hiring-tool-regulations-filling-federal-void/",
+      "source_type": "primary/official",
+      "used_for": "state and EU regulatory classification of resume-screening AI"
+    },
+    {
+      "title": "AI Hiring Discrimination Lawsuits 2026: What Employers Need to Know",
+      "url": "https://ratedwithai.com/blog/ai-hiring-discrimination-lawsuits-2026",
+      "source_type": "industry publication",
+      "used_for": "Mobley v. Workday and litigation trend context"
+    },
+    {
+      "title": "EEOC AI Hiring Enforcement: What HR Teams Must Know in 2026",
+      "url": "https://thecomplyguide.com/eeoc-ai-hiring-enforcement/",
+      "source_type": "industry publication",
+      "used_for": "EEOC/Title VII enforcement shift details"
+    },
+    {
+      "title": "If You're Using AI to Screen Resumes, You're Optimizing for the Wrong People",
+      "url": "https://www.thetoolnerd.com/p/ai-hiring-bias-in-screening-resumes",
+      "source_type": "community",
+      "used_for": "LLM bias toward AI-written resumes, Brookings-style selection-gap findings"
+    },
+    {
+      "title": "AI Resume Screening Bias in Administrative & Sales Roles",
+      "url": "https://staffmyagency.com/Article/ai_resume_screening_bias_administrative_and_sales_roles",
+      "source_type": "industry publication",
+      "used_for": "bias mechanisms in resume screening"
+    },
+    {
+      "title": "AI: Workers Push Back on AI Job Screening: The 2026 Shift",
+      "url": "https://technosports.co.in/workers-push-back-on-ai-job-screening/",
+      "source_type": "industry publication",
+      "used_for": "candidate organized pushback trend"
+    },
+    {
+      "title": "12 Best AI Candidate Screening & Assessment Tools Compared",
+      "url": "https://www.willo.video/blog/ai-tools-for-candidate-screening",
+      "source_type": "company docs",
+      "used_for": "pricing/positioning of small-team AI screening tools"
+    }
+  ]
+}

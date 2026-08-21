@@ -1,0 +1,184 @@
+{
+  "candidate_id": "C030",
+  "status": "accepted",
+  "topic": "The real tool stack solo founders are shipping AI products with",
+  "topic_cluster": "solo founder AI build stack",
+  "target_keyword": "solo founder ai product tool stack",
+  "secondary_keywords": [
+    "best ai tools for solo founders 2026",
+    "indie hacker ai tool stack",
+    "one person company software stack",
+    "vibe coding tool stack"
+  ],
+  "long_tail_keywords": [
+    "what tools do solo founders use to build ai products",
+    "cursor vs lovable for solo founders",
+    "cheapest tool stack to launch a saas solo",
+    "how solo founders ship a product in a weekend with ai",
+    "claude vs chatgpt for solo founders"
+  ],
+  "question_keywords": [
+    "what tools do indie hackers actually use",
+    "how much does a solo founder tool stack cost per month",
+    "can you build a saas alone with ai tools",
+    "what percentage of new micro-saas products are built by non-programmers"
+  ],
+  "comparison_keywords": [
+    "cursor vs lovable",
+    "claude vs chatgpt for founders",
+    "make vs zapier vs n8n",
+    "supabase vs firebase for solo founders"
+  ],
+  "how_to_keywords": [
+    "how to build a saas product solo using ai",
+    "how to set up a solo founder tool stack",
+    "how to launch an mvp in a weekend with ai tools"
+  ],
+  "problem_keywords": [
+    "can't afford a dev team as a solo founder",
+    "too many ai tools to choose from as a founder",
+    "keeping tool costs low as a bootstrapped founder"
+  ],
+  "commercial_keywords": [
+    "cursor pricing",
+    "lovable pricing",
+    "supabase pricing",
+    "claude code pricing for founders"
+  ],
+  "entities": [
+    "Cursor",
+    "Claude Code",
+    "Lovable",
+    "v0",
+    "Supabase",
+    "n8n",
+    "Notion",
+    "Gamma",
+    "Indie Hackers",
+    "Lemon Squeezy",
+    "Plausible"
+  ],
+  "primary_intent": "Tool discovery",
+  "secondary_intent": "Commercial Investigation",
+  "audience": "Solo/non-technical or lightly-technical founders and indie hackers building and shipping AI-era products without a team",
+  "countries": [],
+  "connects_to_service": "no-code-apps",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "Build Apps Without Code",
+    "Startup & Strategy"
+  ],
+  "scores": {
+    "demand": 6,
+    "intent": 6,
+    "relevance": 6,
+    "question_density": 5,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 8,
+    "competitive_gap": 5,
+    "conversion_potential": 5,
+    "evidence_quality": 6,
+    "total": 59
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What's a typical baseline tool stack for a solo founder building a SaaS product today?",
+      "answer_summary": "A commonly cited lean stack pairs an AI builder (Lovable or Cursor) with Supabase for data/auth, Lemon Squeezy for payments/tax, Plausible for analytics, and Resend for email - with total pre-revenue monthly cost cited at under $20 in one guide.",
+      "sources": [
+        "https://quasa.io/media/the-practical-ai-tool-stack-for-a-solo-founder-in-2026"
+      ]
+    },
+    {
+      "question": "Which AI coding assistant do solo founders rely on most in 2026?",
+      "answer_summary": "Cursor and Claude Code are repeatedly named as the dominant coding-assistant combination across 2026 indie-hacker content and founder surveys, with Cursor cited as crossing 1 million monthly active users in early 2026.",
+      "sources": [
+        "https://www.taskade.com/blog/one-person-companies",
+        "https://tengspectrum.com/blog/how-solo-founders-use-ai-to-launch-products-fast/"
+      ]
+    },
+    {
+      "question": "Do solo founders use both ChatGPT and Claude, or just one?",
+      "answer_summary": "Many keep both, reportedly using Claude for deeper reasoning/writing work and ChatGPT for faster iteration/experimentation.",
+      "sources": [
+        "https://www.cipherprojects.com/blog/posts/best-ai-tools-solo-founders-2026/"
+      ]
+    },
+    {
+      "question": "What does a more 'aggressive' shipping stack add on top of the basics?",
+      "answer_summary": "Beyond the core builder+database+payments stack, more aggressive setups add app builders like Lovable/v0 plus Midjourney for rapid visual/product asset iteration, and workflow automation via n8n, Make, or Zapier.",
+      "sources": [
+        "https://quasa.io/media/the-practical-ai-tool-stack-for-a-solo-founder-in-2026",
+        "https://saasranger.com/blog/indie-hacker-tool-stack-what-successful-solo-founders-actually-use/"
+      ]
+    },
+    {
+      "question": "How fast can a solo founder actually go from idea to a live product using this stack?",
+      "answer_summary": "Guides describe going from a blank screen on a Friday evening to a live, publicly accessible deployed product by Sunday night as a realistic claim for the current AI-assisted stack.",
+      "sources": [
+        "https://quasa.io/media/the-practical-ai-tool-stack-for-a-solo-founder-in-2026"
+      ]
+    },
+    {
+      "question": "How many new micro-SaaS launches are now built by people with no prior coding background?",
+      "answer_summary": "One Indie Hackers-sourced figure cited in a 2026 stack guide put this at 34% of new micro-SaaS products launched in Q1 2026.",
+      "sources": [
+        "https://tengspectrum.com/blog/how-solo-founders-use-ai-to-launch-products-fast/"
+      ]
+    },
+    {
+      "question": "What does a scaled-up (post-launch) solo founder stack cost per month?",
+      "answer_summary": "A mid-2026 guide placed ongoing scaling-stage operating costs at roughly $180-$400/month plus variable infrastructure costs, once a product has real usage.",
+      "sources": [
+        "https://www.cipherprojects.com/blog/posts/top-5-tools-solo-founders-2026/"
+      ]
+    },
+    {
+      "question": "What tools handle the non-coding parts of running solo (CRM, workspace, automation)?",
+      "answer_summary": "Notion is frequently cited as the default 'operating system' for a solo founder, paired with automation via n8n/Make/Zapier and a lightweight CRM like GoHighLevel or HubSpot.",
+      "sources": [
+        "https://quasa.io/media/the-practical-ai-tool-stack-for-a-solo-founder-in-2026",
+        "https://www.techpluto.com/best-ai-tools-for-solo-founders-in-2026/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "AI Tool Stack for Solo Founders in 2026 - Quasa.io",
+      "url": "https://quasa.io/media/the-practical-ai-tool-stack-for-a-solo-founder-in-2026",
+      "source_type": "industry publication",
+      "used_for": "Core stack composition, cost figures, and weekend-build claim"
+    },
+    {
+      "title": "One-Person Company Software: The Solo AI Tool Stack (2026) - Taskade",
+      "url": "https://www.taskade.com/blog/one-person-companies",
+      "source_type": "company docs",
+      "used_for": "Cursor/Claude Code dominance and adoption figure"
+    },
+    {
+      "title": "How Indie Developers and Solo Founders Are Using AI to Launch Products in a Weekend - TenG Spectrum",
+      "url": "https://tengspectrum.com/blog/how-solo-founders-use-ai-to-launch-products-fast/",
+      "source_type": "industry publication",
+      "used_for": "Non-programmer micro-SaaS launch statistic"
+    },
+    {
+      "title": "Best AI Tools for Solo Founders (2026): A Practical Stack by Business Stage - Cipher Projects",
+      "url": "https://www.cipherprojects.com/blog/posts/best-ai-tools-solo-founders-2026/",
+      "source_type": "industry publication",
+      "used_for": "Claude vs ChatGPT usage split"
+    },
+    {
+      "title": "Top 5 Tools for Solo Founders in 2026: The Lean Stack That Actually Ships - Cipher Projects",
+      "url": "https://www.cipherprojects.com/blog/posts/top-5-tools-solo-founders-2026/",
+      "source_type": "industry publication",
+      "used_for": "Scaled-stage monthly cost estimate"
+    },
+    {
+      "title": "Indie Hacker Tool Stack: What Solo Founders Use - SaaSRanger",
+      "url": "https://saasranger.com/blog/indie-hacker-tool-stack-what-successful-solo-founders-actually-use/",
+      "source_type": "industry publication",
+      "used_for": "Corroborating stack components"
+    }
+  ]
+}

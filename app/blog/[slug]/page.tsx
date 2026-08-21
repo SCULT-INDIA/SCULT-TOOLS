@@ -3,13 +3,14 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { BlogBody } from '@/components/blog/BlogBody'
+import { BlogFaq } from '@/components/blog/BlogFaq'
 import { PromptCard } from '@/components/ui/PromptCard'
 import { ToolCard } from '@/components/ui/ToolCard'
 import { BLOG_POSTS, getBlogPost } from '@/lib/blog/registry'
 import type { BlogPillar } from '@/lib/blog/types'
 import { getPromptCategory } from '@/lib/prompts/categories'
 import { getPrompt } from '@/lib/prompts/registry'
-import { blogPostJsonLd, breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
+import { blogFaqJsonLd, blogPostJsonLd, breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl, formatUpdatedDate } from '@/lib/site'
 import { getTool } from '@/lib/tools/registry'
 import { resolveServiceLink } from '@/lib/tools/service-links'
@@ -85,6 +86,7 @@ export default async function BlogPostPage({
         ])}
       />
       <JsonLd data={blogPostJsonLd(post)} />
+      {blogFaqJsonLd(post) ? <JsonLd data={blogFaqJsonLd(post) as object} /> : null}
 
       <article className="container-site max-w-[46rem] pt-8 pb-20">
         <nav aria-label="Breadcrumb" className="mb-6">
@@ -119,6 +121,33 @@ export default async function BlogPostPage({
         </header>
 
         <BlogBody sections={post.sections} />
+
+        {post.faq && post.faq.length > 0 ? <BlogFaq items={post.faq} /> : null}
+
+        {post.sources && post.sources.length > 0 ? (
+          <section aria-labelledby="blog-sources" className="mt-12">
+            <h2
+              id="blog-sources"
+              className="text-[13px] font-bold uppercase tracking-[0.1em] text-ink-subtle"
+            >
+              Sources
+            </h2>
+            <ul className="mt-3 flex flex-col gap-1.5">
+              {post.sources.map((url) => (
+                <li key={url} className="truncate text-[13px]">
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[var(--color-violet-accent-text,var(--color-violet-700))] hover:text-violet-600"
+                  >
+                    {url}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
 
         {service ? (
           <section

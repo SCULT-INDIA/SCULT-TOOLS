@@ -1,0 +1,119 @@
+{
+  "candidate_id": "C081",
+  "topic": "How AI is actually changing entry-level hiring for developer roles",
+  "status": "accepted",
+  "target_keyword": "AI entry level developer hiring impact",
+  "secondary_keywords": [
+    "AI replacing junior developers",
+    "is AI killing entry level tech jobs",
+    "AI impact on new grad software engineer hiring"
+  ],
+  "long_tail_keywords": [
+    "why is it harder to get an entry level developer job because of AI",
+    "are companies hiring fewer junior developers due to AI",
+    "how much has AI reduced junior developer hiring",
+    "AI exposed occupations young workers employment decline"
+  ],
+  "question_keywords": [
+    "is AI reducing entry-level programming jobs",
+    "how many fewer young workers are being hired because of AI",
+    "will AI replace junior software engineers",
+    "is this AI job loss data causal or correlational"
+  ],
+  "comparison_keywords": [
+    "junior developers vs senior developers AI impact",
+    "AI substitution roles vs complementary roles employment",
+    "young workers vs experienced workers AI employment effects"
+  ],
+  "how_to_keywords": [
+    "how to get a developer job despite AI",
+    "how to stand out as a junior developer using AI tools"
+  ],
+  "problem_keywords": [
+    "can't get an entry level developer job",
+    "AI is replacing junior coding jobs",
+    "new grad software engineers can't find jobs"
+  ],
+  "commercial_keywords": [
+    "GitHub Copilot for junior developers",
+    "AI coding assistant career impact"
+  ],
+  "entities": [
+    "Stanford Digital Economy Lab",
+    "Erik Brynjolfsson",
+    "GitHub Copilot",
+    "ChatGPT"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "Computer science students, new graduates, junior developers, career changers, and engineering hiring managers",
+  "countries": [
+    "United States"
+  ],
+  "topic_cluster": "AI & Entry-Level Tech Careers",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "career-jobsearch",
+    "github-copilot"
+  ],
+  "connects_to_service": "",
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 7,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 5,
+    "conversion_potential": 5,
+    "evidence_quality": 8,
+    "total": 68
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Has AI actually reduced hiring of young workers in AI-exposed occupations?",
+      "answer_summary": "Yes — employment of workers aged 22-25 in AI-exposed occupations now sits about 19% below where it would be had it kept pace with less-exposed peers.",
+      "sources": [
+        "https://digitaleconomy.stanford.edu/publications/canaries-in-the-coal-mine/"
+      ]
+    },
+    {
+      "question": "Is AI causing layoffs of junior employees, or something else?",
+      "answer_summary": "The decline shows up primarily through reduced hiring of young workers rather than through increased separations/layoffs.",
+      "sources": [
+        "https://digitaleconomy.stanford.edu/publications/canaries-in-the-coal-mine/"
+      ]
+    },
+    {
+      "question": "Do experienced workers in the same AI-exposed occupations show the same decline as young workers?",
+      "answer_summary": "No — experienced workers in the same roles show no comparable employment decline.",
+      "sources": [
+        "https://digitaleconomy.stanford.edu/publications/canaries-in-the-coal-mine/"
+      ]
+    },
+    {
+      "question": "Are all AI-exposed jobs affected the same way?",
+      "answer_summary": "No — the research distinguishes 'substitution' roles (AI replacing tasks), where employment declined, from 'complementary' roles (AI assisting workers), where employment stayed flat or even increased, especially for experienced staff.",
+      "sources": [
+        "https://digitaleconomy.stanford.edu/publications/canaries-in-the-coal-mine/"
+      ]
+    },
+    {
+      "question": "Does this research prove AI is directly causing the entry-level hiring decline?",
+      "answer_summary": "The authors are explicit that these are 'early, descriptive indicators — canaries in the coal mine — rather than causal estimates,' i.e. preliminary evidence, not proof.",
+      "sources": [
+        "https://digitaleconomy.stanford.edu/publications/canaries-in-the-coal-mine/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Canaries in the Coal Mine? Six Facts about the Recent Employment Effects of Artificial Intelligence (Stanford Digital Economy Lab)",
+      "url": "https://digitaleconomy.stanford.edu/publications/canaries-in-the-coal-mine/",
+      "source_type": "government/academic",
+      "used_for": "Primary statistics and framing for AI's measured effect on entry-level/young-worker hiring in AI-exposed occupations, including developer roles"
+    }
+  ]
+}

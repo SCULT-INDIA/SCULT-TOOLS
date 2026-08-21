@@ -1,0 +1,188 @@
+{
+  "candidate_id": "C085",
+  "status": "accepted",
+  "topic": "How solo YouTube creators are actually structuring an AI-assisted production workflow",
+  "topic_cluster": "youtube-ai-creator-workflow-monetization",
+  "target_keyword": "youtube creator ai production workflow",
+  "secondary_keywords": [
+    "ai tools for youtube video production",
+    "youtube ai slop monetization policy",
+    "faceless youtube channel ai tools 2026"
+  ],
+  "long_tail_keywords": [
+    "will youtube demonetize ai generated videos",
+    "how to use ai for youtube without being flagged as slop",
+    "what counts as inauthentic content on youtube",
+    "is faceless youtube channel still profitable in 2026"
+  ],
+  "question_keywords": [
+    "what counts as ai slop on youtube",
+    "does youtube ban ai generated content",
+    "can you monetize ai voiceover videos on youtube",
+    "why did youtube wipe subscribers over ai slop"
+  ],
+  "comparison_keywords": [
+    "ai video generator vs traditional editing for youtube",
+    "cliplama vs invideo vs pictory for faceless channels"
+  ],
+  "how_to_keywords": [
+    "how to make ai youtube videos that don't get demonetized",
+    "how to build a faceless youtube channel with ai",
+    "how to structure an ai assisted youtube production pipeline"
+  ],
+  "problem_keywords": [
+    "youtube channel demonetized for ai slop",
+    "faceless channel subscribers wiped out",
+    "small creator hurt by youtube monetization rules"
+  ],
+  "commercial_keywords": [
+    "best ai tools for youtube creators",
+    "ai script generator for youtube",
+    "ai thumbnail generator for youtube"
+  ],
+  "entities": [
+    "YouTube",
+    "YouTube Partner Program",
+    "AI slop",
+    "faceless channels",
+    "Veo",
+    "Runway",
+    "Kling",
+    "Meta",
+    "Snapchat"
+  ],
+  "primary_intent": "Tutorial",
+  "secondary_intent": "Problem-solving",
+  "audience": "solo/indie YouTube creators, faceless-channel operators, small content teams and agencies",
+  "countries": [
+    "Global (YouTube policy applies platform-wide)"
+  ],
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "YouTube",
+    "Image/Video Generation (Veo, Kling, Runway)"
+  ],
+  "connects_to_service": "AI agents/automation",
+  "scores": {
+    "demand": 8,
+    "intent": 6,
+    "relevance": 7,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 7,
+    "competitive_gap": 6,
+    "conversion_potential": 5,
+    "evidence_quality": 8,
+    "total": 69
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What actually counts as 'AI slop' under YouTube's monetization policy, versus legitimate AI-assisted content?",
+      "answer_summary": "Coverage describes YouTube targeting 'mass-produced,' 'repetitive,' and 'inauthentic' content patterns specifically, not AI tool use itself — the policy distinguishes output characteristics from the production method.",
+      "sources": [
+        "https://news.google.com (Engadget, Aug 5 2026)",
+        "https://news.google.com (TechCrunch, Jul 9 2025 and Jul 20 2026)"
+      ]
+    },
+    {
+      "question": "Are faceless YouTube channels specifically targeted, or just low-effort content in general?",
+      "answer_summary": "The Hollywood Reporter and The Next Web both report faceless creators being disproportionately hurt by the crackdown even when their content isn't actually 'slop,' because the policy struggles to distinguish format from intent.",
+      "sources": [
+        "https://news.google.com (The Hollywood Reporter, Jun 13 2026)",
+        "https://news.google.com (The Next Web, Jun 15 2026)"
+      ]
+    },
+    {
+      "question": "How large was the actual impact of YouTube's AI slop crackdown?",
+      "answer_summary": "Tech Times reported that YouTube 'wiped 35M subscribers' in connection with the AI slop crackdown, giving a concrete scale indicator.",
+      "sources": [
+        "https://news.google.com (Tech Times, Jul 15 2026)"
+      ]
+    },
+    {
+      "question": "Are small/solo creators hit harder than large studios by the new monetization rules?",
+      "answer_summary": "Kotaku specifically reported small creators 'feeling the crunch' under YouTube's updated monetization rules.",
+      "sources": [
+        "https://news.google.com (Kotaku, Aug 11 2026)"
+      ]
+    },
+    {
+      "question": "Did other platforms follow YouTube's lead on AI content crackdowns?",
+      "answer_summary": "Yes — Meta/Facebook and Snapchat both introduced parallel restrictions around the same period, limiting monetization or full-AI generation for creators.",
+      "sources": [
+        "https://news.google.com (Tubefilter, Jul 15 2025)",
+        "https://news.google.com (Business Insider, Jul 31 2026)"
+      ]
+    },
+    {
+      "question": "What specific tools are solo creators actually using to build an AI production pipeline end-to-end?",
+      "answer_summary": "Real developer-built tools spotted on Hacker News cover distinct pipeline stages: niche/CPM research (channel-analysis tool spanning 400K+ channels), script-to-video generation, AI stock footage generation, and thumbnail CTR optimization.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=faceless%20youtube%20channel%20AI"
+      ]
+    },
+    {
+      "question": "Is there evidence solo creators are measuring/optimizing thumbnail performance with AI tools?",
+      "answer_summary": "One HN builder reported moving click-through rate from 1.2% to 2.3% for a faceless niche channel using a purpose-built AI thumbnail generator.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=faceless%20youtube%20channel%20AI"
+      ]
+    },
+    {
+      "question": "Do marketers view the AI slop crackdown positively while creators are anxious about it?",
+      "answer_summary": "Digiday's coverage frames the split explicitly: 'creators concerned, marketers cheering.'",
+      "sources": [
+        "https://news.google.com (Digiday, Jul 18 2025)"
+      ]
+    },
+    {
+      "question": "Has YouTube's AI content policy been stable, or is it still being clarified?",
+      "answer_summary": "YouTube had to 'clarify' its AI slop policy multiple times (2025 and again in 2026) after creator confusion, indicating rules are still evolving rather than fixed.",
+      "sources": [
+        "https://news.google.com (TechCrunch, Jul 20 2026)",
+        "https://news.google.com (Metricool, Jul 22 2026)"
+      ]
+    },
+    {
+      "question": "Despite the crackdown, is low-cost AI-generated content still earning meaningful revenue on YouTube?",
+      "answer_summary": "One industry piece reported that some cheaply-produced AI videos are still earning significant revenue even amid the policy changes, suggesting uneven enforcement.",
+      "sources": [
+        "https://news.google.com (AI CERTs, Mar 1 2026)"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "YouTube Explains Its AI Slop Policy And Why Some Creators Won't Get Paid",
+      "url": "https://news.google.com/rss/search?q=YouTube+AI+slop+policy+monetization+creators",
+      "source_type": "industry publication",
+      "used_for": "Details on YouTube's current AI content/monetization policy"
+    },
+    {
+      "title": "Faceless Creators Take a Hit As YouTube Cracks Down on AI Slop",
+      "url": "https://news.google.com/rss/search?q=YouTube+AI+slop+policy+monetization+creators",
+      "source_type": "industry publication",
+      "used_for": "Impact specifically on faceless/solo creators"
+    },
+    {
+      "title": "YouTube Wiped 35M Subscribers Over AI Slop: Now It's Judging Your Taste",
+      "url": "https://news.google.com/rss/search?q=YouTube+AI+slop+policy+monetization+creators",
+      "source_type": "industry publication",
+      "used_for": "Scale/impact statistic"
+    },
+    {
+      "title": "Small Creators Are Feeling The Crunch Under YouTube's New Monetization Rules",
+      "url": "https://news.google.com/rss/search?q=YouTube+AI+slop+policy+monetization+creators",
+      "source_type": "industry publication",
+      "used_for": "Confirming disproportionate effect on small creators"
+    },
+    {
+      "title": "Hacker News search: faceless youtube channel AI",
+      "url": "https://hn.algolia.com/api/v1/search?query=faceless%20youtube%20channel%20AI",
+      "source_type": "community",
+      "used_for": "Real tool ecosystem built by solo creators/developers across the production pipeline"
+    }
+  ]
+}

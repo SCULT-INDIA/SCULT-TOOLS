@@ -1,0 +1,215 @@
+{
+  "candidate_id": "C024",
+  "topic": "RAG vs fine-tuning vs long context: how teams are actually choosing",
+  "status": "accepted",
+  "target_keyword": "rag vs fine-tuning vs long context",
+  "secondary_keywords": [
+    "when to use rag vs fine-tuning",
+    "long context vs rag 2026",
+    "rag fine-tuning decision framework"
+  ],
+  "long_tail_keywords": [
+    "how teams are actually choosing between rag fine-tuning and long context",
+    "is rag dead because of long context llms",
+    "hybrid rag fine-tuning architecture",
+    "what percentage of llm problems need fine-tuning vs rag"
+  ],
+  "question_keywords": [
+    "should i use rag or fine-tuning",
+    "does long context replace rag",
+    "when does fine-tuning make more sense than rag",
+    "at what context length does long context performance degrade"
+  ],
+  "comparison_keywords": [
+    "rag vs fine-tuning",
+    "rag vs long context",
+    "fine-tuning vs long context window",
+    "gpt-4o vs claude 3.5 sonnet long context"
+  ],
+  "how_to_keywords": [
+    "how to decide between rag and fine-tuning",
+    "how to build a hybrid rag fine-tuning system",
+    "how to design a self-route layer for retrieval vs full context"
+  ],
+  "problem_keywords": [
+    "rag retrieval failures",
+    "long context performance degradation",
+    "fine-tuning data requirements",
+    "claude refuses to answer at long context"
+  ],
+  "commercial_keywords": [
+    "rag pipeline tool",
+    "vector database for rag",
+    "fine-tuning platform"
+  ],
+  "entities": [
+    "Databricks",
+    "GPT-4",
+    "Claude 3.5 Sonnet",
+    "Llama 3.1 405B",
+    "Gemini",
+    "DBRX",
+    "Mixtral",
+    "Anthropic"
+  ],
+  "audience": "AI/ML engineers and technical leads architecting LLM applications choosing a knowledge/behavior strategy",
+  "primary_intent": "Comparative",
+  "secondary_intent": "Tutorial",
+  "countries": [],
+  "topic_cluster": "RAG, Fine-Tuning & Long Context Architecture",
+  "connects_to_service": "ai-agents-automation-service",
+  "connects_to_tools": [
+    "ai-engineering"
+  ],
+  "connects_to_prompts": [
+    "ai-engineering-prompts"
+  ],
+  "scores": {
+    "demand": 6,
+    "intent": 6,
+    "relevance": 8,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 6,
+    "conversion_potential": 5,
+    "evidence_quality": 9,
+    "total": 64
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Should I use RAG or fine-tuning for my LLM application?",
+      "answer_summary": "The practical framework: use RAG when failures come from missing or stale facts, and fine-tune when failures come from behavior inconsistency (wrong format, unstable tone, weak classification, poor policy adherence) — most sources agree RAG should be the default first choice for knowledge-heavy tasks.",
+      "sources": [
+        "https://dev.to/umesh_malik/rag-vs-fine-tuning-for-llms-2026-what-actually-works-in-production-10if",
+        "https://blog.n8n.io/fine-tuning-vs-rag/"
+      ]
+    },
+    {
+      "question": "Does long context make RAG obsolete?",
+      "answer_summary": "No — while long-context windows are powerful, they are not an automatic replacement for retrieval pipelines; multiple analysts frame this explicitly as 'will RAG be killed by long-context LLMs?' and conclude RAG is 'maturing,' not dying, because it still offers attribution, cheaper updates, and model-swap flexibility.",
+      "sources": [
+        "https://dev.to/zilliz/will-retrieval-augmented-generation-rag-be-killed-by-long-context-llms-2fbg",
+        "https://aiwithmike.substack.com/p/rag-isnt-deadits-maturing-why-retrieval"
+      ]
+    },
+    {
+      "question": "At what context length do long-context LLMs start to degrade on retrieval-heavy tasks?",
+      "answer_summary": "Databricks research found GPT-4-0125-preview's performance declines after 64k tokens and Llama-3.1-405B begins degrading at 32k tokens, while GPT-4o and Claude-3.5-Sonnet stayed more consistent across longer contexts.",
+      "sources": [
+        "https://www.databricks.com/jp/blog/long-context-rag-performance-llms"
+      ]
+    },
+    {
+      "question": "Why does Claude sometimes refuse to answer at very long context lengths?",
+      "answer_summary": "Databricks found Claude-3-Sonnet increasingly refused to answer, citing copyright concerns, with a 49.5% failure rate at 64k tokens — attributed to insufficient long-context instruction-following training data.",
+      "sources": [
+        "https://www.databricks.com/jp/blog/long-context-rag-performance-llms"
+      ]
+    },
+    {
+      "question": "Do all models fail the same way when given too much context?",
+      "answer_summary": "No — failure patterns are model-specific: GPT-4 returns incorrect or irrelevant content, DBRX-Instruct defaults to summarizing instead of answering (50.4% failure at 32k), and Mixtral-8x7B generates repeated nonsensical or random characters.",
+      "sources": [
+        "https://www.databricks.com/jp/blog/long-context-rag-performance-llms"
+      ]
+    },
+    {
+      "question": "How does retrieval recall change as context size grows?",
+      "answer_summary": "Databricks found average recall across four datasets improved from 0.468 at 2k tokens to 0.95 at 192k tokens, showing that more retrieved documents genuinely helps up to a point before model-specific degradation kicks in.",
+      "sources": [
+        "https://www.databricks.com/jp/blog/long-context-rag-performance-llms"
+      ]
+    },
+    {
+      "question": "What percentage of production LLM problems actually require fine-tuning rather than RAG?",
+      "answer_summary": "A commonly cited figure is that roughly 70% of production problems don't need fine-tuning at all and can be solved with RAG, since RAG doesn't require significant compute and only needs domain-specific text data.",
+      "sources": [
+        "https://blog.n8n.io/fine-tuning-vs-rag/",
+        "https://montecarlo.ai/blog-rag-vs-fine-tuning"
+      ]
+    },
+    {
+      "question": "Can teams combine RAG and fine-tuning instead of choosing one?",
+      "answer_summary": "Yes — mature systems increasingly use a hybrid: fine-tuning handles style/format/task-specific behavior while RAG supplies up-to-date, attributable knowledge, with the fine-tuned model acting as generator over RAG-provided context.",
+      "sources": [
+        "https://montecarlo.ai/blog-rag-vs-fine-tuning",
+        "https://dev.to/umesh_malik/rag-vs-fine-tuning-for-llms-2026-what-actually-works-in-production-10if"
+      ]
+    },
+    {
+      "question": "What does a modern three-layer LLM architecture actually look like in 2026?",
+      "answer_summary": "One described architecture layers a small fine-tuned model for response format, a polished RAG pipeline with hybrid search and reranking for knowledge, and a 'Self-Route' layer that decides per-query whether retrieval is sufficient or full long context is needed.",
+      "sources": [
+        "https://dev.to/umesh_malik/rag-vs-fine-tuning-for-llms-2026-what-actually-works-in-production-10if"
+      ]
+    },
+    {
+      "question": "Is choosing between RAG and fine-tuning still the right question to ask in 2026?",
+      "answer_summary": "Practitioners argue the RAG-vs-fine-tuning framing is outdated; leading teams layer RAG (knowledge), fine-tuning (behavior), and long context (prototyping/edge cases) together with an evaluation framework to tell which piece is actually helping.",
+      "sources": [
+        "https://dev.to/umesh_malik/rag-vs-fine-tuning-for-llms-2026-what-actually-works-in-production-10if"
+      ]
+    },
+    {
+      "question": "How much data and compute does fine-tuning require compared to RAG?",
+      "answer_summary": "RAG doesn't require abundant computational resources and works with domain-specific text data alone, while fine-tuning requires adequate labeled data and meaningfully more compute to update model weights.",
+      "sources": [
+        "https://montecarlo.ai/blog-rag-vs-fine-tuning"
+      ]
+    },
+    {
+      "question": "When does fine-tuning clearly outperform RAG?",
+      "answer_summary": "Fine-tuning is favored for style, format consistency, narrow classification tasks, and cost efficiency at scale, once behavior (not missing knowledge) is the bottleneck.",
+      "sources": [
+        "https://blog.n8n.io/fine-tuning-vs-rag/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "RAG vs Fine-Tuning for LLMs (2026): What Actually Works in Production",
+      "url": "https://dev.to/umesh_malik/rag-vs-fine-tuning-for-llms-2026-what-actually-works-in-production-10if",
+      "source_type": "community",
+      "used_for": "decision framework, hybrid three-layer architecture description"
+    },
+    {
+      "title": "Fine-Tuning vs. RAG: When to Use Each for Production LLMs",
+      "url": "https://blog.n8n.io/fine-tuning-vs-rag/",
+      "source_type": "company docs",
+      "used_for": "decision criteria, definitions"
+    },
+    {
+      "title": "Long Context RAG Performance of LLMs",
+      "url": "https://www.databricks.com/jp/blog/long-context-rag-performance-llms",
+      "source_type": "primary/official",
+      "used_for": "primary quantitative research on context-length degradation, recall curves, model-specific failure patterns"
+    },
+    {
+      "title": "Will Retrieval Augmented Generation (RAG) Be Killed by Long-Context LLMs?",
+      "url": "https://dev.to/zilliz/will-retrieval-augmented-generation-rag-be-killed-by-long-context-llms-2fbg",
+      "source_type": "company docs",
+      "used_for": "framing of the RAG-vs-long-context debate"
+    },
+    {
+      "title": "RAG Isn't Dead—It's Maturing",
+      "url": "https://aiwithmike.substack.com/p/rag-isnt-deadits-maturing-why-retrieval",
+      "source_type": "industry publication",
+      "used_for": "counter-argument that RAG remains relevant"
+    },
+    {
+      "title": "RAG Vs. Fine Tuning: Which One Should You Choose?",
+      "url": "https://montecarlo.ai/blog-rag-vs-fine-tuning",
+      "source_type": "company docs",
+      "used_for": "resource/compute comparison, hybrid approach description"
+    },
+    {
+      "title": "The Sequence Opinion: Is RAG Dying?",
+      "url": "https://thesequence.substack.com/p/the-sequence-opinion-509-is-rag-dying",
+      "source_type": "industry publication",
+      "used_for": "framing of three competing approaches (long context, fine-tuning, other trends)"
+    }
+  ]
+}

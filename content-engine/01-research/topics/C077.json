@@ -1,0 +1,150 @@
+{
+  "candidate_id": "C077",
+  "topic": "What marketing attribution actually means for a business with no dedicated analyst",
+  "status": "accepted",
+  "target_keyword": "marketing attribution for small business",
+  "secondary_keywords": [
+    "marketing attribution without an analyst",
+    "simple marketing attribution model",
+    "last-touch attribution small business",
+    "how to track marketing attribution"
+  ],
+  "long_tail_keywords": [
+    "how to do marketing attribution without a data analyst",
+    "marketing attribution model for a small business with no data team",
+    "easiest attribution model for a small business to start with",
+    "free marketing attribution tools for small business"
+  ],
+  "question_keywords": [
+    "what is marketing attribution",
+    "how do small businesses track which marketing channel works",
+    "which attribution model should a small business use",
+    "do I need a data analyst for marketing attribution",
+    "does GA4 attribution need dedicated analytics staff"
+  ],
+  "comparison_keywords": [
+    "last-touch vs multi-touch attribution",
+    "first-touch vs last-touch attribution",
+    "GA4 data-driven attribution vs last-click attribution"
+  ],
+  "how_to_keywords": [
+    "how to set up marketing attribution",
+    "how to track which marketing channel drives sales",
+    "how to set up UTM tracking for attribution"
+  ],
+  "problem_keywords": [
+    "marketing attribution is too complicated",
+    "can't tell which marketing channel actually works",
+    "attribution data is unreliable",
+    "(not set) source medium in Google Analytics"
+  ],
+  "commercial_keywords": [
+    "best marketing attribution tool for small business",
+    "free marketing attribution software",
+    "HubSpot vs Databox attribution"
+  ],
+  "entities": [
+    "Google Analytics 4",
+    "HubSpot",
+    "Databox",
+    "UTM parameters",
+    "Alex Birkett"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "Small business owners and solo marketers who run their own marketing without a dedicated analytics/data person",
+  "countries": [],
+  "topic_cluster": "Marketing Measurement & Attribution",
+  "connects_to_tools": [
+    "marketing-roi-calculator",
+    "utm-builder"
+  ],
+  "connects_to_prompts": [],
+  "connects_to_service": "",
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 8,
+    "competitive_gap": 5,
+    "conversion_potential": 6,
+    "evidence_quality": 6,
+    "total": 65
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What attribution model should a small business without an analyst start with?",
+      "answer_summary": "Start with the simplest option — last-touch attribution — rather than a complex multi-touch model.",
+      "sources": [
+        "https://databox.com/marketing-attribution-models"
+      ]
+    },
+    {
+      "question": "Is building an attribution model worth it for a small business that doesn't run much paid advertising?",
+      "answer_summary": "Attribution expert Alex Birkett is quoted saying that for small businesses not running heavy paid ads, over-investing in attribution modeling is 'probably a mistake'.",
+      "sources": [
+        "https://databox.com/marketing-attribution-models"
+      ]
+    },
+    {
+      "question": "What tools can a small business use for attribution without hiring a data analyst?",
+      "answer_summary": "Free/low-lift options cited include Google Analytics 4 (free, basic), Databox (130+ integrations), and HubSpot (CRM plus attribution).",
+      "sources": [
+        "https://databox.com/marketing-attribution-models"
+      ]
+    },
+    {
+      "question": "What attribution models exist inside Google Analytics 4?",
+      "answer_summary": "GA4 offers data-driven attribution (ML-based credit distribution), paid-and-organic last click, and Google-paid-channels last click.",
+      "sources": [
+        "https://support.google.com/analytics/answer/10596866"
+      ]
+    },
+    {
+      "question": "Does setting up attribution in GA4 require specialized analytics staff?",
+      "answer_summary": "No — configuration happens through Admin > Events with marketer-level access, though data-driven attribution needs sufficient conversion volume to work well.",
+      "sources": [
+        "https://support.google.com/analytics/answer/10596866"
+      ]
+    },
+    {
+      "question": "Why is my attribution data unreliable even after setting up GA4?",
+      "answer_summary": "Skipping UTM parameter tagging on campaign links is called out as a root cause of unreliable attribution data.",
+      "sources": [
+        "https://databox.com/marketing-attribution-models"
+      ]
+    },
+    {
+      "question": "Should a small business rely on just one attribution model?",
+      "answer_summary": "No — guidance recommends using multiple models to see both top-of-funnel acquisition and bottom-of-funnel conversion credit.",
+      "sources": [
+        "https://databox.com/marketing-attribution-models"
+      ]
+    },
+    {
+      "question": "Does direct traffic get attribution credit in GA4?",
+      "answer_summary": "No, all GA4 attribution models exclude direct visits from credit unless the entire conversion path consists only of direct visits.",
+      "sources": [
+        "https://support.google.com/analytics/answer/10596866"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Marketing attribution models (Databox)",
+      "url": "https://databox.com/marketing-attribution-models",
+      "source_type": "industry publication",
+      "used_for": "Practical small-business attribution guidance, expert quote, tool recommendations, common mistakes"
+    },
+    {
+      "title": "About attribution models and attribution reporting (Google Analytics Help)",
+      "url": "https://support.google.com/analytics/answer/10596866",
+      "source_type": "company docs",
+      "used_for": "Official GA4 attribution model definitions and setup guidance"
+    }
+  ]
+}

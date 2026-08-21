@@ -1,0 +1,225 @@
+{
+  "candidate_id": "C072",
+  "status": "accepted",
+  "topic": "How Google Search behaves differently by country for the same query",
+  "topic_cluster": "international-seo-geotargeting",
+  "target_keyword": "google search results different by country",
+  "secondary_keywords": [
+    "google search results vary by country",
+    "why does google show different results in different countries",
+    "google search geolocation",
+    "google search country settings",
+    "international seo geotargeting"
+  ],
+  "long_tail_keywords": [
+    "why does google give different results for the same search in different countries",
+    "how to see google search results from another country",
+    "why does google search change based on location",
+    "google ignoring my language preference and showing local results instead"
+  ],
+  "question_keywords": [
+    "why does google search results differ by country",
+    "how does google decide which country version of a page to show",
+    "can i change my google search region without a vpn",
+    "why does google search show wrong currency or language",
+    "does google use ip address or account settings for search localization"
+  ],
+  "comparison_keywords": [
+    "ccTLD vs hreflang for geotargeting",
+    "google.com vs google.co.uk search results",
+    "vpn vs google search region setting"
+  ],
+  "how_to_keywords": [
+    "how to change google search country/region",
+    "how to implement hreflang for multi-regional seo",
+    "how to geotarget a website in google search console"
+  ],
+  "problem_keywords": [
+    "google search showing wrong country results",
+    "google ignoring language settings",
+    "google misdetecting my location",
+    "google search results not relevant to my country"
+  ],
+  "commercial_keywords": [
+    "international seo services",
+    "multi-regional seo audit",
+    "geotargeting seo consultant"
+  ],
+  "entities": [
+    "Google Search Central",
+    "Googlebot",
+    "hreflang",
+    "ccTLD",
+    "Google Search Console",
+    "Accept-Language header",
+    "IP geolocation"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "SEO professionals, marketers running international campaigns, and everyday users/travelers frustrated by geotargeted search results; secondarily site owners managing multi-regional websites",
+  "countries": [
+    "United States",
+    "United Kingdom",
+    "Australia",
+    "India"
+  ],
+  "connects_to_service": "seo-companies-for-small-business",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "seo-geo"
+  ],
+  "scores": {
+    "demand": 6,
+    "intent": 6,
+    "relevance": 8,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 3,
+    "competitive_gap": 5,
+    "conversion_potential": 4,
+    "evidence_quality": 7,
+    "total": 60
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Why does Google show different search results in different countries for the same query?",
+      "answer_summary": "Google customizes results using geographic and language signals (IP-derived location, ccTLDs, hreflang annotations, server location, local links/addresses) rather than crawling the same page differently; site owners must explicitly declare regional/language variants.",
+      "sources": [
+        "https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites",
+        "https://developers.google.com/search/docs/specialty/international"
+      ]
+    },
+    {
+      "question": "How do I change which country's Google results I see?",
+      "answer_summary": "On mobile, Google Search app settings let you change 'Search region' under Language & region, but the feature is not available for every location; otherwise people resort to VPNs.",
+      "sources": [
+        "https://support.google.com/websearch/answer/873?hl=en"
+      ]
+    },
+    {
+      "question": "Why doesn't using a country-specific domain (like .co.uk) let me search a different country's results anymore?",
+      "answer_summary": "Google moved away from ccTLD-based redirection toward IP/account-based localization years ago, so switching the domain in the URL bar no longer reliably changes results.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=15559769 (via HN Algolia search referencing The Verge: 'Google no longer lets you change domains to search different countries')"
+      ]
+    },
+    {
+      "question": "How can I get an English-language, non-geotargeted search experience without a VPN?",
+      "answer_summary": "A widely-discussed Ask HN thread ('How to Avoid Geotargetted Content?') shows there is no reliable non-VPN fix — users report Google Search, Maps, YouTube and even Spotify/Twitter overriding explicit language/country settings with location-based defaults.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=34114924"
+      ]
+    },
+    {
+      "question": "What do I do if Google has the wrong geolocation for my IP address?",
+      "answer_summary": "Users have publicly asked Google support/HN how to correct a misdetected IP-based location (e.g., a US IP flagged as Central American after travel), indicating the geolocation signal is a frequent source of complaints and has no simple self-service fix.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=VPN%20google%20search%20results%20country"
+      ]
+    },
+    {
+      "question": "Why does Google use my location to guess my language instead of my browser's language settings?",
+      "answer_summary": "A commonly linked blog post argues Google prioritizes IP-based geolocation over the browser's Accept-Language header, which frustrates expats and travelers; this is a known, documented behavior rather than a bug.",
+      "sources": [
+        "https://smaller.fish/posts/language"
+      ]
+    },
+    {
+      "question": "What signals tell Google a page is meant for a specific country?",
+      "answer_summary": "ccTLDs, hreflang tags, server/hosting location, local business info (address/phone), currency, language, and inbound links from local sites — but Google explicitly ignores geo meta tags like geo.position.",
+      "sources": [
+        "https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites"
+      ]
+    },
+    {
+      "question": "Should I use subdirectories, subdomains, or ccTLDs for targeting different countries?",
+      "answer_summary": "Google's own guidance and SEO industry guides (Ahrefs) discuss trade-offs: ccTLDs signal country intent strongly but split PageRank and cost more; subfolders/subdomains with hreflang are usually the recommended default.",
+      "sources": [
+        "https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites",
+        "https://ahrefs.com/blog/international-seo/"
+      ]
+    },
+    {
+      "question": "Does hreflang pass ranking authority (PageRank) between country/language versions?",
+      "answer_summary": "No — hreflang only helps Google pick the right alternate URL to serve a given locale; it does not consolidate ranking signals the way canonical tags do.",
+      "sources": [
+        "https://ahrefs.com/blog/international-seo/"
+      ]
+    },
+    {
+      "question": "Why do search volumes and even terminology for 'the same' thing differ so much between English-speaking countries?",
+      "answer_summary": "Local vocabulary and demand differ sharply (e.g., Australians search 'bin chicken' vs Americans' 'ibis bird'), and volumes for identical intents like 'home insurance' vary by tens of thousands of monthly searches between UK and other markets.",
+      "sources": [
+        "https://ahrefs.com/blog/international-seo/"
+      ]
+    },
+    {
+      "question": "Can automatic IP-based redirects hurt my international SEO?",
+      "answer_summary": "Yes — Google explicitly warns that auto-redirecting users (and Googlebot) based on IP or cookies can prevent both users and search engines from discovering other locale versions of a site, and recommends a manual prompt instead.",
+      "sources": [
+        "https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites",
+        "https://ahrefs.com/blog/international-seo/"
+      ]
+    },
+    {
+      "question": "Why does Google Maps show me the wrong currency for a hotel even though I'm logged in with my home-country account?",
+      "answer_summary": "Reported directly in the Ask HN geotargeting thread as an ongoing real-world annoyance, showing that account settings don't reliably override location-based defaults across Google's products.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=34114924"
+      ]
+    },
+    {
+      "question": "Do political/border disputes change what Google Maps or Search shows by country?",
+      "answer_summary": "Yes, Google is known to alter map borders/labels depending on the viewer's country to comply with local law/sensitivities, a widely-reported example of intentional country-based variation beyond simple language targeting.",
+      "sources": [
+        "https://www.washingtonpost.com/technology/2020/02/14/google-maps-political-borders/ (referenced via HN Algolia)"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Managing multi-regional and multilingual sites",
+      "url": "https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites",
+      "source_type": "primary/official",
+      "used_for": "Core mechanism of country-based search variation: ccTLDs, hreflang, server location, redirect guidance"
+    },
+    {
+      "title": "International and multilingual sites overview",
+      "url": "https://developers.google.com/search/docs/specialty/international",
+      "source_type": "primary/official",
+      "used_for": "Confirming Google's three-pillar guidance (multi-regional targeting, localized version declaration, locale-adaptive crawling risks)"
+    },
+    {
+      "title": "Change your Search region and language",
+      "url": "https://support.google.com/websearch/answer/873?hl=en",
+      "source_type": "primary/official",
+      "used_for": "User-facing mechanism for changing search region, and its limitations"
+    },
+    {
+      "title": "International SEO: The Definitive Guide",
+      "url": "https://ahrefs.com/blog/international-seo/",
+      "source_type": "industry publication",
+      "used_for": "hreflang/ccTLD trade-offs, common international SEO mistakes, real demand/terminology examples across countries"
+    },
+    {
+      "title": "Ask HN: How to Avoid Geotargetted Content?",
+      "url": "https://news.ycombinator.com/item?id=34114924",
+      "source_type": "community",
+      "used_for": "Real, first-person evidence of user frustration with geotargeted Google Search/Maps/YouTube results and lack of a non-VPN fix"
+    },
+    {
+      "title": "HN Algolia search results referencing 'Google no longer lets you change domains to search different countries' (The Verge) and 'Google redraws borders...' (Washington Post)",
+      "url": "https://hn.algolia.com/api/v1/search?query=google%20search%20results%20different%20country",
+      "source_type": "aggregator",
+      "used_for": "Confirming discussion history and real article titles about ccTLD-based localization changes and politically-varying map results"
+    },
+    {
+      "title": "Why does Google use location for language rather than browser settings?",
+      "url": "https://smaller.fish/posts/language",
+      "source_type": "community",
+      "used_for": "Documented complaint about Google prioritizing IP geolocation over Accept-Language browser settings"
+    }
+  ]
+}

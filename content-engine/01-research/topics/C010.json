@@ -1,0 +1,218 @@
+{
+  "candidate_id": "C010",
+  "topic": "What AI overviews changed about click-through rate and how site owners are responding",
+  "status": "accepted",
+  "topic_cluster": "AI Overviews impact & zero-click search response",
+  "target_keyword": "ai overviews impact on ctr",
+  "secondary_keywords": [
+    "ai overviews ctr drop",
+    "zero click search statistics",
+    "google ai overviews traffic loss",
+    "ai overviews citation ctr"
+  ],
+  "long_tail_keywords": [
+    "how much does ai overviews reduce click through rate",
+    "ai overview citation ctr vs no citation",
+    "publisher traffic decline ai overviews 2026",
+    "is ai overview ctr recovering in 2026"
+  ],
+  "question_keywords": [
+    "do ai overviews reduce clicks",
+    "what percentage of searches are zero-click",
+    "does being cited in an ai overview help ctr",
+    "is ai overview ctr loss permanent"
+  ],
+  "comparison_keywords": [
+    "cited vs uncited ctr in ai overviews",
+    "organic ctr with vs without ai overviews",
+    "paid ctr vs organic ctr under ai overviews"
+  ],
+  "how_to_keywords": [
+    "how to recover traffic lost to ai overviews",
+    "how to get cited in ai overviews",
+    "how to measure ai overview traffic loss in google search console"
+  ],
+  "problem_keywords": [
+    "losing traffic to ai overviews",
+    "google ai overviews killing my clicks",
+    "site traffic dropped after ai overviews appeared"
+  ],
+  "commercial_keywords": [
+    "ai visibility checker",
+    "website speed test",
+    "seo audit tool"
+  ],
+  "entities": [
+    "Google AI Overviews",
+    "Seer Interactive",
+    "zero-click search",
+    "HuffPost",
+    "Business Insider",
+    "CNN",
+    "Daily Mail",
+    "emarketer"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "Publishers, SEO teams, and site owners tracking or reacting to declining organic click-through rates caused by AI-generated search summaries",
+  "countries": [],
+  "connects_to_tools": [
+    "ai-visibility-checker"
+  ],
+  "connects_to_prompts": [],
+  "connects_to_service": "Local SEO / Google Ads (traffic diversification and paid-search strategy in response to organic CTR loss)",
+  "scores": {
+    "demand": 8,
+    "intent": 8,
+    "relevance": 7,
+    "question_density": 8,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 5,
+    "conversion_potential": 6,
+    "evidence_quality": 9,
+    "total": 70
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "How much do AI Overviews reduce click-through rate?",
+      "answer_summary": "2025 data showed organic CTR on AI-Overview queries plummeting roughly 61% (1.76% to 0.61%); by February 2026, Seer Interactive's tracking showed CTR recovering to about 2.4%, up from a 1.3% low in December 2025.",
+      "sources": [
+        "https://www.emarketer.com/content/google-ai-overviews-decrease-ctrs-by-34-5-per-new-study",
+        "https://searchengineland.com/google-ai-overviews-ctr-recovery-study-475566"
+      ]
+    },
+    {
+      "question": "Does being cited in an AI Overview increase my CTR compared to not being cited?",
+      "answer_summary": "Yes — Seer Interactive's data shows cited pages earn roughly 2.1% CTR versus roughly 0.9% for uncited pages appearing on the same AI-Overview results page.",
+      "sources": [
+        "https://searchengineland.com/google-ai-overviews-ctr-recovery-study-475566"
+      ]
+    },
+    {
+      "question": "What percentage of Google searches now end without any click?",
+      "answer_summary": "Multiple 2026 sources report zero-click searches in the range of roughly 68-69% of U.S. queries, with some AI-Overview-specific query sets showing 60-83% ending without a click.",
+      "sources": [
+        "https://www.cognizo.ai/blog/google-ai-overviews-statistics"
+      ]
+    },
+    {
+      "question": "How are publishers responding to AI Overview traffic declines?",
+      "answer_summary": "Publishers are diversifying into email, social, video, and direct/brand traffic; some, like Business Insider, have cut back SEO-dependent commerce content and pivoted toward live events to reduce reliance on organic search.",
+      "sources": [
+        "https://www.forbes.com/sites/terdawn-deboe/2026/05/18/google-ai-overviews-are-eating-your-website-traffic-fight-back/",
+        "https://www.demandlocal.com/blog/ai-search-organic-traffic-decline-agencies/"
+      ]
+    },
+    {
+      "question": "Which publishers have reported the biggest traffic drops tied to AI Overviews and AI search?",
+      "answer_summary": "Reported declines include HuffPost (around -50%), Business Insider (around -55%), Daily Mail (around -32%), CNN (around -28%), The Sun (around -50%), and the New York Post (around -27%).",
+      "sources": [
+        "https://www.practicalecommerce.com/why-search-rankings-are-driving-less-traffic"
+      ]
+    },
+    {
+      "question": "What is the Seer Interactive AI Overviews CTR study and what did it find?",
+      "answer_summary": "Seer Interactive analyzed 53 brands across 5.47 million queries and 2.43 billion impressions from January 2025 to February 2026, finding an 85% CTR recovery on AI-Overview queries between December 2025 and February 2026, though a roughly 37% structural CTR gap versus non-AI-Overview queries remains.",
+      "sources": [
+        "https://searchengineland.com/google-ai-overviews-ctr-recovery-study-475566"
+      ]
+    },
+    {
+      "question": "How can site owners increase their chances of being cited (and clicked) in an AI Overview?",
+      "answer_summary": "Recommended tactics include producing distinctive, experience-led, opinion/depth content less likely to be fully summarized, and targeting queries where the AI Overview doesn't fully satisfy user intent so a click is still needed.",
+      "sources": [
+        "https://www.relevantaudience.com/seo/how-to-fix-traffic-loss-from-ai-overviews/",
+        "https://www.semrush.com/blog/ai-overviews-traffic-loss/"
+      ]
+    },
+    {
+      "question": "Is the AI Overview CTR hit permanent, or is it recovering?",
+      "answer_summary": "Early 2026 data shows partial recovery (an 85% CTR increase between December 2025 and February 2026), but a persistent structural gap of roughly 37% versus queries without an AI Overview remains the baseline to plan around.",
+      "sources": [
+        "https://searchengineland.com/google-ai-overviews-ctr-recovery-study-475566"
+      ]
+    },
+    {
+      "question": "Should businesses diversify away from Google organic traffic because of AI Overviews?",
+      "answer_summary": "Most SEO commentary treats diversification into direct visits, email, social, and brand search as a non-negotiable strategy given the structural CTR loss on AI-Overview-triggering queries.",
+      "sources": [
+        "https://newormedia.com/blog/ai-overviews-publisher-revenue-strategy/",
+        "https://www.seo.com/blog/losing-traffic-to-ai/"
+      ]
+    },
+    {
+      "question": "How did paid search CTR compare to organic CTR when AI Overviews appear?",
+      "answer_summary": "In 2025 data, paid CTR fell even more sharply than organic — roughly 68% (from 19.7% to 6.34%) versus organic's roughly 61% decline on the same AI-Overview-affected queries.",
+      "sources": [
+        "https://www.emarketer.com/content/google-ai-overviews-decrease-ctrs-by-34-5-per-new-study"
+      ]
+    },
+    {
+      "question": "What should a site owner do first if traffic drops after AI Overviews start appearing for their target keywords?",
+      "answer_summary": "Guidance from SEO tool vendors recommends first isolating which queries in Google Search Console are AI-Overview-affected, then reprioritizing toward queries less likely to trigger a full AI summary and building direct/brand channels.",
+      "sources": [
+        "https://serpstat.com/blog/how-to-measure-traffic-loss-ai-overview/",
+        "https://www.semrush.com/blog/ai-overviews-traffic-loss/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Google AI Overviews CTR shows early signs of recovery: Study",
+      "url": "https://searchengineland.com/google-ai-overviews-ctr-recovery-study-475566",
+      "source_type": "industry publication",
+      "used_for": "Seer Interactive study details: methodology, CTR recovery figures, cited-vs-uncited CTR"
+    },
+    {
+      "title": "Google AI Overviews decrease CTRs by 34.5%, per new study",
+      "url": "https://www.emarketer.com/content/google-ai-overviews-decrease-ctrs-by-34-5-per-new-study",
+      "source_type": "industry publication",
+      "used_for": "2025 organic and paid CTR decline statistics"
+    },
+    {
+      "title": "Google AI Overviews statistics for 2026: coverage, click loss and citations",
+      "url": "https://www.cognizo.ai/blog/google-ai-overviews-statistics",
+      "source_type": "aggregator",
+      "used_for": "Zero-click search percentage statistics"
+    },
+    {
+      "title": "Google AI Overviews Are Eating Your Website Traffic. Here's How To Get That Traffic Back",
+      "url": "https://www.forbes.com/sites/terdawn-deboe/2026/05/18/google-ai-overviews-are-eating-your-website-traffic-fight-back/",
+      "source_type": "industry publication",
+      "used_for": "Publisher response strategies including Business Insider's pivot"
+    },
+    {
+      "title": "AI Search Organic Traffic Decline Agencies Face: A 2026 Response Playbook",
+      "url": "https://www.demandlocal.com/blog/ai-search-organic-traffic-decline-agencies/",
+      "source_type": "industry publication",
+      "used_for": "Diversification strategy commentary"
+    },
+    {
+      "title": "How to Fix Traffic Loss from AI Overviews: The 2026 Recovery Guide",
+      "url": "https://www.relevantaudience.com/seo/how-to-fix-traffic-loss-from-ai-overviews/",
+      "source_type": "industry publication",
+      "used_for": "Tactics for improving AI Overview citation and click retention"
+    },
+    {
+      "title": "What to Do About AI Overviews Traffic Loss",
+      "url": "https://www.semrush.com/blog/ai-overviews-traffic-loss/",
+      "source_type": "company docs",
+      "used_for": "Measurement and response guidance"
+    },
+    {
+      "title": "How to Forecast and Measure Traffic Loss Due to the AI Overview Google",
+      "url": "https://serpstat.com/blog/how-to-measure-traffic-loss-ai-overview/",
+      "source_type": "company docs",
+      "used_for": "Practical measurement steps for site owners"
+    },
+    {
+      "title": "Why search rankings are driving less traffic",
+      "url": "https://www.practicalecommerce.com/why-search-rankings-are-driving-less-traffic",
+      "source_type": "industry publication",
+      "used_for": "Named publisher traffic decline figures (HuffPost, Business Insider, CNN, etc.)"
+    }
+  ]
+}

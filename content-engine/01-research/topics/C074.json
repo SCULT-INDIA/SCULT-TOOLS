@@ -1,0 +1,170 @@
+{
+  "candidate_id": "C074",
+  "status": "accepted",
+  "topic": "How currency and pricing localization actually affects SaaS conversion",
+  "topic_cluster": "saas-pricing-localization-ppp",
+  "target_keyword": "saas pricing localization conversion",
+  "secondary_keywords": [
+    "purchasing power parity pricing saas",
+    "local currency pricing checkout",
+    "ppp pricing saas",
+    "geo pricing software",
+    "multi currency saas pricing"
+  ],
+  "long_tail_keywords": [
+    "does showing local currency at checkout increase conversion",
+    "how much revenue do you lose without local pricing",
+    "how to implement ppp pricing for a saas product",
+    "should i charge different prices in different countries for my saas",
+    "ppp pricing widget for saas"
+  ],
+  "question_keywords": [
+    "does purchasing power parity pricing increase sales",
+    "how do i set up local currency pricing in stripe",
+    "is ppp pricing fair or does it get abused",
+    "how much does local pricing improve international conversion",
+    "should i localize pricing by country or just by currency"
+  ],
+  "comparison_keywords": [
+    "ppp pricing vs flat usd pricing",
+    "automatic geo-pricing vs discount codes",
+    "stripe vs paddle for local currency billing"
+  ],
+  "how_to_keywords": [
+    "how to implement ppp fair pricing for your product",
+    "how to detect visitor country and adjust saas price",
+    "how to add multi-currency checkout to a saas app"
+  ],
+  "problem_keywords": [
+    "losing international customers to usd-only pricing",
+    "non-us traffic not converting",
+    "customers confused by usd pricing and exchange fees",
+    "cart abandonment due to unfamiliar currency"
+  ],
+  "commercial_keywords": [
+    "ppp pricing tool",
+    "localized pricing widget",
+    "saas billing platform with multi currency"
+  ],
+  "entities": [
+    "Stripe",
+    "Paddle",
+    "Purchasing Power Parity (PPP)",
+    "ParityBar",
+    "Exportator",
+    "TierWise"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Commercial Investigation",
+  "audience": "Indie SaaS founders, bootstrapped software makers, and growth/pricing teams at small SaaS companies deciding whether/how to localize pricing",
+  "countries": [
+    "United States",
+    "India",
+    "Brazil"
+  ],
+  "connects_to_service": "custom-software",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "finance"
+  ],
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 7,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 5,
+    "conversion_potential": 5,
+    "evidence_quality": 6,
+    "total": 58
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What is purchasing power parity (PPP) pricing and why do SaaS founders use it?",
+      "answer_summary": "PPP pricing adjusts the same product's price by country based on local purchasing power (e.g., a $99 product priced at $39 in India), aiming to convert price-sensitive international visitors who otherwise wouldn't buy at USD list price.",
+      "sources": [
+        "https://scastiel.dev/implement-ppp-fair-pricing-for-your-product",
+        "https://www.evendeals.com"
+      ]
+    },
+    {
+      "question": "Does purchasing power parity pricing actually increase SaaS revenue?",
+      "answer_summary": "Evidence is mixed/unverified: one indie developer explicitly admitted he had no data to confirm the revenue hypothesis when he wrote about implementing it; a commercial PPP-pricing vendor claims case studies showing 20-30% revenue lifts, but that is a vendor's own unverified marketing claim, not independent data.",
+      "sources": [
+        "https://scastiel.dev/implement-ppp-fair-pricing-for-your-product",
+        "https://www.evendeals.com"
+      ]
+    },
+    {
+      "question": "What are the different ways to implement localized/PPP pricing for a SaaS product?",
+      "answer_summary": "Three common approaches discussed: (1) automatic IP-based price adjustment (transparent to the backend, invisible discount to the user), (2) discount codes tied to a country's PPP conversion factor (gives users agency, needs manual Stripe upkeep), (3) third-party widgets/services (ParityBar, Exportator, TierWise) that require no coding but reduce control.",
+      "sources": [
+        "https://scastiel.dev/implement-ppp-fair-pricing-for-your-product"
+      ]
+    },
+    {
+      "question": "How much revenue is lost by not offering local currency at checkout?",
+      "answer_summary": "A commenter in a payments-related HN discussion claimed lost conversions from lacking local pricing could be 'as high as 50%' — a community estimate rather than a formally cited study.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=local%20currency%20pricing%20conversion%20rate%20stripe"
+      ]
+    },
+    {
+      "question": "Are there ready-made tools/widgets to add PPP pricing to a SaaS site without custom engineering?",
+      "answer_summary": "Yes — Show HN posts describe drop-in JS widgets (e.g., TierWise) that detect visitor country and auto-apply a PPP-based discount, plus standalone PPP calculators (startuptoolchain.com, exportator.com) developers use to decide discount tiers manually.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=purchasing%20power%20parity%20pricing%20SaaS"
+      ]
+    },
+    {
+      "question": "Is PPP/geo-based discount pricing 'fair' or does it get abused (e.g., VPN arbitrage)?",
+      "answer_summary": "This is a live debate point in maker communities — the 169-point, 153-comment Hacker News thread on 'Purchasing Power Parity: Fair pricing for SaaS products' indicates strong, contested community interest in both the fairness case and the gaming/arbitrage risk.",
+      "sources": [
+        "https://scastiel.dev/implement-ppp-fair-pricing-for-your-product (via HN discussion metadata)"
+      ]
+    },
+    {
+      "question": "Should I localize just the currency symbol/display or the actual price amount?",
+      "answer_summary": "Discussed as two distinct strategies: simple currency display conversion at the live exchange rate (cosmetic, no discount) versus true PPP-adjusted pricing (an actual lower list price per country) — makers frame these as different tools solving different problems (trust/clarity vs affordability/conversion).",
+      "sources": [
+        "https://scastiel.dev/implement-ppp-fair-pricing-for-your-product"
+      ]
+    },
+    {
+      "question": "Which billing platforms make multi-currency/local pricing easiest to set up?",
+      "answer_summary": "Stripe (and its regional entities like Stripe UK) and merchant-of-record platforms are commonly discussed as the practical backend for multi-currency SaaS billing, though implementers still need to layer PPP logic on top themselves or via a third-party widget.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=local%20currency%20pricing%20conversion%20rate%20stripe"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "How to implement PPP (fair pricing) for your product",
+      "url": "https://scastiel.dev/implement-ppp-fair-pricing-for-your-product",
+      "source_type": "community",
+      "used_for": "First-person indie-developer account of implementing PPP pricing, implementation options, and an honest admission of no confirmed revenue data"
+    },
+    {
+      "title": "HN Algolia search: purchasing power parity pricing SaaS",
+      "url": "https://hn.algolia.com/api/v1/search?query=purchasing%20power%20parity%20pricing%20SaaS",
+      "source_type": "community",
+      "used_for": "Evidence of strong community engagement (169pt/153-comment thread) and multiple Show HN tools/calculators built specifically for PPP pricing"
+    },
+    {
+      "title": "Evendeals (PPP pricing vendor site)",
+      "url": "https://www.evendeals.com",
+      "source_type": "aggregator",
+      "used_for": "Vendor framing of PPP pricing and claimed (unverified) 20-30% revenue-lift case studies — used cautiously as a commercial claim, not independent evidence"
+    },
+    {
+      "title": "HN Algolia search: local currency pricing / conversion rate / Stripe",
+      "url": "https://hn.algolia.com/api/v1/search?query=local%20currency%20pricing%20conversion%20rate%20stripe",
+      "source_type": "community",
+      "used_for": "Community estimate on conversion loss from lacking local pricing, and discussion of Stripe's multi-currency capabilities"
+    }
+  ]
+}

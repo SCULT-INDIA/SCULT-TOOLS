@@ -1,0 +1,112 @@
+candidate_id,cluster,topic,target_keyword_hypothesis,connects_to
+C001,GEO/AEO,How ChatGPT search actually decides which pages to cite,how does chatgpt search choose sources,ai-visibility-checker;seo-geo
+C002,GEO/AEO,The difference between being crawled and being cited by an AI answer engine,crawled vs cited ai search,ai-visibility-checker;schema-markup-generator
+C003,GEO/AEO,What llms.txt actually does and whether it changes AI crawler behavior,llms.txt explained,ai-visibility-checker
+C004,GEO/AEO,Structured data AI answer engines actually use vs structured data that does nothing for them,schema markup for ai search,schema-markup-generator;faq-schema-generator
+C005,GEO/AEO,How Perplexity sources its answers differently from Google's AI Overviews,perplexity vs google ai overviews sourcing,ai-visibility-checker
+C006,GEO/AEO,Why a page can rank on Google but never get cited by an AI answer engine,rank on google not cited by ai,ai-visibility-checker;seo-geo
+C007,GEO/AEO,Robots.txt directives every AI crawler actually respects (GPTBot ClaudeBot PerplexityBot),robots.txt ai crawler directives,ai-visibility-checker
+C008,GEO/AEO,How to check if GPTBot ClaudeBot or Google-Extended can actually reach your site,check if ai crawlers can access my site,ai-visibility-checker
+C009,GEO/AEO,FAQ schema vs a genuine FAQ page: what AI answer engines actually parse,faq schema vs faq page ai,faq-schema-generator
+C010,GEO/AEO,What AI overviews changed about click-through rate and how site owners are responding,ai overviews impact on ctr,ai-visibility-checker;website-speed-test
+C011,AI coding,How AI coding assistants actually differ on large, existing codebases vs greenfield projects,ai coding assistant large codebase vs greenfield,cursor;claude-code;github-copilot
+C012,AI coding,What a CLAUDE.md, .cursorrules, and a Copilot instructions file actually do differently,claude.md vs cursorrules vs copilot instructions,claude-code;cursor;github-copilot
+C013,AI coding,Why AI-generated code reviews still miss the same categories of bugs,ai code review blind spots,claude-code;devops
+C014,AI coding,How developers are actually using AI agents for codebase migrations,ai agent codebase migration,ai-engineering;devops
+C015,AI coding,The real cost difference between running Claude Code, Cursor, and Copilot at team scale,claude code vs cursor vs copilot cost comparison,claude-code;cursor;github-copilot
+C016,AI coding,What actually breaks when AI coding tools touch a monorepo,ai coding tools monorepo issues,devops;claude-code
+C017,AI coding,How teams are documenting AI-assisted commits for code review and compliance,ai assisted commit documentation,devops;business-ops
+C018,AI coding,MCP servers explained: what they actually let an AI coding assistant do,mcp server explained,claude-code;ai-engineering
+C019,AI coding,Why AI pair-programming changes what "code review" means on a team,ai pair programming code review,claude-code;devops
+C020,AI coding,How to evaluate whether an AI coding subscription is worth it for a small dev team,is ai coding subscription worth it small team,cursor;claude-code;github-copilot
+C021,AI agents,What actually counts as an "AI agent" vs a chatbot with tool access,ai agent vs chatbot definition,ai-engineering;ai-agents-automation-service
+C022,AI agents,How small businesses are actually deploying AI agents for customer support,ai agent customer support small business,customer-support;ai-agents-automation-service
+C023,AI agents,The real failure modes of autonomous AI agents in production,ai agent production failure modes,ai-engineering
+C024,AI agents,RAG vs fine-tuning vs long context: how teams are actually choosing,rag vs fine-tuning vs long context,ai-engineering
+C025,AI agents,What an AI agent actually costs to run at real usage volume,ai agent api cost at scale,ai-engineering;ai-agents-automation-service
+C026,AI agents,How AI agent frameworks (LangChain, CrewAI, AutoGen) actually differ in practice,langchain vs crewai vs autogen,ai-engineering
+C027,AI agents,Why most "AI agent" demos don't survive contact with real user input,ai agent demo vs production reality,ai-engineering
+C028,AI agents,How companies are actually measuring AI agent ROI internally,ai agent roi measurement,ai-agents-automation-service;business-ops
+C029,Startup/indie,What Y Combinator's own advice on AI startups has actually changed since 2023,yc advice ai startups changed,startup
+C030,Startup/indie,The real tool stack solo founders are shipping AI products with,solo founder ai product tool stack,startup;no-code-apps
+C031,Startup/indie,How indie hackers are actually pricing AI-wrapper SaaS products,ai wrapper saas pricing,startup;finance
+C032,Startup/indie,What Product Hunt launch data says about which AI product categories are saturated,product hunt ai categories saturated,startup
+C033,Startup/indie,How first-time founders are validating an idea before writing code,validate startup idea before building,startup;business-name-generator
+C034,Startup/indie,The actual difference between a wrapper product and a defensible AI product,ai wrapper vs defensible product,startup;ai-agents-automation-service
+C035,Startup/indie,What YC-backed companies say about when to hire your first salesperson,when to hire first salesperson startup,startup;business-ops
+C036,Startup/indie,How solo founders are handling customer support without a team,solo founder customer support no team,customer-support;startup
+C037,Startup/indie,What actually happens to a Product Hunt launch's traffic after week one,product hunt launch traffic after week one,startup
+C038,SEO/content,Why topical authority actually matters more for AI search than backlinks alone,topical authority ai search vs backlinks,seo-geo;ai-visibility-checker
+C039,SEO/content,How small businesses are actually recovering from a Google core update,recover from google core update small business,seo-geo
+C040,SEO/content,What internal linking actually does for a site under 200 pages,internal linking small site seo,seo-geo;website-speed-test
+C041,SEO/content,The real difference between programmatic SEO done well and done badly,programmatic seo done well vs badly,seo-geo
+C042,SEO/content,How much technical SEO actually matters if the content is thin,technical seo vs content quality,seo-geo;website-speed-test
+C043,SEO/content,What Google's own documentation actually says about AI-generated content,google ai generated content policy,seo-geo
+C044,SEO/content,How small teams are actually running content audits without an enterprise tool,content audit small team no enterprise tool,seo-geo;word-counter
+C045,SEO/content,Why some FAQ pages get rich results and others don't,why faq schema not showing rich results,faq-schema-generator
+C046,SEO/content,What actually happens to rankings when a site migrates domains,domain migration seo impact,website-speed-test;seo-geo
+C047,SEO/content,How local businesses are actually using Google Business Profile beyond the basics,google business profile advanced tips,seo-geo
+C048,E-commerce,What actually drives cart abandonment beyond price,cart abandonment causes beyond price,ecommerce-product
+C049,E-commerce,How small e-commerce brands are using AI for product descriptions at scale,ai product descriptions at scale ecommerce,ecommerce-product
+C050,E-commerce,The real impact of page speed on e-commerce conversion, with actual data,page speed ecommerce conversion data,website-speed-test;ecommerce-product
+C051,E-commerce,What UGC and review mining tools actually do differently,ugc review mining tools comparison,ecommerce-product
+C052,E-commerce,How small e-commerce brands are handling returns without losing money,ecommerce returns policy small brand,ecommerce-product;invoice-generator
+C053,E-commerce,What actually changed about Amazon vs Shopify vs direct-to-consumer economics,amazon vs shopify vs dtc economics,ecommerce-product
+C054,E-commerce,How QR codes are actually being used in physical retail post-pandemic,qr code physical retail use cases,qr-code-generator;ecommerce-product
+C055,HR/ops,How small teams are actually using AI for first-round candidate screening,ai candidate screening small team,hr-management
+C056,HR/ops,What actually goes wrong when companies automate customer support too fast,customer support automation gone wrong,customer-support;ai-agents-automation-service
+C057,HR/ops,How remote teams are actually documenting processes with AI tools,remote team process documentation ai,business-ops;hr-management
+C058,HR/ops,What the real onboarding checklist looks like for a 5-person startup,startup onboarding checklist small team,hr-management;business-ops
+C059,HR/ops,How customer support teams are actually measuring AI chatbot deflection rate,chatbot deflection rate measurement,customer-support
+C060,HR/ops,What legal and compliance teams actually worry about with AI-drafted contracts,ai drafted contracts legal risk,legal-compliance
+C061,Design,How design teams are actually using AI for accessible color palettes,ai accessible color palette design workflow,color-palette-generator;ui-design
+C062,Design,What actually makes a logo work at favicon size and most don't test for it,logo favicon size testing,favicon-generator;branding
+C063,Design,How Figma's AI features actually compare to dedicated AI design tools,figma ai features vs dedicated ai design tools,figma;ui-design
+C064,Design,What a real brand style guide needs that a generated one usually skips,brand style guide essentials,branding;color-palette-generator
+C065,Design,How small teams are actually running design QA before a launch,design qa checklist before launch,ui-design;website-speed-test
+C066,Design,What email signature design actually does for brand consistency at a growing company,email signature brand consistency,email-signature-generator;branding
+C067,Design,How presentation design tools (Gamma, Canva, Beautiful.ai) actually differ for pitch decks,gamma vs canva vs beautiful ai pitch decks,presentations;startup
+C068,Global,How GDPR actually affects a small SaaS company's analytics setup,gdpr small saas analytics,seo-geo;legal-compliance
+C069,Global,What US sales tax nexus actually means for a small online seller,sales tax nexus small online seller,ecommerce-product;invoice-generator
+C070,Global,How VAT invoicing actually works for a UK freelancer selling internationally,vat invoicing uk freelancer international,invoice-generator
+C071,Global,What Singapore and UAE actually offer startups that other hubs don't,singapore uae startup incentives compared,startup
+C072,Global,How Google Search behaves differently by country for the same query,google search results differ by country,seo-geo
+C073,Global,What US vs EU vs India say differently about AI and data privacy right now,ai data privacy rules us eu india compared,legal-compliance;seo-geo
+C074,Global,How currency and pricing localization actually affects SaaS conversion,saas pricing localization conversion,ecommerce-product;finance
+C075,Data/finance,What actually goes wrong when small businesses build their first dashboard,first business dashboard mistakes,data-bi;marketing-roi-calculator
+C076,Data/finance,How freelancers are actually tracking multi-currency invoices without an accountant,multi currency invoicing without accountant,invoice-generator;finance
+C077,Data/finance,What marketing attribution actually means for a business with no dedicated analyst,marketing attribution small business no analyst,marketing-roi-calculator;utm-builder
+C078,Data/finance,How small consulting firms are actually pricing retainers vs project work,consulting retainer vs project pricing,consulting;invoice-generator
+C079,Data/finance,What UTM parameters actually break when marketers set them up wrong,utm parameter mistakes,utm-builder
+C080,Data/finance,How small businesses are actually calculating customer acquisition cost correctly,calculate customer acquisition cost correctly,marketing-roi-calculator;finance
+C081,Career,How AI is actually changing entry-level hiring for developer roles,ai entry level developer hiring impact,career-jobsearch;github-copilot
+C082,Career,What resume screening tools actually look for that candidates don't expect,resume screening tools what they check,career-jobsearch
+C083,Career,How students are actually using AI tools for exam prep without it backfiring,ai exam prep tools without backfiring,education
+C084,Career,What a real technical interview prep plan looks like with AI as one input, not the whole plan,technical interview prep plan with ai,career-jobsearch
+C085,Content creators,How solo YouTube creators are actually structuring an AI-assisted production workflow,youtube creator ai production workflow,youtube;video-audio-prompts
+C085b,Content creators,What actually changed about Instagram reach for small accounts in the algorithm,instagram reach small accounts algorithm change,instagram
+C086,Content creators,How X (Twitter) creators are actually growing an account without buying followers,grow x twitter account without buying followers,x-twitter
+C087,Content creators,What a real content calendar looks like for a solo creator running three platforms,content calendar solo creator three platforms,blog-writing;youtube;instagram
+C088,Cross-cutting,What actually happens when a small business switches from spreadsheets to real tools,small business spreadsheet to tools transition,invoice-generator;marketing-roi-calculator
+C089,Cross-cutting,How freelancers in India are actually handling GST-compliant invoicing,gst compliant invoicing freelancer india,invoice-generator
+C090,Cross-cutting,What actually makes a website "fast enough" and what's diminishing returns,website fast enough diminishing returns,website-speed-test
+C091,Cross-cutting,How small teams are actually choosing between no-code and custom development,no-code vs custom development decision,no-code-apps;custom-software-service
+C092,Cross-cutting,What actually breaks a no-code app when it needs to scale,no-code app scaling breaking points,no-code-apps;custom-software-service
+C093,Cross-cutting,How much a small business should actually budget for their first website,first website budget small business,web-development-service
+C094,Cross-cutting,What Google Ads actually costs for a small local business by industry,google ads cost by industry small business,google-ads-management-service
+C095,Cross-cutting,How small businesses are actually deciding between hiring an agency and doing marketing in-house,agency vs in house marketing decision,seo-geo;google-ads-management-service
+C096,Cross-cutting,What actually happens in the first 90 days after hiring an SEO agency,first 90 days seo agency,seo-geo;seo-service
+C097,AI models,How Claude, GPT, and Gemini actually differ on long-document analysis tasks,claude vs gpt vs gemini long document analysis,claude;chatgpt;gemini
+C098,AI models,What actually changed about AI model context windows and why it matters practically,ai model context window practical impact,claude;chatgpt
+C099,AI models,How developers are actually choosing between AI models by cost per task, not benchmarks,ai model cost per task vs benchmarks,ai-engineering
+C100,AI models,What "AI hallucination" actually means technically and how teams catch it in practice,ai hallucination technical explanation catching it,ai-engineering;claude
+C101,AI models,How image generation models (Midjourney, Flux, Nano Banana) actually differ for commercial use,midjourney vs flux vs nano banana commercial use,midjourney;flux;nano-banana
+C102,GEO/AEO,What a "citation" from an AI answer engine actually looks like and how to find yours,how to find ai answer engine citations,ai-visibility-checker
+C103,GEO/AEO,How Wikipedia and Reddit ended up as dominant AI training/citation sources, and what that means for smaller sites,wikipedia reddit ai citation dominance,ai-visibility-checker;seo-geo
+C104,Business ops,What client communication actually breaks down at freelance-to-agency transition,freelance to agency transition communication,business-ops;consulting
+C105,Business ops,How small agencies are actually handling scope creep with AI-assisted contracts,scope creep ai assisted contracts,business-ops;legal-compliance
+C106,Business ops,What a real client onboarding checklist looks like for a service business,client onboarding checklist service business,business-ops;invoice-generator
+C107,Startup/indie,How founders are actually using AI to draft investor updates,ai investor updates draft,startup;business-ops
+C108,SEO/content,What schema markup actually does for e-commerce product pages beyond rich snippets,ecommerce product schema markup beyond snippets,schema-markup-generator;ecommerce-product
+C109,Design,How small teams are actually running a rebrand without a big agency budget,rebrand small budget without agency,branding;color-palette-generator
+C110,Cross-cutting,What actually separates a healthcare or wellness business's website compliance needs from a normal small business site,healthcare wellness website compliance needs,healthcare-wellness;legal-compliance

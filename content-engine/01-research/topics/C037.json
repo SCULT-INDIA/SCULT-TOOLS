@@ -1,0 +1,162 @@
+{
+  "candidate_id": "C037",
+  "topic": "What actually happens to a Product Hunt launch's traffic after week one",
+  "status": "accepted",
+  "topic_cluster": "Startup launch & post-launch traffic strategy",
+  "target_keyword": "product hunt launch traffic after week one",
+  "secondary_keywords": [
+    "product hunt traffic drop",
+    "product hunt launch results",
+    "life after product hunt launch",
+    "product hunt traffic timeline"
+  ],
+  "long_tail_keywords": [
+    "what happens to traffic after a product hunt launch",
+    "how long does the product hunt traffic spike last",
+    "product hunt launch traffic drop percentage",
+    "does product hunt traffic convert to signups"
+  ],
+  "question_keywords": [
+    "does product hunt traffic last",
+    "how much traffic does product hunt actually give",
+    "why did my product hunt traffic disappear",
+    "is product hunt worth it for traffic"
+  ],
+  "comparison_keywords": [
+    "product hunt traffic vs seo traffic",
+    "product hunt vs organic search for growth"
+  ],
+  "how_to_keywords": [
+    "how to sustain traffic after a product hunt launch",
+    "how to convert product hunt visitors into signups"
+  ],
+  "problem_keywords": [
+    "product hunt traffic dropped to zero",
+    "product hunt launch didn't convert",
+    "product hunt traffic not turning into customers"
+  ],
+  "commercial_keywords": [
+    "product hunt launch service",
+    "product hunt launch agency",
+    "product hunt promotion help"
+  ],
+  "entities": [
+    "Product Hunt",
+    "Indie Hackers",
+    "ChatGPT citations",
+    "Google AI Overviews",
+    "SaaS founders"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Informational",
+  "audience": "Startup founders and indie hackers who have launched or are about to launch on Product Hunt, plus SaaS marketers planning post-launch strategy",
+  "countries": [],
+  "connects_to_service": "seo-geo",
+  "connects_to_tools": [
+    "ai-visibility-checker",
+    "website-speed-test"
+  ],
+  "connects_to_prompts": [
+    "launch/marketing content prompts"
+  ],
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 6,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 6,
+    "conversion_potential": 5,
+    "evidence_quality": 7,
+    "total": 62
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What actually happens to traffic after the first week of a Product Hunt launch?",
+      "answer_summary": "Traffic falls off a cliff after launch day; roughly 75% of new tools see a sharp decline within the first month once the warm launch-day audience is exhausted.",
+      "sources": [
+        "https://www.indiehackers.com/post/your-product-hunt-launch-will-fail-heres-what-to-do-instead-starting-30-days-before-you-ship-ffa59716f7"
+      ]
+    },
+    {
+      "question": "Is the post-launch traffic drop a sign something went wrong?",
+      "answer_summary": "No — commentators frame it as the normal shape of the curve; waking up on day 3 with ~5% of day-1 traffic is typical, not a red flag.",
+      "sources": [
+        "https://hub.causo.ai/guides/product-hunt-traffic-data-2026"
+      ]
+    },
+    {
+      "question": "How steep is the traffic drop in the first 72 hours?",
+      "answer_summary": "Traffic commonly drops 80-90% within 72 hours of the launch spike.",
+      "sources": [
+        "https://hub.causo.ai/guides/product-hunt-traffic-data-2026"
+      ]
+    },
+    {
+      "question": "What happens to products that don't land in the top 3?",
+      "answer_summary": "Below the top 3 spots, a launch page is described as 'effectively dead' by day 14 — the spike concentrates in the first few days for most products.",
+      "sources": [
+        "https://hub.causo.ai/guides/product-hunt-traffic-data-2026"
+      ]
+    },
+    {
+      "question": "What's the real conversion outcome founders report from a launch?",
+      "answer_summary": "Founders say traffic is easy to get for a day, but activated users and follow-up conversations are the real test of whether a launch mattered.",
+      "sources": [
+        "https://www.producthunt.com/p/general/what-s-your-real-conversion-outcome-from-a-product-hunt-launch"
+      ]
+    },
+    {
+      "question": "Does a Product Hunt launch have any lasting SEO value beyond the spike?",
+      "answer_summary": "One founder reported limited immediate revenue but a long-term SEO effect that showed up well after launch day.",
+      "sources": [
+        "https://www.producthunt.com/p/general/what-s-your-real-conversion-outcome-from-a-product-hunt-launch"
+      ]
+    },
+    {
+      "question": "What should founders do in the 30 days before launching?",
+      "answer_summary": "Advice is to build comparison and decision-focused content ahead of launch and structure it for AI search engines, not just Google, so there's a 'floor' once the Product Hunt spike fades.",
+      "sources": [
+        "https://www.indiehackers.com/post/your-product-hunt-launch-will-fail-heres-what-to-do-instead-starting-30-days-before-you-ship-ffa59716f7"
+      ]
+    },
+    {
+      "question": "Can a founder launch successfully without a pre-built audience?",
+      "answer_summary": "Founders raise this as an open problem: most launch playbooks assume an existing audience, and the channels used to build one often reject cold product promotion.",
+      "sources": [
+        "https://www.producthunt.com/p/general/what-s-your-real-conversion-outcome-from-a-product-hunt-launch"
+      ]
+    },
+    {
+      "question": "Is Product Hunt 'dead' as a growth channel?",
+      "answer_summary": "Discussed directly in community writeups questioning whether Product Hunt still delivers meaningful results versus its earlier years.",
+      "sources": [
+        "https://dev.to/holiney/is-product-hunt-dead-or-what-results-can-you-expect-from-product-hunt-launch-4j3d"
+      ]
+    },
+    {
+      "question": "How much organic/AI visibility can accumulate in the weeks after launch if paired with content?",
+      "answer_summary": "One founder's post-launch content reached 1.08M impressions by month 1.5 and grew to 4.89M impressions with 314 ChatGPT citations by week 12, illustrating the gap between the PH spike and compounding organic/AI visibility.",
+      "sources": [
+        "https://www.indiehackers.com/post/your-product-hunt-launch-will-fail-heres-what-to-do-instead-starting-30-days-before-you-ship-ffa59716f7"
+      ]
+    },
+    {
+      "question": "Should Product Hunt be treated as a growth channel or something else?",
+      "answer_summary": "Multiple founder accounts frame the winning approach as treating PH as a credibility catalyst rather than a primary growth channel, with real growth resuming only after adding review/feedback/engagement systems.",
+      "sources": [
+        "https://www.producthunt.com/p/general/what-s-your-real-conversion-outcome-from-a-product-hunt-launch"
+      ]
+    },
+    {
+      "question": "What other channels should run alongside a Product Hunt launch to sustain traffic?",
+      "answer_summary": "Recommended complementary channels include email, social media, and SEO, since Product Hunt alone is described as one day of acquisition, not one week.",
+      "sources": [
+        "https://hub.causo.ai/guides/product-hunt-traffic-data-2026"
+      ]
+    }
+  ]
+}

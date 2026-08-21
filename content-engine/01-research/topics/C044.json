@@ -1,0 +1,230 @@
+{
+  "candidate_id": "C044",
+  "status": "accepted",
+  "topic": "How small teams are actually running content audits without an enterprise tool",
+  "topic_cluster": "DIY SEO / content operations for small teams",
+  "target_keyword": "content audit without enterprise seo tool",
+  "secondary_keywords": [
+    "free content audit template",
+    "content audit google sheets",
+    "how to do a content audit without semrush"
+  ],
+  "long_tail_keywords": [
+    "how to do a content audit with no budget",
+    "free alternative to screaming frog for content audit",
+    "content audit for small business blog free tools"
+  ],
+  "question_keywords": [
+    "how often should you do a content audit",
+    "what's the difference between a content audit and an seo audit",
+    "do you need semrush for a content audit"
+  ],
+  "comparison_keywords": [
+    "screaming frog vs semrush content audit",
+    "content audit vs seo audit"
+  ],
+  "how_to_keywords": [
+    "how to do a content audit in google sheets",
+    "how to inventory website content for free"
+  ],
+  "problem_keywords": [
+    "content audit takes too long for a small team",
+    "no budget for semrush or ahrefs"
+  ],
+  "commercial_keywords": [
+    "free seo audit tool",
+    "content audit template download"
+  ],
+  "entities": [
+    "Screaming Frog",
+    "Google Search Console",
+    "Google Analytics",
+    "Google Sheets",
+    "Semrush",
+    "Airtable",
+    "RankMath"
+  ],
+  "primary_intent": "Tutorial",
+  "secondary_intent": "Problem-solving",
+  "audience": "Solo marketers, small business owners, in-house marketing teams at startups, and freelance SEO consultants who can't justify enterprise SEO platform pricing",
+  "countries": [],
+  "connects_to_tools": [
+    "word-counter"
+  ],
+  "connects_to_prompts": [
+    "seo-geo"
+  ],
+  "connects_to_service": "",
+  "scores": {
+    "demand": 6,
+    "intent": 6,
+    "relevance": 7,
+    "question_density": 5,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 7,
+    "competitive_gap": 6,
+    "conversion_potential": 5,
+    "evidence_quality": 6,
+    "total": 60
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What's the difference between an SEO audit and a content audit?",
+      "answer_summary": "An SEO audit looks at crawlability, indexation, and technical/on-page factors; a content audit inventories and evaluates the content itself for relevance, performance, and gaps.",
+      "sources": [
+        "https://factandform.com/seo-audit-vs-content-audit-differences/",
+        "https://www.syptus.com/blog/content-vs-seo-audit-what-is-the-difference/"
+      ]
+    },
+    {
+      "question": "How often should a small team run a content audit?",
+      "answer_summary": "A common practitioner pattern is one full audit per year layered with quarterly mini-audits focused on top-traffic/top-revenue pages.",
+      "sources": [
+        "https://portent.com/blog/content/how-often-you-need-to-audit-content-to-stay-on-top.htm"
+      ]
+    },
+    {
+      "question": "Can I do a content audit with just Screaming Frog's free version?",
+      "answer_summary": "Yes for sites under roughly 500 URLs — the free crawl limit covers most small-business sites.",
+      "sources": [
+        "https://www.gomega.ai/blog/screaming-frog-seo-audit/",
+        "https://www.mikeginley.com/blog/seo-content-audit/"
+      ]
+    },
+    {
+      "question": "What free tools can replace a paid content-audit tool for a small site?",
+      "answer_summary": "Screaming Frog's free tier plus Google Search Console, Google Analytics, and Google Sheets covers most of what a dedicated paid content-audit tool would provide; Semrush itself discontinued its standalone Content Audit tool.",
+      "sources": [
+        "https://www.mikeginley.com/blog/seo-content-audit/",
+        "https://pt.semrush.com/content_tool"
+      ]
+    },
+    {
+      "question": "How do I organize a content audit spreadsheet?",
+      "answer_summary": "Use columns for URL, issue, impact, effort, owner, and status, and group findings by content type so priorities are visible at a glance.",
+      "sources": [
+        "https://rankz.co/blog/how-to-do-an-seo-audit-reddit/",
+        "https://blog.hubspot.com/marketing/company-content-audit"
+      ]
+    },
+    {
+      "question": "What metrics can I track without a paid rank tracker?",
+      "answer_summary": "Free Search Console and Analytics data (clicks, impressions, average position, engagement) can substitute for paid rank-tracking metrics in a basic audit.",
+      "sources": [
+        "https://blog.hubspot.com/marketing/company-content-audit"
+      ]
+    },
+    {
+      "question": "Is Airtable a good substitute for a spreadsheet-based content inventory?",
+      "answer_summary": "Yes — it has a generous free tier and can import crawl data exported from Screaming Frog or similar tools for a more structured inventory.",
+      "sources": [
+        "https://thestacc.com/blog/best-content-inventory-tools/"
+      ]
+    },
+    {
+      "question": "What's a lightweight free alternative to Screaming Frog for crawling a small site?",
+      "answer_summary": "SiteOne Crawler and Google Lighthouse are cited as no-cost crawler alternatives for basic technical checks.",
+      "sources": [
+        "https://prerender.io/blog/screaming-frog-alternative/"
+      ]
+    },
+    {
+      "question": "How do I spot thin content without a paid tool?",
+      "answer_summary": "Run a free word-counter/website word-count tool across pages to flag low word counts, then cross-reference with Search Console performance data.",
+      "sources": [
+        "https://websitewordcounter.com/"
+      ]
+    },
+    {
+      "question": "Do I need to audit my entire site at once?",
+      "answer_summary": "No — auditing section by section is a recommended approach for teams with limited time and bandwidth.",
+      "sources": [
+        "https://www.lullabot.com/articles/content-audits-heavy-lift-huge-payoff"
+      ]
+    },
+    {
+      "question": "What should go into a content audit report for a small client?",
+      "answer_summary": "A prioritized spreadsheet, a short executive summary of 3-5 high-impact wins, and a 30/60/90-day roadmap are the recommended minimum deliverables.",
+      "sources": [
+        "https://rankz.co/blog/how-to-do-an-seo-audit-reddit/"
+      ]
+    },
+    {
+      "question": "Should underperforming posts be consolidated instead of deleted?",
+      "answer_summary": "Merging multiple lower-ranking posts into one comprehensive pillar page is described as one of the more effective plays available to small, resource-constrained teams.",
+      "sources": [
+        "https://nealschaffer.com/content-audit/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "How to Run a Content Audit (With Tips From Content & SEO Specialists)",
+      "url": "https://blog.hubspot.com/marketing/company-content-audit",
+      "source_type": "industry publication",
+      "used_for": "General audit process/spreadsheet structure"
+    },
+    {
+      "title": "How to Do a Technical SEO Audit with Screaming Frog",
+      "url": "https://www.gomega.ai/blog/screaming-frog-seo-audit/",
+      "source_type": "industry publication",
+      "used_for": "Free-tier crawl limit confirmation"
+    },
+    {
+      "title": "Free SEO Content Audit Template - Screaming Frog + Google Sheets",
+      "url": "https://www.mikeginley.com/blog/seo-content-audit/",
+      "source_type": "community",
+      "used_for": "Practitioner workflow combining free tools"
+    },
+    {
+      "title": "How to Do an SEO Audit: Practical Steps and Reddit Tips",
+      "url": "https://rankz.co/blog/how-to-do-an-seo-audit-reddit/",
+      "source_type": "industry publication",
+      "used_for": "Spreadsheet structure and reporting format synthesized from practitioner discussion"
+    },
+    {
+      "title": "Best Screaming Frog Alternatives (Paid and Free SEO Spider)",
+      "url": "https://prerender.io/blog/screaming-frog-alternative/",
+      "source_type": "industry publication",
+      "used_for": "Free crawler alternatives list"
+    },
+    {
+      "title": "11 Best Content Inventory Tools",
+      "url": "https://thestacc.com/blog/best-content-inventory-tools/",
+      "source_type": "industry publication",
+      "used_for": "Airtable as free inventory option"
+    },
+    {
+      "title": "Website Word Counter",
+      "url": "https://websitewordcounter.com/",
+      "source_type": "aggregator",
+      "used_for": "Free thin-content detection approach, ties to word-counter tool"
+    },
+    {
+      "title": "Content Audits: A Heavy Lift for a Huge Payoff",
+      "url": "https://www.lullabot.com/articles/content-audits-heavy-lift-huge-payoff",
+      "source_type": "industry publication",
+      "used_for": "Section-by-section auditing advice for small teams"
+    },
+    {
+      "title": "SEO Audit Vs Content Audit: Key Differences",
+      "url": "https://factandform.com/seo-audit-vs-content-audit-differences/",
+      "source_type": "industry publication",
+      "used_for": "Definitional distinction between audit types"
+    },
+    {
+      "title": "How Often Should You Perform a Content Audit",
+      "url": "https://portent.com/blog/content/how-often-you-need-to-audit-content-to-stay-on-top.htm",
+      "source_type": "industry publication",
+      "used_for": "Audit cadence recommendation"
+    },
+    {
+      "title": "How to Do a Content Audit: The Complete Step-by-Step Guide",
+      "url": "https://nealschaffer.com/content-audit/",
+      "source_type": "industry publication",
+      "used_for": "Content consolidation strategy for small teams"
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "candidate_id": "C102",
+  "topic": "What a \"citation\" from an AI answer engine actually looks like and how to find yours",
+  "status": "accepted",
+  "target_keyword": "how to find ai answer engine citations",
+  "secondary_keywords": [
+    "ai citation tracking tools",
+    "how to see if chatgpt cites your website",
+    "ai visibility checker",
+    "answer engine optimization tools"
+  ],
+  "long_tail_keywords": [
+    "how to check if my website is cited by chatgpt",
+    "google search console ai mode report citations",
+    "free tools to track ai overviews citations",
+    "how to know if perplexity is citing my site",
+    "what does an ai overview citation look like"
+  ],
+  "question_keywords": [
+    "what does a citation from chatgpt look like",
+    "how do I know if perplexity cites my site",
+    "can google search console show ai overviews data",
+    "does chatgpt tell you when it cites a source",
+    "how do ai search engines pick which sites to cite"
+  ],
+  "comparison_keywords": [
+    "otterly ai vs profound vs peec ai",
+    "ahrefs brand radar vs semrush ai toolkit",
+    "chatgpt search vs google ai overviews citations"
+  ],
+  "how_to_keywords": [
+    "how to opt out of google ai overviews",
+    "how to track brand mentions in chatgpt",
+    "how to increase your citations in ai search"
+  ],
+  "problem_keywords": [
+    "my website isn't cited by chatgpt",
+    "ai overviews not sending traffic",
+    "brand invisible in ai search"
+  ],
+  "commercial_keywords": [
+    "ai visibility monitoring tool pricing",
+    "best ai citation tracking software",
+    "answer engine optimization agency"
+  ],
+  "entities": [
+    "ChatGPT",
+    "Perplexity",
+    "Google AI Overviews",
+    "Google AI Mode",
+    "Google Search Console",
+    "Otterly.ai",
+    "Profound",
+    "Peec AI",
+    "SE Ranking",
+    "Canonry",
+    "Elmo",
+    "Spiderseek",
+    "Prominara",
+    "Somantra",
+    "BrightEdge",
+    "5W Research",
+    "SynthID"
+  ],
+  "primary_intent": "Tool discovery",
+  "secondary_intent": "Tutorial",
+  "audience": "SEO/marketing professionals, small business owners, and agency operators trying to measure and improve their brand's visibility in AI-generated answers",
+  "countries": [],
+  "topic_cluster": "AI visibility & answer engine optimization (AEO/GEO)",
+  "connects_to_prompts": [],
+  "connects_to_tools": [
+    "ai-visibility-checker"
+  ],
+  "connects_to_service": "seo-geo",
+  "scores": {
+    "demand": 8,
+    "intent": 7,
+    "relevance": 9,
+    "question_density": 8,
+    "search_opportunity": 8,
+    "ai_answer_opportunity": 9,
+    "tool_discovery_opportunity": 9,
+    "competitive_gap": 6,
+    "conversion_potential": 7,
+    "evidence_quality": 8,
+    "total": 79
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What does a citation in an AI answer engine actually consist of?",
+      "answer_summary": "Tools like Otterly.ai describe citations as linked references embedded within an AI-generated answer — the engine names or links a specific external source (domain/page) it drew the answer from, distinct from a plain brand mention with no link.",
+      "sources": [
+        "https://otterly.ai/"
+      ]
+    },
+    {
+      "question": "Can Google Search Console show whether my site was cited in AI Overviews or AI Mode?",
+      "answer_summary": "Google is rolling out new Search Console reporting specifically for generative AI search surfaces, including impression metrics and country-level breakdowns for pages appearing in AI features; as of mid-2026 it was in limited testing with a subset of UK site owners before wider rollout.",
+      "sources": [
+        "https://9to5google.com/2026/06/02/google-ai-mode-overviews-opt-out/"
+      ]
+    },
+    {
+      "question": "Can I opt my website out of AI Overviews and AI Mode without hurting my regular Google ranking?",
+      "answer_summary": "Yes — Google confirmed the new opt-out toggle in Search Console removes a site from AI Overviews/AI Mode/AI Overviews-in-Discover but does not affect regular Search results, and Google stated the setting will not be used as a ranking signal.",
+      "sources": [
+        "https://9to5google.com/2026/06/02/google-ai-mode-overviews-opt-out/"
+      ]
+    },
+    {
+      "question": "What third-party tools exist to track whether AI engines cite my brand?",
+      "answer_summary": "A wave of dedicated products now track this: Otterly.ai, and newer entrants like Canonry (open-source AEO monitor), Elmo (open source AEO), Spiderseek, Prominara, and Somantra (which recently launched a 'Brand Consideration Score'), each running prompt sets across ChatGPT/Perplexity/Gemini/AI Overviews and reporting which links get cited.",
+      "sources": [
+        "https://otterly.ai/",
+        "https://github.com/AINYC/canonry",
+        "https://github.com/elmohq/elmo",
+        "https://www.spiderseek.com",
+        "https://prominara.com",
+        "https://finance.yahoo.com/technology/ai/articles/somantra-enterprise-grade-answer-engine-130000005.html"
+      ]
+    },
+    {
+      "question": "Do AI engines cite sources the same way Google's classic search results do?",
+      "answer_summary": "No — research (BrightEdge, via Search Engine Journal) finds AI engines don't just retrieve/rank sources the way traditional search does; they assign different sources different 'jobs' in an answer (e.g., authority citation vs. social-proof citation) depending on query type.",
+      "sources": [
+        "https://www.searchenginejournal.com/research-suggests-ai-engines-assign-ranking-roles-to-sources/578620/"
+      ]
+    },
+    {
+      "question": "Why does citation tracking matter for a small business specifically?",
+      "answer_summary": "Industry commentary (Forbes Agency Council, Entrepreneur) argues that because AI answer engines compress discovery/evaluation/recommendation into a single generated answer, a brand's citation share is becoming a metric agencies are being asked to report alongside traditional SEO metrics.",
+      "sources": [
+        "https://www.forbes.com/councils/forbesagencycouncil/2026/06/29/how-agencies-can-tap-into-better-ai-citation-results/",
+        "https://www.entrepreneur.com/building-a-business/your-brand-will-be-invisible-in-ai-search-if-youre-not-showing-up-on-these-8-channels"
+      ]
+    },
+    {
+      "question": "Is there a large-scale study aggregating what gets cited across AI engines?",
+      "answer_summary": "Yes — a 2026 'AI Platform Citation Source Index' synthesized roughly 680 million tracked AI citations across nine independent third-party studies (Similarweb, Semrush, Ahrefs, Profound, Peec AI, SE Ranking, and others) covering ChatGPT, Claude, Perplexity, Gemini, and Google AI Overviews.",
+      "sources": [
+        "https://www.forbes.com/councils/forbesagencycouncil/2026/06/29/how-agencies-can-tap-into-better-ai-citation-results/"
+      ]
+    },
+    {
+      "question": "Are there free/open-source tools to check AI citations, or only paid platforms?",
+      "answer_summary": "Both exist — Canonry and Elmo are explicitly open-source AEO monitors on GitHub, alongside paid commercial platforms like Otterly.ai, Profound, Peec AI, and Somantra.",
+      "sources": [
+        "https://github.com/AINYC/canonry",
+        "https://github.com/elmohq/elmo",
+        "https://otterly.ai/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "OtterlyAI homepage",
+      "url": "https://otterly.ai/",
+      "source_type": "company docs",
+      "used_for": "Definition of what an AI citation/mention looks like and how monitoring tools work"
+    },
+    {
+      "title": "Google will let websites opt-out of AI Mode & Overviews in Search",
+      "url": "https://9to5google.com/2026/06/02/google-ai-mode-overviews-opt-out/",
+      "source_type": "industry publication",
+      "used_for": "New Search Console AI performance reporting and opt-out feature details"
+    },
+    {
+      "title": "Google Search Console AI Performance Report & Blocking Controls (headline/snippet only)",
+      "url": "https://www.seroundtable.com/google-ai-performance-report-blocking-controls-41443.html",
+      "source_type": "industry publication",
+      "used_for": "Corroborating the Search Console AI reporting feature (full article blocked, used snippet only)"
+    },
+    {
+      "title": "Research Suggests AI Engines Assign Ranking Roles To Sources",
+      "url": "https://www.searchenginejournal.com/research-suggests-ai-engines-assign-ranking-roles-to-sources/578620/",
+      "source_type": "industry publication",
+      "used_for": "BrightEdge findings on how differently AI engines treat/cite sources"
+    },
+    {
+      "title": "How Agencies Can Tap Into Better AI Citation Results",
+      "url": "https://www.forbes.com/councils/forbesagencycouncil/2026/06/29/how-agencies-can-tap-into-better-ai-citation-results/",
+      "source_type": "industry publication",
+      "used_for": "Citation Share concept and the AI Platform Citation Source Index study aggregation"
+    },
+    {
+      "title": "Your Brand Will Be Invisible in AI Search If You're Not Showing Up on These 8 Channels",
+      "url": "https://www.entrepreneur.com/building-a-business/your-brand-will-be-invisible-in-ai-search-if-youre-not-showing-up-on-these-8-channels",
+      "source_type": "industry publication",
+      "used_for": "Reddit's share of AI citations and multi-channel visibility framing"
+    },
+    {
+      "title": "Somantra launches 'Brand Consideration Score'",
+      "url": "https://finance.yahoo.com/technology/ai/articles/somantra-enterprise-grade-answer-engine-130000005.html",
+      "source_type": "industry publication",
+      "used_for": "Example of a new enterprise AEO/AI-visibility platform"
+    },
+    {
+      "title": "Show HN: Canonry – Open-source AEO monitor",
+      "url": "https://github.com/AINYC/canonry",
+      "source_type": "community",
+      "used_for": "Evidence of open-source citation-tracking tool demand"
+    },
+    {
+      "title": "Show HN: Elmo (Open Source AEO)",
+      "url": "https://github.com/elmohq/elmo",
+      "source_type": "community",
+      "used_for": "Evidence of open-source citation-tracking tool demand"
+    },
+    {
+      "title": "Show HN: Grow and Monitor Your AI Search Traffic (Spiderseek)",
+      "url": "https://www.spiderseek.com",
+      "source_type": "community",
+      "used_for": "Evidence of AI search visibility tool demand on Hacker News"
+    }
+  ]
+}

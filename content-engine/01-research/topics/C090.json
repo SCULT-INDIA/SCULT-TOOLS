@@ -1,0 +1,194 @@
+{
+  "candidate_id": "C090",
+  "status": "accepted",
+  "topic": "What actually makes a website \"fast enough\" and what's diminishing returns",
+  "topic_cluster": "Web Performance Thresholds",
+  "target_keyword": "how fast does a website need to be",
+  "secondary_keywords": [
+    "core web vitals thresholds",
+    "website speed diminishing returns",
+    "good enough page speed",
+    "lcp inp cls targets"
+  ],
+  "long_tail_keywords": [
+    "is a 2 second load time fast enough",
+    "does shaving milliseconds off load time matter",
+    "how much does page speed actually increase conversions",
+    "what pagespeed score is good enough for seo"
+  ],
+  "question_keywords": [
+    "what is a good lcp score",
+    "what is a good inp score",
+    "does site speed affect google rankings",
+    "how much does 1 second of load time cost in conversions",
+    "is there a point where more speed optimization stops helping"
+  ],
+  "comparison_keywords": [
+    "lcp vs inp vs cls",
+    "lab data vs field data page speed",
+    "pagespeed score vs real user experience"
+  ],
+  "how_to_keywords": [
+    "how to check if your website is fast enough",
+    "how to test core web vitals",
+    "how to prioritize which speed fixes actually matter"
+  ],
+  "problem_keywords": [
+    "slow landing page hurting google ads",
+    "high bounce rate due to slow site",
+    "google ads smart bidding punished by slow site",
+    "site passes lighthouse but still feels slow"
+  ],
+  "commercial_keywords": [
+    "website speed test tool",
+    "page speed optimization service",
+    "core web vitals audit"
+  ],
+  "entities": [
+    "Google",
+    "Core Web Vitals",
+    "Lighthouse",
+    "PageSpeed Insights",
+    "GTmetrix",
+    "LCP",
+    "INP",
+    "CLS",
+    "TBT",
+    "Chrome UX Report"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "Website owners, marketers running paid ads, small business site owners, and developers deciding how much performance work is worth doing",
+  "countries": [],
+  "connects_to_tools": [
+    "website-speed-test"
+  ],
+  "connects_to_prompts": [],
+  "connects_to_service": "web-dev",
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 9,
+    "question_density": 7,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 8,
+    "competitive_gap": 6,
+    "conversion_potential": 6,
+    "evidence_quality": 8,
+    "total": 73
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What is a good LCP (Largest Contentful Paint) score?",
+      "answer_summary": "Google's web.dev sets the target at 2.5 seconds or less, measured at the 75th percentile of page loads.",
+      "sources": [
+        "https://web.dev/articles/vitals"
+      ]
+    },
+    {
+      "question": "What is a good INP (Interaction to Next Paint) score?",
+      "answer_summary": "Google's web.dev sets the target at 200 milliseconds or less at the 75th percentile.",
+      "sources": [
+        "https://web.dev/articles/vitals"
+      ]
+    },
+    {
+      "question": "What is a good CLS (Cumulative Layout Shift) score?",
+      "answer_summary": "Google's web.dev sets the target at 0.1 or less to be considered visually stable.",
+      "sources": [
+        "https://web.dev/articles/vitals"
+      ]
+    },
+    {
+      "question": "Why measure Core Web Vitals at the 75th percentile instead of the average?",
+      "answer_summary": "web.dev specifies thresholds should be met at the 75th percentile of page loads, split by mobile and desktop, so the metric reflects most real users rather than being skewed by best-case sessions.",
+      "sources": [
+        "https://web.dev/articles/vitals"
+      ]
+    },
+    {
+      "question": "How much can fixing page speed actually move revenue?",
+      "answer_summary": "web.dev cites Rakuten 24 raising revenue per visitor by 53.37% and conversion by 33.13%, Vodafone gaining 8% sales from a 31% LCP improvement, and redBus gaining 7% sales from an INP improvement.",
+      "sources": [
+        "https://web.dev/articles/why-speed-matters"
+      ]
+    },
+    {
+      "question": "Does a 1-second delay really lose that many visitors?",
+      "answer_summary": "web.dev cites the BBC's finding that it lost an additional 10% of users for every additional second of load time.",
+      "sources": [
+        "https://web.dev/articles/why-speed-matters"
+      ]
+    },
+    {
+      "question": "Can a slow landing page hurt a Google Ads campaign specifically, not just organic traffic?",
+      "answer_summary": "GTmetrix describes a 'performance death spiral' where AI-driven Smart Bidding interprets a slowdown as reduced conversion effectiveness and cuts spend/traffic, citing a case where a two-second slowdown was enough to derail a campaign.",
+      "sources": [
+        "https://gtmetrix.com/blog/how-landing-page-performance-can-silently-make-or-break-your-google-ads-campaigns/"
+      ]
+    },
+    {
+      "question": "What performance score should trigger concern?",
+      "answer_summary": "GTmetrix recommends alerting when the performance score drops below 80%, citing a mattress retailer example that went from a 76% (C grade) to 99% (A grade) after fixes.",
+      "sources": [
+        "https://gtmetrix.com/blog/how-landing-page-performance-can-silently-make-or-break-your-google-ads-campaigns/"
+      ]
+    },
+    {
+      "question": "What Total Blocking Time (TBT) is considered a problem?",
+      "answer_summary": "GTmetrix recommends alerting when TBT exceeds 300 milliseconds.",
+      "sources": [
+        "https://gtmetrix.com/blog/how-landing-page-performance-can-silently-make-or-break-your-google-ads-campaigns/"
+      ]
+    },
+    {
+      "question": "What 'fully loaded' time is too slow for a landing page?",
+      "answer_summary": "GTmetrix recommends alerting when fully loaded time exceeds 4 seconds.",
+      "sources": [
+        "https://gtmetrix.com/blog/how-landing-page-performance-can-silently-make-or-break-your-google-ads-campaigns/"
+      ]
+    },
+    {
+      "question": "Does waiting for a slow page actually cause measurable stress?",
+      "answer_summary": "web.dev cites research finding stress responses to page delays comparable to watching horror films or solving math problems, and higher than waiting in a retail checkout line.",
+      "sources": [
+        "https://web.dev/articles/why-speed-matters"
+      ]
+    },
+    {
+      "question": "Do lab performance fixes (like reducing TBT) actually translate to real-world improvement?",
+      "answer_summary": "web.dev notes that optimizations improving TBT in lab testing may improve INP in the field, i.e., lab metrics are a proxy that can predict — but don't guarantee — real-user gains.",
+      "sources": [
+        "https://web.dev/articles/vitals"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Core Web Vitals",
+      "url": "https://web.dev/articles/vitals",
+      "source_type": "primary/official",
+      "used_for": "LCP/INP/CLS thresholds, 75th-percentile measurement methodology, lab-vs-field relationship"
+    },
+    {
+      "title": "Why speed matters",
+      "url": "https://web.dev/articles/why-speed-matters",
+      "source_type": "primary/official",
+      "used_for": "Business-impact statistics (BBC, Rakuten 24, Vodafone, redBus) and psychological research on load-time stress"
+    },
+    {
+      "title": "How Landing Page Performance Can Silently Make or Break Your Google Ads Campaigns",
+      "url": "https://gtmetrix.com/blog/how-landing-page-performance-can-silently-make-or-break-your-google-ads-campaigns/",
+      "source_type": "industry publication",
+      "used_for": "Google Ads-specific performance thresholds (score, LCP, TBT, fully-loaded time) and a real optimization case study"
+    },
+    {
+      "title": "GTmetrix Blog (listing)",
+      "url": "https://gtmetrix.com/blog/",
+      "source_type": "industry publication",
+      "used_for": "Confirming current publication activity and topical focus areas (Aug 2026)"
+    }
+  ]
+}

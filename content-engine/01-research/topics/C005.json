@@ -1,0 +1,156 @@
+{
+  "candidate_id": "C005",
+  "status": "accepted",
+  "topic": "How Perplexity sources its answers differently from Google's AI Overviews",
+  "topic_cluster": "AI Answer Engine Comparison",
+  "target_keyword": "perplexity vs google ai overviews sourcing",
+  "secondary_keywords": [
+    "how perplexity picks sources",
+    "google ai overviews source selection",
+    "perplexity vs google ai search sources"
+  ],
+  "long_tail_keywords": [
+    "why does perplexity cite reddit so much more than google",
+    "how many sources does perplexity use per answer vs google",
+    "does perplexity or google ai overviews cite more niche blogs",
+    "perplexity source diversity vs google ai overviews"
+  ],
+  "question_keywords": [
+    "how does perplexity decide which sources to cite",
+    "how does google ai overviews choose sources",
+    "does perplexity use more sources than google ai overviews",
+    "why does perplexity favor reddit"
+  ],
+  "comparison_keywords": [
+    "perplexity vs google ai overviews",
+    "perplexity vs chatgpt search citations",
+    "perplexity sourcing vs bing chat sourcing"
+  ],
+  "how_to_keywords": [
+    "how to get cited by perplexity",
+    "how to increase citations in google ai overviews"
+  ],
+  "problem_keywords": [
+    "perplexity not citing my site",
+    "google ai overviews ignoring my content"
+  ],
+  "commercial_keywords": [
+    "ai visibility checker",
+    "geo audit tool"
+  ],
+  "entities": [
+    "Perplexity",
+    "Google AI Overviews",
+    "Gemini",
+    "Reddit",
+    "E-E-A-T",
+    "YouTube",
+    "GitHub"
+  ],
+  "primary_intent": "Comparative",
+  "secondary_intent": "Informational",
+  "audience": "SEO/GEO practitioners and content marketers comparing AI search platforms to prioritize where to invest citation-earning effort",
+  "countries": [],
+  "connects_to_tools": [
+    "ai-visibility-checker"
+  ],
+  "connects_to_service": "",
+  "connects_to_prompts": [],
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 5,
+    "conversion_potential": 5,
+    "evidence_quality": 7,
+    "total": 64
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "How many sources does Perplexity use per answer compared to Google AI Overviews?",
+      "answer_summary": "Google AI Overviews typically summarizes around 5 sources, while Perplexity (especially Pro) is reported to draw on 20+ sources per query.",
+      "sources": [
+        "https://www.leapd.ai/blog/ai-visibility/how-chatgpt-google-ai-overviews-and-perplexity-source-information-in-2026"
+      ]
+    },
+    {
+      "question": "Why does Perplexity cite Reddit so much more heavily than Google AI Overviews does?",
+      "answer_summary": "Reddit is reported to account for roughly 46.7% of Perplexity's top-10 citations — more than 3x its next source (YouTube) — because Perplexity's retrieval appears to weight experiential specificity and community validation highly, and Reddit is a manually boosted domain in its system; after a 2024 cease-and-desist, Reddit citations reportedly increased roughly forty-fold before Reddit ultimately sued Perplexity in October 2025 over unauthorized scraping.",
+      "sources": [
+        "https://hashmeta.com/blog/why-perplexity-loves-reddit-a-deep-dive-into-its-citation-behaviour/"
+      ]
+    },
+    {
+      "question": "Does Google AI Overviews favor big, established sites over smaller niche ones?",
+      "answer_summary": "Yes — Google tends to prioritize large, well-known sites with strong E-E-A-T signals, while Perplexity has a more 'open' policy that surfaces niche blogs, smaller publications, and video content more readily.",
+      "sources": [
+        "https://www.leapd.ai/blog/ai-visibility/how-chatgpt-google-ai-overviews-and-perplexity-source-information-in-2026"
+      ]
+    },
+    {
+      "question": "How different are the actual sources cited by Perplexity vs Google AI Overviews for the same query?",
+      "answer_summary": "Reported overlap between the two platforms' citations for the same query is low — cited as only 10-25% overlap — with Perplexity drawing from a reported 1,430 unique news sources versus Google's 881 in one comparison.",
+      "sources": [
+        "https://www.leapd.ai/blog/ai-visibility/how-chatgpt-google-ai-overviews-and-perplexity-source-information-in-2026"
+      ]
+    },
+    {
+      "question": "Does Perplexity show which specific source backs each claim, unlike Google AI Overviews?",
+      "answer_summary": "Yes — Perplexity is reported to provide inline numbered citations tied to specific claims, making fact-checking straightforward, while Google AI Overviews cites with less granularity, typically listing references at the end rather than per-claim.",
+      "sources": [
+        "https://discoveredlabs.com/blog/chatgpt-claude-perplexity-and-google-ai-overviews-how-each-platform-cites-sources-differently"
+      ]
+    },
+    {
+      "question": "Does Perplexity respect Google's organic rankings when choosing sources?",
+      "answer_summary": "One multi-query study is cited as finding Perplexity follows Google's SEO rankings fairly closely (~90% in that study), unlike ChatGPT, which was found to largely ignore Google rankings and brand size.",
+      "sources": [
+        "https://www.einpresswire.com/article/925230382/citelens-study-seo-decides-ai-citations-on-google-and-perplexity-not-chatgpt"
+      ]
+    },
+    {
+      "question": "Is there real overlap between what Perplexity cites and what ChatGPT cites for the same question?",
+      "answer_summary": "Reported overlap is low — only around 11% of domains cited by ChatGPT are also cited by Perplexity in one comparative study, underscoring that each platform runs a substantially different source-selection process.",
+      "sources": [
+        "https://www.einpresswire.com/article/925230382/citelens-study-seo-decides-ai-citations-on-google-and-perplexity-not-chatgpt"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://www.leapd.ai/blog/ai-visibility/how-chatgpt-google-ai-overviews-and-perplexity-source-information-in-2026",
+      "title": "How ChatGPT, Google AI Overviews, and Perplexity Source Information in 2026",
+      "source_type": "industry publication",
+      "used_for": "Source-count comparison, source diversity stats, and E-E-A-T vs open-source-policy contrast"
+    },
+    {
+      "url": "https://discoveredlabs.com/blog/chatgpt-claude-perplexity-and-google-ai-overviews-how-each-platform-cites-sources-differently",
+      "title": "ChatGPT, Claude, Perplexity, and Google AI Overviews: How Each Platform Cites Sources Differently",
+      "source_type": "industry publication",
+      "used_for": "Citation presentation/granularity comparison"
+    },
+    {
+      "url": "https://hashmeta.com/blog/why-perplexity-loves-reddit-a-deep-dive-into-its-citation-behaviour/",
+      "title": "Why Perplexity Loves Reddit: A Deep Dive Into Its Citation Behaviour",
+      "source_type": "industry publication",
+      "used_for": "Reddit citation-share statistic and cease-and-desist/lawsuit context"
+    },
+    {
+      "url": "https://www.einpresswire.com/article/925230382/citelens-study-seo-decides-ai-citations-on-google-and-perplexity-not-chatgpt",
+      "title": "CiteLens Study: SEO Decides AI Citations on Google and Perplexity, Not ChatGPT",
+      "source_type": "industry publication (press release)",
+      "used_for": "Cross-platform citation-overlap and SEO-following-rate statistics"
+    },
+    {
+      "url": "https://quickseo.ai/blog/perplexity-vs-google-search-in-2026-the-data-seos-need-to-know",
+      "title": "Perplexity vs Google in 2026: Why 1% Beats 90% on...",
+      "source_type": "industry publication",
+      "used_for": "Additional comparative context on Perplexity vs Google search behavior"
+    }
+  ]
+}

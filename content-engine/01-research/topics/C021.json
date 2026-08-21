@@ -1,0 +1,232 @@
+{
+  "candidate_id": "C021",
+  "topic": "What actually counts as an \"AI agent\" vs a chatbot with tool access",
+  "status": "accepted",
+  "target_keyword": "ai agent vs chatbot",
+  "secondary_keywords": [
+    "what is an ai agent",
+    "difference between ai agent and chatbot",
+    "agentic ai definition",
+    "ai agent vs chatbot definition"
+  ],
+  "long_tail_keywords": [
+    "what actually counts as an ai agent vs a chatbot with tool access",
+    "is a chatbot with function calling an ai agent",
+    "how to tell if a product is really an ai agent",
+    "agent washing definition explained"
+  ],
+  "question_keywords": [
+    "what makes something an ai agent instead of a chatbot",
+    "is my chatbot actually an ai agent",
+    "what is agent washing",
+    "what percentage of ai agents are real"
+  ],
+  "comparison_keywords": [
+    "ai agent vs ai chatbot vs llm workflow",
+    "anthropic agents vs workflows",
+    "agentic workflow vs autonomous agent"
+  ],
+  "how_to_keywords": [
+    "how to tell if a product is really an ai agent",
+    "how to spot agent washing",
+    "how to decide between a workflow and an agent"
+  ],
+  "problem_keywords": [
+    "agent washing",
+    "ai agent hype vs reality",
+    "vendors mislabeling chatbots as agents"
+  ],
+  "commercial_keywords": [
+    "ai agent platform",
+    "agentic ai software",
+    "ai agent builder"
+  ],
+  "entities": [
+    "Anthropic",
+    "Salesforce Agentforce",
+    "Zendesk",
+    "Gartner",
+    "Rasa",
+    "Make.com",
+    "OWASP"
+  ],
+  "audience": "product managers, engineering leaders, and buyers evaluating 'AI agent' vendor claims; developers building agentic systems",
+  "primary_intent": "Informational",
+  "secondary_intent": "Comparative",
+  "countries": [],
+  "topic_cluster": "AI Agents — Definitions & Terminology",
+  "connects_to_service": "ai-agents-automation-service",
+  "connects_to_tools": [
+    "ai-engineering"
+  ],
+  "connects_to_prompts": [
+    "ai-agent-prompts"
+  ],
+  "scores": {
+    "demand": 6,
+    "intent": 6,
+    "relevance": 8,
+    "question_density": 9,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 9,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 6,
+    "conversion_potential": 6,
+    "evidence_quality": 9,
+    "total": 71
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What is the fundamental difference between an AI agent and a chatbot?",
+      "answer_summary": "Multiple vendor sources converge on autonomy: a chatbot converses and answers within a defined scope, while an agent perceives inputs, reasons about a goal, selects tools, and executes multi-step actions across systems.",
+      "sources": [
+        "https://aisera.com/blog/ai-agent-vs-chatbot-differences/",
+        "https://www.make.com/en/blog/AI-agent-vs-chatbot",
+        "https://www.zendesk.com/blog/ai/chatbots/ai-agents-vs-ai-chatbots/"
+      ]
+    },
+    {
+      "question": "How does Anthropic formally define an 'agent' versus a 'workflow'?",
+      "answer_summary": "Anthropic defines workflows as systems where LLMs and tools are orchestrated through predefined code paths, while agents are systems where the LLM dynamically directs its own process and tool use, maintaining control over how it accomplishes a task.",
+      "sources": [
+        "https://www.anthropic.com/engineering/building-effective-agents"
+      ]
+    },
+    {
+      "question": "When should you build a workflow instead of a fully autonomous agent?",
+      "answer_summary": "Anthropic's guidance is to start with the simplest solution (workflow) and only add agency when flexibility is worth the added latency, cost, and error-compounding risk; most production systems don't need full autonomy.",
+      "sources": [
+        "https://mer.vin/2026/05/when-not-to-build-ai-agents-anthropics-workflow-vs-agent-playbook/",
+        "https://www.anthropic.com/engineering/building-effective-agents"
+      ]
+    },
+    {
+      "question": "What is 'agent washing' and how widespread is it?",
+      "answer_summary": "Gartner named the phenomenon in mid-2025 and estimated only about 130 of thousands of vendors claiming to sell 'AI agents' were genuinely agentic — roughly 95% were rebranded chatbots, RPA, or assistants.",
+      "sources": [
+        "https://xpert.digital/en/the-label-fraud/",
+        "https://particula.tech/blog/agent-washing-real-vs-fake-ai-agents"
+      ]
+    },
+    {
+      "question": "How can you tell a real AI agent from a rebranded chatbot?",
+      "answer_summary": "Buyer scorecards look for genuine autonomy, goal-orientation, adaptive tool selection, and ability to act across systems — not just a conversational UI with a new label.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/agent-washing-definition-buyers-scorecard-2026",
+        "https://www.entagl.com/blog/agent-washing-real-ai-agent-vs-rebranded-chatbot"
+      ]
+    },
+    {
+      "question": "Is a RAG system automatically an 'AI agent'?",
+      "answer_summary": "No — commentators specifically flag RAG systems being marketed as 'autonomous knowledge systems' as an example of agent washing, since retrieval alone doesn't imply autonomous decision-making or action-taking.",
+      "sources": [
+        "https://particula.tech/blog/agent-washing-real-vs-fake-ai-agents"
+      ]
+    },
+    {
+      "question": "What percentage of organizations have actually deployed AI agents versus just planning to?",
+      "answer_summary": "Gartner's 2026 CIO survey found only 17% of organizations have deployed AI agents while over 60% expect to within two years — a large gap between buying intent and real deployment that fuels mislabeling.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/agent-washing-definition-buyers-scorecard-2026"
+      ]
+    },
+    {
+      "question": "What are the five workflow patterns Anthropic lays out before recommending full agents?",
+      "answer_summary": "Prompt chaining, routing, parallelization, orchestrator-workers, and evaluator-optimizer — all predefined-path patterns that stop short of full agentic autonomy.",
+      "sources": [
+        "https://www.anthropic.com/engineering/building-effective-agents"
+      ]
+    },
+    {
+      "question": "Why might agentic AI project cancellations rise in the next couple of years?",
+      "answer_summary": "Analysts predict a high cancellation rate for agentic AI projects by 2027 due to unclear value and capabilities that were mislabelled at purchase time (i.e., bought as 'agents' but functioning as simple automation).",
+      "sources": [
+        "https://www.digitalapplied.com/blog/agent-washing-definition-buyers-scorecard-2026"
+      ]
+    },
+    {
+      "question": "Does tool access alone make an LLM system an 'agent'?",
+      "answer_summary": "Practitioner debate (e.g., on Hacker News around agentic systems) generally lands on autonomy plus decision-making over tool use — not mere tool access — as the deciding factor, since a chatbot can also call a function without directing its own multi-step process.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=44623207"
+      ]
+    },
+    {
+      "question": "Why does the threat model change once a system is a true 'agent' rather than a chatbot?",
+      "answer_summary": "A chatbot that leaks data or generates unsafe text is dangerous in a bounded way, but an agentic system that can actually take actions (delete data, call APIs, spend money) changes the entire security threat model.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=44623207"
+      ]
+    },
+    {
+      "question": "What are practical, non-chatbot use cases that qualify as true agents?",
+      "answer_summary": "Anthropic points to promising agent applications like customer support that combine a familiar chatbot interface with genuine tool-integrated autonomy — i.e., the interface alone isn't the distinguishing factor, the decision-making loop behind it is.",
+      "sources": [
+        "https://www.anthropic.com/engineering/building-effective-agents"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "AI Agent vs Chatbot: What's the Difference in 2026?",
+      "url": "https://aisera.com/blog/ai-agent-vs-chatbot-differences/",
+      "source_type": "company docs",
+      "used_for": "baseline agent-vs-chatbot definition"
+    },
+    {
+      "title": "AI agent vs chatbot: what is the difference?",
+      "url": "https://www.make.com/en/blog/AI-agent-vs-chatbot",
+      "source_type": "company docs",
+      "used_for": "corroborating definition"
+    },
+    {
+      "title": "AI agent vs. AI chatbot: Key differences and features",
+      "url": "https://www.zendesk.com/blog/ai/chatbots/ai-agents-vs-ai-chatbots/",
+      "source_type": "company docs",
+      "used_for": "corroborating definition, customer support framing"
+    },
+    {
+      "title": "Building Effective AI Agents",
+      "url": "https://www.anthropic.com/engineering/building-effective-agents",
+      "source_type": "primary/official",
+      "used_for": "authoritative agents-vs-workflows definition and workflow pattern taxonomy"
+    },
+    {
+      "title": "When Not to Build AI Agents: Anthropic's Workflow-vs-Agent Playbook",
+      "url": "https://mer.vin/2026/05/when-not-to-build-ai-agents-anthropics-workflow-vs-agent-playbook/",
+      "source_type": "industry publication",
+      "used_for": "practical guidance on when not to build full agents"
+    },
+    {
+      "title": "Agent Washing: Only 130 out of thousands are real",
+      "url": "https://xpert.digital/en/the-label-fraud/",
+      "source_type": "industry publication",
+      "used_for": "Gartner agent-washing statistic"
+    },
+    {
+      "title": "Agent Washing: Why 95% of 'AI Agents' Are Just Expensive Chatbots",
+      "url": "https://particula.tech/blog/agent-washing-real-vs-fake-ai-agents",
+      "source_type": "industry publication",
+      "used_for": "agent-washing examples including RAG mislabeling"
+    },
+    {
+      "title": "Agent Washing: The Definition — and a Scorecard to Catch It",
+      "url": "https://www.digitalapplied.com/blog/agent-washing-definition-buyers-scorecard-2026",
+      "source_type": "industry publication",
+      "used_for": "Gartner CIO survey stats, cancellation prediction, buyer scorecard"
+    },
+    {
+      "title": "Agent Washing: Real AI Agent vs Rebranded Chatbot",
+      "url": "https://www.entagl.com/blog/agent-washing-real-ai-agent-vs-rebranded-chatbot",
+      "source_type": "industry publication",
+      "used_for": "practical detection criteria"
+    },
+    {
+      "title": "The current hype around autonomous agents, and what actually works in production",
+      "url": "https://news.ycombinator.com/item?id=44623207",
+      "source_type": "community",
+      "used_for": "practitioner debate on autonomy/threat-model distinction"
+    }
+  ]
+}

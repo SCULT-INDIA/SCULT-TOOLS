@@ -1,0 +1,232 @@
+{
+  "candidate_id": "C056",
+  "status": "accepted",
+  "topic": "What actually goes wrong when companies automate customer support too fast",
+  "topic_cluster": "AI customer support failure patterns",
+  "target_keyword": "customer support automation gone wrong",
+  "secondary_keywords": [
+    "ai chatbot customer service fails",
+    "ai customer support backlash",
+    "company replaced support agents with ai",
+    "ai support hallucination incidents"
+  ],
+  "long_tail_keywords": [
+    "what happens when companies automate support too fast",
+    "real examples of ai customer service disasters",
+    "why did klarna bring back human agents",
+    "air canada chatbot lawsuit explained",
+    "cursor ai support bot invented policy"
+  ],
+  "question_keywords": [
+    "is a company liable for what its ai chatbot says",
+    "why did cursor's support bot invent a fake policy",
+    "how much ai customer support spend actually pays off",
+    "does removing human support hurt customer loyalty",
+    "why did klarna reverse its ai-first support strategy"
+  ],
+  "comparison_keywords": [
+    "ai chatbot vs human support agent satisfaction",
+    "klarna ai support vs human support before and after"
+  ],
+  "how_to_keywords": [
+    "how to avoid ai customer support disasters",
+    "how to label ai-generated support responses",
+    "how to roll out ai support without alienating customers"
+  ],
+  "problem_keywords": [
+    "ai chatbot hallucinated company policy",
+    "ai customer support lawsuit",
+    "customers cancel subscription after ai support mistake"
+  ],
+  "commercial_keywords": [
+    "ai customer support platform with human handoff",
+    "enterprise ai support tools with escalation controls"
+  ],
+  "entities": [
+    "Klarna",
+    "Air Canada",
+    "Cursor (Sam bot)",
+    "Sebastian Siemiatkowski",
+    "Shopify",
+    "Accenture",
+    "Judge Christopher Rivers (Air Canada tribunal)"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Opinion/research",
+  "audience": "Founders, CX/support leaders and product managers at small-to-mid companies deciding how fast and how far to automate support",
+  "countries": [
+    "Canada"
+  ],
+  "connects_to_service": "ai-agents-automation",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "customer-support",
+    "ai-engineering"
+  ],
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 6,
+    "conversion_potential": 7,
+    "evidence_quality": 9,
+    "total": 72
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What actually happened when Klarna replaced support agents with an AI chatbot?",
+      "answer_summary": "Klarna replaced roughly 700 support agents with an AI chatbot handling 2.3 million conversations/month in 2024, but by mid-2025 CEO Sebastian Siemiatkowski publicly reversed course, admitting the company prioritized cost over quality and began rehiring humans.",
+      "sources": [
+        "https://www.yahoo.com/news/customer-support-ai-went-rogue-120000474.html",
+        "https://www.cmswire.com/customer-experience/ai-in-customer-service-billion-dollar-mistake-when-deployed-wrong/"
+      ]
+    },
+    {
+      "question": "Is a company legally liable for what its AI chatbot tells customers?",
+      "answer_summary": "Yes — Air Canada was found liable for negligent misrepresentation after its chatbot invented a bereavement-fare policy; the tribunal rejected the airline's argument that the bot was a separate legal entity, ruling a company is responsible for all information on its website regardless of source.",
+      "sources": [
+        "https://www.forbes.com/sites/marisagarcia/2024/02/19/what-air-canada-lost-in-remarkable-lying-ai-chatbot-case/",
+        "https://www.cbc.ca/news/canada/british-columbia/air-canada-chatbot-lawsuit-1.7116416"
+      ]
+    },
+    {
+      "question": "What happened with Cursor's AI support bot 'Sam'?",
+      "answer_summary": "Cursor's AI-powered support bot fabricated a nonexistent 'one device per subscription' policy in response to a login bug, and users publicly cancelled subscriptions over the invented rule before Cursor apologized and began labeling AI-generated support responses.",
+      "sources": [
+        "https://www.theregister.com/2025/04/18/cursor_ai_support_bot_lies/",
+        "https://www.cxtoday.com/contact-center/a-contact-center-chatbot-invents-company-policies-now-customers-want-out/"
+      ]
+    },
+    {
+      "question": "How often does AI-only handling actually resolve a support interaction?",
+      "answer_summary": "Research cited (Accenture) found roughly 38.8% of interactions handled entirely by AI failed, and nearly one in five consumers using AI support got no benefit from it at all.",
+      "sources": [
+        "https://www.gleap.io/blog/ai-support-failures-lessons"
+      ]
+    },
+    {
+      "question": "Does removing human support agents hurt customer loyalty?",
+      "answer_summary": "Cited survey data found nearly 90% of consumers reported reduced loyalty when human support was removed from a company's service channel, even when AI responses were fast.",
+      "sources": [
+        "https://www.gleap.io/blog/ai-support-failures-lessons"
+      ]
+    },
+    {
+      "question": "Is heavy AI investment in customer support actually paying off?",
+      "answer_summary": "Organizations reportedly invested $47 billion in AI initiatives in the first half of 2025, yet 89% of that spend delivered minimal measurable return, per industry reporting.",
+      "sources": [
+        "https://www.gleap.io/blog/ai-support-failures-lessons"
+      ]
+    },
+    {
+      "question": "What are the most common root causes of AI customer-support failures?",
+      "answer_summary": "Common causes cited are the bot lacking accurate context, relying on outdated knowledge, overstepping its permissions, missing frustration signals, and making escalation to a human too hard.",
+      "sources": [
+        "https://www.gleap.io/blog/ai-support-failures-lessons"
+      ]
+    },
+    {
+      "question": "What are Shopify merchants specifically complaining about with AI support?",
+      "answer_summary": "Merchants on Shopify's own community forum have complained about being forced through an ineffective AI chatbot that fails to resolve issues and makes reaching a human representative difficult.",
+      "sources": [
+        "https://community.shopify.com/t/shopify-misleading-merchants-about-support/258145"
+      ]
+    },
+    {
+      "question": "How did Cursor fix its AI hallucination incident afterward?",
+      "answer_summary": "Cursor acknowledged the error, apologized, clarified an AI bot rather than a human had answered, and committed that any AI-generated email support responses would be clearly labeled as such going forward.",
+      "sources": [
+        "https://www.theregister.com/2025/04/18/cursor_ai_support_bot_lies/"
+      ]
+    },
+    {
+      "question": "Can an AI support bot hallucinate a policy that never existed?",
+      "answer_summary": "Yes — both the Air Canada bereavement-fare case and the Cursor 'one device per subscription' case are documented instances of a support AI inventing a specific, plausible-sounding policy that had no basis in actual company rules.",
+      "sources": [
+        "https://www.cbc.ca/news/canada/british-columbia/air-canada-chatbot-lawsuit-1.7116416",
+        "https://digialps.com/ai-support-fail-cursor-bot-invents-policy-causes-user-uproar/"
+      ]
+    },
+    {
+      "question": "What did the Air Canada tribunal award the affected customer?",
+      "answer_summary": "The Canadian small-claims tribunal awarded the passenger CAD $812.02 in damages and fees after finding Air Canada negligently misrepresented its bereavement-fare policy through its chatbot.",
+      "sources": [
+        "https://www.cbc.ca/news/canada/british-columbia/air-canada-chatbot-lawsuit-1.7116416"
+      ]
+    },
+    {
+      "question": "Why do companies rush to automate support faster than the technology can reliably handle?",
+      "answer_summary": "Coverage of the Klarna reversal frames it as prioritizing efficiency/cost savings over quality and sustainability, a pattern repeated across the cited failure cases.",
+      "sources": [
+        "https://www.yahoo.com/news/customer-support-ai-went-rogue-120000474.html"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "63% of Job Seekers... (survey vendor, used cross-reference only)",
+      "url": "https://www.greenhouse.com/newsroom/63-of-job-seekers-have-faced-an-ai-interview-most-havent-had-a-good-one-yet",
+      "source_type": "company docs",
+      "used_for": "general AI-in-hiring context, not directly used for this topic's core claims"
+    },
+    {
+      "title": "AI Customer Support Failures: Backlash, Liability, and Lessons for 2026",
+      "url": "https://www.gleap.io/blog/ai-support-failures-lessons",
+      "source_type": "industry publication",
+      "used_for": "failure-rate statistics, root-cause analysis, consumer-loyalty stats"
+    },
+    {
+      "title": "A customer support AI went rogue—and it's a warning for every company",
+      "url": "https://www.yahoo.com/news/customer-support-ai-went-rogue-120000474.html",
+      "source_type": "aggregator",
+      "used_for": "Klarna reversal narrative"
+    },
+    {
+      "title": "AI in Customer Service: Billion-Dollar Mistake When Deployed Wrong",
+      "url": "https://www.cmswire.com/customer-experience/ai-in-customer-service-billion-dollar-mistake-when-deployed-wrong/",
+      "source_type": "industry publication",
+      "used_for": "Klarna context and framing"
+    },
+    {
+      "title": "What Air Canada Lost In 'Remarkable' Lying AI Chatbot Case",
+      "url": "https://www.forbes.com/sites/marisagarcia/2024/02/19/what-air-canada-lost-in-remarkable-lying-ai-chatbot-case/",
+      "source_type": "industry publication",
+      "used_for": "Air Canada case details"
+    },
+    {
+      "title": "How can I mislead you? Air Canada found liable for chatbot's bad advice",
+      "url": "https://www.cbc.ca/news/canada/british-columbia/air-canada-chatbot-lawsuit-1.7116416",
+      "source_type": "news/primary",
+      "used_for": "court ruling details, damages awarded, legal reasoning"
+    },
+    {
+      "title": "Cursor AI's own support bot hallucinated its usage policy",
+      "url": "https://www.theregister.com/2025/04/18/cursor_ai_support_bot_lies/",
+      "source_type": "industry publication",
+      "used_for": "Cursor incident details and company response"
+    },
+    {
+      "title": "A Contact Center Chatbot Invents Company Policies, Now Customers Want Out",
+      "url": "https://www.cxtoday.com/contact-center/a-contact-center-chatbot-invents-company-policies-now-customers-want-out/",
+      "source_type": "industry publication",
+      "used_for": "Cursor incident, subscription cancellations"
+    },
+    {
+      "title": "AI Support Fail: Cursor Bot Invents Policy, Causes User Uproar",
+      "url": "https://digialps.com/ai-support-fail-cursor-bot-invents-policy-causes-user-uproar/",
+      "source_type": "industry publication",
+      "used_for": "Cursor incident corroboration"
+    },
+    {
+      "title": "Shopify misleading merchants about support (community thread)",
+      "url": "https://community.shopify.com/t/shopify-misleading-merchants-about-support/258145",
+      "source_type": "community",
+      "used_for": "real merchant complaints about AI support quality"
+    }
+  ]
+}

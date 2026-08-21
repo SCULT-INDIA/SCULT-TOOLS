@@ -1,0 +1,169 @@
+{
+  "candidate_id": "C099",
+  "topic": "How developers are actually choosing between AI models by cost per task, not benchmarks",
+  "status": "accepted",
+  "target_keyword": "ai model cost per task vs benchmarks",
+  "secondary_keywords": [
+    "ai model cost comparison",
+    "cheapest llm for production",
+    "llm cost per task"
+  ],
+  "long_tail_keywords": [
+    "how to choose an ai model based on cost not benchmarks",
+    "cheaper ai models that match gpt-4 performance",
+    "llm router to pick cheapest model per query"
+  ],
+  "question_keywords": [
+    "are ai benchmarks misleading",
+    "why do ai models with similar scores cost so differently",
+    "how do i reduce llm api costs"
+  ],
+  "comparison_keywords": [
+    "gpt-4 vs cheaper models cost performance",
+    "flagship model vs mid-tier model cost"
+  ],
+  "how_to_keywords": [
+    "how to build a model router for cost savings",
+    "how to benchmark llms on cost per task"
+  ],
+  "problem_keywords": [
+    "llm api costs too high",
+    "benchmark scores don't match real performance"
+  ],
+  "commercial_keywords": [
+    "llm api pricing comparison",
+    "cheapest ai api for production"
+  ],
+  "entities": [
+    "GPT-4",
+    "GPT-5",
+    "Claude",
+    "cached tokens",
+    "model router",
+    "OCR benchmark",
+    "tokens per second",
+    "EEBench"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Commercial Investigation",
+  "audience": "Developers and technical leads running production LLM workloads at scale who need to control API spend without sacrificing quality",
+  "countries": [],
+  "topic_cluster": "LLM cost optimization & model selection",
+  "connects_to_tools": [],
+  "connects_to_prompts": [],
+  "connects_to_service": "AI agents & automation",
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 7,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 6,
+    "conversion_potential": 6,
+    "evidence_quality": 7,
+    "total": 64
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Why can two AI models with similar benchmark scores cost wildly different amounts to run per task?",
+      "answer_summary": "A real Show HN project (EEBench, grading AI-designed circuits by physics simulation) found cost per task varying 15x between models with similar benchmark scores, arguing for measuring actual behavior over generic scores.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=cost%20per%20task%20LLM%20benchmark"
+      ]
+    },
+    {
+      "question": "Can an API router that picks the cheapest model per query actually cut costs without hurting quality?",
+      "answer_summary": "A real Show HN tool (an API router picking the cheapest model that fits each query) reportedly found 70% of customer-support queries could use cheaper models, dropping monthly costs from $250 to $40 while maintaining quality.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=cost%20per%20task%20LLM%20benchmark"
+      ]
+    },
+    {
+      "question": "Do cheaper/mid-tier models actually match state-of-the-art models on standard tasks like OCR?",
+      "answer_summary": "A real benchmark project ('we benchmarked 18 LLMs on OCR, 7K+ calls') found cost differences spanning 'multiple orders of magnitude' between comparable models, with mid-tier and older models matching top models on standard document tasks.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=cost%20per%20task%20LLM%20benchmark"
+      ]
+    },
+    {
+      "question": "Why do developers say published leaderboards are misleading?",
+      "answer_summary": "A real HN comment on OpenAI's Structured Outputs feature states 'leaderboards and benchmarks are very misleading as OpenAI is optimizing for them,' and the commenter found an older model version outperformed a newer one on their specific task.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=LLM%20benchmarks%20are%20misleading"
+      ]
+    },
+    {
+      "question": "Is cost-per-call a better metric than peak capability when running many LLM calls in an agent workflow?",
+      "answer_summary": "A real practitioner comment states 'the cost per call matters more than peak capability' specifically for workflows making dozens of LLM calls per task.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=cost%20per%20task%20LLM%20benchmark"
+      ]
+    },
+    {
+      "question": "Is minimizing total token count the wrong optimization target?",
+      "answer_summary": "An HN comment argues 'optimizing for total token count is wrong' — shifting volume to cheaper pricing tiers (e.g. cached tokens) yields better real economics than raw token efficiency.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=cost%20per%20task%20LLM%20benchmark"
+      ]
+    },
+    {
+      "question": "Can routing different task types to specialized models cut cost while improving output quality?",
+      "answer_summary": "A real example on HN describes specialized per-task models producing '2x more detailed output' than a pinned flagship model, while cutting costs by 66%.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=cost%20per%20task%20LLM%20benchmark"
+      ]
+    },
+    {
+      "question": "Do some developers ignore benchmarks entirely and rely only on hands-on testing?",
+      "answer_summary": "A commenter on 'The Illusion of Thinking' HN thread states plainly 'I don't care about benchmarks' and instead tests models directly on their specific tasks, sometimes finding generated code takes 'more time to troubleshoot and fix than if I were to write it myself.'",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=LLM%20benchmarks%20are%20misleading"
+      ]
+    },
+    {
+      "question": "Why do teams keep multiple premium model subscriptions instead of relying on one benchmark 'winner'?",
+      "answer_summary": "An HN commenter reports teams subscribing to 'Claude AND Gemini AND ChatGPT' simultaneously because 'benchmarks are often misleading' and local-model tokens/s numbers rarely hold up in practice.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=LLM%20benchmarks%20are%20misleading"
+      ]
+    },
+    {
+      "question": "Why is there growing skepticism of generic LLM leaderboards among engineers actually shipping products?",
+      "answer_summary": "Across multiple independent HN threads (EEBench, the OCR benchmark, the model router project, and general model-selection discussions), the consistent theme is that real cost-quality tradeoffs discovered through direct testing diverge from what public leaderboards suggest.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=cost%20per%20task%20LLM%20benchmark",
+        "https://hn.algolia.com/api/v1/search?query=LLM%20benchmarks%20are%20misleading"
+      ]
+    },
+    {
+      "question": "How do teams decide when a task is simple enough to route to a cheap model versus needing a frontier model?",
+      "answer_summary": "The API-router Show HN project frames this as an automatic decision ('picks the cheapest model that fits each query'), with the real-world outcome that a majority (70%) of a support workload didn't need the expensive model.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=cost%20per%20task%20LLM%20benchmark"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "HN Algolia search: cost per task LLM benchmark",
+      "url": "https://hn.algolia.com/api/v1/search?query=cost%20per%20task%20LLM%20benchmark",
+      "source_type": "community",
+      "used_for": "Show HN projects and comments quantifying real cost differences between models and cost-based routing strategies"
+    },
+    {
+      "title": "HN Algolia search: LLM benchmarks are misleading",
+      "url": "https://hn.algolia.com/api/v1/search?query=LLM%20benchmarks%20are%20misleading",
+      "source_type": "community",
+      "used_for": "Practitioner skepticism of benchmarks/leaderboards versus hands-on, task-specific testing"
+    },
+    {
+      "title": "tools.scult.in homepage overview",
+      "url": "https://tools.scult.in",
+      "source_type": "company docs",
+      "used_for": "Confirming service alignment (AI agents & automation) for this topic"
+    }
+  ]
+}

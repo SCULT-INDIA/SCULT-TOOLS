@@ -1,0 +1,175 @@
+{
+  "candidate_id": "C066",
+  "topic": "What email signature design actually does for brand consistency at a growing company",
+  "status": "accepted",
+  "target_keyword": "email signature brand consistency",
+  "secondary_keywords": [
+    "consistent company email signature",
+    "email signature generator for business",
+    "email signature management software"
+  ],
+  "long_tail_keywords": [
+    "how to create a consistent company wide email signature",
+    "why email signatures matter for branding",
+    "email signature marketing for growing companies"
+  ],
+  "question_keywords": [
+    "why does email signature consistency matter",
+    "what happens when employees make their own email signatures",
+    "does email signature design affect brand perception"
+  ],
+  "comparison_keywords": [
+    "email signature generator vs it-installed signature vs exchange rules",
+    "manual signature vs automated signature management"
+  ],
+  "how_to_keywords": [
+    "how to standardize email signatures across a company",
+    "how to create a professional email signature",
+    "how to roll out email signatures at scale"
+  ],
+  "problem_keywords": [
+    "employees create inconsistent email signatures",
+    "email signature looks unprofessional",
+    "signature formatting breaks when forwarded"
+  ],
+  "commercial_keywords": [
+    "email signature generator free",
+    "email signature management software",
+    "email signature manager for business"
+  ],
+  "entities": [
+    "Exchange/Outlook 365",
+    "Gravatar",
+    "NEWOLDSTAMP",
+    "Mailmunch",
+    "Exclaimer",
+    "HubSpot signature generator"
+  ],
+  "audience": "growing companies (roughly 20-500 employees) standardizing brand touchpoints, IT/marketing ops managers, HR onboarding teams, sales and marketing leads",
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Tool discovery",
+  "countries": [],
+  "topic_cluster": "Brand consistency in everyday communication touchpoints",
+  "connects_to_tools": [
+    "email-signature-generator"
+  ],
+  "connects_to_prompts": [
+    "business operations",
+    "design"
+  ],
+  "connects_to_service": "Branding",
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 9,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 9,
+    "competitive_gap": 5,
+    "conversion_potential": 8,
+    "evidence_quality": 7,
+    "total": 69
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Why does it matter if a growing company's employees all have different-looking email signatures?",
+      "answer_summary": "Leaving signature design to individual employees typically results in unapproved colors, oversized fonts, and unprofessional additions, undermining brand professionalism at scale.",
+      "sources": [
+        "https://signature.email/guides/how-to-create-consistent-company-email-signatures"
+      ]
+    },
+    {
+      "question": "What is the 'copy and paste telephone game' problem with email signatures?",
+      "answer_summary": "When signatures are shared by copy-pasting between employees, formatting degrades with each hand-off — fonts change, spacing breaks, and graphics disappear.",
+      "sources": [
+        "https://signature.email/guides/how-to-create-consistent-company-email-signatures"
+      ]
+    },
+    {
+      "question": "What are the main ways companies enforce consistent email signatures across staff?",
+      "answer_summary": "Four common approaches: web-form signature generators employees fill in themselves, IT manually installing signatures during onboarding, server-side Exchange/Outlook 365 rules that auto-apply signatures, and third-party email-forwarding signature services.",
+      "sources": [
+        "https://signature.email/guides/how-to-create-consistent-company-email-signatures"
+      ]
+    },
+    {
+      "question": "Can a branded email signature actually work as a marketing channel?",
+      "answer_summary": "A vendor-published guide claims high ROI and cites a case study where survey follow-up responses rose from 11 to about 55 after adding a signature banner; this is a vendor case study, not independently verified, so treat the specific numbers cautiously.",
+      "sources": [
+        "https://newoldstamp.com/blog/email-signature-marketing-guide/"
+      ]
+    },
+    {
+      "question": "Which departments benefit most from standardized, branded email signatures?",
+      "answer_summary": "Sales, marketing, PR, and customer support are named as the departments that benefit most from treating signatures as a controlled brand/marketing surface.",
+      "sources": [
+        "https://newoldstamp.com/blog/email-signature-marketing-guide/"
+      ]
+    },
+    {
+      "question": "Is there a server-level way to guarantee every employee's signature is identical?",
+      "answer_summary": "Yes — applying signatures via Exchange or Outlook 365 rules ensures consistency regardless of what an individual employee does, though it requires IT/marketing coordination and an up-to-date employee database.",
+      "sources": [
+        "https://signature.email/guides/how-to-create-consistent-company-email-signatures"
+      ]
+    },
+    {
+      "question": "What existing tools do people use to generate or manage email signatures?",
+      "answer_summary": "A wide range exists, from free generators (HubSpot, Designhill, mysignature.io, si.gnatu.re) to enterprise signature management platforms (Exclaimer) and open-source options (Signify, MySigMail).",
+      "sources": [
+        "https://www.hubspot.com/email-signature-generator",
+        "https://www.designhill.com/email-signature-generator",
+        "https://signify.difuse.io",
+        "https://github.com/antonreshetov/mysigmail"
+      ]
+    },
+    {
+      "question": "Do organizations actually enforce policy through email signature content?",
+      "answer_summary": "Yes — this happens in practice; a reported case of federal employees being told to remove pronouns from email signatures generated substantial discussion (63 points/122 comments on Hacker News), showing signature content is treated as a real policy and brand lever.",
+      "sources": [
+        "https://abcnews.go.com/US/federal-employees-told-remove-pronouns-email-signatures-end/story?id=118310483"
+      ]
+    },
+    {
+      "question": "Are there downsides to heavy, image-based branded email signatures?",
+      "answer_summary": "Yes — coverage discussed on Hacker News argued that oversized, image-heavy signatures contribute to unnecessary data transfer and energy use, a real if niche sustainability angle on signature design.",
+      "sources": [
+        "https://theconversation.com/email-signatures-are-harming-the-planet-and-could-cost-people-their-lives-its-time-to-stop-using-them-251215"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "How to create a consistent company-wide email signature",
+      "url": "https://signature.email/guides/how-to-create-consistent-company-email-signatures",
+      "source_type": "company docs",
+      "used_for": "Core pain points (copy-paste degradation, inconsistent employee edits) and the four standardization methods"
+    },
+    {
+      "title": "Email Signature Marketing Guide — NEWOLDSTAMP",
+      "url": "https://newoldstamp.com/blog/email-signature-marketing-guide/",
+      "source_type": "company docs",
+      "used_for": "Vendor framing of email signatures as a marketing channel, including a cited (vendor-reported) case study"
+    },
+    {
+      "title": "Hacker News: Federal employees told to remove pronouns from email signatures",
+      "url": "https://abcnews.go.com/US/federal-employees-told-remove-pronouns-email-signatures-end/story?id=118310483",
+      "source_type": "aggregator",
+      "used_for": "Evidence that signature content is treated as a genuine policy/brand-control lever with real public discussion volume"
+    },
+    {
+      "title": "Email signatures are harming the planet and could cost people their lives",
+      "url": "https://theconversation.com/email-signatures-are-harming-the-planet-and-could-cost-people-their-lives-its-time-to-stop-using-them-251215",
+      "source_type": "industry publication",
+      "used_for": "Sustainability angle on heavy branded email signatures, corroborated by HN discussion"
+    },
+    {
+      "title": "Marginalia search results for email signature tools/guides",
+      "url": "https://marginalia-search.com/search?query=email+signature+brand+consistency+company",
+      "source_type": "aggregator",
+      "used_for": "Landscape of existing email signature generator/management tools and guide content"
+    }
+  ]
+}

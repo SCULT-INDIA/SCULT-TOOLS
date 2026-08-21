@@ -1,0 +1,242 @@
+{
+  "candidate_id": "C092",
+  "topic": "What actually breaks a no-code app when it needs to scale",
+  "status": "accepted",
+  "target_keyword": "what breaks a no-code app at scale",
+  "secondary_keywords": [
+    "no-code app scaling limits",
+    "why no-code apps fail at scale",
+    "bubble.io scalability issues",
+    "airtable performance at scale"
+  ],
+  "long_tail_keywords": [
+    "why does bubble.io break at scale",
+    "airtable record limit performance issues",
+    "when to migrate off a no-code platform",
+    "no-code app breaks after 10000 users"
+  ],
+  "question_keywords": [
+    "is bubble.io a scalable solution for a saas",
+    "does no-code scale to 10k users then break",
+    "why is airtable slow with large datasets",
+    "how does bubble cope with scale"
+  ],
+  "comparison_keywords": [
+    "airtable vs bubble scalability",
+    "no-code vs custom code scalability",
+    "airtable vs bubble"
+  ],
+  "how_to_keywords": [
+    "how to scale a bubble app",
+    "how to migrate off a no-code platform",
+    "how to fix a bubble app that won't scale"
+  ],
+  "problem_keywords": [
+    "bubble app performance issues",
+    "airtable 50k record limit",
+    "airtable 500k record limit",
+    "no-code technical debt",
+    "bubble app data structure not optimized"
+  ],
+  "commercial_keywords": [
+    "hire developer to rebuild no-code app",
+    "bubble app rescue service",
+    "no-code to custom code migration service",
+    "custom software development service"
+  ],
+  "entities": [
+    "Bubble",
+    "Bubble.io",
+    "Airtable",
+    "Xano",
+    "Glide",
+    "Softr",
+    "Webflow",
+    "API rate limits",
+    "record limits",
+    "technical debt"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Informational",
+  "audience": "Founders and small teams who built an MVP or internal tool on a no-code platform (Bubble, Airtable, Glide) and are hitting real growth/performance pain; no-code freelancers/agencies who fix these apps",
+  "countries": [
+    "India"
+  ],
+  "topic_cluster": "No-Code Scaling Limits & Technical Debt",
+  "connects_to_service": "custom-software-service",
+  "connects_to_tools": [
+    "no-code-apps (prompt/tool category)"
+  ],
+  "connects_to_prompts": [
+    "technical debt / architecture review prompts",
+    "no-code-to-code migration planning prompts"
+  ],
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 8,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 6,
+    "conversion_potential": 8,
+    "evidence_quality": 8,
+    "total": 71
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What usually breaks Bubble apps as they grow?",
+      "answer_summary": "A recurring cause is unmanaged database/API design, external APIs, and scheduled workflows; when these are handled early, Bubble apps scale far more comfortably.",
+      "sources": [
+        "https://www.reddit.com/r/Bubbleio/comments/1qh0y9g/what_usually_breaks_bubble_apps_as_they_grow_and/"
+      ]
+    },
+    {
+      "question": "Why do people struggle to scale Bubble apps past MVP?",
+      "answer_summary": "A common pattern: the MVP works fine, but once real users grow, performance and workflow issues surface that weren't visible at low volume.",
+      "sources": [
+        "https://www.reddit.com/r/nocode/comments/1qghq4w/anyone_else_struggling_to_scale_bubble_apps_past/"
+      ]
+    },
+    {
+      "question": "Is Bubble.io actually a scalable solution for a SaaS business?",
+      "answer_summary": "Opinion is split into camps — some call scalability concerns misinformation from competitors, others say it fundamentally requires a rewrite in real code at a certain scale; this affects even exit/acquisition conversations.",
+      "sources": [
+        "https://www.reddit.com/r/nocode/comments/1c6xvcz/is_bubbleio_a_scalable_solution_for_a_saas/"
+      ]
+    },
+    {
+      "question": "What's the honest state of most Bubble apps once they need real scale?",
+      "answer_summary": "Someone who rescued 50+ Bubble apps reports the same recurring foundational issues (poor data structure, unmanaged workflows) across most apps that struggle at scale.",
+      "sources": [
+        "https://www.reddit.com/r/Bubbleio/comments/1ro2v08/ive_rescued_50_bubble_apps_heres_the_honest_state/"
+      ]
+    },
+    {
+      "question": "Does no-code scale to a certain number of users and then just break?",
+      "answer_summary": "The specific claim discussed: no-code apps can scale to roughly 10K users before breaking, and by the time you realize it, you're well past 1,000 users and deeply invested.",
+      "sources": [
+        "https://www.reddit.com/r/StartUpIndia/comments/1pkngg3/nocode_scales_to_10k_users_then_it_breaks_most/"
+      ]
+    },
+    {
+      "question": "How does Bubble actually cope with scale?",
+      "answer_summary": "Community opinion splits into roughly three camps on whether Bubble can scale at all, ranging from 'no, rewrite in real code' to 'yes, with the right architecture.'",
+      "sources": [
+        "https://www.reddit.com/r/Bubbleio/comments/1kmdhjf/how_bubble_copes_with_scale/"
+      ]
+    },
+    {
+      "question": "Why are founders leaving Bubble.io after building their MVP?",
+      "answer_summary": "Multiple founders report leaving Bubble after 1-1.5 years specifically because of scaling issues encountered once the product had real traction.",
+      "sources": [
+        "https://www.reddit.com/r/nocode/comments/1l5517z/leaving_bubbleio_after_building_an_mvp_for_15_year/"
+      ]
+    },
+    {
+      "question": "Is Bubble capable enough to support a scalable community app?",
+      "answer_summary": "Responders say yes for non-coders building templated/community sites, but with caveats around future growth and complexity.",
+      "sources": [
+        "https://www.reddit.com/r/Bubbleio/comments/1am87ut/is_bubble_capable_enough_for_a_scalable_community/"
+      ]
+    },
+    {
+      "question": "How does Airtable perform on large datasets?",
+      "answer_summary": "A builder who pushed Airtable to its limits for a real-estate startup describes hitting real performance ceilings on large datasets, requiring workarounds.",
+      "sources": [
+        "https://www.reddit.com/r/Airtable/comments/1nghtcf/how_is_airtables_performance_on_large_datasets/"
+      ]
+    },
+    {
+      "question": "Why doesn't Airtable raise its 500K record limit, and what happens as you approach it?",
+      "answer_summary": "Users report hitting hard 500K-record caps, with workarounds (Supabase sync, HyperDB) unable to fully replace needed features, causing real frustration at scale.",
+      "sources": [
+        "https://www.reddit.com/r/Airtable/comments/1sdi2q0/is_airtable_not_planning_at_all_to_increase_above/"
+      ]
+    },
+    {
+      "question": "Is Airtable's 50K record limit a real pain point?",
+      "answer_summary": "A software engineer confirms the 50K limit is genuinely limiting for certain use cases, despite Airtable's ease-of-use advantages.",
+      "sources": [
+        "https://www.reddit.com/r/Airtable/comments/1g8le58/thoughts_on_airtables_50k_record_limit/"
+      ]
+    },
+    {
+      "question": "What breaks first when comparing Airtable and Bubble at scale?",
+      "answer_summary": "Named breaking points include Airtable API rate/performance caps and rising costs as usage-based pricing (Airtable, Glide, Softr) scales with growth.",
+      "sources": [
+        "https://www.reddit.com/r/Airtable/comments/1sash6o (Airtable vs. Bubble thread referenced in Airtable subreddit search)"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "What usually breaks Bubble apps as they grow (r/Bubbleio)",
+      "url": "https://www.reddit.com/r/Bubbleio/comments/1qh0y9g/what_usually_breaks_bubble_apps_as_they_grow_and/",
+      "source_type": "community",
+      "used_for": "Root causes of Bubble app breakage"
+    },
+    {
+      "title": "Anyone else struggling to scale Bubble apps past MVP? (r/nocode)",
+      "url": "https://www.reddit.com/r/nocode/comments/1qghq4w/anyone_else_struggling_to_scale_bubble_apps_past/",
+      "source_type": "community",
+      "used_for": "MVP-to-growth pain pattern"
+    },
+    {
+      "title": "Is bubble.io a scalable solution for a saas? (r/nocode)",
+      "url": "https://www.reddit.com/r/nocode/comments/1c6xvcz/is_bubbleio_a_scalable_solution_for_a_saas/",
+      "source_type": "community",
+      "used_for": "Debate on Bubble scalability and exit implications"
+    },
+    {
+      "title": "I've rescued 50+ Bubble apps. Here's the honest state of... (r/Bubbleio)",
+      "url": "https://www.reddit.com/r/Bubbleio/comments/1ro2v08/ive_rescued_50_bubble_apps_heres_the_honest_state/",
+      "source_type": "community",
+      "used_for": "Recurring technical-debt patterns"
+    },
+    {
+      "title": "No-code scales to 10K users. Then it breaks. (r/StartUpIndia)",
+      "url": "https://www.reddit.com/r/StartUpIndia/comments/1pkngg3/nocode_scales_to_10k_users_then_it_breaks_most/",
+      "source_type": "community",
+      "used_for": "Specific scale-threshold claim"
+    },
+    {
+      "title": "How bubble copes with scale (r/Bubbleio)",
+      "url": "https://www.reddit.com/r/Bubbleio/comments/1kmdhjf/how_bubble_copes_with_scale/",
+      "source_type": "community",
+      "used_for": "Range of community opinion on scalability"
+    },
+    {
+      "title": "Leaving Bubble.io after building an MVP for 1.5 year (r/nocode)",
+      "url": "https://www.reddit.com/r/nocode/comments/1l5517z/leaving_bubbleio_after_building_an_mvp_for_15_year/",
+      "source_type": "community",
+      "used_for": "First-hand migration-away accounts"
+    },
+    {
+      "title": "Is Bubble capable enough for a scalable community app? (r/Bubbleio)",
+      "url": "https://www.reddit.com/r/Bubbleio/comments/1am87ut/is_bubble_capable_enough_for_a_scalable_community/",
+      "source_type": "community",
+      "used_for": "Use-case-specific scalability judgment"
+    },
+    {
+      "title": "How is Airtable's performance on large datasets? (r/Airtable)",
+      "url": "https://www.reddit.com/r/Airtable/comments/1nghtcf/how_is_airtables_performance_on_large_datasets/",
+      "source_type": "community",
+      "used_for": "Airtable performance ceiling evidence"
+    },
+    {
+      "title": "Is airtable not planning at all to increase above 500k record limit? (r/Airtable)",
+      "url": "https://www.reddit.com/r/Airtable/comments/1sdi2q0/is_airtable_not_planning_at_all_to_increase_above/",
+      "source_type": "community",
+      "used_for": "Hard record-limit pain points"
+    },
+    {
+      "title": "Thoughts on Airtable's 50K Record Limit? (r/Airtable)",
+      "url": "https://www.reddit.com/r/Airtable/comments/1g8le58/thoughts_on_airtables_50k_record_limit/",
+      "source_type": "community",
+      "used_for": "Record-limit as real constraint"
+    }
+  ]
+}

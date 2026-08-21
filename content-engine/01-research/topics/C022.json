@@ -1,0 +1,207 @@
+{
+  "candidate_id": "C022",
+  "topic": "How small businesses are actually deploying AI agents for customer support",
+  "status": "accepted",
+  "target_keyword": "ai agent customer support small business",
+  "secondary_keywords": [
+    "small business ai customer service agent",
+    "ai chatbot for small business support",
+    "ai agent for customer service smb"
+  ],
+  "long_tail_keywords": [
+    "how small businesses are deploying ai agents for customer support",
+    "ai customer support agent roi small business",
+    "best ai customer service tools for small business 2026",
+    "realistic results from ai customer support agents"
+  ],
+  "question_keywords": [
+    "how much does an ai customer support agent cost for small business",
+    "do ai agents actually reduce support costs",
+    "will an ai agent replace my support staff",
+    "what deflection rate can a small business actually expect"
+  ],
+  "comparison_keywords": [
+    "intercom fin vs tidio vs gorgias ai agent",
+    "ai agent vs live chat for small business",
+    "ai support agent vs human support cost"
+  ],
+  "how_to_keywords": [
+    "how to set up an ai customer support agent for small business",
+    "how to train an ai support agent on your business faqs",
+    "how to measure ai support agent roi"
+  ],
+  "problem_keywords": [
+    "ai chatbot can't solve customer issues",
+    "customers frustrated with ai support bots",
+    "ai agent deflection rate overstated"
+  ],
+  "commercial_keywords": [
+    "tidio pricing",
+    "gorgias ai agent",
+    "intercom fin cost",
+    "jotform ai agents",
+    "cosupport ai"
+  ],
+  "entities": [
+    "Gorgias",
+    "Tidio",
+    "Intercom Fin",
+    "Zendesk",
+    "Decagon",
+    "Ada",
+    "Sierra",
+    "Jotform"
+  ],
+  "audience": "small business owners and support leads (1-50 employees) evaluating AI customer support tools",
+  "primary_intent": "Commercial Investigation",
+  "secondary_intent": "Tutorial",
+  "countries": [],
+  "topic_cluster": "AI Agents for SMB Customer Support",
+  "connects_to_service": "ai-agents-automation-service",
+  "connects_to_tools": [
+    "customer-support"
+  ],
+  "connects_to_prompts": [
+    "customer-support-prompts"
+  ],
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 8,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 8,
+    "competitive_gap": 6,
+    "conversion_potential": 8,
+    "evidence_quality": 8,
+    "total": 75
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "How are small businesses actually using AI agents for customer support right now?",
+      "answer_summary": "Real examples include a 12-person online retailer using an agent to triage returns/shipping/order-status (cutting first response from a day to minutes) and a 5-person HVAC company using a phone-and-chat agent for scheduling that boosted after-hours bookings within six weeks.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/ai-customer-support-statistics-2026-adoption-roi-data"
+      ]
+    },
+    {
+      "question": "How much can a small business realistically expect to reduce support costs by using an AI agent?",
+      "answer_summary": "Small businesses (1-50 employees) see roughly 20-40% support cost reduction, driven mainly by less after-hours staffing and faster resolution of common queries — realistic net reduction lands at 20-35% in year one, well under vendor headline claims of 60-80%.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/ai-customer-support-statistics-2026-adoption-roi-data"
+      ]
+    },
+    {
+      "question": "What deflection rate should a small business actually expect from an AI support agent, versus vendor marketing?",
+      "answer_summary": "Vendors like Decagon, Ada, and Sierra claim 70-80% deflection, but an independent Zendesk benchmark across all programs found a 41.2% median (58.7% top quartile) — a 30-40 point gap between marketing and cross-program reality.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/ai-customer-support-statistics-2026-adoption-roi-data"
+      ]
+    },
+    {
+      "question": "Does using an AI support agent hurt customer satisfaction (CSAT)?",
+      "answer_summary": "AI-handled tickets average 4.10/5 CSAT versus 4.30/5 for human agents — a small gap that narrows to 0.05 when hybrid human escalation is used; the gap is much larger for complaint-type tickets (3.34/5).",
+      "sources": [
+        "https://www.digitalapplied.com/blog/ai-customer-support-statistics-2026-adoption-roi-data"
+      ]
+    },
+    {
+      "question": "How long does it take to see results after deploying an AI support agent?",
+      "answer_summary": "Case studies show measurable change typically appears between 30 and 90 days, not overnight or over years.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/ai-customer-support-statistics-2026-adoption-roi-data"
+      ]
+    },
+    {
+      "question": "What's a good AI chatbot/agent tool for a small business to start with?",
+      "answer_summary": "Commonly recommended small-business tools include Gorgias (AI Agent feature for support messages), Tidio (multi-channel, easy setup), Jotform AI Agents (24/7 FAQ/service requests), and CoSupport AI.",
+      "sources": [
+        "https://www.g2.com/categories/ai-customer-support-agents/small-business",
+        "https://apps.shopify.com/reviews/1994945"
+      ]
+    },
+    {
+      "question": "Can an AI agent handle after-hours bookings for a small service business?",
+      "answer_summary": "Yes — a five-person HVAC company's phone-and-chat agent for scheduling/troubleshooting produced a noticeable jump in after-hours booked appointments within six weeks of deployment.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/ai-customer-support-statistics-2026-adoption-roi-data"
+      ]
+    },
+    {
+      "question": "Why do customers get frustrated with AI support chatbots?",
+      "answer_summary": "A store owner on a Shopify community forum reported strongly disliking most AI chatbots because they can't actually resolve issues or take real action, disappointing customers who expect a human to help.",
+      "sources": [
+        "https://community.shopify.com/t/ai-chat-bot/279259"
+      ]
+    },
+    {
+      "question": "What kinds of support tickets should NOT be routed to an AI agent?",
+      "answer_summary": "Sentiment-heavy tasks like complaints and disputes perform far worse (CSAT ~3.34/5) than structured tasks like password resets or order status (65-80% deflection, CSAT 4.32-4.41/5), so narrowing the AI's domain to simple, well-defined queries is recommended.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/ai-customer-support-statistics-2026-adoption-roi-data"
+      ]
+    },
+    {
+      "question": "What's the ROI payback period for an AI customer support agent?",
+      "answer_summary": "Reported figures show roughly $3.50 return per $1 invested with a 3-6 month payback period, though this assumes proper scoping to eligible ticket types.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/ai-customer-support-statistics-2026-adoption-roi-data"
+      ]
+    },
+    {
+      "question": "How do you actually feed an AI chatbot your business's specific information?",
+      "answer_summary": "A small business owner reported that after feeding a custom chatbot with company-specific information, it generated more leads than static contact forms had.",
+      "sources": [
+        "https://raquelhunter.substack.com/p/ai-marketing-using-ai-for-customer"
+      ]
+    },
+    {
+      "question": "Should a small business fully replace human support staff with an AI agent?",
+      "answer_summary": "The consistent finding across case studies is that the biggest win is faster response time and after-hours coverage, not full staff replacement — realistic combined savings are 20-35% net, not the 60-80% vendors imply.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/ai-customer-support-statistics-2026-adoption-roi-data"
+      ]
+    },
+    {
+      "question": "What percentage of service organizations have deployed AI agents for support as of 2026?",
+      "answer_summary": "66% of service organizations now deploy some form of AI agent (up from 39% in 2025), though this figure blends early pilots with mature deployments, and 91% of CX leaders report executive pressure to implement AI regardless of readiness.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/ai-customer-support-statistics-2026-adoption-roi-data"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "AI Customer Support 2026: 50+ Adoption + ROI Data Points",
+      "url": "https://www.digitalapplied.com/blog/ai-customer-support-statistics-2026-adoption-roi-data",
+      "source_type": "industry publication",
+      "used_for": "primary source for adoption rates, deflection benchmarks, CSAT data, cost/ROI figures, and real small-business case studies"
+    },
+    {
+      "title": "AI Customer Support Agents for Small Business (G2 category)",
+      "url": "https://www.g2.com/categories/ai-customer-support-agents/small-business",
+      "source_type": "aggregator",
+      "used_for": "tool discovery / small-business-specific tool listing"
+    },
+    {
+      "title": "Shopify Community: AI chat bot discussion",
+      "url": "https://community.shopify.com/t/ai-chat-bot/279259",
+      "source_type": "community",
+      "used_for": "real small merchant sentiment on chatbot limitations"
+    },
+    {
+      "title": "AI + Marketing: Using AI for Customer Service and Support",
+      "url": "https://raquelhunter.substack.com/p/ai-marketing-using-ai-for-customer",
+      "source_type": "industry publication",
+      "used_for": "small business owner anecdote on chatbot setup with company data"
+    },
+    {
+      "title": "Shopify App reviews (Gorgias)",
+      "url": "https://apps.shopify.com/reviews/1994945",
+      "source_type": "aggregator",
+      "used_for": "real merchant reviews of an AI support tool"
+    }
+  ]
+}

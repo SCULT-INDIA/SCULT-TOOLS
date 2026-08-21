@@ -1,0 +1,152 @@
+{
+  "candidate_id": "C076",
+  "status": "accepted",
+  "topic": "How freelancers are actually tracking multi-currency invoices without an accountant",
+  "topic_cluster": "freelancer-multi-currency-invoicing",
+  "target_keyword": "multi currency invoicing without accountant",
+  "secondary_keywords": [
+    "freelancer multi currency invoice tool",
+    "how freelancers track invoices in different currencies",
+    "diy invoicing for freelancers",
+    "invoice generator multiple currencies",
+    "freelance bookkeeping without an accountant"
+  ],
+  "long_tail_keywords": [
+    "how do freelancers invoice international clients without an accountant",
+    "simple invoice tool for freelancers with multiple currencies",
+    "how to track income in different currencies as a freelancer",
+    "free invoice generator for freelancers multiple currencies",
+    "how to convert foreign currency invoices for taxes as a freelancer"
+  ],
+  "question_keywords": [
+    "how do freelancers deal with getting paid in different currencies",
+    "do i need an accountant to invoice international clients",
+    "how do i track exchange rates on old invoices",
+    "what's the easiest way to invoice clients abroad",
+    "how do solo freelancers do their own bookkeeping across currencies"
+  ],
+  "comparison_keywords": [
+    "wise vs paypal for freelancer invoicing",
+    "spreadsheet vs invoicing app for multi currency",
+    "diy invoice tool vs paid invoicing software"
+  ],
+  "how_to_keywords": [
+    "how to create a multi currency invoice",
+    "how to track multi currency invoices in a spreadsheet",
+    "how to get paid internationally as a freelancer without high fees"
+  ],
+  "problem_keywords": [
+    "existing invoicing software too expensive for solo freelancer",
+    "existing invoicing tools too complicated for simple multi currency needs",
+    "no reliable way to get paid as a freelancer in a country with banking restrictions",
+    "losing money to currency conversion fees as a freelancer"
+  ],
+  "commercial_keywords": [
+    "invoice generator tool",
+    "free invoice template multiple currencies",
+    "freelance invoicing software"
+  ],
+  "entities": [
+    "Wise",
+    "PayPal",
+    "Invoroo",
+    "klirr (open-source invoicing)",
+    "Stripe",
+    "PlainInvoice"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Tool discovery",
+  "audience": "Solo freelancers and independent contractors billing international clients who don't have (and don't want to pay for) a dedicated accountant or bookkeeper",
+  "countries": [
+    "India",
+    "Nigeria",
+    "Brazil",
+    "Venezuela"
+  ],
+  "connects_to_service": "custom-software",
+  "connects_to_tools": [
+    "invoice-generator"
+  ],
+  "connects_to_prompts": [
+    "finance"
+  ],
+  "scores": {
+    "demand": 5,
+    "intent": 6,
+    "relevance": 8,
+    "question_density": 5,
+    "search_opportunity": 5,
+    "ai_answer_opportunity": 5,
+    "tool_discovery_opportunity": 8,
+    "competitive_gap": 6,
+    "conversion_potential": 6,
+    "evidence_quality": 6,
+    "total": 56
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Why do freelancers build their own invoicing tools instead of using existing software?",
+      "answer_summary": "A recurring pattern on Hacker News: freelancers report existing invoicing platforms are 'overly complex and expensive' for solo, multi-currency needs, leading them to build minimal personal tools (e.g., a 100-line CLI) or ship small products like Invoroo and PlainInvoice specifically to solve this.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=freelancer%20invoice%20multiple%20currencies"
+      ]
+    },
+    {
+      "question": "What lightweight tools exist for freelancers who need multi-currency invoices without hiring an accountant?",
+      "answer_summary": "Community-built examples include Invoroo (minimal multi-currency/multi-language invoicing), klirr (open-source, Rust-based, automates exchange-rate conversion and emailing of invoices), and PlainInvoice (no-login instant invoice generation with multi-currency support).",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=freelancer%20invoice%20multiple%20currencies",
+        "https://hn.algolia.com/api/v1/search?query=multi%20currency%20invoicing%20freelancer"
+      ]
+    },
+    {
+      "question": "How do freelancers in countries with restricted banking access get paid by international clients?",
+      "answer_summary": "A discussed real-world example is a Venezuelan freelance programmer who found getting paid in Bitcoin 'orders of magnitude easier than any other alternative' because of banking/currency restrictions in his country — illustrating that in some markets, the 'without an accountant' problem is really a 'without normal banking access' problem.",
+      "sources": [
+        "https://dergigi.com/2021/01/14/bitcoin-is-time/ (via HN Algolia)"
+      ]
+    },
+    {
+      "question": "Are there invoicing tools built specifically for informal/chat-based markets rather than desktop software?",
+      "answer_summary": "Yes — a WhatsApp-based invoicing bot was built specifically to help freelancers and informal businesses in markets like Nigeria, India, Brazil, and Southeast Asia create/track invoices inside a chat interface rather than a traditional web app.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=multi%20currency%20invoicing%20freelancer"
+      ]
+    },
+    {
+      "question": "What's the practical difference between just converting currency for display vs actually reconciling multi-currency income for taxes?",
+      "answer_summary": "Not directly answered by a single source, but implied across multiple tool-building threads: makers focus on generating the invoice and converting the shown amount (exchange-rate math), while the harder downstream problem of tax/bookkeeping reconciliation across currencies is largely left unaddressed by these DIY tools — a genuine content gap.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=freelancer%20invoice%20multiple%20currencies"
+      ]
+    },
+    {
+      "question": "Why do freelancers avoid mainstream invoicing platforms like FreshBooks/QuickBooks for simple multi-currency needs?",
+      "answer_summary": "Reported motivation across several Show HN/Ask HN threads is cost and complexity mismatch — solo freelancers don't want subscription-priced, feature-heavy accounting suites just to send a few invoices in different currencies each month.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=freelancer%20invoice%20multiple%20currencies"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "HN Algolia search: freelancer invoice multiple currencies",
+      "url": "https://hn.algolia.com/api/v1/search?query=freelancer%20invoice%20multiple%20currencies",
+      "source_type": "community",
+      "used_for": "Real Show HN/Ask HN threads about freelancers building or choosing lightweight multi-currency invoicing tools, and their stated reasons (cost/complexity of mainstream tools)"
+    },
+    {
+      "title": "HN Algolia search: multi currency invoicing freelancer",
+      "url": "https://hn.algolia.com/api/v1/search?query=multi%20currency%20invoicing%20freelancer",
+      "source_type": "community",
+      "used_for": "Additional real tools discovered (PlainInvoice, WhatsApp invoicing bot) targeting freelancers/informal businesses across specific emerging markets"
+    },
+    {
+      "title": "Bitcoin Is Time (freelancer payment restrictions example)",
+      "url": "https://dergigi.com/2021/01/14/bitcoin-is-time/",
+      "source_type": "community",
+      "used_for": "Real first-person account of a freelancer in a currency-restricted country solving cross-border payment problems outside traditional banking/accounting"
+    }
+  ]
+}

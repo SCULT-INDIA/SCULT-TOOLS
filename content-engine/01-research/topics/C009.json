@@ -1,0 +1,218 @@
+{
+  "candidate_id": "C009",
+  "topic": "FAQ schema vs a genuine FAQ page: what AI answer engines actually parse",
+  "status": "accepted",
+  "topic_cluster": "Structured data & AI answer-engine citation",
+  "target_keyword": "faq schema vs faq page ai",
+  "secondary_keywords": [
+    "faq schema ai search",
+    "does chatgpt read schema markup",
+    "faq rich results deprecated",
+    "faqpage structured data 2026"
+  ],
+  "long_tail_keywords": [
+    "does ai read json-ld structured data",
+    "should i remove faq schema after google deprecation",
+    "how does perplexity cite faq pages",
+    "do llms parse structured data or visible text"
+  ],
+  "question_keywords": [
+    "do llms parse json-ld",
+    "is faq schema still useful in 2026",
+    "why did google remove faq rich results",
+    "will removing faq schema hurt my seo"
+  ],
+  "comparison_keywords": [
+    "faq schema vs visible faq content",
+    "structured data vs plain text for ai citations",
+    "json-ld vs on-page q&a for llm extraction"
+  ],
+  "how_to_keywords": [
+    "how to structure a faq page for ai citations",
+    "how to write faq schema for ai search",
+    "how to format faq content for chatgpt and perplexity"
+  ],
+  "problem_keywords": [
+    "faq schema not showing in google",
+    "faq rich results disappeared",
+    "faq schema seems useless now"
+  ],
+  "commercial_keywords": [
+    "faq schema generator",
+    "faq schema generator tool",
+    "json-ld faq generator"
+  ],
+  "entities": [
+    "Google",
+    "FAQPage schema",
+    "JSON-LD",
+    "ChatGPT",
+    "Perplexity",
+    "Claude",
+    "Schema.org",
+    "Rich Results Test",
+    "Search Console"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Tutorial",
+  "audience": "SEO practitioners, content marketers, and developers deciding whether/how to implement FAQ schema for both traditional search and AI answer engines",
+  "countries": [],
+  "connects_to_tools": [
+    "faq-schema-generator"
+  ],
+  "connects_to_prompts": [],
+  "connects_to_service": "Local SEO / technical SEO consulting (structured-data implementation)",
+  "scores": {
+    "demand": 6,
+    "intent": 8,
+    "relevance": 10,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 9,
+    "competitive_gap": 6,
+    "conversion_potential": 7,
+    "evidence_quality": 8,
+    "total": 77
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Do AI chatbots like ChatGPT and Claude actually read FAQ schema (JSON-LD) markup?",
+      "answer_summary": "Not semantically — LLMs tend to tokenize JSON-LD as raw text rather than parsing it as structured data the way Google's own systems do; the visible on-page Q&A text is what's directly extractable and citable.",
+      "sources": [
+        "https://ziptie.dev/blog/faq-schema-for-ai-answers/"
+      ]
+    },
+    {
+      "question": "Should I still use FAQ schema now that Google removed FAQ rich results?",
+      "answer_summary": "Yes, per Google's own guidance — FAQPage structured data remains a valid Schema.org type and still helps Google understand the page even without the visual rich result, and unused structured data doesn't cause search problems.",
+      "sources": [
+        "https://www.searchenginejournal.com/google-drops-faq-rich-results-from-search/574429/",
+        "https://www.thehoth.com/blog/google-faq-rich-results-deprecated/"
+      ]
+    },
+    {
+      "question": "Why did Google get rid of FAQ rich results?",
+      "answer_summary": "Google first restricted FAQ rich results to authoritative government/health sites in August 2023 due to widespread abuse (artificial FAQs stuffed to inflate SERP real estate), then fully deprecated them in phases starting May 2026.",
+      "sources": [
+        "https://nobsmarketplace.com/blog/google-officially-kills-faq-rich-results"
+      ]
+    },
+    {
+      "question": "What exactly is the timeline for Google's FAQ rich results phase-out?",
+      "answer_summary": "May 7, 2026: FAQ rich results stop appearing in Search; June 2026: the Search Console FAQ filter, rich result report, and Rich Results Test support are removed; August 2026: Search Console API support for FAQ data is removed.",
+      "sources": [
+        "https://www.getpassionfruit.com/blog/what-changed-with-google-drops-faq-rich-results-and-what-to-do-now"
+      ]
+    },
+    {
+      "question": "What's the real difference between FAQ schema and a genuine FAQ page for AI citation purposes?",
+      "answer_summary": "Visible, well-formatted on-page Q&A content is the direct pathway AI platforms extract from and cite; the schema mainly feeds Google's own ranking/knowledge-graph pipeline rather than being read directly by ChatGPT or Perplexity.",
+      "sources": [
+        "https://www.mqlmagnet.com/post/faq-schema-for-ai-search",
+        "https://semnexus.com/how-to-structure-faq-page-ai-engines-cite-you"
+      ]
+    },
+    {
+      "question": "Does FAQ schema still help with AI Overviews or GEO/AEO even without the classic rich snippet?",
+      "answer_summary": "Indirectly — it can improve how Google's own systems understand and rank the page, which can feed into AI Overviews grounding, even though it doesn't directly control LLM citation.",
+      "sources": [
+        "https://www.stackmatix.com/blog/optimizing-faq-schema-google-ai-overviews",
+        "https://www.frase.io/blog/faq-schema-ai-search-geo-aeo"
+      ]
+    },
+    {
+      "question": "Do I need both FAQ schema and visible FAQ text, or just one?",
+      "answer_summary": "A dual-layer approach is recommended: JSON-LD to serve Google's infrastructure, plus visible, mirrored Q&A formatting for direct LLM extraction and citation.",
+      "sources": [
+        "https://ziptie.dev/blog/faq-schema-for-ai-answers/"
+      ]
+    },
+    {
+      "question": "Which sites still get FAQ rich results after the restriction?",
+      "answer_summary": "Since the August 2023 restriction (which preceded the 2026 full deprecation), FAQ rich results were limited mainly to well-known, authoritative government and health websites.",
+      "sources": [
+        "https://nobsmarketplace.com/blog/google-officially-kills-faq-rich-results"
+      ]
+    },
+    {
+      "question": "Will removing FAQ schema from my pages hurt my SEO?",
+      "answer_summary": "No, according to Google — unused or now-decorative structured data doesn't cause problems for Search, so there's no need to rush to remove it.",
+      "sources": [
+        "https://www.searchenginejournal.com/google-drops-faq-rich-results-from-search/574429/"
+      ]
+    },
+    {
+      "question": "How should I format an FAQ page so ChatGPT or Perplexity actually cite it?",
+      "answer_summary": "Use clear question-as-heading and direct-answer formatting in the visible page text that mirrors the structured data, since that visible formatting is the direct extraction pathway for AI platforms.",
+      "sources": [
+        "https://semnexus.com/how-to-structure-faq-page-ai-engines-cite-you"
+      ]
+    },
+    {
+      "question": "Is the FAQPage schema type still valid even though Google no longer displays a rich result for it?",
+      "answer_summary": "Yes, FAQPage remains a valid Schema.org type; Google's deprecation only affects the visual rich result and related Search Console tooling, not the schema's validity.",
+      "sources": [
+        "https://www.searchenginejournal.com/google-drops-faq-rich-results-from-search/574429/"
+      ]
+    },
+    {
+      "question": "What happens to Search Console's FAQ-related reporting after the deprecation?",
+      "answer_summary": "The FAQ search-appearance filter and rich result report, along with FAQ support in the Rich Results Test, were removed in the June 2026 phase of the rollout.",
+      "sources": [
+        "https://www.getpassionfruit.com/blog/what-changed-with-google-drops-faq-rich-results-and-what-to-do-now"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "FAQ Schema for AI Answers: Does It Actually Get You Cited by AI?",
+      "url": "https://ziptie.dev/blog/faq-schema-for-ai-answers/",
+      "source_type": "industry publication",
+      "used_for": "Explanation of JSON-LD tokenization vs visible-text extraction by LLMs, dual-layer recommendation"
+    },
+    {
+      "title": "FAQ Schema for AI Search | What Actually Drives Citations",
+      "url": "https://www.mqlmagnet.com/post/faq-schema-for-ai-search",
+      "source_type": "industry publication",
+      "used_for": "Distinguishing what drives AI citation vs what schema does"
+    },
+    {
+      "title": "How to Structure a FAQ Page So AI Engines Actually Cite You",
+      "url": "https://semnexus.com/how-to-structure-faq-page-ai-engines-cite-you",
+      "source_type": "industry publication",
+      "used_for": "Formatting guidance for AI-citable FAQ pages"
+    },
+    {
+      "title": "Google Drops FAQ Rich Results From Search",
+      "url": "https://www.searchenginejournal.com/google-drops-faq-rich-results-from-search/574429/",
+      "source_type": "industry publication",
+      "used_for": "Official deprecation announcement details and Google's stance on keeping schema"
+    },
+    {
+      "title": "Google Officially Kills FAQ Rich Results",
+      "url": "https://nobsmarketplace.com/blog/google-officially-kills-faq-rich-results",
+      "source_type": "industry publication",
+      "used_for": "2023 restriction background and abuse rationale"
+    },
+    {
+      "title": "FAQ Rich Results Deprecated: Google's May 2026 Change",
+      "url": "https://www.getpassionfruit.com/blog/what-changed-with-google-drops-faq-rich-results-and-what-to-do-now",
+      "source_type": "industry publication",
+      "used_for": "Three-phase deprecation timeline (May/June/August 2026)"
+    },
+    {
+      "title": "Google Killed FAQ Rich Results: Why Your FAQ Content Still Matters",
+      "url": "https://www.thehoth.com/blog/google-faq-rich-results-deprecated/",
+      "source_type": "industry publication",
+      "used_for": "Confirming FAQPage schema validity and no-need-to-remove guidance"
+    },
+    {
+      "title": "Optimizing FAQ Schema for Google AI Overviews (2026)",
+      "url": "https://www.stackmatix.com/blog/optimizing-faq-schema-google-ai-overviews",
+      "source_type": "industry publication",
+      "used_for": "Indirect relationship between FAQ schema and AI Overviews"
+    }
+  ]
+}

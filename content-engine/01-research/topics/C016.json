@@ -1,0 +1,195 @@
+{
+  "candidate_id": "C016",
+  "status": "accepted",
+  "topic": "What actually breaks when AI coding tools touch a monorepo",
+  "topic_cluster": "AI coding tools and monorepo scale limits",
+  "target_keyword": "ai coding tools monorepo issues",
+  "secondary_keywords": [
+    "ai agent context window monorepo",
+    "cursor monorepo problems",
+    "claude code large codebase context",
+    "ai coding assistant large repo limitations"
+  ],
+  "long_tail_keywords": [
+    "why does cursor create files in the wrong folder in a monorepo",
+    "why do ai coding agents hallucinate interfaces in monorepos",
+    "how many files can an ai coding agent index before it degrades",
+    "why context window limits break ai agents in enterprise monorepos",
+    "turborepo pnpm workspace cursor rules for ai agents"
+  ],
+  "question_keywords": [
+    "can ai coding agents handle a large monorepo",
+    "why does my ai coding assistant get confused in a monorepo",
+    "how do you scope an ai agent to one package in a monorepo",
+    "does claude code work well with turborepo or nx",
+    "why does an ai agent break cross-service code changes"
+  ],
+  "comparison_keywords": [
+    "monorepo vs polyrepo for ai coding agents",
+    "cursor vs claude code large codebase performance"
+  ],
+  "how_to_keywords": [
+    "how to configure cursor rules for a monorepo",
+    "how to scope claude code to a subdirectory",
+    "how to set up claude.md for a monorepo",
+    "how to avoid ai agents breaking shared packages"
+  ],
+  "problem_keywords": [
+    "ai agent breaks shared library in monorepo",
+    "cursor ignores folder structure monorepo",
+    "ai coding agent inconsistent code patterns across monorepo"
+  ],
+  "commercial_keywords": [
+    "ai code assistant for large codebases",
+    "enterprise ai coding tool monorepo support"
+  ],
+  "entities": [
+    "Cursor",
+    "Claude Code",
+    "Turborepo",
+    "Nx",
+    "pnpm",
+    "Vercel",
+    "monorepo.tools"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Tutorial",
+  "audience": "developers and platform/DevOps engineers running AI coding assistants inside large monorepos",
+  "countries": [],
+  "connects_to_tools": [
+    "JSON Formatter & Validator"
+  ],
+  "connects_to_prompts": [
+    "Cursor",
+    "Claude",
+    "development frameworks"
+  ],
+  "connects_to_service": "custom software development / DevOps consulting service",
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 6,
+    "conversion_potential": 5,
+    "evidence_quality": 7,
+    "total": 62
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Why do AI coding agents struggle in large monorepos?",
+      "answer_summary": "LLM context windows (100k-2M tokens) are dwarfed by enterprise monorepos spanning tens of millions of tokens, and relevance can't be determined without traversing a dependency graph the agent hasn't loaded.",
+      "sources": [
+        "https://tianpan.co/blog/2026-04-17-coding-agents-monorepo-context-window"
+      ]
+    },
+    {
+      "question": "What is 'interface hallucination' in a monorepo context?",
+      "answer_summary": "An agent generates syntactically correct code calling a method signature that was renamed elsewhere in a shared library months earlier, because it infers from stale training data rather than the current interface.",
+      "sources": [
+        "https://tianpan.co/blog/2026-04-17-coding-agents-monorepo-context-window"
+      ]
+    },
+    {
+      "question": "Is there a practical file-count ceiling before an AI agent's indexing degrades?",
+      "answer_summary": "One analysis cites roughly 2,500 files as the practical ceiling for naive context-stuffing before tool indexing quality visibly degrades.",
+      "sources": [
+        "https://tianpan.co/blog/2026-04-17-coding-agents-monorepo-context-window"
+      ]
+    },
+    {
+      "question": "Why does Cursor create files in the wrong folder in a monorepo/workspace setup?",
+      "answer_summary": "Developers report Cursor bypassing intended folder structures (e.g., an apps/ folder) and creating files at the workspace root instead of the correct subdirectory, even after trying .cursorignore and .mdc rule files.",
+      "sources": [
+        "https://forum.cursor.com/t/cursor-issues-with-monorepo-and-code-workspace/78543"
+      ]
+    },
+    {
+      "question": "Can something as simple as an emoji in a folder name break monorepo indexing?",
+      "answer_summary": "Yes — one user found that an emoji in a code-workspace folder name prevented that folder from being indexed at all; removing the emoji fixed indexing.",
+      "sources": [
+        "https://forum.cursor.com/t/cursor-issues-with-monorepo-and-code-workspace/78543"
+      ]
+    },
+    {
+      "question": "Does an AI agent break in a polyrepo the same way it does in a monorepo?",
+      "answer_summary": "In a polyrepo setup an agent is blind to everything outside the current repo, so it guesses at interfaces and invents contracts that don't match, breaking integration — a related but distinct failure mode from monorepo context overload.",
+      "sources": [
+        "https://tianpan.co/blog/2026-04-17-coding-agents-monorepo-context-window"
+      ]
+    },
+    {
+      "question": "How should teams scope an AI agent session in a large monorepo?",
+      "answer_summary": "The most reliable approach is scoping the agent session to the specific package being worked on (e.g., opening a subdirectory directly) rather than pointing it at the whole repo root.",
+      "sources": [
+        "https://tianpan.co/blog/2026-04-17-coding-agents-monorepo-context-window"
+      ]
+    },
+    {
+      "question": "Does an AI assistant follow a codebase's existing naming/export conventions in a monorepo?",
+      "answer_summary": "Not reliably — one developer found Claude generated a React component using default exports and different state-naming conventions than the monorepo's established pattern (named exports, custom hooks), and then applied its own convention inconsistently across the repo.",
+      "sources": [
+        "https://selfscrum.medium.com/ai-driven-development-beyond-the-monorepo-2ce9ad74ac89"
+      ]
+    },
+    {
+      "question": "Do CLAUDE.md-style rule files actually help agents respect monorepo boundaries?",
+      "answer_summary": "Yes — describing repository structure in CLAUDE.md or .cursor/rules helps the AI understand package boundaries and avoid breaking shared code, though it isn't foolproof.",
+      "sources": [
+        "https://selfscrum.medium.com/ai-driven-development-beyond-the-monorepo-2ce9ad74ac89",
+        "https://forum.cursor.com/t/cursor-issues-with-monorepo-and-code-workspace/78543"
+      ]
+    },
+    {
+      "question": "Are bigger context windows the real fix for monorepo AI problems?",
+      "answer_summary": "No — teams getting reliable cross-service agent results aren't relying on bigger context windows; they're building navigation infrastructure (indexing, dependency graphs, RAG) that lets agents find the right code precisely.",
+      "sources": [
+        "https://tianpan.co/blog/2026-04-17-coding-agents-monorepo-context-window"
+      ]
+    },
+    {
+      "question": "Is monorepo adoption increasing specifically because of AI coding tools?",
+      "answer_summary": "Yes — commentary suggests monorepos are being reconsidered/adopted specifically because tools like Cursor and Claude Code get native cross-package visibility inside one repo that they lack across separate repos.",
+      "sources": [
+        "https://adrianpetcu.substack.com/p/monorepos-are-back-and-ai-is-the",
+        "https://www.spectrocloud.com/blog/will-ai-turn-2026-into-the-year-of-the-monorepo"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Coding Agents in the Monorepo: Why Context Windows and 50-Service Repos Don't Mix",
+      "url": "https://tianpan.co/blog/2026-04-17-coding-agents-monorepo-context-window",
+      "source_type": "industry publication",
+      "used_for": "core technical mechanism of context-window/interface-hallucination failures and scoping mitigation"
+    },
+    {
+      "title": "Cursor issues with monorepo and code-workspace (Cursor forum)",
+      "url": "https://forum.cursor.com/t/cursor-issues-with-monorepo-and-code-workspace/78543",
+      "source_type": "primary/official (vendor community forum)",
+      "used_for": "real reported bugs: wrong-folder file creation, emoji-breaks-indexing case"
+    },
+    {
+      "title": "AI-Driven Development Beyond the Monorepo",
+      "url": "https://selfscrum.medium.com/ai-driven-development-beyond-the-monorepo-2ce9ad74ac89",
+      "source_type": "community",
+      "used_for": "example of AI ignoring existing code conventions in a monorepo"
+    },
+    {
+      "title": "Monorepos Are Back, and AI Is the Reason",
+      "url": "https://adrianpetcu.substack.com/p/monorepos-are-back-and-ai-is-the",
+      "source_type": "industry publication",
+      "used_for": "trend claim that AI is driving renewed monorepo adoption"
+    },
+    {
+      "title": "Will AI turn 2026 into the year of the monorepo?",
+      "url": "https://www.spectrocloud.com/blog/will-ai-turn-2026-into-the-year-of-the-monorepo",
+      "source_type": "industry publication",
+      "used_for": "corroborating monorepo/AI adoption trend claim"
+    }
+  ]
+}

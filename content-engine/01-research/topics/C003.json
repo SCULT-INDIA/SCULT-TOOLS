@@ -1,0 +1,182 @@
+{
+  "candidate_id": "C003",
+  "status": "accepted",
+  "topic": "What llms.txt actually does and whether it changes AI crawler behavior",
+  "topic_cluster": "llms.txt & AI Crawler Standards",
+  "target_keyword": "llms.txt explained",
+  "secondary_keywords": [
+    "what is llms.txt",
+    "llms.txt standard",
+    "does llms.txt work",
+    "llms.txt vs robots.txt"
+  ],
+  "long_tail_keywords": [
+    "is llms.txt worth implementing in 2026",
+    "do ai companies actually read llms.txt",
+    "does llms.txt improve chatgpt citations",
+    "llms.txt vs llms-full.txt difference"
+  ],
+  "question_keywords": [
+    "what does llms.txt actually do",
+    "is llms.txt a real standard",
+    "who created llms.txt",
+    "does openai anthropic google read llms.txt"
+  ],
+  "comparison_keywords": [
+    "llms.txt vs robots.txt",
+    "llms.txt vs sitemap.xml"
+  ],
+  "how_to_keywords": [
+    "how to create an llms.txt file",
+    "how to generate llms.txt for wordpress",
+    "how to write llms-full.txt"
+  ],
+  "problem_keywords": [
+    "llms.txt not being read by ai crawlers",
+    "llms.txt doesn't block ai bots"
+  ],
+  "commercial_keywords": [
+    "llms.txt generator",
+    "ai visibility checker"
+  ],
+  "entities": [
+    "Jeremy Howard",
+    "Answer.AI",
+    "llmstxt.org",
+    "robots.txt",
+    "GPTBot",
+    "Markdown",
+    "Vercel",
+    "Stripe"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Opinion/research",
+  "audience": "Developers, technical SEOs, and documentation/dev-tool teams evaluating whether to adopt an emerging AI web standard",
+  "countries": [],
+  "connects_to_tools": [
+    "ai-visibility-checker"
+  ],
+  "connects_to_service": "",
+  "connects_to_prompts": [],
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 5,
+    "conversion_potential": 5,
+    "evidence_quality": 8,
+    "total": 64
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What exactly is llms.txt and who created it?",
+      "answer_summary": "llms.txt is a plain Markdown file placed at a site's root (e.g. /llms.txt) proposed by Jeremy Howard of Answer.AI/fast.ai in September 2024 to give AI systems a curated, one-line-description index of a site's most important content, framed as 'robots.txt for the AI era.'",
+      "sources": [
+        "https://llmstxt.org/",
+        "https://searchengineland.com/llms-txt-proposed-standard-453676"
+      ]
+    },
+    {
+      "question": "Is llms.txt an official, ratified web standard?",
+      "answer_summary": "No — it remains a proposed community standard. Neither the IETF nor W3C has ratified it, and adoption is driven by individual companies (Anthropic docs, Vercel, Stripe, Answer.AI) rather than a formal body.",
+      "sources": [
+        "https://searchengineland.com/llms-txt-proposed-standard-453676",
+        "https://llmstxt.org/"
+      ]
+    },
+    {
+      "question": "Do OpenAI, Anthropic, Google, or Perplexity actually read and use llms.txt when crawling or answering?",
+      "answer_summary": "As of the discussion, none of the major AI providers has publicly confirmed that their production crawlers or answer systems consume llms.txt normatively; a Hacker News thread explicitly asks 'Is LLMs.txt a REAL thing now?' reflecting this uncertainty.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=43438190",
+        "https://news.ycombinator.com/item?id=48410783",
+        "https://searchengineland.com/llms-txt-proposed-standard-453676"
+      ]
+    },
+    {
+      "question": "What is the difference between llms.txt and llms-full.txt?",
+      "answer_summary": "llms.txt is a streamlined navigation index of a site's key pages with short descriptions, while llms-full.txt is a comprehensive file containing the full documentation content in one place.",
+      "sources": [
+        "https://llmstxt.org/"
+      ]
+    },
+    {
+      "question": "Does llms.txt block or restrict AI crawlers the way robots.txt does?",
+      "answer_summary": "No — it is a discovery/navigation aid, not an access-control mechanism; it cannot prevent any AI system from reading a site the way robots.txt directives are intended to restrict crawler behavior.",
+      "sources": [
+        "https://medium.com/@devakpo777/the-complete-guide-to-llms-txt-control-how-ai-crawlers-access-your-content-47ec698e1f61",
+        "https://derivatex.agency/blog/llms-txt-guide/"
+      ]
+    },
+    {
+      "question": "Is it worth the time to create an llms.txt file in 2026?",
+      "answer_summary": "Community sentiment described it as low-cost and largely harmless but not a meaningful visibility lever; one cited large-scale study claims a majority of these files go unread, and most of what does read them isn't even an AI system.",
+      "sources": [
+        "https://powerfulcombo.com/blog/is-llms-txt-worth-it/"
+      ]
+    },
+    {
+      "question": "Does llms.txt help with live AI search citations (e.g. being cited by ChatGPT search) or only with AI coding/dev tools reading documentation?",
+      "answer_summary": "The strongest confirmed real-world use case is developer tooling — AI coding assistants fetching documentation more efficiently — rather than influencing live AI search answer citations, where its effect is unconfirmed.",
+      "sources": [
+        "https://derivatex.agency/blog/llms-txt-guide/"
+      ]
+    },
+    {
+      "question": "What has Google said about llms.txt?",
+      "answer_summary": "Google's public position, as characterized in industry coverage, is that creating an llms.txt file will neither harm nor help a site's visibility.",
+      "sources": [
+        "https://powerfulcombo.com/blog/is-llms-txt-worth-it/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://llmstxt.org/",
+      "title": "The /llms.txt file, v2 – llms-txt",
+      "source_type": "primary/official",
+      "used_for": "The actual spec/proposal text, defining llms.txt and llms-full.txt"
+    },
+    {
+      "url": "https://searchengineland.com/llms-txt-proposed-standard-453676",
+      "title": "Meet llms.txt, a proposed standard for AI website content crawling",
+      "source_type": "industry publication",
+      "used_for": "Background on Jeremy Howard's proposal, origin, and adoption status"
+    },
+    {
+      "url": "https://news.ycombinator.com/item?id=43438190",
+      "title": "Ask HN: Is LLMs.txt a REAL thing now?",
+      "source_type": "community",
+      "used_for": "Developer skepticism/discussion about real-world adoption"
+    },
+    {
+      "url": "https://news.ycombinator.com/item?id=48410783",
+      "title": "Does any of the LLM providers actually use llms.txt?",
+      "source_type": "community",
+      "used_for": "Direct discussion of whether providers consume the file"
+    },
+    {
+      "url": "https://powerfulcombo.com/blog/is-llms-txt-worth-it/",
+      "title": "Is Llms.txt Worth It? What The SEO & GEO Reddit Communities Really Think (2026)",
+      "source_type": "industry publication",
+      "used_for": "Community sentiment summary and unread-file statistic"
+    },
+    {
+      "url": "https://derivatex.agency/blog/llms-txt-guide/",
+      "title": "LLMs.txt Guide: What It Does and Doesn't Do (2026)",
+      "source_type": "industry publication",
+      "used_for": "Clarifying what llms.txt does and does not accomplish"
+    },
+    {
+      "url": "https://medium.com/@devakpo777/the-complete-guide-to-llms-txt-control-how-ai-crawlers-access-your-content-47ec698e1f61",
+      "title": "The Complete Guide to llms.txt: Control How AI Crawlers Access Your Content",
+      "source_type": "community",
+      "used_for": "Additional explanatory detail on llms.txt mechanics"
+    }
+  ]
+}

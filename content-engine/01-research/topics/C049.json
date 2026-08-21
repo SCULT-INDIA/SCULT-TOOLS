@@ -1,0 +1,238 @@
+{
+  "candidate_id": "C049",
+  "topic": "How small e-commerce brands are using AI for product descriptions at scale",
+  "status": "accepted",
+  "target_keyword": "ai product descriptions at scale ecommerce",
+  "secondary_keywords": [
+    "ai generated product descriptions",
+    "bulk product description generator",
+    "ai copywriting for ecommerce",
+    "ai product description tool shopify"
+  ],
+  "long_tail_keywords": [
+    "how to write product descriptions at scale with ai",
+    "ai product description generator for small shopify store",
+    "using chatgpt to write hundreds of product descriptions",
+    "ai product descriptions for ai shopping assistants"
+  ],
+  "question_keywords": [
+    "does google penalize ai generated product descriptions",
+    "will ai product descriptions hurt my seo",
+    "how much editing do ai product descriptions need",
+    "can ai write a product description from just a photo"
+  ],
+  "comparison_keywords": [
+    "chatgpt vs dedicated ai description app",
+    "ai product description generator vs human copywriter",
+    "amazon generative ai listing tool vs ebay magical listing"
+  ],
+  "how_to_keywords": [
+    "how to use ai for product descriptions without hurting seo",
+    "how to keep ai descriptions on brand across a catalog",
+    "how to avoid duplicate ai product descriptions"
+  ],
+  "problem_keywords": [
+    "ai product descriptions sound fake",
+    "ai descriptions inaccurate leading to returns",
+    "duplicate content from ai product copy"
+  ],
+  "commercial_keywords": [
+    "best ai product description generator",
+    "ai copywriting tool pricing ecommerce",
+    "shopify ai description app"
+  ],
+  "entities": [
+    "ChatGPT",
+    "Amazon generative AI seller tools",
+    "eBay Magical Listing",
+    "Shopify AI Description apps",
+    "Jasper",
+    "Copy.ai",
+    "Genrise"
+  ],
+  "audience": "Small-to-mid ecommerce brand owners and solo sellers with large catalogs, Shopify/WooCommerce/eBay operators, ecommerce copywriters and marketing teams deciding whether/how to adopt AI for product content",
+  "countries": [],
+  "topic_cluster": "AI content operations for ecommerce catalogs",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "ecommerce-product"
+  ],
+  "connects_to_service": "AI agents/automation (content generation workflows) — plausible secondary fit, not strongly evidenced",
+  "primary_intent": "Tutorial",
+  "secondary_intent": "Problem-solving",
+  "scores": {
+    "demand": 7,
+    "intent": 6,
+    "relevance": 8,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 5,
+    "conversion_potential": 6,
+    "evidence_quality": 6,
+    "total": 62
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Will AI-generated product descriptions hurt my SEO or get me penalized by Google?",
+      "answer_summary": "Google doesn't issue a direct penalty for duplicate or AI-written descriptions in normal cases, but it may deduplicate/deprioritize near-identical text and only issues manual action for 'spammy auto-generated content' published unedited at scale.",
+      "sources": [
+        "https://www.techmagnate.com/blog/does-google-penalize-ai-content/",
+        "https://www.hostpapa.com/blog/marketing/does-duplicate-content-hurt-seo/",
+        "https://rankai.ai/articles/how-to-avoid-duplicate-product-descriptions"
+      ]
+    },
+    {
+      "question": "How do I avoid duplicate product descriptions when generating them with AI across many SKUs?",
+      "answer_summary": "Feed the model distinct structured attributes per SKU and vary prompts/angles rather than reusing manufacturer copy verbatim.",
+      "sources": [
+        "https://rankai.ai/articles/how-to-avoid-duplicate-product-descriptions",
+        "https://seo.ai/blog/how-to-avoid-duplicate-product-descriptions-with-ai-seo"
+      ]
+    },
+    {
+      "question": "Are AI-written descriptions actually accurate, or do they oversell products and cause returns?",
+      "answer_summary": "Sellers on eBay's forums report AI descriptions often use generic 'cheesy' language and can misstate details, which they say leads to negative feedback and more returns.",
+      "sources": [
+        "https://community.ebay.com/t5/Selling/AI-descriptions-are-truly-awful/m-p/34096231"
+      ]
+    },
+    {
+      "question": "What's the difference between typing into ChatGPT directly vs using a dedicated bulk description app?",
+      "answer_summary": "Dedicated Shopify apps (e.g. Power Bulk ChatGPT Description, ChatGPT AI Description – Bulk) wrap the same underlying model with catalog-aware bulk generation, SEO metadata, and one-click publishing that raw ChatGPT use doesn't offer.",
+      "sources": [
+        "https://apps.shopify.com/powerbulk",
+        "https://apps.shopify.com/chatgpt-ai-description"
+      ]
+    },
+    {
+      "question": "Can AI generate a product description just from a product photo?",
+      "answer_summary": "Yes — both Amazon's seller-side generative AI tool and eBay's 'Magical Listing' feature can extract product details from images to draft descriptions and titles.",
+      "sources": [
+        "https://techcrunch.com/2023/09/13/amazon-debuts-generative-ai-tools-that-helps-sellers-write-product-descriptions/",
+        "https://community.ebay.com/t5/Selling/Using-AI-Tools-for-SEO-Optimized-eBay-Listings/m-p/34884722"
+      ]
+    },
+    {
+      "question": "How much human editing does AI-generated product copy actually need before publishing?",
+      "answer_summary": "Guidance converges on a human-in-the-loop model: AI drafts from structured data, a human then checks facts, brand voice, and conversion framing before it goes live.",
+      "sources": [
+        "https://www.1digitalagency.com/blog/how-to-use-ai-to-write-product-descriptions-at-scale-without-hurting-your-seo-46586/"
+      ]
+    },
+    {
+      "question": "Do buyers notice or care when a listing was clearly written by AI?",
+      "answer_summary": "eBay seller-community sentiment is that buyers do notice generic AI phrasing and it can read as the seller not knowing their own product.",
+      "sources": [
+        "https://community.ebay.com/t5/Selling/AI-descriptions-are-truly-awful/m-p/34096231"
+      ]
+    },
+    {
+      "question": "What structured product data do I need before AI can generate good descriptions?",
+      "answer_summary": "Enterprise guidance stresses rich structured attributes (materials, dimensions, use-case data) as the input AI needs to produce accurate, differentiated copy rather than generic filler.",
+      "sources": [
+        "https://genrise.ai/insights/generative-ai-in-ecommerce"
+      ]
+    },
+    {
+      "question": "How should product descriptions differ for AI shopping assistants (like ChatGPT/Perplexity shopping) vs. traditional Google SEO?",
+      "answer_summary": "A 2026 guide argues descriptions for AI shopping agents need explicit structured attributes and FAQ-style content the agent can parse, not just keyword-optimized prose for human search.",
+      "sources": [
+        "https://genrise.ai/insights/ai-product-descriptions-for-marketplaces"
+      ]
+    },
+    {
+      "question": "Is it safe to publish raw, unedited AI descriptions across an entire catalog?",
+      "answer_summary": "Multiple SEO sources warn that publishing unreviewed AI text at scale risks being flagged as low-quality/spammy auto-generated content even though isolated duplicate descriptions aren't penalized.",
+      "sources": [
+        "https://www.rewarx.com/blogs/google-algorithm-update-penalizing-ai-content",
+        "https://www.1digitalagency.com/blog/google-s-stance-on-ai-generated-content-what-ecommerce-merchants-need-to-know-41193/"
+      ]
+    },
+    {
+      "question": "What's Amazon's own official generative AI tool for sellers and how does it work?",
+      "answer_summary": "Amazon introduced a generative AI tool letting sellers produce descriptions, titles, and bullet points from a short input, aimed at reducing listing-creation time.",
+      "sources": [
+        "https://www.retaildive.com/news/amazon-generative-ai-sellers-write-product-descriptions/693793"
+      ]
+    },
+    {
+      "question": "How is AI product-content use expected to evolve for ecommerce brands through 2026?",
+      "answer_summary": "Industry write-ups describe a shift from single-task description generation toward 'agentic' catalog-wide content production (titles, bullets, FAQs, structured attributes) at the pace the digital shelf demands.",
+      "sources": [
+        "https://genrise.ai/insights/generative-ai-in-ecommerce",
+        "https://www.bigcommerce.com/articles/ecommerce/ecommerce-ai/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "AI Product Descriptions SEO: A Guide to Scaling Safely",
+      "url": "https://www.1digitalagency.com/blog/how-to-use-ai-to-write-product-descriptions-at-scale-without-hurting-your-seo-46586/",
+      "source_type": "industry publication",
+      "used_for": "human-in-the-loop best practice guidance"
+    },
+    {
+      "title": "Google AI Content Policy: Will You Get Penalized?",
+      "url": "https://www.techmagnate.com/blog/does-google-penalize-ai-content/",
+      "source_type": "industry publication",
+      "used_for": "SEO penalty risk clarification"
+    },
+    {
+      "title": "Does Duplicate Content Hurt SEO?",
+      "url": "https://www.hostpapa.com/blog/marketing/does-duplicate-content-hurt-seo/",
+      "source_type": "industry publication",
+      "used_for": "duplicate content vs penalty distinction"
+    },
+    {
+      "title": "How To Avoid Duplicate Product Descriptions",
+      "url": "https://rankai.ai/articles/how-to-avoid-duplicate-product-descriptions",
+      "source_type": "company docs",
+      "used_for": "practical mitigation tactics"
+    },
+    {
+      "title": "AI descriptions are truly awful (eBay Community)",
+      "url": "https://community.ebay.com/t5/Selling/AI-descriptions-are-truly-awful/m-p/34096231",
+      "source_type": "community",
+      "used_for": "real seller sentiment/complaints"
+    },
+    {
+      "title": "Using AI Tools for SEO-Optimized eBay Listings (eBay Community)",
+      "url": "https://community.ebay.com/t5/Selling/Using-AI-Tools-for-SEO-Optimized-eBay-Listings/m-p/34884722",
+      "source_type": "community",
+      "used_for": "seller discussion of AI listing tools"
+    },
+    {
+      "title": "Amazon debuts generative AI tools that help sellers write product descriptions",
+      "url": "https://techcrunch.com/2023/09/13/amazon-debuts-generative-ai-tools-that-helps-sellers-write-product-descriptions/",
+      "source_type": "industry publication",
+      "used_for": "confirming Amazon's official AI tool"
+    },
+    {
+      "title": "Amazon debuts generative AI (Retail Dive)",
+      "url": "https://www.retaildive.com/news/amazon-generative-ai-sellers-write-product-descriptions/693793",
+      "source_type": "industry publication",
+      "used_for": "confirming Amazon seller AI tool details"
+    },
+    {
+      "title": "Power Bulk ChatGPT Description (Shopify App Store)",
+      "url": "https://apps.shopify.com/powerbulk",
+      "source_type": "company docs",
+      "used_for": "confirming real bulk AI description tools exist"
+    },
+    {
+      "title": "Generative AI in Ecommerce in 2026 (Genrise)",
+      "url": "https://genrise.ai/insights/generative-ai-in-ecommerce",
+      "source_type": "industry publication",
+      "used_for": "2026 trend framing, structured data requirements"
+    },
+    {
+      "title": "Product Descriptions for AI Shopping Assistants in 2026 (Genrise)",
+      "url": "https://genrise.ai/insights/ai-product-descriptions-for-marketplaces",
+      "source_type": "industry publication",
+      "used_for": "AI-agent-oriented content requirements"
+    }
+  ]
+}

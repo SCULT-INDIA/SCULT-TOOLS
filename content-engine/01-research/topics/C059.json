@@ -1,0 +1,217 @@
+{
+  "candidate_id": "C059",
+  "status": "accepted",
+  "topic": "How customer support teams are actually measuring AI chatbot deflection rate",
+  "topic_cluster": "AI support metrics and measurement",
+  "target_keyword": "chatbot deflection rate measurement",
+  "secondary_keywords": [
+    "how to calculate deflection rate",
+    "ai support deflection rate benchmark",
+    "deflection rate vs resolution rate",
+    "ticket deflection rate formula"
+  ],
+  "long_tail_keywords": [
+    "why is deflection rate a vanity metric",
+    "how do vendors inflate ai chatbot deflection claims",
+    "what's a good chatbot deflection rate in 2026",
+    "how to measure ai support success beyond deflection rate"
+  ],
+  "question_keywords": [
+    "what is deflection rate and how is it calculated",
+    "is deflection rate a misleading metric",
+    "what's the difference between deflection rate and resolution rate",
+    "how many deflected tickets actually get resolved",
+    "what questions should you ask an ai vendor about their deflection numbers"
+  ],
+  "comparison_keywords": [
+    "deflection rate vs resolution rate vs containment rate",
+    "forethought deflection claims vs real world results"
+  ],
+  "how_to_keywords": [
+    "how to calculate your chatbot's true deflection rate",
+    "how to measure verified resolution instead of deflection",
+    "how to audit the ai support metrics a vendor reports"
+  ],
+  "problem_keywords": [
+    "high deflection rate but customers still churning",
+    "false deflection ai chatbot",
+    "no industry standard definition of deflection rate"
+  ],
+  "commercial_keywords": [
+    "ai support platform with verified resolution reporting",
+    "customer support analytics software with deflection tracking"
+  ],
+  "entities": [
+    "Decagon",
+    "Gladly",
+    "Fin.ai",
+    "Forethought",
+    "Zendesk",
+    "Twig",
+    "Voiceflow",
+    "Owlish"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Informational",
+  "audience": "Customer support/CX leaders, support ops analysts and founders evaluating or reporting on AI chatbot performance",
+  "countries": [],
+  "connects_to_service": "ai-agents-automation",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "customer-support",
+    "ai-engineering"
+  ],
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 7,
+    "conversion_potential": 6,
+    "evidence_quality": 8,
+    "total": 69
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What is deflection rate and how do you calculate it?",
+      "answer_summary": "Deflection rate = (issues successfully resolved by self-service without a human agent) ÷ (total inquiries received) × 100; a team resolving 3,500 of 10,000 inquiries without an agent has a 35% deflection rate.",
+      "sources": [
+        "https://www.gladly.ai/glossary/deflection-rate/",
+        "https://decagon.ai/glossary/deflection-rate"
+      ]
+    },
+    {
+      "question": "What counts as a 'good' chatbot deflection rate benchmark?",
+      "answer_summary": "Industry guides put a 'good' deflection rate between 40-60%, with 80%+ considered top tier — though these benchmarks vary by how loosely 'deflected' is defined.",
+      "sources": [
+        "https://alhena.ai/blog/what-is-deflection-rate/",
+        "https://helply.com/blog/what-is-the-deflection-rate"
+      ]
+    },
+    {
+      "question": "Why do some practitioners call deflection rate a 'vanity metric'?",
+      "answer_summary": "Deflection rate is easy to optimize for and decouples vendor incentives from customer outcomes; one practitioner cited having experienced 65% deflection alongside an 18% increase in customer churn.",
+      "sources": [
+        "https://www.twig.so/blog/deflection-rate-vanity-metric-cx-numbers-that-matter"
+      ]
+    },
+    {
+      "question": "Is there an industry-standard definition of 'deflection'?",
+      "answer_summary": "No — some vendors count a ticket deflected if there's no follow-up ticket within 24 hours, others if the customer didn't explicitly ask for a human, others simply if the AI responded at all, regardless of whether the customer engaged.",
+      "sources": [
+        "https://www.twig.so/blog/deflection-rate-vanity-metric-cx-numbers-that-matter"
+      ]
+    },
+    {
+      "question": "Do vendor-claimed deflection rates match real-world performance?",
+      "answer_summary": "One vendor (Forethought) has publicly claimed 80-98% deflection in marketing materials, while independent analysis and customer reports put real-world deflection rates in the 44-87% range.",
+      "sources": [
+        "https://www.twig.so/blog/deflection-rate-vanity-metric-cx-numbers-that-matter"
+      ]
+    },
+    {
+      "question": "What percentage of 'deflected' tickets are actually false deflections?",
+      "answer_summary": "Cited data shows that while AI deflects more than 45% of queries, only about 14% reach genuine self-service resolution — the other roughly 31% are customers who got a bot response and came back through a different channel.",
+      "sources": [
+        "https://www.twig.so/blog/deflection-rate-vanity-metric-cx-numbers-that-matter"
+      ]
+    },
+    {
+      "question": "What's the difference between deflection rate and resolution rate?",
+      "answer_summary": "Deflection rate measures whether a contact avoided a human agent at all; resolution rate measures whether the customer's issue was actually solved, independent of channel — a high deflection rate can coexist with a mediocre resolution rate.",
+      "sources": [
+        "https://fin.ai/learn/resolution-rate-vs-deflection-rate",
+        "https://owlish.bot/blog/resolution-rate-vs-deflection-rate/"
+      ]
+    },
+    {
+      "question": "How often are 'deflected' tickets actually answered incorrectly?",
+      "answer_summary": "Audits of RAG-based support deployments cited found 15-25% of 'deflected' tickets were deflected with incorrect or incomplete answers, meaning the customer left without their problem actually solved.",
+      "sources": [
+        "https://www.zendesk.com/blog/ai/workflow-automation/ticket-deflection-vs-resolution/"
+      ]
+    },
+    {
+      "question": "Which metric do industry experts increasingly favor — deflection or resolution?",
+      "answer_summary": "Experts increasingly favor resolution rate because it's closest to the customer's actual experience and ties vendor incentives to real outcomes, unlike deflection rate which just rewards avoiding the human queue.",
+      "sources": [
+        "https://www.zendesk.com/blog/ai/workflow-automation/ticket-deflection-vs-resolution/"
+      ]
+    },
+    {
+      "question": "What specific questions should a support leader ask an AI vendor about their deflection numbers?",
+      "answer_summary": "Recommended vendor questions include: how is deflection specifically defined, what recontact-rate data is available, what verified-resolution numbers do other customers report, and what CSAT gap exists between AI-handled and human-handled interactions.",
+      "sources": [
+        "https://www.twig.so/blog/deflection-rate-vanity-metric-cx-numbers-that-matter"
+      ]
+    },
+    {
+      "question": "What alternative KPIs are recommended alongside or instead of deflection rate?",
+      "answer_summary": "Recommended primary KPIs include verified resolution rate (60-75% benchmark) and AI CSAT (4.0+/5), with recontact rate within 72 hours (<15%) and escalation quality score as diagnostic metrics.",
+      "sources": [
+        "https://www.twig.so/blog/deflection-rate-vanity-metric-cx-numbers-that-matter"
+      ]
+    },
+    {
+      "question": "What is containment rate and how does it differ from deflection and resolution rate?",
+      "answer_summary": "Containment rate, deflection rate and resolution rate are related but distinct AI-support metrics that are frequently conflated; guides recommend reading all three together rather than reporting just one.",
+      "sources": [
+        "https://owlish.bot/blog/resolution-rate-vs-deflection-rate/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Deflection rate: formula, benchmarks, and calculation",
+      "url": "https://decagon.ai/glossary/deflection-rate",
+      "source_type": "company docs",
+      "used_for": "deflection rate definition and formula"
+    },
+    {
+      "title": "What is deflection rate definition formula and benchmarks",
+      "url": "https://www.gladly.ai/glossary/deflection-rate/",
+      "source_type": "company docs",
+      "used_for": "formula and worked example"
+    },
+    {
+      "title": "Why Deflection Rate Is a Vanity AI Support Metric",
+      "url": "https://www.twig.so/blog/deflection-rate-vanity-metric-cx-numbers-that-matter",
+      "source_type": "industry publication",
+      "used_for": "core skeptical analysis — definition drift, vendor-claim gap, false deflection stat, practitioner churn quote, vendor-evaluation questions, alternative KPI benchmarks"
+    },
+    {
+      "title": "Resolution vs. Deflection Rate: Measure AI Agent Success",
+      "url": "https://fin.ai/learn/resolution-rate-vs-deflection-rate",
+      "source_type": "company docs",
+      "used_for": "deflection vs resolution rate distinction"
+    },
+    {
+      "title": "Ticket deflection vs. resolution: Metrics that matter",
+      "url": "https://www.zendesk.com/blog/ai/workflow-automation/ticket-deflection-vs-resolution/",
+      "source_type": "company docs",
+      "used_for": "RAG-deployment wrong-answer audit stat, expert preference for resolution rate"
+    },
+    {
+      "title": "Resolution Rate vs Deflection Rate vs Containment Rate: How to Read AI Support Metrics",
+      "url": "https://owlish.bot/blog/resolution-rate-vs-deflection-rate/",
+      "source_type": "company docs",
+      "used_for": "containment rate distinction"
+    },
+    {
+      "title": "Deflection Rate: Formula, Benchmarks & How to Hit 80%+",
+      "url": "https://alhena.ai/blog/what-is-deflection-rate/",
+      "source_type": "company docs",
+      "used_for": "benchmark figures"
+    },
+    {
+      "title": "What Is Deflection Rate? Formula & Benchmarks (2026)",
+      "url": "https://helply.com/blog/what-is-the-deflection-rate",
+      "source_type": "company docs",
+      "used_for": "benchmark corroboration"
+    }
+  ]
+}

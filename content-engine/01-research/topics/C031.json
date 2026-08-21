@@ -1,0 +1,228 @@
+{
+  "candidate_id": "C031",
+  "topic": "How indie hackers are actually pricing AI-wrapper SaaS products",
+  "status": "accepted",
+  "target_keyword": "ai wrapper saas pricing",
+  "secondary_keywords": [
+    "ai wrapper pricing strategy",
+    "how to price an ai saas product",
+    "ai tool pricing model 2026",
+    "chatgpt wrapper pricing",
+    "ai saas pricing model"
+  ],
+  "long_tail_keywords": [
+    "how much to charge for an ai wrapper app",
+    "is it profitable to build wrapper apps",
+    "why does every ai tool cost $20 a month",
+    "usage based vs subscription pricing for ai tools",
+    "how indie hackers price ai tools"
+  ],
+  "question_keywords": [
+    "how do indie hackers price ai wrapper products",
+    "is building an ai wrapper still profitable",
+    "why do most ai tools cost $20/month",
+    "should i use usage-based or flat pricing for an ai wrapper",
+    "how much profit margin does an ai wrapper saas have"
+  ],
+  "comparison_keywords": [
+    "usage-based pricing vs per-seat pricing ai",
+    "subscription vs api pricing ai tools",
+    "flat fee vs token-based ai pricing"
+  ],
+  "how_to_keywords": [
+    "how to price an ai wrapper saas",
+    "how to avoid api cost overruns in ai pricing",
+    "how to set pricing tiers for an ai tool"
+  ],
+  "problem_keywords": [
+    "ai api costs eating margin",
+    "ai wrapper high churn",
+    "unprofitable ai saas pricing",
+    "ai subscription cancellations"
+  ],
+  "commercial_keywords": [
+    "ai wrapper saas pricing calculator",
+    "best pricing model for ai startup",
+    "ai saas pricing tool"
+  ],
+  "entities": [
+    "Indie Hackers",
+    "OpenAI API",
+    "ChatGPT Plus",
+    "Cursor",
+    "Claude Pro",
+    "Midjourney",
+    "Photo AI",
+    "Pieter Levels",
+    "Notion AI"
+  ],
+  "evidence_strength": "strong",
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 9,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 6,
+    "conversion_potential": 6,
+    "evidence_quality": 8,
+    "total": 73
+  },
+  "primary_intent": "Commercial Investigation",
+  "secondary_intent": "Problem-solving",
+  "audience": "Indie hackers and solo/small-team founders building AI-wrapper SaaS products (thin UI layers over LLM APIs) deciding how to price and whether their pricing is sustainable against API costs and competitor clustering",
+  "countries": [],
+  "topic_cluster": "startup-finance / ai-saas-pricing",
+  "connects_to_service": "ai-agents-automation-service",
+  "connects_to_tools": [
+    "Marketing ROI Calculator",
+    "Business Name Generator",
+    "Invoice Generator"
+  ],
+  "connects_to_prompts": [
+    "business",
+    "marketing"
+  ],
+  "questions": [
+    {
+      "question": "Is it actually profitable to build AI wrapper apps, or just revenue-heavy?",
+      "answer_summary": "Indie Hackers discussion notes some wrapper apps generated multi-million-dollar revenue (e.g., $3.8M and $1.7-2.1M cases cited) but profitability was undercut by heavy OpenAI API costs and paid-ad spend; commenters questioned true margin.",
+      "sources": [
+        "https://www.indiehackers.com/post/is-it-profitable-to-build-wrapper-apps-94baf9e681"
+      ]
+    },
+    {
+      "question": "Why do so many AI tools converge on the $20/month price point?",
+      "answer_summary": "Multiple unrelated AI tools (ChatGPT Plus, Cursor Pro, Claude Pro, Midjourney) cluster near $20/month regardless of differing value delivered, largely anchored to what OpenAI charges; two tools at the same price can differ 10x in real capability.",
+      "sources": [
+        "https://www.indiehackers.com/post/the-uncomfortable-truth-about-ai-tool-pricing-in-2026-92944b6a4d"
+      ]
+    },
+    {
+      "question": "How much markup do AI subscriptions charge over raw API costs?",
+      "answer_summary": "For light users, actual API usage might cost $3-8/month versus a $20/month subscription fee, a roughly 3-5x premium mainly paying for the chat interface/convenience.",
+      "sources": [
+        "https://www.indiehackers.com/post/the-uncomfortable-truth-about-ai-tool-pricing-in-2026-92944b6a4d"
+      ]
+    },
+    {
+      "question": "What happens if the underlying API provider raises prices or cuts access?",
+      "answer_summary": "Commenters flagged platform dependency risk directly: wrapper businesses can be wiped out if OpenAI/Anthropic/etc. raise API prices or shut off service, since the wrapper has no proprietary infrastructure.",
+      "sources": [
+        "https://www.indiehackers.com/post/is-it-profitable-to-build-wrapper-apps-94baf9e681"
+      ]
+    },
+    {
+      "question": "Is usage-based or per-seat pricing better for an AI product?",
+      "answer_summary": "Seat-based pricing share fell from 21% to 15% of SaaS companies within a year while hybrid models grew from 27% to 41%, because AI agents can do work that used to require many human seats, making per-seat pricing leave value on the table.",
+      "sources": [
+        "https://www.zuora.com/subscribed/usage-versus-seats-has-the-pricing-pendulum-swung-back"
+      ]
+    },
+    {
+      "question": "Why are annual-plan discounts on AI tools so aggressive now (40-50% off)?",
+      "answer_summary": "Vendors moved from traditional ~20% annual discounts to 40-50% because month-to-month AI subscribers churn fast; the discussion cites roughly 47% of LLM-tool subscribers canceling between months 4-8.",
+      "sources": [
+        "https://www.indiehackers.com/post/the-uncomfortable-truth-about-ai-tool-pricing-in-2026-92944b6a4d"
+      ]
+    },
+    {
+      "question": "Can a generic AI wrapper survive once the underlying model (e.g. ChatGPT) gets good enough on its own?",
+      "answer_summary": "Jasper is cited as a cautionary example: it built a clean UI on OpenAI's API and hit a $1.5B valuation, then lost users once ChatGPT itself became capable enough to replace the wrapper's core value.",
+      "sources": [
+        "https://www.startups.com/lexicon/ai-wrapper"
+      ]
+    },
+    {
+      "question": "How do indie hackers cut AI API costs while keeping subscription prices stable?",
+      "answer_summary": "Builders report using multi-model routers/aggregators to cut inference costs by up to 70% (e.g., replacing multiple AI subscriptions/API bills with self-built routing across model providers).",
+      "sources": [
+        "https://www.indiehackers.com/post/how-i-shaved-70-off-my-multi-model-ai-wrapping-costs-and-why-you-re-overpaying-for-api-routing-4ff48cb944",
+        "https://www.indiehackers.com/post/we-were-burning-400-mo-on-5-different-ai-api-bills-so-we-built-a-single-router-to-slash-costs-by-70-57c340190e"
+      ]
+    },
+    {
+      "question": "What monthly revenue can a solo-built AI wrapper realistically reach?",
+      "answer_summary": "Case studies range widely: from a wrapper earning $220 MRR after 8 months on 'auto-mode' build, up to Photo AI's $132-138K MRR after 18 months as an outlier success story.",
+      "sources": [
+        "https://www.indiehackers.com/post/simple-ai-wrapper-in-auto-mode-8-months-4k-in-revenue-220-in-mrr-6d418c5a8e",
+        "https://www.indiehackers.com/post/photo-ai-by-pieter-levels-complete-deep-dive-case-study-0-to-132k-mrr-in-18-months-3a9a2b1579"
+      ]
+    },
+    {
+      "question": "Is charging for a thin wrapper around ChatGPT ethically/strategically defensible if the API cost is much lower?",
+      "answer_summary": "Debate is split: some frame it as pure arbitrage that will get squeezed as models get cheaper and native apps improve; others point to counterexamples like Cursor (crossed $2B ARR, once dismissed as 'just a wrapper') showing wrapper-origin products can become durable if they add real value.",
+      "sources": [
+        "https://www.startups.com/lexicon/ai-wrapper",
+        "https://www.indiehackers.com/post/the-uncomfortable-truth-about-ai-tool-pricing-in-2026-92944b6a4d"
+      ]
+    },
+    {
+      "question": "How can a wrapper product build a pricing moat instead of just copying competitor prices?",
+      "answer_summary": "Suggested strategies include targeting a very specific niche, layering domain-specific training/multi-agent workflows on top of the raw model, and using the wrapper as an MVP while accumulating proprietary data that competitors can't replicate.",
+      "sources": [
+        "https://www.indiehackers.com/post/is-it-profitable-to-build-wrapper-apps-94baf9e681"
+      ]
+    },
+    {
+      "question": "What is 'ambiguity friction' in AI pricing and why does it matter?",
+      "answer_summary": "A commenter argued most AI pricing friction isn't about raw cost but about buyers being unable to predict actual monthly spend or understand what justifies a premium price — an issue distinct from and compounding the underlying cost structure.",
+      "sources": [
+        "https://www.indiehackers.com/post/the-uncomfortable-truth-about-ai-tool-pricing-in-2026-92944b6a4d"
+      ]
+    },
+    {
+      "question": "How does agent/retry-loop usage change AI cost economics versus a flat subscription?",
+      "answer_summary": "For agentic products, retry loops on the API side can silently burn through cost (cited example: ~$30 in 8 minutes) in a way a capped subscription price would not, inverting the usual API-is-cheaper assumption.",
+      "sources": [
+        "https://www.indiehackers.com/post/the-uncomfortable-truth-about-ai-tool-pricing-in-2026-92944b6a4d"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://www.indiehackers.com/post/is-it-profitable-to-build-wrapper-apps-94baf9e681",
+      "title": "Is it profitable to build wrapper apps?",
+      "source_type": "community",
+      "used_for": "Real founder discussion on wrapper app profitability, revenue numbers, API dependency risk"
+    },
+    {
+      "url": "https://www.indiehackers.com/post/the-uncomfortable-truth-about-ai-tool-pricing-in-2026-92944b6a4d",
+      "title": "The uncomfortable truth about AI tool pricing in 2026",
+      "source_type": "community",
+      "used_for": "Pricing clustering data, API vs subscription markup, churn stats, commenter insights"
+    },
+    {
+      "url": "https://www.indiehackers.com/post/photo-ai-by-pieter-levels-complete-deep-dive-case-study-0-to-132k-mrr-in-18-months-3a9a2b1579",
+      "title": "Photo AI by Pieter Levels: Complete Deep Dive Case Study",
+      "source_type": "community",
+      "used_for": "Revenue outcome case study for a successful wrapper product"
+    },
+    {
+      "url": "https://www.indiehackers.com/post/simple-ai-wrapper-in-auto-mode-8-months-4k-in-revenue-220-in-mrr-6d418c5a8e",
+      "title": "Simple AI Wrapper in Auto-mode: 8 Months, $4K in Revenue, $220 in MRR",
+      "source_type": "community",
+      "used_for": "Lower-end realistic revenue outcome for indie wrapper builds"
+    },
+    {
+      "url": "https://www.indiehackers.com/post/how-i-shaved-70-off-my-multi-model-ai-wrapping-costs-and-why-you-re-overpaying-for-api-routing-4ff48cb944",
+      "title": "How I shaved 70% off my multi-model AI wrapping costs",
+      "source_type": "community",
+      "used_for": "Cost optimization tactics for wrapper builders"
+    },
+    {
+      "url": "https://www.startups.com/lexicon/ai-wrapper",
+      "title": "AI Wrapper: definition, the dismissive critique of AI startups",
+      "source_type": "industry publication",
+      "used_for": "Wrapper defensibility framing, Cursor/Jasper case examples"
+    },
+    {
+      "url": "https://www.zuora.com/subscribed/usage-versus-seats-has-the-pricing-pendulum-swung-back",
+      "title": "Usage Versus Seats: Has The Pricing Pendulum Swung Back?",
+      "source_type": "industry publication",
+      "used_for": "Seat-based vs usage-based pricing adoption statistics"
+    }
+  ]
+}

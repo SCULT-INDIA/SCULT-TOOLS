@@ -1,0 +1,207 @@
+{
+  "candidate_id": "C043",
+  "status": "accepted",
+  "topic": "What Google's own documentation actually says about AI-generated content",
+  "topic_cluster": "AI content & Google search policy",
+  "target_keyword": "google ai generated content policy",
+  "secondary_keywords": [
+    "google ai content guidelines",
+    "does google penalize ai content",
+    "ai generated content spam policy",
+    "scaled content abuse google"
+  ],
+  "long_tail_keywords": [
+    "does google penalize ai generated content 2026",
+    "how to disclose ai generated content for seo",
+    "google scaled content abuse policy explained",
+    "is using ai to write blog posts against google guidelines"
+  ],
+  "question_keywords": [
+    "does google detect ai content",
+    "is ai content against google's guidelines",
+    "will ai content hurt my rankings",
+    "can google tell if content is ai written"
+  ],
+  "comparison_keywords": [
+    "ai content vs human content google ranking",
+    "human written vs ai written seo performance"
+  ],
+  "how_to_keywords": [
+    "how to use ai content without violating google policy",
+    "how to disclose ai generated content on a website"
+  ],
+  "problem_keywords": [
+    "google penalized my ai content",
+    "traffic drop after publishing ai content",
+    "manual action for ai generated content"
+  ],
+  "commercial_keywords": [
+    "ai content detection tool",
+    "ai seo content checker"
+  ],
+  "entities": [
+    "Google Search Central",
+    "E-E-A-T",
+    "Search Quality Raters Guidelines",
+    "scaled content abuse",
+    "helpful content system",
+    "Ahrefs"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "Content marketers, SEO practitioners, agencies, and small business site owners publishing AI-assisted content who want to know if they are at risk of a Google penalty",
+  "countries": [],
+  "connects_to_tools": [
+    "ai-visibility-checker"
+  ],
+  "connects_to_prompts": [
+    "seo-geo"
+  ],
+  "connects_to_service": "",
+  "scores": {
+    "demand": 8,
+    "intent": 7,
+    "relevance": 9,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 5,
+    "conversion_potential": 4,
+    "evidence_quality": 9,
+    "total": 70
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Does Google penalize content simply for being AI-generated?",
+      "answer_summary": "No — Google's official guidance says it focuses on content quality and helpfulness, not on the production method; AI use alone is not a violation.",
+      "sources": [
+        "https://developers.google.com/search/docs/fundamentals/using-gen-ai-content"
+      ]
+    },
+    {
+      "question": "What counts as 'scaled content abuse'?",
+      "answer_summary": "Producing many pages primarily to manipulate rankings, regardless of whether the content is AI-generated, human-written, or scraped — intent and lack of user value are what matter.",
+      "sources": [
+        "https://developers.google.com/search/docs/essentials/spam-policies"
+      ]
+    },
+    {
+      "question": "Is using AI to help write blog posts against Google's guidelines?",
+      "answer_summary": "Not inherently — it becomes a violation only when AI/automation is used to mass-produce pages that don't add value for users.",
+      "sources": [
+        "https://developers.google.com/search/docs/essentials/spam-policies",
+        "https://developers.google.com/search/docs/fundamentals/using-gen-ai-content"
+      ]
+    },
+    {
+      "question": "Should I disclose that content on my site was AI-generated?",
+      "answer_summary": "Google suggests providing background information on how automation was used, in a way that makes sense for the audience, as a transparency practice rather than a hard requirement.",
+      "sources": [
+        "https://developers.google.com/search/docs/fundamentals/using-gen-ai-content"
+      ]
+    },
+    {
+      "question": "Why did some sites get a manual action tied to AI content?",
+      "answer_summary": "Reported manual actions have targeted mass-produced, low-value pages (scaled content abuse) rather than AI use by itself.",
+      "sources": [
+        "https://www.searchenginejournal.com/google-may-be-penalizing-ai-generated-content-as-thin-content/583773/"
+      ]
+    },
+    {
+      "question": "Does AI-written content actually rank worse than human-written content?",
+      "answer_summary": "Independent research cited found no link between AI use and lower rankings, with the large majority of top-ranking pages surveyed containing at least some AI-assisted content.",
+      "sources": [
+        "https://www.ahrefs.com/blog/ai-generated-content-does-not-hurt-your-google-rankings",
+        "https://www.emarketer.com/content/google-doesn-t-penalize-ai-content-86-5--of-top-pages-use-some-ai--study-finds"
+      ]
+    },
+    {
+      "question": "What's the difference between using AI as a writing aid and 'scaled content abuse'?",
+      "answer_summary": "Human oversight, originality, and genuine added value are what separate acceptable AI-assisted content from abuse, per Google's spam policy wording.",
+      "sources": [
+        "https://developers.google.com/search/docs/essentials/spam-policies"
+      ]
+    },
+    {
+      "question": "Are AI-generated product descriptions okay for ecommerce SEO?",
+      "answer_summary": "Allowed if they add value; Google's ecommerce-related guidance recommends labeling AI-generated product images/media with IPTC DigitalSourceType metadata.",
+      "sources": [
+        "https://developers.google.com/search/docs/fundamentals/using-gen-ai-content"
+      ]
+    },
+    {
+      "question": "Does 'spinning' or AI-rewriting scraped content count as spam?",
+      "answer_summary": "Yes — Google explicitly calls out scraping plus automated transformations like synonymizing or translating as a scaled-content-abuse pattern.",
+      "sources": [
+        "https://developers.google.com/search/docs/essentials/spam-policies"
+      ]
+    },
+    {
+      "question": "What was the March 2024 helpful content update's connection to AI spam?",
+      "answer_summary": "It folded 'scaled content abuse' into Google's core spam policies, explicitly closing the loophole that had allowed mass-produced auto-generated content to rank.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/scaled-content-abuse-google-march-update-ai-pages-decimated"
+      ]
+    },
+    {
+      "question": "Is machine-generated traffic the same policy as AI-written content?",
+      "answer_summary": "No — these are separate spam policies (scaled content abuse for AI-written pages vs. machine-generated traffic for automated querying of Google), both filed under the broader 'automation' spam category.",
+      "sources": [
+        "https://developers.google.com/search/docs/essentials/spam-policies"
+      ]
+    },
+    {
+      "question": "Can Google actually detect AI-written text?",
+      "answer_summary": "Google frames this as beside the point — its stated approach evaluates helpfulness/quality signals rather than trying to flag text as AI- vs. human-authored.",
+      "sources": [
+        "https://developers.google.com/search/docs/fundamentals/using-gen-ai-content"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Google Search's Guidance on Generative AI Content on Your Website",
+      "url": "https://developers.google.com/search/docs/fundamentals/using-gen-ai-content",
+      "source_type": "primary/official",
+      "used_for": "Core policy statement on AI content, disclosure guidance, ecommerce AI-media metadata recommendation"
+    },
+    {
+      "title": "Spam Policies for Google Web Search",
+      "url": "https://developers.google.com/search/docs/essentials/spam-policies",
+      "source_type": "primary/official",
+      "used_for": "Exact 'scaled content abuse' wording and related automation spam policies (scraping, machine-generated traffic)"
+    },
+    {
+      "title": "Google Search's guidance about AI-generated content",
+      "url": "https://developers.google.com/search/blog/2023/02/google-search-and-ai-content",
+      "source_type": "primary/official",
+      "used_for": "Original 2023 blog post establishing Google's quality-over-method stance"
+    },
+    {
+      "title": "Google May Be Penalizing AI-Generated Content As Thin Content",
+      "url": "https://www.searchenginejournal.com/google-may-be-penalizing-ai-generated-content-as-thin-content/583773/",
+      "source_type": "industry publication",
+      "used_for": "Evidence of real manual-action cases tied to mass AI content"
+    },
+    {
+      "title": "AI-generated content does not hurt your Google rankings",
+      "url": "https://www.ahrefs.com/blog/ai-generated-content-does-not-hurt-your-google-rankings",
+      "source_type": "industry publication",
+      "used_for": "Data point on AI content prevalence among top-ranking pages"
+    },
+    {
+      "title": "Google doesn't penalize AI content—86.5% of top pages use some AI, study finds",
+      "url": "https://www.emarketer.com/content/google-doesn-t-penalize-ai-content-86-5--of-top-pages-use-some-ai--study-finds",
+      "source_type": "industry publication",
+      "used_for": "Cross-check on AI-content-prevalence statistic"
+    },
+    {
+      "title": "Scaled Content Abuse: Google's AI Page Crackdown Guide",
+      "url": "https://www.digitalapplied.com/blog/scaled-content-abuse-google-march-update-ai-pages-decimated",
+      "source_type": "industry publication",
+      "used_for": "Context on March 2024 helpful content update and enforcement impact"
+    }
+  ]
+}

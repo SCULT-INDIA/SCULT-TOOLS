@@ -1,0 +1,191 @@
+{
+  "candidate_id": "C033",
+  "topic": "How first-time founders are validating an idea before writing code",
+  "status": "accepted",
+  "target_keyword": "validate startup idea before building",
+  "secondary_keywords": [
+    "how to validate a startup idea",
+    "validate idea before coding",
+    "startup idea validation methods",
+    "test startup idea without building"
+  ],
+  "long_tail_keywords": [
+    "how to validate a startup idea before writing a single line of code",
+    "how to test if people will pay for my idea before building it",
+    "landing page test startup idea validation",
+    "how to validate an app idea with no money"
+  ],
+  "question_keywords": [
+    "how do i validate a startup idea before building it",
+    "do i need to build an mvp to validate my idea",
+    "how many people should i interview to validate a startup idea",
+    "how much does it cost to validate a startup idea"
+  ],
+  "comparison_keywords": [
+    "landing page test vs building mvp",
+    "customer interviews vs surveys for validation",
+    "no-code prototype vs full mvp"
+  ],
+  "how_to_keywords": [
+    "how to validate a startup idea before building an mvp",
+    "how to run a smoke test landing page",
+    "how to interview potential customers for validation"
+  ],
+  "problem_keywords": [
+    "startup idea failed no market need",
+    "built product nobody wanted",
+    "wasted months building unvalidated idea"
+  ],
+  "commercial_keywords": [
+    "no-code mvp validation tool",
+    "landing page builder for startup validation",
+    "business name generator for new startup idea"
+  ],
+  "entities": [
+    "Buffer",
+    "Joel Gascoigne",
+    "CB Insights",
+    "Bubble",
+    "Webflow",
+    "Figma",
+    "Y Combinator"
+  ],
+  "evidence_strength": "strong",
+  "scores": {
+    "demand": 8,
+    "intent": 8,
+    "relevance": 9,
+    "question_density": 8,
+    "search_opportunity": 8,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 8,
+    "competitive_gap": 5,
+    "conversion_potential": 7,
+    "evidence_quality": 8,
+    "total": 77
+  },
+  "primary_intent": "Tutorial",
+  "secondary_intent": "Problem-solving",
+  "audience": "First-time, pre-code, pre-funding founders (often solo or small teams) deciding how to test demand for an idea before investing development time",
+  "countries": [],
+  "topic_cluster": "startup-validation / pre-launch-testing",
+  "connects_to_service": "ai-agents-automation-service",
+  "connects_to_tools": [
+    "Business Name Generator",
+    "Slogan Generator",
+    "Website Speed Test",
+    "Marketing ROI Calculator"
+  ],
+  "connects_to_prompts": [
+    "business",
+    "marketing"
+  ],
+  "questions": [
+    {
+      "question": "What's the biggest reason startups fail, and how does that relate to validation?",
+      "answer_summary": "CB Insights data (cited across multiple validation guides) attributes 42% of startup failures to 'no market need,' which is the core argument for validating demand before writing code.",
+      "sources": [
+        "https://reddinbox.com/blog/how-to-validate-startup-ideas-on-reddit",
+        "https://founderplaybook.substack.com/p/how-to-test-your-startup-idea-without"
+      ]
+    },
+    {
+      "question": "How many potential customers should I talk to before building anything?",
+      "answer_summary": "Guidance converges on talking to roughly 10-20 target users in open-ended problem interviews (not pitching the idea) before building, listening for how they currently solve the problem and what frustrates them.",
+      "sources": [
+        "https://16vc.substack.com/p/how-to-validate-your-startup-idea",
+        "https://founderplaybook.substack.com/p/how-to-test-your-startup-idea-without"
+      ]
+    },
+    {
+      "question": "Can I validate a startup idea using only a landing page, with no product built?",
+      "answer_summary": "Yes -- a common tactic is publishing a landing page (sometimes with a pricing page before the product exists) to collect emails/clicks as a demand signal; a landing-page-plus-ads test can run for roughly $50-100.",
+      "sources": [
+        "https://founderplaybook.substack.com/p/how-to-test-your-startup-idea-without",
+        "https://codevelo.io/blog/validate-startup-idea-before-building-mvp"
+      ]
+    },
+    {
+      "question": "What's a real example of a founder validating an idea before building the product?",
+      "answer_summary": "Buffer's Joel Gascoigne validated the original concept in 2010 by putting up a pricing page before the product existed and observing who clicked through to see if there was purchase intent.",
+      "sources": [
+        "https://founderplaybook.substack.com/p/how-to-test-your-startup-idea-without"
+      ]
+    },
+    {
+      "question": "What kinds of evidence count as real validation versus wishful thinking?",
+      "answer_summary": "Frameworks split evidence into three types: public data from search/review tools, direct problem interviews, and commitment tests (landing page signups, letters of intent/contracts) -- explicitly favoring binding commitment signals over people simply saying they like an idea.",
+      "sources": [
+        "https://founderplaybook.substack.com/p/how-to-test-your-startup-idea-without"
+      ]
+    },
+    {
+      "question": "What no-code tools can I use to build a testable prototype without hiring developers?",
+      "answer_summary": "Commonly cited no-code/AI tools include Figma and Webflow/Bubble for interactive prototypes, and newer AI-assisted tools (Bolt, v0.dev, Cursor) that can take a validated landing page to a working prototype in days.",
+      "sources": [
+        "https://dev.to/bismasaeed/validate-your-app-idea-without-writing-a-single-line-of-code-3kh0",
+        "https://medium.com/ideas-with-wings/how-to-validate-a-startup-idea-before-building-2026-ai-framework-a8237c7ed0a6"
+      ]
+    },
+    {
+      "question": "How do I know if people would actually pay for my idea versus just saying they'd use it?",
+      "answer_summary": "Validation guides recommend looking for explicit budget signals in existing conversations/forums (phrases like 'current tool costs too much' or 'would pay $X for') and testing willingness to pay directly via a pricing page or pre-order, rather than trusting verbal interest alone.",
+      "sources": [
+        "https://reddinbox.com/blog/how-to-validate-startup-ideas-on-reddit"
+      ]
+    },
+    {
+      "question": "Is there a tool that packages startup idea validation into one process?",
+      "answer_summary": "A Show HN-launched tool ('MVP It') was built specifically to consolidate the idea-validation workflow (market/demand testing before coding) into a single product, indicating real demand from builders for a structured validation process.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=43085323"
+      ]
+    },
+    {
+      "question": "What should I avoid doing when interviewing potential customers for validation?",
+      "answer_summary": "Guides caution against pitching the idea during interviews; the recommended posture is to 'listen like a detective, not a salesperson,' asking about current behavior and pain points rather than seeking validation of your specific solution.",
+      "sources": [
+        "https://16vc.substack.com/p/how-to-validate-your-startup-idea"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://founderplaybook.substack.com/p/how-to-test-your-startup-idea-without",
+      "title": "How to Validate Your Startup Without Writing Code",
+      "source_type": "industry publication",
+      "used_for": "Core validation framework: interviews, commitment tests, landing pages, Buffer example"
+    },
+    {
+      "url": "https://16vc.substack.com/p/how-to-validate-your-startup-idea",
+      "title": "How to Validate Your Startup Idea Before Writing a Line of Code",
+      "source_type": "industry publication",
+      "used_for": "Customer-first validation approach, interview guidance"
+    },
+    {
+      "url": "https://reddinbox.com/blog/how-to-validate-startup-ideas-on-reddit",
+      "title": "How to Validate Startup Ideas on Reddit",
+      "source_type": "industry publication",
+      "used_for": "CB Insights failure-rate stat, budget-signal search phrases"
+    },
+    {
+      "url": "https://dev.to/bismasaeed/validate-your-app-idea-without-writing-a-single-line-of-code-3kh0",
+      "title": "Validate Your App Idea Without Writing a Single Line of Code",
+      "source_type": "community",
+      "used_for": "No-code prototype tooling recommendations"
+    },
+    {
+      "url": "https://news.ycombinator.com/item?id=43085323",
+      "title": "Show HN: Validate your startup idea before coding - MVP It",
+      "source_type": "community",
+      "used_for": "Evidence of genuine builder/community demand around idea-validation tooling"
+    },
+    {
+      "url": "https://codevelo.io/blog/validate-startup-idea-before-building-mvp",
+      "title": "Validate a Startup Idea Before Building an MVP",
+      "source_type": "industry publication",
+      "used_for": "Cost estimates for landing-page validation tests"
+    }
+  ],
+  "rejection_reason": ""
+}

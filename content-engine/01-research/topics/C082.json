@@ -1,0 +1,203 @@
+{
+  "candidate_id": "C082",
+  "status": "accepted",
+  "topic": "What resume screening tools actually look for that candidates don't expect",
+  "topic_cluster": "career-jobsearch-resume-ats",
+  "target_keyword": "what does ATS actually look for in a resume",
+  "secondary_keywords": [
+    "how does an applicant tracking system work",
+    "ATS resume screening explained",
+    "do recruiters really use ATS to auto-reject resumes",
+    "resume screening myths"
+  ],
+  "long_tail_keywords": [
+    "does ATS automatically reject resumes without keywords",
+    "is the 75 percent ATS rejection stat true",
+    "what percentage of resumes actually get auto-rejected by ATS",
+    "do hidden white-text keywords work on resumes"
+  ],
+  "question_keywords": [
+    "does ats automatically reject your resume",
+    "what do recruiters actually look for in a resume",
+    "can ats read pdf resumes",
+    "is ats resume score accurate",
+    "do recruiters use ats fit scores"
+  ],
+  "comparison_keywords": [
+    "ats resume checker vs recruiter review",
+    "greenhouse vs workday vs lever ats",
+    "jobscan vs enhancv ats checker"
+  ],
+  "how_to_keywords": [
+    "how to make a resume ats friendly",
+    "how to format a resume for ats in 2026",
+    "how to avoid ats parsing errors"
+  ],
+  "problem_keywords": [
+    "resume not getting past ats",
+    "no interviews despite tailoring resume for ats",
+    "ats rejecting qualified candidates"
+  ],
+  "commercial_keywords": [
+    "best ats resume checker",
+    "free ats resume scanner",
+    "ats resume score tool"
+  ],
+  "entities": [
+    "ATS",
+    "Applicant Tracking System",
+    "Greenhouse",
+    "Lever",
+    "Workday",
+    "iCIMS",
+    "Jobscan",
+    "Enhancv",
+    "Harvard Business School Hidden Workers report",
+    "BBC"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "active job seekers, career changers, and early-career candidates confused by ATS/AI resume advice",
+  "countries": [
+    "Global",
+    "United States (dominant ATS vendors like Workday/Greenhouse/iCIMS are US-centric)",
+    "India (distinct ATS tooling ecosystem — Naukri, ATSMeter — geared to freshers and government-exam-style hiring)"
+  ],
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "Career & Job Search"
+  ],
+  "connects_to_service": "",
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 6,
+    "question_density": 8,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 5,
+    "conversion_potential": 4,
+    "evidence_quality": 8,
+    "total": 62
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Does ATS software automatically reject resumes that don't match keywords?",
+      "answer_summary": "A 2025 study surveying 25 US recruiters found 92% said their systems do not auto-reject based on formatting, design, keywords, or AI match scores; only 8% use auto-rejection, and only for highly specialized roles.",
+      "sources": [
+        "https://www.itbrief.co.uk/story/study-reveals-ats-rarely-auto-rejects-cvs-debunks-75-myth"
+      ]
+    },
+    {
+      "question": "What percentage of resumes never reach a human recruiter?",
+      "answer_summary": "The widely-cited '75% of resumes get rejected by ATS' figure has been debunked by recent recruiter-survey research; the study traced the stat's origin mainly to job-seeker social media posts (68%) and career-coach marketing (20%), not verified data.",
+      "sources": [
+        "https://www.itbrief.co.uk/story/study-reveals-ats-rarely-auto-rejects-cvs-debunks-75-myth"
+      ]
+    },
+    {
+      "question": "What do ATS platforms like Greenhouse, Lever, and Workday actually do with a resume?",
+      "answer_summary": "They use NLP-based parsing to convert resumes into searchable, structured data, support recruiter Boolean/keyword search, and apply recruiter-defined 'knockout questions' (e.g., licensure, work authorization) — they don't independently rank or reject candidates.",
+      "sources": [
+        "https://www.jobscan.co/blog/8-things-you-need-to-know-about-applicant-tracking-systems/"
+      ]
+    },
+    {
+      "question": "Do hidden white-text keywords actually trick ATS into ranking a resume higher?",
+      "answer_summary": "Coverage from recruiters described these 'hidden prompt' tricks as generally ineffective and risky if discovered during manual review.",
+      "sources": [
+        "https://news.google.com (Built In: 'AI Resume Hacks? Recruiters Say Hidden Prompts Don't Work,' Oct 2025)"
+      ]
+    },
+    {
+      "question": "Are newer AI hiring tools introducing bias risks beyond old-style keyword matching?",
+      "answer_summary": "BBC reported that AI-driven hiring tools may be filtering out qualified applicants due to pattern-matching flaws, a distinct and newer risk from classic ATS keyword filtering.",
+      "sources": [
+        "https://news.google.com (BBC: 'AI hiring tools may be filtering out the best job applicants,' Feb 2024)"
+      ]
+    },
+    {
+      "question": "What resume qualities do recruiters actually prioritize when they manually review applications?",
+      "answer_summary": "Per the 25-recruiter study: clear/scannable structure (92%), relevant experience and skills (88%), tailored content matching the job (76%), and short achievement-focused bullets (72%).",
+      "sources": [
+        "https://www.itbrief.co.uk/story/study-reveals-ats-rarely-auto-rejects-cvs-debunks-75-myth"
+      ]
+    },
+    {
+      "question": "Does complex resume formatting (tables, columns, graphics) actually break ATS parsing?",
+      "answer_summary": "Yes — this is described as a real (not mythical) mechanism: NLP-based parsers can misread multi-column layouts, tables, and embedded graphics, corrupting the extracted text.",
+      "sources": [
+        "https://www.jobscan.co/blog/8-things-you-need-to-know-about-applicant-tracking-systems/"
+      ]
+    },
+    {
+      "question": "Why do some candidates get hired despite an 'unoptimized' resume?",
+      "answer_summary": "A Business Insider piece profiled a candidate who ignored standard ATS-tailoring advice and still got hired, suggesting human review, referrals, and overall fit often outweigh keyword-perfect formatting.",
+      "sources": [
+        "https://news.google.com (Business Insider: 'My bad resume still got me hired,' Jul 2025)"
+      ]
+    },
+    {
+      "question": "Do different ATS vendors behave differently enough that a single 'ATS trick' can't work universally?",
+      "answer_summary": "Market share is fragmented (Greenhouse ~19%, Lever ~17%, Workday ~16%, iCIMS ~15%), meaning tailoring advice aimed at one vendor's quirks doesn't reliably transfer to another.",
+      "sources": [
+        "https://ongig.com (via Jobscan/Ongig research on ATS market share)"
+      ]
+    },
+    {
+      "question": "Is there credible research on hiring processes systematically excluding qualified candidates?",
+      "answer_summary": "Harvard Business School's 'Hidden Workers: Untapped Talent' research specifically studied how efficiency-focused hiring technology and processes exclude categories of otherwise-qualified workers (caregivers, veterans, people with disabilities, etc.).",
+      "sources": [
+        "https://www.hbs.edu/managing-the-future-of-work/research/Pages/hidden-workers-untapped-talent.aspx"
+      ]
+    },
+    {
+      "question": "Are developers now building tools specifically to test or beat ATS parsing?",
+      "answer_summary": "Yes — Hacker News Show HN launches include an open-source 'ATS-style resume simulator' and AI agents built specifically to tailor resumes against ATS/job-description matching.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=resume%20ATS%20screening"
+      ]
+    },
+    {
+      "question": "What's the actual scale of ATS adoption among employers?",
+      "answer_summary": "Roughly 98.4% of Fortune 500 companies (492 of 500) and about 35% of small businesses now use some form of ATS.",
+      "sources": [
+        "https://www.jobscan.co/blog/8-things-you-need-to-know-about-applicant-tracking-systems/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "8 Things You Need to Know About Applicant Tracking Systems",
+      "url": "https://www.jobscan.co/blog/8-things-you-need-to-know-about-applicant-tracking-systems/",
+      "source_type": "company docs",
+      "used_for": "ATS parsing mechanics, adoption stats, vendor market share"
+    },
+    {
+      "title": "Study reveals ATS rarely auto-rejects CVs, debunks 75% myth",
+      "url": "https://www.itbrief.co.uk/story/study-reveals-ats-rarely-auto-rejects-cvs-debunks-75-myth",
+      "source_type": "industry publication",
+      "used_for": "Recruiter survey stats debunking auto-rejection myth and what recruiters actually prioritize"
+    },
+    {
+      "title": "Hidden Workers: Untapped Talent (Harvard Business School)",
+      "url": "https://www.hbs.edu/managing-the-future-of-work/research/Pages/hidden-workers-untapped-talent.aspx",
+      "source_type": "government/academic",
+      "used_for": "Evidence that hiring technology/process design systematically excludes qualified candidate groups"
+    },
+    {
+      "title": "Google News RSS aggregation on ATS/resume screening coverage (BBC, Forbes, Business Insider, Built In, USA Today, Entrepreneur)",
+      "url": "https://news.google.com/rss/search?q=ATS+resume+screening+myth+recruiters",
+      "source_type": "aggregator",
+      "used_for": "Confirming breadth of real, dated news/opinion coverage on ATS myths and AI hiring tool bias"
+    },
+    {
+      "title": "Hacker News search: resume ATS screening tools",
+      "url": "https://hn.algolia.com/api/v1/search?query=resume%20ATS%20screening",
+      "source_type": "community",
+      "used_for": "Evidence of real developer/candidate-side interest in tools that test or beat ATS systems"
+    }
+  ]
+}

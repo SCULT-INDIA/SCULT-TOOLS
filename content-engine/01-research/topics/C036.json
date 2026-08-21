@@ -1,0 +1,184 @@
+{
+  "candidate_id": "C036",
+  "topic": "How solo founders are handling customer support without a team",
+  "status": "accepted",
+  "target_keyword": "solo founder customer support no team",
+  "secondary_keywords": [
+    "solo founder customer support system",
+    "how to do customer support alone",
+    "saas customer support solo founder",
+    "customer support without a support team"
+  ],
+  "long_tail_keywords": [
+    "how to manage customer support as a solo founder",
+    "customer support system for one person saas",
+    "how much time should customer support take per day solo founder",
+    "when should a solo founder hire their first support person"
+  ],
+  "question_keywords": [
+    "how do solo founders handle customer support",
+    "what tools do solo founders use for customer support",
+    "how many hours a day should customer support take",
+    "when should i hire my first support hire"
+  ],
+  "comparison_keywords": [
+    "intercom vs crisp for solo founders",
+    "help scout vs zendesk for small saas",
+    "ai chatbot vs human support for solo founder"
+  ],
+  "how_to_keywords": [
+    "how to set up a customer support system as a solo founder",
+    "how to write a knowledge base for a saas product",
+    "how to triage support tickets alone"
+  ],
+  "problem_keywords": [
+    "customer support burnout solo founder",
+    "too many support tickets one person",
+    "support eating all my time as a founder"
+  ],
+  "commercial_keywords": [
+    "best help desk tool for solo founders",
+    "cheap customer support software for startups",
+    "ai customer support tool for small saas"
+  ],
+  "entities": [
+    "Intercom",
+    "Crisp",
+    "Help Scout",
+    "Zendesk",
+    "Front",
+    "Missive",
+    "Deelo",
+    "Zoho"
+  ],
+  "evidence_strength": "strong",
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 8,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 7,
+    "competitive_gap": 6,
+    "conversion_potential": 6,
+    "evidence_quality": 8,
+    "total": 73
+  },
+  "primary_intent": "Tutorial",
+  "secondary_intent": "Tool discovery",
+  "audience": "Solo/bootstrapped SaaS and micro-SaaS founders with no support staff, looking for a repeatable system and tool stack to handle customer support without burning out",
+  "countries": [],
+  "topic_cluster": "solo-founder-ops / customer-support-systems",
+  "connects_to_service": "customer-support",
+  "connects_to_tools": [
+    "Email Signature Generator",
+    "Invoice Generator",
+    "Word Counter"
+  ],
+  "connects_to_prompts": [
+    "customer-support",
+    "business"
+  ],
+  "questions": [
+    {
+      "question": "How much time per day should customer support realistically take a solo founder?",
+      "answer_summary": "A described system built around a shared inbox, a 5-article knowledge base, 2-3 reply macros, and a 24-hour SLA is designed to be handled in about 30 minutes a day (roughly 2.5-3 hours/week) via two short daily triage blocks.",
+      "sources": [
+        "https://www.deelo.ai/blog/saas-customer-support-solo-founder"
+      ]
+    },
+    {
+      "question": "What are the signs a solo founder is ready to hire their first support person?",
+      "answer_summary": "Recommended trigger: hire when at least two of these persist for 4+ weeks -- spending over 2 hours/day in support, first-response time exceeding 36 hours, or every non-trivial ticket needing the founder's direct involvement.",
+      "sources": [
+        "https://www.deelo.ai/blog/saas-customer-support-solo-founder"
+      ]
+    },
+    {
+      "question": "What should a solo founder's support documentation actually include?",
+      "answer_summary": "Guidance emphasizes simple, visual documentation (gifs/videos) and a rule of thumb: if more than one customer asks the same question, that answer needs to go into the docs and be linked from the product's home page, reducing repeat tickets.",
+      "sources": [
+        "https://medium.com/@tylertringas/customer-support-for-solo-founders-df7dd7a97749",
+        "https://www.indiehackers.com/post/whats-the-best-way-to-handle-customer-service-as-a-small-company-or-solo-founder-c6ad4c2ce7"
+      ]
+    },
+    {
+      "question": "Should I reply to support tickets in real time or batch them?",
+      "answer_summary": "The recommended approach is asynchronous batching -- reply immediately only to payment issues or one-sentence/doc-link answers, and schedule a dedicated block (e.g., once a day) for everything else, so support doesn't fragment attention all day.",
+      "sources": [
+        "https://medium.com/@tylertringas/customer-support-for-solo-founders-df7dd7a97749"
+      ]
+    },
+    {
+      "question": "What tools do other solo founders actually use for support, and what do they cost?",
+      "answer_summary": "Indie Hackers and comparison sources name Intercom (praised for value but flagged as pricier), Crisp.chat (budget-friendly, generous free tier), Help Scout, Front, Missive, and Deelo (~$19/seat/month) as common shared-inbox/helpdesk choices for solo founders, versus enterprise tools like Zendesk ($75-300/seat) recommended only after a second support hire.",
+      "sources": [
+        "https://www.indiehackers.com/post/whats-the-best-way-to-handle-customer-service-as-a-small-company-or-solo-founder-c6ad4c2ce7",
+        "https://www.deelo.ai/blog/saas-customer-support-solo-founder"
+      ]
+    },
+    {
+      "question": "Should support emails go through a personal inbox or a dedicated tool?",
+      "answer_summary": "Strong recommendation to move support out of personal email entirely into a dedicated support address connected to a tool offering threading, ticket statuses (open/pending/closed), tags, and waiting-on-customer vs waiting-on-you states.",
+      "sources": [
+        "https://medium.com/@tylertringas/customer-support-for-solo-founders-df7dd7a97749"
+      ]
+    },
+    {
+      "question": "Can AI actually replace a human support team for a solo founder?",
+      "answer_summary": "Sources present AI as an augmentation layer -- automating responses to common/repeat questions, organizing tickets, and providing first-level triage with human escalation -- rather than a full replacement, especially for complex or high-stakes tickets.",
+      "sources": [
+        "https://www.supportseal.com/blog/from-zero-to-100-customers-scaling-customer-support-as-a-solo-founder-with-ai",
+        "https://www.indiehackers.com/post/whats-the-best-way-to-handle-customer-service-as-a-small-company-or-solo-founder-c6ad4c2ce7"
+      ]
+    },
+    {
+      "question": "How should a solo founder mentally reframe support tickets to avoid burnout?",
+      "answer_summary": "Guidance suggests treating every support ticket as a feedback/product opportunity rather than a burden, which is framed as the mindset shift that keeps support sustainable long-term for a single person.",
+      "sources": [
+        "https://www.zoho.com/teaminbox/articles/solopreneur-guide.html"
+      ]
+    },
+    {
+      "question": "What's the minimum viable support stack for a brand-new solo SaaS with a handful of customers?",
+      "answer_summary": "For very early-stage products, some founders report using nothing more than a plain support email plus a lightweight doc site, only adopting a dedicated helpdesk tool once ticket volume becomes unmanageable through email alone.",
+      "sources": [
+        "https://www.indiehackers.com/post/whats-the-best-way-to-handle-customer-service-as-a-small-company-or-solo-founder-c6ad4c2ce7"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://www.deelo.ai/blog/saas-customer-support-solo-founder",
+      "title": "You Don't Need a Support Team Yet — How to Handle SaaS Customer Support Solo",
+      "source_type": "company docs",
+      "used_for": "Detailed daily-time-budget system, hiring trigger thresholds, tool cost comparison table"
+    },
+    {
+      "url": "https://medium.com/@tylertringas/customer-support-for-solo-founders-df7dd7a97749",
+      "title": "Customer Support for Solo Founders",
+      "source_type": "industry publication",
+      "used_for": "Documentation-first strategy, async batching approach, dedicated-inbox recommendation"
+    },
+    {
+      "url": "https://www.indiehackers.com/post/whats-the-best-way-to-handle-customer-service-as-a-small-company-or-solo-founder-c6ad4c2ce7",
+      "title": "What's the best way to handle customer service as a small company or solo founder?",
+      "source_type": "community",
+      "used_for": "Real founder Q&A thread with specific tool names and tradeoffs"
+    },
+    {
+      "url": "https://www.supportseal.com/blog/from-zero-to-100-customers-scaling-customer-support-as-a-solo-founder-with-ai",
+      "title": "From Zero to 100 Customers: Scaling Customer Support as a Solo Founder",
+      "source_type": "company docs",
+      "used_for": "AI-as-augmentation framing for scaling support"
+    },
+    {
+      "url": "https://www.zoho.com/teaminbox/articles/solopreneur-guide.html",
+      "title": "A solopreneur's guide: Struggling to manage customer support alone?",
+      "source_type": "company docs",
+      "used_for": "Mindset/reframing guidance on support tickets as opportunities"
+    }
+  ],
+  "rejection_reason": ""
+}

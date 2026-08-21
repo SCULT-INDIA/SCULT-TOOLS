@@ -1,0 +1,198 @@
+{
+  "candidate_id": "C084",
+  "status": "accepted",
+  "topic": "What a real technical interview prep plan looks like with AI as one input, not the whole plan",
+  "topic_cluster": "career-jobsearch-technical-interview-ai",
+  "target_keyword": "technical interview prep plan with ai",
+  "secondary_keywords": [
+    "how to prepare for technical interviews in the ai era",
+    "is using ai in interview prep cheating",
+    "leetcode vs ai interview prep"
+  ],
+  "long_tail_keywords": [
+    "is it cheating to use ai during interview prep practice",
+    "how to use ai for mock technical interviews without depending on it",
+    "google ai policy for job interviews",
+    "is leetcode still worth grinding in 2026"
+  ],
+  "question_keywords": [
+    "is using ai during a coding interview cheating",
+    "can you use chatgpt to prepare for technical interviews",
+    "is leetcode dying because of ai",
+    "will companies ban ai assistants in interviews"
+  ],
+  "comparison_keywords": [
+    "leetcode vs ai mock interview tools",
+    "chatgpt vs claude for interview prep",
+    "cluely vs interview coder vs truely"
+  ],
+  "how_to_keywords": [
+    "how to prepare for technical interviews with ai",
+    "how to structure a technical interview prep plan",
+    "how to use ai for system design interview prep"
+  ],
+  "problem_keywords": [
+    "leetcode not enough for real interviews",
+    "failing technical interviews despite grinding leetcode",
+    "worried about ai interview cheating detection"
+  ],
+  "commercial_keywords": [
+    "best ai mock interview tool",
+    "ai interview prep platform",
+    "ai coding interview practice app"
+  ],
+  "entities": [
+    "LeetCode",
+    "Cluely",
+    "Roy Lee",
+    "Interview Coder",
+    "Truely",
+    "Columbia University",
+    "Google",
+    "Adobe",
+    "Anthropic",
+    "a16z"
+  ],
+  "primary_intent": "Tutorial",
+  "secondary_intent": "Opinion/research",
+  "audience": "software engineers and CS students actively preparing for coding/technical interviews at tech companies",
+  "countries": [
+    "Global",
+    "United States (Big Tech hiring culture dominates coverage)",
+    "India (distinct high-volume engineering job-market angle — mass applications, competitive tech hiring intensity)"
+  ],
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "Career & Job Search"
+  ],
+  "connects_to_service": "",
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 7,
+    "question_density": 8,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 6,
+    "conversion_potential": 4,
+    "evidence_quality": 8,
+    "total": 65
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Is LeetCode-style grinding actually going away as interview prep, or just changing?",
+      "answer_summary": "Multiple 2026 outlets debated whether 'LeetCode is dying'; the consensus in coverage is that it's evolving (companies still test DSA fundamentals but are adapting formats) rather than disappearing outright.",
+      "sources": [
+        "https://news.google.com (Built In: 'LeetCode Is Dying, But What Will Come Next?', May 2026)",
+        "https://news.google.com (India Today, Aug 2026)"
+      ]
+    },
+    {
+      "question": "What happened with the Columbia student who built an AI tool to cheat in technical interviews?",
+      "answer_summary": "Roy Lee built 'Interview Coder,' was suspended from/withdrew from Columbia over it, then raised funding (reported as $5.3M, later $15M from a16z) to build Cluely, a startup marketed around helping users 'cheat on everything.'",
+      "sources": [
+        "https://news.google.com (TechCrunch, Apr 21 2025)",
+        "https://news.google.com (CNBC, Mar 9 2025)",
+        "https://news.google.com (Fortune, Apr 23 2025)"
+      ]
+    },
+    {
+      "question": "Did other students respond to the Cluely/Interview Coder controversy?",
+      "answer_summary": "Yes — Columbia students launched 'Truely,' reported as 'the anti-Cluely,' an AI-detection tool built specifically to counter interview-cheating software.",
+      "sources": [
+        "https://news.google.com (Columbia Daily Spectator, Jul 28 2025)"
+      ]
+    },
+    {
+      "question": "Is using AI during an actual interview considered cheating by companies?",
+      "answer_summary": "Coverage is split: some outlets frame it outright as cheating, while others (e.g., a 'Is Using AI in a Job Interview Cheating? It Depends' piece) argue the ethics hinge on transparency and stated company policy rather than the tool itself.",
+      "sources": [
+        "https://news.google.com (Built In: 'Is Using AI in a Job Interview Cheating? It Depends,' Feb 2026)"
+      ]
+    },
+    {
+      "question": "Are big tech companies banning or allowing AI use in interviews?",
+      "answer_summary": "Reports genuinely conflict: one 2026 piece says Google is 'embracing' candidate AI-assistant use, while a 2025 piece reports Google shifted toward more in-person interviews specifically because of a surge in AI-aided candidates; Adobe's leadership reportedly welcomes AI use while other employers remain hesitant.",
+      "sources": [
+        "https://news.google.com (The HR Digest, May 2026)",
+        "https://news.google.com (hcamag.com, Aug 2025)",
+        "https://news.google.com (HR Grapevine, Oct 2025)"
+      ]
+    },
+    {
+      "question": "What do engineers say they now need beyond raw coding-test skill to get hired?",
+      "answer_summary": "Business Insider profiles of experienced engineers and a startup CTO report interviewers now weight system design, judgment, and collaboration/AI-era skills more heavily alongside DSA fundamentals.",
+      "sources": [
+        "https://news.google.com (Business Insider, Jan 5 2026 and Apr 16 2026)"
+      ]
+    },
+    {
+      "question": "Are there dedicated AI mock-interview products built specifically to fill a practice gap LeetCode doesn't cover?",
+      "answer_summary": "Yes — Hacker News Show HN launches (e.g., Crackr, Neuraprep, CipherAI, LeetPro) explicitly cite 'LeetCode wasn't actually preparing me... for the pressure of a real technical interview' as their founding motivation.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=technical%20interview%20prep%20AI%20leetcode"
+      ]
+    },
+    {
+      "question": "Is there a public real-world case of someone using AI to pass a top-tier technical interview?",
+      "answer_summary": "Gizmodo reported a case of a student using AI tools to pass Amazon's technical interview, receiving an offer, and then being reported by someone else.",
+      "sources": [
+        "https://news.google.com (Gizmodo, Mar 4 2025)"
+      ]
+    },
+    {
+      "question": "Has the interview-cheating debate reached frontier AI labs themselves?",
+      "answer_summary": "Built In published a piece specifically framing an 'Anthropic cheating scandal' in relation to whether it marks 'the end of the coding interview,' indicating the controversy extends beyond candidate-side tools.",
+      "sources": [
+        "https://news.google.com (Built In: 'Is Anthropic's Cheating Scandal the End of the Coding Interview?', Feb 2026)"
+      ]
+    },
+    {
+      "question": "How are AI-focused startups running technical hiring differently now?",
+      "answer_summary": "A Business Insider piece on hiring at 'the hottest AI coding startups' describes bootcamp-style vetting, work trials, and 'token burn' tests replacing some traditional interview formats.",
+      "sources": [
+        "https://news.google.com (Business Insider, Jul 2 2026)"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Columbia student suspended over interview cheating tool raises $5.3M to 'cheat on everything'",
+      "url": "https://news.google.com/rss/search?q=Cluely+Roy+Lee+interview+coder+Columbia",
+      "source_type": "industry publication",
+      "used_for": "Core narrative of the Cluely/Interview Coder controversy"
+    },
+    {
+      "title": "Meet the 21-year-old helping coders use AI to cheat in Google and other tech job interviews",
+      "url": "https://news.google.com/rss/search?q=Cluely+Roy+Lee+interview+coder+Columbia",
+      "source_type": "industry publication",
+      "used_for": "CNBC profile detail on the same story"
+    },
+    {
+      "title": "'The anti-Cluely': Columbia students launch Truely",
+      "url": "https://news.google.com/rss/search?q=Cluely+Roy+Lee+interview+coder+Columbia",
+      "source_type": "community",
+      "used_for": "Counter-movement evidence (AI-detection tool built in response)"
+    },
+    {
+      "title": "Google News RSS: technical interview prep AI leetcode 2026 coverage",
+      "url": "https://news.google.com/rss/search?q=technical+interview+prep+AI+leetcode+2026",
+      "source_type": "aggregator",
+      "used_for": "Broad landscape of 'LeetCode is dying,' Google/Adobe AI-interview-policy tension, and post-hire skill-shift coverage"
+    },
+    {
+      "title": "Google News RSS: Google AI assistants job interviews policy",
+      "url": "https://news.google.com/rss/search?q=Google+AI+assistants+job+interviews+policy",
+      "source_type": "aggregator",
+      "used_for": "Evidence of genuinely conflicting company policies on AI use in interviews"
+    },
+    {
+      "title": "Hacker News search: technical interview prep AI leetcode",
+      "url": "https://hn.algolia.com/api/v1/search?query=technical%20interview%20prep%20AI%20leetcode",
+      "source_type": "community",
+      "used_for": "Real developer-built AI mock-interview tools and their stated motivations"
+    }
+  ]
+}

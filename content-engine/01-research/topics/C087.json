@@ -1,0 +1,180 @@
+{
+  "candidate_id": "C087",
+  "status": "accepted",
+  "topic": "What a real content calendar looks like for a solo creator running three platforms",
+  "topic_cluster": "Multi-Platform Content Planning",
+  "target_keyword": "content calendar for solo creator running three platforms",
+  "secondary_keywords": [
+    "social media content calendar template",
+    "repurposing content across platforms",
+    "content planning for creators",
+    "batch content creation solo creator"
+  ],
+  "long_tail_keywords": [
+    "how to plan content across youtube instagram and a blog",
+    "content calendar for one person running three platforms",
+    "free content calendar template for creators",
+    "how to repurpose one video into multiple platforms"
+  ],
+  "question_keywords": [
+    "how do solo creators manage multiple platforms",
+    "how often should i post across youtube instagram and a blog",
+    "what should a content calendar include",
+    "how to batch create a month of content",
+    "do solo creators need to post daily"
+  ],
+  "comparison_keywords": [
+    "notion vs google sheets content calendar",
+    "buffer vs later for content planning",
+    "manual calendar vs scheduling tool"
+  ],
+  "how_to_keywords": [
+    "how to build a content calendar from scratch",
+    "how to repurpose a youtube video into instagram reels and a blog post",
+    "how to batch plan a month of content"
+  ],
+  "problem_keywords": [
+    "content creation burnout solo creator",
+    "inconsistent posting schedule",
+    "no time to create content for multiple platforms",
+    "content chaos across platforms"
+  ],
+  "commercial_keywords": [
+    "best content calendar tool for creators",
+    "social media scheduling software",
+    "notion content calendar template"
+  ],
+  "entities": [
+    "Buffer",
+    "Later",
+    "Notion",
+    "Google Sheets",
+    "Canva",
+    "YouTube",
+    "Instagram"
+  ],
+  "primary_intent": "Tutorial",
+  "secondary_intent": "Tool discovery",
+  "audience": "Solo/independent creators simultaneously running a YouTube channel, an Instagram account, and a blog with no team support",
+  "countries": [],
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "blog-writing",
+    "youtube",
+    "instagram"
+  ],
+  "connects_to_service": "branding",
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 8,
+    "question_density": 7,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 7,
+    "competitive_gap": 5,
+    "conversion_potential": 6,
+    "evidence_quality": 7,
+    "total": 69
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What should a content calendar actually include?",
+      "answer_summary": "Buffer's guide lists posting dates/times, captions, visual formats, asset links, and tracking URLs as the essential elements.",
+      "sources": [
+        "https://buffer.com/library/social-media-calendar/"
+      ]
+    },
+    {
+      "question": "How do I repurpose one piece of content across platforms?",
+      "answer_summary": "Later explains a single YouTube video can be cut into Instagram Reels, TikTok clips, and Pinterest pins to cover three platforms from one shoot.",
+      "sources": [
+        "https://later.com/blog/content-calendar/"
+      ]
+    },
+    {
+      "question": "Do solo creators need to post every day?",
+      "answer_summary": "Later states consistency matters more than frequency — solo creators don't need daily posting, just an achievable, repeatable cadence.",
+      "sources": [
+        "https://later.com/blog/content-calendar/"
+      ]
+    },
+    {
+      "question": "What's the actual step-by-step process for building a calendar?",
+      "answer_summary": "Buffer outlines a 7-step process: define strategy first, centralize ideas, tag/color-code content, set per-platform posting schedules, plan with a monthly/weekly view, balance timely vs. evergreen content, then analyze performance.",
+      "sources": [
+        "https://buffer.com/library/social-media-calendar/"
+      ]
+    },
+    {
+      "question": "What free templates exist for a content calendar?",
+      "answer_summary": "Buffer offers free templates in Buffer, Google Sheets, Canva, Notion, and PDF formats.",
+      "sources": [
+        "https://buffer.com/library/"
+      ]
+    },
+    {
+      "question": "How do I know which content pillar or format is working?",
+      "answer_summary": "Buffer recommends tagging/color-coding content by pillar, format, or status specifically so performance can be tracked later by category.",
+      "sources": [
+        "https://buffer.com/library/social-media-calendar/"
+      ]
+    },
+    {
+      "question": "Should posting times be the same across all three platforms?",
+      "answer_summary": "Buffer recommends setting distinct, consistent posting schedules ('Queue times') per platform rather than one blanket schedule.",
+      "sources": [
+        "https://buffer.com/library/social-media-calendar/"
+      ]
+    },
+    {
+      "question": "How do I balance viral/timely posts with evergreen content?",
+      "answer_summary": "Buffer advises mixing timely, viral content when available with consistently scheduled 'bread and butter' evergreen posts.",
+      "sources": [
+        "https://buffer.com/library/social-media-calendar/"
+      ]
+    },
+    {
+      "question": "What tool centralizes planning across multiple platforms?",
+      "answer_summary": "Later positions its centralized content calendar as letting creators plan and schedule across channels from one place, with a shared media library for assets.",
+      "sources": [
+        "https://later.com/blog/content-calendar/"
+      ]
+    },
+    {
+      "question": "How far in advance should content be planned to save time?",
+      "answer_summary": "Later recommends blocking dedicated time to plan content 'en masse' rather than reactively, to save creation hours over time.",
+      "sources": [
+        "https://later.com/blog/content-calendar/"
+      ]
+    },
+    {
+      "question": "How do solo creators avoid content chaos across three platforms?",
+      "answer_summary": "Later frames a single centralized calendar as the fix for content becoming scattered and unmanageable across separate platforms.",
+      "sources": [
+        "https://later.com/blog/content-calendar/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Social Media Calendar: 11 Free Templates + How to Make Your Own",
+      "url": "https://buffer.com/library/social-media-calendar/",
+      "source_type": "company docs",
+      "used_for": "7-step calendar-building workflow, essential calendar fields, template formats"
+    },
+    {
+      "title": "Buffer Resource Library (hub page)",
+      "url": "https://buffer.com/library/",
+      "source_type": "company docs",
+      "used_for": "Confirming template variety and publication recency (July 2026)"
+    },
+    {
+      "title": "Content Calendar guide",
+      "url": "https://later.com/blog/content-calendar/",
+      "source_type": "company docs",
+      "used_for": "Repurposing strategy across YouTube/Instagram/blog, tool recommendations, posting-cadence advice for solo creators"
+    }
+  ]
+}

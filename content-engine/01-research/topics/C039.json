@@ -1,0 +1,158 @@
+{
+  "candidate_id": "C039",
+  "topic": "How small businesses are actually recovering from a Google core update",
+  "status": "accepted",
+  "topic_cluster": "Core update recovery for small/local business SEO",
+  "target_keyword": "recover from google core update small business",
+  "secondary_keywords": [
+    "google core update recovery timeline",
+    "how to recover lost rankings after core update"
+  ],
+  "long_tail_keywords": [
+    "how long does it take to recover from a google core update",
+    "small business traffic drop after google update what to do",
+    "local business lost google rankings after core update"
+  ],
+  "question_keywords": [
+    "how long does google core update recovery take",
+    "why did my small business website lose rankings",
+    "will my site recover at the next core update"
+  ],
+  "comparison_keywords": [
+    "core update recovery vs manual penalty recovery",
+    "technical fixes vs content fixes after a core update"
+  ],
+  "how_to_keywords": [
+    "how to recover from a google core update",
+    "how to audit content after a core update hit"
+  ],
+  "problem_keywords": [
+    "traffic dropped after google core update",
+    "lost local rankings after update",
+    "small business seo traffic disaster"
+  ],
+  "commercial_keywords": [
+    "seo recovery audit service",
+    "local seo agency core update help"
+  ],
+  "entities": [
+    "Google",
+    "Google Business Profile",
+    "E-E-A-T",
+    "helpful content update",
+    "Search Engine Land"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Informational",
+  "audience": "Small business owners and local-business marketers who saw a ranking/traffic drop after a Google core update",
+  "countries": [],
+  "connects_to_service": "seo-geo",
+  "connects_to_tools": [
+    "website-speed-test"
+  ],
+  "connects_to_prompts": [
+    "content audit / rewrite prompts"
+  ],
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 8,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 5,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 5,
+    "conversion_potential": 8,
+    "evidence_quality": 6,
+    "total": 64
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "How long does it typically take to recover from a Google core update?",
+      "answer_summary": "Estimates vary by source: commonly cited as 1-3 months overall, 4-12 weeks for content/authority-driven issues, and up to 3-9 months across one or two full update cycles for harder cases.",
+      "sources": [
+        "https://www.seodiscovery.com/blog/overcome-traffic-drop-after-google-core-update/",
+        "https://www.stylefactoryproductions.com/google-core-update-recovery"
+      ]
+    },
+    {
+      "question": "Why did my small business site lose rankings after the update?",
+      "answer_summary": "Cited causes include thin/repetitive template pages (e.g., near-identical suburb or city pages), weak trust signals, and a lack of visible expertise signals.",
+      "sources": [
+        "https://spiltmedia.com/blog/how-googles-core-update-affects-small-business-rankings/"
+      ]
+    },
+    {
+      "question": "What should I do first after being hit by a core update?",
+      "answer_summary": "Advice is calm review rather than panic edits — assess content quality, intent alignment, and trust signals before making sweeping changes.",
+      "sources": [
+        "https://spiltmedia.com/blog/how-googles-core-update-affects-small-business-rankings/"
+      ]
+    },
+    {
+      "question": "Do technical fixes speed up recovery?",
+      "answer_summary": "If the drop was technical in origin, improvement can appear within days; content/authority-related drops take much longer to resolve.",
+      "sources": [
+        "https://www.seodiscovery.com/blog/google-traffic-recovery/"
+      ]
+    },
+    {
+      "question": "Will my site only recover once the next core update rolls out?",
+      "answer_summary": "Yes in many cases — Google is described as re-evaluating previously impacted sites during the next core update cycle, so improvements often need to be in place before that next update.",
+      "sources": [
+        "https://www.seodiscovery.com/blog/overcome-traffic-drop-after-google-core-update/"
+      ]
+    },
+    {
+      "question": "What concrete actions correlate with sites regaining rankings?",
+      "answer_summary": "Commonly cited actions: improving topical authority, cleaning up content architecture, adding structured data, and adding trust signals like a clear About page, contact details, and credentials/awards.",
+      "sources": [
+        "https://searchengineland.com/guide/google-core-updates",
+        "https://www.stylefactoryproductions.com/google-core-update-recovery"
+      ]
+    },
+    {
+      "question": "Does removing thin/low-quality content help recovery?",
+      "answer_summary": "A cited case reported a site removing roughly 180 weak articles (about 20-30% of its weakest content) and recovering to about 85% of pre-update traffic levels within three weeks.",
+      "sources": [
+        "https://dev.to/synergistdigitalmedia/googles-december-2025-core-update-the-recovery-playbook-nobodys-talking-about-39ce"
+      ]
+    },
+    {
+      "question": "How severe have recent core-update traffic drops been for smaller/niche sites?",
+      "answer_summary": "Some site owners reported drops of roughly 40-85%, concentrated among smaller niche sites.",
+      "sources": [
+        "https://dev.to/synergistdigitalmedia/googles-december-2025-core-update-the-recovery-playbook-nobodys-talking-about-39ce"
+      ]
+    },
+    {
+      "question": "Are local businesses affected differently than other sites?",
+      "answer_summary": "Yes — cited local-specific causes include coasting on legacy citation volume/review counts without active profile management, and using generic rather than hyper-local content.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/local-seo-march-2026-core-update-gbp-optimization-guide"
+      ]
+    },
+    {
+      "question": "Does Google Business Profile optimization play a role in local recovery?",
+      "answer_summary": "Yes, GBP optimization is presented as part of the local-SEO recovery response alongside on-site content and trust-signal work.",
+      "sources": [
+        "https://www.digitalapplied.com/blog/local-seo-march-2026-core-update-gbp-optimization-guide"
+      ]
+    },
+    {
+      "question": "How many sites are typically affected by a given core update?",
+      "answer_summary": "One estimate for the May 2026 core update put the share of sites with noticeable ranking changes at over 55%.",
+      "sources": [
+        "https://www.relevantaudience.com/seo/google-core-update-may-2026-what-you-need-to-know/"
+      ]
+    },
+    {
+      "question": "Is a core update the same thing as a manual action/penalty?",
+      "answer_summary": "No — sources distinguish core updates (algorithmic, broad reassessments) from manual penalties, which changes the recovery approach since there's no 'reconsideration request' path for a core update.",
+      "sources": [
+        "https://somo.agency/blog/google-core-update/"
+      ]
+    }
+  ]
+}

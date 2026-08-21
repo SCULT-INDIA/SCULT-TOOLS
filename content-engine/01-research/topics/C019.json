@@ -1,0 +1,253 @@
+{
+  "candidate_id": "C019",
+  "topic": "Why AI pair-programming changes what \"code review\" means on a team",
+  "status": "accepted",
+  "target_keyword": "ai pair programming code review",
+  "secondary_keywords": [
+    "reviewing AI generated code",
+    "code review in the age of AI",
+    "AI code review culture",
+    "AI-assisted development code review"
+  ],
+  "long_tail_keywords": [
+    "how AI pair programming changes what code review means on a team",
+    "why senior engineers are exhausted reviewing AI code",
+    "code review fatigue from AI generated pull requests",
+    "how to review pull requests written by Claude Code or Cursor"
+  ],
+  "question_keywords": [
+    "how do you review code in the age of AI",
+    "who is responsible for bugs in AI generated code",
+    "is code review still necessary with AI coding tools",
+    "does AI generated code need more review rounds than human code"
+  ],
+  "comparison_keywords": [
+    "AI code review vs human code review",
+    "Claude Code vs Cursor code review workflow",
+    "AI reviewer vs senior engineer review"
+  ],
+  "how_to_keywords": [
+    "how to review AI generated pull requests",
+    "how to set code review standards for AI-assisted teams",
+    "how to avoid AI generate-and-submit anti-pattern"
+  ],
+  "problem_keywords": [
+    "review fatigue AI code",
+    "AI generated code technical debt",
+    "AI slop pull requests",
+    "generate and submit anti-pattern"
+  ],
+  "commercial_keywords": [
+    "AI code review tool",
+    "CodeRabbit",
+    "Qodo Merge",
+    "AI PR reviewer tool"
+  ],
+  "entities": [
+    "Claude Code",
+    "Cursor",
+    "GitHub Copilot",
+    "CodeRabbit",
+    "Qodo",
+    "GitLab",
+    "Anthropic"
+  ],
+  "audience": "engineering managers, senior/staff engineers, and team leads at small-to-mid dev teams adopting AI coding assistants",
+  "primary_intent": "Opinion/research",
+  "secondary_intent": "Problem-solving",
+  "countries": [],
+  "topic_cluster": "AI-Assisted Development & Code Review",
+  "connects_to_service": "ai-agents-automation-service",
+  "connects_to_tools": [
+    "claude-code",
+    "cursor",
+    "github-copilot",
+    "devops"
+  ],
+  "connects_to_prompts": [
+    "coding-prompts",
+    "code-review-prompts"
+  ],
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 9,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 6,
+    "conversion_potential": 5,
+    "evidence_quality": 8,
+    "total": 70
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "How do you review your code in the age of AI?",
+      "answer_summary": "Traditional review criteria (readability, maintainability, correctness) are proving insufficient because AI-generated code often 'works' but follows logic that is unfamiliar or subtly incorrect, forcing reviewers to change what they look for.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=44067019"
+      ]
+    },
+    {
+      "question": "What tools are people using for human review of AI-assisted code?",
+      "answer_summary": "AI review tools like CodeRabbit and Copilot catch bugs and style issues well but are weaker at spotting duplicate code, cross-module coupling, and separation-of-concerns problems, so human review is still needed for architecture-level issues.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=49321400"
+      ]
+    },
+    {
+      "question": "Is anyone else sick of AI-generated ('splattered') code flooding reviews?",
+      "answer_summary": "A consultant reported observing at least 8 companies embracing AI-generated code for coding, testing, and reviews without matching review rigor, causing visible quality decline.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=45278819"
+      ]
+    },
+    {
+      "question": "Should the author of AI-generated code also be its reviewer?",
+      "answer_summary": "The community debate centers on whether self-review by the prompter is sufficient given the author didn't actually write the logic being reviewed.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=43857643"
+      ]
+    },
+    {
+      "question": "Is there an 'AI code review bubble' of low-value tooling?",
+      "answer_summary": "Commenters argue a good reviewer (human or AI) should focus on functional correctness rather than getting lost in minor style/naming nits, which is where many AI review tools currently add noise.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=46766961"
+      ]
+    },
+    {
+      "question": "Why is the 'generate and submit' pattern destroying code quality?",
+      "answer_summary": "Developers enable agent mode, generate large diffs unsupervised, and submit minimal-description PRs; reviewers then discover inconsistent patterns, missing error handling, and security gaps, turning review into an audit of AI output rather than a discussion of the author's understanding.",
+      "sources": [
+        "https://dev.to/sizan_mahmud0_e7c3fd0cb68/the-hidden-cost-of-ai-coding-tools-why-generate-and-submit-is-destroying-code-quality-46o"
+      ]
+    },
+    {
+      "question": "Does AI-generated code need its own AI reviewer?",
+      "answer_summary": "As AI-written code volume grows, teams are adding AI review platforms as an automated 'senior engineer' layer for security, race conditions, and performance, shifting human developers toward an editor/validator role rather than original author.",
+      "sources": [
+        "https://bdtechtalks.substack.com/p/your-ai-coding-assistant-now-needs"
+      ]
+    },
+    {
+      "question": "Who is responsible when AI-generated code breaks production?",
+      "answer_summary": "The framing that emerges is that submitting a PR is still a claim that 'I believe this is production-ready' — accountability doesn't transfer to the AI tool.",
+      "sources": [
+        "https://dev.to/sizan_mahmud0_e7c3fd0cb68/the-hidden-cost-of-ai-coding-tools-why-generate-and-submit-is-destroying-code-quality-46o"
+      ]
+    },
+    {
+      "question": "Does AI-generated code require more review rounds than human-written code?",
+      "answer_summary": "Comparative research found human reviewers exchange 11.8% more rounds of back-and-forth when reviewing AI-generated code versus human-written code.",
+      "sources": [
+        "https://arxiv.org/pdf/2603.15911.pdf"
+      ]
+    },
+    {
+      "question": "Are AI reviewer suggestions actually adopted into codebases?",
+      "answer_summary": "AI agent review suggestions get adopted at a much lower rate than human reviewer suggestions (16.6% vs 56.5%), with over half of unadopted AI suggestions being incorrect or handled differently.",
+      "sources": [
+        "https://arxiv.org/pdf/2603.15911.pdf"
+      ]
+    },
+    {
+      "question": "Does relying on AI coding tools reduce what developers actually learn?",
+      "answer_summary": "A 2026 study found developers using AI finished tasks slightly faster but scored only 50% on post-task knowledge assessments versus 67% for a control group without AI, raising concerns about long-term skill and code-ownership erosion that review processes must now account for.",
+      "sources": [
+        "https://arxiv.org/pdf/2603.15911.pdf"
+      ]
+    },
+    {
+      "question": "What's the best AI code review tool right now?",
+      "answer_summary": "Community discussion points to tools like Kodus, CodeRabbit, and Qodo Merge, which learn from a team's existing review patterns rather than applying generic checks.",
+      "sources": [
+        "https://news.ycombinator.com/item?id=43938241"
+      ]
+    },
+    {
+      "question": "Is code review's real purpose bug-finding or knowledge-sharing, and how does AI change that?",
+      "answer_summary": "Practitioners note code review's core purpose has always been knowledge-sharing and education more than bug-finding, and AI-generated code disrupts this because there's no author to learn from or question about intent.",
+      "sources": [
+        "https://handbook.gitlab.com/handbook/engineering/ai/code-creation"
+      ]
+    },
+    {
+      "question": "Are junior developers treating AI coding tools as 'magic wands' and how does that affect reviewers?",
+      "answer_summary": "Junior/mid-level engineers are increasingly treating AI output as inherently correct ('the AI is smarter than me'), which pushes more verification burden onto senior reviewers and increases review fatigue.",
+      "sources": [
+        "https://dev.to/sizan_mahmud0_e7c3fd0cb68/the-hidden-cost-of-ai-coding-tools-why-generate-and-submit-is-destroying-code-quality-46o"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Ask HN: How Do You Review Your Code in the Age of AI?",
+      "url": "https://news.ycombinator.com/item?id=44067019",
+      "source_type": "community",
+      "used_for": "real developer questions/framing on reviewing AI code"
+    },
+    {
+      "title": "Ask HN: What tools are you using for human code review of AI-assisted code?",
+      "url": "https://news.ycombinator.com/item?id=49321400",
+      "source_type": "community",
+      "used_for": "tool-limitation evidence for AI review tools"
+    },
+    {
+      "title": "Ask HN: Is anyone else sick of AI splattered code",
+      "url": "https://news.ycombinator.com/item?id=45278819",
+      "source_type": "community",
+      "used_for": "practitioner complaints about AI code volume/quality"
+    },
+    {
+      "title": "AI code review: Should the author be the reviewer?",
+      "url": "https://news.ycombinator.com/item?id=43857643",
+      "source_type": "community",
+      "used_for": "debate on review responsibility"
+    },
+    {
+      "title": "There is an AI code review bubble",
+      "url": "https://news.ycombinator.com/item?id=46766961",
+      "source_type": "community",
+      "used_for": "skepticism of AI review tooling value"
+    },
+    {
+      "title": "What's the best AI code review tool? An independent evaluation of 8 tools",
+      "url": "https://news.ycombinator.com/item?id=43938241",
+      "source_type": "community",
+      "used_for": "tool discovery / recommendations"
+    },
+    {
+      "title": "The hidden cost of AI coding tools: why 'generate and submit' is destroying code quality",
+      "url": "https://dev.to/sizan_mahmud0_e7c3fd0cb68/the-hidden-cost-of-ai-coding-tools-why-generate-and-submit-is-destroying-code-quality-46o",
+      "source_type": "community",
+      "used_for": "detailed anti-pattern analysis, quotes, review fatigue argument"
+    },
+    {
+      "title": "Your AI coding assistant now needs its own AI reviewer",
+      "url": "https://bdtechtalks.substack.com/p/your-ai-coding-assistant-now-needs",
+      "source_type": "industry publication",
+      "used_for": "argument for AI-governed review layer and shifting developer role"
+    },
+    {
+      "title": "arxiv preprint on AI vs human code review behavior",
+      "url": "https://arxiv.org/pdf/2603.15911.pdf",
+      "source_type": "government/academic",
+      "used_for": "quantitative comparison of AI vs human review adoption rates and rounds"
+    },
+    {
+      "title": "GitLab AI Coding Group handbook",
+      "url": "https://handbook.gitlab.com/handbook/engineering/ai/code-creation",
+      "source_type": "company docs",
+      "used_for": "framing of code review's purpose (knowledge-sharing vs bug-finding)"
+    },
+    {
+      "title": "Claude Code vs Cursor: What to Choose in 2026",
+      "url": "https://www.builder.io/blog/cursor-vs-claude-code",
+      "source_type": "industry publication",
+      "used_for": "how the two leading tools differ in review/diff workflow"
+    }
+  ]
+}

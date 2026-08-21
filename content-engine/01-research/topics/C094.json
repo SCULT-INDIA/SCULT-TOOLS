@@ -1,0 +1,239 @@
+{
+  "candidate_id": "C094",
+  "topic": "What Google Ads actually costs for a small local business by industry",
+  "status": "accepted",
+  "target_keyword": "google ads cost by industry",
+  "secondary_keywords": [
+    "average cpc by industry google ads",
+    "how much does google ads cost for a small business",
+    "google ads benchmarks by industry"
+  ],
+  "long_tail_keywords": [
+    "google ads cost per lead by industry",
+    "google ads benchmarks 2026",
+    "how much should i spend on google ads per month for a small business",
+    "average cost per click for lawyers google ads"
+  ],
+  "question_keywords": [
+    "how much should i spend on google ads for a small business",
+    "what is a good monthly budget for google ads",
+    "what is the minimum budget i can run to learn google ads",
+    "how much do i need to spend on google ads to promote a small business"
+  ],
+  "comparison_keywords": [
+    "google ads vs facebook ads cost",
+    "small budget vs large budget google ads",
+    "cpc by industry comparison"
+  ],
+  "how_to_keywords": [
+    "how to decide on a budget for a google ads campaign",
+    "how to calculate a google ads budget for a small business"
+  ],
+  "problem_keywords": [
+    "google ads too expensive for small business",
+    "google ads is costing our small business a fortune",
+    "google ads cpc too high for my industry"
+  ],
+  "commercial_keywords": [
+    "google ads management service",
+    "ppc agency pricing",
+    "google ads management cost",
+    "hire a google ads agency"
+  ],
+  "entities": [
+    "WordStream",
+    "LocaliQ",
+    "Google Ads",
+    "CPC",
+    "CPL",
+    "CTR",
+    "CVR",
+    "CPA",
+    "roofing",
+    "plumbing",
+    "legal services",
+    "e-commerce"
+  ],
+  "primary_intent": "Commercial Investigation",
+  "secondary_intent": "Informational",
+  "audience": "Small and local business owners (home services, legal, e-commerce, professional services) budgeting or already running Google Ads campaigns",
+  "countries": [
+    "United States",
+    "India"
+  ],
+  "topic_cluster": "Google Ads Cost Benchmarks by Industry",
+  "connects_to_service": "google-ads-management-service",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "Google Ads copy generation prompts",
+    "ad campaign / keyword brainstorming prompts"
+  ],
+  "scores": {
+    "demand": 8,
+    "intent": 8,
+    "relevance": 9,
+    "question_density": 8,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 3,
+    "competitive_gap": 4,
+    "conversion_potential": 9,
+    "evidence_quality": 8,
+    "total": 71
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "How much are small businesses actually spending on Google Ads per month?",
+      "answer_summary": "Real spend figures reported range widely: some spend $100-150/month with high close rates, others $4,000-6,000/month to generate $10-15K in revenue.",
+      "sources": [
+        "https://www.reddit.com/r/smallbusiness/comments/1i7mr67/how_much_are_you_spending_on_google_ads/"
+      ]
+    },
+    {
+      "question": "What is the minimum budget needed to learn or run Google Ads?",
+      "answer_summary": "You can start learning Google Ads effectively with as little as $5-$10/day, focused on narrow targeting rather than broad, expensive campaigns.",
+      "sources": [
+        "https://www.reddit.com/r/googleads/comments/1gbkg9o/question_what_is_the_minimum_budget_i_can_run_to/"
+      ]
+    },
+    {
+      "question": "What do small home service businesses spend on Google Ads?",
+      "answer_summary": "For roofing specifically, a recommended spend was $4,500-$5,000/month on Google Ads, plus another $2-3K/month if supplementing with Facebook.",
+      "sources": [
+        "https://www.reddit.com/r/SEO/comments/1hf5bc4/what_do_small_small_home_service_businesses_spend/"
+      ]
+    },
+    {
+      "question": "What's a good monthly budget for Google Ads for a local service business?",
+      "answer_summary": "One rule of thumb given: your daily budget should be at least 3x your average cost per qualified lead.",
+      "sources": [
+        "https://www.reddit.com/r/digital_marketing/comments/1krbpg1/whats_a_good_monthly_budget_for_google_ads/"
+      ]
+    },
+    {
+      "question": "Why is Google Ads costing my small business so much?",
+      "answer_summary": "A common fix suggested: switch to manual CPC bidding and add heavy negative keyword lists if you're converting fewer than ~15 times a month in a campaign.",
+      "sources": [
+        "https://www.reddit.com/r/PPC/comments/1i81dam/google_ads_is_costing_our_small_business_a_fortune/"
+      ]
+    },
+    {
+      "question": "As a beginner running Google Ads for a small lead-based business, where do I even start with budget?",
+      "answer_summary": "Respondents note there's no single right answer — it depends heavily on lead value, niche CPC, and conversion rate specific to that business.",
+      "sources": [
+        "https://www.reddit.com/r/googleads/comments/1k9lqls/beginner_google_ads_user_for_small_business_where/"
+      ]
+    },
+    {
+      "question": "What counts as a 'small' Google Ads budget?",
+      "answer_summary": "Industry practitioners commonly consider anything below $10,000/month a 'small' budget in a PPC-agency context.",
+      "sources": [
+        "https://www.reddit.com/r/PPC/comments/15fnsrw/i_know_its_all_relative_but_what_do_you_consider/"
+      ]
+    },
+    {
+      "question": "How do you decide on a budget for a Google Ads campaign in a high-value niche (e.g. legal)?",
+      "answer_summary": "The suggested method: calculate your break-even cost per action from the value of the action, then size the budget around that number.",
+      "sources": [
+        "https://www.reddit.com/r/googleads/comments/1thu931/how_to_decide_on_a_budget_for_a_google_ads/"
+      ]
+    },
+    {
+      "question": "How much do I need to spend on Google Ads to generate a set number of leads?",
+      "answer_summary": "Recommended approach: reverse-engineer from revenue-per-client and target cost-per-acquisition, factoring in the niche's actual CPC (e.g. ~$30/click cited for a renovation business).",
+      "sources": [
+        "https://www.reddit.com/r/googleads/comments/1jbbtc5/how_much_do_i_need_to_spend_on_google_ads_to/"
+      ]
+    },
+    {
+      "question": "Are Google Ads worth it for a small local service business at all?",
+      "answer_summary": "Mixed but largely positive sentiment when combined with Google Business Profile optimization and tight location targeting.",
+      "sources": [
+        "https://www.reddit.com/r/smallbusiness/comments/yhe3fh/are_google_ads_worth_it/"
+      ]
+    },
+    {
+      "question": "What is the average cost per click and cost per lead in Google Ads across industries?",
+      "answer_summary": "Published 2026 benchmarks: average CTR 6.64%, average CPC $5.42, average conversion rate 8.18%, and average cost per lead $66.69 across industries, varying significantly by vertical (legal and consumer services historically the most expensive per click).",
+      "sources": [
+        "https://www.wordstream.com/blog (Google Ads Benchmarks for YOUR Industry)"
+      ]
+    },
+    {
+      "question": "Which industries have the highest and lowest Google Ads CPC?",
+      "answer_summary": "Legal and consumer services have historically carried the highest search CPCs (over $6), while advocacy/nonprofit and e-commerce have some of the lowest.",
+      "sources": [
+        "https://www.wordstream.com/blog (Google Ads Benchmarks for YOUR Industry)"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Google Ads Benchmarks for YOUR Industry [Updated!]",
+      "url": "https://www.wordstream.com/blog",
+      "source_type": "industry publication",
+      "used_for": "Published CTR/CPC/CVR/CPA benchmark tables by industry"
+    },
+    {
+      "title": "How much are you spending on Google ads? (r/smallbusiness)",
+      "url": "https://www.reddit.com/r/smallbusiness/comments/1i7mr67/how_much_are_you_spending_on_google_ads/",
+      "source_type": "community",
+      "used_for": "Real small-business spend figures"
+    },
+    {
+      "title": "What is the minimum budget I can run to learn Google Ads? (r/googleads)",
+      "url": "https://www.reddit.com/r/googleads/comments/1gbkg9o/question_what_is_the_minimum_budget_i_can_run_to/",
+      "source_type": "community",
+      "used_for": "Entry-level budget guidance"
+    },
+    {
+      "title": "What do small home service businesses spend on Google Ads? (r/SEO)",
+      "url": "https://www.reddit.com/r/SEO/comments/1hf5bc4/what_do_small_small_home_service_businesses_spend/",
+      "source_type": "community",
+      "used_for": "Vertical-specific (roofing) spend figures"
+    },
+    {
+      "title": "What's a Good Monthly Budget for Google Ads? (r/digital_marketing)",
+      "url": "https://www.reddit.com/r/digital_marketing/comments/1krbpg1/whats_a_good_monthly_budget_for_google_ads/",
+      "source_type": "community",
+      "used_for": "Budget sizing heuristic"
+    },
+    {
+      "title": "Google Ads is costing our small business a fortune... (r/PPC)",
+      "url": "https://www.reddit.com/r/PPC/comments/1i81dam/google_ads_is_costing_our_small_business_a_fortune/",
+      "source_type": "community",
+      "used_for": "Cost-control troubleshooting"
+    },
+    {
+      "title": "Beginner Google Ads user for small business (r/googleads)",
+      "url": "https://www.reddit.com/r/googleads/comments/1k9lqls/beginner_google_ads_user_for_small_business_where/",
+      "source_type": "community",
+      "used_for": "Beginner budgeting starting point"
+    },
+    {
+      "title": "What do you consider a 'small' Google Ads budget (r/PPC)",
+      "url": "https://www.reddit.com/r/PPC/comments/15fnsrw/i_know_its_all_relative_but_what_do_you_consider/",
+      "source_type": "community",
+      "used_for": "Practitioner definition of small budget"
+    },
+    {
+      "title": "How to decide on a budget for a Google Ads campaign (r/googleads)",
+      "url": "https://www.reddit.com/r/googleads/comments/1thu931/how_to_decide_on_a_budget_for_a_google_ads/",
+      "source_type": "community",
+      "used_for": "Break-even CPA budgeting method"
+    },
+    {
+      "title": "How much do I need to spend on Google Ads to promote... (r/googleads)",
+      "url": "https://www.reddit.com/r/googleads/comments/1jbbtc5/how_much_do_i_need_to_spend_on_google_ads_to/",
+      "source_type": "community",
+      "used_for": "Reverse-engineered budgeting from CPA"
+    },
+    {
+      "title": "Are Google ads worth it? (r/smallbusiness)",
+      "url": "https://www.reddit.com/r/smallbusiness/comments/yhe3fh/are_google_ads_worth_it/",
+      "source_type": "community",
+      "used_for": "General ROI sentiment"
+    }
+  ]
+}

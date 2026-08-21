@@ -1,0 +1,175 @@
+{
+  "candidate_id": "C063",
+  "topic": "How Figma's AI features actually compare to dedicated AI design tools",
+  "status": "accepted",
+  "target_keyword": "figma ai vs dedicated ai design tools",
+  "secondary_keywords": [
+    "Figma Make review",
+    "Claude Design vs Figma",
+    "AI design tool comparison 2026"
+  ],
+  "long_tail_keywords": [
+    "is figma make good enough compared to dedicated ai design tools",
+    "figma make vs claude design",
+    "figma make vs v0 by vercel",
+    "why does figma make ignore my design system"
+  ],
+  "question_keywords": [
+    "does figma make respect design tokens",
+    "is figma make as good as other ai design tools",
+    "what happened to figma's ai design tool",
+    "why did figma disable its ai design tool"
+  ],
+  "comparison_keywords": [
+    "figma make vs claude design",
+    "figma make vs v0",
+    "figma vs brilliant ai design tool",
+    "figma ai vs magic patterns"
+  ],
+  "how_to_keywords": [
+    "how to use figma make with your design system",
+    "how to prompt figma ai to match your components"
+  ],
+  "problem_keywords": [
+    "figma make ignores components",
+    "figma ai generated design looks generic",
+    "figma ai copied apple design"
+  ],
+  "commercial_keywords": [
+    "figma ai pricing",
+    "claude design pricing",
+    "best ai design tool for product teams"
+  ],
+  "entities": [
+    "Figma Make",
+    "Figma First Draft",
+    "Claude Design",
+    "Anthropic",
+    "Dylan Field",
+    "v0 by Vercel",
+    "Magic Patterns",
+    "Brilliant.design",
+    "Uizard",
+    "Mowgli",
+    "shadcn"
+  ],
+  "audience": "product designers, design-system leads, engineering managers evaluating AI design tools, startup founders without dedicated designers",
+  "primary_intent": "Comparative",
+  "secondary_intent": "Commercial Investigation",
+  "countries": [],
+  "topic_cluster": "AI design tooling landscape",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "design",
+    "ChatGPT",
+    "Claude"
+  ],
+  "connects_to_service": "UI/UX design",
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 6,
+    "question_density": 7,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 7,
+    "conversion_potential": 5,
+    "evidence_quality": 8,
+    "total": 67
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Why did Figma disable its AI 'Make Designs' tool after launch?",
+      "answer_summary": "Figma disabled it after it produced app designs nearly identical to Apple's Weather app; CEO Dylan Field said 'Ultimately it is my fault for not insisting on a better QA process,' and paused the feature pending further QA.",
+      "sources": [
+        "https://www.404media.co/figma-disables-ai-app-design-tool-after-it-copied-apples-weather-app/"
+      ]
+    },
+    {
+      "question": "Is Figma Make good enough to replace a dedicated AI design tool?",
+      "answer_summary": "Many practitioners say no — one commenter called it 'incredibly underwhelming... basically just Gemini 3 Pro with a design prompt,' and others noted it 'generates pages that ignore your components, skip your tokens.'",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=Claude%20Design%20Figma%20Make"
+      ]
+    },
+    {
+      "question": "How does Figma Make compare specifically to Claude Design?",
+      "answer_summary": "A widely discussed comparison argued Figma Make runs on a weaker underlying model than Claude Design and that Claude Design's one-click import of an existing design system produces more professional, on-brand results.",
+      "sources": [
+        "https://martinalderson.com/posts/figmas-woes-compound-with-claude-design/"
+      ]
+    },
+    {
+      "question": "Does an AI design tool need to respect existing design tokens/components to be useful for real teams?",
+      "answer_summary": "Practitioners argue yes — criticism of Figma Make centers on it treating 'every screen like a fresh snowflake' instead of reusing the team's actual component library and tokens.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=Claude%20Design%20Figma%20Make"
+      ]
+    },
+    {
+      "question": "What other AI design tools compete with Figma's built-in AI features?",
+      "answer_summary": "Named alternatives include Claude Design (Anthropic), v0 by Vercel, Magic Patterns (YC W23, 185 pts/114 comments on HN), Brilliant.design (a Figma alternative where 'AI works with vector primitives, not code'), and Mowgli ('Figma for the agent era' with Claude Code integration).",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=AI%20UI%20design%20generator%20tool",
+        "https://brilliant.design/",
+        "https://mowgli.ai/"
+      ]
+    },
+    {
+      "question": "Why do a lot of AI-generated UIs end up looking the same regardless of which tool made them?",
+      "answer_summary": "One commenter attributed this to many teams and tools defaulting to the same off-the-shelf CSS/component library (e.g. shadcn) as a shared starting point.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=Figma%20Make%20AI"
+      ]
+    },
+    {
+      "question": "Did Figma's AI stumbles create an opening for competitors like Anthropic?",
+      "answer_summary": "Commentary framed it as a structural disadvantage: Figma pays for the same AI inference it competes against, while smaller dedicated competitors have near-zero marginal shipping costs.",
+      "sources": [
+        "https://martinalderson.com/posts/figmas-woes-compound-with-claude-design/"
+      ]
+    },
+    {
+      "question": "What does Figma Make actually do, mechanically?",
+      "answer_summary": "Figma positions Make as prompt-to-prototype generation that stays visually editable on canvas and can pull in 'Make kits' or existing Figma frames as design-system context.",
+      "sources": [
+        "https://www.figma.com/make/"
+      ]
+    },
+    {
+      "question": "Can non-designers get professional-looking results from a dedicated AI design tool?",
+      "answer_summary": "One reviewer argued yes for Claude Design specifically, saying it lets non-designers 'create professional outputs matching corporate design standards,' partly via one-click import of an existing design system.",
+      "sources": [
+        "https://martinalderson.com/posts/figmas-woes-compound-with-claude-design/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Figma disables AI app design tool after it copied Apple's weather app",
+      "url": "https://www.404media.co/figma-disables-ai-app-design-tool-after-it-copied-apples-weather-app/",
+      "source_type": "industry publication",
+      "used_for": "Timeline and CEO quote on Figma's AI design tool QA failure"
+    },
+    {
+      "title": "Figma Make product page",
+      "url": "https://www.figma.com/make/",
+      "source_type": "company docs",
+      "used_for": "How Figma positions and describes its own AI design feature"
+    },
+    {
+      "title": "Figma's woes compound with Claude Design",
+      "url": "https://martinalderson.com/posts/figmas-woes-compound-with-claude-design/",
+      "source_type": "industry publication",
+      "used_for": "Direct feature/model/economics comparison between Figma Make and Claude Design"
+    },
+    {
+      "title": "Hacker News discussion threads on Figma Make / Claude Design / AI design tools",
+      "url": "https://hn.algolia.com/api/v1/search?query=Claude%20Design%20Figma%20Make",
+      "source_type": "community",
+      "used_for": "Practitioner sentiment, named competing tools, and specific criticisms of Figma's AI output vs dedicated tools"
+    }
+  ]
+}

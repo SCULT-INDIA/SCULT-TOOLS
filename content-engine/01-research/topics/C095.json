@@ -1,0 +1,182 @@
+{
+  "candidate_id": "C095",
+  "topic": "How small businesses are actually deciding between hiring an agency and doing marketing in-house",
+  "status": "accepted",
+  "target_keyword": "marketing agency vs in-house for small business",
+  "secondary_keywords": [
+    "should I hire a marketing agency or do it in-house",
+    "agency vs in-house marketing for small business",
+    "in-house marketing vs hiring an agency"
+  ],
+  "long_tail_keywords": [
+    "at what stage does in-house marketing make sense",
+    "small business hire marketing agency or in house",
+    "pros and cons of in-house marketing vs agency for a startup"
+  ],
+  "question_keywords": [
+    "should I hire a marketing agency or a part-time in-house marketer",
+    "at what stage does in-house marketing make more sense",
+    "why do so many startups hire a marketing team vs an agency"
+  ],
+  "comparison_keywords": [
+    "in-house vs agency marketing",
+    "freelancer vs agency vs in-house marketing",
+    "agency vs in-house SEO"
+  ],
+  "how_to_keywords": [
+    "how to decide between agency and in-house marketing",
+    "how to know when to bring marketing in-house"
+  ],
+  "problem_keywords": [
+    "marketing agency too expensive for small business",
+    "in-house marketing team not working",
+    "agency invoices too high"
+  ],
+  "commercial_keywords": [
+    "hire a marketing agency",
+    "SEO agency for small business",
+    "google ads agency vs in-house team"
+  ],
+  "entities": [
+    "SEO",
+    "PPC",
+    "in-house marketing team",
+    "marketing agency",
+    "CMO",
+    "freelancer"
+  ],
+  "primary_intent": "Comparative",
+  "secondary_intent": "Commercial Investigation",
+  "audience": "Small business owners and startup founders deciding how to structure their marketing function and budget",
+  "countries": [],
+  "topic_cluster": "Agency vs In-House Marketing Decision",
+  "connects_to_service": "seo-geo;google-ads-management-service",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "marketing strategy / channel-planning prompts",
+    "job description / hiring-brief prompts for marketing roles"
+  ],
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 7,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 3,
+    "competitive_gap": 6,
+    "conversion_potential": 8,
+    "evidence_quality": 7,
+    "total": 66
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Has anyone actually changed their mind after trying both in-house and agency marketing?",
+      "answer_summary": "One business owner reports switching preference after trying both: in-house was faster and cleaner for simple work, but the agency proved better once they needed paid media, content, and reporting running simultaneously.",
+      "sources": [
+        "https://www.reddit.com/r/b2bmarketing/comments/1v903rl/has_anyone_actually_changed_their_mind_after/"
+      ]
+    },
+    {
+      "question": "Should a bootstrapped startup hire a marketing agency or a part-time in-house marketer?",
+      "answer_summary": "Top advice for a limited-budget bootstrapped startup: an agency is often better because it requires less of the founder's own time to manage than hiring and directing a part-time person.",
+      "sources": [
+        "https://www.reddit.com/r/startups/comments/p9i9vi/should_i_hire_a_marketing_agency_or_parttime_in/"
+      ]
+    },
+    {
+      "question": "Is in-house marketing more cost-effective than hiring an agency?",
+      "answer_summary": "In-house is argued to be more cost-effective long-term since you only pay salaries/benefits, but an agency can be the better starting point for companies that are just starting out.",
+      "sources": [
+        "https://www.reddit.com/r/marketing/comments/qi8hoy/inhouse_marketing_vs_hiring_an_agency/"
+      ]
+    },
+    {
+      "question": "At what stage does bringing marketing in-house actually make more sense for a small business?",
+      "answer_summary": "A practical rule of thumb offered: bring it in-house once an activity is core to your long-term strategy and the agency's monthly invoices exceed what an equivalent in-house hire would cost.",
+      "sources": [
+        "https://www.reddit.com/r/smallbusiness/comments/1r0upoe/at_what_stage_does_inhouse_marketing_make_more/"
+      ]
+    },
+    {
+      "question": "Why do so many startups build an in-house marketing team instead of hiring an agency?",
+      "answer_summary": "A common counter-argument is that hiring an agency means the company never builds internal marketing knowledge and experience, which is why some founders push to hire in-house early.",
+      "sources": [
+        "https://www.reddit.com/r/startups/comments/... (Why do so many startups hire marketing team vs agency thread)"
+      ]
+    },
+    {
+      "question": "Is working in-house or at an agency better for a marketer's own experience?",
+      "answer_summary": "This is a related but distinct debate among marketing practitioners themselves (not businesses hiring) — many say in-house offers more stability and pay, while agency work is described by some as more chaotic and demanding.",
+      "sources": [
+        "https://www.reddit.com/r/marketing/comments/17u8q1m/would_you_rather_be_working_inhouse_or_agency/"
+      ]
+    },
+    {
+      "question": "What are the practical differences between working in-house vs at an agency?",
+      "answer_summary": "From a practitioner's-eye view: agencies feel less predictable with more mobility opportunities, while in-house roles feel more secure and typically pay more.",
+      "sources": [
+        "https://www.reddit.com/r/advertising/comments/1rq4xr0/inhouse_vs_agency/"
+      ]
+    },
+    {
+      "question": "Should I move from an agency job to an in-house marketing role?",
+      "answer_summary": "Advice given to an SEO executive with 10 months of agency experience was that it's too early to jump in-house — more agency time builds broader foundational skill first.",
+      "sources": [
+        "https://www.reddit.com/r/DigitalMarketing/comments/1110xw9/inhouse_digital_marketing_vs_digital_marketing/"
+      ]
+    },
+    {
+      "question": "Are marketing agencies a worse option than freelancers or in-house specialists for PPC specifically?",
+      "answer_summary": "Practitioners note that in 2025+, doing only one channel (like pure PPC) at an agency is getting harder to justify compared to freelance or in-house specialist alternatives.",
+      "sources": [
+        "https://www.reddit.com/r/PPC/... (Are agencies a worse option than freelancers / in-house thread)"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Has anyone actually changed their mind after trying both in-house and agency? (r/b2bmarketing)",
+      "url": "https://www.reddit.com/r/b2bmarketing/comments/1v903rl/has_anyone_actually_changed_their_mind_after/",
+      "source_type": "community",
+      "used_for": "Real before/after comparison of both models"
+    },
+    {
+      "title": "Should I hire a marketing agency or part-time in-house marketer? (r/startups)",
+      "url": "https://www.reddit.com/r/startups/comments/p9i9vi/should_i_hire_a_marketing_agency_or_parttime_in/",
+      "source_type": "community",
+      "used_for": "Bootstrapped startup buying-decision perspective"
+    },
+    {
+      "title": "In-house Marketing Vs. Hiring an Agency (r/marketing)",
+      "url": "https://www.reddit.com/r/marketing/comments/qi8hoy/inhouse_marketing_vs_hiring_an_agency/",
+      "source_type": "community",
+      "used_for": "Cost-effectiveness argument for each model"
+    },
+    {
+      "title": "At what stage does in-house marketing make more sense? (r/smallbusiness)",
+      "url": "https://www.reddit.com/r/smallbusiness/comments/1r0upoe/at_what_stage_does_inhouse_marketing_make_more/",
+      "source_type": "community",
+      "used_for": "Decision threshold rule of thumb"
+    },
+    {
+      "title": "Inhouse Digital Marketing vs Digital Marketing Agency (r/DigitalMarketing)",
+      "url": "https://www.reddit.com/r/DigitalMarketing/comments/1110xw9/inhouse_digital_marketing_vs_digital_marketing/",
+      "source_type": "community",
+      "used_for": "Practitioner career-timing perspective (secondary angle)"
+    },
+    {
+      "title": "In-house vs Agency (r/advertising)",
+      "url": "https://www.reddit.com/r/advertising/comments/1rq4xr0/inhouse_vs_agency/",
+      "source_type": "community",
+      "used_for": "Practitioner pay/security comparison (secondary angle)"
+    },
+    {
+      "title": "Would you rather be working in-house or agency? (r/marketing)",
+      "url": "https://www.reddit.com/r/marketing/comments/17u8q1m/would_you_rather_be_working_inhouse_or_agency/",
+      "source_type": "community",
+      "used_for": "Practitioner sentiment on agency vs in-house work (secondary angle)"
+    }
+  ]
+}

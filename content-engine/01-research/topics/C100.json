@@ -1,0 +1,178 @@
+{
+  "candidate_id": "C100",
+  "topic": "What \"AI hallucination\" actually means technically and how teams catch it in practice",
+  "status": "accepted",
+  "target_keyword": "ai hallucination technical explanation catching it",
+  "secondary_keywords": [
+    "what is ai hallucination",
+    "how to detect ai hallucinations",
+    "llm hallucination detection"
+  ],
+  "long_tail_keywords": [
+    "how do teams catch ai hallucinations in production",
+    "what does groundedness mean in ai",
+    "llm as a judge hallucination detection"
+  ],
+  "question_keywords": [
+    "what counts as an ai hallucination",
+    "how does groundedness checking work",
+    "can ai detect its own hallucinations"
+  ],
+  "comparison_keywords": [
+    "llm-as-judge vs human review for hallucinations",
+    "single model vs multi-model consensus for hallucination detection"
+  ],
+  "how_to_keywords": [
+    "how to catch ai hallucinations before they reach users",
+    "how to build a hallucination detection pipeline"
+  ],
+  "problem_keywords": [
+    "ai confidently stating false information",
+    "rag system giving ungrounded answers"
+  ],
+  "commercial_keywords": [
+    "ai hallucination detection tool",
+    "llm evaluation platform"
+  ],
+  "entities": [
+    "FactScore",
+    "groundedness",
+    "RAG",
+    "LLM-as-judge",
+    "sparse autoencoder",
+    "Claude",
+    "GPT",
+    "hallucination leaderboard"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "AI/ML engineers and technical teams shipping production LLM applications who need to QA and monitor for factual errors",
+  "countries": [],
+  "topic_cluster": "AI hallucination detection & evaluation",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "Claude"
+  ],
+  "connects_to_service": "AI agents & automation",
+  "scores": {
+    "demand": 6,
+    "intent": 6,
+    "relevance": 7,
+    "question_density": 8,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 6,
+    "conversion_potential": 5,
+    "evidence_quality": 7,
+    "total": 65
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What technically counts as an AI 'hallucination' versus the model just being wrong about something obscure?",
+      "answer_summary": "A real HN commenter distinguishes trivially-false claims from a harder case: the model 'lies on fact based information which is mentioned in very few places on the internet and not repeated too much,' meaning detection needs external verification, not just plausibility checks.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=AI%20hallucination%20detect"
+      ]
+    },
+    {
+      "question": "How does 'groundedness' checking work as a hallucination-detection method?",
+      "answer_summary": "A detailed HN answer to 'How does one detect hallucinations?' describes verifying a response's claims against the retrieved source context it was supposed to be based on.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=hallucination%20RAG%20groundedness"
+      ]
+    },
+    {
+      "question": "What is FactScore and how does it work?",
+      "answer_summary": "Referenced on HN as a real methodology: decompose a model's response into individual, independently verifiable facts, then check each one against ground truth and average the results into a score.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=hallucination%20RAG%20groundedness"
+      ]
+    },
+    {
+      "question": "What do 'attributable,' 'extrapolatory,' and 'contradictory' mean when judging an AI answer?",
+      "answer_summary": "A real three-tier classification scheme described on HN: attributable (verified against source), extrapolatory (unclear/unverifiable), and contradictory (directly conflicts with source) — used to grade groundedness.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=hallucination%20RAG%20groundedness"
+      ]
+    },
+    {
+      "question": "Can one LLM be used as a 'judge' to automatically catch another LLM's hallucinations?",
+      "answer_summary": "Multiple real HN projects use 'LLM-as-a-judge' to programmatically check for hallucinations/groundedness and safety violations, including an open-source framework that also traces full execution paths for systematic quality checks.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=hallucination%20RAG%20groundedness",
+        "https://hn.algolia.com/api/v1/search?query=AI%20hallucination%20detect"
+      ]
+    },
+    {
+      "question": "Does running a query through multiple different models and checking for agreement help catch hallucinations?",
+      "answer_summary": "A real Show HN project built an '11-LLM consensus engine' specifically to detect AI hallucination by cross-referencing outputs across many models.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=AI%20hallucination%20detect"
+      ]
+    },
+    {
+      "question": "Can hallucinations be caught in real time as the model generates output, rather than only after the fact?",
+      "answer_summary": "Real projects on HN include 'real-time AI hallucination detection' (demonstrated with a chess example) and a 'Live AI Evaluation' tool built to catch hallucinations, grounding issues, and drift as they happen.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=AI%20hallucination%20detect"
+      ]
+    },
+    {
+      "question": "What is 'Fathom' and how does activation geometry relate to hallucination detection?",
+      "answer_summary": "A real Show HN project ('Fathom') detects hallucinations from SAE (sparse autoencoder) activation geometry inside the model, i.e. looking at internal representations rather than just the output text.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=AI%20hallucination%20detect"
+      ]
+    },
+    {
+      "question": "Is there a standardized leaderboard comparing how often different models hallucinate?",
+      "answer_summary": "A real 'LLM Hallucination Detection Leaderboard' exists on HN as a comparative evaluation framework across models.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=AI%20hallucination%20detect"
+      ]
+    },
+    {
+      "question": "Why is it harder to catch a hallucination when the false claim sounds confident and touches on rare facts?",
+      "answer_summary": "See the same HN comment noting the hard case is content 'mentioned in very few places on the internet' — confidence and rarity together make casual fact-checking unreliable.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=AI%20hallucination%20detect"
+      ]
+    },
+    {
+      "question": "How do production systems trace a model's execution path to catch grounding issues systematically?",
+      "answer_summary": "A real open-source framework described on HN uses 'full execution path tracing via decorators' combined with automated test suites comparing prompt/logic changes against concrete quality metrics, rather than one-off spot checks.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=hallucination%20RAG%20groundedness"
+      ]
+    },
+    {
+      "question": "What signals does real-time hallucination monitoring look for during a live session?",
+      "answer_summary": "Per the 'Live AI Evaluation' project, monitoring evaluates outputs as they're generated specifically for 'grounding issues, and drift,' rather than only checking final answers.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=AI%20hallucination%20detect"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "HN Algolia search: AI hallucination detect",
+      "url": "https://hn.algolia.com/api/v1/search?query=AI%20hallucination%20detect",
+      "source_type": "community",
+      "used_for": "Real Show HN projects and comments on detection methods: consensus engines, real-time monitoring, SAE-based detection, leaderboards"
+    },
+    {
+      "title": "HN Algolia search: hallucination RAG groundedness",
+      "url": "https://hn.algolia.com/api/v1/search?query=hallucination%20RAG%20groundedness",
+      "source_type": "community",
+      "used_for": "Technical detail on groundedness checking, FactScore, attributable/extrapolatory/contradictory classification, and LLM-as-judge frameworks"
+    },
+    {
+      "title": "tools.scult.in homepage overview",
+      "url": "https://tools.scult.in",
+      "source_type": "company docs",
+      "used_for": "Confirming prompt-library and service alignment for this topic"
+    }
+  ]
+}

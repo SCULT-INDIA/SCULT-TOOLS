@@ -1,0 +1,204 @@
+{
+  "candidate_id": "C014",
+  "status": "accepted",
+  "topic": "How developers are actually using AI agents for codebase migrations",
+  "topic_cluster": "AI-driven code migration",
+  "target_keyword": "ai agent codebase migration",
+  "secondary_keywords": [
+    "ai code migration",
+    "claude code migration playbook",
+    "large scale code migration ai",
+    "legacy code migration ai agents",
+    "agentic code migration workflow"
+  ],
+  "long_tail_keywords": [
+    "how anthropic migrated bun from zig to rust with claude code",
+    "how to migrate legacy codebase with ai agents without breaking things",
+    "migrating python to typescript with ai agents",
+    "why full codebase migration in one shot fails with ai",
+    "how to break a code migration into safe batches for ai agents"
+  ],
+  "question_keywords": [
+    "can ai agents fully migrate a legacy codebase",
+    "how do you migrate code with claude code safely",
+    "what happens when ai agents lose context during migration",
+    "how long does an ai-assisted code migration take",
+    "do ai code migrations pass existing test suites"
+  ],
+  "comparison_keywords": [
+    "claude code vs cursor vs codex for migration",
+    "ai migration agents comparison legacy codebase",
+    "manual migration vs ai agent migration cost"
+  ],
+  "how_to_keywords": [
+    "how to migrate a monolith with ai agents",
+    "how to structure a claude.md for a migration project",
+    "how to set up a migration rulebook for ai agents"
+  ],
+  "problem_keywords": [
+    "ai agent migration hallucinated interfaces",
+    "ai agent loses context during large migration",
+    "ai coding agent breaks existing tests during migration"
+  ],
+  "commercial_keywords": [
+    "ai code migration services",
+    "claude code enterprise migration",
+    "code modernization ai tool"
+  ],
+  "entities": [
+    "Anthropic",
+    "Claude Code",
+    "Bun",
+    "Zig",
+    "Rust",
+    "Cursor",
+    "Codex",
+    "Gemini",
+    "Amazon Nova"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Tutorial",
+  "audience": "engineering leads and senior developers planning or running large-scale legacy code or language migrations",
+  "countries": [],
+  "connects_to_tools": [
+    "JSON Formatter & Validator"
+  ],
+  "connects_to_prompts": [
+    "development frameworks",
+    "Claude",
+    "Cursor"
+  ],
+  "connects_to_service": "custom software development / AI agents and automation service",
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 4,
+    "competitive_gap": 6,
+    "conversion_potential": 6,
+    "evidence_quality": 7,
+    "total": 63
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "How did Anthropic migrate Bun from Zig to Rust with Claude Code?",
+      "answer_summary": "A team migrated roughly a million lines of code in under two weeks using parallel agent teams, with 100% of the existing test suite passing in CI before merge, plus post-merge performance gains (19% smaller binary, large memory reduction).",
+      "sources": [
+        "https://claude.com/blog/ai-code-migration"
+      ]
+    },
+    {
+      "question": "How fast can AI agents port a codebase between languages?",
+      "answer_summary": "Anthropic reports a Python-to-TypeScript port of 165,000 lines completed over a single weekend, cutting compile time from 30 minutes to about two seconds per release cycle.",
+      "sources": [
+        "https://claude.com/blog/ai-code-migration"
+      ]
+    },
+    {
+      "question": "What workflow do teams use for AI-agent-driven migrations?",
+      "answer_summary": "A six-stage process: build a rulebook/mapping of what can't be auto-translated, stress-test on sample files, run parallel agent teams (small models translate, large models review), fix compiler errors in agent loops, run smoke tests, then verify behavior matches the original via full test suites.",
+      "sources": [
+        "https://claude.com/blog/ai-code-migration"
+      ]
+    },
+    {
+      "question": "Does Claude Code outperform other agents on legacy migration planning?",
+      "answer_summary": "In a comparison of five coding agents on the same legacy codebase, Claude Code produced the most coherent migration plan and explained why it made each change, while Cursor was faster at local refactoring.",
+      "sources": [
+        "https://www.200oksolutions.com/blog/5-ai-coding-agents-tested-on-legacy-codebase/"
+      ]
+    },
+    {
+      "question": "Why does letting an AI agent migrate an entire codebase in one shot fail?",
+      "answer_summary": "Agents lose things along the way due to excessive context; breaking work into smaller chunks without full visibility instead causes poor practice application, frequent hallucinations, and scalability issues — so migrations need guided exploration and decomposed tasks.",
+      "sources": [
+        "https://ainativecompass.substack.com/p/migrating-legacy-code-with-ai-yes"
+      ]
+    },
+    {
+      "question": "Is there a real risk of AI agents hallucinating APIs or interfaces during migration?",
+      "answer_summary": "Yes — agents can generate code calling method signatures that no longer match the current shared library because they infer from stale training data rather than the actual present interface.",
+      "sources": [
+        "https://tianpan.co/blog/2026-04-17-coding-agents-monorepo-context-window"
+      ]
+    },
+    {
+      "question": "How should teams structure instructions (CLAUDE.md) for a migration project?",
+      "answer_summary": "Claude Code performs significantly better with structured instructions via a project rules file (e.g., CLAUDE.md documenting translation rules and boundaries) rather than vague prompts.",
+      "sources": [
+        "https://rejoicehub.com/blogs/ai-code-migration-claude-code-playbook",
+        "https://www.buildthisnow.com/blog/guide/development/cursor-to-claude-code-migration"
+      ]
+    },
+    {
+      "question": "Can you migrate context/rules directly from Cursor to Claude Code?",
+      "answer_summary": "No — there's no direct import; teams must hand-carry rules into CLAUDE.md, since Cursor's accumulated project-specific context and .cursor/rules aren't treated as native Claude Code configuration.",
+      "sources": [
+        "https://www.memorylake.ai/en/blogs/migrate-cursor-to-claude-code"
+      ]
+    },
+    {
+      "question": "Can AI agents migrate specific version upgrades quickly (e.g., Java or Spring Boot)?",
+      "answer_summary": "For narrower version migrations like Java 11 to 17 or Spring Boot 2.x to 3.x, agents given a clear plan can complete large application migrations in as little as a single day.",
+      "sources": [
+        "https://ainativecompass.substack.com/p/migrating-legacy-code-with-ai-yes"
+      ]
+    },
+    {
+      "question": "What's the biggest non-technical barrier to AI-assisted migration adoption?",
+      "answer_summary": "Making existing code 'AI-readable' (clear structure, documentation, boundaries) is often the bigger barrier than learning the AI tools themselves.",
+      "sources": [
+        "https://ainativecompass.substack.com/p/migrating-legacy-code-with-ai-yes"
+      ]
+    },
+    {
+      "question": "Do post-migration regressions still occur after an AI-driven migration?",
+      "answer_summary": "Yes — even the widely-cited Bun migration saw 19 post-merge regressions, which were subsequently fixed, showing full automation without human validation isn't yet reliable.",
+      "sources": [
+        "https://claude.com/blog/ai-code-migration"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "How Anthropic runs large-scale code migrations with Claude Code",
+      "url": "https://claude.com/blog/ai-code-migration",
+      "source_type": "primary/official",
+      "used_for": "workflow stages, Bun and Python-to-TypeScript migration metrics"
+    },
+    {
+      "title": "We Ran 5 AI Coding Agents on the Same Legacy Codebase. Here's What Each Missed",
+      "url": "https://www.200oksolutions.com/blog/5-ai-coding-agents-tested-on-legacy-codebase/",
+      "source_type": "industry publication",
+      "used_for": "comparative agent performance on legacy migration planning"
+    },
+    {
+      "title": "Migrating legacy code with AI: yes, but not as you imagine",
+      "url": "https://ainativecompass.substack.com/p/migrating-legacy-code-with-ai-yes",
+      "source_type": "industry publication",
+      "used_for": "failure modes of one-shot migration, version-upgrade examples"
+    },
+    {
+      "title": "Coding Agents in the Monorepo: Why Context Windows and 50-Service Repos Don't Mix",
+      "url": "https://tianpan.co/blog/2026-04-17-coding-agents-monorepo-context-window",
+      "source_type": "industry publication",
+      "used_for": "interface hallucination example during agent code changes"
+    },
+    {
+      "title": "Migrate From Cursor to Claude Code, Keep Context (2026)",
+      "url": "https://www.memorylake.ai/en/blogs/migrate-cursor-to-claude-code",
+      "source_type": "industry publication",
+      "used_for": "tool-migration context transfer limitations"
+    },
+    {
+      "title": "AI Code Migration Guide: Claude Code Playbook & Steps",
+      "url": "https://rejoicehub.com/blogs/ai-code-migration-claude-code-playbook",
+      "source_type": "industry publication",
+      "used_for": "structured-instructions best practice"
+    }
+  ]
+}

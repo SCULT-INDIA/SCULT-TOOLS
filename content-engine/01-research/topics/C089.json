@@ -1,0 +1,190 @@
+{
+  "candidate_id": "C089",
+  "status": "accepted",
+  "topic": "How freelancers in India are actually handling GST-compliant invoicing",
+  "topic_cluster": "India Tax Compliance for Freelancers",
+  "target_keyword": "gst compliant invoicing for freelancers india",
+  "secondary_keywords": [
+    "gst invoice format for freelancers",
+    "gst registration for freelancers india",
+    "e-invoice portal gst freelancer",
+    "gst invoice mandatory fields"
+  ],
+  "long_tail_keywords": [
+    "how to create a gst compliant invoice as a freelancer",
+    "do freelancers need gst registration in india",
+    "gst invoice deadline for services rendered",
+    "hsn sac code for freelance services"
+  ],
+  "question_keywords": [
+    "do freelancers need gst registration in india",
+    "what fields must a gst invoice include",
+    "when must a freelancer issue an invoice for services",
+    "is e-invoicing mandatory for freelancers",
+    "what happens if gstin is missing on an invoice"
+  ],
+  "comparison_keywords": [
+    "registered vs unregistered gst invoice",
+    "gst invoice vs regular invoice",
+    "cgst sgst vs igst for freelancers"
+  ],
+  "how_to_keywords": [
+    "how to generate a gst invoice as a freelancer",
+    "how to add an hsn/sac code to an invoice",
+    "how to use the gst e-invoice portal"
+  ],
+  "problem_keywords": [
+    "invoice missing gstin",
+    "wrong hsn code on invoice",
+    "freelancer invoice rejected by client for gst",
+    "late invoice issuance under gst"
+  ],
+  "commercial_keywords": [
+    "free gst invoice generator",
+    "gst invoicing software india",
+    "best invoice tool for freelancers india"
+  ],
+  "entities": [
+    "GSTN",
+    "GST portal (gst.gov.in)",
+    "einvoice1.gst.gov.in",
+    "CGST",
+    "SGST",
+    "IGST",
+    "HSN/SAC codes",
+    "GSTR-1",
+    "GSTR-3B",
+    "GSTR-2A"
+  ],
+  "primary_intent": "Tutorial",
+  "secondary_intent": "Informational",
+  "audience": "Indian freelancers, independent consultants, and solo service providers who must issue tax-compliant invoices",
+  "countries": [
+    "India"
+  ],
+  "connects_to_tools": [
+    "invoice-generator"
+  ],
+  "connects_to_prompts": [],
+  "connects_to_service": "",
+  "scores": {
+    "demand": 6,
+    "intent": 8,
+    "relevance": 9,
+    "question_density": 7,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 8,
+    "competitive_gap": 5,
+    "conversion_potential": 7,
+    "evidence_quality": 6,
+    "total": 70
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What are the mandatory fields on a GST invoice?",
+      "answer_summary": "ClearTax lists roughly 13 core elements: invoice number/date, supplier and customer names/addresses, GSTIN of both parties (if registered), place of supply, HSN/SAC codes, item descriptions/quantities, taxable value, tax rates/amounts (CGST/SGST/IGST), reverse-charge notation where applicable, and signature.",
+      "sources": [
+        "https://cleartax.in/s/gst-invoice"
+      ]
+    },
+    {
+      "question": "Within how many days must a freelancer issue an invoice for services?",
+      "answer_summary": "ClearTax states service invoices must be issued within 30 days of providing the service (vs. 'before or at the time of removal' for goods).",
+      "sources": [
+        "https://cleartax.in/s/gst-invoice"
+      ]
+    },
+    {
+      "question": "What extra details are needed when billing an unregistered client over ₹50,000?",
+      "answer_summary": "ClearTax notes that for unregistered recipients on invoices above ₹50,000, the recipient's name, address, and state code must also be included.",
+      "sources": [
+        "https://cleartax.in/s/gst-invoice"
+      ]
+    },
+    {
+      "question": "What is einvoice1.gst.gov.in and who has to use it?",
+      "answer_summary": "Razorpay describes it as the government's official e-invoice portal where B2B invoice data from businesses crossing the notified turnover threshold must be authenticated by GSTN before being legally valid.",
+      "sources": [
+        "https://razorpay.com/learn/einvoice1-gst-gov-in-portal-guide/"
+      ]
+    },
+    {
+      "question": "Which entities are exempt from mandatory e-invoicing?",
+      "answer_summary": "Razorpay lists banks/financial institutions, Goods Transport Agencies, passenger transport providers, NBFCs, and SEZ units (for outward supplies) as exempt categories.",
+      "sources": [
+        "https://razorpay.com/learn/einvoice1-gst-gov-in-portal-guide/"
+      ]
+    },
+    {
+      "question": "What is GSTR-1 and when is it due?",
+      "answer_summary": "Razorpay describes GSTR-1 as the return capturing all outward supplies during a tax period.",
+      "sources": [
+        "https://razorpay.com/learn/gstr-1/"
+      ]
+    },
+    {
+      "question": "What is GSTR-3B used for?",
+      "answer_summary": "Razorpay describes GSTR-3B as the monthly return for declaring overall tax liability.",
+      "sources": [
+        "https://razorpay.com/learn/gstr-3b-return-filing/"
+      ]
+    },
+    {
+      "question": "What is GSTR-2A and why does it matter for input tax credit?",
+      "answer_summary": "Razorpay describes GSTR-2A as an auto-generated statement used for claiming input tax credit.",
+      "sources": [
+        "https://razorpay.com/learn/gstr-2a/"
+      ]
+    },
+    {
+      "question": "What is an HSN/SAC code and why is it required on invoices?",
+      "answer_summary": "Razorpay's dedicated guide frames HSN/SAC codes as essential classification codes required for correct invoice reporting.",
+      "sources": [
+        "https://razorpay.com/learn/hsn-sac-code-full-form-meaning-explained/"
+      ]
+    },
+    {
+      "question": "Do freelancers need to formally register a business to invoice under GST?",
+      "answer_summary": "Razorpay's 'What is Freelancing' guide covers freelancing fundamentals and business setup considerations relevant before invoicing clients formally.",
+      "sources": [
+        "https://razorpay.com/learn/what-is-freelancing/"
+      ]
+    },
+    {
+      "question": "Is reverse charge notation required on any freelancer invoices?",
+      "answer_summary": "ClearTax lists 'reverse charge notation (if applicable)' among the mandatory invoice elements, relevant when the recipient rather than the supplier is liable for GST.",
+      "sources": [
+        "https://cleartax.in/s/gst-invoice"
+      ]
+    },
+    {
+      "question": "What is a Letter of Authorisation for GST and when is it needed?",
+      "answer_summary": "Razorpay maintains a dedicated guide on the Letter of Authorisation for GST, used to delegate GST-related responsibilities to another person (e.g., an accountant) — relevant for freelancers who outsource filing.",
+      "sources": [
+        "https://razorpay.com/learn/letter-of-authorization-for-gst/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "GST Invoice: Format, Rules & Requirements",
+      "url": "https://cleartax.in/s/gst-invoice",
+      "source_type": "industry publication",
+      "used_for": "Mandatory invoice fields, 30-day service invoicing rule, unregistered-recipient threshold rule"
+    },
+    {
+      "title": "einvoice1.gst.gov.in Portal Overview & Usage Guide",
+      "url": "https://razorpay.com/learn/einvoice1-gst-gov-in-portal-guide/",
+      "source_type": "company docs",
+      "used_for": "E-invoicing portal purpose, turnover-threshold framing, exempt entity categories"
+    },
+    {
+      "title": "Razorpay Learn (hub page)",
+      "url": "https://razorpay.com/learn/",
+      "source_type": "company docs",
+      "used_for": "Locating and confirming GSTR-1/GSTR-2A/GSTR-3B, HSN/SAC, freelancing, and Letter of Authorisation guides"
+    }
+  ]
+}

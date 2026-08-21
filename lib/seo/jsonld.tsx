@@ -1,4 +1,4 @@
-import type { BlogPost } from '@/lib/blog/types'
+import type { BlogPost, Inline } from '@/lib/blog/types'
 import type { Guide } from '@/lib/guides/types'
 import type { Prompt, PromptCategory } from '@/lib/prompts/types'
 import { absoluteUrl, SITE } from '@/lib/site'
@@ -214,6 +214,27 @@ export function blogPostJsonLd(post: BlogPost): object {
     inLanguage: SITE.locale,
     dateModified: post.updatedAt,
   }
+}
+
+/** Flattens an `Inline[]` answer down to plain text for JSON-LD, which has
+ * no concept of a link or a bold run — same reasoning as `faqJsonLd` below
+ * it: this must describe exactly what `BlogFaq` renders, just without the
+ * markup. */
+function flattenInline(segments: readonly Inline[]): string {
+  return segments
+    .map((segment) => (typeof segment === 'string' ? segment : segment.text))
+    .join('')
+}
+
+/**
+ * `FAQPage` for a blog post's FAQ block — only emitted when `post.faq` is
+ * non-empty, same "never mark up content the visitor can't see" rule as
+ * `faqJsonLd` (tool pages). Reuses `genericFaqJsonLd` rather than a second
+ * `FAQPage` shape.
+ */
+export function blogFaqJsonLd(post: BlogPost): object | null {
+  if (!post.faq || post.faq.length === 0) return null
+  return genericFaqJsonLd(post.faq.map((item) => ({ q: item.question, a: flattenInline(item.answer) })))
 }
 
 /** Renders a JSON-LD script tag. Input is always our own static config. */

@@ -1,0 +1,226 @@
+{
+  "candidate_id": "C008",
+  "topic": "How to check if GPTBot, ClaudeBot, or Google-Extended can actually reach your site",
+  "status": "accepted",
+  "topic_cluster": "AI crawler access & robots.txt control",
+  "target_keyword": "check if ai crawlers can access my site",
+  "secondary_keywords": [
+    "ai crawler access checker",
+    "test robots.txt for ai bots",
+    "can chatgpt see my website",
+    "ai crawlability check"
+  ],
+  "long_tail_keywords": [
+    "how to check if gptbot can crawl my site",
+    "how to verify google-extended is blocked",
+    "check server logs for ai bot visits",
+    "free tool to test ai bot access to website"
+  ],
+  "question_keywords": [
+    "how do I know if ai bots can access my site",
+    "does chatgpt see my website",
+    "how to check ai crawler ip",
+    "is my site blocked from ai search"
+  ],
+  "comparison_keywords": [
+    "checking robots.txt manually vs using an ai crawler audit tool",
+    "server log analysis vs automated crawler checker"
+  ],
+  "how_to_keywords": [
+    "how to check ai bot access to website",
+    "how to test if perplexity can crawl your site",
+    "how to read server logs for gptbot requests"
+  ],
+  "problem_keywords": [
+    "ai crawler blocked accidentally by cdn or waf",
+    "site not appearing in chatgpt search results",
+    "unsure if claudebot can reach my pages"
+  ],
+  "commercial_keywords": [
+    "free ai crawler access checker tool",
+    "ai visibility checker",
+    "ai crawl audit tool"
+  ],
+  "entities": [
+    "GPTBot",
+    "ClaudeBot",
+    "Google-Extended",
+    "PerplexityBot",
+    "OAI-SearchBot",
+    "Cloudflare",
+    "server logs",
+    "HTTP status codes",
+    "IP ranges JSON"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Tutorial",
+  "audience": "Website owners and marketers who want a practical, actionable way to verify AI crawler access rather than just read about directives",
+  "countries": [],
+  "connects_to_tools": [
+    "ai-visibility-checker"
+  ],
+  "connects_to_prompts": [],
+  "connects_to_service": "Web Development / technical SEO audits",
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 10,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 10,
+    "competitive_gap": 5,
+    "conversion_potential": 8,
+    "evidence_quality": 8,
+    "total": 76
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "How can I check if GPTBot can access my website?",
+      "answer_summary": "Use an online AI crawler access checker that reads your robots.txt line by line, or manually check your robots.txt and server logs for GPTBot requests returning HTTP 200.",
+      "sources": [
+        "https://mrs.digital/tools/ai-crawler-access-checker/",
+        "https://llmpulse.ai/robots-txt-checker"
+      ]
+    },
+    {
+      "question": "Can ChatGPT see my website?",
+      "answer_summary": "Depends on whether OAI-SearchBot or ChatGPT-User can reach the page per your robots.txt and any CDN-level blocks; dedicated checker tools test this directly.",
+      "sources": [
+        "https://scorecraft.ai/blog/how-to-check-if-chatgpt-can-see-your-website"
+      ]
+    },
+    {
+      "question": "What should I look for in server logs to confirm an AI bot successfully crawled my site?",
+      "answer_summary": "Search logs for AI bot user-agent strings (GPTBot, ClaudeBot, PerplexityBot, OAI-SearchBot) and check that requests returned HTTP 200 rather than 403/404.",
+      "sources": [
+        "https://centium.ai/guides/ai-crawler-access",
+        "https://llmpulse.ai/blog/website-ai-bot-access/"
+      ]
+    },
+    {
+      "question": "Do free AI crawler checker tools just parse robots.txt, or do they simulate a real crawl request?",
+      "answer_summary": "Some tools go further than parsing robots.txt syntax by sending requests that mimic the actual crawlers (GPTBot, ClaudeBot, Googlebot) and analyzing the live response, catching CDN/WAF-level blocks that robots.txt alone wouldn't reveal.",
+      "sources": [
+        "https://siftly.ai/free-tools/crawler-audit"
+      ]
+    },
+    {
+      "question": "Can I verify Google-Extended access the same way I check other crawlers, by looking for its own user agent in logs?",
+      "answer_summary": "No — Google-Extended has no separate crawling user-agent string; it's purely a robots.txt control token layered on Google's existing crawler infrastructure, so it can't be confirmed via log user-agent alone.",
+      "sources": [
+        "https://pushleads.com/google-extended-crawler/"
+      ]
+    },
+    {
+      "question": "How long does it take for a robots.txt change to take effect for OpenAI's search bot?",
+      "answer_summary": "OpenAI states changes to allow/disallow OAI-SearchBot take about 24 hours to process.",
+      "sources": [
+        "https://developers.openai.com/api/docs/bots"
+      ]
+    },
+    {
+      "question": "Why would GPTBot show up in my logs even though robots.txt disallows it?",
+      "answer_summary": "Possible causes include a spoofed user agent (verify against official IP ranges), a mismatch between robots.txt rules and CDN/WAF settings, or a bot violating its stated compliance.",
+      "sources": [
+        "https://technologychecker.io/blog/robots-txt-ai-crawlers-blocking-report",
+        "https://developers.openai.com/api/docs/bots"
+      ]
+    },
+    {
+      "question": "How do I verify that a bot claiming to be ClaudeBot is genuine?",
+      "answer_summary": "Cross-check the requester's IP address against Anthropic's published IP range list rather than trusting the user-agent header alone.",
+      "sources": [
+        "https://support.claude.com/en/articles/8896518"
+      ]
+    },
+    {
+      "question": "Does the robots.txt file alone tell me whether AI crawlers can really reach my site?",
+      "answer_summary": "No — robots.txt only shows declared intent; actual reachability also depends on CDN/WAF bot-management settings, which is why dedicated crawler-access checkers test live requests rather than only parsing the file.",
+      "sources": [
+        "https://siftly.ai/free-tools/crawler-audit",
+        "https://technologychecker.io/blog/robots-txt-ai-crawlers-blocking-report"
+      ]
+    },
+    {
+      "question": "What does an AI Crawler Access Checker tool actually check?",
+      "answer_summary": "It typically reads a site's robots.txt and shows, line by line, which AI/search crawlers (GPTBot, ClaudeBot, PerplexityBot, etc.) are allowed or blocked, sometimes alongside a simulated fetch.",
+      "sources": [
+        "https://mrs.digital/tools/ai-crawler-access-checker/",
+        "https://llmpulse.ai/robots-txt-checker"
+      ]
+    },
+    {
+      "question": "Does blocking AI crawlers hurt my chances of appearing in AI Overviews or ChatGPT search answers?",
+      "answer_summary": "Yes — blocking the search/retrieval-specific bots (OAI-SearchBot, Claude-SearchBot, PerplexityBot) removes eligibility for citation in those AI answer surfaces, separate from blocking training-only bots like GPTBot.",
+      "sources": [
+        "https://developers.openai.com/api/docs/bots",
+        "https://dataimpulse.com/blog/robots-txt-ai-crawlers/"
+      ]
+    },
+    {
+      "question": "Can my site be blocking AI crawlers at the CDN/WAF level even though robots.txt allows them?",
+      "answer_summary": "Yes, this mismatch is documented as common — bot-fight-mode or WAF rules can silently block crawlers that robots.txt technically permits.",
+      "sources": [
+        "https://technologychecker.io/blog/robots-txt-ai-crawlers-blocking-report"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "AI Crawler Access Checker",
+      "url": "https://mrs.digital/tools/ai-crawler-access-checker/",
+      "source_type": "company docs",
+      "used_for": "Example of what an AI crawler access checker tool inspects and reports"
+    },
+    {
+      "title": "Free AI Robots.txt Checker: GPTBot, ClaudeBot",
+      "url": "https://llmpulse.ai/robots-txt-checker",
+      "source_type": "company docs",
+      "used_for": "Checker tool functionality and methodology"
+    },
+    {
+      "title": "Is Your Website Crawlable by AI? How to Test and Fix AI Bot Access",
+      "url": "https://llmpulse.ai/blog/website-ai-bot-access/",
+      "source_type": "company docs",
+      "used_for": "Manual methods (robots.txt, server logs, status codes) for checking AI bot access"
+    },
+    {
+      "title": "Free AI Crawler Audit Tool — Check if AI Bots Can Read Your Site",
+      "url": "https://siftly.ai/free-tools/crawler-audit",
+      "source_type": "company docs",
+      "used_for": "Description of live-request-based crawler audit approach vs static robots.txt parsing"
+    },
+    {
+      "title": "Can ChatGPT See Your Website? Here's How to Check",
+      "url": "https://scorecraft.ai/blog/how-to-check-if-chatgpt-can-see-your-website",
+      "source_type": "industry publication",
+      "used_for": "Framing of the practical checking question from a site owner's perspective"
+    },
+    {
+      "title": "Overview of OpenAI Crawlers",
+      "url": "https://developers.openai.com/api/docs/bots",
+      "source_type": "primary/official",
+      "used_for": "Official propagation time (24 hours) and IP range verification method"
+    },
+    {
+      "title": "Does Anthropic crawl data from the web, and how can site owners block the crawler?",
+      "url": "https://support.claude.com/en/articles/8896518",
+      "source_type": "primary/official",
+      "used_for": "Official IP range verification and blocking-guarantee caveats"
+    },
+    {
+      "title": "Google-Extended robots.txt: Official Guide for Sites",
+      "url": "https://pushleads.com/google-extended-crawler/",
+      "source_type": "industry publication",
+      "used_for": "Clarifying Google-Extended has no distinct crawler user agent"
+    },
+    {
+      "title": "We Analyzed robots.txt Across Cloudflare's Network",
+      "url": "https://technologychecker.io/blog/robots-txt-ai-crawlers-blocking-report",
+      "source_type": "aggregator",
+      "used_for": "Data on CDN/WAF vs robots.txt mismatches affecting actual crawler access"
+    }
+  ]
+}

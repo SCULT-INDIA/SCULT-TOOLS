@@ -7,27 +7,40 @@ import type { BlogSection, Inline } from '@/lib/blog/types'
  * `<a>` for `external: true` (scult.in service pages, book-a-meeting — the
  * href is expected to already be built via `parentLink()` so UTM attribution
  * survives, same convention `ContactAndCta.tsx` and `HowItWorksShell.tsx` use).
+ * A `bold` segment renders as `<strong>` — the one other case `Inline` closes
+ * over (see lib/blog/types.ts).
  */
+/** Shared across `BlogBody` and `BlogFaq` — the only two places `Inline[]`
+ * gets rendered — so link/bold handling can't drift between a normal
+ * section paragraph and an FAQ answer. */
+export function renderInlineSegments(segments: readonly Inline[]) {
+  return segments.map((segment, i) => {
+    if (typeof segment === 'string') {
+      // biome-ignore lint/suspicious/noArrayIndexKey: segments are static, ordered, never reordered
+      return <span key={i}>{segment}</span>
+    }
+    if ('bold' in segment) {
+      // biome-ignore lint/suspicious/noArrayIndexKey: segments are static, ordered, never reordered
+      return <strong key={i}>{segment.text}</strong>
+    }
+    const linkClass =
+      'text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4 hover:text-violet-600'
+    return segment.external ? (
+      <a key={segment.href} href={segment.href} className={linkClass}>
+        {segment.text}
+      </a>
+    ) : (
+      <Link key={segment.href} href={segment.href} className={linkClass}>
+        {segment.text}
+      </Link>
+    )
+  })
+}
+
 function Paragraph({ segments }: { segments: readonly Inline[] }) {
   return (
     <p className="mt-4 text-[16px] text-ink-muted leading-7">
-      {segments.map((segment, i) => {
-        if (typeof segment === 'string') {
-          // biome-ignore lint/suspicious/noArrayIndexKey: segments are static, ordered, never reordered
-          return <span key={i}>{segment}</span>
-        }
-        const linkClass =
-          'text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4 hover:text-violet-600'
-        return segment.external ? (
-          <a key={segment.href} href={segment.href} className={linkClass}>
-            {segment.text}
-          </a>
-        ) : (
-          <Link key={segment.href} href={segment.href} className={linkClass}>
-            {segment.text}
-          </Link>
-        )
-      })}
+      {renderInlineSegments(segments)}
     </p>
   )
 }

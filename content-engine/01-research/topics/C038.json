@@ -1,0 +1,164 @@
+{
+  "candidate_id": "C038",
+  "topic": "Why topical authority actually matters more for AI search than backlinks alone",
+  "status": "accepted",
+  "topic_cluster": "AI search visibility & topical authority (GEO)",
+  "target_keyword": "topical authority ai search vs backlinks",
+  "secondary_keywords": [
+    "topical authority ai overviews",
+    "does topical authority matter more than backlinks",
+    "backlinks vs content depth ai search"
+  ],
+  "long_tail_keywords": [
+    "why does my competitor rank with fewer backlinks than me",
+    "how to build topical authority without backlinks",
+    "does chatgpt cite pages that rank on google"
+  ],
+  "question_keywords": [
+    "do backlinks still matter for ai search visibility",
+    "will topical authority replace backlinks",
+    "how does google decide what to cite in ai overviews",
+    "why is reddit cited so much by chatgpt"
+  ],
+  "comparison_keywords": [
+    "topical authority vs backlinks",
+    "domain authority vs topical authority",
+    "chatgpt citations vs google ai overview citations"
+  ],
+  "how_to_keywords": [
+    "how to build topical authority for a site",
+    "how to get cited in chatgpt and ai overviews"
+  ],
+  "problem_keywords": [
+    "ranking behind sites with fewer backlinks",
+    "backlinks not helping ai search visibility",
+    "not getting cited in ai overviews despite ranking"
+  ],
+  "commercial_keywords": [
+    "topical authority seo audit",
+    "ai visibility checker tool",
+    "content cluster seo service"
+  ],
+  "entities": [
+    "Google AI Overviews",
+    "ChatGPT",
+    "Perplexity",
+    "BrightEdge",
+    "Domain Authority",
+    "Reddit",
+    "LinkedIn",
+    "Mayo Clinic"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Comparative",
+  "audience": "SEO practitioners, content strategists, and in-house marketers optimizing for AI answer engines (GEO) rather than classic Google rankings",
+  "countries": [],
+  "connects_to_service": "seo-geo",
+  "connects_to_tools": [
+    "ai-visibility-checker"
+  ],
+  "connects_to_prompts": [
+    "content cluster / topical map prompts"
+  ],
+  "scores": {
+    "demand": 8,
+    "intent": 7,
+    "relevance": 9,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 9,
+    "tool_discovery_opportunity": 8,
+    "competitive_gap": 5,
+    "conversion_potential": 7,
+    "evidence_quality": 7,
+    "total": 75
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Will topical authority matter more than backlinks in an AI-driven search landscape?",
+      "answer_summary": "Framed as an open, actively-debated question; multiple SEO commentators argue topical authority (breadth/depth of subject coverage) is becoming the primary signal, with backlinks demoted to a supporting role.",
+      "sources": [
+        "https://www.quora.com/Will-topical-authority-matter-more-than-backlinks-in-an-AI-driven-search"
+      ]
+    },
+    {
+      "question": "Why are sites with fewer backlinks outranking competitors with much larger link profiles?",
+      "answer_summary": "Observers report smaller, tightly-focused sites overtaking bigger-brand competitors because Google evaluates whether a site 'owns' a topic rather than just counting links.",
+      "sources": [
+        "https://goldeneggmarketing.uk/why-topical-authority-matters-more-than-backlinks/",
+        "https://www.rankarise.com/blog/topical-authority-vs-backlinks-what-actually-wins-in-2026/"
+      ]
+    },
+    {
+      "question": "Is topical authority a better predictor of AI citation than Domain Authority or backlinks?",
+      "answer_summary": "Described as the strongest predictor of AI citation, outperforming Domain Authority and raw backlink counts.",
+      "sources": [
+        "https://ziptie.dev/blog/why-in-depth-coverage-gets-cited-more/"
+      ]
+    },
+    {
+      "question": "Can a lower-ranked page get cited more than a #1 result?",
+      "answer_summary": "Pages ranking #6-10 with strong topical authority are reported to be cited roughly 2.3x more often than #1-ranked pages with weak topical authority.",
+      "sources": [
+        "https://ziptie.dev/blog/why-in-depth-coverage-gets-cited-more/"
+      ]
+    },
+    {
+      "question": "Is the same content strategy used across ChatGPT, Perplexity, and Google AI Overviews?",
+      "answer_summary": "No — the overlap between what each engine cites is only about 10-15%, meaning platform-specific strategies are needed.",
+      "sources": [
+        "https://ziptie.dev/blog/why-reddit-dominates-chatgpt-perplexity-and-google-ai-overviews/"
+      ]
+    },
+    {
+      "question": "Why does Reddit get cited so much more in ChatGPT than in Google AI Overviews?",
+      "answer_summary": "Reddit appears alongside editorial/medical sources roughly 36% of the time in ChatGPT citations versus only about 6% of the time in Google AI Overviews — described as a '6x authority flip.'",
+      "sources": [
+        "https://www.searchenginejournal.com/research-suggests-ai-engines-assign-ranking-roles-to-sources/578620/"
+      ]
+    },
+    {
+      "question": "Is Reddit's share of AI citations stable over time?",
+      "answer_summary": "No — Reddit's share of ChatGPT citations reportedly fell sharply within 2026, an 86% relative drop cited between early and mid-August.",
+      "sources": [
+        "https://ziptie.dev/blog/why-reddit-dominates-chatgpt-perplexity-and-google-ai-overviews/"
+      ]
+    },
+    {
+      "question": "Does ranking #1 on Google guarantee an AI Overview citation?",
+      "answer_summary": "No — reportedly only about 38% of AI Overview citations come from top-10 ranking pages, undercutting the assumption that Google rank alone drives AI citation.",
+      "sources": [
+        "https://www.searchenginejournal.com/research-suggests-ai-engines-assign-ranking-roles-to-sources/578620/"
+      ]
+    },
+    {
+      "question": "How does LinkedIn's citation role differ between ChatGPT and Google AI Overviews?",
+      "answer_summary": "LinkedIn appears in roughly 33% of ChatGPT how-to citations versus 22% in AI Overviews, with a stronger role in professional/B2B contexts across both.",
+      "sources": [
+        "https://www.searchenginejournal.com/research-suggests-ai-engines-assign-ranking-roles-to-sources/578620/"
+      ]
+    },
+    {
+      "question": "Do AI engines just rank by topical authority, or do they assign sources different 'roles'?",
+      "answer_summary": "Research suggests AI engines don't apply one uniform authority ranking; they assign different sources different functional roles depending on query type (e.g., comparison vs. explanation vs. verification queries).",
+      "sources": [
+        "https://www.searchenginejournal.com/research-suggests-ai-engines-assign-ranking-roles-to-sources/578620/"
+      ]
+    },
+    {
+      "question": "Do I still need a backlink or Reddit-mention campaign to get cited by AI?",
+      "answer_summary": "Some commentary argues you don't need backlink or Reddit campaigns as 'Plan A' if the content is genuinely the best answer to the query.",
+      "sources": [
+        "https://www.searchenginejournal.com/research-suggests-ai-engines-assign-ranking-roles-to-sources/578620/"
+      ]
+    },
+    {
+      "question": "How much topical coverage is needed to build real topical authority?",
+      "answer_summary": "Some practitioners cite roughly 25-30+ interconnected articles on a subject as the threshold where a site starts being treated as the best match for that topic.",
+      "sources": [
+        "https://www.rankarise.com/blog/topical-authority-vs-backlinks-what-actually-wins-in-2026/"
+      ]
+    }
+  ]
+}

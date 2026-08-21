@@ -1,0 +1,211 @@
+{
+  "candidate_id": "C001",
+  "status": "accepted",
+  "topic": "How ChatGPT search actually decides which pages to cite",
+  "topic_cluster": "AI Search Citation Mechanics",
+  "target_keyword": "how does chatgpt search choose sources",
+  "secondary_keywords": [
+    "chatgpt citation algorithm",
+    "chatgpt search ranking factors",
+    "how chatgpt picks sources",
+    "chatgpt search how it works"
+  ],
+  "long_tail_keywords": [
+    "why does chatgpt cite some websites and not others",
+    "how does chatgpt decide which sources to cite in search",
+    "does chatgpt use bing for search results",
+    "why does chatgpt cite reddit and wikipedia so often"
+  ],
+  "question_keywords": [
+    "how does chatgpt choose which sources to cite",
+    "why does chatgpt cite certain websites",
+    "does chatgpt rank pages like google",
+    "how many sources does chatgpt cite per answer"
+  ],
+  "comparison_keywords": [
+    "chatgpt citations vs google rankings",
+    "chatgpt search vs bing search citations",
+    "chatgpt vs google ai overviews citations"
+  ],
+  "how_to_keywords": [
+    "how to get cited by chatgpt",
+    "how to rank in chatgpt search",
+    "how to increase chatgpt citations"
+  ],
+  "problem_keywords": [
+    "chatgpt doesn't cite my website",
+    "chatgpt search citations dropped",
+    "chatgpt never mentions my brand"
+  ],
+  "commercial_keywords": [
+    "ai visibility checker",
+    "chatgpt seo audit tool",
+    "geo optimization service"
+  ],
+  "entities": [
+    "ChatGPT",
+    "OpenAI",
+    "Bing",
+    "Reciprocal Rank Fusion",
+    "RAG (retrieval-augmented generation)",
+    "Reddit",
+    "Wikipedia"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "SEO professionals, content marketers, in-house marketing teams, and GEO/AEO consultants trying to understand and influence AI search citation behavior",
+  "countries": [],
+  "connects_to_tools": [
+    "ai-visibility-checker"
+  ],
+  "connects_to_service": "SEO/GEO visibility consulting",
+  "connects_to_prompts": [],
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 9,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 8,
+    "competitive_gap": 5,
+    "conversion_potential": 6,
+    "evidence_quality": 7,
+    "total": 73
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Does ChatGPT rank and cite pages the same way Google ranks search results?",
+      "answer_summary": "No. An analysis of ChatGPT citation patterns found only about 12% overlap between URLs cited by ChatGPT and URLs on Google's first page for the same query, indicating a largely separate retrieval and selection process.",
+      "sources": [
+        "https://sellm.io/post/chatgpt-ranking-factors"
+      ]
+    },
+    {
+      "question": "What actually happens technically when ChatGPT search cites a source?",
+      "answer_summary": "When browse/search is invoked, ChatGPT retrieves candidate pages (primarily via Bing), extracts relevant passages, and generates an answer, selecting citations based on whether a page directly supports a specific claim in the output.",
+      "sources": [
+        "https://sellm.io/post/chatgpt-ranking-factors",
+        "https://help.openai.com/en/articles/9237897-chatgpt-search"
+      ]
+    },
+    {
+      "question": "What percentage of the pages ChatGPT fetches during a search actually make it into the final cited answer?",
+      "answer_summary": "Roughly 85% of pages ChatGPT fetches during browsing never appear as a citation in the final answer, according to analysis of the citation pipeline.",
+      "sources": [
+        "https://www.airops.com/blog/chatgpt-decides-sources-cite",
+        "https://ziptie.dev/blog/how-does-chatgpt-choose-its-sources/"
+      ]
+    },
+    {
+      "question": "Why does ChatGPT cite Reddit and Wikipedia so much more than brand or business websites?",
+      "answer_summary": "Reddit (~16.7% mention share) and Wikipedia (~8.9%) top ChatGPT's most-cited domains list for US queries; these sites are seen as offering direct, plain-language answers from real people, which the model appears to trust for grounding claims.",
+      "sources": [
+        "https://ahrefs.com/blog/most-cited-domains-in-chatgpt/",
+        "https://www.pravinkumar.co/blog/why-chatgpt-cites-reddit-not-my-website-2026"
+      ]
+    },
+    {
+      "question": "What is Reciprocal Rank Fusion and how does it relate to ChatGPT search?",
+      "answer_summary": "RRF is a method used to merge results across multiple query variations, rewarding pages that show up consistently across reformulated searches rather than pages that rank well for just one phrasing.",
+      "sources": [
+        "https://sellm.io/post/chatgpt-ranking-factors"
+      ]
+    },
+    {
+      "question": "Does traditional backlink authority still matter for getting cited by ChatGPT?",
+      "answer_summary": "Backlinks still correlate with citation likelihood but explain only a small share of variance; content-answer fit and answer-first extractable structure are reported as stronger predictors.",
+      "sources": [
+        "https://sellm.io/post/chatgpt-ranking-factors"
+      ]
+    },
+    {
+      "question": "When does ChatGPT actually trigger a live web search instead of answering from training data?",
+      "answer_summary": "ChatGPT invokes browsing when a query needs current information, explicitly asks for sources, or falls outside the model's confident training-data range; OpenAI's help center confirms search can also be triggered automatically based on the request.",
+      "sources": [
+        "https://help.openai.com/en/articles/9237897-chatgpt-search",
+        "https://ziptie.dev/blog/how-does-chatgpt-choose-its-sources/"
+      ]
+    },
+    {
+      "question": "Can I see exactly which sources ChatGPT used to answer a question?",
+      "answer_summary": "Yes — OpenAI's help documentation confirms that responses using web search can include selectable citations and a 'Sources' view showing cited links and other relevant results.",
+      "sources": [
+        "https://help.openai.com/en/articles/9237897-chatgpt-search"
+      ]
+    },
+    {
+      "question": "Does having schema markup increase the odds a page gets cited by ChatGPT?",
+      "answer_summary": "Industry analysis reports schema markup is present in a majority (cited figure: 61%) of content ChatGPT cites, suggesting a correlation, though this is not confirmed as a causal ranking factor by OpenAI.",
+      "sources": [
+        "https://www.pravinkumar.co/blog/why-chatgpt-cites-reddit-not-my-website-2026"
+      ]
+    },
+    {
+      "question": "Is ChatGPT search available without an account?",
+      "answer_summary": "Yes, OpenAI's help center states people who are not signed in can also use ChatGPT's web search feature.",
+      "sources": [
+        "https://help.openai.com/en/articles/9237897-chatgpt-search"
+      ]
+    },
+    {
+      "question": "How many source citations does a typical ChatGPT search answer show?",
+      "answer_summary": "Analyses of ChatGPT search behavior report typically 3 to 6 clickable citations per response when browse mode fires.",
+      "sources": [
+        "https://ziptie.dev/blog/how-does-chatgpt-choose-its-sources/"
+      ]
+    },
+    {
+      "question": "Does content structure (answer-first formatting) affect whether ChatGPT cites a page?",
+      "answer_summary": "Yes — 'answer-first extractable structure' is reported as one of the top-ranked factors in citation-pattern analysis, ahead of factors like backlinks.",
+      "sources": [
+        "https://sellm.io/post/chatgpt-ranking-factors"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://help.openai.com/en/articles/9237897-chatgpt-search",
+      "title": "Searching the web with ChatGPT | OpenAI Help Center",
+      "source_type": "primary/official",
+      "used_for": "Official description of how ChatGPT search triggers, works, and displays citations"
+    },
+    {
+      "url": "https://openai.com/index/introducing-chatgpt-search/",
+      "title": "Introducing ChatGPT search | OpenAI",
+      "source_type": "primary/official",
+      "used_for": "Original announcement of the ChatGPT search feature"
+    },
+    {
+      "url": "https://sellm.io/post/chatgpt-ranking-factors",
+      "title": "From Found to Cited: Analysis of ChatGPT Ranking Factors (400K Pages)",
+      "source_type": "industry publication",
+      "used_for": "Data-driven analysis of citation ranking factors, RRF, and Google-overlap statistic"
+    },
+    {
+      "url": "https://www.airops.com/blog/chatgpt-decides-sources-cite",
+      "title": "How ChatGPT Decides Which Sources to Cite (and Why 85% Never Make the Cut)",
+      "source_type": "industry publication",
+      "used_for": "Statistic on percentage of fetched pages that never get cited, domain-weighting breakdown"
+    },
+    {
+      "url": "https://ziptie.dev/blog/how-does-chatgpt-choose-its-sources/",
+      "title": "How Does ChatGPT Choose Its Sources? – ZipTie.dev",
+      "source_type": "industry publication",
+      "used_for": "Three-stage retrieval pipeline description, trigger conditions, citation count per answer"
+    },
+    {
+      "url": "https://ahrefs.com/blog/most-cited-domains-in-chatgpt/",
+      "title": "Most Cited Domains in ChatGPT",
+      "source_type": "industry publication (data aggregator)",
+      "used_for": "Ranked list and mention-share statistics of most-cited domains in ChatGPT"
+    },
+    {
+      "url": "https://www.pravinkumar.co/blog/why-chatgpt-cites-reddit-not-my-website-2026",
+      "title": "Why Does ChatGPT Cite Reddit Instead of My Website?",
+      "source_type": "industry publication",
+      "used_for": "Explanation of why community platforms outrank brand sites, schema correlation figure"
+    }
+  ]
+}

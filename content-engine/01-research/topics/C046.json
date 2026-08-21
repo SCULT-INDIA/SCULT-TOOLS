@@ -1,0 +1,185 @@
+{
+  "candidate_id": "C046",
+  "status": "accepted",
+  "topic": "What actually happens to rankings when a site migrates domains",
+  "topic_cluster": "Technical SEO / site migrations",
+  "target_keyword": "domain migration seo impact",
+  "secondary_keywords": [
+    "site migration seo checklist",
+    "changing domains seo traffic loss",
+    "google change of address tool"
+  ],
+  "long_tail_keywords": [
+    "how long does seo take to recover after a domain migration",
+    "will changing my domain hurt my google rankings",
+    "how to migrate a website without losing seo"
+  ],
+  "question_keywords": [
+    "how long does it take to recover seo rankings after a domain change",
+    "does changing domains hurt seo",
+    "do i need 301 redirects for every page when migrating domains"
+  ],
+  "comparison_keywords": [
+    "301 vs 302 redirect for domain migration",
+    "subdomain vs subdirectory migration seo impact"
+  ],
+  "how_to_keywords": [
+    "how to use the google search console change of address tool",
+    "how to map old urls to new urls for redirects"
+  ],
+  "problem_keywords": [
+    "traffic dropped after domain migration",
+    "rankings never recovered after site migration",
+    "lost seo after changing domain name"
+  ],
+  "commercial_keywords": [
+    "website migration seo service",
+    "seo audit before domain migration"
+  ],
+  "entities": [
+    "Google Search Console",
+    "Change of Address tool",
+    "301 redirect",
+    "canonical tag"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Tutorial",
+  "audience": "Business owners rebranding or changing domains, in-house marketers planning a replatform, agencies handling client migrations, and developers doing HTTP-to-HTTPS or platform moves",
+  "countries": [],
+  "connects_to_tools": [
+    "website-speed-test"
+  ],
+  "connects_to_prompts": [
+    "seo-geo"
+  ],
+  "connects_to_service": "web-development",
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 7,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 5,
+    "conversion_potential": 7,
+    "evidence_quality": 7,
+    "total": 66
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Does changing my domain name hurt my SEO rankings?",
+      "answer_summary": "Yes, temporarily — Google's own documentation states visibility may fluctuate temporarily during a move and frames this as normal, expected behavior rather than a penalty.",
+      "sources": [
+        "https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes"
+      ]
+    },
+    {
+      "question": "How long does it take Google to reindex a site after a domain migration?",
+      "answer_summary": "For medium-sized sites, a few weeks or more; larger sites can take even longer, per Google's guidance.",
+      "sources": [
+        "https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes"
+      ]
+    },
+    {
+      "question": "Do I need the Search Console Change of Address tool for a subdomain change?",
+      "answer_summary": "Yes — it's needed when moving between domains or subdomains, but it is explicitly not required for an HTTP-to-HTTPS-only move.",
+      "sources": [
+        "https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes"
+      ]
+    },
+    {
+      "question": "How long should 301 redirects stay live after a migration?",
+      "answer_summary": "Google recommends keeping redirects active for as long as possible, generally at least one year, to let signals fully transfer.",
+      "sources": [
+        "https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes"
+      ]
+    },
+    {
+      "question": "What's the biggest mistake people make during a domain migration?",
+      "answer_summary": "Common mistakes include leaving staging noindex tags or robots.txt blocks in place, redirecting to irrelevant/non-existent new URLs, and forgetting to update the sitemap.",
+      "sources": [
+        "https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes"
+      ]
+    },
+    {
+      "question": "Does a 301 redirect fully preserve a page's ranking value?",
+      "answer_summary": "Google frames post-redirect fluctuation as temporary and normal; some SEO-industry writeups separately describe redirects as a point where some link-equity/traffic dip can occur even when implemented correctly.",
+      "sources": [
+        "https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes",
+        "https://www.semrush.com/blog/301-redirects/"
+      ]
+    },
+    {
+      "question": "What causes some migrations to lose far more traffic than others?",
+      "answer_summary": "Botched URL-to-URL redirect mapping, or moving content onto a domain that carries a toxic backlink/spam history, are cited as the main drivers of unusually severe traffic loss.",
+      "sources": [
+        "https://seo.domains/seo-resources/domain-migration-rebranding/expected-traffic-loss-migration-recovery/",
+        "https://www.localseoguide.com/how-long-does-it-take-to-recover-from-a-domain-migration/"
+      ]
+    },
+    {
+      "question": "How do I map old URLs to new URLs before migrating?",
+      "answer_summary": "Create a full URL inventory/mapping before the move, then update internal links and the sitemap to reference the new URLs directly rather than relying only on redirects.",
+      "sources": [
+        "https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes"
+      ]
+    },
+    {
+      "question": "Is traffic loss from a migration temporary or permanent?",
+      "answer_summary": "It varies: well-executed migrations commonly recover within roughly one to three months, while poorly executed ones (bad redirects, toxic domain history) can take much longer or, in some documented cases, never fully recover.",
+      "sources": [
+        "https://seo.domains/seo-resources/domain-migration-rebranding/expected-traffic-loss-migration-recovery/",
+        "https://www.localseoguide.com/how-long-does-it-take-to-recover-from-a-domain-migration/"
+      ]
+    },
+    {
+      "question": "Do I need to update my sitemap during a migration?",
+      "answer_summary": "Yes — failing to update the sitemap with new URLs is listed by Google as a common technical mistake during site moves.",
+      "sources": [
+        "https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes"
+      ]
+    },
+    {
+      "question": "Does migrating from HTTP to HTTPS require the Change of Address tool?",
+      "answer_summary": "No — Google explicitly states that tool is not needed for an HTTP-to-HTTPS-only move.",
+      "sources": [
+        "https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes"
+      ]
+    },
+    {
+      "question": "Will my server need extra capacity during a migration?",
+      "answer_summary": "Yes — insufficient server capacity to handle the temporary surge in crawling is listed as a common migration pitfall.",
+      "sources": [
+        "https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Site moves with URL changes",
+      "url": "https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes",
+      "source_type": "primary/official",
+      "used_for": "Official step-by-step guidance, timeline language, Change of Address tool scope, common mistakes"
+    },
+    {
+      "title": "Expected Traffic Loss During a Domain Migration, and the Recovery Timeline",
+      "url": "https://seo.domains/seo-resources/domain-migration-rebranding/expected-traffic-loss-migration-recovery/",
+      "source_type": "industry publication",
+      "used_for": "Directional framing on clean vs. botched migration outcomes"
+    },
+    {
+      "title": "How Long Does It Take To Recover From A Domain Migration?",
+      "url": "https://www.localseoguide.com/how-long-does-it-take-to-recover-from-a-domain-migration/",
+      "source_type": "industry publication",
+      "used_for": "Recovery-timeline framing from a recognized SEO agency"
+    },
+    {
+      "title": "301 Redirects for SEO: Everything You Need to Know",
+      "url": "https://www.semrush.com/blog/301-redirects/",
+      "source_type": "industry publication",
+      "used_for": "General redirect-and-traffic context"
+    }
+  ]
+}

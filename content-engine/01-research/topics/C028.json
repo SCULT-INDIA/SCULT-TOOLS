@@ -1,0 +1,190 @@
+{
+  "candidate_id": "C028",
+  "status": "accepted",
+  "topic": "How companies are actually measuring AI agent ROI internally",
+  "topic_cluster": "AI agent ROI measurement",
+  "target_keyword": "ai agent roi measurement",
+  "secondary_keywords": [
+    "how to measure ai agent roi",
+    "ai agent roi metrics",
+    "agentic ai roi framework",
+    "ai pilot roi failure"
+  ],
+  "long_tail_keywords": [
+    "how to calculate roi of an ai agent",
+    "why do most ai pilots fail to show roi",
+    "ai agent roi formula for business",
+    "how to prove ai agent value to executives",
+    "hard vs soft roi metrics for ai agents"
+  ],
+  "question_keywords": [
+    "how do you measure ai agent roi",
+    "why do 95% of ai pilots fail",
+    "what metrics show ai agent is working",
+    "how long does it take to see roi from ai agents"
+  ],
+  "comparison_keywords": [
+    "hard roi metrics vs soft roi metrics",
+    "pilot vs production roi measurement"
+  ],
+  "how_to_keywords": [
+    "how to calculate ai agent roi",
+    "how to set a roi measurement baseline for ai agents",
+    "how to track ai agent cost attribution"
+  ],
+  "problem_keywords": [
+    "ai agent roi hard to prove",
+    "can't attribute ai spend to business outcomes",
+    "ai pilot stalls with no measurable impact"
+  ],
+  "commercial_keywords": [
+    "ai agent roi calculator",
+    "enterprise ai roi consulting",
+    "ai agent analytics platform"
+  ],
+  "entities": [
+    "MIT NANDA",
+    "Deloitte",
+    "IBM",
+    "Forbes",
+    "Gartner",
+    "Moveworks",
+    "Shelf.io"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Commercial Investigation",
+  "audience": "Business leaders, operations managers, and technical decision-makers evaluating or justifying AI agent investment inside a company",
+  "countries": [],
+  "connects_to_service": "ai-agents-automation-service",
+  "connects_to_tools": [],
+  "connects_to_prompts": [
+    "Business Ops & Client Comms",
+    "Finance & Analysis"
+  ],
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 7,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 7,
+    "tool_discovery_opportunity": 3,
+    "competitive_gap": 5,
+    "conversion_potential": 6,
+    "evidence_quality": 7,
+    "total": 60
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "What percentage of AI pilots actually deliver measurable ROI?",
+      "answer_summary": "MIT's 'GenAI Divide' report (NANDA initiative), based on 150 leader interviews, a 350-employee survey, and analysis of 300 public deployments, found about 95% of generative AI pilots deliver little or no measurable profit impact, with only around 5% achieving rapid revenue acceleration.",
+      "sources": [
+        "https://finance.yahoo.com/news/mit-report-95-generative-ai-105412686.html",
+        "https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots-at-companies-failing-cfo"
+      ]
+    },
+    {
+      "question": "Why do so many AI pilots fail to show ROI even though the models work?",
+      "answer_summary": "MIT's research attributes failure mainly to a 'learning gap' in enterprise integration (workflow fit, data readiness, org adoption) rather than model quality or regulation.",
+      "sources": [
+        "https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots-at-companies-failing-cfo"
+      ]
+    },
+    {
+      "question": "What is the basic formula companies use to calculate AI agent ROI?",
+      "answer_summary": "The commonly cited formula is (Benefits - Costs) / Costs x 100, applied against a defined baseline and measurement window.",
+      "sources": [
+        "https://pickaxe.co/post/ai-agent-roi-metrics-formulas"
+      ]
+    },
+    {
+      "question": "What are the 'hard' metrics companies track for AI agent ROI?",
+      "answer_summary": "Hard/direct metrics include task accuracy, cycle-time reduction, labor hours redirected, error-reduction rates, ticket deflection volume, and processing-time improvement.",
+      "sources": [
+        "https://shelf.io/blog/agentic-ai-roi-how-to-measure-the-return-on-your-ai-agent-investment/",
+        "https://www.mintmcp.com/blog/measure-ai-agent-roi"
+      ]
+    },
+    {
+      "question": "What 'soft' metrics matter alongside the hard financial numbers?",
+      "answer_summary": "Soft metrics include employee experience, decision speed, customer engagement, CSAT/NPS, and first-contact resolution rate - seen as leading indicators even before hard financial ROI shows up.",
+      "sources": [
+        "https://www.moveworks.com/us/en/resources/blog/how-to-measure-and-communicate-agentic-ai-roi"
+      ]
+    },
+    {
+      "question": "Where does most enterprise AI agent ROI actually come from?",
+      "answer_summary": "MIT's research found the biggest measurable ROI showing up in back-office automation (cutting BPO/agency costs, streamlining operations), even though most budget is spent on sales/marketing tools that show weaker measurable returns.",
+      "sources": [
+        "https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots-at-companies-failing-cfo"
+      ]
+    },
+    {
+      "question": "How confident are executives in their own ability to measure AI ROI?",
+      "answer_summary": "Only about 29% of executives report being confident in assessing AI ROI, according to IBM data cited in industry coverage.",
+      "sources": [
+        "https://www.forbes.com/sites/bernardmarr/2026/07/28/5-ways-to-measure-the-true-roi-of-ai-agents/"
+      ]
+    },
+    {
+      "question": "How long should a company measure before declaring ROI success or failure?",
+      "answer_summary": "A practical approach seen across guides is a roughly 30-day baseline measurement period, followed by a longer (e.g., 6-12 month) tracking window before running the ROI formula with full cost accounting.",
+      "sources": [
+        "https://pickaxe.co/post/ai-agent-roi-metrics-formulas"
+      ]
+    },
+    {
+      "question": "What costs get missed when companies try to calculate AI agent ROI?",
+      "answer_summary": "Full cost accounting needs to include upfront costs (licensing, implementation, integration) plus ongoing costs (cloud compute, AI credits, model maintenance, governance overhead) - guides note this is where many ROI calculations undercount.",
+      "sources": [
+        "https://shelf.io/blog/agentic-ai-roi-how-to-measure-the-return-on-your-ai-agent-investment/"
+      ]
+    },
+    {
+      "question": "Why can't companies simply attribute AI spend to business outcomes?",
+      "answer_summary": "A Deloitte 2025 survey found fewer than a third of organizations could clearly attribute AI spend to measurable business outcomes, pointing to weak instrumentation/attribution practices rather than lack of value.",
+      "sources": [
+        "https://www.cockroachlabs.com/blog/agentic-ai-costs-at-scale/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "MIT report: 95% of generative AI pilots at companies are failing",
+      "url": "https://finance.yahoo.com/news/mit-report-95-generative-ai-105412686.html",
+      "source_type": "industry publication",
+      "used_for": "Core MIT NANDA statistic on pilot failure rate"
+    },
+    {
+      "title": "MIT report 95 percent generative AI pilots at companies failing (CFO)",
+      "url": "https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots-at-companies-failing-cfo",
+      "source_type": "industry publication",
+      "used_for": "Methodology detail and root-cause analysis (learning gap, back-office ROI)"
+    },
+    {
+      "title": "How to Measure AI Agent ROI: Metrics & Formulas - Pickaxe",
+      "url": "https://pickaxe.co/post/ai-agent-roi-metrics-formulas",
+      "source_type": "company docs",
+      "used_for": "ROI formula and measurement timeline"
+    },
+    {
+      "title": "Agentic AI ROI: Measure AI Agent Investment - Shelf.io",
+      "url": "https://shelf.io/blog/agentic-ai-roi-how-to-measure-the-return-on-your-ai-agent-investment/",
+      "source_type": "company docs",
+      "used_for": "Hard ROI metrics and full cost accounting framework"
+    },
+    {
+      "title": "Unlocking Agentic AI ROI for the Modern Enterprise - Moveworks",
+      "url": "https://www.moveworks.com/us/en/resources/blog/how-to-measure-and-communicate-agentic-ai-roi",
+      "source_type": "company docs",
+      "used_for": "Soft ROI metrics"
+    },
+    {
+      "title": "5 Ways To Measure The True ROI Of AI Agents - Forbes",
+      "url": "https://www.forbes.com/sites/bernardmarr/2026/07/28/5-ways-to-measure-the-true-roi-of-ai-agents/",
+      "source_type": "industry publication",
+      "used_for": "Executive confidence statistic (referenced via search snippet; full article was 403-blocked on direct fetch)"
+    }
+  ]
+}

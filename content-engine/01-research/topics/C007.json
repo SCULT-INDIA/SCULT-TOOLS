@@ -1,0 +1,252 @@
+{
+  "candidate_id": "C007",
+  "topic": "Robots.txt directives every AI crawler actually respects (GPTBot, ClaudeBot, PerplexityBot)",
+  "status": "accepted",
+  "topic_cluster": "AI crawler access & robots.txt control",
+  "target_keyword": "robots.txt ai crawler directives",
+  "secondary_keywords": [
+    "ai crawler user agents",
+    "block ai bots robots.txt",
+    "GPTBot ClaudeBot PerplexityBot robots.txt",
+    "ai training crawlers vs ai search crawlers",
+    "disallow ai bots"
+  ],
+  "long_tail_keywords": [
+    "how to block chatgpt and claude from crawling my site",
+    "which ai crawlers actually respect robots.txt",
+    "does perplexity respect robots.txt",
+    "allow ai search bots but block ai training bots robots.txt",
+    "official ip ranges for gptbot and claudebot"
+  ],
+  "question_keywords": [
+    "do ai crawlers respect robots.txt",
+    "does perplexity ignore robots.txt",
+    "how to block gptbot",
+    "what is claude-user vs claudebot",
+    "is google-extended a real crawler"
+  ],
+  "comparison_keywords": [
+    "GPTBot vs ChatGPT-User vs OAI-SearchBot",
+    "ClaudeBot vs Claude-User vs Claude-SearchBot",
+    "Google-Extended vs Googlebot",
+    "robots.txt vs Cloudflare bot blocking"
+  ],
+  "how_to_keywords": [
+    "how to block ai crawlers in robots.txt",
+    "how to allow ai search bots but block training bots",
+    "how to add crawl-delay for claudebot"
+  ],
+  "problem_keywords": [
+    "ai bots ignoring robots.txt",
+    "perplexity scraping despite robots.txt block",
+    "cdn blocking ai crawlers robots.txt says allow"
+  ],
+  "commercial_keywords": [
+    "ai crawler access checker",
+    "robots.txt ai crawler tool",
+    "ai visibility checker"
+  ],
+  "entities": [
+    "OpenAI",
+    "GPTBot",
+    "ChatGPT-User",
+    "OAI-SearchBot",
+    "Anthropic",
+    "ClaudeBot",
+    "Claude-User",
+    "Claude-SearchBot",
+    "Google-Extended",
+    "Googlebot",
+    "PerplexityBot",
+    "Perplexity-User",
+    "Cloudflare",
+    "CCBot",
+    "Applebot-Extended"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "Website owners, technical SEOs, and developers deciding how to configure robots.txt for AI/LLM crawlers",
+  "countries": [],
+  "connects_to_tools": [
+    "ai-visibility-checker"
+  ],
+  "connects_to_prompts": [],
+  "connects_to_service": "Web Development / technical SEO implementation (robots.txt and crawler configuration work)",
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 9,
+    "question_density": 8,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 8,
+    "competitive_gap": 5,
+    "conversion_potential": 6,
+    "evidence_quality": 9,
+    "total": 74
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Do AI crawlers actually respect robots.txt?",
+      "answer_summary": "Most named crawlers (GPTBot, ClaudeBot, OAI-SearchBot, Claude-SearchBot) publicly commit to honoring robots.txt, but robots.txt itself is voluntary/an honor system with no enforcement, and Perplexity's real-time fetching behavior has been documented bypassing it.",
+      "sources": [
+        "https://paulcalvano.com/2025-08-21-ai-bots-and-robots-txt/",
+        "https://appleinsider.com/articles/25/08/05/perplexity-defensive-over-ignoring-robotstxt-and-stealing-data"
+      ]
+    },
+    {
+      "question": "What's the difference between GPTBot and ChatGPT-User?",
+      "answer_summary": "GPTBot crawls for model training; ChatGPT-User fetches pages on-demand when a user asks ChatGPT something, and OpenAI notes robots.txt rules may not apply to it since it's user-triggered rather than automatic.",
+      "sources": [
+        "https://developers.openai.com/api/docs/bots"
+      ]
+    },
+    {
+      "question": "What's the difference between ClaudeBot, Claude-User, and Claude-SearchBot?",
+      "answer_summary": "ClaudeBot collects data for training, Claude-User fetches a page when a Claude user's question requires it, and Claude-SearchBot indexes content to improve Claude's search results; all three are documented to honor robots.txt.",
+      "sources": [
+        "https://support.claude.com/en/articles/8896518",
+        "https://www.seroundtable.com/anthropic-updates-its-crawler-docs-40978.html"
+      ]
+    },
+    {
+      "question": "Does blocking Google-Extended remove my site from Google Search or AI Overviews?",
+      "answer_summary": "No. Google-Extended only controls use of content for Gemini training/grounding; Google has explicitly stated it does not affect Search inclusion or ranking, and AI Overviews are powered by the standard Googlebot.",
+      "sources": [
+        "https://searchengineland.com/google-extended-crawler-432636",
+        "https://growwildagency.com/blog/google-extended-robots-txt-guide/"
+      ]
+    },
+    {
+      "question": "Does Perplexity respect robots.txt?",
+      "answer_summary": "This is disputed: Cloudflare documented Perplexity accessing freshly created test domains that disallowed all bots, allegedly using undisclosed user agents/IPs; Perplexity has argued its real-time \"agent\" fetching on a user's behalf isn't bound by robots.txt the way a training crawler is.",
+      "sources": [
+        "https://appleinsider.com/articles/25/08/05/perplexity-defensive-over-ignoring-robotstxt-and-stealing-data",
+        "https://www.searchengineworld.com/perplexity-responds-to-cloudflare"
+      ]
+    },
+    {
+      "question": "How do I block AI bots from training on my content while still appearing in AI search answers?",
+      "answer_summary": "Block training-only crawlers (GPTBot, ClaudeBot, Google-Extended, CCBot) while allowing retrieval/search crawlers (OAI-SearchBot, Claude-SearchBot, PerplexityBot) since each is controlled independently in robots.txt.",
+      "sources": [
+        "https://dataimpulse.com/blog/robots-txt-ai-crawlers/",
+        "https://pixis.ai/blog/robots-txt-for-ai-crawlers-gptbot-perplexitybot-geo-audit/"
+      ]
+    },
+    {
+      "question": "What percentage of websites block GPTBot vs ClaudeBot?",
+      "answer_summary": "Analysis of robots.txt files across Cloudflare's network found GPTBot as the most-blocked AI bot (roughly 4.7-5.5% of disallow rules), followed by CCBot and ClaudeBot around 4.9-5%.",
+      "sources": [
+        "https://technologychecker.io/blog/robots-txt-ai-crawlers-blocking-report"
+      ]
+    },
+    {
+      "question": "Does Anthropic support crawl-delay in robots.txt for its bots?",
+      "answer_summary": "Yes, Anthropic documents support for the non-standard Crawl-delay directive in addition to standard Allow/Disallow rules.",
+      "sources": [
+        "https://support.claude.com/en/articles/8896518"
+      ]
+    },
+    {
+      "question": "How can I verify a bot claiming to be GPTBot or ClaudeBot is legitimate and not spoofed?",
+      "answer_summary": "Check the request's source IP against the official published IP range lists (openai.com/gptbot.json and claude.com/crawling/bots.json) rather than trusting the user-agent string alone.",
+      "sources": [
+        "https://developers.openai.com/api/docs/bots",
+        "https://support.claude.com/en/articles/8896518"
+      ]
+    },
+    {
+      "question": "Can blocking by IP address instead of robots.txt guarantee an opt-out from AI crawling?",
+      "answer_summary": "No — Anthropic explicitly notes that blocking by IP address may not work correctly or persistently guarantee an opt-out, since IP ranges can change.",
+      "sources": [
+        "https://support.claude.com/en/articles/8896518"
+      ]
+    },
+    {
+      "question": "Why is Cloudflare offering one-click AI bot blocking instead of relying on robots.txt alone?",
+      "answer_summary": "Because robots.txt is an honor system with no enforcement mechanism; Cloudflare built managed blocking at the network layer and later split it into three separate controls for search, training, and agent crawlers.",
+      "sources": [
+        "https://blog.cloudflare.com/declaring-your-aindependence-block-ai-bots-scrapers-and-crawlers-with-a-single-click/"
+      ]
+    },
+    {
+      "question": "Can a site's CDN/WAF settings conflict with what its robots.txt says about AI crawlers?",
+      "answer_summary": "Yes — research on Cloudflare's network found a meaningful share of sites accidentally blocking major AI crawlers at the CDN/WAF layer while their robots.txt said \"allow,\" meaning both layers must be checked and kept consistent.",
+      "sources": [
+        "https://technologychecker.io/blog/robots-txt-ai-crawlers-blocking-report",
+        "https://dataimpulse.com/blog/robots-txt-ai-crawlers/"
+      ]
+    },
+    {
+      "question": "How quickly did sites start adding AI-crawler rules to robots.txt?",
+      "answer_summary": "Adoption was fast: GPTBot rules went from 0 to almost 125,000 sites within the first month of GPTBot's August 2023 launch, reaching 578,000 sites by November 2023; ClaudeBot rules grew from about 2,400 to 30,000 sites within four months of its December 2023 debut.",
+      "sources": [
+        "https://technologychecker.io/blog/robots-txt-ai-crawlers-blocking-report"
+      ]
+    },
+    {
+      "question": "Should I also block CCBot (Common Crawl)?",
+      "answer_summary": "Many site owners choose to block CCBot alongside GPTBot/ClaudeBot because several AI companies use Common Crawl's dataset for training, making it one of the most frequently disallowed bots.",
+      "sources": [
+        "https://technologychecker.io/blog/robots-txt-ai-crawlers-blocking-report"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Overview of OpenAI Crawlers",
+      "url": "https://developers.openai.com/api/docs/bots",
+      "source_type": "primary/official",
+      "used_for": "Official GPTBot, ChatGPT-User, and OAI-SearchBot user-agent strings, purposes, and robots.txt behavior"
+    },
+    {
+      "title": "Does Anthropic crawl data from the web, and how can site owners block the crawler?",
+      "url": "https://support.claude.com/en/articles/8896518",
+      "source_type": "primary/official",
+      "used_for": "Official Anthropic documentation on ClaudeBot/Claude-User/Claude-SearchBot, crawl-delay support, and IP-blocking caveats"
+    },
+    {
+      "title": "Google introduces Google-Extended to let you block Bard, Vertex AI via robots.txt",
+      "url": "https://searchengineland.com/google-extended-crawler-432636",
+      "source_type": "industry publication",
+      "used_for": "Background and impact of the Google-Extended token"
+    },
+    {
+      "title": "Google-Extended robots.txt Guide",
+      "url": "https://growwildagency.com/blog/google-extended-robots-txt-guide/",
+      "source_type": "industry publication",
+      "used_for": "Clarifying Google-Extended has no separate crawl user agent and doesn't affect Search ranking"
+    },
+    {
+      "title": "Perplexity defensive over ignoring robots.txt and stealing data",
+      "url": "https://appleinsider.com/articles/25/08/05/perplexity-defensive-over-ignoring-robotstxt-and-stealing-data",
+      "source_type": "industry publication",
+      "used_for": "Cloudflare's documented findings on Perplexity's robots.txt behavior"
+    },
+    {
+      "title": "Perplexity Says an Agent isn't a Bot and Not Required to Honor Robots.txt",
+      "url": "https://www.searchengineworld.com/perplexity-responds-to-cloudflare",
+      "source_type": "industry publication",
+      "used_for": "Perplexity's defense/response to the Cloudflare controversy"
+    },
+    {
+      "title": "AI Bots and Robots.txt",
+      "url": "https://paulcalvano.com/2025-08-21-ai-bots-and-robots-txt/",
+      "source_type": "community",
+      "used_for": "Independent technical analysis of the honor-system nature of robots.txt and bot compliance claims"
+    },
+    {
+      "title": "Declare your AIndependence: block AI bots, scrapers and crawlers with a single click",
+      "url": "https://blog.cloudflare.com/declaring-your-aindependence-block-ai-bots-scrapers-and-crawlers-with-a-single-click/",
+      "source_type": "company docs",
+      "used_for": "Cloudflare's one-click AI bot blocking feature and rationale"
+    },
+    {
+      "title": "We Analyzed robots.txt Across Cloudflare's Network",
+      "url": "https://technologychecker.io/blog/robots-txt-ai-crawlers-blocking-report",
+      "source_type": "aggregator",
+      "used_for": "Statistics on percentage of sites blocking GPTBot/ClaudeBot/CCBot and CDN/robots.txt mismatch data"
+    }
+  ]
+}

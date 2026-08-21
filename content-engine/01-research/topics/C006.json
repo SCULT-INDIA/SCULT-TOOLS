@@ -1,0 +1,173 @@
+{
+  "candidate_id": "C006",
+  "status": "accepted",
+  "topic": "Why a page can rank on Google but never get cited by an AI answer engine",
+  "topic_cluster": "Google Ranking vs AI Citation Gap",
+  "target_keyword": "rank on google not cited by ai",
+  "secondary_keywords": [
+    "ranking vs ai citation gap",
+    "google top 10 but not cited by chatgpt",
+    "why ai overviews don't cite top ranking pages"
+  ],
+  "long_tail_keywords": [
+    "can you rank number 1 on google and still not appear in chatgpt",
+    "why doesn't my page show up in ai overviews even though it ranks",
+    "does higher google ranking guarantee ai overview citation",
+    "why does chatgpt ignore pages that rank well on google"
+  ],
+  "question_keywords": [
+    "why isn't my page cited in ai overviews if it ranks well",
+    "does ranking on google help you get cited by ai",
+    "why does chatgpt cite pages outside google's top 10"
+  ],
+  "comparison_keywords": [
+    "google ranking vs ai overview citation",
+    "seo ranking vs geo citation",
+    "chatgpt citations vs perplexity citations vs google ai overviews"
+  ],
+  "how_to_keywords": [
+    "how to diagnose why your page isn't cited by ai",
+    "how to check ai visibility separately from google rankings",
+    "how to get an ai overview citation"
+  ],
+  "problem_keywords": [
+    "rank number 1 but invisible to chatgpt",
+    "ai overview skipped my top ranking page",
+    "good seo but no ai citations"
+  ],
+  "commercial_keywords": [
+    "ai visibility checker",
+    "geo audit service",
+    "ai citation tracking tool"
+  ],
+  "entities": [
+    "Google AI Overviews",
+    "ChatGPT",
+    "Perplexity",
+    "Ahrefs Brand Radar",
+    "Surfer SEO",
+    "CiteLens",
+    "E-E-A-T"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Tool discovery",
+  "audience": "SEO professionals, content marketers, and business owners confused by strong Google rankings not translating into AI-engine visibility",
+  "countries": [],
+  "connects_to_tools": [
+    "ai-visibility-checker"
+  ],
+  "connects_to_service": "SEO/GEO visibility consulting",
+  "connects_to_prompts": [],
+  "scores": {
+    "demand": 7,
+    "intent": 8,
+    "relevance": 9,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 9,
+    "competitive_gap": 6,
+    "conversion_potential": 8,
+    "evidence_quality": 8,
+    "total": 78
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "Is there a measurable correlation between Google ranking position and being cited in AI Overviews?",
+      "answer_summary": "An analysis of 1 million keywords and 1.9 million citation links found a moderate positive Spearman correlation of 0.347 between ranking position and citation likelihood — meaningful but far from a guarantee.",
+      "sources": [
+        "https://ahrefs.com/blog/does-ranking-higher-on-google-mean-youll-get-cited-in-ai-overviews"
+      ]
+    },
+    {
+      "question": "If my page ranks #1 on Google, how likely is it to appear in the AI Overview's top citations?",
+      "answer_summary": "Even pages ranking #1 appear in the top three AI Overview citations only about 50% of the time, according to the same large-scale study.",
+      "sources": [
+        "https://ahrefs.com/blog/does-ranking-higher-on-google-mean-youll-get-cited-in-ai-overviews"
+      ]
+    },
+    {
+      "question": "What share of AI Overview citations come from pages that don't rank in Google's top 10 at all?",
+      "answer_summary": "67.82% of AI Overview-cited pages did not rank in Google's top 10 for the query or its fan-out variations, though this drops to 45.86% when looking only at the top-3 visible citations.",
+      "sources": [
+        "https://ahrefs.com/blog/does-ranking-higher-on-google-mean-youll-get-cited-in-ai-overviews"
+      ]
+    },
+    {
+      "question": "Can a page genuinely rank #1 on Google and still never be mentioned by ChatGPT?",
+      "answer_summary": "Yes — described as a real, common phenomenon; one comparative report states the overlap between top Google rankings and AI-cited sources has fallen to roughly 12% for ChatGPT specifically, meaning most of what ChatGPT cites doesn't rank in Google's top 10 for that query at all.",
+      "sources": [
+        "https://hackernoon.com/you-can-rank-1-on-google-and-still-not-exist-to-chatgpt"
+      ]
+    },
+    {
+      "question": "Do all AI answer engines ignore Google rankings equally, or do some respect them more than others?",
+      "answer_summary": "No — a 320-query study found Google's own AI Mode and Perplexity followed Google-style SEO signals roughly 90% of the time, while ChatGPT was found to largely ignore both ranking position and brand size when selecting sources.",
+      "sources": [
+        "https://www.einpresswire.com/article/925230382/citelens-study-seo-decides-ai-citations-on-google-and-perplexity-not-chatgpt"
+      ]
+    },
+    {
+      "question": "What percentage of what ChatGPT recommends comes from outside Google's or Bing's top 10 entirely?",
+      "answer_summary": "One analysis reports ChatGPT sources roughly 70% of what it recommends from pages ranking in neither Google's nor Bing's top 10, reinforcing that traditional SEO ranking is a weak predictor for this specific engine.",
+      "sources": [
+        "https://hackernoon.com/you-can-rank-1-on-google-and-still-not-exist-to-chatgpt"
+      ]
+    },
+    {
+      "question": "If ranking doesn't guarantee citation, what does correlate with being cited when a page does rank well?",
+      "answer_summary": "When cited pages do rank well, higher SERP position also correlates (0.445) with more prominent placement within the AI Overview citation list — so ranking still matters for prominence, even if it's not the deciding factor for inclusion.",
+      "sources": [
+        "https://ahrefs.com/blog/does-ranking-higher-on-google-mean-youll-get-cited-in-ai-overviews"
+      ]
+    },
+    {
+      "question": "Is the gap between ranking and citation a ranking problem or a different problem entirely?",
+      "answer_summary": "It's characterized as a fundamentally different problem — ranking and being cited are described as 'two different jobs': a rank wins a spot in a list of links, while a citation means an answer engine judged a page the best evidence for that specific prompt.",
+      "sources": [
+        "https://www.wpconsults.com/page-not-cited-in-ai-overviews/",
+        "https://www.aapta.in/blog/why-website-ranks-google-invisible-chatgpt-2026"
+      ]
+    },
+    {
+      "question": "Does entity/brand authority across the web matter more than ranking for AI citation?",
+      "answer_summary": "For platforms like ChatGPT and Claude specifically, industry analysis suggests consistent, recognized brand/entity presence across the web matters more than Google rank position, whereas Google's own AI Mode and Perplexity weight ranking more heavily.",
+      "sources": [
+        "https://www.einpresswire.com/article/925230382/citelens-study-seo-decides-ai-citations-on-google-and-perplexity-not-chatgpt"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://ahrefs.com/blog/does-ranking-higher-on-google-mean-youll-get-cited-in-ai-overviews",
+      "title": "Does Ranking Higher on Google Mean You'll Get Cited in AI Overviews?",
+      "source_type": "industry publication (large-scale data study)",
+      "used_for": "Correlation statistics (0.347, 0.445), citation-overlap percentages (67.82%, 45.86%), study methodology on 1M keywords/1.9M citations"
+    },
+    {
+      "url": "https://hackernoon.com/you-can-rank-1-on-google-and-still-not-exist-to-chatgpt",
+      "title": "You Can Rank #1 on Google and Still Not Exist to ChatGPT",
+      "source_type": "industry publication/tech community",
+      "used_for": "12% overlap statistic, ChatGPT's ~70% out-of-top-10 sourcing claim"
+    },
+    {
+      "url": "https://www.einpresswire.com/article/925230382/citelens-study-seo-decides-ai-citations-on-google-and-perplexity-not-chatgpt",
+      "title": "CiteLens Study: SEO Decides AI Citations on Google and Perplexity, Not ChatGPT",
+      "source_type": "industry publication (press release)",
+      "used_for": "320-query comparative study on ranking-following behavior across ChatGPT/Perplexity/Google AI Mode"
+    },
+    {
+      "url": "https://www.wpconsults.com/page-not-cited-in-ai-overviews/",
+      "title": "Why Isn't My Page Cited in AI Overviews? 10-Minute Fix",
+      "source_type": "industry publication",
+      "used_for": "Framing of ranking vs citation as separate problems, diagnostic angle"
+    },
+    {
+      "url": "https://www.aapta.in/blog/why-website-ranks-google-invisible-chatgpt-2026",
+      "title": "Ranks #1 on Google but Invisible in ChatGPT? Fix It (2026)",
+      "source_type": "industry publication",
+      "used_for": "Practical framing and case-study angle for the ranking/citation gap"
+    }
+  ]
+}

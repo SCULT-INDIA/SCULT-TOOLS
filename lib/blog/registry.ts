@@ -107,6 +107,107 @@ import { meta as youtubeScriptPromptsGuide } from './youtube-script-prompts-guid
  * file only assembles and orders them. `/blog`, `/blog/[slug]` and the
  * sitemap all derive from this array.
  */
+import { meta as ceHowToFindAiAnswerEngineCitations } from './how-to-find-ai-answer-engine-citations/meta'
+import { meta as ceRankOnGoogleNotCitedByAi } from './rank-on-google-not-cited-by-ai/meta'
+import { meta as ceSchemaMarkupForAiSearch } from './schema-markup-for-ai-search/meta'
+import { meta as ceFaqSchemaVsFaqPageAi } from './faq-schema-vs-faq-page-ai/meta'
+import { meta as ceValidateStartupIdeaBeforeBuilding } from './validate-startup-idea-before-building/meta'
+import { meta as ceCheckIfAiCrawlersCanAccessMySite } from './check-if-ai-crawlers-can-access-my-site/meta'
+import { meta as ceWhyFaqSchemaNotShowingRichResults } from './why-faq-schema-not-showing-rich-results/meta'
+import { meta as ceSchemaMarkupEcommerceProductPages } from './schema-markup-ecommerce-product-pages/meta'
+import { meta as ceAiAgentCustomerSupportSmallBusiness } from './ai-agent-customer-support-small-business/meta'
+import { meta as ceTopicalAuthorityAiSearchVsBacklinks } from './topical-authority-ai-search-vs-backlinks/meta'
+import { meta as ceRobotsTxtAiCrawlerDirectives } from './robots-txt-ai-crawler-directives/meta'
+import { meta as ceAiWrapperVsDefensibleProduct } from './ai-wrapper-vs-defensible-product/meta'
+import { meta as ceHowDoesChatgptSearchChooseSources } from './how-does-chatgpt-search-choose-sources/meta'
+import { meta as ceAiCodingSubscriptionWorthItSmallTeam } from './ai-coding-subscription-worth-it-small-team/meta'
+import { meta as ceAiWrapperSaasPricing } from './ai-wrapper-saas-pricing/meta'
+import { meta as ceSoloFounderCustomerSupportNoTeam } from './solo-founder-customer-support-no-team/meta'
+import { meta as cePageSpeedEcommerceConversionData } from './page-speed-ecommerce-conversion-data/meta'
+import { meta as ceHowFastDoesAWebsiteNeedToBe } from './how-fast-does-a-website-need-to-be/meta'
+import { meta as ceHowMuchShouldASmallBusinessBudgetForAWebsite } from './how-much-should-a-small-business-budget-for-a-website/meta'
+import { meta as ceWikipediaRedditAiCitationDominance } from './wikipedia-reddit-ai-citation-dominance/meta'
+import { meta as ceCustomerSupportAutomationGoneWrong } from './customer-support-automation-gone-wrong/meta'
+import { meta as ceUsingAiForExamPrepWithoutHurtingLearning } from './using-ai-for-exam-prep-without-hurting-learning/meta'
+import { meta as ceCrawledVsCitedAiSearch } from './crawled-vs-cited-ai-search/meta'
+import { meta as ceAiAgentVsChatbot } from './ai-agent-vs-chatbot/meta'
+import { meta as ceWhatBreaksANoCodeAppAtScale } from './what-breaks-a-no-code-app-at-scale/meta'
+import { meta as ceGoogleAdsCostByIndustry } from './google-ads-cost-by-industry/meta'
+import { meta as ceMidjourneyVsFluxVsNanoBananaCommercialUse } from './midjourney-vs-flux-vs-nano-banana-commercial-use/meta'
+import { meta as ceAiOverviewsImpactOnCtr } from './ai-overviews-impact-on-ctr/meta'
+import { meta as ceAiPairProgrammingCodeReview } from './ai-pair-programming-code-review/meta'
+import { meta as ceGoogleAiGeneratedContentPolicy } from './google-ai-generated-content-policy/meta'
+import { meta as ceGstCompliantInvoicingFreelancersIndia } from './gst-compliant-invoicing-freelancers-india/meta'
+import { meta as ceClaudeCodeVsCursorVsCopilotCostComparison } from './claude-code-vs-cursor-vs-copilot-cost-comparison/meta'
+import { meta as ceAiAgentApiCostAtScale } from './ai-agent-api-cost-at-scale/meta'
+import { meta as ceAiAgentDemoVsProductionReality } from './ai-agent-demo-vs-production-reality/meta'
+import { meta as ceProgrammaticSeoDoneWellVsBadly } from './programmatic-seo-done-well-vs-badly/meta'
+import { meta as ceChatbotDeflectionRateMeasurement } from './chatbot-deflection-rate-measurement/meta'
+import { meta as ceEmailSignatureBrandConsistency } from './email-signature-brand-consistency/meta'
+import { meta as ceUtmParameterMistakes } from './utm-parameter-mistakes/meta'
+import { meta as ceYoutubeCreatorAiProductionWorkflow } from './youtube-creator-ai-production-workflow/meta'
+import { meta as ceContentCalendarSoloCreatorThreePlatforms } from './content-calendar-solo-creator-three-platforms/meta'
+import { meta as ceClientOnboardingChecklist } from './client-onboarding-checklist/meta'
+import { meta as ceHealthcareWebsiteComplianceRequirements } from './healthcare-website-compliance-requirements/meta'
+import { meta as ceClaudeMdVsCursorrulesVsCopilotInstructions } from './claude-md-vs-cursorrules-vs-copilot-instructions/meta'
+import { meta as ceMcpServerExplained } from './mcp-server-explained/meta'
+import { meta as ceAiAgentFailureModesProduction } from './ai-agent-failure-modes-production/meta'
+import { meta as ceQrCodePhysicalRetailUseCases } from './qr-code-physical-retail-use-cases/meta'
+import { meta as ceGdprSmallSaasAnalytics } from './gdpr-small-saas-analytics/meta'
+import { meta as ceAiEntryLevelDeveloperHiringImpact } from './ai-entry-level-developer-hiring-impact/meta'
+import { meta as ceWhenToHireFirstSalespersonStartup } from './when-to-hire-first-salesperson-startup/meta'
+import { meta as ceFigmaAiVsDedicatedAiDesignTools } from './figma-ai-vs-dedicated-ai-design-tools/meta'
+import { meta as ceNoCodeVsCustomDevelopment } from './no-code-vs-custom-development/meta'
+import { meta as ceDomainMigrationSeoImpact } from './domain-migration-seo-impact/meta'
+import { meta as ceCartAbandonmentCausesBeyondPrice } from './cart-abandonment-causes-beyond-price/meta'
+import { meta as ceVatInvoicingUkFreelancerInternational } from './vat-invoicing-uk-freelancer-international/meta'
+import { meta as ceConsultingRetainerVsProjectPricing } from './consulting-retainer-vs-project-pricing/meta'
+import { meta as ceMarketingAgencyVsInHouseSmallBusiness } from './marketing-agency-vs-in-house-small-business/meta'
+import { meta as ceEcommerceReturnsPolicySmallBrand } from './ecommerce-returns-policy-small-brand/meta'
+import { meta as ceMarketingAttributionSmallBusiness } from './marketing-attribution-small-business/meta'
+import { meta as ceHowToCalculateCustomerAcquisitionCostCorrectly } from './how-to-calculate-customer-acquisition-cost-correctly/meta'
+import { meta as ceTechnicalInterviewPrepPlanWithAi } from './technical-interview-prep-plan-with-ai/meta'
+import { meta as ceAiHallucinationTechnicalExplanationDetection } from './ai-hallucination-technical-explanation-detection/meta'
+import { meta as ceLlmsTxtExplained } from './llms-txt-explained/meta'
+import { meta as cePerplexityVsGoogleAiOverviewsSourcing } from './perplexity-vs-google-ai-overviews-sourcing/meta'
+import { meta as ceAiCodeReviewBlindSpots } from './ai-code-review-blind-spots/meta'
+import { meta as ceRagVsFineTuningVsLongContext } from './rag-vs-fine-tuning-vs-long-context/meta'
+import { meta as ceLangchainVsCrewaiVsAutogen } from './langchain-vs-crewai-vs-autogen/meta'
+import { meta as ceRecoverFromGoogleCoreUpdateSmallBusiness } from './recover-from-google-core-update-small-business/meta'
+import { meta as ceAiModelCostPerTaskVsBenchmarks } from './ai-model-cost-per-task-vs-benchmarks/meta'
+import { meta as ceAiAgentCodebaseMigration } from './ai-agent-codebase-migration/meta'
+import { meta as ceSalesTaxNexusSmallOnlineSeller } from './sales-tax-nexus-small-online-seller/meta'
+import { meta as ceAiCodingToolsMonorepoIssues } from './ai-coding-tools-monorepo-issues/meta'
+import { meta as ceProductHuntLaunchTrafficAfterWeekOne } from './product-hunt-launch-traffic-after-week-one/meta'
+import { meta as ceAiProductDescriptionsAtScaleEcommerce } from './ai-product-descriptions-at-scale-ecommerce/meta'
+import { meta as ceHowToBuildWcagCompliantColorPalette } from './how-to-build-wcag-compliant-color-palette/meta'
+import { meta as ceWhatDoesAtsActuallyLookForInAResume } from './what-does-ats-actually-look-for-in-a-resume/meta'
+import { meta as ceFirst90DaysSeoAgency } from './first-90-days-seo-agency/meta'
+import { meta as ceAiModelContextWindowPracticalImpact } from './ai-model-context-window-practical-impact/meta'
+import { meta as ceAiAssistedCommitDocumentation } from './ai-assisted-commit-documentation/meta'
+import { meta as ceBrandStyleGuideEssentials } from './brand-style-guide-essentials/meta'
+import { meta as ceClaudeVsGptVsGeminiLongDocumentAnalysis } from './claude-vs-gpt-vs-gemini-long-document-analysis/meta'
+import { meta as ceAiAgentRoiMeasurement } from './ai-agent-roi-measurement/meta'
+import { meta as ceContentAuditWithoutEnterpriseSeoTool } from './content-audit-without-enterprise-seo-tool/meta'
+import { meta as ceAmazonVsShopifyVsDtcEconomics } from './amazon-vs-shopify-vs-dtc-economics/meta'
+import { meta as ceGoogleSearchResultsDifferentByCountry } from './google-search-results-different-by-country/meta'
+import { meta as ceGrowXTwitterAccountWithoutBuyingFollowers } from './grow-x-twitter-account-without-buying-followers/meta'
+import { meta as ceRebrandWithoutAgency } from './rebrand-without-agency/meta'
+import { meta as ceAiCodingAssistantLargeCodebaseVsGreenfield } from './ai-coding-assistant-large-codebase-vs-greenfield/meta'
+import { meta as ceSoloFounderAiProductToolStack } from './solo-founder-ai-product-tool-stack/meta'
+import { meta as ceTechnicalSeoVsContentQuality } from './technical-seo-vs-content-quality/meta'
+import { meta as ceDesignQaChecklistBeforeLaunch } from './design-qa-checklist-before-launch/meta'
+import { meta as ceAiCandidateScreeningSmallTeam } from './ai-candidate-screening-small-team/meta'
+import { meta as ceSaasPricingLocalizationConversion } from './saas-pricing-localization-conversion/meta'
+import { meta as ceAiDraftedContractsLegalRisk } from './ai-drafted-contracts-legal-risk/meta'
+import { meta as ceInstagramReachSmallAccountsChanges } from './instagram-reach-small-accounts-changes/meta'
+import { meta as ceAiInvestorUpdates } from './ai-investor-updates/meta'
+import { meta as ceGoogleBusinessProfileAdvancedTips } from './google-business-profile-advanced-tips/meta'
+import { meta as ceUgcReviewMiningToolsComparison } from './ugc-review-mining-tools-comparison/meta'
+import { meta as ceMultiCurrencyInvoicingWithoutAccountant } from './multi-currency-invoicing-without-accountant/meta'
+import { meta as ceSmallBusinessSpreadsheetToToolsTransition } from './small-business-spreadsheet-to-tools-transition/meta'
+import { meta as ceFreelanceToAgencyTransitionCommunication } from './freelance-to-agency-transition-communication/meta'
+
 export const BLOG_POSTS: readonly BlogPost[] = [
   schemaMarkupGeneratorGuide,
   faqSchemaGeneratorGuide,
@@ -208,6 +309,106 @@ export const BLOG_POSTS: readonly BlogPost[] = [
   nextjsMigrationPlaybook,
   internalAiSupportBotPlaybook,
   rebrandWithoutLosingCustomersPlaybook,
+  ceHowToFindAiAnswerEngineCitations,
+  ceRankOnGoogleNotCitedByAi,
+  ceSchemaMarkupForAiSearch,
+  ceFaqSchemaVsFaqPageAi,
+  ceValidateStartupIdeaBeforeBuilding,
+  ceCheckIfAiCrawlersCanAccessMySite,
+  ceWhyFaqSchemaNotShowingRichResults,
+  ceSchemaMarkupEcommerceProductPages,
+  ceAiAgentCustomerSupportSmallBusiness,
+  ceTopicalAuthorityAiSearchVsBacklinks,
+  ceRobotsTxtAiCrawlerDirectives,
+  ceAiWrapperVsDefensibleProduct,
+  ceHowDoesChatgptSearchChooseSources,
+  ceAiCodingSubscriptionWorthItSmallTeam,
+  ceAiWrapperSaasPricing,
+  ceSoloFounderCustomerSupportNoTeam,
+  cePageSpeedEcommerceConversionData,
+  ceHowFastDoesAWebsiteNeedToBe,
+  ceHowMuchShouldASmallBusinessBudgetForAWebsite,
+  ceWikipediaRedditAiCitationDominance,
+  ceCustomerSupportAutomationGoneWrong,
+  ceUsingAiForExamPrepWithoutHurtingLearning,
+  ceCrawledVsCitedAiSearch,
+  ceAiAgentVsChatbot,
+  ceWhatBreaksANoCodeAppAtScale,
+  ceGoogleAdsCostByIndustry,
+  ceMidjourneyVsFluxVsNanoBananaCommercialUse,
+  ceAiOverviewsImpactOnCtr,
+  ceAiPairProgrammingCodeReview,
+  ceGoogleAiGeneratedContentPolicy,
+  ceGstCompliantInvoicingFreelancersIndia,
+  ceClaudeCodeVsCursorVsCopilotCostComparison,
+  ceAiAgentApiCostAtScale,
+  ceAiAgentDemoVsProductionReality,
+  ceProgrammaticSeoDoneWellVsBadly,
+  ceChatbotDeflectionRateMeasurement,
+  ceEmailSignatureBrandConsistency,
+  ceUtmParameterMistakes,
+  ceYoutubeCreatorAiProductionWorkflow,
+  ceContentCalendarSoloCreatorThreePlatforms,
+  ceClientOnboardingChecklist,
+  ceHealthcareWebsiteComplianceRequirements,
+  ceClaudeMdVsCursorrulesVsCopilotInstructions,
+  ceMcpServerExplained,
+  ceAiAgentFailureModesProduction,
+  ceQrCodePhysicalRetailUseCases,
+  ceGdprSmallSaasAnalytics,
+  ceAiEntryLevelDeveloperHiringImpact,
+  ceWhenToHireFirstSalespersonStartup,
+  ceFigmaAiVsDedicatedAiDesignTools,
+  ceNoCodeVsCustomDevelopment,
+  ceDomainMigrationSeoImpact,
+  ceCartAbandonmentCausesBeyondPrice,
+  ceVatInvoicingUkFreelancerInternational,
+  ceConsultingRetainerVsProjectPricing,
+  ceMarketingAgencyVsInHouseSmallBusiness,
+  ceEcommerceReturnsPolicySmallBrand,
+  ceMarketingAttributionSmallBusiness,
+  ceHowToCalculateCustomerAcquisitionCostCorrectly,
+  ceTechnicalInterviewPrepPlanWithAi,
+  ceAiHallucinationTechnicalExplanationDetection,
+  ceLlmsTxtExplained,
+  cePerplexityVsGoogleAiOverviewsSourcing,
+  ceAiCodeReviewBlindSpots,
+  ceRagVsFineTuningVsLongContext,
+  ceLangchainVsCrewaiVsAutogen,
+  ceRecoverFromGoogleCoreUpdateSmallBusiness,
+  ceAiModelCostPerTaskVsBenchmarks,
+  ceAiAgentCodebaseMigration,
+  ceSalesTaxNexusSmallOnlineSeller,
+  ceAiCodingToolsMonorepoIssues,
+  ceProductHuntLaunchTrafficAfterWeekOne,
+  ceAiProductDescriptionsAtScaleEcommerce,
+  ceHowToBuildWcagCompliantColorPalette,
+  ceWhatDoesAtsActuallyLookForInAResume,
+  ceFirst90DaysSeoAgency,
+  ceAiModelContextWindowPracticalImpact,
+  ceAiAssistedCommitDocumentation,
+  ceBrandStyleGuideEssentials,
+  ceClaudeVsGptVsGeminiLongDocumentAnalysis,
+  ceAiAgentRoiMeasurement,
+  ceContentAuditWithoutEnterpriseSeoTool,
+  ceAmazonVsShopifyVsDtcEconomics,
+  ceGoogleSearchResultsDifferentByCountry,
+  ceGrowXTwitterAccountWithoutBuyingFollowers,
+  ceRebrandWithoutAgency,
+  ceAiCodingAssistantLargeCodebaseVsGreenfield,
+  ceSoloFounderAiProductToolStack,
+  ceTechnicalSeoVsContentQuality,
+  ceDesignQaChecklistBeforeLaunch,
+  ceAiCandidateScreeningSmallTeam,
+  ceSaasPricingLocalizationConversion,
+  ceAiDraftedContractsLegalRisk,
+  ceInstagramReachSmallAccountsChanges,
+  ceAiInvestorUpdates,
+  ceGoogleBusinessProfileAdvancedTips,
+  ceUgcReviewMiningToolsComparison,
+  ceMultiCurrencyInvoicingWithoutAccountant,
+  ceSmallBusinessSpreadsheetToToolsTransition,
+  ceFreelanceToAgencyTransitionCommunication,
 ]
 
 export const BLOG_POST_BY_SLUG: ReadonlyMap<string, BlogPost> = new Map(

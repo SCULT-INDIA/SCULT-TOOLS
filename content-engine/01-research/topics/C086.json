@@ -1,0 +1,145 @@
+{
+  "candidate_id": "C086",
+  "status": "accepted",
+  "topic": "How X (Twitter) creators are actually growing an account without buying followers",
+  "topic_cluster": "Organic Social Growth (X/Twitter)",
+  "target_keyword": "grow x twitter account without buying followers",
+  "secondary_keywords": [
+    "organic twitter growth strategy",
+    "how to grow on x without bots",
+    "authentic x follower growth",
+    "twitter growth strategy no bots",
+    "x algorithm 2026"
+  ],
+  "long_tail_keywords": [
+    "how to grow an x account from zero organically",
+    "why buying twitter followers doesn't work",
+    "grow x account in 2026 without ads",
+    "how to increase reposts on x organically",
+    "does x premium actually increase reach"
+  ],
+  "question_keywords": [
+    "does buying twitter followers hurt engagement",
+    "how to grow x account fast without buying followers",
+    "is buying followers on x worth it",
+    "how long does it take to grow on x organically",
+    "does x premium boost reach"
+  ],
+  "comparison_keywords": [
+    "organic growth vs buying followers",
+    "x premium vs organic reach",
+    "bought followers vs real followers engagement rate"
+  ],
+  "how_to_keywords": [
+    "how to grow x twitter account organically",
+    "how to increase x engagement without buying followers",
+    "how to get more reposts and bookmarks on x"
+  ],
+  "problem_keywords": [
+    "twitter account not growing",
+    "low engagement despite good content",
+    "x algorithm suppressing reach for non-premium accounts",
+    "fake followers hurting account credibility"
+  ],
+  "commercial_keywords": [
+    "x premium subscription reach boost",
+    "social media scheduling tool for x",
+    "legit twitter growth service"
+  ],
+  "entities": [
+    "X (Twitter)",
+    "X Premium",
+    "Sprout Social",
+    "Buffer",
+    "X algorithm",
+    "reposts/bookmarks ranking signals"
+  ],
+  "primary_intent": "Tutorial",
+  "secondary_intent": "Problem-solving",
+  "audience": "Solo creators, personal-brand builders, and small-brand social media managers trying to grow an X presence without paid follower schemes",
+  "countries": [],
+  "connects_to_tools": [
+    "x-twitter"
+  ],
+  "connects_to_prompts": [],
+  "connects_to_service": "",
+  "scores": {
+    "demand": 6,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 5,
+    "conversion_potential": 5,
+    "evidence_quality": 6,
+    "total": 60
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "How often should I post on X to actually grow?",
+      "answer_summary": "Sprout Social recommends posting consistently throughout the day rather than dumping posts all at once, combined with timing posts around platform-measured optimal send times.",
+      "sources": [
+        "https://sproutsocial.com/insights/twitter-algorithm/"
+      ]
+    },
+    {
+      "question": "Do reposts matter more than likes for growth on X?",
+      "answer_summary": "Sprout Social states reposts carry roughly 20x the algorithmic weight of a like, so encouraging reposts/bookmarks matters more than chasing likes.",
+      "sources": [
+        "https://sproutsocial.com/insights/twitter-algorithm/"
+      ]
+    },
+    {
+      "question": "Does X Premium actually increase organic reach?",
+      "answer_summary": "Sprout Social reports Premium accounts see a 2x–4x reach boost versus non-Premium accounts, meaning free accounts face a real algorithmic disadvantage.",
+      "sources": [
+        "https://sproutsocial.com/insights/twitter-algorithm/"
+      ]
+    },
+    {
+      "question": "How much video content should I be posting on X?",
+      "answer_summary": "Sprout Social cites that four out of five user sessions on X now include watching video, making video a priority format for growth.",
+      "sources": [
+        "https://sproutsocial.com/insights/twitter-algorithm/"
+      ]
+    },
+    {
+      "question": "How fast should I respond to replies to boost my reach?",
+      "answer_summary": "Sprout Social recommends replying within 2–3 hours to keep engagement signals strong for the algorithm.",
+      "sources": [
+        "https://sproutsocial.com/insights/twitter-algorithm/"
+      ]
+    },
+    {
+      "question": "Is organic reach declining for regular (non-Premium) accounts?",
+      "answer_summary": "Sprout Social's analysis frames non-Premium organic reach as 'significantly lower,' a structural constraint independent of content quality.",
+      "sources": [
+        "https://sproutsocial.com/insights/twitter-algorithm/"
+      ]
+    },
+    {
+      "question": "What free templates exist for planning X content alongside other platforms?",
+      "answer_summary": "Buffer's resource library offers free social calendar templates (Buffer, Google Sheets, Canva, Notion, PDF) usable for planning X posts as part of a broader schedule.",
+      "sources": [
+        "https://buffer.com/library/"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "How the Twitter (X) Algorithm Works in 2026",
+      "url": "https://sproutsocial.com/insights/twitter-algorithm/",
+      "source_type": "industry publication",
+      "used_for": "Organic growth tactics, algorithm weighting of reposts/video/reply speed, X Premium reach differential"
+    },
+    {
+      "title": "Buffer Resource Library (hub page)",
+      "url": "https://buffer.com/library/",
+      "source_type": "company docs",
+      "used_for": "Confirming existence and framing of X/Twitter growth and content-planning resources"
+    }
+  ]
+}

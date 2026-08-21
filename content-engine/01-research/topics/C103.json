@@ -1,0 +1,203 @@
+{
+  "candidate_id": "C103",
+  "topic": "How Wikipedia and Reddit ended up as dominant AI training/citation sources, and what that means for smaller sites",
+  "status": "accepted",
+  "target_keyword": "wikipedia reddit ai citation dominance",
+  "secondary_keywords": [
+    "why does chatgpt cite wikipedia so much",
+    "reddit ai overviews citations",
+    "ai citation source concentration"
+  ],
+  "long_tail_keywords": [
+    "wikipedia and reddit drive over 25 percent of chatgpt citations",
+    "how to get cited on reddit for ai search",
+    "small business ai visibility without a wikipedia page",
+    "why does google ai overviews group reddit with social platforms"
+  ],
+  "question_keywords": [
+    "why do ai engines cite reddit so much",
+    "does my site need a wikipedia page to be cited by ai",
+    "how much of ai overviews citations are reddit",
+    "why did reddit's citation share collapse in chatgpt",
+    "does negative wikipedia content show up in ai answers"
+  ],
+  "comparison_keywords": [
+    "reddit vs wikipedia ai citations",
+    "chatgpt vs google ai overviews citation sources",
+    "fandom vs wikipedia citation share google ai mode"
+  ],
+  "how_to_keywords": [
+    "how to get your brand mentioned on reddit for ai visibility",
+    "how to increase ai citations as a small business",
+    "how to counter negative wikipedia content in ai answers"
+  ],
+  "problem_keywords": [
+    "small business invisible in ai search without wikipedia",
+    "negative wikipedia content resurfacing in ai answers",
+    "reddit citation volatility ai search"
+  ],
+  "commercial_keywords": [
+    "ai visibility agency services",
+    "geo content strategy for small business",
+    "brand monitoring on reddit and wikipedia"
+  ],
+  "entities": [
+    "Wikipedia",
+    "Reddit",
+    "ChatGPT",
+    "Google AI Overviews",
+    "AI Mode",
+    "Perplexity",
+    "LinkedIn",
+    "Fandom",
+    "Grokipedia",
+    "5W Research",
+    "BrightEdge",
+    "Similarweb",
+    "Semrush",
+    "Ahrefs"
+  ],
+  "primary_intent": "Informational",
+  "secondary_intent": "Problem-solving",
+  "audience": "SEO/GEO practitioners, agency owners, and small business/site owners worried about being structurally excluded from AI-generated answers dominated by a few large platforms",
+  "countries": [
+    "United States — the specific 13%/12% Wikipedia/Reddit citation-share figures cited are explicitly for U.S. ChatGPT citations; the mix and share of platforms cited likely differs by country/language given Wikipedia's per-language editions and Reddit's US-centric userbase, though this research did not find country-specific breakdowns beyond the US figure"
+  ],
+  "topic_cluster": "AI visibility & answer engine optimization (AEO/GEO)",
+  "connects_to_prompts": [],
+  "connects_to_tools": [
+    "ai-visibility-checker"
+  ],
+  "connects_to_service": "seo-geo",
+  "scores": {
+    "demand": 8,
+    "intent": 6,
+    "relevance": 8,
+    "question_density": 8,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 8,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 7,
+    "conversion_potential": 6,
+    "evidence_quality": 9,
+    "total": 73
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "How much of ChatGPT's citations actually come from Wikipedia and Reddit?",
+      "answer_summary": "A Q1 2026 '5W Citation Source Audit' found Wikipedia at 13.15% and Reddit at 11.97% of U.S. ChatGPT citations, together over 25% — ahead of Reuters (2.27%), Forbes (1.38%), and outranking WSJ, NYT, Bloomberg, and Financial Times, none of which made the top 20.",
+      "sources": [
+        "https://finance.yahoo.com/sectors/technology/articles/wikipedia-reddit-now-drive-over-160000284.html"
+      ]
+    },
+    {
+      "question": "Has Reddit's share of AI citations always been this high?",
+      "answer_summary": "No — the same audit found Reddit's citation share in ChatGPT collapsed from roughly 60% to about 10% within a two-week span in September 2025, showing these shares are volatile, not fixed.",
+      "sources": [
+        "https://finance.yahoo.com/sectors/technology/articles/wikipedia-reddit-now-drive-over-160000284.html"
+      ]
+    },
+    {
+      "question": "Do Google AI Overviews and ChatGPT cite the same sources for the same query?",
+      "answer_summary": "No — BrightEdge research found Reddit appears alongside authority health sites (Mayo Clinic, Healthline, Cleveland Clinic) in about 36% of ChatGPT citations vs. only about 6% of the time in Google AI Overviews (a '6x authority flip'); AI Overviews instead groups Reddit with other social platforms like YouTube, Facebook, TikTok, and Instagram.",
+      "sources": [
+        "https://www.searchenginejournal.com/research-suggests-ai-engines-assign-ranking-roles-to-sources/578620/"
+      ]
+    },
+    {
+      "question": "Does the type of question change which platform gets cited?",
+      "answer_summary": "Yes — per BrightEdge, ChatGPT leans on Reddit roughly twice as much as Google AI Overviews for how-to/explanatory 'why' questions, while Google AI Overviews cites social sources in ~10% of comparison queries vs. only ~1% for ChatGPT.",
+      "sources": [
+        "https://www.searchenginejournal.com/research-suggests-ai-engines-assign-ranking-roles-to-sources/578620/"
+      ]
+    },
+    {
+      "question": "Is any other platform catching up to Wikipedia/Reddit in AI citations?",
+      "answer_summary": "LinkedIn's ChatGPT citation share reportedly jumped from #11 to #5 in three months, reaching 14.3% of ChatGPT Search responses, per the 5W audit; separately, Google's AI Mode was found to cite Fandom (7.16%) even ahead of Wikipedia for some query types.",
+      "sources": [
+        "https://finance.yahoo.com/sectors/technology/articles/wikipedia-reddit-now-drive-over-160000284.html"
+      ]
+    },
+    {
+      "question": "What is Grokipedia and is it being cited by AI tools too?",
+      "answer_summary": "Grokipedia (built with Grok/xAI) is increasingly cited by tools like ChatGPT and Gemini, though its citation share remains small; researchers have raised accuracy and human-oversight concerns about it as a growing AI source.",
+      "sources": [
+        "https://www.moneycontrol.com/technology/from-chatgpt-to-google-ai-tools-are-starting-to-cite-grokipedia-article-13804399.html"
+      ]
+    },
+    {
+      "question": "Can outdated or negative Wikipedia content hurt a brand via AI search?",
+      "answer_summary": "Search Engine Land reports that negative or outdated Wikipedia content can persist for years and then regain visibility when AI systems surface it in generated answers, effectively re-amplifying old reputational issues.",
+      "sources": [
+        "https://searchengineland.com/negative-information-wikipedia-ai-search-477060"
+      ]
+    },
+    {
+      "question": "What does the citation-source research imply for a small business without a Wikipedia page or Reddit presence?",
+      "answer_summary": "Forbes Agency Council commentary argues brands need presence across a spread of channels (Reddit, Wikipedia, LinkedIn, YouTube, review sites like G2/Trustpilot/Yelp, and press outlets like Forbes/Reuters) rather than relying on any single platform, since AI engines assemble answers from a mix rather than crowning one authoritative source.",
+      "sources": [
+        "https://www.forbes.com/councils/forbesagencycouncil/2026/07/24/why-reddit-and-quora-now-matter-more-than-your-website-for-ai-visibility/",
+        "https://www.entrepreneur.com/building-a-business/your-brand-will-be-invisible-in-ai-search-if-youre-not-showing-up-on-these-8-channels"
+      ]
+    },
+    {
+      "question": "Does listing a brand on review platforms actually change AI citation odds?",
+      "answer_summary": "The 5W audit found brands with a presence on review platforms (G2, Capterra, Trustpilot, Yelp) get roughly a 3x citation boost, and found a 0.737 correlation between YouTube presence and AI visibility — the strongest predictor identified across the 2025–2026 studies reviewed.",
+      "sources": [
+        "https://finance.yahoo.com/sectors/technology/articles/wikipedia-reddit-now-drive-over-160000284.html"
+      ]
+    },
+    {
+      "question": "How was this Wikipedia/Reddit dominance data actually gathered — is it a single study?",
+      "answer_summary": "No single source; the 5W audit is a synthesis of nine separate third-party datasets (Similarweb ~600,000 citations, Semrush 325,000 prompts, Ahrefs 75,000-brand analysis, plus Profound, Peec AI, SE Ranking, Goodie, Evertune, Passionfruit) covering January 2025–April 2026.",
+      "sources": [
+        "https://finance.yahoo.com/sectors/technology/articles/wikipedia-reddit-now-drive-over-160000284.html"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Wikipedia and Reddit Now Drive Over 25% of ChatGPT Citations in the U.S., New 5W Research Finds",
+      "url": "https://finance.yahoo.com/sectors/technology/articles/wikipedia-reddit-now-drive-over-160000284.html",
+      "source_type": "industry publication",
+      "used_for": "Core citation-share statistics, methodology, volatility, LinkedIn/YouTube/review-platform findings"
+    },
+    {
+      "title": "Research Suggests AI Engines Assign Ranking Roles To Sources",
+      "url": "https://www.searchenginejournal.com/research-suggests-ai-engines-assign-ranking-roles-to-sources/578620/",
+      "source_type": "industry publication",
+      "used_for": "BrightEdge findings on ChatGPT vs Google AI Overviews citation-role differences"
+    },
+    {
+      "title": "Google AI Cites More Social, As Perplexity Pulls Back From Reddit",
+      "url": "https://www.mediapost.com/publications/article/415354/google-ai-cites-more-social-as-perplexity-pulls-b.html",
+      "source_type": "industry publication",
+      "used_for": "Confirming citation-pattern shifts across AI engines (headline/snippet)"
+    },
+    {
+      "title": "Why Reddit And Quora Now Matter More Than Your Website For AI Visibility",
+      "url": "https://www.forbes.com/councils/forbesagencycouncil/2026/07/24/why-reddit-and-quora-now-matter-more-than-your-website-for-ai-visibility/",
+      "source_type": "industry publication",
+      "used_for": "Framing implications for brands/small sites"
+    },
+    {
+      "title": "How negative information spreads from Wikipedia into AI search",
+      "url": "https://searchengineland.com/negative-information-wikipedia-ai-search-477060",
+      "source_type": "industry publication",
+      "used_for": "Risk of outdated/negative Wikipedia content resurfacing via AI"
+    },
+    {
+      "title": "From ChatGPT to Google, AI tools are starting to cite Grokipedia",
+      "url": "https://www.moneycontrol.com/technology/from-chatgpt-to-google-ai-tools-are-starting-to-cite-grokipedia-article-13804399.html",
+      "source_type": "industry publication",
+      "used_for": "Emerging competitor to Wikipedia as an AI-cited encyclopedia source"
+    },
+    {
+      "title": "Your Brand Will Be Invisible in AI Search If You're Not Showing Up on These 8 Channels",
+      "url": "https://www.entrepreneur.com/building-a-business/your-brand-will-be-invisible-in-ai-search-if-youre-not-showing-up-on-these-8-channels",
+      "source_type": "industry publication",
+      "used_for": "Reddit's ~40% share figure and multi-channel visibility argument"
+    }
+  ]
+}

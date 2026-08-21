@@ -1,0 +1,190 @@
+{
+  "candidate_id": "C069",
+  "topic": "What US sales tax nexus actually means for a small online seller",
+  "status": "accepted",
+  "topic_cluster": "us-sales-tax-compliance",
+  "target_keyword": "sales tax nexus small online seller",
+  "secondary_keywords": [
+    "economic nexus vs physical nexus",
+    "do i need to collect sales tax in every state",
+    "sales tax nexus states list",
+    "amazon fba sales tax nexus"
+  ],
+  "long_tail_keywords": [
+    "do i have sales tax nexus if i store inventory in an amazon fba warehouse",
+    "small etsy shop sales tax nexus",
+    "how many sales trigger economic nexus in a state",
+    "does shopify collect sales tax automatically for me"
+  ],
+  "question_keywords": [
+    "what is sales tax nexus",
+    "do online sellers have to charge sales tax in every state",
+    "what triggers economic nexus",
+    "does hiring a remote employee create sales tax nexus"
+  ],
+  "comparison_keywords": [
+    "economic nexus vs physical nexus",
+    "taxjar vs avalara",
+    "origin-based vs destination-based sales tax"
+  ],
+  "how_to_keywords": [
+    "how to register for a sales tax permit",
+    "how to determine if you have sales tax nexus",
+    "how to calculate economic nexus thresholds by state"
+  ],
+  "problem_keywords": [
+    "accidentally created sales tax nexus",
+    "sales tax nexus back taxes penalty",
+    "amazon fba sales tax nexus nightmare",
+    "selling us saas from a uk company tax nightmare"
+  ],
+  "commercial_keywords": [
+    "taxjar pricing",
+    "avalara pricing",
+    "sales tax automation software for small business"
+  ],
+  "entities": [
+    "TaxJar",
+    "Avalara",
+    "Amazon FBA",
+    "Shopify",
+    "Etsy",
+    "South Dakota v. Wayfair",
+    "economic nexus"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Informational",
+  "audience": "Small US-based ecommerce sellers (Etsy/Shopify/Amazon FBA) and small SaaS founders trying to figure out where they legally owe sales tax",
+  "countries": [
+    "United States"
+  ],
+  "connects_to_tools": [
+    "invoice-generator"
+  ],
+  "connects_to_prompts": [
+    "ecommerce-product"
+  ],
+  "connects_to_service": "confirms hypothesis — connects to ecommerce-product content and the invoice-generator tool (sellers need to know when/whether to add sales tax on generated invoices)",
+  "scores": {
+    "demand": 7,
+    "intent": 7,
+    "relevance": 7,
+    "question_density": 7,
+    "search_opportunity": 7,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 6,
+    "competitive_gap": 4,
+    "conversion_potential": 5,
+    "evidence_quality": 7,
+    "total": 63
+  },
+  "evidence_strength": "strong",
+  "questions": [
+    {
+      "question": "What is sales tax nexus?",
+      "answer_summary": "A sufficient connection between a business and a state that legally obligates the business to collect and remit that state's sales tax.",
+      "sources": [
+        "https://www.taxjar.com/sales-tax/nexus"
+      ]
+    },
+    {
+      "question": "What's the difference between physical nexus and economic nexus?",
+      "answer_summary": "Physical nexus comes from tangible presence (office, staff, warehouse); economic nexus comes from crossing a state-set dollar or transaction-count sales threshold, with no physical presence required.",
+      "sources": [
+        "https://www.taxjar.com/sales-tax/nexus"
+      ]
+    },
+    {
+      "question": "Does storing inventory in an Amazon FBA warehouse create nexus?",
+      "answer_summary": "Yes — inventory storage, including via third-party fulfillment centers like Amazon FBA, is explicitly listed as a nexus-creating activity.",
+      "sources": [
+        "https://www.taxjar.com/sales-tax/nexus"
+      ]
+    },
+    {
+      "question": "Do nexus thresholds differ from state to state?",
+      "answer_summary": "Yes — each state sets its own nexus rules and thresholds independently.",
+      "sources": [
+        "https://www.taxjar.com/sales-tax/nexus"
+      ]
+    },
+    {
+      "question": "How do I figure out which states I owe sales tax in?",
+      "answer_summary": "Check each state taxing authority's site directly, or use an automation dashboard (e.g. TaxJar) that flags where nexus exists versus where tax is being collected.",
+      "sources": [
+        "https://www.taxjar.com/sales-tax/nexus"
+      ]
+    },
+    {
+      "question": "How do small SaaS founders actually handle sales tax (and VAT) day to day?",
+      "answer_summary": "This is a live, heavily discussed pain point — an 'Ask HN' thread on handling VAT/sales tax accounting as a B2C SaaS drew 97 points and 86 comments.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=sales%20tax%20nexus"
+      ]
+    },
+    {
+      "question": "Does hiring a remote employee in another state create nexus there?",
+      "answer_summary": "Founders treat employee location as a real nexus trigger to worry about, per a dedicated 'Ask HN: Hiring Remotely and US Tax Nexuses' thread.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=sales%20tax%20nexus"
+      ]
+    },
+    {
+      "question": "Do trade shows or craft fairs create nexus?",
+      "answer_summary": "Yes — temporary physical presence such as trade shows or craft fairs is listed as a nexus-creating activity.",
+      "sources": [
+        "https://www.taxjar.com/sales-tax/nexus"
+      ]
+    },
+    {
+      "question": "Can having affiliates in a state create nexus?",
+      "answer_summary": "Yes — third-party affiliates operating in a state are listed among nexus-creating activities.",
+      "sources": [
+        "https://www.taxjar.com/sales-tax/nexus"
+      ]
+    },
+    {
+      "question": "Is selling a US-facing SaaS product from a non-US company a tax problem?",
+      "answer_summary": "Founders describe it as a real headache — one HN post is titled 'Selling a B2B SaaS product in the U.S as a U.K company – A tax nightmare?'",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=sales%20tax%20nexus"
+      ]
+    },
+    {
+      "question": "What tools do small businesses actually use to manage multi-state sales tax?",
+      "answer_summary": "TaxJar and Avalara are the platforms most commonly cited by sellers and SaaS founders for nexus tracking and remittance.",
+      "sources": [
+        "https://www.taxjar.com/sales-tax/nexus",
+        "https://hn.algolia.com/api/v1/search?query=sales%20tax%20nexus"
+      ]
+    },
+    {
+      "question": "Are there active efforts to simplify nexus rules?",
+      "answer_summary": "Yes — for example, a New Jersey bill was proposed to eliminate the transaction-count nexus requirement for sales and corporate business tax.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=sales%20tax%20nexus"
+      ]
+    },
+    {
+      "question": "Does origin-based vs. destination-based taxation matter for remote sellers?",
+      "answer_summary": "Yes — states differ on this basis, which changes how a remote seller must calculate the tax rate to charge.",
+      "sources": [
+        "https://www.taxjar.com/sales-tax/nexus"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Sales Tax Nexus for Online Sellers",
+      "url": "https://www.taxjar.com/sales-tax/nexus",
+      "source_type": "company docs",
+      "used_for": "Core definitions of physical vs. economic nexus, nexus-creating activities, and state variance"
+    },
+    {
+      "title": "Hacker News (Algolia) search results — 'sales tax nexus'",
+      "url": "https://hn.algolia.com/api/v1/search?query=sales%20tax%20nexus",
+      "source_type": "community",
+      "used_for": "Real founder/seller pain points and evidence of active discussion volume"
+    }
+  ]
+}

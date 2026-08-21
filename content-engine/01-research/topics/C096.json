@@ -1,0 +1,209 @@
+{
+  "candidate_id": "C096",
+  "topic": "What actually happens in the first 90 days after hiring an SEO agency",
+  "status": "accepted",
+  "target_keyword": "first 90 days seo agency",
+  "secondary_keywords": [
+    "what to expect from an seo agency",
+    "seo agency onboarding process",
+    "seo agency deliverables month 1",
+    "hiring an seo agency"
+  ],
+  "long_tail_keywords": [
+    "what happens after you hire an seo agency",
+    "seo agency first 3 months results",
+    "how long before an seo agency shows results",
+    "is it worth paying an seo agency"
+  ],
+  "question_keywords": [
+    "is an seo agency worth it",
+    "how long does seo take to work",
+    "what should an seo agency deliver in the first month",
+    "how do i know if my seo agency is scamming me"
+  ],
+  "comparison_keywords": [
+    "seo agency vs freelancer",
+    "seo agency vs in-house seo",
+    "seo agency vs doing seo yourself"
+  ],
+  "how_to_keywords": [
+    "how to evaluate an seo agency after 90 days",
+    "how to onboard a new seo agency",
+    "questions to ask before hiring an seo agency"
+  ],
+  "problem_keywords": [
+    "seo agency not delivering results",
+    "seo agency red flags",
+    "seo agency scam signs",
+    "seo agency spammy backlinks"
+  ],
+  "commercial_keywords": [
+    "hire seo agency",
+    "seo agency pricing",
+    "best seo agency for small business"
+  ],
+  "entities": [
+    "SEO agency",
+    "Google Search Console",
+    "Ahrefs",
+    "Semrush",
+    "backlinks",
+    "technical SEO audit",
+    "keyword research",
+    "content calendar"
+  ],
+  "primary_intent": "Problem-solving",
+  "secondary_intent": "Commercial Investigation",
+  "audience": "Small business owners and marketing managers who have just hired (or are about to hire) an SEO agency and want to know what a legitimate engagement looks like month-to-month",
+  "countries": [],
+  "topic_cluster": "SEO agency evaluation & expectations",
+  "connects_to_tools": [
+    "Schema Markup Generator",
+    "FAQ Schema Generator",
+    "Website Speed Test",
+    "Marketing ROI Calculator"
+  ],
+  "connects_to_prompts": [],
+  "connects_to_service": "SEO / local SEO service",
+  "scores": {
+    "demand": 5,
+    "intent": 7,
+    "relevance": 8,
+    "question_density": 6,
+    "search_opportunity": 6,
+    "ai_answer_opportunity": 6,
+    "tool_discovery_opportunity": 5,
+    "competitive_gap": 7,
+    "conversion_potential": 7,
+    "evidence_quality": 5,
+    "total": 62
+  },
+  "evidence_strength": "moderate",
+  "questions": [
+    {
+      "question": "Is it worth paying a premium (e.g. $6k/month) for an SEO agency?",
+      "answer_summary": "Real HN debate: skeptics say it's not worth it and freelancers/in-house are cheaper; one 15-year SEO veteran calls mid-tier agency services 'almost guaranteed to be a scam' (billing $2,000/month for links bought for $200), while an agency owner counters that legitimate ecommerce SEO is still profitable.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=SEO%20agency%20worth%20it"
+      ]
+    },
+    {
+      "question": "How long does SEO typically take to start showing results?",
+      "answer_summary": "HN discussion referencing a Forbes piece on SEO timelines concludes there's no quick fix — visible results require sustained multi-month effort across content, technical work, and distribution, and should be judged against paid-search cost/timeline as a baseline.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=how%20long%20does%20SEO%20take%20to%20work"
+      ]
+    },
+    {
+      "question": "What should an SEO agency actually deliver in the early months?",
+      "answer_summary": "A real client account on HN lists four core deliverables agencies bill for: on-page optimization (WordPress/Yoast), keyword research, content writing, and backlink acquisition.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=SEO%20agency%20worth%20it"
+      ]
+    },
+    {
+      "question": "What are red flags that an SEO agency is just reselling cheap backlinks at a markup?",
+      "answer_summary": "A veteran SEO practitioner on HN describes a common pattern: agencies charging ~$2,000/month for backlinks that actually cost ~$200 to acquire, from 'spammy-looking' partner sites despite claimed high domain authority.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=SEO%20agency%20worth%20it"
+      ]
+    },
+    {
+      "question": "Is it better to hire freelancers or do SEO in-house instead of an agency?",
+      "answer_summary": "Commenters on the same HN thread recommend handling technical SEO in-house with tools like Yoast/GA and hiring freelance content writers directly, as a more cost-effective and transparent alternative to a full agency retainer.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=SEO%20agency%20worth%20it"
+      ]
+    },
+    {
+      "question": "How do you measure whether SEO work actually caused a traffic or lead increase?",
+      "answer_summary": "Real commenters flag this as a genuine measurement problem — it's 'difficult to prove direct causality' between an agency's SEO work and traffic/lead changes when other marketing runs simultaneously, and they recommend demanding transparent ROI reporting.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=SEO%20agency%20worth%20it"
+      ]
+    },
+    {
+      "question": "What questions should you ask before hiring an SEO expert or agency?",
+      "answer_summary": "A Mashable piece ('12 Questions to Ask Before Hiring an SEO Expert') referenced in HN discussion is a real example of the vetting-question genre searchers look for before signing a contract.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=questions%20to%20ask%20before%20hiring%20SEO",
+        "https://mashable.com/2013/10/22/seo-hiring-questions/"
+      ]
+    },
+    {
+      "question": "Are promises like 'first page rankings in 2-3 weeks' realistic?",
+      "answer_summary": "A real anecdote on HN cites a local agency promising first-page Google rankings within '2-3 weeks upon launch' — a claim other commenters treat as an obvious red flag given how SEO actually works.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=SEO%20agency%20worth%20it"
+      ]
+    },
+    {
+      "question": "Has SEO gotten less effective than it used to be?",
+      "answer_summary": "One HN commenter argues SEO's effectiveness has 'diminished significantly since 2005-2007' due to algorithm changes, a viewpoint that shapes how skeptical some buyers are of agency promises.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=SEO%20agency%20worth%20it"
+      ]
+    },
+    {
+      "question": "Why is it hard to tell if the backlinks an agency is building are high quality or spammy?",
+      "answer_summary": "A real client (healthcare provider) reported receiving backlinks from 'spammy-looking' partner websites despite the agency's high-domain-authority claims, raising doubts about black-hat tactics that later algorithm updates could penalize.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=SEO%20agency%20worth%20it"
+      ]
+    },
+    {
+      "question": "What does a legitimate, transparent SEO engagement look like versus a vague one?",
+      "answer_summary": "Commenters converge on transparency as the differentiator: agencies that show concrete methods and ROI metrics vs. those that stay vague about tactics and results attribution.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=SEO%20agency%20worth%20it"
+      ]
+    },
+    {
+      "question": "Is SEO worth evaluating on its own, or only as part of a broader marketing mix?",
+      "answer_summary": "HN commenters on the SEO-timeline thread suggest comparing SEO's cost/timeline against paid search rather than judging it in isolation, since organic results interact with other channels.",
+      "sources": [
+        "https://hn.algolia.com/api/v1/search?query=how%20long%20does%20SEO%20take%20to%20work"
+      ]
+    },
+    {
+      "question": "Why do generic 'What is SEO' explainer pages dominate search results instead of practical 'what happens after you hire someone' guides?",
+      "answer_summary": "Direct SERP checks for phrases like 'seo agency 90 day plan,' 'seo agency client timeline,' and 'what to expect when you hire an seo agency' consistently surfaced only broad definitional guides (Moz, Semrush, Ahrefs, Google's own SEO Starter Guide) rather than dedicated first-90-days content, indicating a real content gap.",
+      "sources": [
+        "https://www.bing.com/search?q=seo+agency+90+day+plan+client+expectations+month+1+month+2+month+3",
+        "https://www.bing.com/search?q=seo+agency+client+timeline+month+1+audits+month+2+content+month+3+rankings"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Ask HN thread: Is it worth paying $6k/month for an SEO agency?",
+      "url": "https://hn.algolia.com/api/v1/search?query=SEO%20agency%20worth%20it",
+      "source_type": "community",
+      "used_for": "Primary real-world discussion of agency deliverables, red flags, pricing skepticism, and measurement challenges"
+    },
+    {
+      "title": "HN discussion referencing 'How Long Does SEO Take to Start Working?' (Forbes)",
+      "url": "https://hn.algolia.com/api/v1/search?query=how%20long%20does%20SEO%20take%20to%20work",
+      "source_type": "community",
+      "used_for": "Evidence on realistic SEO result timelines and how practitioners frame them"
+    },
+    {
+      "title": "12 Questions to Ask Before Hiring an SEO Expert - Mashable",
+      "url": "https://mashable.com/2013/10/22/seo-hiring-questions/",
+      "source_type": "industry publication",
+      "used_for": "Confirming the 'questions to ask before hiring' content genre and real question framing"
+    },
+    {
+      "title": "Bing SERP check: SEO agency 90-day plan / client timeline queries",
+      "url": "https://www.bing.com/search?q=seo+agency+90+day+plan+client+expectations+month+1+month+2+month+3",
+      "source_type": "aggregator",
+      "used_for": "Confirming that generic 'what is SEO' explainer content dominates the SERP for this phrase, indicating a content gap"
+    },
+    {
+      "title": "tools.scult.in homepage overview",
+      "url": "https://tools.scult.in",
+      "source_type": "company docs",
+      "used_for": "Confirming which tools.scult.in free tools and paid services this topic should realistically link to"
+    }
+  ]
+}
