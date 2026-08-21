@@ -21,8 +21,9 @@
  */
 
 import { NextResponse } from 'next/server'
-import { requestErrorMessage, validateRequest } from '@/lib/requests/logic'
+import { isLikelyBotUserAgent } from '@/lib/bot-detection'
 import { checkRateLimit, clientIpFromHeaders } from '@/lib/rate-limit'
+import { requestErrorMessage, validateRequest } from '@/lib/requests/logic'
 import { submitToolRequest } from '@/lib/studio'
 
 /** A human asking for something submits at most a handful of times; anything more is a script. */
@@ -34,8 +35,20 @@ function errorJson(error: string, status: number): NextResponse {
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
+  // Same generic 400 the honeypot below returns — a known crawler/monitor
+  // User-Agent posting here is either a scripted-form-spam bot or an
+  // automated test, never a real visitor's request; either way it should
+  // never reach Studio. See lib/bot-detection.ts for scope/limitations.
+  if (isLikelyBotUserAgent(request.headers.get('user-agent'))) {
+    return errorJson('Could not submit that.', 400)
+  }
+
   const clientIp = clientIpFromHeaders(request.headers)
-  const rateLimit = checkRateLimit(`request:${clientIp}`, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW_MS)
+  const rateLimit = checkRateLimit(
+    `request:${clientIp}`,
+    RATE_LIMIT_MAX,
+    RATE_LIMIT_WINDOW_MS,
+  )
   if (!rateLimit.allowed) {
     return NextResponse.json(
       {

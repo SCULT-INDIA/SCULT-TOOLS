@@ -2,6 +2,7 @@
 
 import Script from 'next/script'
 import { useEffect, useState } from 'react'
+import { isLikelyAutomatedBrowser, isLikelyBotUserAgent } from '@/lib/bot-detection'
 
 /** Any of these counts as "the visitor is actually using the page" — the
  * bar deliberately stays low since the only cost of triggering early is
@@ -41,6 +42,17 @@ const FALLBACK_DELAY_MS = 4000
  * session id in `sessionStorage`, no cookies. It fires its own pageview on
  * load and on every client-side route change internally; nothing else in
  * this app has to drive that.
+ *
+ * `isBot` gates ONLY the Studio script, never GA4/Clarity: both of those
+ * already run their own always-on bot filtering server-side (Google's
+ * "known bots and spiders" exclusion for GA4, Clarity's own equivalent) —
+ * adding a client-side gate there would be redundant and risks disagreeing
+ * with a real user Google/Clarity already correctly counted. Studio has no
+ * such filtering visible from here, so `lib/bot-detection.ts`'s heuristic
+ * (a known crawler User-Agent, or `navigator.webdriver` from a
+ * Selenium/Puppeteer/Playwright-driven session) is the first pass — bots
+ * still get the exact same HTML/robots.txt access as any other visitor,
+ * this only keeps them out of Studio's pageview/analytics counts.
  */
 export function DeferredAnalyticsScripts({
   gaId,
@@ -52,6 +64,15 @@ export function DeferredAnalyticsScripts({
   studioSiteId: string
 }) {
   const [active, setActive] = useState(false)
+  // Lazy initializer, not a bare call: this component still renders during
+  // SSR (as HTML shell, before `active` ever flips true), where `navigator`
+  // does not exist — evaluating it eagerly as a prop/argument would throw
+  // on every page. The lazy-initializer form only runs client-side, on
+  // first mount.
+  const [isBot] = useState(() => {
+    if (typeof navigator === 'undefined') return false
+    return isLikelyBotUserAgent(navigator.userAgent) || isLikelyAutomatedBrowser()
+  })
 
   useEffect(() => {
     if (active || (!gaId && !clarityId && !studioSiteId)) return
@@ -98,7 +119,7 @@ gtag('js',new Date());gtag('config','${gaId}',{cookie_domain:'.scult.in'});`}
         />
       ) : null}
 
-      {studioSiteId ? (
+      {studioSiteId && !isBot ? (
         <Script
           src="https://studio.scult.in/track.js"
           data-site={studioSiteId}
