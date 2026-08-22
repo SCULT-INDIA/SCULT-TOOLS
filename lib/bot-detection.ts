@@ -28,6 +28,16 @@ const KNOWN_BOT_UA_SUBSTRINGS: readonly string[] = [
   ...AI_BOTS.map((bot) => bot.name),
   // General search-engine crawlers.
   'Googlebot',
+  // Confirmed gap (2026-08-22 audit): "GoogleOther" is a real, distinct
+  // Google crawler product — its name contains none of "bot"/"crawler"/
+  // "spider"/etc., so it fell through both this list and the generic
+  // fallback pattern below undetected. It was responsible for the large
+  // majority of the pageview inflation this whole bot-detection module was
+  // added to fix in the first place (confirmed via SCULT Studio's raw
+  // User-Agent logs for the same day this file was first added).
+  'GoogleOther',
+  'Google-Extended',
+  'Storebot-Google',
   'AdsBot-Google',
   'Google-InspectionTool',
   'Mediapartners-Google',

@@ -30,6 +30,30 @@ describe('isLikelyBotUserAgent — every AI_BOTS entry is caught', () => {
   })
 })
 
+describe('isLikelyBotUserAgent — GoogleOther (2026-08-22 confirmed gap)', () => {
+  it('flags GoogleOther in every form actually observed in production traffic', () => {
+    // Real UAs pulled from SCULT Studio's raw_user_agent logs for the day
+    // this module was first added — GoogleOther's product name contains
+    // none of "bot"/"crawler"/"spider"/etc., so both the named list and
+    // the generic fallback missed it entirely until this test was added.
+    const realGoogleOtherUAs = [
+      'Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.137 Mobile Safari/537.36 (compatible; GoogleOther)',
+      'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GoogleOther) Chrome/151.0.7922.137 Safari/537.36',
+    ]
+    for (const ua of realGoogleOtherUAs) {
+      expect(isLikelyBotUserAgent(ua)).toBe(true)
+    }
+  })
+
+  it('flags GoogleOther\'s sibling products the same way', () => {
+    expect(isLikelyBotUserAgent('Mozilla/5.0 (compatible; GoogleOther-Image/1.0)')).toBe(true)
+    expect(isLikelyBotUserAgent('Mozilla/5.0 (compatible; Google-Extended/1.0)')).toBe(true)
+    expect(
+      isLikelyBotUserAgent('Storebot-Google/1.0 (+http://www.google.com/bot.html)'),
+    ).toBe(true)
+  })
+})
+
 describe('isLikelyBotUserAgent — common named crawlers/monitors', () => {
   const namedBots = [
     'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
