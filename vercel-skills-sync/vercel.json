@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/sync.js": {
+      "maxDuration": 60
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/sync",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}

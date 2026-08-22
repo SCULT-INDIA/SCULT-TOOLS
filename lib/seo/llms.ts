@@ -3,6 +3,8 @@ import { GUIDES } from '@/lib/guides/registry'
 import { getCategoriesByGroup, PROMPT_GROUPS } from '@/lib/prompts/categories'
 import { getPromptsByCategory, PROMPTS } from '@/lib/prompts/registry'
 import { absoluteUrl, SITE } from '@/lib/site'
+import { SKILL_CATEGORIES } from '@/lib/skills/categories'
+import { getAllCategoryCounts, getTotalSkillCount } from '@/lib/skills/db'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { getToolsByCategory, TOOLS } from '@/lib/tools/registry'
 
@@ -156,6 +158,27 @@ function buildPromptSection(): string[] {
   return lines
 }
 
+/** Link-level only, same reasoning as `buildPromptSection` — at the
+ * registry's real scale (~600k), inlining every skill would make this file
+ * enormous for little benefit, since each is already a small, templated
+ * third-party record. */
+async function buildSkillSection(): Promise<string[]> {
+  const [total, counts] = await Promise.all([getTotalSkillCount(), getAllCategoryCounts()])
+  const lines = [
+    '',
+    '## Skills Library',
+    `- [Skills Library](${absoluteUrl('/skills')}): ${total.toLocaleString()} real AI agent skills synced daily from the open skills.sh registry, exportable as SKILL.md, AGENTS.md, .cursorrules, or Copilot instructions.`,
+  ]
+  for (const category of SKILL_CATEGORIES) {
+    const count = counts[category.slug] ?? 0
+    if (count === 0) continue
+    lines.push(
+      `- [${category.name}](${absoluteUrl(`/skills/${category.slug}`)}): ${category.blurb} (${count.toLocaleString()} skill${count === 1 ? '' : 's'})`,
+    )
+  }
+  return lines
+}
+
 function buildTrustSection(): string[] {
   const lines = ['', '## About this site']
   for (const page of TRUST_PAGES) {
@@ -165,7 +188,7 @@ function buildTrustSection(): string[] {
 }
 
 /** The concise index: one link plus one description per tool, guide and trust page. */
-export function buildLlmsTxt(): string {
+export async function buildLlmsTxt(): Promise<string> {
   const lines = [...buildHeader(), '', '## Tools']
 
   for (const category of CATEGORIES) {
@@ -192,6 +215,7 @@ export function buildLlmsTxt(): string {
   }
 
   lines.push(...buildPromptSection())
+  lines.push(...(await buildSkillSection()))
   lines.push(...buildTrustSection())
 
   lines.push(
@@ -214,7 +238,7 @@ export function buildLlmsTxt(): string {
  * page is already a small, templated record rather than long-form content
  * worth pre-loading.
  */
-export function buildLlmsFullTxt(): string {
+export async function buildLlmsFullTxt(): Promise<string> {
   const lines = [...buildHeader(), '', '## Tools']
 
   for (const category of CATEGORIES) {
@@ -257,6 +281,7 @@ export function buildLlmsFullTxt(): string {
   }
 
   lines.push(...buildPromptSection())
+  lines.push(...(await buildSkillSection()))
   lines.push(...buildTrustSection())
 
   lines.push(

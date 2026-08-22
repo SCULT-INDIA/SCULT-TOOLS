@@ -1,0 +1,60 @@
+name: Drive Skills Library sync
+
+# The actual sync logic (calling skills.sh's official API, writing to
+# Supabase) lives in the separate vercel-skills-sync Vercel project — see
+# vercel-skills-sync/README.md. A single invocation there is bounded by
+# Vercel's function duration limit, so this workflow is the loop driver:
+# GitHub Actions jobs can run for hours, calling that one short endpoint
+# over and over so real cumulative progress toward the full ~600k registry
+# happens in a realistic timeframe.
+on:
+  schedule:
+    - cron: '0 2 * * *' # 02:00 UTC daily
+  workflow_dispatch: {}
+
+concurrency:
+  group: sync-skills-worker
+  cancel-in-progress: false
+
+jobs:
+  drive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340 # leaves margin under GitHub's 360-min default job cap
+    steps:
+      - name: Loop the sync-worker until it's caught up or time runs out
+        env:
+          WORKER_URL: ${{ secrets.SKILLS_SYNC_WORKER_URL }}
+          SYNC_SECRET: ${{ secrets.SKILLS_SYNC_SECRET }}
+        run: |
+          if [ -z "$WORKER_URL" ] || [ -z "$SYNC_SECRET" ]; then
+            echo "SKILLS_SYNC_WORKER_URL / SKILLS_SYNC_SECRET not set yet — skipping until the vercel-skills-sync project is deployed (see vercel-skills-sync/README.md)."
+            exit 0
+          fi
+
+          end=$(( $(date +%s) + 300 * 60 )) # stop calling with ~40min to spare
+          total_processed=0
+          while [ "$(date +%s)" -lt "$end" ]; do
+            response=$(curl -sS -X POST "$WORKER_URL" -H "Authorization: Bearer $SYNC_SECRET" -w "\n%{http_code}")
+            status="${response##*$'\n'}"
+            body="${response%$'\n'*}"
+            echo "$body"
+
+            if [ "$status" != "200" ]; then
+              echo "Worker returned HTTP $status — backing off 60s"
+              sleep 60
+              continue
+            fi
+
+            processed=$(echo "$body" | node -e "process.stdin.on('data',d=>{try{console.log(JSON.parse(d).processed||0)}catch{console.log(0)}})")
+            cursor_done=$(echo "$body" | node -e "process.stdin.on('data',d=>{try{console.log(JSON.parse(d).cursorDone===true)}catch{console.log('false')}})")
+            total_processed=$((total_processed + processed))
+
+            if [ "$cursor_done" = "true" ]; then
+              echo "Reached the end of the current leaderboard snapshot after processing $total_processed skills this run."
+              break
+            fi
+
+            sleep 5
+          done
+
+          echo "Done for this run. Total processed: $total_processed"

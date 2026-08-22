@@ -183,6 +183,7 @@ function buildFooterColumns(): readonly FooterColumn[] {
       { key: 'home', label: 'Home', href: '/' },
       { key: 'all', label: 'All tools', href: '/all' },
       { key: 'prompts', label: 'Prompt library', href: '/prompts' },
+      { key: 'skills', label: 'Skills library', href: '/skills' },
       { key: 'pricing', label: 'Pricing', href: '/pricing' },
       { key: 'guides', label: 'Guides', href: '/guides' },
       { key: 'blog', label: 'Blog', href: '/blog' },

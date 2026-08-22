@@ -9,3 +9,6 @@ coverage/
 next-env.d.ts
 .DS_Store
 .playwright-mcp/
+
+.vercel
+.env*

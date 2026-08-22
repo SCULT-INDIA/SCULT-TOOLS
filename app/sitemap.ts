@@ -5,6 +5,8 @@ import { PROMPT_CATEGORIES } from '@/lib/prompts/categories'
 import { getPromptsByCategory, PROMPTS } from '@/lib/prompts/registry'
 import type { Prompt } from '@/lib/prompts/types'
 import { absoluteUrl } from '@/lib/site'
+import { SKILL_CATEGORIES } from '@/lib/skills/categories'
+import { getAllCategoryCounts, getAllSkillRefs, getSyncMeta } from '@/lib/skills/db'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { TOOLS } from '@/lib/tools/registry'
 
@@ -119,16 +121,6 @@ const STATIC_PAGES: readonly {
   },
 ]
 
-/**
- * Generated entirely from the two registries.
- *
- * `lastModified` comes from each entry's real dates and NEVER from
- * `new Date()`. A sitemap that claims every page changed today teaches Google to
- * ignore the signal completely — a common, entirely self-inflicted wound.
- * Tools carry an explicit `updatedAt`; prompts derive the same thing from
- * their changelog and verification stamps (see `promptLastModified`).
- */
-
 /** Latest of a set of ISO `YYYY-MM-DD` dates — lexical order is date order. */
 function newest(dates: readonly string[], fallback: string): string {
   return dates.reduce((latest, date) => (date > latest ? date : latest), fallback)
@@ -149,18 +141,32 @@ function promptLastModified(prompt: Prompt): string {
   )
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+/** The sitemap protocol caps a single file at 50,000 URLs. The Skills
+ * Library is sized to eventually hold the full skills.sh registry
+ * (~600k), so its URLs alone need many shards — everything else on the
+ * site fits one (id 0) many times over. */
+const SKILLS_PER_SHARD = 45_000
+
+export async function generateSitemaps() {
+  const { totalSkills } = await getSyncMeta()
+  const skillShardCount = Math.max(1, Math.ceil(totalSkills / SKILLS_PER_SHARD))
+  return Array.from({ length: 1 + skillShardCount }, (_, id) => ({ id }))
+}
+
+async function siteSitemap(): Promise<MetadataRoute.Sitemap> {
   const newestTool = TOOLS.reduce(
     (latest, t) => (t.updatedAt > latest ? t.updatedAt : latest),
     TOOLS[0]?.updatedAt ?? '2026-07-28',
   )
   const newestPrompt = newest(PROMPTS.map(promptLastModified), '2026-07-25')
 
-  // Only categories whose content wave has landed — empty ones 404 by design
-  // (see app/prompts/[category]/page.tsx's generateStaticParams).
   const livePromptCategories = PROMPT_CATEGORIES.filter(
     (c) => getPromptsByCategory(c.slug).length > 0,
   )
+
+  const [skillCounts, skillSyncMeta] = await Promise.all([getAllCategoryCounts(), getSyncMeta()])
+  const skillsLastModified = skillSyncMeta.lastSyncedAt ?? '2026-08-23'
+  const liveSkillCategories = SKILL_CATEGORIES.filter((c) => (skillCounts[c.slug] ?? 0) > 0)
 
   return [
     {
@@ -233,5 +239,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly' as const,
       priority: 0.6,
     })),
+    {
+      url: absoluteUrl('/skills'),
+      lastModified: skillsLastModified,
+      changeFrequency: 'daily',
+      priority: 0.8,
+    },
+    ...liveSkillCategories.map((c) => ({
+      url: absoluteUrl(`/skills/${c.slug}`),
+      lastModified: skillsLastModified,
+      changeFrequency: 'daily' as const,
+      priority: 0.7,
+    })),
   ]
+}
+
+async function skillsShardSitemap(shardIndex: number): Promise<MetadataRoute.Sitemap> {
+  const refs = await getAllSkillRefs(shardIndex * SKILLS_PER_SHARD, SKILLS_PER_SHARD)
+  return refs.map((ref) => ({
+    url: absoluteUrl(`/skills/${ref.category}/${ref.slug}`),
+    lastModified: ref.lastSyncedAt,
+    changeFrequency: 'weekly' as const,
+    priority: 0.5,
+  }))
+}
+
+export default async function sitemap({ id }: { id: number }): Promise<MetadataRoute.Sitemap> {
+  if (id === 0) return siteSitemap()
+  return skillsShardSitemap(id - 1)
 }

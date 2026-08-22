@@ -12,6 +12,13 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    # The Skills Library's build-time data (generateStaticParams,
+    # generateSitemaps) reads Supabase directly. The anon key is public by
+    # design (RLS-gated to read-only — see supabase/migrations/0001_create_skills.sql)
+    # so it's fine as a plain repo variable rather than a secret.
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
     steps:
       - uses: actions/checkout@v4
 

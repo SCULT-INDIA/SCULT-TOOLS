@@ -5,8 +5,8 @@ import { buildLlmsTxt } from '@/lib/seo/llms'
  * assembled; kept out of this file because a Next.js Route Handler may only
  * export HTTP method handlers.
  */
-export function GET(): Response {
-  return new Response(buildLlmsTxt(), {
+export async function GET(): Promise<Response> {
+  return new Response(await buildLlmsTxt(), {
     headers: {
       'Content-Type': 'text/markdown; charset=utf-8',
       // Registry-derived and rebuilt at deploy time — safe to cache for a day.

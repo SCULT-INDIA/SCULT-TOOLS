@@ -193,6 +193,18 @@ export function MobileDrawer({
           >
             Prompts
           </Link>
+          <Link
+            href="/skills"
+            onClick={() => setOpen(false)}
+            aria-current={
+              pathname === '/skills' || pathname.startsWith('/skills/') ? 'page' : undefined
+            }
+            className={`flex items-center justify-between rounded-sm px-2 py-2.5 font-medium text-[17px] hover:text-violet-600 ${
+              pathname === '/skills' || pathname.startsWith('/skills/') ? 'text-violet-700' : ''
+            }`}
+          >
+            Skills
+          </Link>
         </nav>
       </div>
     </>

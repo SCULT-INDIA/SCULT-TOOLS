@@ -1,0 +1,10 @@
+{
+  "name": "skills-sync-worker",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Standalone Vercel project that syncs the Skills Library's Supabase database from skills.sh's official v1 API. Deployed separately from the main tools.scult.in app (which is on Railway) because only a Vercel-deployed project can obtain the OIDC token that API requires.",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.112.3",
+    "@vercel/oidc": "^3.8.5"
+  }
+}

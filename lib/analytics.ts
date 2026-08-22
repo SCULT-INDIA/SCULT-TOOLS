@@ -117,6 +117,18 @@ export function trackPromptEvent(
   trackEvent('prompt_action', { category, prompt: promptSlug, action, ...extra })
 }
 
+/** Same shape again, for the Skills Library — kept as its own event name
+ * (`skill_action`) for the same reason `trackPromptEvent` is separate from
+ * `trackToolEvent`: distinct GA4 reports without a secondary filter. */
+export function trackSkillEvent(
+  category: string,
+  skillSlug: string,
+  action: string,
+  extra?: Record<string, string | number | boolean>,
+): void {
+  trackEvent('skill_action', { category, skill: skillSlug, action, ...extra })
+}
+
 /**
  * What a click on an outbound link to the parent site is worth recording.
  * `campaign` is the `utm_campaign` value `parentLink()` already stamped on

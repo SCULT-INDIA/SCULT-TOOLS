@@ -2,6 +2,7 @@ import type { BlogPost, Inline } from '@/lib/blog/types'
 import type { Guide } from '@/lib/guides/types'
 import type { Prompt, PromptCategory } from '@/lib/prompts/types'
 import { absoluteUrl, SITE } from '@/lib/site'
+import type { Skill } from '@/lib/skills/types'
 import type { Category, Tool } from '@/lib/tools/types'
 
 /**
@@ -235,6 +236,33 @@ function flattenInline(segments: readonly Inline[]): string {
 export function blogFaqJsonLd(post: BlogPost): object | null {
   if (!post.faq || post.faq.length === 0) return null
   return genericFaqJsonLd(post.faq.map((item) => ({ q: item.question, a: flattenInline(item.answer) })))
+}
+
+/**
+ * A skill is executable/procedural instructions sourced from a real,
+ * public third-party repository — `SoftwareSourceCode` fits better than
+ * `CreativeWork` (which `promptJsonLd`/`blogPostJsonLd` use for authored
+ * prose) precisely because a skill *is* code/config, not prose we wrote.
+ * `codeRepository` and `author` point at the REAL source, not Scult — this
+ * is the one JSON-LD node in this file that doesn't attribute to
+ * `PUBLISHER`, because Scult didn't write the content.
+ */
+export function skillJsonLd(skill: Skill): object {
+  const url = absoluteUrl(`/skills/${skill.category}/${skill.slug}`)
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareSourceCode',
+    '@id': `${url}#skill`,
+    name: skill.name,
+    url,
+    description: skill.description,
+    codeRepository: skill.sourceUrl,
+    author: { '@type': 'Person', name: skill.sourceOwner },
+    license: skill.license,
+    isAccessibleForFree: true,
+    inLanguage: SITE.locale,
+    dateModified: skill.lastSyncedAt,
+  }
 }
 
 /** Renders a JSON-LD script tag. Input is always our own static config. */
