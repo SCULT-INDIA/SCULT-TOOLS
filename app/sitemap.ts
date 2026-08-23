@@ -148,7 +148,7 @@ function promptLastModified(prompt: Prompt): string {
  * sized to eventually hold the full skills.sh registry (~600k), so its
  * URLs alone need many shards at this cap (12 shards at 600k); everything
  * else on the site fits one (id 0) many times over. */
-const SKILLS_PER_SHARD = 50_000
+export const SKILLS_PER_SHARD = 50_000
 
 export async function generateSitemaps() {
   const { totalSkills } = await getSyncMeta()

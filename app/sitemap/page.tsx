@@ -7,6 +7,7 @@ import { getCategoriesByGroup, PROMPT_GROUPS } from '@/lib/prompts/categories'
 import { getPromptsByCategory, PROMPTS } from '@/lib/prompts/registry'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
+import { SKILLS_PER_SHARD } from '@/app/sitemap'
 import { SKILL_CATEGORIES } from '@/lib/skills/categories'
 import { getAllCategoryCounts, getSyncMeta, getTotalSkillCount } from '@/lib/skills/db'
 import { CATEGORIES } from '@/lib/tools/categories'
@@ -14,7 +15,7 @@ import { getToolsByCategory, TOOLS } from '@/lib/tools/registry'
 
 const TITLE = 'Sitemap'
 const DESCRIPTION =
-  'Every page on Scult Tools in one place — every tool, prompt category, guide and trust page, plus links to the machine-readable robots.txt, sitemap.xml and llms.txt.'
+  'Every page on Scult Tools in one place — every tool, prompt category, skill category, guide and trust page, plus links to the machine-readable robots.txt, XML sitemap and llms.txt.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -48,16 +49,11 @@ const TRUST_PAGES: readonly { href: string; label: string }[] = [
   { href: '/collections', label: 'Tool Collections' },
 ]
 
-const MACHINE_PAGES: readonly { href: string; label: string; note: string }[] = [
-  {
-    href: '/sitemap.xml',
-    label: 'XML sitemap',
-    note: 'every URL with a real last-modified date',
-  },
+const STATIC_MACHINE_PAGES: readonly { href: string; label: string; note: string }[] = [
   {
     href: '/robots.txt',
     label: 'robots.txt',
-    note: 'explicit allow rules for GPTBot, ClaudeBot, PerplexityBot and the rest',
+    note: 'explicit allow rules for GPTBot, ClaudeBot, PerplexityBot and the rest — also lists every sitemap shard below',
   },
   { href: '/llms.txt', label: 'llms.txt', note: 'a curated link map for AI systems' },
   {
@@ -94,7 +90,9 @@ const BLOG_PILLARS: readonly BlogPillar[] = [
 ]
 
 /**
- * The detailed, human-readable counterpart to `/sitemap.xml`.
+ * The detailed, human-readable counterpart to the XML sitemap (which is
+ * sharded across /sitemap/0.xml, /sitemap/1.xml, … once the Skills Library
+ * needs more than one file — see app/sitemap.ts).
  *
  * Every list here is generated from the same registries that drive routing,
  * the footer and `llms.txt` — nothing on this page is a hand-kept snapshot
@@ -118,6 +116,21 @@ export default async function SitemapPage() {
     count: skillCounts[category.slug] ?? 0,
   })).filter(({ count }) => count > 0)
 
+  // The sitemap is sharded (see app/sitemap.ts's generateSitemaps) — once
+  // sharded, there's no bare /sitemap.xml, only /sitemap/0.xml,
+  // /sitemap/1.xml, etc., so every real shard is listed here rather than
+  // one hardcoded path that would 404 the moment a new shard appears.
+  const skillShardCount = Math.max(1, Math.ceil(totalSkills / SKILLS_PER_SHARD))
+  const sitemapShards = Array.from({ length: 1 + skillShardCount }, (_, id) => ({
+    href: `/sitemap/${id}.xml`,
+    label: id === 0 ? 'XML sitemap — site pages' : `XML sitemap — skills, shard ${id}`,
+    note:
+      id === 0
+        ? 'tools, prompts, guides, blog, and every static page, with real last-modified dates'
+        : 'up to 50,000 skill URLs, with real sync dates',
+  }))
+  const machinePages = [...sitemapShards, ...STATIC_MACHINE_PAGES]
+
   return (
     <>
       <JsonLd
@@ -139,7 +152,7 @@ export default async function SitemapPage() {
         </p>
         <p className="mt-3 max-w-[62ch] text-[15px] text-ink-muted">
           Prefer a machine-readable version?{' '}
-          {MACHINE_PAGES.map((page, i) => (
+          {machinePages.map((page, i) => (
             <span key={page.href}>
               {i > 0 && ', '}
               <a href={page.href} className={LINK_CLASS}>
@@ -366,7 +379,7 @@ export default async function SitemapPage() {
           fetch.
         </p>
         <ul className="mt-4 space-y-3">
-          {MACHINE_PAGES.map((page) => (
+          {machinePages.map((page) => (
             <li key={page.href} className="card-flat p-4">
               <a href={page.href} className={`font-medium ${LINK_CLASS}`}>
                 {page.href}

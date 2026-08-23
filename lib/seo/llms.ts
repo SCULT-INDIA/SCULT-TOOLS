@@ -221,7 +221,7 @@ export async function buildLlmsTxt(): Promise<string> {
   lines.push(
     '',
     '## Machine-readable',
-    `- [XML sitemap](${absoluteUrl('/sitemap.xml')}): every URL on the site with a real last-modified date.`,
+    `- [XML sitemap](${absoluteUrl('/sitemap/0.xml')}): every non-skill URL on the site with a real last-modified date — the Skills Library's own URLs are sharded across further numbered files listed in robots.txt.`,
     `- [robots.txt](${absoluteUrl('/robots.txt')}): explicit allow rules for GPTBot, ClaudeBot, PerplexityBot and the rest of the AI crawler roster.`,
     `- [llms-full.txt](${absoluteUrl('/llms-full.txt')}): the same map, with full tool and guide detail inlined for a single-fetch context load.`,
   )
@@ -287,7 +287,7 @@ export async function buildLlmsFullTxt(): Promise<string> {
   lines.push(
     '',
     '## Machine-readable',
-    `- [XML sitemap](${absoluteUrl('/sitemap.xml')}): every URL on the site with a real last-modified date.`,
+    `- [XML sitemap](${absoluteUrl('/sitemap/0.xml')}): every non-skill URL on the site with a real last-modified date — the Skills Library's own URLs are sharded across further numbered files listed in robots.txt.`,
     `- [robots.txt](${absoluteUrl('/robots.txt')}): explicit allow rules for GPTBot, ClaudeBot, PerplexityBot and the rest of the AI crawler roster.`,
     `- [llms.txt](${absoluteUrl('/llms.txt')}): the same map, link-level only, for a lighter-weight fetch.`,
   )

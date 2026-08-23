@@ -1,6 +1,8 @@
 import type { MetadataRoute } from 'next'
 import { absoluteUrl } from '@/lib/site'
+import { getSyncMeta } from '@/lib/skills/db'
 import { AI_BOTS } from '@/lib/tools/ai-visibility-checker/logic'
+import { SKILLS_PER_SHARD } from '@/app/sitemap'
 
 /**
  * `Allow: /` under `User-agent: *` already permits every crawler, AI or
@@ -22,7 +24,19 @@ import { AI_BOTS } from '@/lib/tools/ai-visibility-checker/logic'
  * app/layout.tsx's robots metadata for the page-level directive — pre-declared
  * here even though the route does not exist yet).
  */
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  // `generateSitemaps()` in app/sitemap.ts shards the sitemap once the
+  // Skills Library needs more than one file (50,000 URLs each) — that
+  // changes the real served URLs to /sitemap/0.xml, /sitemap/1.xml, … with
+  // no bare /sitemap.xml at all, so every shard has to be listed here
+  // explicitly rather than pointing at a single hardcoded path that 404s
+  // the moment sharding kicks in.
+  const { totalSkills } = await getSyncMeta()
+  const skillShardCount = Math.max(1, Math.ceil(totalSkills / SKILLS_PER_SHARD))
+  const sitemapUrls = Array.from({ length: 1 + skillShardCount }, (_, id) =>
+    absoluteUrl(`/sitemap/${id}.xml`),
+  )
+
   return {
     rules: [
       {
@@ -35,7 +49,7 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
       })),
     ],
-    sitemap: absoluteUrl('/sitemap.xml'),
+    sitemap: sitemapUrls,
     host: absoluteUrl('/'),
   }
 }
