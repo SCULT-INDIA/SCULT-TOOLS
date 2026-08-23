@@ -85,7 +85,11 @@ export default async function SkillsPage() {
 
         <nav aria-label="Jump to category" className="mt-8 flex flex-wrap gap-2">
           {categoriesWithCounts.map(({ category }) => (
-            <a key={category.slug} href={`#${category.slug}`} className="chip-tool px-4 py-2 text-[14px]">
+            <a
+              key={category.slug}
+              href={`#${category.slug}`}
+              className="rounded-full border border-line-grey bg-white px-4 py-2 font-medium text-[14px] text-ink-body transition-colors hover:border-violet-300 hover:text-violet-700"
+            >
               {category.name}
             </a>
           ))}

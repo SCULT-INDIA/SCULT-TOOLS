@@ -6,6 +6,7 @@ import { CategoryTabs } from '@/components/sections/CategoryTabs'
 import { ContactAndCta } from '@/components/sections/ContactAndCta'
 import { Hero } from '@/components/sections/Hero'
 import { PromptLibrarySpotlight } from '@/components/sections/PromptLibrarySpotlight'
+import { SkillLibrarySpotlight } from '@/components/sections/SkillLibrarySpotlight'
 import { SecondaryHero } from '@/components/sections/SecondaryHero'
 import { TechMarquee } from '@/components/sections/TechMarquee'
 import { ToolShowcaseMarquee } from '@/components/sections/ToolShowcaseMarquee'
@@ -75,7 +76,7 @@ function homeFaqJsonLd(): object {
   }
 }
 
-export default function Home() {
+export default async function Home() {
   const clientSide = TOOLS.filter((t) => t.runsInBrowser).length
   const toolsByCategory = Object.fromEntries(
     CATEGORIES.map((c) => [
@@ -113,6 +114,11 @@ export default function Home() {
           The site's second catalogue gets the same homepage billing as the
           tools — pitch + official brand-logo wall, linking to /prompts. */}
       <PromptLibrarySpotlight />
+
+      {/* ============================================== 5c. SKILLS LIBRARY SPOTLIGHT
+          The site's third catalogue — same homepage billing, live count
+          from Supabase since this one grows daily instead of at deploy time. */}
+      <SkillLibrarySpotlight />
 
       {/* 6. FULL SERVICE GRID — removed at the user's request. */}
 

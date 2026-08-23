@@ -107,7 +107,7 @@ async function SkillGrid({
           {page > 1 ? (
             <Link
               href={page - 1 === 1 ? `/skills/${category.slug}` : `/skills/${category.slug}?page=${page - 1}`}
-              className="chip-tool px-4 py-2 text-[14px]"
+              className="rounded-full border border-line-grey bg-white px-4 py-2 font-medium text-[14px] text-ink-body transition-colors hover:border-violet-300 hover:text-violet-700"
             >
               ← Previous
             </Link>
@@ -116,7 +116,10 @@ async function SkillGrid({
             Page {page.toLocaleString()} of {totalPages.toLocaleString()}
           </span>
           {page < totalPages ? (
-            <Link href={`/skills/${category.slug}?page=${page + 1}`} className="chip-tool px-4 py-2 text-[14px]">
+            <Link
+              href={`/skills/${category.slug}?page=${page + 1}`}
+              className="rounded-full border border-line-grey bg-white px-4 py-2 font-medium text-[14px] text-ink-body transition-colors hover:border-violet-300 hover:text-violet-700"
+            >
               Next →
             </Link>
           ) : null}
@@ -173,26 +176,26 @@ export default async function SkillCategoryPage({
           </ol>
         </nav>
 
-        <header
-          className={`rounded-panel border border-ink p-6 shadow-brutal md:p-9 ${TILE_BG[category.tile]}`}
-        >
+        <header className="rounded-3xl border border-line-grey bg-white p-7 shadow-xs md:p-10">
           <div className="flex flex-wrap items-center gap-4">
-            <span className="flex size-16 shrink-0 items-center justify-center rounded-2xl border border-ink/10 bg-white shadow-[0_2px_8px_rgb(0_0_0/0.08)]">
-              <Icon name={category.icon} className="size-8 text-violet-700" />
+            <span
+              className={`flex size-14 shrink-0 items-center justify-center rounded-2xl ${TILE_BG[category.tile]}`}
+            >
+              <Icon name={category.icon} className="size-6 text-violet-700" />
             </span>
             <div>
-              <p className="font-bold text-[12px] text-black/60 uppercase tracking-[0.14em]">
+              <p className="font-semibold text-[12px] text-ink-subtle uppercase tracking-[0.14em]">
                 {count.toLocaleString()} free {count === 1 ? 'skill' : 'skills'}
               </p>
-              <h1 className="mt-1 text-[34px] text-black leading-[1.05] tracking-[-1px] md:text-[46px]">
+              <h1 className="mt-1 text-[30px] leading-[1.1] tracking-[-0.5px] md:text-[38px]">
                 {category.name} skills
               </h1>
             </div>
           </div>
-          <p className="mt-5 max-w-[64ch] text-[16px] text-black/70 leading-7 md:text-[17px]">
+          <p className="mt-5 max-w-[64ch] text-[16px] text-ink-muted leading-7">
             {category.intro}
           </p>
-          <p className="mt-4 flex items-center gap-1.5 font-medium text-[13.5px] text-black/70">
+          <p className="mt-4 flex items-center gap-1.5 font-medium text-[13.5px] text-ink-subtle">
             <BadgeCheck className="size-4 text-green" aria-hidden="true" />
             Sourced from real, public repositories — synced daily, never invented.
           </p>
@@ -211,8 +214,12 @@ export default async function SkillCategoryPage({
         </h2>
         <div className="mt-4 flex flex-wrap gap-3">
           {siblings.map((s) => (
-            <Link key={s.slug} href={`/skills/${s.slug}`} className="chip-tool max-w-sm text-[15px]">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-[9px] border border-line-grey bg-white">
+            <Link
+              key={s.slug}
+              href={`/skills/${s.slug}`}
+              className="flex max-w-sm items-center gap-2.5 rounded-full border border-line-grey bg-white px-3.5 py-2 text-[15px] transition-colors hover:border-violet-300"
+            >
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-offwhite">
                 <Icon name={s.icon} className="size-4 text-violet-700" />
               </span>
               <span>
@@ -221,7 +228,10 @@ export default async function SkillCategoryPage({
               </span>
             </Link>
           ))}
-          <Link href="/skills" className="chip-tool text-[15px]">
+          <Link
+            href="/skills"
+            className="flex items-center rounded-full border border-line-grey bg-white px-3.5 py-2 text-[15px] transition-colors hover:border-violet-300"
+          >
             <span className="font-medium">All skills</span>
           </Link>
         </div>

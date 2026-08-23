@@ -1,5 +1,6 @@
-import { Download, ShieldAlert } from 'lucide-react'
+import { Download } from 'lucide-react'
 import Link from 'next/link'
+import { BrandIcon, brandForTag } from '@/components/ui/BrandIcon'
 import { Icon } from '@/components/ui/Icon'
 import type { Skill, SkillCategory } from '@/lib/skills/types'
 
@@ -17,54 +18,58 @@ function formatInstalls(n: number): string {
 }
 
 /**
- * The Skills Library's card. Unlike `PromptCard`, there's no single "brand"
- * to lead with — a skill is sourced from one of thousands of GitHub repos,
- * not one of a fixed set of AI models — so the category icon/tile leads
- * instead, and the real `installs` count + source repo take the trust-signal
- * role `verifiedAgainst` plays on a `PromptCard`.
+ * The Skills Library's card — deliberately calmer than `PromptCard`'s
+ * brutalist `.chip-tool` (thick border, hard offset shadow): at this
+ * volume the grid needs to read as a clean, scannable directory rather
+ * than a wall of bordered boxes, so this uses `.card-modern` (soft border,
+ * layered shadow, gentle lift) instead. A skill has no single "brand" the
+ * way a prompt targets one AI model, so the tech-stack row (real brand
+ * marks parsed from the skill's own `tags`) carries that visual-recognition
+ * role instead — the same one-glance "what is this actually for" signal a
+ * logo gives on `PromptCard`.
  */
 export function SkillCard({ skill, category }: { skill: Skill; category: SkillCategory }) {
+  const techBrands = [...new Set(skill.tags.map(brandForTag).filter((b): b is string => b !== null))].slice(0, 3)
+
   return (
     <Link
       href={`/skills/${skill.category}/${skill.slug}`}
-      className="chip-tool group flex-col items-start gap-3 p-5"
+      className="card-modern group flex flex-col gap-3 p-5"
     >
-      <span className="flex w-full items-start gap-3.5">
+      <div className="flex items-start gap-3">
         <span
-          className={`flex size-11 shrink-0 items-center justify-center rounded-[14px] border border-ink/10 ${TILE_BG[category.tile]}`}
+          className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${TILE_BG[category.tile]}`}
         >
-          <Icon name={category.icon} className="size-5 text-violet-700" />
+          <Icon name={category.icon} className="size-4.5 text-violet-700" />
         </span>
-        <span className="min-w-0 flex-1">
-          <span className="block font-display font-semibold text-[17px] leading-[1.3] tracking-normal transition-colors group-hover:text-violet-700">
+        <div className="min-w-0 flex-1">
+          <p className="truncate font-semibold text-[15.5px] text-ink leading-[1.3] transition-colors group-hover:text-violet-700">
             {skill.name}
-          </span>
-          <span className="mt-0.5 block truncate text-[12.5px] text-ink-subtle">
+          </p>
+          <p className="mt-0.5 truncate text-[12.5px] text-ink-subtle">
             {skill.sourceOwner}/{skill.sourceRepo}
-          </span>
-        </span>
-      </span>
+          </p>
+        </div>
+      </div>
 
-      <span className="line-clamp-3 text-[14px] text-ink-muted leading-5">
-        {skill.description}
-      </span>
+      <p className="line-clamp-2 text-[13.5px] text-ink-muted leading-[1.5]">{skill.description}</p>
 
-      <span className="mt-auto flex w-full items-center gap-3 pt-1 text-[12px] text-ink-subtle">
-        <span className="flex items-center gap-1">
+      <div className="mt-auto flex items-center justify-between gap-3 pt-1">
+        <div className="flex items-center gap-1">
+          {techBrands.map((brand) => (
+            <span
+              key={brand}
+              className="flex size-6 items-center justify-center rounded-full bg-offwhite ring-1 ring-black/[0.04]"
+            >
+              <BrandIcon brand={brand} size={13} />
+            </span>
+          ))}
+        </div>
+        <span className="flex items-center gap-1 text-[12px] text-ink-subtle">
           <Download className="size-3.5" aria-hidden="true" />
-          {formatInstalls(skill.installs)} installs
+          {formatInstalls(skill.installs)}
         </span>
-        {skill.licenseGated ? (
-          <span className="flex items-center gap-1">
-            <ShieldAlert className="size-3.5" aria-hidden="true" />
-            View on GitHub
-          </span>
-        ) : skill.license ? (
-          <span className="ml-auto rounded-pill border border-line-grey bg-offwhite px-2 py-0.5">
-            {skill.license}
-          </span>
-        ) : null}
-      </span>
+      </div>
     </Link>
   )
 }

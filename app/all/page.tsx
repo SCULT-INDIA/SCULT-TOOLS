@@ -58,7 +58,14 @@ export default function AllToolsPage() {
           >
             The prompt library
           </Link>{' '}
-          has {PROMPTS.length} of those, also free.
+          has {PROMPTS.length} of those, also free. Or browse{' '}
+          <Link
+            href="/skills"
+            className="text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4 hover:text-violet-600"
+          >
+            the skills library
+          </Link>{' '}
+          for real, daily-synced AI agent skills.
         </p>
 
         <nav aria-label="Jump to category" className="mt-7 flex flex-wrap gap-2">
