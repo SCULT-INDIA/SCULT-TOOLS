@@ -54,7 +54,11 @@ jobs:
               break
             fi
 
-            sleep 5
+            # No real pacing needed here — sync.js's own rate limiter already
+            # paces requests to skills.sh within each invocation; this is
+            # just enough gap for the previous Vercel invocation to fully
+            # tear down before the next one starts.
+            sleep 1
           done
 
           echo "Done for this run. Total processed: $total_processed"

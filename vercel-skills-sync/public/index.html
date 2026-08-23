@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Skills Library sync-worker</title>
+  <style>
+    body { font: 15px/1.6 -apple-system, system-ui, sans-serif; max-width: 640px; margin: 60px auto; padding: 0 20px; color: #222; }
+    code { background: #f2f2f2; padding: 2px 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Skills Library sync-worker</h1>
+  <p>
+    This is a headless worker, not a website — it has no page to browse.
+    Its only job is <code>POST /api/sync</code> (with a Bearer token),
+    which calls skills.sh's official API and writes real skills into the
+    Supabase database that <a href="https://tools.scult.in/skills">tools.scult.in/skills</a>
+    reads from.
+  </p>
+  <p>
+    It's driven by a scheduled GitHub Actions workflow in the main repo
+    and a daily Vercel Cron as a backup. See <code>vercel-skills-sync/README.md</code>
+    in the repo for how it works.
+  </p>
+</body>
+</html>

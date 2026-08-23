@@ -35,9 +35,27 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
 const CRON_SECRET = process.env.CRON_SECRET
 const SKILLS_SH_BASE = 'https://www.skills.sh/api/v1'
 
-const PAGES_PER_INVOCATION = 3
 const PER_PAGE = 100
-const DETAIL_CONCURRENCY = 15
+const DETAIL_CONCURRENCY = 30
+// skills.sh's official API is documented at 600 requests/minute per
+// (team, project). Rather than cap concurrency low to stay under that (which
+// wastes the window whenever a request is slow), a sliding-window limiter
+// paces the ACTUAL requests to ~90% of the documented cap — concurrency can
+// stay high because the limiter, not queue depth, is what governs throughput.
+const RATE_LIMIT_PER_MINUTE = 540
+const RATE_LIMIT_WINDOW_MS = 60_000
+// maxDuration is 60s (vercel.json). This budget has to leave room not just
+// for the final Supabase writes but for the WORST-CASE TAIL of whatever's
+// already in flight when the deadline check fires: mapConcurrent stops
+// starting new items past this budget, but up to DETAIL_CONCURRENCY items
+// already started can each still take up to LICENSE_FETCH_TIMEOUT_MS * 6
+// (two branches x three filenames) before fetchRootLicense gives up. That
+// tail, not the budget itself, is what caused the first two production
+// deploys to hit FUNCTION_INVOCATION_TIMEOUT — 52s budget + a 30s tail
+// (5s x 6) safely exceeds the 60s hard limit.
+const LICENSE_FETCH_TIMEOUT_MS = 2_000
+const TIME_BUDGET_MS = 60_000 - LICENSE_FETCH_TIMEOUT_MS * 6 - 6_000 // ~42s
+const MAX_RETRIES = 4
 
 // Mirrors lib/skills/categories.ts's (slug, seedQueries) pairs in the main
 // repo — duplicated here because this is a separate deployable project
@@ -113,6 +131,33 @@ function classifyLicense(frontmatter, files) {
   return { license: stated || null, licenseGated: true }
 }
 
+/**
+ * Most single-skill repos put LICENSE at the repo ROOT, not next to
+ * SKILL.md — the official API's per-skill `files[]` only covers the
+ * skill's own directory, so a root-level license was invisible to
+ * `classifyLicense` and made the large majority of skills look
+ * unlicensed when they're actually MIT/Apache/etc. This is a plain CDN
+ * fetch (raw.githubusercontent.com), not an API call, so it doesn't touch
+ * any rate limit the way the old legacy-endpoint scraping did.
+ */
+async function fetchRootLicense(sourceOwner, sourceRepo) {
+  for (const branch of ['main', 'master']) {
+    for (const name of ['LICENSE', 'LICENSE.txt', 'LICENSE.md']) {
+      try {
+        const res = await fetch(`https://raw.githubusercontent.com/${sourceOwner}/${sourceRepo}/${branch}/${name}`, {
+          signal: AbortSignal.timeout(LICENSE_FETCH_TIMEOUT_MS),
+        })
+        if (res.ok) return { path: name, contents: await res.text() }
+      } catch {
+        // try the next branch/filename — a slow/hanging request here must
+        // not be allowed to stall an entire batch past the function's
+        // duration limit (this is what caused the first deploy's timeout)
+      }
+    }
+  }
+  return null
+}
+
 function toSlug(sourceSkillId) {
   return sourceSkillId
     .toLowerCase()
@@ -120,35 +165,106 @@ function toSlug(sourceSkillId) {
     .replace(/^-+|-+$/g, '')
 }
 
-async function fetchV1(token, path) {
-  const res = await fetch(`${SKILLS_SH_BASE}${path}`, {
-    headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
-  })
-  if (!res.ok) throw new Error(`skills.sh ${path} -> HTTP ${res.status}`)
-  return res.json()
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-async function mapConcurrent(items, concurrency, worker) {
+/**
+ * Sliding-window limiter shared by every call to the official API — this
+ * is what lets DETAIL_CONCURRENCY be set high without actually exceeding
+ * skills.sh's documented per-minute cap. It's a module-level singleton, so
+ * its window PERSISTS across invocations that land on the same warm
+ * container (which the GH Actions loop-driver's rapid repeat calls make
+ * common) — a prior invocation's usage can leave the window near-full,
+ * meaning `acquire()` might need to wait most of a minute for it to roll
+ * over. Left unbounded, that wait — not the request itself — is what blew
+ * through Vercel's hard function-duration limit in earlier deploys:
+ * `acquire()` must give up once waiting would exceed what's left of THIS
+ * invocation's own budget, rather than sleep past it with no visibility
+ * into the caller's deadline.
+ */
+function createRateLimiter(maxPerWindow, windowMs) {
+  const timestamps = []
+  return async function acquire(deadlineAt) {
+    while (true) {
+      const now = Date.now()
+      while (timestamps.length > 0 && now - timestamps[0] > windowMs) timestamps.shift()
+      if (timestamps.length < maxPerWindow) {
+        timestamps.push(now)
+        return
+      }
+      const waitMs = windowMs - (now - timestamps[0]) + 10
+      if (deadlineAt && now + waitMs > deadlineAt) {
+        throw new Error('rate-limit wait would exceed remaining time budget')
+      }
+      await sleep(waitMs)
+    }
+  }
+}
+
+const acquireSlot = createRateLimiter(RATE_LIMIT_PER_MINUTE, RATE_LIMIT_WINDOW_MS)
+
+function backoffMs(attempt) {
+  return Math.min(8_000, 500 * 2 ** (attempt - 1)) + Math.random() * 250
+}
+
+async function fetchV1(token, path, deadlineAt) {
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    await acquireSlot(deadlineAt)
+    const res = await fetch(`${SKILLS_SH_BASE}${path}`, {
+      headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
+    })
+    if (res.status === 429 && attempt < MAX_RETRIES) {
+      const retryAfter = Number(res.headers.get('retry-after'))
+      await sleep(retryAfter > 0 ? retryAfter * 1000 : backoffMs(attempt))
+      continue
+    }
+    if (!res.ok) throw new Error(`skills.sh ${path} -> HTTP ${res.status}`)
+    return res.json()
+  }
+  throw new Error(`skills.sh ${path} -> exhausted retries`)
+}
+
+/**
+ * `timeLeft` is optional — when given, no NEW item starts once it returns
+ * <= 0 (items already in flight still finish; each is individually bounded
+ * by fetchV1/fetchRootLicense's own timeouts, so the real worst-case tail
+ * is bounded too). Without this, a batch whose item count doesn't divide
+ * evenly by `concurrency` — the curated set, which has no per-page budget
+ * check the way the cursor loop does — has no way to stop itself before
+ * Vercel's own hard function-duration limit kills the whole invocation
+ * mid-write, which is what caused the first production deploy's timeout.
+ */
+async function mapConcurrent(items, concurrency, worker, timeLeft) {
   let next = 0
+  let ranOutOfTime = false
   async function run() {
     while (next < items.length) {
+      if (timeLeft && timeLeft() <= 0) {
+        ranOutOfTime = true
+        return
+      }
       const item = items[next++]
       await worker(item)
     }
   }
   await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, run))
+  return { completed: !ranOutOfTime }
 }
 
-async function upsertSkillFromListing(supabase, token, item) {
+async function upsertSkillFromListing(supabase, token, item, deadlineAt) {
+  if (!item?.id || typeof item.source !== 'string' || !item.source.includes('/')) {
+    return { ok: false, error: `malformed item: ${JSON.stringify(item)}` }
+  }
   const [sourceOwner, ...repoRest] = item.source.split('/')
   const sourceRepo = repoRest.join('/')
   const skillId = item.slug ?? item.skillId ?? item.name
 
   let detail
   try {
-    detail = await fetchV1(token, `/skills/${sourceOwner}/${sourceRepo}/${skillId}`)
-  } catch {
-    return { ok: false }
+    detail = await fetchV1(token, `/skills/${sourceOwner}/${sourceRepo}/${skillId}`, deadlineAt)
+  } catch (err) {
+    return { ok: false, error: err.message }
   }
   const files = detail?.files
   if (!files) return { ok: false }
@@ -161,7 +277,15 @@ async function upsertSkillFromListing(supabase, token, item) {
   const description = frontmatter.description || ''
   if (!description) return { ok: false } // no real trigger-phrase description — skip, don't invent one
 
-  const { license, licenseGated } = classifyLicense(frontmatter, files)
+  let { license, licenseGated } = classifyLicense(frontmatter, files)
+  if (licenseGated) {
+    const rootLicense = await fetchRootLicense(sourceOwner, sourceRepo)
+    if (rootLicense) {
+      const reclassified = classifyLicense(frontmatter, [...files, rootLicense])
+      license = reclassified.license
+      licenseGated = reclassified.licenseGated
+    }
+  }
   const tags = (frontmatter.tags || '')
     .replace(/^\[|\]$/g, '')
     .split(',')
@@ -207,6 +331,10 @@ export default async function handler(req, res) {
     return
   }
 
+  const startedAt = Date.now()
+  const timeLeft = () => TIME_BUDGET_MS - (Date.now() - startedAt)
+  const deadlineAt = startedAt + TIME_BUDGET_MS
+
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
   const token = await getVercelOidcToken()
 
@@ -217,26 +345,54 @@ export default async function handler(req, res) {
 
   let processed = 0
   let failed = 0
+  let pagesThisRun = 0
   const errors = []
 
   if (!curatedDone) {
     try {
-      const curated = await fetchV1(token, '/skills/curated')
-      const items = (curated.data ?? curated.skills ?? []).filter((it) => !it.isDuplicate)
-      await mapConcurrent(items, DETAIL_CONCURRENCY, async (item) => {
-        const result = await upsertSkillFromListing(supabase, token, item)
-        if (result.ok) processed++
-        else failed++
-      })
-      curatedDone = true
+      const curated = await fetchV1(token, '/skills/curated', deadlineAt)
+      // The real shape is grouped by owner ({owner, featuredRepo, skills:
+      // [...]}), not a flat list of skill items — each group's own `skills`
+      // array is what actually matches the leaderboard's per-item shape
+      // (id/slug/source/installs/isDuplicate).
+      const groups = curated.data ?? curated.skills ?? []
+      const items = groups.flatMap((group) => group.skills ?? [group]).filter((it) => !it.isDuplicate)
+      const { completed } = await mapConcurrent(
+        items,
+        DETAIL_CONCURRENCY,
+        async (item) => {
+          let result
+          try {
+            result = await upsertSkillFromListing(supabase, token, item, deadlineAt)
+          } catch (err) {
+            result = { ok: false, error: err.message }
+          }
+          if (result.ok) processed++
+          else {
+            failed++
+            if (result.error && errors.length < 20) errors.push(String(result.error))
+          }
+        },
+        timeLeft,
+      )
+      // Only mark curated as done once every item was actually attempted —
+      // if the time budget ran out mid-batch, the next invocation must
+      // retry curated rather than silently skip whatever wasn't reached.
+      curatedDone = completed
     } catch (err) {
       errors.push(`curated: ${err.message}`)
     }
-  } else if (!cursorDone) {
-    for (let i = 0; i < PAGES_PER_INVOCATION; i++) {
+  }
+
+  // Uses whatever time is left after curated (if this was the first-ever
+  // invocation) to make as much cursor progress as the budget allows,
+  // rather than a fixed page count that leaves the window under-used on
+  // fast pages or gets killed mid-page on slow ones.
+  if (curatedDone && !cursorDone) {
+    while (timeLeft() > 8_000) {
       let listing
       try {
-        listing = await fetchV1(token, `/skills?page=${cursorPage + 1}&perPage=${PER_PAGE}`)
+        listing = await fetchV1(token, `/skills?page=${cursorPage + 1}&perPage=${PER_PAGE}`, deadlineAt)
       } catch (err) {
         errors.push(`page ${cursorPage + 1}: ${err.message}`)
         break
@@ -247,13 +403,33 @@ export default async function handler(req, res) {
         break
       }
 
-      await mapConcurrent(items, DETAIL_CONCURRENCY, async (item) => {
-        const result = await upsertSkillFromListing(supabase, token, item)
-        if (result.ok) processed++
-        else failed++
-      })
+      const { completed } = await mapConcurrent(
+        items,
+        DETAIL_CONCURRENCY,
+        async (item) => {
+          let result
+          try {
+            result = await upsertSkillFromListing(supabase, token, item, deadlineAt)
+          } catch (err) {
+            result = { ok: false, error: err.message }
+          }
+          if (result.ok) processed++
+          else {
+            failed++
+            if (result.error && errors.length < 20) errors.push(String(result.error))
+          }
+        },
+        timeLeft,
+      )
+
+      // Only advance past this page if every item on it was actually
+      // attempted — otherwise the next invocation must retry the SAME
+      // page (cursorPage unchanged) rather than silently skip whatever
+      // this page's batch didn't reach before time ran out.
+      if (!completed) break
 
       cursorPage++
+      pagesThisRun++
       if (!listing.pagination?.hasMore) {
         cursorDone = true
         break
@@ -274,10 +450,12 @@ export default async function handler(req, res) {
   res.status(200).json({
     processed,
     failed,
+    pagesThisRun,
     cursorPage,
     cursorDone,
     curatedDone,
     totalSkills: count ?? 0,
+    elapsedMs: Date.now() - startedAt,
     errors,
   })
 }

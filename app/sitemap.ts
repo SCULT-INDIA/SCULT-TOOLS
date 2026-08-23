@@ -141,11 +141,14 @@ function promptLastModified(prompt: Prompt): string {
   )
 }
 
-/** The sitemap protocol caps a single file at 50,000 URLs. The Skills
- * Library is sized to eventually hold the full skills.sh registry
- * (~600k), so its URLs alone need many shards — everything else on the
- * site fits one (id 0) many times over. */
-const SKILLS_PER_SHARD = 45_000
+/** The sitemap protocol's real cap: 50,000 URLs per file (also well under
+ * its 50MB-uncompressed size limit at this entry size) — used in full
+ * rather than left with headroom, so every shard is maxed out and the
+ * total shard count stays as low as the spec allows. The Skills Library is
+ * sized to eventually hold the full skills.sh registry (~600k), so its
+ * URLs alone need many shards at this cap (12 shards at 600k); everything
+ * else on the site fits one (id 0) many times over. */
+const SKILLS_PER_SHARD = 50_000
 
 export async function generateSitemaps() {
   const { totalSkills } = await getSyncMeta()
