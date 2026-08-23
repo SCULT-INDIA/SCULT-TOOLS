@@ -273,6 +273,7 @@ export async function GET(request: Request): Promise<NextResponse> {
     html: home.body,
     ...(home.xRobotsTag !== undefined ? { xRobotsTag: home.xRobotsTag } : {}),
     ...(sitemapProbeStatus !== undefined ? { sitemapProbeStatus } : {}),
+    isHttps: home.finalUrl.startsWith('https://'),
   })
 
   return NextResponse.json(report, {

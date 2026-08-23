@@ -33,6 +33,7 @@ import { BrandIcon, brandForCompany } from '@/components/ui/BrandIcon'
 import { trackToolEvent } from '@/lib/analytics'
 import { downloadTextFile, slugifyUrlForFilename } from '@/lib/download-file'
 import { SITE } from '@/lib/site'
+import { generatePdfHtml } from '@/lib/tools/ai-visibility-checker/pdf-template'
 import {
   AI_BOTS,
   type ApiError,
@@ -577,6 +578,11 @@ const CHECK_WEIGHT: Record<CheckId, number> = {
   'llms-txt': 10,
   sitemap: 10,
   noai: 0,
+  https: 0,
+  'mobile-viewport': 0,
+  'schema-richness': 0,
+  'author-signals': 0,
+  'twitter-card': 0,
 }
 
 /**
@@ -664,6 +670,115 @@ function DownloadMarkdownButton({ report }: { report: VisibilityReport }) {
   )
 }
 
+/**
+ * Opens the professional A4 PDF report in a new browser tab.
+ * The user presses Ctrl+P (or the "Save as PDF" button injected by the
+ * template) to produce a file — no new npm dependency, no server round-trip,
+ * and the result is a proper document layout (not a webpage screenshot).
+ */
+function DownloadPdfButton({ report }: { report: VisibilityReport }) {
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        trackToolEvent('ai-visibility-checker', 'download_report', { format: 'pdf' })
+        const generatedAt = new Date().toLocaleString('en-US', {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+        })
+        const html = generatePdfHtml(report, generatedAt)
+        const win = window.open('', '_blank')
+        if (win !== null) {
+          win.document.write(html)
+          win.document.close()
+        }
+      }}
+      className="flex min-h-11 items-center gap-1.5 rounded-sm border border-line-grey bg-cream px-3 py-1.5 font-medium text-[14px] transition-colors hover:border-ink sm:min-h-9"
+    >
+      <Download className="size-4" aria-hidden="true" />
+      Download PDF
+    </button>
+  )
+}
+
+const CTA_DISMISSED_KEY = 'scult-tools:aiv-cta-dismissed:v1'
+
+/**
+ * Modal CTA — shown 1.5 s after a report loads. Dismissed in localStorage so
+ * "Don't show again" survives page reloads. Never shown during loading or on
+ * the pre-run legend; only visible when a real result exists.
+ */
+function ScultCtaModal({ onDismiss }: { onDismiss: () => void }) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center p-4 sm:items-center"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="scult-cta-heading"
+    >
+      <div
+        className="absolute inset-0 bg-black/50"
+        onClick={onDismiss}
+        aria-hidden="true"
+      />
+      <div className="relative w-full max-w-md overflow-hidden rounded-panel border border-ink bg-white shadow-brutal">
+        <div className="bg-violet-900 px-6 py-5 text-white">
+          <p className="font-bold text-[11px] uppercase tracking-widest text-cta-pure">
+            Scult India — AI-First Digital Agency
+          </p>
+          <h2
+            id="scult-cta-heading"
+            className="mt-1 font-display font-bold text-[20px] text-white"
+          >
+            Not sure how to make your site AI-ready?
+          </h2>
+        </div>
+        <div className="p-6">
+          <p className="text-[14px] text-ink-muted leading-6">
+            We implement every fix in reports like this one — structured data, robots.txt
+            audit, llms.txt, and content strategy that gets your pages cited by ChatGPT,
+            Perplexity, and Claude.
+          </p>
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+            <a
+              href="https://scult.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-brutal btn-violet btn-brutal-sm w-full text-center"
+              onClick={onDismiss}
+            >
+              Book a free AI readiness call →
+            </a>
+            <button
+              type="button"
+              onClick={onDismiss}
+              className="btn-brutal btn-brutal-sm btn-white w-full"
+            >
+              Close
+            </button>
+          </div>
+          <label className="mt-4 flex cursor-pointer items-center gap-2 text-[13px] text-ink-subtle">
+            <input
+              type="checkbox"
+              className="size-3.5"
+              onChange={(e) => {
+                if (e.target.checked) {
+                  try {
+                    localStorage.setItem(CTA_DISMISSED_KEY, '1')
+                  } catch {
+                    // Private mode — dismiss works for the session anyway.
+                  }
+                }
+              }}
+            />
+            Don&apos;t show again
+          </label>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /** AI_BOTS never changes at runtime, so this groups once at module load
  * rather than on every render of the pre-run legend and loading state. */
 const SPEC_GROUPS = groupByCompany(AI_BOTS)
@@ -678,6 +793,8 @@ export function AiVisibilityChecker() {
   const [apiError, setApiError] = useState<ApiError | undefined>(undefined)
   const [blockedOnly, setBlockedOnly] = useState(false)
   const [linkCopied, setLinkCopied] = useState(false)
+  const [ctaVisible, setCtaVisible] = useState(false)
+  const [ctaDismissed, setCtaDismissed] = useState(false)
   const abortRef = useRef<AbortController | undefined>(undefined)
   const bootedRef = useRef(false)
 
@@ -836,6 +953,22 @@ export function AiVisibilityChecker() {
     return () => clearTimeout(t)
   }, [linkCopied])
 
+  // Show the Scult India CTA 1.5 s after a report lands. Skipped when the
+  // user has clicked "Don't show again" (persisted in localStorage).
+  useEffect(() => {
+    if (report === undefined || ctaDismissed) return
+    try {
+      if (localStorage.getItem(CTA_DISMISSED_KEY) === '1') {
+        setCtaDismissed(true)
+        return
+      }
+    } catch {
+      // Private mode — proceed.
+    }
+    const t = setTimeout(() => setCtaVisible(true), 1500)
+    return () => clearTimeout(t)
+  }, [report, ctaDismissed])
+
   // Drop an in-flight check when the component goes away, so a resolved fetch
   // never writes to state nobody is reading. Declared AFTER the boot effect so
   // its cleanup runs after the boot guard has been released.
@@ -904,8 +1037,15 @@ export function AiVisibilityChecker() {
   }))
   const progressPercent = Math.round(((stage + 1) / LOADING_STAGES.length) * 100)
 
+  function dismissCta(): void {
+    setCtaVisible(false)
+    setCtaDismissed(true)
+    trackToolEvent('ai-visibility-checker', 'cta_dismiss')
+  }
+
   return (
     <div className="flex flex-col gap-6 rounded-panel border border-ink bg-cream p-5 shadow-brutal md:p-6">
+      {ctaVisible && !ctaDismissed ? <ScultCtaModal onDismiss={dismissCta} /> : null}
       <ToolToolbar>
         <ToolbarGroup label="Crawler breakdown">
           <SegmentButton
@@ -1136,6 +1276,7 @@ export function AiVisibilityChecker() {
                   onCopy={() => trackToolEvent('ai-visibility-checker', 'copy_report')}
                 />
                 <DownloadMarkdownButton report={report} />
+                <DownloadPdfButton report={report} />
               </div>
             </div>
 
@@ -1265,6 +1406,36 @@ export function AiVisibilityChecker() {
                   ))}
                 </div>
               )}
+            </div>
+
+            {/* Scult India CTA — always shown when there's a report.
+                A fixed dark panel that mirrors the hero's violet-900 idiom
+                so it reads as branded, not as a random interstitial. */}
+            <div className="overflow-hidden rounded-panel border border-ink bg-violet-900 text-white shadow-brutal-sm">
+              <div className="p-5 sm:p-6">
+                <p className="font-bold text-[11px] uppercase tracking-widest text-cta-pure">
+                  Scult India — AI-First Digital Agency
+                </p>
+                <h3 className="mt-1.5 font-display font-bold text-[18px] text-white">
+                  Not sure how to implement these fixes?
+                </h3>
+                <p className="mt-2 text-[14px] text-white/80 leading-5">
+                  We handle structured data, robots.txt audits, llms.txt setup, and
+                  content strategy that gets your pages cited by ChatGPT, Perplexity, and
+                  Claude — typically in one sprint.
+                </p>
+                <a
+                  href="https://scult.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-2 rounded-pill border-2 border-white px-4 py-2 font-semibold text-[14px] text-white transition-colors hover:bg-white hover:text-violet-900"
+                  onClick={() =>
+                    trackToolEvent('ai-visibility-checker', 'cta_click', { source: 'inline' })
+                  }
+                >
+                  Book a free AI readiness call →
+                </a>
+              </div>
             </div>
 
             {/* At a glance — the numbers behind the score, restated. An

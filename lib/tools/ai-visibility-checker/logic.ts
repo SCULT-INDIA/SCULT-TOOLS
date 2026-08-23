@@ -940,6 +940,11 @@ export type CheckId =
   | 'llms-txt'
   | 'sitemap'
   | 'noai'
+  | 'https'
+  | 'mobile-viewport'
+  | 'schema-richness'
+  | 'author-signals'
+  | 'twitter-card'
 
 export interface CheckResult {
   readonly id: CheckId
@@ -962,6 +967,171 @@ export interface ReportInput {
   readonly xRobotsTag?: string
   /** Status of GET /sitemap.xml, probed only when robots.txt declares none. */
   readonly sitemapProbeStatus?: number
+  /** Whether the final URL uses HTTPS — passed from the Route Handler. */
+  readonly isHttps?: boolean
+}
+
+// ---------------------------------------------------------------------------
+// Additional checks — HTTPS, mobile viewport, schema richness, author signals, Twitter Card
+// ---------------------------------------------------------------------------
+
+/** True when the URL uses the https scheme. */
+export function checkHttps(url: string): boolean {
+  try {
+    return new URL(url).protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
+/** True when the page declares a mobile viewport meta tag with width=device-width. */
+export function analyzeMobileViewport(html: string): boolean {
+  const tags = html.match(/<meta\b[^>]*>/gi) ?? []
+  const nameRe = /name\s*=\s*["']?viewport["'\s/>]/i
+  const contentRe = /content\s*=\s*(?:"([^"]*)"|'([^']*)')/i
+  for (const tag of tags) {
+    if (!nameRe.test(tag)) continue
+    const match = contentRe.exec(tag)
+    const content = (match?.[1] ?? match?.[2] ?? '').toLowerCase()
+    if (content.includes('width=device-width')) return true
+  }
+  return false
+}
+
+/** Schema @type values that enrich AI understanding beyond identity — articles,
+ * FAQs, products, breadcrumbs, how-to, and review signals. These make a page
+ * a candidate for rich results in AI answer engines. */
+const RICH_SCHEMA_TYPES = new Set([
+  'article',
+  'newsarticle',
+  'blogposting',
+  'techArticle',
+  'faqpage',
+  'howto',
+  'product',
+  'review',
+  'aggregaterating',
+  'breadcrumblist',
+  'event',
+  'jobposting',
+  'recipe',
+  'course',
+  'video',
+  'videoobject',
+  'service',
+  'softwareapplication',
+  'person',
+  'localBusiness',
+])
+
+export interface SchemaRichnessResult {
+  readonly richTypes: readonly string[]
+  readonly hasRichSchema: boolean
+  readonly hasFaqSchema: boolean
+  readonly hasArticleSchema: boolean
+}
+
+/** Analyses schema richness beyond basic identity types. */
+export function analyzeSchemaRichness(types: readonly string[]): SchemaRichnessResult {
+  const lc = types.map((t) => t.toLowerCase())
+  const richTypes = types.filter((t) => RICH_SCHEMA_TYPES.has(t.toLowerCase()))
+  return {
+    richTypes,
+    hasRichSchema: richTypes.length > 0,
+    hasFaqSchema: lc.includes('faqpage'),
+    hasArticleSchema:
+      lc.includes('article') ||
+      lc.includes('newsarticle') ||
+      lc.includes('blogposting') ||
+      lc.includes('techarticle'),
+  }
+}
+
+export interface AuthorSignalsResult {
+  readonly hasAuthorMeta: boolean
+  readonly hasPublicationDate: boolean
+  readonly hasOrganizationName: boolean
+  readonly hasByline: boolean
+  readonly signalCount: number
+}
+
+/**
+ * Checks for citation-worthiness signals: author bylines, publication dates,
+ * and organization attribution. AI answer engines prefer to cite pages that
+ * clearly attribute content — these are the on-page signals they scan for.
+ */
+export function analyzeAuthorSignals(html: string): AuthorSignalsResult {
+  const lowerHtml = html.toLowerCase()
+
+  // Author meta tag: <meta name="author" content="...">
+  const hasAuthorMeta =
+    findMetaContentByAttr(html, 'name', 'author') !== undefined ||
+    findMetaContentByAttr(html, 'name', 'Author') !== undefined
+
+  // Publication / modification date — og:article:published_time, datePublished in LD, or <time datetime="">
+  const hasPublicationDate =
+    findMetaContentByAttr(html, 'property', 'article:published_time') !== undefined ||
+    lowerHtml.includes('"datepublished"') ||
+    lowerHtml.includes('"datemodified"') ||
+    /<time\b[^>]*datetime\s*=\s*["'][^"']+["']/i.test(html)
+
+  // Organization name in JSON-LD or og:site_name
+  const hasOrganizationName =
+    findMetaContentByAttr(html, 'property', 'og:site_name') !== undefined ||
+    lowerHtml.includes('"organization"') ||
+    lowerHtml.includes('"publisher"')
+
+  // Byline patterns in HTML — common patterns used by CMSes
+  const hasByline =
+    /class\s*=\s*["'][^"']*\b(?:author|byline|by-line|post-author)\b[^"']*["']/i.test(html) ||
+    /rel\s*=\s*["']author["']/i.test(html) ||
+    /<[^>]+\bitemprop\s*=\s*["']author["']/i.test(html)
+
+  const signalCount = [hasAuthorMeta, hasPublicationDate, hasOrganizationName, hasByline].filter(
+    Boolean,
+  ).length
+
+  return {
+    hasAuthorMeta,
+    hasPublicationDate,
+    hasOrganizationName,
+    hasByline,
+    signalCount,
+  }
+}
+
+export interface TwitterCardResult {
+  readonly hasCard: boolean
+  readonly cardType: string | undefined
+  readonly hasTitle: boolean
+  readonly hasDescription: boolean
+  readonly hasImage: boolean
+  readonly completeness: number
+}
+
+/** Analyses Twitter Card completeness — a secondary social signal AI crawlers
+ * and link-preview bots also consume. */
+export function analyzeTwitterCard(html: string): TwitterCardResult {
+  const card = findMetaContentByAttr(html, 'name', 'twitter:card')
+  const title = findMetaContentByAttr(html, 'name', 'twitter:title')
+  const description = findMetaContentByAttr(html, 'name', 'twitter:description')
+  const image = findMetaContentByAttr(html, 'name', 'twitter:image')
+
+  const hasCard = card !== undefined && card !== ''
+  const hasTitle = title !== undefined && title !== ''
+  const hasDescription = description !== undefined && description !== ''
+  const hasImage = image !== undefined && image !== ''
+
+  const total = 4
+  const present = [hasCard, hasTitle, hasDescription, hasImage].filter(Boolean).length
+  return {
+    hasCard,
+    cardType: card,
+    hasTitle,
+    hasDescription,
+    hasImage,
+    completeness: present / total,
+  }
 }
 
 export interface VisibilityReport {
@@ -1176,6 +1346,109 @@ export function buildReport(input: ReportInput): VisibilityReport {
       noaiSignals.length > 0
         ? 'No fix needed if this is intentional. If it is a leftover from a plugin or theme, remove it to allow AI use of your content.'
         : 'Nothing to do. If you want to opt out of AI use without blocking crawlers, add "noai" to your meta robots tag.',
+    scored: false,
+  })
+
+  // 7. HTTPS security — informational
+  const isHttpsFlag = input.isHttps ?? checkHttps(input.url)
+  checks.push({
+    id: 'https',
+    label: 'HTTPS security',
+    status: isHttpsFlag ? 'pass' : 'fail',
+    finding: isHttpsFlag
+      ? 'The site is served over HTTPS — browsers and AI crawlers trust it.'
+      : 'The site is served over plain HTTP. Most AI crawlers, browsers, and search engines treat non-HTTPS sites as untrustworthy.',
+    fix: isHttpsFlag
+      ? 'Nothing to do. Ensure your SSL certificate stays valid and renews automatically.'
+      : 'Obtain an SSL/TLS certificate (free via Let\'s Encrypt) and redirect all HTTP traffic to HTTPS. This affects both search ranking and AI crawler trust signals.',
+    scored: false,
+  })
+
+  // 8. Mobile viewport — informational
+  const hasMobileViewport = analyzeMobileViewport(input.html)
+  checks.push({
+    id: 'mobile-viewport',
+    label: 'Mobile viewport',
+    status: hasMobileViewport ? 'pass' : 'warn',
+    finding: hasMobileViewport
+      ? 'The page declares a mobile viewport meta tag (width=device-width) — responsive design signal present.'
+      : 'No mobile viewport meta tag found. AI crawlers and many search engines render pages in mobile-first mode.',
+    fix: hasMobileViewport
+      ? 'Nothing to do.'
+      : 'Add <meta name="viewport" content="width=device-width, initial-scale=1"> to your HTML <head>. It signals to crawlers that the page is mobile-optimised.',
+    scored: false,
+  })
+
+  // 9. Schema richness — informational
+  const schemaRichness = analyzeSchemaRichness(jsonLd.types)
+  checks.push({
+    id: 'schema-richness',
+    label: 'Rich schema types',
+    status: schemaRichness.hasRichSchema
+      ? 'pass'
+      : jsonLd.types.length > 0
+        ? 'warn'
+        : 'fail',
+    finding: schemaRichness.hasRichSchema
+      ? `Rich schema declared: ${schemaRichness.richTypes.join(', ')} — makes this page a candidate for rich results in AI answers.`
+      : jsonLd.types.length > 0
+        ? `Only identity schema found (${jsonLd.types.join(', ')}). No rich types like FAQPage, Article, or HowTo that help AI engines understand content structure.`
+        : 'No structured data at all. Rich schema helps AI engines understand and cite your content.',
+    fix: schemaRichness.hasRichSchema
+      ? `Good coverage${schemaRichness.hasFaqSchema ? ' — FAQPage schema is especially valuable for AI answer inclusion' : ''}. Consider adding BreadcrumbList for navigation context.`
+      : 'Add FAQPage schema for Q&A content, Article schema for blog posts, or HowTo schema for guides. These signal content structure to AI answer engines.',
+    scored: false,
+  })
+
+  // 10. Author and citation signals — informational
+  const authorSignals = analyzeAuthorSignals(input.html)
+  checks.push({
+    id: 'author-signals',
+    label: 'Author & citation signals',
+    status: authorSignals.signalCount >= 3 ? 'pass' : authorSignals.signalCount >= 1 ? 'warn' : 'fail',
+    finding: authorSignals.signalCount >= 3
+      ? `Strong citation signals: ${[
+          authorSignals.hasAuthorMeta && 'author meta tag',
+          authorSignals.hasPublicationDate && 'publication date',
+          authorSignals.hasOrganizationName && 'organization name',
+          authorSignals.hasByline && 'on-page byline',
+        ]
+          .filter(Boolean)
+          .join(', ')}.`
+      : authorSignals.signalCount > 0
+        ? `Partial citation signals (${authorSignals.signalCount}/4 present): ${[
+            authorSignals.hasAuthorMeta && 'author meta',
+            authorSignals.hasPublicationDate && 'date',
+            authorSignals.hasOrganizationName && 'org name',
+            authorSignals.hasByline && 'byline',
+          ]
+            .filter(Boolean)
+            .join(', ')}. AI engines prefer to cite content with clear authorship.`
+        : 'No authorship or publication date signals detected. AI engines prioritise content with clear authorship, publication dates, and organisation attribution for citations.',
+    fix: authorSignals.signalCount >= 3
+      ? 'Good. Keep author meta tags and dates current — AI engines weight recency.'
+      : 'Add: (1) <meta name="author" content="Name"> in <head>, (2) visible publication dates on content pages, (3) og:site_name for your organisation, (4) on-page bylines. These signals improve citation likelihood in AI answers.',
+    scored: false,
+  })
+
+  // 11. Twitter Card completeness — informational
+  const twitterCard = analyzeTwitterCard(input.html)
+  checks.push({
+    id: 'twitter-card',
+    label: 'Twitter / X Card',
+    status: twitterCard.completeness >= 0.75 ? 'pass' : twitterCard.hasCard ? 'warn' : 'warn',
+    finding: twitterCard.hasCard
+      ? `Twitter Card type "${twitterCard.cardType ?? 'unknown'}" declared. ${[
+          !twitterCard.hasTitle && 'missing twitter:title',
+          !twitterCard.hasDescription && 'missing twitter:description',
+          !twitterCard.hasImage && 'missing twitter:image',
+        ]
+          .filter(Boolean)
+          .join(', ') || 'All card fields present — full social preview.'}`
+      : 'No Twitter Card meta tags found. Many AI link-preview crawlers and social sharing features consume these alongside Open Graph.',
+    fix: twitterCard.completeness >= 0.75
+      ? 'Nothing to do.'
+      : 'Add twitter:card (use "summary_large_image"), twitter:title, twitter:description, and twitter:image to your <head>. Many AI systems consume these tags for page context.',
     scored: false,
   })
 
