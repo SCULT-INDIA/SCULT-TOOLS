@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { PROMPT_COUNT, TOOL_COUNT } from '@/lib/search'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { getToolCount } from '@/lib/tools/registry'
-import scultLogo from '@/public/brand/scult-tools-blue.png'
+import scultMark from '@/public/brand/scult-mark.png'
 import { AllToolsLink } from './AllToolsLink'
 import { AnnouncementBar } from './AnnouncementBar'
 import { CategoryMenu } from './CategoryMenu'
@@ -14,27 +14,23 @@ import { SkillsLink } from './SkillsLink'
 import { SearchBox } from './SearchBox'
 
 /**
- * The reference site's floating white pill nav — reproduced closely, with two
- * deliberate deviations, both documented in docs/PLAN.md:
- *   1. It is STICKY. The reference header is position:static, which suits a page
- *      you scroll once; a tools hub gets navigated repeatedly.
- *   2. It carries a persistent search input, because 15 tools cannot be
- *      navigated from a six-link bar.
+ * The floating white pill nav — same `.nav-pill` treatment (white fill, 2px
+ * ink border, panel radius, brutal shadow) as always, rebuilt at a
+ * noticeably smaller scale: 83px tall on desktop read as oversized for a
+ * bar that's sticky on every page, so the pill height, padding, gaps, logo
+ * and nav-link type size are all cut down together rather than shrinking
+ * any one of them in isolation (which would just leave the rest looking too
+ * big next to it). The two things this redesign was told explicitly to
+ * keep — the GitHub star button and the AI Visibility Checker CTA — both
+ * still render at the same breakpoints as before; the checker's button now
+ * carries the violet fill (`.btn-violet`) that its own hero panel uses,
+ * since it's the site's flagship tool and the plain cta-yellow "ALL TOOLS"
+ * button next to it should read as the secondary action.
  *
- * The reference's aurora glow behind the pill was REMOVED at the user's request —
- * it read as an odd blue smear rather than the reference's soft halo. With it went
- * the machinery it required: the `overflow-hidden` clip that stopped a sticky
- * gradient painting over scrolled content, the `isolate`/`relative` stacking
- * context for its negative z-index, and the `pb-16` that reserved room for its
- * bleed. None of that has any purpose without the gradient.
- *
- * The `.aurora` class itself is left in globals.css — the hero still uses the
- * same visual language and it costs nothing unreferenced.
- *
- * Note the pill's white fill was load-bearing while the aurora existed (black
- * 18px/500 nav text measured 3.36:1 over the gradient core, an AA failure). On
- * plain white that risk is gone, but the fill stays: it is what makes the pill
- * read as a pill.
+ * It is STICKY (the reference this was originally built from is not) —
+ * suits a page you navigate repeatedly rather than scroll once — and it
+ * carries a persistent search input, because 15+ tools cannot be reached
+ * from a six-link bar.
  */
 export function Header() {
   // Counts are resolved on the server so the client menu ships data, not the
@@ -57,9 +53,9 @@ export function Header() {
           border sits flush against the viewport edge, which reads as
           clipped rather than as a bordered pill. Symmetric with the
           existing pb-3 below it. */}
-      <div className="py-3">
+      <div className="py-2.5">
         <div className="container-site">
-          <div className="nav-pill flex h-[60px] items-center justify-between gap-4 px-4 md:h-[68px] lg:h-[83px] lg:gap-6 lg:px-[30px]">
+          <div className="nav-pill flex h-[52px] items-center justify-between gap-3 px-3 md:h-[58px] lg:h-[64px] lg:gap-4 lg:px-5">
             {/* prefetch={false}: this logo sits in the sticky header, so it is
                 in the initial viewport on every single page. Next's default
                 viewport-prefetch would fetch the homepage's full RSC payload
@@ -67,28 +63,36 @@ export function Header() {
                 in a live PageSpeed trace as a ~230KB request competing with
                 critical-path CSS/fonts for bandwidth. Disabling it costs
                 nothing but a slightly later fetch on the click itself. */}
-            <Link href="/" prefetch={false} className="inline-flex shrink-0 items-center">
-              {/* Explicit width/height (matching the source's 16:9 ratio, sized
-                  to the largest CSS display height this ever renders at) —
-                  without them next/image falls back to the source PNG's full
-                  6000x3375 intrinsic size for its srcset/preload, and this is
-                  the one `priority` image on every page, so that oversized
-                  preload was competing with the critical CSS/font requests
-                  for bandwidth. CSS (h-7/lg:h-9/w-auto) still controls the
-                  actual rendered size unchanged. */}
-              <Image
-                src={scultLogo}
-                alt="SCULT Tools"
-                priority
-                width={64}
-                height={36}
-                className="h-7 w-auto lg:h-9"
-              />
+            <Link
+              href="/"
+              prefetch={false}
+              className="inline-flex shrink-0 items-center gap-2"
+            >
+              {/* The circular mark — clipped to a true circle via
+                  rounded-full + overflow-hidden regardless of what the
+                  source PNG's own corners look like, so any square/black
+                  background baked into the file never shows. No separate
+                  wordmark image alongside it any more — the "Scult Tools"
+                  name to its right is real text (brand font/colour), not a
+                  second raster asset. */}
+              <span className="block size-6 shrink-0 overflow-hidden rounded-full lg:size-7">
+                <Image
+                  src={scultMark}
+                  alt=""
+                  priority
+                  width={40}
+                  height={40}
+                  className="size-full object-cover"
+                />
+              </span>
+              <span className="font-display font-semibold text-[17px] text-violet-700 lg:text-[19px]">
+                Scult Tools
+              </span>
             </Link>
 
             <nav
               aria-label="Main"
-              className="hidden flex-1 items-center gap-6 font-medium text-[18px] text-ink tracking-[0.5px] lg:flex"
+              className="hidden flex-1 items-center gap-5 font-medium text-[15px] text-ink tracking-[0.2px] lg:flex"
             >
               <CategoryMenu items={menuItems} />
               <AllToolsLink />
@@ -100,14 +104,16 @@ export function Header() {
                 is the single highest-leverage nav affordance on a 15-tool
                 catalogue — no reason to withhold it for two more
                 breakpoints just because the full link row still needs lg. */}
-            <div className="hidden w-[200px] shrink-0 md:block lg:w-[240px]">
+            <div className="hidden w-[170px] shrink-0 md:block lg:w-[200px]">
               <SearchBox toolCount={TOOL_COUNT} promptCount={PROMPT_COUNT} />
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               {/* lg-only: the star count is a nice-to-have, and every
                   breakpoint below this is already tight with search + the
-                  primary CTA + the drawer trigger. */}
+                  primary CTA + the drawer trigger. Kept on the redesigned
+                  nav per explicit instruction — one of exactly two elements
+                  this redesign must not drop. */}
               <div className="hidden lg:block">
                 <GitHubStarButton />
               </div>
@@ -127,12 +133,22 @@ export function Header() {
               >
                 ALL TOOLS
               </Link>
+              {/* The site's flagship tool — kept on the redesigned nav per
+                  explicit instruction, the second of the two elements this
+                  redesign must not drop. Violet-filled (`.btn-violet`)
+                  rather than the plain cta-yellow "ALL TOOLS" button, so it
+                  visually matches its own violet-900 hero panel and reads as
+                  the primary action in this cluster. Same `.btn-brutal-sm`
+                  sizing as every other compact CTA on the site — the nav's
+                  compactness comes from the pill/logo/gaps around it, not
+                  from a one-off smaller button that would break consistency
+                  with the rest of the site's buttons. */}
               <Link
                 href="/geo/ai-visibility-checker"
                 prefetch={false}
-                className="btn-brutal btn-brutal-sm hidden whitespace-nowrap lg:inline-flex"
+                className="btn-brutal btn-violet btn-brutal-sm hidden whitespace-nowrap lg:inline-flex"
               >
-                CHECK AI VISIBILITY
+                AI VISIBILITY
               </Link>
               <MobileDrawer
                 categories={menuItems}

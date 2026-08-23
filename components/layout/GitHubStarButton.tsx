@@ -3,7 +3,7 @@
 import { Star } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-const REPO = 'Pranjulrathour/Tools.scult.in'
+const REPO = 'SCULT-INDIA/SCULT-TOOLS'
 
 /**
  * Links out to the repo and shows its live star count — a real number from

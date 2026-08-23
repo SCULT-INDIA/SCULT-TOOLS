@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { BrandIcon } from '@/components/ui/BrandIcon'
 import { RequestButton } from '@/components/ui/RequestButton'
 import { SaashubBadge } from '@/components/ui/SaashubBadge'
+import { SourceForgeBadge } from '@/components/ui/SourceForgeBadge'
 import { UneedBadge } from '@/components/ui/UneedBadge'
 import { getCategoriesByGroup, PROMPT_GROUPS } from '@/lib/prompts/categories'
 import { getPromptsByCategory } from '@/lib/prompts/registry'
@@ -367,6 +368,7 @@ export function Footer() {
             ))}
             <UneedBadge />
             <SaashubBadge />
+            <SourceForgeBadge />
           </div>
         </div>
 

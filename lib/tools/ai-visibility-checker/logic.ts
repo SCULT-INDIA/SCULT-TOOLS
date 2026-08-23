@@ -331,6 +331,26 @@ export function analyzeSocialMeta(html: string): SocialMetaResult {
   }
 }
 
+/**
+ * Resolves the page's `og:image` (falling back to `twitter:image`) to an
+ * absolute URL against the page's own address, since plenty of sites point
+ * these at a root-relative path (`/images/hero.jpg`) rather than a full URL.
+ * Returns undefined on anything that fails to parse as a URL at all —
+ * callers still have to fetch and validate it before trusting it as real
+ * image bytes, this only resolves the address.
+ */
+export function extractHeroImageUrl(html: string, pageUrl: string): string | undefined {
+  const raw =
+    findMetaContentByAttr(html, 'property', 'og:image') ??
+    findMetaContentByAttr(html, 'name', 'twitter:image')
+  if (raw === undefined || raw.trim() === '') return undefined
+  try {
+    return new URL(raw.trim(), pageUrl).toString()
+  } catch {
+    return undefined
+  }
+}
+
 /** True when a `<link rel="canonical">` tag with a non-empty href exists. */
 export function hasCanonicalLink(html: string): boolean {
   const tags = html.match(/<link\b[^>]*>/gi) ?? []
@@ -552,7 +572,7 @@ export interface BasicsResult {
  * the two conventions real pages mix, since Open Graph tags use `property`
  * while everything else on this page uses `name`.
  */
-function findMetaContentByAttr(
+export function findMetaContentByAttr(
   html: string,
   attr: 'name' | 'property',
   key: string,
@@ -573,6 +593,47 @@ function findMetaContent(html: string, name: string): string | undefined {
   return findMetaContentByAttr(html, 'name', name)
 }
 
+const NAMED_HTML_ENTITIES: Readonly<Record<string, string>> = {
+  amp: '&',
+  lt: '<',
+  gt: '>',
+  quot: '"',
+  apos: "'",
+  '#39': "'",
+  nbsp: ' ',
+  mdash: '—',
+  ndash: '–',
+  lsquo: '‘',
+  rsquo: '’',
+  ldquo: '“',
+  rdquo: '”',
+  hellip: '…',
+}
+
+/**
+ * Decodes HTML entities in text pulled straight from raw fetched markup via
+ * regex (title tags, meta content attributes) rather than a DOM parser — a
+ * compliant page's `<title>` legitimately contains `&amp;` as markup, and
+ * without this every consumer of that string (this report's own UI, the PDF,
+ * a copy-pasted badge) would display the literal text "&amp;" instead of
+ * "&". Covers the handful of named entities real titles/descriptions
+ * actually use plus numeric entities (`&#8217;`, `&#x2019;`); anything
+ * unrecognised is left as-is rather than guessed at.
+ */
+function decodeHtmlEntities(text: string): string {
+  return text.replace(/&(#x?[0-9a-fA-F]+|[a-zA-Z]+\d*);/g, (match, entity: string) => {
+    if (entity.startsWith('#x') || entity.startsWith('#X')) {
+      const code = Number.parseInt(entity.slice(2), 16)
+      return Number.isFinite(code) ? String.fromCodePoint(code) : match
+    }
+    if (entity.startsWith('#')) {
+      const code = Number.parseInt(entity.slice(1), 10)
+      return Number.isFinite(code) ? String.fromCodePoint(code) : match
+    }
+    return NAMED_HTML_ENTITIES[entity] ?? match
+  })
+}
+
 /**
  * Extracts the plain-HTML signals answer engines read before anything else:
  * title, meta description, a single h1, h2 section headings, the lang
@@ -584,11 +645,14 @@ function findMetaContent(html: string, name: string): string | undefined {
 export function analyzeBasics(html: string): BasicsResult {
   const titleMatch = /<title\b[^>]*>([\s\S]*?)<\/title>/i.exec(html)
   const rawTitle = titleMatch?.[1]?.replace(/\s+/g, ' ').trim()
-  const title = rawTitle !== undefined && rawTitle !== '' ? rawTitle : undefined
+  const title =
+    rawTitle !== undefined && rawTitle !== '' ? decodeHtmlEntities(rawTitle) : undefined
 
   const rawDescription = findMetaContent(html, 'description')
   const description =
-    rawDescription !== undefined && rawDescription !== '' ? rawDescription : undefined
+    rawDescription !== undefined && rawDescription !== ''
+      ? decodeHtmlEntities(rawDescription)
+      : undefined
 
   const h1Count = (html.match(/<h1[\s>]/gi) ?? []).length
   const h2Count = (html.match(/<h2[\s>]/gi) ?? []).length
@@ -969,6 +1033,13 @@ export interface ReportInput {
   readonly sitemapProbeStatus?: number
   /** Whether the final URL uses HTTPS — passed from the Route Handler. */
   readonly isHttps?: boolean
+  /** Wall-clock time the homepage fetch took, in ms — measured by the Route
+   * Handler around its `safeFetch` call, since `buildReport` itself never
+   * makes a network request. */
+  readonly homepageResponseMs?: number
+  /** Bytes read from the homepage response body — the Route Handler already
+   * has this from its capped reader loop. */
+  readonly homepageSizeBytes?: number
 }
 
 // ---------------------------------------------------------------------------
@@ -1134,6 +1205,37 @@ export function analyzeTwitterCard(html: string): TwitterCardResult {
   }
 }
 
+/**
+ * Descriptive, non-scored numbers pulled from data every check already
+ * computes internally (title/description text, word count, heading counts,
+ * alt-text coverage) plus two the Route Handler measures around its fetch
+ * (response time, page size) — surfaced as their own "pro" insight panel
+ * rather than folded into a pass/fail check, since a title being 71
+ * characters long isn't a verdict, it's a fact worth showing on its own.
+ */
+export interface PageInsights {
+  readonly title: string | undefined
+  readonly titleLength: number
+  readonly metaDescription: string | undefined
+  readonly metaDescriptionLength: number
+  readonly wordCount: number
+  readonly h1Count: number
+  readonly h2Count: number
+  readonly altTextCoveragePct: number
+  readonly homepageResponseMs: number | undefined
+  readonly homepageSizeBytes: number | undefined
+  /**
+   * The resolved (absolute) `og:image`/`twitter:image` URL, standing in for
+   * "a picture of the site" without a headless-browser screenshot pipeline —
+   * set to the raw URL here (pure/sync, no fetch), then replaced with a
+   * data: URI by the Route Handler after it fetches and validates the bytes
+   * through the same SSRF-safe path as every other request this tool makes.
+   * Undefined when the page declares no such tag, or once the Route Handler
+   * has tried and failed to fetch it.
+   */
+  readonly heroImageUrl: string | undefined
+}
+
 export interface VisibilityReport {
   readonly url: string
   readonly score: number
@@ -1142,7 +1244,60 @@ export interface VisibilityReport {
   readonly allowedBotCount: number
   readonly checks: readonly CheckResult[]
   readonly jsonLdTypes: readonly string[]
+  readonly pageInsights: PageInsights
 }
+
+/** Point value per check — mirrors `computeScore`'s 40/20/20/10/10 weights
+ * above. `pass` always means the full weight was earned for every scored
+ * check (each is graded pass only when every sub-condition it covers is
+ * met), so "not yet passing" and "has points left on the table" are the
+ * same thing. Exported so both the on-page report and the PDF template
+ * compute identical point totals from one source. */
+export const CHECK_WEIGHT: Record<CheckId, number> = {
+  crawlers: 40,
+  noindex: 0,
+  'structured-data': 20,
+  basics: 20,
+  'llms-txt': 10,
+  sitemap: 10,
+  noai: 0,
+  https: 0,
+  'mobile-viewport': 0,
+  'schema-richness': 0,
+  'author-signals': 0,
+  'twitter-card': 0,
+}
+
+/**
+ * The 12 checks grouped into 4 categories that mean something on their own —
+ * shared between the on-page report and the PDF template so both surfaces
+ * teach the same mental model instead of maintaining two mappings that could
+ * silently drift apart.
+ */
+export interface ReportCategory {
+  readonly id: string
+  readonly label: string
+  readonly checkIds: readonly CheckId[]
+}
+
+export const REPORT_CATEGORIES: readonly ReportCategory[] = [
+  { id: 'crawler-access', label: 'Crawler access', checkIds: ['crawlers'] },
+  {
+    id: 'structured-data',
+    label: 'Structured data & content',
+    checkIds: ['structured-data', 'basics', 'schema-richness', 'author-signals'],
+  },
+  {
+    id: 'discovery',
+    label: 'Discovery & indexing',
+    checkIds: ['llms-txt', 'sitemap', 'noindex', 'noai'],
+  },
+  {
+    id: 'technical-social',
+    label: 'Technical & social',
+    checkIds: ['https', 'mobile-viewport', 'twitter-card'],
+  },
+]
 
 /**
  * Runs every check against pre-fetched raw material and assembles the final
@@ -1460,6 +1615,20 @@ export function buildReport(input: ReportInput): VisibilityReport {
     sitemap: sitemapStatus,
   })
 
+  const pageInsights: PageInsights = {
+    title: basics.title,
+    titleLength: basics.title?.length ?? 0,
+    metaDescription: basics.description,
+    metaDescriptionLength: basics.description?.length ?? 0,
+    wordCount: basics.wordCount,
+    h1Count: basics.h1Count,
+    h2Count: basics.h2Count,
+    altTextCoveragePct: Math.round(basics.altText.coverage * 100),
+    homepageResponseMs: input.homepageResponseMs,
+    homepageSizeBytes: input.homepageSizeBytes,
+    heroImageUrl: extractHeroImageUrl(input.html, input.url),
+  }
+
   return {
     url: input.url,
     score,
@@ -1468,10 +1637,11 @@ export function buildReport(input: ReportInput): VisibilityReport {
     allowedBotCount,
     checks,
     jsonLdTypes: jsonLd.types,
+    pageInsights,
   }
 }
 
-function formatBytes(bytes: number): string {
+export function formatBytes(bytes: number): string {
   if (!Number.isFinite(bytes) || bytes < 0) return '0 B'
   if (bytes < 1024) return `${bytes} B`
   return `${(bytes / 1024).toFixed(1)} KB`
