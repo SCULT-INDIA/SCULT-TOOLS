@@ -47,7 +47,21 @@ curl -X POST https://<your-worker>.vercel.app/api/sync \
   -H "Authorization: Bearer <CRON_SECRET>"
 ```
 
-Returns `{ processed, failed, cursorPage, cursorDone, curatedDone, totalSkills, errors }`.
+Returns `{ processed, failed, cursorPage, cursorDone, curatedDone, rescanTriggered, totalSkills, errors }`.
 `cursorDone: true` means it has reached the end of the leaderboard as it
 currently stands — new skills still get added to skills.sh over time, so
 this isn't a permanent "finished" state.
+
+## Staying current after the first full pass
+
+Once `cursorDone` and `curatedDone` are both `true`, the handler resets
+them back to `false` (and `cursorPage` to `0`) the first time it's called
+more than 20 hours after the last completed sync — `rescanTriggered: true`
+on that response confirms it fired. This is a full re-scan from page 0,
+not a resume from the old cursor: the leaderboard is ranked, so a newly
+popular skill can outrank the old cutoff instead of only appending past
+it, and only a fresh pass is guaranteed to catch that. The 20-hour gate
+exists so the two daily triggers (this project's own `vercel.json` cron
+and the GitHub Actions loop driver, which calls this endpoint many times
+in quick succession within one run) don't restart the scan on every call
+— only the first call after a real day has passed does.

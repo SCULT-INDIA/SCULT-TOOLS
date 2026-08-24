@@ -343,6 +343,31 @@ export default async function handler(req, res) {
   let cursorDone = meta?.cursor_done ?? false
   let curatedDone = meta?.curated_done ?? false
 
+  // The bug that left the registry stuck at a fixed count forever: once
+  // both flags go true, EVERY future invocation skipped both branches
+  // below unconditionally — nothing ever set them back to false, so a
+  // skill added to skills.sh the day after the first full pass completed
+  // would never be picked up, not on the next run, not ever. New skills
+  // can also outrank existing ones on the leaderboard rather than only
+  // appending at the tail, so resuming from the old cursorPage wouldn't
+  // even be correct — a full re-pass from page 0 is what's actually
+  // needed to guarantee nothing new is missed, not just an appended scan.
+  // Gated on time-since-last-completion (not on every call) so the GitHub
+  // Actions loop driver's rapid repeat calls within one run don't restart
+  // the whole scan every few seconds — long enough to outlast one loop-
+  // driver session (up to ~5h), short enough to guarantee a fresh pass
+  // every day regardless of which of the two daily triggers fires it.
+  const RESCAN_INTERVAL_MS = 20 * 60 * 60 * 1000
+  const msSinceLastSync = meta?.last_synced_at
+    ? Date.now() - new Date(meta.last_synced_at).getTime()
+    : Number.POSITIVE_INFINITY
+  const rescanTriggered = cursorDone && curatedDone && msSinceLastSync > RESCAN_INTERVAL_MS
+  if (rescanTriggered) {
+    cursorPage = 0
+    cursorDone = false
+    curatedDone = false
+  }
+
   let processed = 0
   let failed = 0
   let pagesThisRun = 0
@@ -454,6 +479,7 @@ export default async function handler(req, res) {
     cursorPage,
     cursorDone,
     curatedDone,
+    rescanTriggered,
     totalSkills: count ?? 0,
     elapsedMs: Date.now() - startedAt,
     errors,
