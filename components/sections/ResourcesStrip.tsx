@@ -2,11 +2,13 @@ import { ArrowUpRight, BookOpen, Layers, NotebookPen, Type } from 'lucide-react'
 import Link from 'next/link'
 
 /**
- * A slim directory band for the site's written surfaces — Guides, Blog,
- * Glossary and Collections all exist with real content but previously had
- * zero landing-page presence (footer links only). New in the 2026 redesign:
- * four card-flat links, deliberately quiet — a wayfinding row, not another
- * spotlight.
+ * A wayfinding band for the site's written surfaces — Guides, Blog, Glossary
+ * and Collections all exist with real content but previously had zero
+ * landing-page presence (footer links only).
+ *
+ * Styled as four pastel sticker tiles in the hero-constellation vocabulary:
+ * fixed pastel fills, ink borders, hard offset shadows, a degree of tilt
+ * that straightens on hover. Fixed pastels → literal black text.
  */
 
 const RESOURCES = [
@@ -15,24 +17,32 @@ const RESOURCES = [
     title: 'Blog',
     href: '/blog',
     blurb: 'Long-form guides behind every prompt category — 100+ posts.',
+    tile: 'yellow',
+    tilt: '-rotate-1',
   },
   {
     icon: BookOpen,
     title: 'Guides',
     href: '/guides',
     blurb: 'Practical walkthroughs for AI visibility, schema and invoicing.',
+    tile: 'blue',
+    tilt: 'rotate-1',
   },
   {
     icon: Type,
     title: 'Glossary',
     href: '/glossary',
     blurb: 'Plain-English definitions for the jargon these tools touch.',
+    tile: 'lavender',
+    tilt: '-rotate-1',
   },
   {
     icon: Layers,
     title: 'Collections',
     href: '/collections',
     blurb: 'Curated tool bundles for a job — launch day, audits, invoicing.',
+    tile: 'green',
+    tilt: 'rotate-1',
   },
 ] as const
 
@@ -49,9 +59,11 @@ export function ResourcesStrip() {
             The reading behind the tools
           </h2>
         </div>
-        <p className="max-w-[38ch] text-[15px] text-ink-muted leading-6">
-          Everything written here exists to make a tool, prompt or skill more useful — not
-          to rank for its own sake.
+        <p
+          aria-hidden="true"
+          className="rotate-[-2deg] font-display font-semibold text-[17px] text-violet-700 italic"
+        >
+          Also free, obviously →
         </p>
       </div>
 
@@ -60,24 +72,22 @@ export function ResourcesStrip() {
           <li key={r.title}>
             <Link
               href={r.href}
-              className="card-flat group flex h-full flex-col p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-ink"
+              className={`group flex h-full flex-col rounded-lg border border-ink p-5 shadow-brutal-sm transition-all duration-200 hover:rotate-0 hover:-translate-y-1 ${r.tilt}`}
+              style={{ background: `var(--color-tile-${r.tile})` }}
             >
               <span className="flex items-start justify-between">
-                <span className="grid size-10 place-items-center rounded-[10px] bg-violet-500/10">
-                  <r.icon
-                    className="size-5 text-[var(--color-violet-accent-text,var(--color-violet-700))]"
-                    aria-hidden="true"
-                  />
+                <span className="grid size-10 place-items-center rounded-[10px] border border-ink/15 bg-white">
+                  <r.icon className="size-5 text-violet-700" aria-hidden="true" />
                 </span>
                 <ArrowUpRight
-                  className="size-4 text-ink-subtle transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  className="size-4 text-black/40 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                   aria-hidden="true"
                 />
               </span>
-              <span className="mt-4 font-display font-semibold text-[18px] tracking-normal">
+              <span className="mt-4 font-display font-semibold text-[19px] text-black tracking-normal">
                 {r.title}
               </span>
-              <span className="mt-1 text-[14px] text-ink-muted leading-5">{r.blurb}</span>
+              <span className="mt-1 text-[14px] text-black/60 leading-5">{r.blurb}</span>
             </Link>
           </li>
         ))}

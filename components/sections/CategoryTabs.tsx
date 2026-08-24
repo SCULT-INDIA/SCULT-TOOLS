@@ -57,19 +57,25 @@ export function CategoryTabs({
   return (
     <section aria-labelledby="category-tabs" className="bg-violet-700 py-16 text-white">
       <div className="container-site">
-        <div className="mb-10 text-center">
-          <p className="font-bold text-[12px] text-cta uppercase tracking-[0.12em]">
+        <div className="mb-8 text-center">
+          <p className="inline-block -rotate-2 rounded-pill border border-black bg-cta px-3.5 py-1 font-bold text-[12px] text-black uppercase tracking-[0.12em] shadow-[3px_3px_0_0_rgb(0_0_0/0.9)]">
             The tools
           </p>
           <h2
             id="category-tabs"
-            className="mt-3 text-[30px] text-white leading-[1.1] tracking-[-0.5px] md:text-[40px]"
+            className="mt-4 text-[30px] text-white leading-[1.1] tracking-[-0.5px] md:text-[40px]"
           >
             {totalTools} tools across six categories
           </h2>
-          <p className="mx-auto mt-4 max-w-[52ch] text-[16px] text-white/70 leading-7">
+          <p className="mx-auto mt-4 max-w-[52ch] text-[16px] text-white/75 leading-7">
             Built the way we build for clients — tested, accessible, and honest about
-            their own limitations. Pick a lane:
+            their own limitations.
+          </p>
+          <p
+            aria-hidden="true"
+            className="mt-3 rotate-1 font-display font-semibold text-[18px] text-cta italic"
+          >
+            Pick your lane ↓
           </p>
         </div>
 
@@ -92,16 +98,14 @@ export function CategoryTabs({
               aria-controls="category-tabpanel"
               tabIndex={i === active ? 0 : -1}
               onClick={() => setActive(i)}
-              className={`whitespace-nowrap rounded-pill px-4 py-2 font-semibold text-[14px] transition-all duration-200 ${
+              className={`whitespace-nowrap rounded-pill border border-black px-4 py-2 font-semibold text-[14px] transition-all duration-150 ${
                 i === active
-                  ? 'border border-black bg-cta text-black shadow-[3px_3px_0_0_rgb(0_0_0/0.9)]'
-                  : 'border border-white/25 text-white/85 hover:border-white/60 hover:text-white'
+                  ? 'bg-cta text-black shadow-[3px_3px_0_0_rgb(0_0_0/0.9)]'
+                  : 'bg-white text-black hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_rgb(0_0_0/0.9)]'
               }`}
             >
               {c.name}
-              <span
-                className={`ml-1.5 tabular-nums ${i === active ? 'text-black/60' : 'text-white/70'}`}
-              >
+              <span className="ml-1.5 tabular-nums text-black/55">
                 {(toolsByCategory[c.slug] ?? []).length}
               </span>
             </button>
@@ -130,7 +134,7 @@ export function CategoryTabs({
 
             <ul className="grid gap-3" aria-label={`${category.name} tools`}>
               {tools.map((tool) => (
-                // Opaque cards, not translucent-white-on-violet: the
+                // Opaque brutal cards, not translucent-white-on-violet: the
                 // reference's right column is bright device mockups that pop
                 // off the violet field. `bg-cream` (not literal white) so the
                 // card follows the same light-surface elevation token as
@@ -140,7 +144,7 @@ export function CategoryTabs({
                       wide dead card was a needlessly small target. */}
                   <Link
                     href={`/${tool.category}/${tool.slug}`}
-                    className="group flex items-center gap-4 rounded-md bg-cream p-4 shadow-card transition-transform duration-200 hover:-translate-y-0.5"
+                    className="group flex items-center gap-4 rounded-md border border-black bg-cream p-4 shadow-[4px_4px_0_0_rgb(0_0_0/0.9)] transition-all duration-150 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_rgb(0_0_0/0.9)]"
                   >
                     <Image
                       src={`/tool-icons/${tool.slug}.png`}

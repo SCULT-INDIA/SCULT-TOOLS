@@ -4,15 +4,17 @@ import { BrandIcon } from '@/components/ui/BrandIcon'
 import { absoluteUrl } from '@/lib/site'
 
 /**
- * Homepage spotlight for the public MCP server — the newest way to use the
- * site: every tool, prompt, skill, guide and blog post callable from any MCP
- * client. New in the 2026 landing-page redesign; the feature shipped with
- * its own /mcp page but had zero homepage presence.
+ * Homepage spotlight for the public MCP server — every tool, prompt, skill,
+ * guide and blog post callable from any MCP client. The feature shipped
+ * with its own /mcp page but had zero homepage presence until this section.
  *
- * Fixed near-black band (same #111113 the SkillLibrarySpotlight terminal
- * uses) with literal light text — a deliberate fourth texture in the page's
- * rhythm: white sections, pastel panels, violet bands, and this one dark
- * "developer surface" for the one feature aimed squarely at agent users.
+ * On-brand dark: violet-900 (the site's one sanctioned dark tone, AAA for
+ * white text) with the same soft violet-500 glows the AI-visibility band
+ * uses — NOT a neutral black band, which sat outside the palette. The
+ * terminal is a cream neo-brutal card (ink border + hard offset shadow,
+ * slightly tilted like the hero's sticker cards) so even the "developer"
+ * artifact wears the brand. Cream is an adaptive surface token, so the
+ * mono text on it uses adaptive ink tokens, not literal black.
  */
 
 const CLIENTS = ['claude', 'claude-code', 'cursor', 'chatgpt', 'gemini'] as const
@@ -23,20 +25,22 @@ export function McpSpotlight() {
   return (
     <section
       aria-labelledby="mcp-spotlight"
-      className="relative overflow-hidden bg-[#111113] py-20 text-white"
+      className="relative overflow-hidden bg-violet-900 py-20 text-white"
     >
-      {/* Soft violet glow — the brand tone kept present even on the dark
-          developer surface, same technique as the AI-visibility band. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-[-10rem] right-[-10rem] size-[26rem] rounded-full bg-violet-500 opacity-25 blur-[110px]"
+        className="pointer-events-none absolute top-[-8rem] right-[-10rem] size-[30rem] rounded-full bg-violet-500 opacity-40 blur-[110px]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-[-10rem] left-[-8rem] size-[24rem] rounded-full bg-violet-500 opacity-25 blur-[100px]"
       />
 
       <div className="container-site relative grid items-center gap-12 lg:grid-cols-[1fr_1.05fr]">
         <div>
-          <p className="inline-flex items-center gap-2 rounded-pill border border-white/15 bg-white/5 px-3 py-1.5">
-            <Plug className="size-3.5 text-cta" aria-hidden="true" />
-            <span className="font-bold text-[12px] text-cta uppercase tracking-[0.12em]">
+          <p className="inline-flex rotate-[-1.5deg] items-center gap-2 rounded-pill border border-ink bg-cta px-3.5 py-1.5 shadow-brutal-sm">
+            <Plug className="size-3.5 text-black" aria-hidden="true" />
+            <span className="font-bold text-[12px] text-black uppercase tracking-[0.12em]">
               New — public MCP server
             </span>
           </p>
@@ -46,7 +50,7 @@ export function McpSpotlight() {
           >
             Plug the whole site into your AI agent
           </h2>
-          <p className="mt-5 max-w-[50ch] text-[17px] text-white/70 leading-7">
+          <p className="mt-5 max-w-[50ch] text-[17px] text-white/75 leading-7">
             Every tool, prompt, skill, guide and blog post here is callable over MCP — one
             Streamable HTTP endpoint, no auth, no signup. Add it once and your agent can
             generate schema markup, build UTM links, search 1,000+ prompts and more,
@@ -59,18 +63,17 @@ export function McpSpotlight() {
             {CLIENTS.map((brand) => (
               <li
                 key={brand}
-                className="flex size-10 items-center justify-center rounded-xl border border-white/12 bg-white"
+                className="flex size-11 items-center justify-center rounded-xl border border-ink bg-white shadow-brutal-sm"
               >
                 <BrandIcon brand={brand} size={22} />
               </li>
             ))}
-            <li className="flex h-10 items-center rounded-xl border border-white/12 bg-white/5 px-3 font-semibold text-[12px] text-white/60">
+            <li className="flex h-11 items-center rounded-xl border border-white/25 bg-white/5 px-3 font-semibold text-[12px] text-white/75">
               + any MCP client
             </li>
           </ul>
           {/* text-black/border-black force the resting face to literal black
-              on the fixed-dark band — same override pattern as the
-              AI-visibility CTA, see that comment. */}
+              on the fixed-dark band — same override as the AI-visibility CTA. */}
           <Link
             href="/mcp"
             className="btn-brutal mt-8 border-black text-black hover:border-ink hover:text-ink"
@@ -80,42 +83,47 @@ export function McpSpotlight() {
           </Link>
         </div>
 
-        {/* Terminal mockup — the real one-line install from /mcp, then an
-            illustrative session. Decorative; the copy beside it carries the
-            accessible version of every claim. */}
-        <div
-          aria-hidden="true"
-          className="overflow-hidden rounded-lg border border-white/12 bg-black/40 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]"
-        >
-          <div className="flex items-center justify-between border-white/10 border-b px-4 py-2.5">
-            <span className="flex items-center gap-1.5">
-              <span className="size-2 rounded-full bg-white/20" />
-              <span className="size-2 rounded-full bg-white/20" />
-              <span className="size-2 rounded-full bg-white/20" />
-            </span>
-            <span className="font-mono text-[11px] text-white/45">terminal</span>
-          </div>
-          <div className="overflow-x-auto p-5 font-mono text-[12.5px] leading-6">
-            <p className="whitespace-nowrap">
-              <span className="text-green">$</span>{' '}
-              <span className="text-white/85">
-                claude mcp add --transport http scult-tools
+        {/* Cream neo-brutal terminal — the real one-line install from /mcp,
+            then an illustrative session. Decorative; the copy beside it
+            carries the accessible version of every claim. */}
+        <div aria-hidden="true" className="relative">
+          <p className="-top-4 absolute right-6 z-10 rotate-6 rounded-pill border border-ink bg-tile-green px-3.5 py-1 font-display font-semibold text-[14px] text-black italic shadow-brutal-sm">
+            one line. done.
+          </p>
+          <div className="rotate-1 overflow-hidden rounded-lg border border-ink bg-cream shadow-brutal transition-transform duration-200 hover:rotate-0">
+            <div className="flex items-center justify-between border-ink/15 border-b bg-tile-yellow px-4 py-2.5">
+              <span className="flex items-center gap-1.5">
+                <span className="size-2.5 rounded-full border border-ink/40 bg-white" />
+                <span className="size-2.5 rounded-full border border-ink/40 bg-cta" />
+                <span className="size-2.5 rounded-full border border-ink/40 bg-green" />
               </span>
-            </p>
-            <p className="whitespace-nowrap pl-4 text-violet-400">{mcpUrl}</p>
-            <p className="mt-2 text-white/60">
-              <span className="text-green">✓</span> scult-tools connected
-            </p>
-            <p className="mt-4 text-white/45">
-              &gt; generate FAQ schema for my pricing page
-            </p>
-            <p className="mt-1 text-white/60">
-              <span className="text-cta">⚙</span> calling{' '}
-              <span className="text-white/85">generate_faq_schema</span>…
-            </p>
-            <p className="text-white/60">
-              <span className="text-green">✓</span> valid FAQPage JSON-LD returned
-            </p>
+              <span className="font-mono text-[11px] text-black/60">terminal</span>
+            </div>
+            <div className="overflow-x-auto p-5 font-mono text-[12.5px] leading-6">
+              <p className="whitespace-nowrap">
+                <span className="font-bold text-green">$</span>{' '}
+                <span className="text-ink">
+                  claude mcp add --transport http scult-tools
+                </span>
+              </p>
+              <p className="whitespace-nowrap pl-4 font-medium text-violet-700">
+                {mcpUrl}
+              </p>
+              <p className="mt-2 text-ink-muted">
+                <span className="font-bold text-green">✓</span> scult-tools connected
+              </p>
+              <p className="mt-4 text-ink-subtle">
+                &gt; generate FAQ schema for my pricing page
+              </p>
+              <p className="mt-1 text-ink-muted">
+                <span className="text-violet-700">⚙</span> calling{' '}
+                <span className="font-semibold text-ink">generate_faq_schema</span>…
+              </p>
+              <p className="text-ink-muted">
+                <span className="font-bold text-green">✓</span> valid FAQPage JSON-LD
+                returned
+              </p>
+            </div>
           </div>
         </div>
       </div>

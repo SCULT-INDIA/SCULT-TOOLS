@@ -16,7 +16,7 @@ export function CategoryPlans() {
       <div className="mx-auto max-w-[46rem] text-center">
         {/* A badge, not a button-alike: the old span borrowed .btn-brutal,
             which promises clickability it never had. */}
-        <span className="inline-flex items-center gap-2 rounded-pill border border-ink bg-cta px-4 py-1.5 font-bold text-[12px] text-black uppercase tracking-[0.12em]">
+        <span className="inline-flex rotate-[-1.5deg] items-center gap-2 rounded-pill border border-ink bg-cta px-4 py-1.5 font-bold text-[12px] text-black uppercase tracking-[0.12em] shadow-brutal-sm">
           <span aria-hidden="true" className="size-1.5 rounded-full bg-black" />
           Scult project pricing
         </span>

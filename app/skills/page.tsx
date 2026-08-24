@@ -1,8 +1,9 @@
 import { ArrowUpRight, RefreshCw } from 'lucide-react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Icon } from '@/components/ui/Icon'
 import { SkillCard } from '@/components/skills/SkillCard'
+import { Icon } from '@/components/ui/Icon'
+import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { SKILL_CATEGORIES } from '@/lib/skills/categories'
 import {
   getAllCategoryCounts,
@@ -12,7 +13,6 @@ import {
   getTotalSkillCount,
 } from '@/lib/skills/db'
 import type { SkillCategory } from '@/lib/skills/types'
-import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 
 export async function generateMetadata(): Promise<Metadata> {
   const total = await getTotalSkillCount()
@@ -67,28 +67,34 @@ export default async function SkillsPage() {
       />
 
       <section className="container-site pt-10 pb-6">
-        <p className="eyebrow">Free agent skills directory</p>
-        <h1 className="mt-3 max-w-[26ch] text-[38px] leading-[1.05] tracking-[-1px] md:text-[52px] md:leading-[56px]">
-          {total.toLocaleString()} real AI agent skills
-        </h1>
-        <p className="mt-5 max-w-[62ch] text-[17px] text-ink-muted leading-7 md:text-lead">
-          Every skill here is a real, public `SKILL.md` synced from the open skills.sh
-          registry — organized by the task you're trying to do, not by which AI tool you
-          happen to use. Copy it as-is for Claude Code, Codex CLI, Cursor, or Gemini CLI, or
-          export it as AGENTS.md, .cursorrules, or Copilot instructions.
-        </p>
+        {/* Hero — the same brutal pastel panel language the prompt hub and
+            catalogue pages open with. Fixed pastel: literal black text. */}
+        <header className="rounded-panel border border-ink bg-tile-green p-6 shadow-brutal md:p-9">
+          <p className="font-bold text-[12px] text-black/60 uppercase tracking-[0.14em]">
+            Free agent skills directory · {categoriesWithCounts.length} task categories
+          </p>
+          <h1 className="mt-2 max-w-[26ch] text-[38px] text-black leading-[1.05] tracking-[-1px] md:text-[52px] md:leading-[56px]">
+            {total.toLocaleString()} real AI agent skills
+          </h1>
+          <p className="mt-4 max-w-[62ch] text-[17px] text-black/70 leading-7">
+            Every skill here is a real, public `SKILL.md` synced from the open skills.sh
+            registry — organized by the task you're trying to do, not by which AI tool you
+            happen to use. Copy it as-is for Claude Code, Codex CLI, Cursor, or Gemini
+            CLI, or export it as AGENTS.md, .cursorrules, or Copilot instructions.
+          </p>
 
-        <p className="mt-5 flex items-center gap-1.5 font-medium text-[13.5px] text-ink-muted">
-          <RefreshCw className="size-4 text-green" aria-hidden="true" />
-          Updated daily — last synced {formatSyncedAt(syncMeta.lastSyncedAt)}
-        </p>
+          <p className="mt-5 flex items-center gap-1.5 font-medium text-[13.5px] text-black/70">
+            <RefreshCw className="size-4 text-green" aria-hidden="true" />
+            Updated daily — last synced {formatSyncedAt(syncMeta.lastSyncedAt)}
+          </p>
+        </header>
 
-        <nav aria-label="Jump to category" className="mt-8 flex flex-wrap gap-2">
+        <nav aria-label="Jump to category" className="mt-7 flex flex-wrap gap-2">
           {categoriesWithCounts.map(({ category }) => (
             <a
               key={category.slug}
               href={`#${category.slug}`}
-              className="rounded-full border border-line-grey bg-white px-4 py-2 font-medium text-[14px] text-ink-body transition-colors hover:border-violet-300 hover:text-violet-700"
+              className="chip-tool px-4 py-2 text-[14px]"
             >
               {category.name}
             </a>
@@ -98,7 +104,10 @@ export default async function SkillsPage() {
 
       {recentlyAdded.length > 0 ? (
         <section aria-labelledby="recently-added" className="container-site py-8">
-          <h2 id="recently-added" className="text-[26px] tracking-[-0.5px] md:text-[30px]">
+          <h2
+            id="recently-added"
+            className="text-[26px] tracking-[-0.5px] md:text-[30px]"
+          >
             Recently added
           </h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -62,48 +62,53 @@ export default function PromptsPage() {
       />
 
       <section className="container-site pt-10 pb-6">
-        <p className="eyebrow">Free prompt library</p>
-        <h1 className="mt-3 max-w-[24ch] text-[38px] leading-[1.05] tracking-[-1px] md:text-[52px] md:leading-[56px]">
-          {PROMPTS.length} free, verified AI prompts
-        </h1>
-        <p className="mt-5 max-w-[62ch] text-[17px] text-ink-muted leading-7 md:text-lead">
-          No accounts, no paywalls, every prompt shown in full — organized by the tool you
-          actually use. Each one lists exactly which tool and version it was tested
-          against, and gets re-checked rather than left to go stale.
-        </p>
+        {/* Hero — the same brutal pastel panel language the category and
+            detail pages already open with, so hub → category → prompt reads
+            as one continuous surface. Fixed pastel: literal black text. */}
+        <header className="rounded-panel border border-ink bg-tile-lavender p-6 shadow-brutal md:p-9">
+          <p className="font-bold text-[12px] text-black/60 uppercase tracking-[0.14em]">
+            Free prompt library · {groups.reduce((n, g) => n + g.categories.length, 0)}{' '}
+            tool categories
+          </p>
+          <h1 className="mt-2 max-w-[24ch] text-[38px] text-black leading-[1.05] tracking-[-1px] md:text-[52px] md:leading-[56px]">
+            {PROMPTS.length.toLocaleString('en-US')} free, verified AI prompts
+          </h1>
+          <p className="mt-4 max-w-[62ch] text-[17px] text-black/70 leading-7">
+            No accounts, no paywalls, every prompt shown in full — organized by the tool
+            you actually use. Each one lists exactly which tool and version it was tested
+            against, and gets re-checked rather than left to go stale.
+          </p>
 
-        {/* The tools, by their real marks — the fastest possible "is my tool
-            covered?" answer. Decorative duplicate of the nav below it. */}
-        <div className="mt-7 flex flex-wrap items-center gap-2.5" aria-hidden="true">
-          {HERO_BRANDS.map((brand) => (
-            <span
-              key={brand}
-              className="flex size-11 items-center justify-center rounded-[14px] border border-line-grey bg-white shadow-[0_1px_3px_rgb(0_0_0/0.06)]"
-            >
-              <BrandIcon brand={brand} size={22} />
+          {/* The tools, by their real marks — the fastest possible "is my
+              tool covered?" answer. Decorative duplicate of the nav below. */}
+          <div className="mt-6 flex flex-wrap items-center gap-2.5" aria-hidden="true">
+            {HERO_BRANDS.map((brand) => (
+              <span
+                key={brand}
+                className="flex size-11 items-center justify-center rounded-[14px] border border-black/10 bg-white shadow-[0_2px_8px_rgb(0_0_0/0.07)]"
+              >
+                <BrandIcon brand={brand} size={22} />
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13.5px] text-black/70">
+            <span className="flex items-center gap-1.5">
+              <BadgeCheck className="size-4 text-green" aria-hidden="true" />
+              Version-stamped verification on every prompt
             </span>
-          ))}
-          <span className="ml-1 font-medium text-[13px] text-ink-subtle">
-            + {groups.reduce((n, g) => n + g.categories.length, 0)} tool categories
-          </span>
-        </div>
+            <span className="flex items-center gap-1.5">
+              <BadgeCheck className="size-4 text-green" aria-hidden="true" />
+              No signup, no hidden text
+            </span>
+            <span className="flex items-center gap-1.5">
+              <BadgeCheck className="size-4 text-green" aria-hidden="true" />
+              Every prompt explains why it works
+            </span>
+          </div>
+        </header>
 
-        <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13.5px] text-ink-muted">
-          <span className="flex items-center gap-1.5">
-            <BadgeCheck className="size-4 text-green" aria-hidden="true" />
-            Version-stamped verification on every prompt
-          </span>
-          <span className="flex items-center gap-1.5">
-            <BadgeCheck className="size-4 text-green" aria-hidden="true" />
-            No signup, no hidden text
-          </span>
-          <span className="flex items-center gap-1.5">
-            <BadgeCheck className="size-4 text-green" aria-hidden="true" />
-            Every prompt explains why it works
-          </span>
-        </div>
-
-        <nav aria-label="Jump to group" className="mt-8 flex flex-wrap gap-2">
+        <nav aria-label="Jump to group" className="mt-7 flex flex-wrap gap-2">
           {groups.map(({ group }) => (
             <a
               key={group.slug}

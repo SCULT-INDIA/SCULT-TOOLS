@@ -166,12 +166,11 @@ export default async function Home() {
 
         <div className="container-site relative grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
           <div>
-            {/* Eyebrow as a glass badge — bg-black/20 sits on violet-900
-                (already AAA) and only darkens it further, so the amber
-                text's contrast margin only grows. */}
-            <p className="inline-flex items-center gap-2 rounded-pill border border-white/15 bg-black/20 px-3 py-1.5">
-              <span className="size-1.5 shrink-0 rounded-full bg-cta" />
-              <span className="font-bold text-[12px] text-cta uppercase tracking-[0.12em]">
+            {/* Eyebrow as a tilted cta sticker — black-on-cta clears AA and
+                matches the badge vocabulary the MCP band uses. */}
+            <p className="inline-flex rotate-[-1.5deg] items-center gap-2 rounded-pill border border-ink bg-cta px-3.5 py-1.5 shadow-brutal-sm">
+              <span className="size-1.5 shrink-0 rounded-full bg-black" />
+              <span className="font-bold text-[12px] text-black uppercase tracking-[0.12em]">
                 The flagship — GEO / AEO
               </span>
             </p>
@@ -198,10 +197,11 @@ export default async function Home() {
             </Link>
           </div>
 
-          {/* Device-frame mockup of the tool's own hero. */}
+          {/* Device-frame mockup of the tool's own hero — tilted a degree
+              like the page's other sticker mockups, straightening on hover. */}
           <div
             aria-hidden="true"
-            className="overflow-hidden rounded-panel border border-white/12 bg-white/[0.05] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.55)] backdrop-blur-sm"
+            className="rotate-1 overflow-hidden rounded-panel border border-white/15 bg-white/[0.05] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.55)] backdrop-blur-sm transition-transform duration-200 hover:rotate-0"
           >
             <div className="flex items-center gap-2 border-white/10 border-b bg-black/20 px-4 py-3">
               <span className="size-2 rounded-full bg-white/25" />
@@ -298,22 +298,24 @@ export default async function Home() {
           </div>
 
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
-            {/* Anchor tile — the proof number, with the page's one privacy
-                CTA. card-modern (not card-flat) so it reads as a distinct
-                register from the four beside it. */}
-            <div className="card-modern relative flex flex-col justify-between overflow-hidden p-6 lg:row-span-2">
-              <div
-                aria-hidden="true"
-                className="absolute inset-x-0 top-0 h-1 bg-violet-500"
-              />
+            {/* Anchor tile — the proof number as a big cream brutal card
+                with the page's one privacy CTA. bg-cream is an adaptive
+                surface token, so its text uses adaptive ink. */}
+            <div className="flex flex-col justify-between rounded-lg border border-ink bg-cream p-6 shadow-brutal lg:row-span-2">
               <div>
                 <p className="flex items-baseline gap-2">
-                  <span className="stat-figure font-semibold text-[56px] text-ink leading-none">
+                  <span className="stat-figure font-semibold text-[64px] text-ink leading-none">
                     {clientSide}
                   </span>
                   <span className="text-[18px] text-ink-muted">
                     / {TOOLS.length} tools
                   </span>
+                </p>
+                <p
+                  aria-hidden="true"
+                  className="-rotate-1 mt-1 font-display font-semibold text-[16px] text-violet-700 italic"
+                >
+                  Your files stay yours
                 </p>
                 <p className="mt-3 text-[15px] text-ink-muted leading-6">
                   run entirely inside your browser — no upload, no server copy, nothing to
@@ -330,45 +332,50 @@ export default async function Home() {
               </Link>
             </div>
 
+            {/* Four pastel sticker tiles — fixed pastel fills, so text on
+                them is literal black / violet-700, never adaptive ink. */}
             {[
               {
                 icon: Lock,
                 t: 'No accounts, ever',
                 d: 'Nothing to sign up for means no password of yours to hold and no profile of you to build.',
+                tile: 'yellow',
+                tilt: '-rotate-1',
               },
               {
                 icon: ShieldCheck,
                 t: 'No result gating',
                 d: 'The full result renders first. Any offer to email something comes after you already have it.',
+                tile: 'blue',
+                tilt: 'rotate-1',
               },
               {
                 icon: Zap,
                 t: 'Faster by design',
                 d: 'Skipping the upload is not just private — it is why these tools feel instant.',
+                tile: 'green',
+                tilt: 'rotate-1',
               },
               {
                 icon: Radar,
                 t: 'The maths is shown',
                 d: 'Every calculator and checker explains its formula so you can verify it, not trust it.',
+                tile: 'lavender',
+                tilt: '-rotate-1',
               },
             ].map((item) => (
               <div
                 key={item.t}
-                className="card-flat p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-ink"
+                className={`rounded-lg border border-ink p-5 shadow-brutal-sm transition-transform duration-200 hover:rotate-0 hover:-translate-y-1 ${item.tilt}`}
+                style={{ background: `var(--color-tile-${item.tile})` }}
               >
-                {/* bg-violet-500/10 is a translucent tint over card-flat's
-                    own adaptive surface, so no literal-black text override
-                    is needed; only the icon sits on it. */}
-                <span className="grid size-10 place-items-center rounded-[10px] bg-violet-500/10">
-                  <item.icon
-                    className="size-5 text-[var(--color-violet-accent-text,var(--color-violet-700))]"
-                    aria-hidden="true"
-                  />
+                <span className="grid size-10 place-items-center rounded-[10px] border border-ink/15 bg-white">
+                  <item.icon className="size-5 text-violet-700" aria-hidden="true" />
                 </span>
-                <h3 className="mt-3 font-display font-semibold text-[17px] tracking-normal">
+                <h3 className="mt-3 font-display font-semibold text-[17px] text-black tracking-normal">
                   {item.t}
                 </h3>
-                <p className="mt-1.5 text-[14px] text-ink-muted leading-5">{item.d}</p>
+                <p className="mt-1.5 text-[14px] text-black/60 leading-5">{item.d}</p>
               </div>
             ))}
           </div>
@@ -380,7 +387,9 @@ export default async function Home() {
       <ResourcesStrip />
 
       {/* ======================================================== 12. FAQ
-          Card rows in the site's card-flat idiom, native details/summary. */}
+          Neo-brutal accordion rows — ink borders, hard shadows, a cta "+"
+          disc — still native details/summary (keyboard and screen-reader
+          behavior for free). */}
       <section aria-labelledby="home-faq" className="container-site pb-16">
         <div className="mx-auto max-w-[46rem]">
           <div className="mb-8 text-center">
@@ -391,17 +400,27 @@ export default async function Home() {
             >
               The honest answers
             </h2>
+            <p
+              aria-hidden="true"
+              className="mt-2 rotate-1 font-display font-semibold text-[16px] text-violet-700 italic"
+            >
+              No corporate non-answers, promise
+            </p>
           </div>
-          <div className="grid gap-3">
+          <div className="grid gap-3.5">
             {HOME_FAQ.map((item) => (
-              <details key={item.q} className="group card-flat px-5 py-4 open:border-ink">
+              <details
+                key={item.q}
+                className="group rounded-card border border-ink bg-cream px-5 py-4 shadow-brutal-sm transition-shadow open:shadow-brutal"
+              >
                 <summary className="flex cursor-pointer items-center justify-between gap-4 font-medium text-[17px] text-ink marker:content-none">
                   {item.q}
-                  {/* The "+" toggle sits on card-flat's own adaptive surface,
-                      not a fixed pastel — no literal-black override needed. */}
+                  {/* cta disc + ink border — the site's button vocabulary at
+                      toggle size. bg-cream is adaptive; the disc's own cta
+                      fill is fixed, so its glyph stays literal black. */}
                   <span
                     aria-hidden="true"
-                    className="grid size-7 shrink-0 place-items-center rounded-[8px] bg-violet-500/10 font-medium text-[18px] text-[var(--color-violet-accent-text,var(--color-violet-700))] transition-transform duration-200 group-open:rotate-45"
+                    className="grid size-7 shrink-0 place-items-center rounded-full border border-ink bg-cta font-semibold text-[18px] text-black transition-transform duration-200 group-open:rotate-45"
                   >
                     +
                   </span>

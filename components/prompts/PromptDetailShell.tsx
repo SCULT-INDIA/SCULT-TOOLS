@@ -3,6 +3,7 @@ import {
   BadgeCheck,
   History,
   Lightbulb,
+  SlidersHorizontal,
   Sparkles,
   TriangleAlert,
   Wrench,
@@ -150,6 +151,16 @@ export function PromptDetailShell({
               </span>
             )
           })}
+          {prompt.variables.length > 0 ? (
+            <span className="flex items-center gap-1.5 rounded-pill border border-ink/15 bg-white px-3 py-1.5 font-medium text-[12.5px] text-black">
+              <SlidersHorizontal
+                className="size-3.5 text-violet-700"
+                aria-hidden="true"
+              />
+              {prompt.variables.length} fillable{' '}
+              {prompt.variables.length === 1 ? 'variable' : 'variables'}
+            </span>
+          ) : null}
         </div>
       </header>
 
