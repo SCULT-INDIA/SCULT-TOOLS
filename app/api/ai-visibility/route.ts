@@ -5,9 +5,11 @@ import {
   type ApiError,
   buildReport,
   extractHeroImageUrl,
+  isApiError,
   isIpLiteral,
   isPrivateAddress,
   parseRobots,
+  type VisibilityReport,
   validateTargetUrl,
 } from '@/lib/tools/ai-visibility-checker/logic'
 
@@ -225,30 +227,17 @@ function errorResponse(error: ApiError, httpStatus: number): NextResponse {
   return NextResponse.json(error, { status: httpStatus })
 }
 
-export async function GET(request: Request): Promise<NextResponse> {
-  const clientIp = clientIpFromHeaders(request.headers)
-  const rateLimit = checkRateLimit(
-    `ai-visibility:${clientIp}`,
-    RATE_LIMIT_MAX,
-    RATE_LIMIT_WINDOW_MS,
-  )
-  if (!rateLimit.allowed) {
-    return NextResponse.json(
-      {
-        code: 'rate-limited' satisfies ApiError['code'],
-        error: `Too many checks from this connection — wait ${rateLimit.retryAfterSeconds}s and try again.`,
-      },
-      { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfterSeconds) } },
-    )
-  }
-
-  const rawUrl = new URL(request.url).searchParams.get('url') ?? ''
+/**
+ * The full check, independent of HTTP/rate-limiting concerns — shared by
+ * this route's `GET` and the `check_ai_visibility` MCP tool
+ * (`lib/mcp/register.ts`) so the SSRF-safe fetch orchestration has exactly
+ * one implementation. Returns `ApiError` on any failure rather than
+ * throwing, matching every other function in this file.
+ */
+export async function runAiVisibilityCheck(rawUrl: string): Promise<VisibilityReport | ApiError> {
   const validation = validateTargetUrl(rawUrl)
   if (validation.url === undefined || validation.hostname === undefined) {
-    return errorResponse(
-      { error: validation.error ?? 'Invalid URL.', code: 'invalid-url' },
-      400,
-    )
+    return { error: validation.error ?? 'Invalid URL.', code: 'invalid-url' }
   }
 
   // Homepage first — if the site itself is unreachable there is no report.
@@ -259,43 +248,29 @@ export async function GET(request: Request): Promise<NextResponse> {
   const home = await safeFetch(validation.url)
   const homepageResponseMs = Date.now() - homepageFetchStart
   if (home.failure === 'invalid') {
-    return errorResponse(
-      { error: 'A redirect led to an invalid URL.', code: 'invalid-url' },
-      400,
-    )
+    return { error: 'A redirect led to an invalid URL.', code: 'invalid-url' }
   }
   if (home.failure === 'private') {
-    return errorResponse(
-      {
-        error:
-          'That hostname resolves to a private or internal address, which cannot be checked.',
-        code: 'private-address',
-      },
-      400,
-    )
+    return {
+      error: 'That hostname resolves to a private or internal address, which cannot be checked.',
+      code: 'private-address',
+    }
   }
   if (home.failure === 'unreachable') {
-    return errorResponse(
-      {
-        error:
-          'The site did not respond within 10 seconds (or redirected more than 3 times).',
-        code: 'unreachable',
-      },
-      502,
-    )
+    return {
+      error: 'The site did not respond within 10 seconds (or redirected more than 3 times).',
+      code: 'unreachable',
+    }
   }
   if (!home.ok) {
     const blocked = home.status === 401 || home.status === 403 || home.status === 451
-    return errorResponse(
-      {
-        error: blocked
-          ? `The site answered HTTP ${home.status} to our checker.`
-          : `The site answered HTTP ${home.status} instead of a page.`,
-        code: blocked ? 'blocked' : 'unreachable',
-        httpStatus: home.status,
-      },
-      502,
-    )
+    return {
+      error: blocked
+        ? `The site answered HTTP ${home.status} to our checker.`
+        : `The site answered HTTP ${home.status} instead of a page.`,
+      code: blocked ? 'blocked' : 'unreachable',
+      httpStatus: home.status,
+    }
   }
 
   const origin = new URL(home.finalUrl).origin
@@ -334,12 +309,42 @@ export async function GET(request: Request): Promise<NextResponse> {
   // `buildReport` only resolved the hero-image URL (pure/sync, no fetch) —
   // swap in the actual fetched-and-validated data: URI here, or clear the
   // field entirely if that fetch failed or wasn't a real image.
-  const reportWithHeroImage = {
+  return {
     ...report,
     pageInsights: { ...report.pageInsights, heroImageUrl: heroImageDataUri },
   }
+}
 
-  return NextResponse.json(reportWithHeroImage, {
+export async function GET(request: Request): Promise<NextResponse> {
+  const clientIp = clientIpFromHeaders(request.headers)
+  const rateLimit = checkRateLimit(
+    `ai-visibility:${clientIp}`,
+    RATE_LIMIT_MAX,
+    RATE_LIMIT_WINDOW_MS,
+  )
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      {
+        code: 'rate-limited' satisfies ApiError['code'],
+        error: `Too many checks from this connection — wait ${rateLimit.retryAfterSeconds}s and try again.`,
+      },
+      { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfterSeconds) } },
+    )
+  }
+
+  const rawUrl = new URL(request.url).searchParams.get('url') ?? ''
+  const result = await runAiVisibilityCheck(rawUrl)
+  if (isApiError(result)) {
+    const status =
+      result.code === 'invalid-url' || result.code === 'private-address'
+        ? 400
+        : result.code === 'blocked'
+          ? 502
+          : 502
+    return errorResponse(result, status)
+  }
+
+  return NextResponse.json(result, {
     headers: { 'cache-control': 'public, max-age=0, s-maxage=21600' },
   })
 }

@@ -142,6 +142,36 @@ export async function getSkill(
 
 /** A few other skills in the same category, for the detail page's "more
  * like this" section — excludes the current skill. */
+/**
+ * Keyword search — the one lookup path that didn't exist before the MCP
+ * server needed it. A real (if unindexed) `ilike` scan over name/description,
+ * category-scoped first when given. Acceptable at the registry's current
+ * scale; add a pg_trgm/GIN index as a fast-follow migration if usage data
+ * later shows it's needed. Never returns `body` — callers that need it call
+ * `getSkill` per result, which also carries the license-gate decision.
+ */
+export async function searchSkills(
+  query: string,
+  category: SkillCategorySlug | undefined,
+  limit: number,
+): Promise<readonly Skill[]> {
+  const trimmed = query.trim()
+  if (trimmed === '') return []
+  let builder = supabaseSkills
+    .from('skills')
+    .select(SKILL_COLUMNS)
+    .or(`name.ilike.%${trimmed}%,description.ilike.%${trimmed}%`)
+    .order('installs', { ascending: false })
+    .limit(limit)
+  if (category !== undefined) builder = builder.eq('category', category)
+  const { data, error } = await builder
+  if (error) {
+    console.error('searchSkills failed', error)
+    return []
+  }
+  return data.map(rowToSkill)
+}
+
 export async function getSiblingSkills(
   category: SkillCategorySlug,
   excludeSlug: string,

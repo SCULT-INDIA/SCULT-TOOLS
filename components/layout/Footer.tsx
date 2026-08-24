@@ -204,6 +204,7 @@ function buildFooterColumns(): readonly FooterColumn[] {
     header: 'Resources',
     items: [
       { key: 'sitemap', label: 'Sitemap', href: '/sitemap' },
+      { key: 'mcp', label: 'MCP for AI agents', href: '/mcp' },
       { key: 'contact', label: 'Contact', href: '/contact' },
       { key: 'changelog', label: 'Changelog', href: '/changelog' },
       { key: 'roadmap', label: 'Roadmap', href: '/roadmap' },

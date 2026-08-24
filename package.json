@@ -16,20 +16,23 @@
   },
   "dependencies": {
     "@lobehub/icons": "^5.15.0",
+    "@modelcontextprotocol/sdk": "^1.26.0",
     "@react-pdf/renderer": "^4.7.0",
     "@supabase/supabase-js": "^2.112.3",
     "@vercel/analytics": "^2.0.1",
     "lucide-react": "^1.27.0",
+    "mcp-handler": "^1.1.0",
     "next": "^16.2.12",
     "qrcode": "^1.5.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "sharp": "^0.35.3",
     "simple-icons": "^16.28.0",
     "zod": "^4.4.3"
   },
   "overrides": {
     "postcss": "^8.5.24",
-    "sharp": "^0.35.3"
+    "sharp": "$sharp"
   },
   "browserslist": [
     "chrome >= 100",

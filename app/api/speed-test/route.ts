@@ -36,6 +36,7 @@ import {
   isPrivateAddress,
   parsePsiResponse,
   type SpeedTestErrorCode,
+  type SpeedTestPayload,
   type Strategy,
   validateTestUrl,
 } from '@/lib/tools/website-speed-test/logic'
@@ -77,34 +78,38 @@ function upstreamMessage(body: unknown): string {
   return typeof message === 'string' ? message : ''
 }
 
-export async function GET(request: Request): Promise<NextResponse> {
-  const clientIp = clientIpFromHeaders(request.headers)
-  const rateLimit = checkRateLimit(
-    `speed-test:${clientIp}`,
-    RATE_LIMIT_MAX,
-    RATE_LIMIT_WINDOW_MS,
+export interface SpeedTestApiError {
+  readonly code: SpeedTestErrorCode
+  readonly error: string
+}
+
+export function isSpeedTestApiError(value: unknown): value is SpeedTestApiError {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'code' in value &&
+    'error' in value
   )
-  if (!rateLimit.allowed) {
-    return NextResponse.json(
-      {
-        code: 'rate-limited' satisfies SpeedTestErrorCode,
-        error: `Too many tests from this connection — wait ${rateLimit.retryAfterSeconds}s and try again.`,
-      },
-      { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfterSeconds) } },
-    )
-  }
+}
 
-  const { searchParams } = new URL(request.url)
-
-  const rawStrategy = searchParams.get('strategy') ?? 'mobile'
+/**
+ * The full test, independent of HTTP/rate-limiting concerns — shared by
+ * this route's `GET` and the `test_website_speed` MCP tool
+ * (`lib/mcp/register.ts`) so the SSRF-safe validation and PSI call have
+ * exactly one implementation.
+ */
+export async function runSpeedTest(
+  rawUrl: string,
+  rawStrategy: string,
+): Promise<SpeedTestPayload | SpeedTestApiError> {
   if (rawStrategy !== 'mobile' && rawStrategy !== 'desktop') {
-    return errorJson('invalid-url', 'strategy must be "mobile" or "desktop".', 400)
+    return { code: 'invalid-url', error: 'strategy must be "mobile" or "desktop".' }
   }
   const strategy: Strategy = rawStrategy
 
-  const validated = validateTestUrl(searchParams.get('url') ?? '')
+  const validated = validateTestUrl(rawUrl)
   if (validated.url === undefined) {
-    return errorJson('blocked-url', validated.error ?? 'Enter a valid URL.', 400)
+    return { code: 'blocked-url', error: validated.error ?? 'Enter a valid URL.' }
   }
   const targetUrl = validated.url
 
@@ -116,28 +121,22 @@ export async function GET(request: Request): Promise<NextResponse> {
     try {
       const addresses = await lookup(hostname, { all: true, verbatim: true })
       if (addresses.some((a) => isPrivateAddress(a.address))) {
-        return errorJson(
-          'blocked-url',
-          'That hostname resolves to a private network address, so it cannot be tested.',
-          400,
-        )
+        return {
+          code: 'blocked-url',
+          error: 'That hostname resolves to a private network address, so it cannot be tested.',
+        }
       }
     } catch {
-      return errorJson(
-        'unreachable',
-        'That domain does not resolve. Check the spelling, then try again.',
-        400,
-      )
+      return {
+        code: 'unreachable',
+        error: 'That domain does not resolve. Check the spelling, then try again.',
+      }
     }
   }
 
   const cached = resultCache.get(targetUrl, strategy)
   if (cached !== undefined) {
-    return NextResponse.json(cached, {
-      headers: {
-        'Cache-Control': `public, s-maxage=${REVALIDATE_SECONDS}, stale-while-revalidate=3600`,
-      },
-    })
+    return cached
   }
 
   const psiUrl = new URL(PSI_ENDPOINT)
@@ -167,85 +166,111 @@ export async function GET(request: Request): Promise<NextResponse> {
     })
   } catch (err) {
     if (err instanceof DOMException && err.name === 'TimeoutError') {
-      return errorJson(
-        'timeout',
-        'The test did not finish within 60 seconds. Slow or hanging pages can exceed the limit — try again.',
-        504,
-      )
+      return {
+        code: 'timeout',
+        error: 'The test did not finish within 60 seconds. Slow or hanging pages can exceed the limit — try again.',
+      }
     }
-    return errorJson(
-      'upstream',
-      'Could not reach the PageSpeed service. Try again in a moment.',
-      502,
-    )
+    return { code: 'upstream', error: 'Could not reach the PageSpeed service. Try again in a moment.' }
   }
 
   const contentLength = Number(upstream.headers.get('content-length') ?? '0')
   if (Number.isFinite(contentLength) && contentLength > MAX_RESPONSE_BYTES) {
-    return errorJson('upstream', 'The PageSpeed response was too large to process.', 502)
+    return { code: 'upstream', error: 'The PageSpeed response was too large to process.' }
   }
   const text = await upstream.text()
   if (text.length > MAX_RESPONSE_BYTES) {
-    return errorJson('upstream', 'The PageSpeed response was too large to process.', 502)
+    return { code: 'upstream', error: 'The PageSpeed response was too large to process.' }
   }
 
   let body: unknown
   try {
     body = JSON.parse(text)
   } catch {
-    return errorJson(
-      'upstream',
-      'The PageSpeed service returned an unreadable response. Try again in a moment.',
-      502,
-    )
+    return {
+      code: 'upstream',
+      error: 'The PageSpeed service returned an unreadable response. Try again in a moment.',
+    }
   }
 
   if (!upstream.ok) {
     const message = upstreamMessage(body)
     if (upstream.status === 429 || /quota|rate limit/i.test(message)) {
-      return errorJson(
-        'quota',
-        'The free testing quota is briefly exhausted. Wait a minute, then run the test again.',
-        429,
-      )
+      return {
+        code: 'quota',
+        error: 'The free testing quota is briefly exhausted. Wait a minute, then run the test again.',
+      }
     }
     if (
       /FAILED_DOCUMENT_REQUEST|ERRORED_DOCUMENT_REQUEST|DNS_FAILURE|NOT_HTML|unreachable/i.test(
         message,
       )
     ) {
-      return errorJson(
-        'unreachable',
-        'PageSpeed could not load that page. Check it opens in your own browser and is not blocking crawlers.',
-        502,
-      )
+      return {
+        code: 'unreachable',
+        error: 'PageSpeed could not load that page. Check it opens in your own browser and is not blocking crawlers.',
+      }
     }
     if (upstream.status === 400) {
-      return errorJson(
-        'invalid-url',
-        'PageSpeed rejected that URL. Check it is a public web page, not a file or an intranet address.',
-        400,
-      )
+      return {
+        code: 'invalid-url',
+        error: 'PageSpeed rejected that URL. Check it is a public web page, not a file or an intranet address.',
+      }
     }
-    return errorJson(
-      'upstream',
-      'The PageSpeed service failed to run the test. Running it again usually works.',
-      502,
-    )
+    return {
+      code: 'upstream',
+      error: 'The PageSpeed service failed to run the test. Running it again usually works.',
+    }
   }
 
   const parsed = parsePsiResponse(body, strategy)
   if (parsed.payload === undefined) {
-    return errorJson(
-      'upstream',
-      parsed.error ?? 'PageSpeed returned a response this tool could not read.',
-      502,
-    )
+    return {
+      code: 'upstream',
+      error: parsed.error ?? 'PageSpeed returned a response this tool could not read.',
+    }
   }
 
   resultCache.set(targetUrl, strategy, parsed.payload, REVALIDATE_SECONDS * 1000)
+  return parsed.payload
+}
 
-  return NextResponse.json(parsed.payload, {
+export async function GET(request: Request): Promise<NextResponse> {
+  const clientIp = clientIpFromHeaders(request.headers)
+  const rateLimit = checkRateLimit(
+    `speed-test:${clientIp}`,
+    RATE_LIMIT_MAX,
+    RATE_LIMIT_WINDOW_MS,
+  )
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      {
+        code: 'rate-limited' satisfies SpeedTestErrorCode,
+        error: `Too many tests from this connection — wait ${rateLimit.retryAfterSeconds}s and try again.`,
+      },
+      { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfterSeconds) } },
+    )
+  }
+
+  const { searchParams } = new URL(request.url)
+  const result = await runSpeedTest(
+    searchParams.get('url') ?? '',
+    searchParams.get('strategy') ?? 'mobile',
+  )
+
+  if (isSpeedTestApiError(result)) {
+    const status =
+      result.code === 'timeout'
+        ? 504
+        : result.code === 'quota'
+          ? 429
+          : result.code === 'invalid-url' || result.code === 'blocked-url'
+            ? 400
+            : 502
+    return errorJson(result.code, result.error, status)
+  }
+
+  return NextResponse.json(result, {
     headers: {
       // Let the CDN reuse a finished report too — same window as resultCache.
       'Cache-Control': `public, s-maxage=${REVALIDATE_SECONDS}, stale-while-revalidate=3600`,
