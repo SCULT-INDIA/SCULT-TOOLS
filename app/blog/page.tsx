@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { BlogIndexList } from '@/components/blog/BlogIndexList'
 import { BLOG_POSTS } from '@/lib/blog/registry'
 import type { BlogPillar } from '@/lib/blog/types'
@@ -33,20 +34,25 @@ export const metadata: Metadata = {
   twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 }
 
+const POST_SUMMARIES = BLOG_POSTS.map((post) => ({
+  slug: post.slug,
+  pillar: post.pillar,
+  title: post.title,
+  description: post.description,
+  readingMinutes: post.readingMinutes,
+}))
+
 /**
  * The editorial hub, one tier deeper than `/guides` — long-form, keyword-
  * targeted posts across tools, prompts and Scult's services. Every post
  * derives from `lib/blog/registry.ts`, so a new post surfaces here
  * automatically — nothing on this page is hand-kept.
  */
-export default async function BlogPage({
+export default function BlogPage({
   searchParams,
 }: {
   searchParams: Promise<{ pillar?: string }>
 }) {
-  const { pillar } = await searchParams
-  const initialPillar = isBlogPillar(pillar) ? pillar : 'all'
-
   return (
     <>
       <JsonLd
@@ -67,19 +73,33 @@ export default async function BlogPage({
           generic SEO filler.
         </p>
 
+        {/* `searchParams` is per-request data — reading it directly in this
+            page component (as the previous version did) made the whole
+            route "blocking" under Cache Components, which fails the
+            production build outright ("Uncached data was accessed outside
+            of <Suspense>"). Isolating the read in its own async component
+            behind Suspense keeps the rest of the page statically
+            prerenderable; the fallback matches the unfiltered ("all")
+            view exactly, so there's nothing visally to swap in the common
+            case where the request has no `?pillar=`. */}
         <div className="mt-10">
-          <BlogIndexList
-            posts={BLOG_POSTS.map((post) => ({
-              slug: post.slug,
-              pillar: post.pillar,
-              title: post.title,
-              description: post.description,
-              readingMinutes: post.readingMinutes,
-            }))}
-            initialPillar={initialPillar}
-          />
+          <Suspense
+            fallback={<BlogIndexList posts={POST_SUMMARIES} initialPillar="all" />}
+          >
+            <FilteredBlogIndexList searchParams={searchParams} />
+          </Suspense>
         </div>
       </section>
     </>
   )
+}
+
+async function FilteredBlogIndexList({
+  searchParams,
+}: {
+  searchParams: Promise<{ pillar?: string }>
+}) {
+  const { pillar } = await searchParams
+  const initialPillar = isBlogPillar(pillar) ? pillar : 'all'
+  return <BlogIndexList posts={POST_SUMMARIES} initialPillar={initialPillar} />
 }
