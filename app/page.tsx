@@ -1,7 +1,6 @@
 import { Lock, Radar, ShieldCheck, Zap } from 'lucide-react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { CategoryPlans } from '@/components/sections/CategoryPlans'
 import { CategoryTabs } from '@/components/sections/CategoryTabs'
 import { ContactAndCta } from '@/components/sections/ContactAndCta'
 import { Hero } from '@/components/sections/Hero'
@@ -133,9 +132,8 @@ export default async function Home() {
           agent. Dark developer band, real install command. */}
       <McpSpotlight />
 
-      {/* ===================================================== 7. PRICING
-          The honest conversion section — when a free tool is not enough. */}
-      <CategoryPlans />
+      {/* 7. PRICING — removed at the user's request. The /pricing page and
+             the footer's Scult links still carry the paid-services story. */}
 
       {/* ============================================= 8. UNIVERSAL INCLUDES
           LOCKED section (text refreshed to cover all three catalogues). */}
