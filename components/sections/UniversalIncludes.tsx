@@ -1,5 +1,6 @@
 import { Check } from 'lucide-react'
 import Image from 'next/image'
+import { PROMPTS } from '@/lib/prompts/registry'
 import { APPROVED_TOOL_COUNT, TOOLS } from '@/lib/tools/registry'
 
 /**
@@ -34,6 +35,9 @@ function shortName(title: string): string {
 
 const GUARANTEES: readonly string[] = [
   `${APPROVED_TOOL_COUNT} tools, all free`,
+  `${PROMPTS.length.toLocaleString('en-US')} verified AI prompts`,
+  'Real agent skills, synced daily',
+  'MCP server for AI agents',
   'No signup or account',
   'No ads, anywhere',
   'Most run entirely in your browser',
@@ -79,7 +83,7 @@ export function UniversalIncludes() {
             ink-muted is the token-backed swap that clears AA at every
             viewport. */}
         <p className="mt-4 text-center font-display text-[22px] text-ink-muted md:text-[26px]">
-          All of it free, across every tool.
+          All of it free — tools, prompts and skills alike.
         </p>
 
         <div className="mt-12 grid gap-5 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">

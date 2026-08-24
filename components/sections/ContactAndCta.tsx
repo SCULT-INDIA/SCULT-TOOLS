@@ -8,20 +8,36 @@ import { parentLink } from '@/lib/site'
  * There is no functioning inbox behind this form yet, so rather than ship a
  * form that silently goes nowhere, every CTA here goes to the parent site's
  * real "Book a meeting" section (`/#book-meeting` — verified to exist in the
- * live DOM; `/contact`, which these previously pointed at, does not exist on
- * scult.in and 404s). Routed through `parentLink` rather than a plain mailto
- * so the UTM tags survive — a mailto: link can't carry query params the CRM
- * reads, which would silently break the attribution `parentLink`'s own
- * docblock says is the only thing deciding this subdomain's funding.
+ * live DOM). Routed through `parentLink` rather than a plain mailto so the
+ * UTM tags survive — a mailto: link can't carry query params the CRM reads.
  *
- * The dual closing CTA cards that used to follow this block now live in
- * `components/layout/Footer.tsx`, so they appear on every page rather than only
- * on the homepage.
+ * 2026 redesign: the right column's lone border-left divider becomes two
+ * card-flat tiles — the same secondary-action idiom the privacy bento just
+ * above this section established — so the whole row reads as one composed
+ * band rather than copy with an orphaned rule beside it.
+ *
+ * The dual closing CTA cards that used to follow this block live in
+ * `components/layout/Footer.tsx`, so they appear on every page.
  */
 export function ContactAndCta() {
+  const sideActions = [
+    {
+      icon: MessageCircle,
+      title: 'Found a bug in a calculation?',
+      label: 'Report it',
+      href: parentLink('/#book-meeting', 'report-bug'),
+    },
+    {
+      icon: Phone,
+      title: 'Want to talk to the team?',
+      label: 'Reach Scult',
+      href: parentLink('/#book-meeting', 'talk-to-team'),
+    },
+  ]
+
   return (
     <section aria-labelledby="request-tool" className="container-site py-16">
-      <div className="grid gap-10 lg:grid-cols-2">
+      <div className="grid items-center gap-10 lg:grid-cols-2">
         <div>
           <p className="eyebrow">Missing something?</p>
           <h2
@@ -42,40 +58,35 @@ export function ContactAndCta() {
           </a>
         </div>
 
-        <div className="flex flex-col justify-center gap-6 border-line lg:border-l lg:pl-10">
-          <div>
-            <p className="font-display font-semibold text-[18px] tracking-normal">
-              Found a bug in a calculation?
-            </p>
-            {/* Rest state is text-ink, not text-violet-700: violet-700 on
-                dark-mode `bg-offwhite` measures ~2.38:1, an AA failure, and
-                globals.css's dark-mode fix for the `hover:text-violet-600`
-                utility only repairs the HOVER state, never a resting
-                violet-700. text-ink is the same rest/hover split already used
-                for every other nav-style link in this codebase (Header,
-                ToolShell, CategoryPlans, ...) and needs no new fix — it is
-                already theme-safe. */}
-            <a
-              href={parentLink('/#book-meeting', 'report-bug')}
-              className="mt-1 inline-flex items-center gap-2 text-[15px] text-ink hover:text-violet-600"
+        <div className="grid gap-4">
+          {sideActions.map((action) => (
+            <div
+              key={action.title}
+              className="card-flat flex items-center gap-4 p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-ink"
             >
-              <MessageCircle className="size-4" aria-hidden="true" />
-              Report it
-            </a>
-          </div>
-          <div className="border-line border-t pt-6">
-            <p className="font-display font-semibold text-[18px] tracking-normal">
-              Want to talk to the team?
-            </p>
-            {/* Same rest/hover fix as "Report it" above — see that comment. */}
-            <a
-              href={parentLink('/#book-meeting', 'talk-to-team')}
-              className="mt-1 inline-flex items-center gap-2 text-[15px] text-ink hover:text-violet-600"
-            >
-              <Phone className="size-4" aria-hidden="true" />
-              Reach Scult
-            </a>
-          </div>
+              <span className="grid size-11 shrink-0 place-items-center rounded-[10px] bg-violet-500/10">
+                <action.icon
+                  className="size-5 text-[var(--color-violet-accent-text,var(--color-violet-700))]"
+                  aria-hidden="true"
+                />
+              </span>
+              <div>
+                <p className="font-display font-semibold text-[17px] tracking-normal">
+                  {action.title}
+                </p>
+                {/* Rest state is text-ink, not text-violet-700: the
+                    rest-ink/hover-violet-600 split is the one link pattern
+                    already proven theme-safe across the site (Header,
+                    ToolShell, CategoryPlans, …). */}
+                <a
+                  href={action.href}
+                  className="mt-0.5 inline-flex items-center gap-1.5 font-medium text-[15px] text-ink underline decoration-1 underline-offset-4 hover:text-violet-600"
+                >
+                  {action.label}
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

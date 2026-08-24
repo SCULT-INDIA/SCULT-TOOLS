@@ -1,8 +1,9 @@
 'use client'
 
+import { ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { CATEGORIES } from '@/lib/tools/categories'
 
 interface CategoryTabTool {
@@ -12,13 +13,17 @@ interface CategoryTabTool {
 }
 
 /**
- * Reference: band 5 — a full-bleed violet section with a row of 7 text tabs
- * ("Landing Pages & Dashboard UI", "Logo Design & Branding"…), a headline +
- * body + CTA on the left, and stacked device-mockup screenshots on the right.
+ * Reference: band 5 — a full-bleed violet section with a row of 7 text tabs,
+ * a headline + body + CTA on the left, and stacked device-mockup screenshots
+ * on the right. Tabs map onto our six categories exactly; the screenshot
+ * stack is a live list of that category's real tools.
  *
- * Tabs map onto our six categories exactly. The screenshot stack is replaced
- * with a live list of that category's real tools, styled as stacked cards —
- * genuine content standing in for what was a decorative product photo.
+ * 2026 redesign: underline text-tabs become pill tabs (the site's chip
+ * vocabulary), the tablist gains real arrow-key navigation with a roving
+ * tabindex (role="tab" promises keyboard semantics the old version never
+ * delivered), the panel is now a genuine role="tabpanel", and the staggered
+ * card list becomes a flat, scannable list with a hover arrow — the stagger
+ * read as misalignment at this size, not composition.
  */
 export function CategoryTabs({
   toolsByCategory,
@@ -30,40 +35,86 @@ export function CategoryTabs({
   toolsByCategory: Readonly<Record<string, readonly CategoryTabTool[]>>
 }) {
   const [active, setActive] = useState(0)
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
   const category = CATEGORIES[active]
   const tools = category ? (toolsByCategory[category.slug] ?? []) : []
+  const totalTools = Object.values(toolsByCategory).reduce((n, t) => n + t.length, 0)
+
+  function onTablistKeyDown(e: React.KeyboardEvent) {
+    const last = CATEGORIES.length - 1
+    let next: number | null = null
+    if (e.key === 'ArrowRight') next = active === last ? 0 : active + 1
+    else if (e.key === 'ArrowLeft') next = active === 0 ? last : active - 1
+    else if (e.key === 'Home') next = 0
+    else if (e.key === 'End') next = last
+    if (next !== null) {
+      e.preventDefault()
+      setActive(next)
+      tabRefs.current[next]?.focus()
+    }
+  }
 
   return (
     <section aria-labelledby="category-tabs" className="bg-violet-700 py-16 text-white">
       <div className="container-site">
-        <h2 id="category-tabs" className="sr-only">
-          Browse tools by category
-        </h2>
+        <div className="mb-10 text-center">
+          <p className="font-bold text-[12px] text-cta uppercase tracking-[0.12em]">
+            The tools
+          </p>
+          <h2
+            id="category-tabs"
+            className="mt-3 text-[30px] text-white leading-[1.1] tracking-[-0.5px] md:text-[40px]"
+          >
+            {totalTools} tools across six categories
+          </h2>
+          <p className="mx-auto mt-4 max-w-[52ch] text-[16px] text-white/70 leading-7">
+            Built the way we build for clients — tested, accessible, and honest about
+            their own limitations. Pick a lane:
+          </p>
+        </div>
+
         <div
           role="tablist"
           aria-label="Tool categories"
-          className="mb-10 flex flex-wrap justify-center gap-x-8 gap-y-3 border-white/20 border-b pb-4"
+          onKeyDown={onTablistKeyDown}
+          className="mb-10 flex flex-wrap justify-center gap-2.5"
         >
           {CATEGORIES.map((c, i) => (
             <button
               key={c.slug}
+              ref={(el) => {
+                tabRefs.current[i] = el
+              }}
               type="button"
               role="tab"
+              id={`category-tab-${c.slug}`}
               aria-selected={i === active}
+              aria-controls="category-tabpanel"
+              tabIndex={i === active ? 0 : -1}
               onClick={() => setActive(i)}
-              className={`whitespace-nowrap pb-3 text-[15px] transition-colors ${
+              className={`whitespace-nowrap rounded-pill px-4 py-2 font-semibold text-[14px] transition-all duration-200 ${
                 i === active
-                  ? 'border-cta border-b-2 font-semibold text-white'
-                  : 'text-white/80 hover:text-white'
+                  ? 'border border-black bg-cta text-black shadow-[3px_3px_0_0_rgb(0_0_0/0.9)]'
+                  : 'border border-white/25 text-white/85 hover:border-white/60 hover:text-white'
               }`}
             >
               {c.name}
+              <span
+                className={`ml-1.5 tabular-nums ${i === active ? 'text-black/60' : 'text-white/70'}`}
+              >
+                {(toolsByCategory[c.slug] ?? []).length}
+              </span>
             </button>
           ))}
         </div>
 
         {category ? (
-          <div className="grid items-center gap-10 lg:grid-cols-2">
+          <div
+            role="tabpanel"
+            id="category-tabpanel"
+            aria-labelledby={`category-tab-${category.slug}`}
+            className="grid items-center gap-10 lg:grid-cols-2"
+          >
             <div>
               <h3 className="max-w-[16ch] text-[30px] text-white leading-[1.15] tracking-[-0.5px] md:text-[38px]">
                 {category.name} tools, done for you in your browser
@@ -78,37 +129,37 @@ export function CategoryTabs({
             </div>
 
             <ul className="grid gap-3" aria-label={`${category.name} tools`}>
-              {tools.map((tool, i) => (
-                // Opaque cards, not translucent-white-on-violet. The reference's
-                // right column is bright device mockups that pop off the violet
-                // field; `bg-white/5` reads as flat monotone at this size.
-                // `bg-cream` (not a literal white) so the card follows the same
-                // light-surface elevation token as every other card on the site
-                // once dark mode flips it to a near-black surface.
-                <li
-                  key={tool.slug}
-                  className="flex items-center gap-4 rounded-md bg-cream p-4 shadow-card"
-                  style={{ marginLeft: i % 2 === 1 ? '1.5rem' : undefined }}
-                >
-                  <Image
-                    src={`/tool-icons/${tool.slug}.png`}
-                    alt=""
-                    aria-hidden="true"
-                    width={36}
-                    height={36}
-                    className="size-9 shrink-0 rounded-full ring-1 ring-line"
-                  />
-                  {/* hover:text-violet-600, not hover:text-violet-700: this
-                      is the same rest-ink/hover-accent pattern CategoryPlans
-                      uses just below, and only the -600 utility has an
-                      existing dark-mode hover fix wired in globals.css. -700
-                      measures ~2.27:1 on this card's dark-mode `bg-cream`, an
-                      AA failure the -600 swap avoids for free. */}
+              {tools.map((tool) => (
+                // Opaque cards, not translucent-white-on-violet: the
+                // reference's right column is bright device mockups that pop
+                // off the violet field. `bg-cream` (not literal white) so the
+                // card follows the same light-surface elevation token as
+                // every other card on the site.
+                <li key={tool.slug}>
+                  {/* The whole row is the link — a 15px text link inside a
+                      wide dead card was a needlessly small target. */}
                   <Link
                     href={`/${tool.category}/${tool.slug}`}
-                    className="font-medium text-[15px] text-ink hover:text-violet-600"
+                    className="group flex items-center gap-4 rounded-md bg-cream p-4 shadow-card transition-transform duration-200 hover:-translate-y-0.5"
                   >
-                    {tool.title}
+                    <Image
+                      src={`/tool-icons/${tool.slug}.png`}
+                      alt=""
+                      aria-hidden="true"
+                      width={36}
+                      height={36}
+                      className="size-9 shrink-0 rounded-full ring-1 ring-line"
+                    />
+                    {/* hover:text-violet-600, not -700: only the -600 utility
+                        has an existing dark-mode hover fix wired in
+                        globals.css — see CategoryPlans for the precedent. */}
+                    <span className="font-medium text-[15px] text-ink transition-colors group-hover:text-violet-600">
+                      {tool.title}
+                    </span>
+                    <ArrowUpRight
+                      className="ml-auto size-4 shrink-0 text-ink-subtle opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100"
+                      aria-hidden="true"
+                    />
                   </Link>
                 </li>
               ))}

@@ -5,11 +5,10 @@ import { CategoryPlans } from '@/components/sections/CategoryPlans'
 import { CategoryTabs } from '@/components/sections/CategoryTabs'
 import { ContactAndCta } from '@/components/sections/ContactAndCta'
 import { Hero } from '@/components/sections/Hero'
+import { McpSpotlight } from '@/components/sections/McpSpotlight'
 import { PromptLibrarySpotlight } from '@/components/sections/PromptLibrarySpotlight'
+import { ResourcesStrip } from '@/components/sections/ResourcesStrip'
 import { SkillLibrarySpotlight } from '@/components/sections/SkillLibrarySpotlight'
-import { SecondaryHero } from '@/components/sections/SecondaryHero'
-import { TechMarquee } from '@/components/sections/TechMarquee'
-import { ToolShowcaseMarquee } from '@/components/sections/ToolShowcaseMarquee'
 import { TrustStrip } from '@/components/sections/TrustStrip'
 import { UniversalIncludes } from '@/components/sections/UniversalIncludes'
 import { Icon } from '@/components/ui/Icon'
@@ -23,22 +22,28 @@ export const metadata: Metadata = {
 }
 
 /**
- * The hub home page.
+ * The hub home page — 2026 redesign.
  *
- * Rebuilt as a section-by-section clone of the draftss.com reference (see
- * docs/PLAN.md §5 for the per-section source): same order, same visual
- * grammar, same component anatomy — hero, trust strip, tech marquee, secondary
- * hero, tool showcase marquee, full service grid, category tabs, search
- * spotlight, benefits grid, category "plan" cards, universal-includes band, a
- * proof wall, an AI-visibility spotlight, how-it-works, privacy, FAQ, contact,
- * dual closing CTAs and the dome transition into the footer.
+ * The original page was a section-by-section clone of the draftss.com
+ * reference (see docs/PLAN.md §5); this pass keeps only what earns its
+ * scroll. Three sections are LOCKED by explicit user decision (hero,
+ * universal-includes band, footer + its closing CTA cards — the footer lives
+ * in components/layout/Footer.tsx); everything between them was rebuilt or
+ * cut:
+ *
+ *   - CUT: TechMarquee, SecondaryHero, ToolShowcaseMarquee. Together with
+ *     CategoryTabs they were four consecutive restatements of "here are the
+ *     tools" — one strong catalogue section (CategoryTabs, rebuilt) now
+ *     carries that job alone.
+ *   - NEW: McpSpotlight (the public MCP server had zero homepage presence)
+ *     and ResourcesStrip (blog/guides/glossary/collections wayfinding).
+ *   - REBUILT: TrustStrip (receipts band), both library spotlights (product
+ *     mockups instead of twin logo walls), the AI-visibility spotlight, the
+ *     privacy bento, FAQ and contact.
  *
  * Every number and claim is computed from the registry or independently
- * verifiable in the browser. Two sections deliberately do NOT clone the
- * reference's content model: the review wall (fabricated testimonials would be
- * fake social proof) and the contact form (no functioning inbox exists yet, so
- * it is a plain mailto rather than a form with a fake success state). Both are
- * explained inline in their own component docblocks.
+ * verifiable in the browser — no fabricated ratings, counters or
+ * testimonials anywhere on this page.
  */
 
 const HOME_FAQ = [
@@ -53,6 +58,14 @@ const HOME_FAQ = [
   {
     q: 'Is my data uploaded anywhere?',
     a: 'For 13 of the 15 tools, no — files and text are processed inside your own tab and are gone when you close it. The two diagnostics that must fetch a URL (the speed test and the AI visibility checker) send only that URL, never your files. The privacy page lists exactly which is which.',
+  },
+  {
+    q: 'Are the prompts and skills free too?',
+    a: 'Completely. Every prompt is shown in full on its own page — no teaser, no unlock, no email gate — and every skill is a real public SKILL.md you can copy as-is or export for your agent. The same zero-signup rule covers all three catalogues.',
+  },
+  {
+    q: 'What is the MCP server?',
+    a: 'A free, public endpoint that lets AI agents — Claude, Cursor, ChatGPT or any MCP client — call these tools directly: generate schema markup, build UTM links, search the prompt and skill libraries, all mid-conversation. One config line to connect, no auth. Setup instructions live on the MCP page.',
   },
   {
     q: 'Why did an agency build free tools?',
@@ -94,76 +107,50 @@ export default async function Home() {
       <JsonLd data={homeFaqJsonLd()} />
 
       {/* ============================================================ 1. HERO
-          Rebuilt from a reference screenshot the user supplied — see the full
-          adaptation notes in components/sections/Hero.tsx's docblock. */}
+          LOCKED section — see the redesign notes in the file docblock. */}
       <Hero />
 
-      {/* ==================================================== 2. TRUST STRIP */}
+      {/* ==================================================== 2. TRUST STRIP
+          Receipts band: the verifiable numbers, at display weight. */}
       <TrustStrip />
 
-      {/* ===================================================== 3. TECH MARQUEE */}
-      <TechMarquee />
-
-      {/* =================================================== 4. SECONDARY HERO */}
-      <SecondaryHero />
-
-      {/* ============================================== 5. TOOL SHOWCASE MARQUEE */}
-      <ToolShowcaseMarquee />
-
-      {/* ========================================== 5b. PROMPT LIBRARY SPOTLIGHT
-          The site's second catalogue gets the same homepage billing as the
-          tools — pitch + official brand-logo wall, linking to /prompts. */}
-      <PromptLibrarySpotlight />
-
-      {/* ============================================== 5c. SKILLS LIBRARY SPOTLIGHT
-          The site's third catalogue — same homepage billing, live count
-          from Supabase since this one grows daily instead of at deploy time. */}
-      <SkillLibrarySpotlight />
-
-      {/* 6. FULL SERVICE GRID — removed at the user's request. */}
-
-      {/* =================================================== 7. CATEGORY TABS */}
+      {/* ============================================== 3. CATEGORY EXPLORER
+          The one and only "here are the tools" section — violet band,
+          pill tabs with live counts, arrow-key navigable. */}
       <CategoryTabs toolsByCategory={toolsByCategory} />
 
-      {/* 8. SEARCH SPOTLIGHT — removed at the user's request. */}
+      {/* ========================================== 4. PROMPT LIBRARY SPOTLIGHT
+          Second catalogue — lavender panel, real prompt-card mockup. */}
+      <PromptLibrarySpotlight />
 
-      {/* 9. BENEFITS GRID — removed at the user's request. It duplicated the
-             two-card checklist that UniversalIncludes (11) now carries, and two
-             near-identical blocks on one page read as a mistake. */}
+      {/* ============================================ 5. SKILLS LIBRARY SPOTLIGHT
+          Third catalogue — green panel, SKILL.md terminal, mirrored layout.
+          Count is live from Supabase since this catalogue grows daily. */}
+      <SkillLibrarySpotlight />
 
-      {/* ================================================= 10. CATEGORY PLANS */}
+      {/* ==================================================== 6. MCP SPOTLIGHT
+          The public MCP server — every tool/prompt/skill callable from any
+          agent. Dark developer band, real install command. */}
+      <McpSpotlight />
+
+      {/* ===================================================== 7. PRICING
+          The honest conversion section — when a free tool is not enough. */}
       <CategoryPlans />
 
-      {/* ============================================= 11. UNIVERSAL INCLUDES */}
+      {/* ============================================= 8. UNIVERSAL INCLUDES
+          LOCKED section (text refreshed to cover all three catalogues). */}
       <UniversalIncludes />
 
-      {/* ==================================================== 12. PROOF WALL —
-             removed at the user's request. The "verified in code" claims read
-             as too technical/developer-audit-toned for this page. */}
-
-      {/* ============================================ 13. AI-VISIBILITY SPOTLIGHT
-          Redesigned from scratch around a user-supplied swatch matching
-          --color-violet-500 (#7030f8, this file's documented brand PRIMARY).
-          That tone is a glow/gradient accent rather than the section's flat
-          fill: violet-500 is calibrated for 6.06:1 as TEXT on white, and the
-          identical ratio applies in reverse (white text on a violet-500
-          fill) — AA-safe for body copy, but the cta-yellow eyebrow beneath
-          sits at 14px/700, which needs 4.5:1 and only clears ~3.77:1 against
-          a flat violet-500 fill. Keeping violet-900 (14.70:1, AAA) as the
-          base and using violet-500 only as a soft blurred glow keeps every
-          existing contrast guarantee while still visibly bringing in the
-          brighter brand tone.
-
-          The structural change beyond color: the right column used to be a
-          plain icon+text bullet list, which reads as generic marketing copy
-          with nothing to look at. It's now a small "device frame" mockup of
-          the actual tool's own redesigned hero (giant score, real band
-          vocabulary from bandFor() in logic.ts, a filled progress bar) with
-          the three inspected signals as a compact checklist underneath —
-          show the product, don't just describe it. The 84/"AI-visible"
-          numbers are illustrative chrome for the mockup, not a live result;
-          "AI-visible" itself is copied verbatim from the tool's real
-          scoring bands so the marketing claim can't drift from the product. */}
+      {/* ============================================ 9. AI-VISIBILITY SPOTLIGHT
+          The flagship tool. violet-900 base (14.70:1, AAA) with violet-500
+          only as a soft blurred glow — the brighter brand tone without
+          giving up any contrast guarantee (white on flat violet-500 fails
+          for the 14px cta-yellow eyebrow). The right column is a device
+          frame of the tool's own hero: giant score, real band vocabulary
+          from bandFor() in logic.ts, signals checklist and one suggested
+          fix — show the product, don't describe it. The 84/"AI-visible"
+          numbers are illustrative chrome, not a live result; "AI-visible"
+          is copied verbatim from the tool's real scoring bands. */}
       <section
         aria-labelledby="spotlight"
         className="relative overflow-hidden bg-violet-900 py-20 text-white"
@@ -179,13 +166,13 @@ export default async function Home() {
 
         <div className="container-site relative grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
           <div>
-            {/* Eyebrow as a glass badge instead of bare text — bg-black/20
-                sits on top of violet-900 (already AAA) and only darkens it
-                further, so the amber text's contrast margin only grows. */}
+            {/* Eyebrow as a glass badge — bg-black/20 sits on violet-900
+                (already AAA) and only darkens it further, so the amber
+                text's contrast margin only grows. */}
             <p className="inline-flex items-center gap-2 rounded-pill border border-white/15 bg-black/20 px-3 py-1.5">
               <span className="size-1.5 shrink-0 rounded-full bg-cta" />
               <span className="font-bold text-[12px] text-cta uppercase tracking-[0.12em]">
-                New — GEO / AEO
+                The flagship — GEO / AEO
               </span>
             </p>
             <h2
@@ -201,32 +188,22 @@ export default async function Home() {
               out.
             </p>
             {/* text-black/border-black force the resting-state text/border to
-                literal black: .btn-brutal's own color/border both read
-                var(--color-ink), which flips to near-white in dark mode while
-                --color-cta (yellow) stays fixed, collapsing the face to
-                ~1.45:1. hover:text-ink/hover:border-ink deliberately restore
-                the token so the already-correct hover state (near-white on
-                the dark-mode .btn-brutal:hover cream face) is untouched —
-                utilities layer + :hover's higher specificity make that win
-                back on hover in both themes. */}
+                literal black on the fixed-dark band; hover:text-ink/
+                hover:border-ink restore the token for the hover face. */}
             <Link
               href="/geo/ai-visibility-checker"
-              className="btn-brutal mt-8 text-black border-black hover:text-ink hover:border-ink"
+              className="btn-brutal mt-8 border-black text-black hover:border-ink hover:text-ink"
             >
               CHECK YOUR AI VISIBILITY
             </Link>
           </div>
 
-          {/* Device-frame mockup of the tool's own hero. Soft glass +
-              deep drop shadow deliberately reads as a different texture
-              from the flat neo-brutalist .btn-brutal beside it — a
-              considered two-texture pairing (sharp accent, soft canvas)
-              rather than one flat idiom repeated everywhere on the page. */}
+          {/* Device-frame mockup of the tool's own hero. */}
           <div
             aria-hidden="true"
             className="overflow-hidden rounded-panel border border-white/12 bg-white/[0.05] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.55)] backdrop-blur-sm"
           >
-            <div className="flex items-center gap-2 border-b border-white/10 bg-black/20 px-4 py-3">
+            <div className="flex items-center gap-2 border-white/10 border-b bg-black/20 px-4 py-3">
               <span className="size-2 rounded-full bg-white/25" />
               <span className="size-2 rounded-full bg-white/25" />
               <span className="size-2 rounded-full bg-white/25" />
@@ -254,12 +231,12 @@ export default async function Home() {
               </div>
             </div>
 
-            <ul className="divide-y divide-white/10 border-t border-white/10">
+            <ul className="divide-y divide-white/10 border-white/10 border-t">
               {[
                 {
                   icon: 'Radar',
                   label: 'AI crawler access',
-                  d: '10 of 10 crawlers allowed',
+                  d: '9 of 10 crawlers allowed',
                 },
                 {
                   icon: 'FileCode2',
@@ -278,30 +255,34 @@ export default async function Home() {
                   <span className="ml-auto text-[13px] text-white/55">{row.d}</span>
                 </li>
               ))}
+              {/* One suggested fix — the tool's actual value is the fix list,
+                  so the mockup shows one. Illustrative, like the score. */}
+              <li className="flex items-center gap-3 bg-black/20 px-6 py-3.5">
+                <span
+                  aria-hidden="true"
+                  className="size-2 shrink-0 rounded-full bg-cta"
+                />
+                <span className="font-medium text-[14px] text-white">
+                  1 fix suggested
+                </span>
+                <span className="ml-auto text-[13px] text-white/55">
+                  robots.txt blocks GPTBot — fix shown
+                </span>
+              </li>
             </ul>
           </div>
         </div>
       </section>
 
-      {/* 14. HOW IT WORKS — removed at the user's request. */}
-
-      {/* ==================================================== 15. PRIVACY
-          Redesigned as a small bento — researched first (see Sources in the
-          chat reply): asymmetric bento grids are the one 2026 trend that
-          held up in production (Apple/Google/Spotify-class sites went
-          bento-first; +23% scroll depth over 12-col grids in the source
-          data), while heavy glassmorphism/backdrop-blur measurably costs 15
-          to 30% FPS on real devices — so this stays in the site's own
-          card-flat/card-modern idiom rather than reaching for glass. The
-          {clientSide}/{TOOLS.length} figure used to be buried mid-paragraph;
-          it's the single most concrete proof point on the page, so it gets
-          its own hero tile instead, with the paragraph rewritten so the
-          number isn't stated twice. bg-ice/.card-flat/.card-modern are all
-          real dark-mode-adaptive tokens (unlike the fixed-pastel spotlight
-          section above), so no literal-black overrides are needed here. */}
+      {/* ==================================================== 10. PRIVACY
+          Rebuilt as a centered bento: header, then a five-tile grid with the
+          {clientSide}/{TOOLS.length} figure — the single most concrete proof
+          point on the page — as the anchor tile. bg-ice/.card-flat/
+          .card-modern are adaptive tokens, so no literal-black overrides are
+          needed here. */}
       <section aria-labelledby="privacy" className="border-line border-y bg-ice py-16">
-        <div className="container-site grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
-          <div>
+        <div className="container-site">
+          <div className="mx-auto max-w-[54rem] text-center">
             <p className="eyebrow">Privacy as a feature</p>
             <h2
               id="privacy"
@@ -309,104 +290,100 @@ export default async function Home() {
             >
               Your files never leave your browser
             </h2>
-            <p className="mt-5 text-[17px] text-ink-muted leading-7">
+            <p className="mx-auto mt-5 max-w-[62ch] text-[17px] text-ink-muted leading-7">
               Most of these tools do their work with your browser's own capabilities —
-              Canvas, native parsers, Web APIs. There is no upload step to wait for and no
-              server copy to worry about. Open your network panel and watch it stay empty
-              while you work.
+              Canvas, native parsers, Web APIs. No upload step, no server copy. Open your
+              network panel and watch it stay empty while you work.
             </p>
-            <p className="mt-4 text-[17px] text-ink-muted leading-7">
-              The two diagnostics that must touch the network — the speed test and the AI
-              visibility checker — send only the URL you type, never your content. The
-              privacy page lists every tool and exactly what it does or does not send.
-            </p>
-            {/* See the AI-visibility CTA above for why text-black/border-black
-                + hover:text-ink/hover:border-ink are needed here. */}
-            <Link
-              href="/privacy"
-              className="btn-brutal btn-brutal-sm mt-7 text-black border-black hover:text-ink hover:border-ink"
-            >
-              READ THE PRIVACY TABLE
-            </Link>
           </div>
 
-          <div className="grid gap-4">
-            {/* Hero bento cell — the proof number, promoted out of the
-                paragraph and given its own visual weight. card-modern (not
-                card-flat) so this one tile reads as a distinct register from
-                the four beneath it — the same "not everything gets the same
-                box" principle used in the tool-page redesigns earlier this
-                session. */}
-            <div className="card-modern relative overflow-hidden p-6">
+          <div className="mt-10 grid gap-4 lg:grid-cols-3">
+            {/* Anchor tile — the proof number, with the page's one privacy
+                CTA. card-modern (not card-flat) so it reads as a distinct
+                register from the four beside it. */}
+            <div className="card-modern relative flex flex-col justify-between overflow-hidden p-6 lg:row-span-2">
               <div
                 aria-hidden="true"
                 className="absolute inset-x-0 top-0 h-1 bg-violet-500"
               />
-              <p className="flex items-baseline gap-2">
-                <span className="font-display text-[44px] text-ink leading-none">
-                  {clientSide}
-                </span>
-                <span className="text-[18px] text-ink-muted">/ {TOOLS.length} tools</span>
-              </p>
-              <p className="mt-2 text-[14px] text-ink-muted leading-5">
-                run entirely inside your browser — no upload, no server copy, nothing to
-                intercept.
-              </p>
+              <div>
+                <p className="flex items-baseline gap-2">
+                  <span className="stat-figure font-semibold text-[56px] text-ink leading-none">
+                    {clientSide}
+                  </span>
+                  <span className="text-[18px] text-ink-muted">
+                    / {TOOLS.length} tools
+                  </span>
+                </p>
+                <p className="mt-3 text-[15px] text-ink-muted leading-6">
+                  run entirely inside your browser — no upload, no server copy, nothing to
+                  intercept. The two diagnostics that must touch the network (the speed
+                  test and the AI visibility checker) send only the URL you type, never
+                  your content.
+                </p>
+              </div>
+              <Link
+                href="/privacy"
+                className="btn-brutal btn-brutal-sm mt-6 self-start border-black text-black hover:border-ink hover:text-ink"
+              >
+                READ THE PRIVACY TABLE
+              </Link>
             </div>
 
-            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {[
-                {
-                  icon: Lock,
-                  t: 'No accounts, ever',
-                  d: 'Nothing to sign up for means no password of yours to hold and no profile of you to build.',
-                },
-                {
-                  icon: ShieldCheck,
-                  t: 'No result gating',
-                  d: 'The full result renders first. Any offer to email something comes after you already have it.',
-                },
-                {
-                  icon: Zap,
-                  t: 'Faster by design',
-                  d: 'Skipping the upload is not just private — it is why these tools feel instant.',
-                },
-                {
-                  icon: Radar,
-                  t: 'The maths is shown',
-                  d: 'Every calculator and checker explains its formula so you can verify it, not trust it.',
-                },
-              ].map((item) => (
-                <li
-                  key={item.t}
-                  className="card-flat p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-ink"
-                >
-                  {/* bg-violet-500/10 is a translucent tint over whichever
-                      adaptive surface it sits on (card-flat's own bg), not a
-                      fixed opaque pastel — so unlike bg-violet-50/bg-tile-*,
-                      it never needs a literal-black text override; only the
-                      icon sits on it, and its color is set directly below. */}
-                  <span className="grid size-10 place-items-center rounded-[10px] bg-violet-500/10">
-                    <item.icon
-                      className="size-5 text-[var(--color-violet-accent-text,var(--color-violet-700))]"
-                      aria-hidden="true"
-                    />
-                  </span>
-                  <h3 className="mt-3 font-display font-semibold text-[17px] tracking-normal">
-                    {item.t}
-                  </h3>
-                  <p className="mt-1.5 text-[14px] text-ink-muted leading-5">{item.d}</p>
-                </li>
-              ))}
-            </ul>
+            {[
+              {
+                icon: Lock,
+                t: 'No accounts, ever',
+                d: 'Nothing to sign up for means no password of yours to hold and no profile of you to build.',
+              },
+              {
+                icon: ShieldCheck,
+                t: 'No result gating',
+                d: 'The full result renders first. Any offer to email something comes after you already have it.',
+              },
+              {
+                icon: Zap,
+                t: 'Faster by design',
+                d: 'Skipping the upload is not just private — it is why these tools feel instant.',
+              },
+              {
+                icon: Radar,
+                t: 'The maths is shown',
+                d: 'Every calculator and checker explains its formula so you can verify it, not trust it.',
+              },
+            ].map((item) => (
+              <div
+                key={item.t}
+                className="card-flat p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-ink"
+              >
+                {/* bg-violet-500/10 is a translucent tint over card-flat's
+                    own adaptive surface, so no literal-black text override
+                    is needed; only the icon sits on it. */}
+                <span className="grid size-10 place-items-center rounded-[10px] bg-violet-500/10">
+                  <item.icon
+                    className="size-5 text-[var(--color-violet-accent-text,var(--color-violet-700))]"
+                    aria-hidden="true"
+                  />
+                </span>
+                <h3 className="mt-3 font-display font-semibold text-[17px] tracking-normal">
+                  {item.t}
+                </h3>
+                <p className="mt-1.5 text-[14px] text-ink-muted leading-5">{item.d}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ======================================================== 16. FAQ */}
-      <section aria-labelledby="home-faq" className="container-site py-16">
+      {/* ================================================ 11. RESOURCES STRIP
+          Blog / Guides / Glossary / Collections — quiet wayfinding row. */}
+      <ResourcesStrip />
+
+      {/* ======================================================== 12. FAQ
+          Card rows in the site's card-flat idiom, native details/summary. */}
+      <section aria-labelledby="home-faq" className="container-site pb-16">
         <div className="mx-auto max-w-[46rem]">
-          <div className="mb-6 text-center">
+          <div className="mb-8 text-center">
             <p className="eyebrow">Questions</p>
             <h2
               id="home-faq"
@@ -415,17 +392,16 @@ export default async function Home() {
               The honest answers
             </h2>
           </div>
-          <div className="divide-y divide-line border-line border-t">
+          <div className="grid gap-3">
             {HOME_FAQ.map((item) => (
-              <details key={item.q} className="group py-4">
-                <summary className="flex cursor-pointer items-start justify-between gap-4 font-medium text-[17px] text-ink marker:content-none">
+              <details key={item.q} className="group card-flat px-5 py-4 open:border-ink">
+                <summary className="flex cursor-pointer items-center justify-between gap-4 font-medium text-[17px] text-ink marker:content-none">
                   {item.q}
-                  {/* FAQ "+" toggle sits directly on this section's
-                      container-site/offwhite ambient page background, not a
-                      tile/violet-50/100 fill — same fix as the icons above. */}
+                  {/* The "+" toggle sits on card-flat's own adaptive surface,
+                      not a fixed pastel — no literal-black override needed. */}
                   <span
                     aria-hidden="true"
-                    className="mt-1 shrink-0 text-[var(--color-violet-accent-text,var(--color-violet-700))] transition-transform group-open:rotate-45"
+                    className="grid size-7 shrink-0 place-items-center rounded-[8px] bg-violet-500/10 font-medium text-[18px] text-[var(--color-violet-accent-text,var(--color-violet-700))] transition-transform duration-200 group-open:rotate-45"
                   >
                     +
                   </span>
@@ -439,12 +415,12 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ===================================================== 17. CONTACT */}
+      {/* ===================================================== 13. CONTACT */}
       <ContactAndCta />
 
-      {/* 18. The dual CTA cards and the dome that follow are no longer here —
-             they moved into `components/layout/Footer.tsx` so that every page,
-             not just this one, closes with the identical footer. */}
+      {/* 14. The dual CTA cards and the dome that follow live in
+             `components/layout/Footer.tsx` (LOCKED), so every page closes
+             with the identical footer. */}
 
       <p className="sr-only">
         Built by <a href={parentLink('/', 'home-end')}>{SITE.parentName}</a>, an AI-first

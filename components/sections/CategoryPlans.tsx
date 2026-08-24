@@ -14,8 +14,11 @@ export function CategoryPlans() {
   return (
     <section aria-labelledby="pricing-heading" className="container-site py-16">
       <div className="mx-auto max-w-[46rem] text-center">
-        <span className="btn-brutal btn-brutal-sm cursor-default">
-          SCULT PROJECT PRICING
+        {/* A badge, not a button-alike: the old span borrowed .btn-brutal,
+            which promises clickability it never had. */}
+        <span className="inline-flex items-center gap-2 rounded-pill border border-ink bg-cta px-4 py-1.5 font-bold text-[12px] text-black uppercase tracking-[0.12em]">
+          <span aria-hidden="true" className="size-1.5 rounded-full bg-black" />
+          Scult project pricing
         </span>
         <h2
           id="pricing-heading"
