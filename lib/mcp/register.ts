@@ -3,6 +3,9 @@ import QRCode from 'qrcode'
 import { z } from 'zod'
 import { runAiVisibilityCheck } from '@/app/api/ai-visibility/route'
 import { isSpeedTestApiError, runSpeedTest } from '@/app/api/speed-test/route'
+import { BLOG_POSTS, getBlogPost, getBlogPostsByPillar } from '@/lib/blog/registry'
+import type { BlogPost, Inline } from '@/lib/blog/types'
+import { GUIDES, getGuide } from '@/lib/guides/registry'
 import {
   getPromptCategory,
   PROMPT_CATEGORIES,
@@ -866,4 +869,146 @@ export function registerTools(server: McpServer): void {
       )
     },
   )
+
+  // ── Wave 6 — Guides & Blog ────────────────────────────────────────────
+
+  server.registerTool(
+    'list_guides',
+    {
+      title: 'List Guides',
+      description:
+        "This site's small set of evergreen how-to guides (distinct from the blog) — title, description and reading time for each.",
+      inputSchema: {},
+    },
+    async () => {
+      const limited = checkGeneral()
+      if (limited) return limited
+      return text(
+        GUIDES.map((g) => ({
+          slug: g.slug,
+          title: g.title,
+          description: g.description,
+          readingMinutes: g.readingMinutes,
+        })),
+      )
+    },
+  )
+
+  server.registerTool(
+    'get_guide',
+    {
+      title: 'Get Guide',
+      description: 'Fetch one guide in full: every section, and the tools it links to.',
+      inputSchema: { slug: z.string() },
+    },
+    async ({ slug }) => {
+      const limited = checkGeneral()
+      if (limited) return limited
+      const guide = getGuide(slug)
+      if (guide === undefined) return errorText(`No guide with slug "${slug}".`)
+      return text(guide)
+    },
+  )
+
+  server.registerTool(
+    'search_blog',
+    {
+      title: 'Search Blog',
+      description:
+        'Keyword search across 200+ long-form blog posts (tool deep-dives, prompt roundups, service guides, competitor playbooks) by title, description and full body text. Returns compact matches — call get_blog_post for the full post.',
+      inputSchema: {
+        query: z.string(),
+        pillar: z
+          .enum(['tool', 'prompt', 'service', 'roundup', 'playbook'])
+          .optional()
+          .describe('Narrow to one content type'),
+        limit: z.number().int().min(1).max(50).optional().default(10),
+      },
+    },
+    async ({ query, pillar, limit }) => {
+      const limited = checkGeneral()
+      if (limited) return limited
+      const terms = query
+        .toLowerCase()
+        .split(/\s+/)
+        .filter((t) => t.length > 0)
+      if (terms.length === 0) return text([])
+      const pool: readonly BlogPost[] =
+        pillar !== undefined ? getBlogPostsByPillar(pillar) : BLOG_POSTS
+      const scored = pool
+        .map((p) => {
+          const bodyText = p.sections
+            .flatMap((s) => [s.heading, ...s.body.map(flattenInline)])
+            .join(' ')
+          const faqText = (p.faq ?? [])
+            .flatMap((f) => [f.question, flattenInline(f.answer)])
+            .join(' ')
+          const haystack =
+            `${p.title} ${p.description} ${p.dek} ${p.targetKeyword} ${bodyText} ${faqText}`.toLowerCase()
+          const titleHay = p.title.toLowerCase()
+          let score = 0
+          for (const term of terms) {
+            if (titleHay.includes(term)) score += 10
+            else if (haystack.includes(term)) score += 1
+            else return { p, score: -1 }
+          }
+          return { p, score }
+        })
+        .filter((r) => r.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, limit)
+      return text(
+        scored.map(({ p }) => ({
+          slug: p.slug,
+          title: p.title,
+          description: p.description,
+          pillar: p.pillar,
+          readingMinutes: p.readingMinutes,
+        })),
+      )
+    },
+  )
+
+  server.registerTool(
+    'get_blog_post',
+    {
+      title: 'Get Blog Post',
+      description:
+        'Fetch one blog post in full: every section, FAQ, sources, and related tools/prompts.',
+      inputSchema: { slug: z.string() },
+    },
+    async ({ slug }) => {
+      const limited = checkGeneral()
+      if (limited) return limited
+      const post = getBlogPost(slug)
+      if (post === undefined) return errorText(`No blog post with slug "${slug}".`)
+      return text({
+        slug: post.slug,
+        pillar: post.pillar,
+        title: post.title,
+        h1: post.h1,
+        description: post.description,
+        dek: post.dek,
+        sections: post.sections.map((s) => ({
+          heading: s.heading,
+          body: s.body.map(flattenInline),
+        })),
+        faq: (post.faq ?? []).map((f) => ({
+          question: f.question,
+          answer: flattenInline(f.answer),
+        })),
+        sources: post.sources ?? [],
+        relatedTools: post.relatedTools,
+        relatedPrompts: post.relatedPrompts,
+        updatedAt: post.updatedAt,
+        readingMinutes: post.readingMinutes,
+      })
+    },
+  )
+}
+
+/** Drops link/bold structure, keeping just the readable text — an agent
+ * consuming this over MCP wants plain paragraphs, not the site's inline-markup AST. */
+function flattenInline(segments: readonly Inline[]): string {
+  return segments.map((s) => (typeof s === 'string' ? s : s.text)).join('')
 }

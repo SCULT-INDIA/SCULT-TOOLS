@@ -6,7 +6,7 @@ import { absoluteUrl, SITE } from '@/lib/site'
 
 const TITLE = 'MCP Server — Connect Your AI Agent'
 const DESCRIPTION =
-  'Call every tool, prompt and skill on Scult Tools directly from Claude, Cursor, ChatGPT or any MCP client — a public Streamable HTTP server, no auth, no signup.'
+  'Call every tool, prompt, skill, guide and blog post on Scult Tools directly from Claude, Cursor, ChatGPT or any MCP client — a public Streamable HTTP server, no auth, no signup.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -104,6 +104,22 @@ const SKILL_TOOLS: readonly ToolRow[] = [
   { name: 'list_skill_categories', description: 'All skill categories with live counts' },
 ]
 
+const GUIDE_BLOG_TOOLS: readonly ToolRow[] = [
+  {
+    name: 'list_guides',
+    description: 'The evergreen how-to guides — a small set, separate from the blog',
+  },
+  { name: 'get_guide', description: 'One guide in full, every section' },
+  {
+    name: 'search_blog',
+    description: 'Keyword search across 200+ long-form posts, full body included',
+  },
+  {
+    name: 'get_blog_post',
+    description: 'One post in full: sections, FAQ, sources, related links',
+  },
+]
+
 function ToolTable({ rows }: { rows: readonly ToolRow[] }) {
   return (
     <ul className="mt-4 divide-y divide-ink/10 rounded-panel border border-ink/15">
@@ -155,8 +171,8 @@ export default function McpPage() {
           </a>{' '}
           server. Claude, Cursor, ChatGPT or anything else that speaks MCP can call the
           tools below mid-conversation — generate a QR code, audit a site's AI visibility,
-          pull a prompt or a skill — without a human opening this site in a browser. No
-          account, no API key, no cost.
+          pull a prompt, a skill, a guide or a blog post — without a human opening this
+          site in a browser. No account, no API key, no cost.
         </p>
 
         <section className="mt-12">
@@ -222,7 +238,8 @@ export default function McpPage() {
             {PURE_TOOLS.length +
               SERVER_TOOLS.length +
               PROMPT_TOOLS.length +
-              SKILL_TOOLS.length}{' '}
+              SKILL_TOOLS.length +
+              GUIDE_BLOG_TOOLS.length}{' '}
             tools
           </h2>
 
@@ -253,6 +270,9 @@ export default function McpPage() {
 
           <h3 className="mt-8 font-semibold text-[18px] text-ink">Skills Library</h3>
           <ToolTable rows={SKILL_TOOLS} />
+
+          <h3 className="mt-8 font-semibold text-[18px] text-ink">Guides &amp; Blog</h3>
+          <ToolTable rows={GUIDE_BLOG_TOOLS} />
         </section>
 
         <section className="mt-12">
