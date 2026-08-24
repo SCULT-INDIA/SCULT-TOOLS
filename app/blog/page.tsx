@@ -1,8 +1,21 @@
 import type { Metadata } from 'next'
 import { BlogIndexList } from '@/components/blog/BlogIndexList'
 import { BLOG_POSTS } from '@/lib/blog/registry'
+import type { BlogPillar } from '@/lib/blog/types'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
+
+const VALID_PILLARS: readonly BlogPillar[] = [
+  'tool',
+  'prompt',
+  'service',
+  'roundup',
+  'playbook',
+]
+
+function isBlogPillar(value: string | undefined): value is BlogPillar {
+  return VALID_PILLARS.includes(value as BlogPillar)
+}
 
 const TITLE = 'Blog'
 const DESCRIPTION = `${BLOG_POSTS.length} long-form guides on the tools, AI prompts and services this site is built around — each one fact-checked against the real tool it references.`
@@ -26,7 +39,14 @@ export const metadata: Metadata = {
  * derives from `lib/blog/registry.ts`, so a new post surfaces here
  * automatically — nothing on this page is hand-kept.
  */
-export default function BlogPage() {
+export default async function BlogPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ pillar?: string }>
+}) {
+  const { pillar } = await searchParams
+  const initialPillar = isBlogPillar(pillar) ? pillar : 'all'
+
   return (
     <>
       <JsonLd
@@ -42,8 +62,9 @@ export default function BlogPage() {
           Long-form guides on the tools, prompts and services this site is built around
         </h1>
         <p className="mt-5 text-[18px] text-ink-muted leading-8 md:text-lead">
-          {BLOG_POSTS.length} post{BLOG_POSTS.length === 1 ? '' : 's'}, each one fact-checked
-          against the real tool, prompt or service it references — not generic SEO filler.
+          {BLOG_POSTS.length} post{BLOG_POSTS.length === 1 ? '' : 's'}, each one
+          fact-checked against the real tool, prompt or service it references — not
+          generic SEO filler.
         </p>
 
         <div className="mt-10">
@@ -55,6 +76,7 @@ export default function BlogPage() {
               description: post.description,
               readingMinutes: post.readingMinutes,
             }))}
+            initialPillar={initialPillar}
           />
         </div>
       </section>

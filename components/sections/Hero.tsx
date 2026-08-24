@@ -36,6 +36,29 @@ import { TOOLS } from '@/lib/tools/registry'
  *     image: same pixels, but reachable, focusable and announced. On small
  *     screens the absolute scatter cannot fit, so the same six cards render
  *     as a plain grid instead of disappearing.
+ *   - A bold radial glow fills the top of the section and its corners,
+ *     fading to white by mid-height — the reference image's actual look.
+ *     The two snippets handed over differ in exactly one number: one
+ *     centres its white point `at 50% 10%` (near the TOP — which puts the
+ *     colour toward the BOTTOM, the opposite of the reference), the other
+ *     — its own comment literally says "Radial Gradient Background from
+ *     Bottom" — centres `at 50% 90%`. The reference image is the second
+ *     one. With the ellipse's centre 90% of the way down a box far taller
+ *     than the ellipse's own radius reaches, every point near the TOP of
+ *     the box (corners included) sits far from that centre and reads as
+ *     saturated colour, while the box's own bottom — close to the centre
+ *     — resolves to white; that's the dome shape in the reference. The
+ *     colour itself is a literal `#0ea5e9` (sky blue), not a brand token —
+ *     chosen on request, deliberately outside the violet ramp the rest of
+ *     the site uses, so it stays a plain hex rather than getting promoted
+ *     into `@theme` for what may still be a one-page experiment. Height
+ *     is chosen so real content (the reassurance row, whose black text has
+ *     no background box under it) sits at a point still comfortably inside
+ *     the white stop: at `50% 90%`/125% sizing, a point at the box's own
+ *     40%-of-height mark is already at the same gradient position as the
+ *     white colour-stop itself, so anything above that line is guaranteed
+ *     at least as white as the stop — verified live at 375/1024/1440/1920
+ *     that the reassurance row sits well above it.
  */
 export function Hero() {
   return (
@@ -43,7 +66,40 @@ export function Hero() {
     // eyebrow and the constellation was already compacted, so the biggest
     // remaining lever was the hero's own distance from the sticky header,
     // not one more internal gap. This moves the whole block up at once.
-    <section aria-labelledby="hero-heading" className="pt-6 pb-8 text-center md:pt-8">
+    <section
+      aria-labelledby="hero-heading"
+      className="relative pt-6 pb-8 text-center md:pt-8"
+    >
+      {/* No `overflow-hidden` on the section (there was one; removed): the
+          glow is now meant to bleed upward into the sticky header above,
+          the same "hero aurora... bleeds upward" technique this codebase
+          used before (see the removed-aurora history in AnnouncementBar's
+          old comments) — clipping at the section boundary would discard
+          exactly the part that needs to reach the header. Nothing else
+          here needed the clip: the box's own width is `inset-x-0` (100%,
+          never more), so there was never real horizontal overflow risk,
+          and as a `position: absolute` element it doesn't add scrollable
+          page height regardless of overflow.
+          `-top-[90px]`: comfortably clears the pill-only header's real
+          height (measured live at 72-84px across breakpoints) so the glow
+          reaches the true top of the page with no gap, whether it
+          overshoots slightly into non-existent space above the page
+          (harmless) or not. Height grew by the same 90px so the bottom
+          edge — and therefore every content-clearance measurement in the
+          docblock above — lands exactly where it did before this shifted
+          the top up. `-z-10` puts it behind the header's own real content
+          (the pill has its own opaque white fill regardless) — the header
+          is transparent everywhere else now specifically so this shows
+          through beside the pill, see Header.tsx. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -top-[90px] -z-10 h-[890px]"
+        style={{
+          background:
+            'radial-gradient(125% 125% at 50% 90%, var(--color-cream) 40%, #0ea5e9 100%)',
+        }}
+      />
+
       <div className="container-site">
         {/* Real third-party recognition, sitting above the eyebrow so it adds
             its own block with its own margin rather than touching any of the
@@ -56,48 +112,49 @@ export function Hero() {
         </div>
 
         <p className="eyebrow">
-          {TOOLS.length} tools · {PROMPTS.length} AI prompts · zero signups
+          {TOOLS.length} tools · {PROMPTS.length} prompts · zero signups
         </p>
 
+        {/* Wording matches `SITE.tagline` (lib/site.ts) — the same line
+            every page's <title>/OG/Twitter card already carries — with one
+            word (`Free`) pulled out for the accent-gradient span a plain
+            string constant can't carry on its own. "Tools" alone undersold
+            the site once Prompts and Skills existed as equally real
+            sections of their own (each with its own nav dropdown) — this
+            names all three instead of picking one. */}
         <h1
           id="hero-heading"
-          className="mx-auto mt-4 max-w-[18ch] text-[40px] leading-[42px] tracking-[-1px] sm:text-[48px] sm:leading-[50px] md:text-[64px] md:leading-[66px] lg:text-[76px] lg:leading-[78px]"
+          className="mx-auto mt-4 max-w-[20ch] text-[40px] leading-[42px] tracking-[-1px] sm:text-[48px] sm:leading-[50px] md:text-[64px] md:leading-[66px] lg:text-[72px] lg:leading-[74px]"
         >
-          Free tools that do the{' '}
-          <em
-            className="text-accent-gradient font-semibold not-italic"
-          >
-            boring
-          </em>{' '}
-          work for you
+          <em className="text-accent-gradient font-semibold not-italic">Free</em> tools,
+          prompts and skills for real work
         </h1>
 
-        <p className="mx-auto mt-4 max-w-[44ch] text-[17px] text-ink-muted leading-7 md:text-lead">
-          SEO, business paperwork, developer utilities, writing, design and AI visibility
-          — running right in your browser.
+        {/* One clean line, not two stacked paragraphs: the former second
+            line (a "built by Scult's own delivery team, not a lead-gen
+            funnel" differentiator) said something true but read as an extra
+            paragraph a minimal hero doesn't need — that positioning point
+            still lives in the trust strip immediately below this section. */}
+        <p className="mx-auto mt-4 max-w-[42ch] text-[17px] text-ink-muted leading-7 md:text-lead">
+          SEO, business, design and AI visibility — all running in your browser.
         </p>
 
-        {/* The one differentiator a generic "free tools" aggregator can't
-            claim, surfaced here instead of buried in FAQ #4 — Dunford's
-            positioning framework treats "competitive alternative" as a
-            prerequisite the hero should state, not leave to the visitor to
-            infer. Deliberately its own short line, not appended onto the
-            subhead paragraph above: the subhead's height feeds every
-            "-mt-*" measurement further down this file (CTA row, checkmark
-            row, constellation overlap math), so a new one-line element with
-            its own small `mt` is safer than making that paragraph wrap
-            wider — re-verified at lg/md that nothing below still overlaps. */}
-        <p className="mx-auto mt-2 max-w-[44ch] text-[14px] text-ink-subtle">
-          Built by Scult's own delivery team — the tools we use on client work, not a
-          lead-gen funnel dressed up as free software.
-        </p>
-
-        {/* `mt-6` (was `mt-9`): next lowest-cost gap in the stack once the
-            checkmark row above the constellation was already trimmed. Still
-            clear of the subhead's own line-height, verified below. */}
-        {/* prefetch={false} on all three: these sit above the fold, so
-            Next's viewport-prefetch fires on every homepage load regardless
-            of intent to click — a live PageSpeed trace showed the
+        {/* Two buttons, not three: "Browse prompts" was cut, not the
+            prompt library itself — it's one click away from either button
+            below and still has its own nav dropdown. Explore-all-tools
+            stays the primary (default cta-yellow `.btn-brutal`) because
+            it's the literal fulfilment of the headline above it;
+            AI Visibility takes the violet fill that opened up once the
+            prompts button was removed — the same violet this site's own
+            nav CTA uses for the identical destination, so the flagship
+            tool reads consistently violet everywhere it's a button.
+            `.btn-brutal`, not the softer `.btn-primary`/`.btn-secondary`
+            pair tried briefly here: those are reserved for calmer
+            secondary sections, but the hard-shadow brutal style is this
+            site's actual buttons everywhere else, hero included. */}
+        {/* prefetch={false} on both: these sit above the fold, so Next's
+            viewport-prefetch fires on every homepage load regardless of
+            intent to click — a live PageSpeed trace showed the
             ai-visibility-checker prefetch alone at ~220KB, directly
             competing with critical-path CSS/fonts for bandwidth. Clicking
             still navigates instantly either way; only the eager background
@@ -106,13 +163,10 @@ export function Hero() {
           <Link href="/all" prefetch={false} className="btn-brutal">
             EXPLORE ALL {TOOLS.length} TOOLS
           </Link>
-          <Link href="/prompts" prefetch={false} className="btn-brutal btn-violet">
-            BROWSE {PROMPTS.length} PROMPTS
-          </Link>
           <Link
             href="/geo/ai-visibility-checker"
             prefetch={false}
-            className="btn-brutal btn-white"
+            className="btn-brutal btn-violet"
           >
             CHECK AI VISIBILITY
           </Link>
@@ -159,11 +213,7 @@ export function Hero() {
 
         {/* Mobile-only search — see the docblock. */}
         <div className="mx-auto mt-8 max-w-xl lg:hidden">
-          <SearchBox
-            size="large"
-            toolCount={TOOL_COUNT}
-            promptCount={PROMPT_COUNT}
-          />
+          <SearchBox size="large" toolCount={TOOL_COUNT} promptCount={PROMPT_COUNT} />
         </div>
       </div>
 

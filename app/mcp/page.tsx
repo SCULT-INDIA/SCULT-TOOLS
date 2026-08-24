@@ -175,7 +175,7 @@ export default function McpPage() {
           site in a browser. No account, no API key, no cost.
         </p>
 
-        <section className="mt-12">
+        <section id="endpoint" className="mt-12">
           <h2 className="text-[26px] tracking-[-0.5px] md:text-[30px]">The endpoint</h2>
           <p className="mt-3 text-[16px] text-ink-muted leading-7">
             Streamable HTTP, the current MCP transport — one URL, no separate SSE endpoint
@@ -186,7 +186,7 @@ export default function McpPage() {
           </div>
         </section>
 
-        <section className="mt-12">
+        <section id="connect" className="mt-12">
           <h2 className="text-[26px] tracking-[-0.5px] md:text-[30px]">Connect</h2>
 
           <h3 className="mt-6 font-semibold text-[18px] text-ink">Claude Code</h3>
@@ -232,7 +232,7 @@ export default function McpPage() {
           </p>
         </section>
 
-        <section className="mt-12">
+        <section id="tools" className="mt-12">
           <h2 className="text-[26px] tracking-[-0.5px] md:text-[30px]">
             What's callable —{' '}
             {PURE_TOOLS.length +
@@ -275,7 +275,7 @@ export default function McpPage() {
           <ToolTable rows={GUIDE_BLOG_TOOLS} />
         </section>
 
-        <section className="mt-12">
+        <section id="rate-limits" className="mt-12">
           <h2 className="text-[26px] tracking-[-0.5px] md:text-[30px]">Rate limits</h2>
           <p className="mt-3 text-[16px] text-ink-muted leading-7">
             Two limits, tracked per connection, independent of the browser rate limits the

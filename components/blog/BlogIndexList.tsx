@@ -39,8 +39,16 @@ const FILTERS: readonly { key: BlogPillar | 'all'; label: string }[] = [
  * server round-trip needed at 100 posts, same call this codebase already
  * made for `CategoryTabs`'s tool-category tabs.
  */
-export function BlogIndexList({ posts }: { posts: readonly BlogIndexEntry[] }) {
-  const [active, setActive] = useState<BlogPillar | 'all'>('all')
+export function BlogIndexList({
+  posts,
+  initialPillar = 'all',
+}: {
+  posts: readonly BlogIndexEntry[]
+  /** Pre-selects a filter tab — lets `/blog?pillar=playbook` (the nav's
+   * "Playbooks" link) land already filtered instead of on the full list. */
+  initialPillar?: BlogPillar | 'all'
+}) {
+  const [active, setActive] = useState<BlogPillar | 'all'>(initialPillar)
   const visible = active === 'all' ? posts : posts.filter((p) => p.pillar === active)
 
   return (

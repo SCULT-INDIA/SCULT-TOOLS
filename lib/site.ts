@@ -9,7 +9,7 @@ export const SITE = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://tools.scult.in',
   parentUrl: process.env.NEXT_PUBLIC_PARENT_URL ?? 'https://scult.in',
   parentName: 'Scult',
-  tagline: 'Free tools that do the boring work for you',
+  tagline: 'Free tools, prompts and skills for real work',
   description:
     'Free online tools plus a verified AI prompt library — SEO, business, developer and design utilities, and copy-paste prompts for ChatGPT, Claude, Cursor, Midjourney and more. Built by Scult, an AI-first digital agency.',
   locale: 'en-IN',
