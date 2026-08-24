@@ -352,16 +352,42 @@ export default async function handler(req, res) {
   // appending at the tail, so resuming from the old cursorPage wouldn't
   // even be correct — a full re-pass from page 0 is what's actually
   // needed to guarantee nothing new is missed, not just an appended scan.
-  // Gated on time-since-last-completion (not on every call) so the GitHub
-  // Actions loop driver's rapid repeat calls within one run don't restart
-  // the whole scan every few seconds — long enough to outlast one loop-
-  // driver session (up to ~5h), short enough to guarantee a fresh pass
-  // every day regardless of which of the two daily triggers fires it.
+  // Gated on time-since-last-invocation (every call bumps last_synced_at,
+  // not only ones that did real work, so this is really "idle for 20h",
+  // not "20h since a completed pass" — that distinction doesn't matter
+  // under the current twice-daily cadence, but would if some future extra
+  // caller — a manual curl, a health check — started polling more often
+  // than once every 20h) so the GitHub Actions loop driver's rapid repeat
+  // calls within one run don't restart the whole scan every few seconds —
+  // long enough to outlast one loop-driver session (up to ~5h), short
+  // enough to guarantee a fresh pass every day regardless of which of the
+  // two daily triggers fires it.
   const RESCAN_INTERVAL_MS = 20 * 60 * 60 * 1000
   const msSinceLastSync = meta?.last_synced_at
     ? Date.now() - new Date(meta.last_synced_at).getTime()
     : Number.POSITIVE_INFINITY
-  const rescanTriggered = cursorDone && curatedDone && msSinceLastSync > RESCAN_INTERVAL_MS
+  let rescanTriggered = cursorDone && curatedDone && msSinceLastSync > RESCAN_INTERVAL_MS
+  if (rescanTriggered) {
+    // Claim the reset atomically before acting on it: the two daily
+    // triggers (this project's own vercel.json cron and the GitHub
+    // Actions loop driver) call this endpoint independently with no
+    // shared lock, so both could read the same idle-too-long state and
+    // each decide to reset. The conditional update only succeeds for
+    // whichever invocation gets there first — the loser sees 0 rows
+    // matched, backs off, and this call falls through as a no-op instead
+    // of running a second full page-0 rescan concurrently (wasteful
+    // against skills.sh's shared rate limit, though not corrupting,
+    // since every write downstream is an idempotent upsert either way).
+    const { data: claimed } = await supabase
+      .from('skills_sync_meta')
+      .update({ cursor_page: 0, cursor_done: false, curated_done: false })
+      .eq('cursor_done', true)
+      .eq('curated_done', true)
+      .select('id')
+    if (!claimed || claimed.length === 0) {
+      rescanTriggered = false
+    }
+  }
   if (rescanTriggered) {
     cursorPage = 0
     cursorDone = false
