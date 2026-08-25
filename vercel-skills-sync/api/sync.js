@@ -165,6 +165,15 @@ function toSlug(sourceSkillId) {
     .replace(/^-+|-+$/g, '')
 }
 
+/** Deterministic 6-char suffix (djb2 → base36) for slug-collision retries —
+ * same input id always yields the same suffix, so re-running a pass upserts
+ * the same row instead of minting a new slug every day. */
+function shortHash(input) {
+  let h = 5381
+  for (let i = 0; i < input.length; i++) h = ((h * 33) ^ input.charCodeAt(i)) >>> 0
+  return h.toString(36).padStart(6, '0').slice(0, 6)
+}
+
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
@@ -252,6 +261,118 @@ async function mapConcurrent(items, concurrency, worker, timeLeft) {
   return { completed: !ranOutOfTime }
 }
 
+/** The rate limiter's own bail-out (see createRateLimiter) — callers need to
+ * tell "the window is exhausted for this invocation" apart from a genuinely
+ * failed skill, because the two demand opposite responses: a failed skill is
+ * recorded and skipped, but an exhausted window means NOTHING further can be
+ * attempted this invocation and the current page/batch must NOT be marked
+ * complete, or every skill after the exhaustion point silently falls out of
+ * the pass (the first full-rescan attempt lost 5,064 of 5,492 curated items
+ * exactly this way). */
+function isRateLimitExhaustion(err) {
+  return String(err?.message ?? err).includes('rate-limit wait would exceed')
+}
+
+function chunk(arr, size) {
+  const out = []
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size))
+  return out
+}
+
+/**
+ * The incremental heart of the daily pass: one cheap Supabase id-lookup
+ * splits a listing batch into skills we already have (refreshed with ZERO
+ * skills.sh calls — the listing row itself carries the only field that
+ * changes daily, `installs`) and genuinely new skills (full detail fetch).
+ * Without this split, every daily rescan re-fetched all ~14k skill details
+ * against a 540/min API cap — ~26 minutes of pure rate-limit budget to
+ * mostly re-download unchanged data, which starved the pass and produced
+ * the mass rate-limit failures above. With it, a steady-state daily pass
+ * is ~100 listing calls plus details for only what's actually new.
+ */
+async function splitExistingNew(supabase, items, deadlineAt) {
+  const existingIds = new Set()
+  // 40 ids per lookup, not more: `.in()` serialises into the request URL,
+  // and skill ids are long slash-y paths ("owner/repo/skill-name",
+  // URL-encoded on top) — 500 of them built a URL past the server's length
+  // limit and every lookup came back 400 Bad Request. 40 × ~90 encoded
+  // chars ≈ 3.6KB, comfortably inside every common 8KB URL cap. The ids
+  // are de-duplicated first because curated items repeat across owner
+  // groups.
+  //
+  // The curated set needs ~137 of these lookups, so per-query latency is
+  // multiplicative — this is why vercel.json pins the function to icn1
+  // (Seoul), the same region as the Supabase project: from the default
+  // iad1 the cross-Pacific round trips alone added ~40s and 504'd the
+  // whole invocation. The deadline check is the backstop for the same
+  // failure shape if the DB is ever slow anyway: bail out cleanly (caller
+  // treats it as "this batch didn't complete", retried next invocation)
+  // instead of sailing past the function's hard 60s kill.
+  const storedInstalls = new Map()
+  const uniqueIds = [...new Set(items.map((i) => i.id).filter(Boolean))]
+  for (const ids of chunk(uniqueIds, 40)) {
+    if (deadlineAt && Date.now() > deadlineAt) {
+      throw new Error('existing-id lookup: time budget exhausted')
+    }
+    const { data, error } = await supabase.from('skills').select('id,installs').in('id', ids)
+    if (error) throw new Error(`existing-id lookup: ${error.message}`)
+    for (const row of data ?? []) {
+      existingIds.add(row.id)
+      storedInstalls.set(row.id, row.installs)
+    }
+  }
+  // Return one entry per id (first occurrence wins) so downstream never
+  // double-processes a skill that appeared in multiple curated groups.
+  const byId = new Map()
+  for (const item of items) if (item.id && !byId.has(item.id)) byId.set(item.id, item)
+  const unique = [...byId.values()]
+  const existingItems = unique.filter((i) => existingIds.has(i.id))
+  return {
+    existingItems,
+    // Only rows whose install count actually moved need a write at all —
+    // most don't on any given day, which keeps the refresh step's write
+    // count (and its share of the time budget) proportional to real change
+    // rather than to registry size.
+    changedItems: existingItems.filter((i) => (i.installs ?? 0) !== storedInstalls.get(i.id)),
+    newItems: unique.filter((i) => !existingIds.has(i.id)),
+  }
+}
+
+/**
+ * Refresh install counts for already-synced skills from listing data alone
+ * — zero skills.sh calls. Plain per-row UPDATEs, never upsert: a partial
+ * upsert of {id, installs} looked equivalent but is a real trap — Postgres
+ * checks NOT NULL constraints on the INSERT tuple it forms BEFORE the
+ * ON CONFLICT arbiter can divert to the UPDATE path, so every row failed
+ * on the omitted `category` even though every row already existed. An
+ * UPDATE has no insert tuple, so the failure mode is impossible rather
+ * than merely guarded against. Callers pass only rows whose installs
+ * actually changed (see splitExistingNew), keeping the per-row write count
+ * small; the deadline check makes an unusually change-heavy day degrade
+ * into "finish next invocation" instead of a 504.
+ */
+async function refreshExistingFromListing(supabase, items, deadlineAt) {
+  if (items.length === 0) return { ok: true, refreshed: 0 }
+  const now = new Date().toISOString()
+  let refreshed = 0
+  const failures = []
+  for (const item of items) {
+    if (deadlineAt && Date.now() > deadlineAt) {
+      return { ok: false, refreshed, error: 'refresh: time budget exhausted' }
+    }
+    const { error } = await supabase
+      .from('skills')
+      .update({ installs: item.installs ?? 0, last_synced_at: now })
+      .eq('id', item.id)
+    if (error) failures.push(`${item.id}: ${error.message}`)
+    else refreshed++
+  }
+  if (failures.length > 0) {
+    return { ok: false, refreshed, error: `row failures: ${failures.slice(0, 3).join(' || ')}` }
+  }
+  return { ok: true, refreshed }
+}
+
 async function upsertSkillFromListing(supabase, token, item, deadlineAt) {
   if (!item?.id || typeof item.source !== 'string' || !item.source.includes('/')) {
     return { ok: false, error: `malformed item: ${JSON.stringify(item)}` }
@@ -264,7 +385,7 @@ async function upsertSkillFromListing(supabase, token, item, deadlineAt) {
   try {
     detail = await fetchV1(token, `/skills/${sourceOwner}/${sourceRepo}/${skillId}`, deadlineAt)
   } catch (err) {
-    return { ok: false, error: err.message }
+    return { ok: false, error: err.message, rateLimited: isRateLimitExhaustion(err) }
   }
   const files = detail?.files
   if (!files) return { ok: false }
@@ -294,33 +415,54 @@ async function upsertSkillFromListing(supabase, token, item, deadlineAt) {
   const category = categorize(name, description)
   const now = new Date().toISOString()
 
-  const { error } = await supabase
+  const row = {
+    id: item.id,
+    category,
+    slug: toSlug(skillId),
+    name,
+    description,
+    body,
+    tags,
+    license,
+    license_gated: licenseGated,
+    source_owner: sourceOwner,
+    source_repo: sourceRepo,
+    source_skill_id: skillId,
+    source_url: `https://github.com/${sourceOwner}/${sourceRepo}`,
+    installs: item.installs ?? 0,
+    last_synced_at: now,
+    related_tools: [],
+    related_prompts: [],
+  }
+
+  let { error } = await supabase
     .from('skills')
-    .upsert(
-      {
-        id: item.id,
-        category,
-        slug: toSlug(skillId),
-        name,
-        description,
-        body,
-        tags,
-        license,
-        license_gated: licenseGated,
-        source_owner: sourceOwner,
-        source_repo: sourceRepo,
-        source_skill_id: skillId,
-        source_url: `https://github.com/${sourceOwner}/${sourceRepo}`,
-        installs: item.installs ?? 0,
-        last_synced_at: now,
-        related_tools: [],
-        related_prompts: [],
-      },
-      { onConflict: 'id', ignoreDuplicates: false },
-    )
+    .upsert(row, { onConflict: 'id', ignoreDuplicates: false })
     .select('id')
 
-  return { ok: !error, error }
+  // Distinct skills from different repos can share a (category, slug) pair
+  // — e.g. two repos both shipping a "skill-creator" — and the table's
+  // UNIQUE(category, slug) makes the second one permanently uninsertable
+  // under its natural slug. Left as a plain failure these retry (and burn
+  // a rate-limited detail fetch) on EVERY pass forever, and as they
+  // accumulate they can eat an entire invocation's budget before any real
+  // work starts. One retry under a deterministic hash-suffixed slug turns
+  // them into ordinary rows instead: unique URL, found by search, and
+  // counted as "existing" by every future pass.
+  if (error?.message?.includes('skills_category_slug_key')) {
+    ;({ error } = await supabase
+      .from('skills')
+      .upsert(
+        { ...row, slug: `${row.slug}-${shortHash(item.id)}` },
+        { onConflict: 'id', ignoreDuplicates: false },
+      )
+      .select('id'))
+  }
+
+  // .message, not the raw object: Supabase errors are plain objects whose
+  // String() is "[object Object]", which is what the error log actually
+  // showed the first time this mattered.
+  return { ok: !error, error: error?.message }
 }
 
 export const config = { maxDuration: 60 }
@@ -396,8 +538,10 @@ export default async function handler(req, res) {
 
   let processed = 0
   let failed = 0
+  let refreshed = 0
   let pagesThisRun = 0
   const errors = []
+  const splitDebug = {}
 
   if (!curatedDone) {
     try {
@@ -405,31 +549,60 @@ export default async function handler(req, res) {
       // The real shape is grouped by owner ({owner, featuredRepo, skills:
       // [...]}), not a flat list of skill items — each group's own `skills`
       // array is what actually matches the leaderboard's per-item shape
-      // (id/slug/source/installs/isDuplicate).
+      // (id/slug/source/installs/isDuplicate). The curated set matters for
+      // COVERAGE, not just ranking: the leaderboard paginates only ~9.6k
+      // skills while the registry holds ~14k — roughly a third of the
+      // registry is reachable only through curated.
       const groups = curated.data ?? curated.skills ?? []
       const items = groups.flatMap((group) => group.skills ?? [group]).filter((it) => !it.isDuplicate)
-      const { completed } = await mapConcurrent(
+
+      const { existingItems, changedItems, newItems } = await splitExistingNew(
+        supabase,
         items,
+        deadlineAt,
+      )
+      // Split diagnostics, surfaced in the response: when the existing/new
+      // classification goes wrong the failure mode downstream (mass detail
+      // fetches, rate-limit exhaustion, duplicate-key inserts) hides the
+      // actual cause. Sample ids make an id-format mismatch visible
+      // immediately instead of needing a debugger on a serverless box.
+      splitDebug.curated = {
+        listed: items.length,
+        existing: existingItems.length,
+        changed: changedItems.length,
+        new: newItems.length,
+        sampleNewIds: newItems.slice(0, 3).map((i) => i.id),
+      }
+      const refresh = await refreshExistingFromListing(supabase, changedItems, deadlineAt)
+      if (!refresh.ok) errors.push(`curated refresh: ${refresh.error}`)
+      refreshed += refresh.refreshed
+
+      let rateLimitedInBatch = 0
+      const { completed } = await mapConcurrent(
+        newItems,
         DETAIL_CONCURRENCY,
         async (item) => {
           let result
           try {
             result = await upsertSkillFromListing(supabase, token, item, deadlineAt)
           } catch (err) {
-            result = { ok: false, error: err.message }
+            result = { ok: false, error: err.message, rateLimited: isRateLimitExhaustion(err) }
           }
           if (result.ok) processed++
           else {
             failed++
+            if (result.rateLimited) rateLimitedInBatch++
             if (result.error && errors.length < 20) errors.push(String(result.error))
           }
         },
         timeLeft,
       )
-      // Only mark curated as done once every item was actually attempted —
-      // if the time budget ran out mid-batch, the next invocation must
-      // retry curated rather than silently skip whatever wasn't reached.
-      curatedDone = completed
+      // Done only when every item was attempted AND none of the failures
+      // were the rate-limit window running out — an exhausted window means
+      // the tail of the batch never really ran, so the next invocation must
+      // retry curated rather than silently skip it (the first full-rescan
+      // attempt lost 5,064 of 5,492 curated items to exactly this).
+      curatedDone = completed && rateLimitedInBatch === 0
     } catch (err) {
       errors.push(`curated: ${err.message}`)
     }
@@ -454,19 +627,36 @@ export default async function handler(req, res) {
         break
       }
 
+      // Unlike curated (whose try/catch wraps its whole block), this loop
+      // body isn't inside one — a split/refresh failure here must break
+      // WITHOUT advancing cursorPage, not bubble up as a 500.
+      let newItems
+      try {
+        const split = await splitExistingNew(supabase, items, deadlineAt)
+        newItems = split.newItems
+        const refresh = await refreshExistingFromListing(supabase, split.changedItems, deadlineAt)
+        if (!refresh.ok) errors.push(`page ${cursorPage + 1} refresh: ${refresh.error}`)
+        refreshed += refresh.refreshed
+      } catch (err) {
+        errors.push(`page ${cursorPage + 1}: ${err.message}`)
+        break
+      }
+
+      let rateLimitedInPage = 0
       const { completed } = await mapConcurrent(
-        items,
+        newItems,
         DETAIL_CONCURRENCY,
         async (item) => {
           let result
           try {
             result = await upsertSkillFromListing(supabase, token, item, deadlineAt)
           } catch (err) {
-            result = { ok: false, error: err.message }
+            result = { ok: false, error: err.message, rateLimited: isRateLimitExhaustion(err) }
           }
           if (result.ok) processed++
           else {
             failed++
+            if (result.rateLimited) rateLimitedInPage++
             if (result.error && errors.length < 20) errors.push(String(result.error))
           }
         },
@@ -474,10 +664,12 @@ export default async function handler(req, res) {
       )
 
       // Only advance past this page if every item on it was actually
-      // attempted — otherwise the next invocation must retry the SAME
-      // page (cursorPage unchanged) rather than silently skip whatever
-      // this page's batch didn't reach before time ran out.
-      if (!completed) break
+      // attempted AND none failed purely on rate-limit exhaustion —
+      // otherwise the next invocation must retry the SAME page
+      // (cursorPage unchanged) rather than silently skip whatever this
+      // page's batch didn't genuinely reach. Re-running a page is safe:
+      // every write is an idempotent upsert.
+      if (!completed || rateLimitedInPage > 0) break
 
       cursorPage++
       pagesThisRun++
@@ -501,6 +693,7 @@ export default async function handler(req, res) {
   res.status(200).json({
     processed,
     failed,
+    refreshed,
     pagesThisRun,
     cursorPage,
     cursorDone,
@@ -508,6 +701,7 @@ export default async function handler(req, res) {
     rescanTriggered,
     totalSkills: count ?? 0,
     elapsedMs: Date.now() - startedAt,
+    splitDebug,
     errors,
   })
 }
