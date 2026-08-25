@@ -220,12 +220,39 @@ function backoffMs(attempt) {
 async function fetchV1(token, path, deadlineAt) {
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     await acquireSlot(deadlineAt)
-    const res = await fetch(`${SKILLS_SH_BASE}${path}`, {
-      headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
-    })
+    // Hard per-request timeout, capped by the invocation's own remaining
+    // budget: skills.sh under heavy load has been observed to throttle by
+    // STALLING connections rather than answering 429, and an un-signalled
+    // fetch then hangs the whole invocation into Vercel's 60s kill (a 504
+    // with no meta write). A stalled attempt aborts, burns one retry, and
+    // stays inside the budget instead.
+    const remainingMs = deadlineAt ? deadlineAt - Date.now() : 15_000
+    if (remainingMs <= 1_000) {
+      throw new Error('rate-limit wait would exceed remaining time budget')
+    }
+    let res
+    try {
+      res = await fetch(`${SKILLS_SH_BASE}${path}`, {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
+        signal: AbortSignal.timeout(Math.min(15_000, remainingMs)),
+      })
+    } catch (err) {
+      if (attempt < MAX_RETRIES) continue
+      throw new Error(`skills.sh ${path} -> ${err.name === 'TimeoutError' ? 'request timed out' : err.message}`)
+    }
     if (res.status === 429 && attempt < MAX_RETRIES) {
       const retryAfter = Number(res.headers.get('retry-after'))
-      await sleep(retryAfter > 0 ? retryAfter * 1000 : backoffMs(attempt))
+      const waitMs = retryAfter > 0 ? retryAfter * 1000 : backoffMs(attempt)
+      // Same deadline discipline as the local limiter above: skills.sh's
+      // Retry-After can be tens of seconds, and an uncapped sleep here rides
+      // the invocation straight past Vercel's hard 60s kill (a 504 with no
+      // JSON body, no meta write — the worst way to end a pass). Throwing
+      // the recognized rate-limit message instead lets the caller record
+      // "this batch didn't complete" and retry it next invocation.
+      if (deadlineAt && Date.now() + waitMs > deadlineAt) {
+        throw new Error('rate-limit wait would exceed remaining time budget')
+      }
+      await sleep(waitMs)
       continue
     }
     if (!res.ok) throw new Error(`skills.sh ${path} -> HTTP ${res.status}`)
@@ -385,7 +412,17 @@ async function upsertSkillFromListing(supabase, token, item, deadlineAt) {
   try {
     detail = await fetchV1(token, `/skills/${sourceOwner}/${sourceRepo}/${skillId}`, deadlineAt)
   } catch (err) {
-    return { ok: false, error: err.message, rateLimited: isRateLimitExhaustion(err) }
+    return {
+      ok: false,
+      error: err.message,
+      rateLimited: isRateLimitExhaustion(err),
+      // A 404 detail for a listed skill means it was deleted upstream while
+      // the listing still names it — permanent, not transient. Callers
+      // tombstone these so they stop consuming rate-limit budget on every
+      // future pass (the accumulated pool of them had grown past a full
+      // per-minute window, which alone made passes uncompletable).
+      notFound: String(err.message).includes('-> HTTP 404'),
+    }
   }
   const files = detail?.files
   if (!files) return { ok: false }
@@ -484,6 +521,8 @@ export default async function handler(req, res) {
   let cursorPage = meta?.cursor_page ?? 0
   let cursorDone = meta?.cursor_done ?? false
   let curatedDone = meta?.curated_done ?? false
+  const tombstones = new Set(Array.isArray(meta?.tombstoned_ids) ? meta.tombstoned_ids : [])
+  const newTombstones = []
 
   // The bug that left the registry stuck at a fixed count forever: once
   // both flags go true, EVERY future invocation skipped both branches
@@ -504,7 +543,14 @@ export default async function handler(req, res) {
   // long enough to outlast one loop-driver session (up to ~5h), short
   // enough to guarantee a fresh pass every day regardless of which of the
   // two daily triggers fires it.
-  const RESCAN_INTERVAL_MS = 20 * 60 * 60 * 1000
+  // 16h, not the original 20h: still far above any single loop-driver
+  // session (~5h) so rapid repeat calls within one run never re-trigger,
+  // but low enough that a manual catch-up drive finishing at an odd hour
+  // (like the one that un-stuck the registry) can't leave the next
+  // scheduled cron inside the gate and silently skip a whole day's pass —
+  // with the two daily triggers 23-24h apart, anything in (5h, 22h] gives
+  // exactly one real pass per day.
+  const RESCAN_INTERVAL_MS = 16 * 60 * 60 * 1000
   const msSinceLastSync = meta?.last_synced_at
     ? Date.now() - new Date(meta.last_synced_at).getTime()
     : Number.POSITIVE_INFINITY
@@ -554,7 +600,9 @@ export default async function handler(req, res) {
       // skills while the registry holds ~14k — roughly a third of the
       // registry is reachable only through curated.
       const groups = curated.data ?? curated.skills ?? []
-      const items = groups.flatMap((group) => group.skills ?? [group]).filter((it) => !it.isDuplicate)
+      const items = groups
+        .flatMap((group) => group.skills ?? [group])
+        .filter((it) => !it.isDuplicate && !tombstones.has(it.id))
 
       const { existingItems, changedItems, newItems } = await splitExistingNew(
         supabase,
@@ -592,6 +640,7 @@ export default async function handler(req, res) {
           else {
             failed++
             if (result.rateLimited) rateLimitedInBatch++
+            if (result.notFound) newTombstones.push(item.id)
             if (result.error && errors.length < 20) errors.push(String(result.error))
           }
         },
@@ -621,8 +670,12 @@ export default async function handler(req, res) {
         errors.push(`page ${cursorPage + 1}: ${err.message}`)
         break
       }
-      const items = (listing.data ?? []).filter((it) => !it.isDuplicate)
-      if (items.length === 0) {
+      const rawItems = listing.data ?? []
+      const items = rawItems.filter((it) => !it.isDuplicate && !tombstones.has(it.id))
+      // End-of-listing is judged on the RAW page: a page consisting
+      // entirely of duplicates/tombstones is still a real page, not the
+      // end of the leaderboard.
+      if (rawItems.length === 0) {
         cursorDone = true
         break
       }
@@ -657,6 +710,7 @@ export default async function handler(req, res) {
           else {
             failed++
             if (result.rateLimited) rateLimitedInPage++
+            if (result.notFound) newTombstones.push(item.id)
             if (result.error && errors.length < 20) errors.push(String(result.error))
           }
         },
@@ -688,6 +742,10 @@ export default async function handler(req, res) {
     cursor_page: cursorPage,
     cursor_done: cursorDone,
     curated_done: curatedDone,
+    // Merged, never replaced: a concurrent invocation's additions can still
+    // be lost to last-write-wins here, but a lost tombstone just means one
+    // extra 404 attempt on some later pass, which re-tombstones it.
+    tombstoned_ids: [...new Set([...tombstones, ...newTombstones])],
   })
 
   res.status(200).json({
