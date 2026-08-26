@@ -2162,9 +2162,7 @@ The finished prompt, followed by one line confirming the palette and camera move
     tags: [`video`, `youtube`, `branding`, `intro`, `native-audio`, `channel-identity`],
     whyItWorks: `A channel bumper is unlike almost every other Veo use case in this library because it is watched repeatedly by the same audience rather than once, which flips the usual creative priority from novelty to exact repeatability — this is why the prompt insists on stating the palette as literal hues and the camera move as a single minimal option rather than leaving room for the model's own interpretation, since two generations of the "same" bumper that differ visibly in color or camera energy read as two different intros rather than one consistent brand identity across an uploader's history. Requiring the branded element's motion to complete fully within the clip rather than implying continuation past the frame addresses a failure that only becomes a real problem at reuse scale: a single clip that feels slightly unfinished is a minor flaw, but the same slightly-unfinished feeling repeating at the top of every video on a channel compounds into something viewers register consciously after enough repetitions, even if they could not describe why the first viewing felt fine. Explicitly ruling out on-screen text is a direct response to a known Veo limitation — text rendered natively inside generated video is not reliably legible or correctly spelled at small sizes, and a channel name is exactly the kind of text a viewer will actually try to read, so the practical fix is to generate a clean branded background and composite the real logo and name over it afterward rather than gambling on native text rendering for an asset that represents the channel on every single video. Naming the audio sting as a literal, describable sound rather than a mood word matters for the same reason it matters elsewhere in Veo's native audio generation: a sonic brand mark that a viewer learns to recognize needs a concrete, renderable sound description, not an adjective the model has to translate into audio on its own, and doing that translation consistently across regenerations is a much less reliable process than describing the actual sound directly.`,
     exampleOutput: `A 6-second bumper: fragmented cyan lines drift together against a deep navy field, resolving into a rotating low-poly globe that settles still as a rising digital chime lands on the exact frame it stops turning, then holds for a beat of clean silence.`,
-    verifiedAgainst: [
-      { tool: 'Veo', version: '3.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'Veo', version: '3.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -2235,9 +2233,7 @@ The finished prompt, followed by one line noting which panel number this clip re
     tags: [`video`, `storyboard`, `previs`, `pre-production`, `continuity`, `filmmaking`],
     whyItWorks: `Previs exists to answer one question cheaply — does this planned shot actually work — and the biggest way that value gets undermined with a generative tool is continuity drift across panels, which is why this prompt insists on repeating continuity details in near-identical wording across every panel's generation rather than paraphrasing the same character or space differently each time; Veo has no memory of a previous generation, so any unintentional variation in how a character or environment is described between panel prompts reads to the model as license to render a subtly different person or place, and a board where the detective looks slightly different in every panel fails at its one job of letting a team evaluate a sequence as a sequence. Matching the shot type and lens exactly to what the storyboard panel indicates, rather than embellishing it with additional camera movement, matters because previs is a planning tool meant to be tested against a real production's actual budget and schedule — a previs clip with a more elaborate camera move than what was actually storyboarded and budgeted for sets an expectation the eventual shoot may not be able to deliver, defeating the purpose of testing the shot as planned. Deliberately keeping the visual polish and audio pass minimal rather than letting Veo default toward its most finished-looking output addresses a subtler risk: a previs clip that looks close to final can be mistaken by a team for a more complete answer than it actually is, when its real job is only to test blocking, framing, and pacing before anyone commits real resources to executing the shot for real. Restricting native audio to a bare ambience note rather than a full soundscape keeps attention on the visual question the test is actually meant to answer, rather than letting an impressive-sounding but ultimately irrelevant audio layer bias the team's read of whether the shot itself is working.`,
     exampleOutput: `A static wide previs clip: the detective in the torn-cuff grey trench coat stops mid-stride on wet asphalt lit by cold blue-green neon spill, looking up toward an unseen fire escape as faint rain ambience plays underneath, no camera movement, no score.`,
-    verifiedAgainst: [
-      { tool: 'Veo', version: '3.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'Veo', version: '3.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2308,9 +2304,7 @@ The finished prompt, followed by the three second-ranges chosen for setup, turn,
     tags: [`video`, `short-form`, `storytelling`, `narrative`, `native-audio`, `social`],
     whyItWorks: `Fitting a complete story into a single fixed-duration Veo generation only works if the beats are pinned to approximate second ranges before the visual description is written, because the model has no separate notion of narrative structure — it renders motion continuously across the duration it is given, so an unanchored instruction like "something changes" leaves entirely to chance whether that change lands early enough to still leave room for a payoff or late enough to undercut the setup, whereas naming seconds 0-3, 3-6, and 6-8 gives it three concrete windows to fill in sequence. Requiring the turn to be named as a specific, nameable visual event — a new object entering frame, an expression shifting — rather than an implied shift addresses a real rendering behavior: without an explicit new visual element or action to anchor the second beat, Veo tends to treat the continued absence of change as an instruction to keep extending beat one, and a clip meant to have three distinct beats ends up reading as one long establishing shot with a rushed ending tacked on. Capping the structure at three beats rather than allowing a fourth is a direct response to how little time is actually available once a story is divided evenly across eight seconds — a fourth beat gets under two seconds on average, which is below the threshold where Veo can render a beat as a legible, distinct event rather than a blurred transitional smear between its neighbors, since generative video models need a minimum number of frames to establish a new visual state before that state reads as intentional rather than accidental. Timing the audio's own character change to the same second range as the visual turn — rather than running one flat ambient bed under the whole clip — uses Veo's native audio generation to reinforce the story's structure rather than ignore it, since a sound shift synchronized to the visual turn gives a viewer two simultaneous, reinforcing signals that something changed, which reads as a stronger beat than either channel would alone.`,
     exampleOutput: `An 8-second clip: a man checks his watch alone on a bus stop bench (0-3s), a stranger sits at the far end and holds up an identical watch (3-6s), and by the final two seconds both men are laughing and shaking hands as the bus pulls away unboarded, the quiet street ambience breaking into overlapping laughter exactly as the handshake lands.`,
-    verifiedAgainst: [
-      { tool: 'Veo', version: '3.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'Veo', version: '3.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2387,9 +2381,7 @@ The finished prompt, followed by one line naming exactly which micro-expression 
     tags: [`video`, `cinematic`, `slow-motion`, `close-up`, `emotional`, `native-audio`],
     whyItWorks: `Slow motion in real cinematography is a tool for revealing a specific change a viewer would otherwise miss at normal speed, not a generic aesthetic filter, and this prompt is built around that distinction — naming the exact micro-expression change the shot exists to track gives Veo an actual event to slow down around, whereas a slow-motion request with no named change defaults to a decorative, hollow prettiness because there is nothing specific for the reduced speed to be revealing. Explicitly stating that the shot is slow motion rather than only describing it as "dramatic" or "emotional" closes a real gap in how the model can interpret an unstated pace: those adjectives are just as satisfiable by ordinary-speed footage with moody lighting, and a prompt that relies on the mood words alone risks getting exactly that instead of the actually slowed motion the emotional beat depends on. Slowing or thinning the native audio to match the visual pace, rather than leaving it running at ordinary speed under a quarter-speed image, targets one of the fastest tells that separates convincing slow motion from an obviously synthetic one — real slow-motion footage's audio characteristically stretches and lowers along with the image, and a normal-paced soundtrack under visibly slowed visuals is a mismatch viewers register even without technical vocabulary for what feels wrong. Restricting the beat to a single character's single expression change, rather than tracking two people's reactions in the same frame, respects a fixed cognitive and rendering budget: an eight-second slow-motion close-up already asks a viewer to hold sustained attention on one small, subtle change, and splitting that attention across two faces gives the model two competing focal points to render at reduced speed simultaneously, which tends to produce a shot where neither person's change reads clearly. Keeping the camera nearly still, rather than adding its own movement on top of the subject's slowed motion, ensures the one motion actually worth watching — the expression changing — is the only motion competing for the viewer's eye.`,
     exampleOutput: `An 8-second tight close-up on the father's weathered face under flickering fluorescent light: his composed expression holds, then visibly cracks for a single slowed second before steadying again, a low stretched hum and a slowed exhale underneath, no music, no camera movement.`,
-    verifiedAgainst: [
-      { tool: 'Veo', version: '3.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'Veo', version: '3.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2478,12 +2470,17 @@ The finished prompt, followed by one line stating the exact second the proof mom
       },
     ],
     targetTools: [`Veo 3.1`],
-    tags: [`video`, `product-demo`, `commercial`, `ecommerce`, `native-audio`, `feature-proof`],
+    tags: [
+      `video`,
+      `product-demo`,
+      `commercial`,
+      `ecommerce`,
+      `native-audio`,
+      `feature-proof`,
+    ],
     whyItWorks: `A functional demo and a hero showcase are solving different problems, and the failure mode this prompt is built to avoid is treating a demo prompt like a showcase prompt — a beauty shot sells desire through an appealing static or rotating view, while a demo has to prove a mechanism actually does what it claims, which requires an explicit action, a visible before-and-after state, and a specific second by which that proof has to register on screen. Naming exactly one feature rather than several is the single biggest lever here because eight seconds divided across multiple capabilities gives each one too little uninterrupted screen time to actually prove anything — a viewer needs a beginning state, an action, and a resulting changed state to register a feature as demonstrated, and that sequence has a real minimum duration below which it reads as a vague gesture rather than a completed proof. Pinning the proof moment to an explicit second, rather than leaving it to happen "at some point," matters because Veo has no separate concept of dramatic pacing for a functional demo the way it might loosely default toward for a narrative beat — an unanchored proof moment is as likely to land in the first second, before the action reads as intentional, as it is to land in the last second, leaving no time for a viewer to register the change before the clip ends. Describing the hands performing a specific step-by-step mechanical action, rather than an unspecific "uses the product," gives the model a concrete motion to render instead of an abstract concept it has to interpret on its own, and that concreteness is exactly what separates a demo that looks like it is actually demonstrating a real mechanism from one that looks like generic product-handling footage. Timing the functional sound — a click, a hiss, a chime — to land exactly on the proof moment uses native audio as a second confirming channel rather than decoration, since a sound that correctly coincides with the visual proof reinforces to a viewer that the mechanism genuinely completed its action at that instant, which is a meaningfully stronger signal than the visual proof alone.`,
     exampleOutput: `A close-up demo clip: a hand twists the travel mug's lid a quarter turn, a mechanical click sounds exactly as a small indicator ring visibly turns from red to green by the fourth second, confirming the seal locked, all on a bright, evenly lit kitchen counter.`,
-    verifiedAgainst: [
-      { tool: 'Veo', version: '3.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'Veo', version: '3.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2556,12 +2553,17 @@ The finished prompt, followed by one line stating the exact second the proof mom
       },
     ],
     targetTools: [`Veo 3.1`],
-    tags: [`video`, `advertising`, `direct-response`, `problem-solution`, `native-audio`, `commercial`],
+    tags: [
+      `video`,
+      `advertising`,
+      `direct-response`,
+      `problem-solution`,
+      `native-audio`,
+      `commercial`,
+    ],
     whyItWorks: `The problem-solution ad structure only works if the contrast between its two halves reads clearly, and the single most fragile point in compressing that structure into eight seconds is the transition itself — which is why this prompt insists on naming an approximate transition second and its visible trigger explicitly, rather than letting the shift happen implicitly, because an unanchored transition tends to get rendered by Veo as a gradual fade or blend between the frustrated and relieved states rather than the clean before/after cut the format depends on, and a blended transition is a weaker, muddier ad than one with a clearly readable pivot. Keeping the camera treatment identical across both halves — same framing style, same movement type — is a deliberate constraint that isolates the contrast to what actually changes in the scene rather than letting a shift in cinematography do work the story itself should be doing; an ad that changes both the situation and the camera language at the same moment gives a viewer two simultaneous changes to process, diluting the clarity of the specific contrast the ad is trying to sell. Requiring the opening frustration to be genuinely, visibly frustrating rather than softened addresses a common failure in generated ad content: a mild, understated problem gives the second half's relief nothing meaningful to resolve, and the entire emotional structure of a problem-solution ad depends on the first half registering as a real, specific annoyance a viewer recognizes, not an abstract or watered-down gesture at one. Timing the audio's shift in character to land at the same second as the visual transition uses Veo's native audio generation as a second reinforcing signal for the pivot rather than an independent decoration — a sigh and clatter giving way to a satisfied exhale exactly as the product appears tells a viewer through two channels simultaneously that something changed, which registers as a stronger, more legible beat than either channel alone would produce.`,
     exampleOutput: `An 8-second ad: a hand fumbles a tangled charging cable and drops the phone in frustration for the first three seconds, then at second three the same hand picks up a magnetic cable organizer instead, the cable neatly wound within the next few seconds as the phone charges cleanly on the desk, a frustrated sigh giving way to a soft satisfied exhale and a clean magnetic click right at the pivot.`,
-    verifiedAgainst: [
-      { tool: 'Veo', version: '3.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'Veo', version: '3.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2635,12 +2637,17 @@ The finished prompt, followed by one line stating explicitly how the chosen meta
       },
     ],
     targetTools: [`Veo 3.1`],
-    tags: [`video`, `explainer`, `metaphor`, `abstract-concept`, `native-audio`, `marketing`],
+    tags: [
+      `video`,
+      `explainer`,
+      `metaphor`,
+      `abstract-concept`,
+      `native-audio`,
+      `marketing`,
+    ],
     whyItWorks: `Abstract concepts have no direct visual referent, which is precisely the problem this prompt structure is built to solve — a request to generate "a video about trust" or "a video about growth" gives Veo nothing concrete to render, and the model's default response to an under-specified abstract subject is to fall back on generic, visually forgettable stock-footage tropes, because there is no specific physical thing being asked for. Choosing a physical metaphor whose actual mechanics mirror the concept's own behavior, rather than one chosen only because it looks visually appealing, is the load-bearing creative decision here — a root system whose growth rate visibly accelerates the longer it runs is a structurally accurate stand-in for compounding growth specifically, in a way a metaphor chosen purely for its aesthetics but with mismatched mechanics would not be, no matter how well it was rendered. Instructing the clip to rely on the metaphor's physical action alone to carry the explanation, rather than propping it up with on-screen text, is a direct response to two separate constraints: first, that Veo does not reliably render small, legible on-screen text, and second, that a metaphor which needs a caption to explain itself was probably the wrong metaphor to begin with — the physical logic of the action shown should be doing the explanatory work on its own. Ruling out a second competing metaphor for the same concept in a single clip matters because eight seconds is barely enough time to establish and resolve one physical action clearly, let alone ask a viewer to track two separate visual logics simultaneously and reconcile what they have in common; a single clear metaphor executed fully outperforms two half-explained ones every time. Tying the native audio to the literal sound the physical metaphor's action would produce, rather than an unrelated ambient mood track, reinforces the same physical logic doing the explanatory work visually, giving the concept two consistent, mutually reinforcing channels instead of one visual channel undercut by an audio track pulling attention somewhere unrelated.`,
     exampleOutput: `An 8-second macro clip: a single seed's root system branches underground, each new split visibly faster and denser than the last, soft layered cracking and rustling growing thicker as the branching accelerates, ending on a dense, rapidly multiplying tangle of roots against warm-lit soil.`,
-    verifiedAgainst: [
-      { tool: 'Veo', version: '3.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'Veo', version: '3.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2720,12 +2727,17 @@ The finished prompt for this one shot, followed by a note confirming the continu
       },
     ],
     targetTools: [`Veo 3.1`],
-    tags: [`video`, `shot-list`, `continuity`, `filmmaking`, `pre-production`, `batch-generation`],
+    tags: [
+      `video`,
+      `shot-list`,
+      `continuity`,
+      `filmmaking`,
+      `pre-production`,
+      `batch-generation`,
+    ],
     whyItWorks: `A shot list assumes a viewer will experience several separately captured angles as one continuous scene, and the core challenge in generating that with Veo is that the model has no memory carried over between separate generations — each shot prompt is evaluated fresh, with no awareness of what a previous shot in the same list looked like, which is why this template's entire structure is built around a continuity block that has to be copied forward identically, word for word, rather than paraphrased shot to shot. This is not a stylistic preference but a direct consequence of how the model actually works: any variation in how a character's appearance or a location is worded between two shots gets interpreted as an actual instruction to render a different-looking character or space, not as a harmless rephrasing of the same intended visual, so a shot list where each prompt describes the same red-haired woman in slightly different words will very plausibly generate several visually distinct women across the finished sequence. Explicitly separating the fixed continuity block from the shot-specific content — camera, action, framing — lets each shot vary in exactly the ways a real shot list is supposed to vary (different angles, different framings of the same scene) while holding everything that should stay constant genuinely constant, which mirrors how a real multi-camera or multi-setup shoot maintains continuity notes across coverage even though each individual shot is captured separately. Matching lighting language and audio register across shots for the same underlying reason a film production keeps a continuity supervisor on set — a sequence edited from generations with subtly different color temperature or ambient sound from cut to cut reads as spliced-together mismatched footage rather than one continuous scene, undermining the entire premise of a shot list, which is that all its individual shots belong to the same moment in the same place.`,
     exampleOutput: `Shot 3 of 6: a low-angle close-up on the red-haired woman's field-jacketed hand tracing an animal track pressed into wet ground, the same cool dawn light and thin mist established in shot 1, quiet birdsong and damp leaf rustle matching the ambient bed used across the rest of the list.`,
-    verifiedAgainst: [
-      { tool: 'Veo', version: '3.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'Veo', version: '3.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2802,9 +2814,7 @@ The finished prompt, followed by one line confirming this describes one single c
     tags: [`video`, `recap`, `highlight`, `montage`, `native-audio`, `sports-and-events`],
     whyItWorks: `The instinct to ask a video generator for "a montage" runs directly into a hard limitation of how Veo actually produces output: each generation is one continuous, uncut take, with no mechanism for switching between distinct scenes inside a single clip, so a prompt that describes several discrete moments expecting the model to cut between them the way an editor would gets rendered instead as one confused space trying to contain fragments of all of them simultaneously, which is a strictly worse result than either a real montage or a clean single shot. The actual workaround this prompt relies on is substituting layered simultaneous activity within one real continuous moment for the multiple distinct scenes a traditional montage would use — a busy marathon finish line already contains a crowd, a background, and straining runners all happening genuinely at once, and describing that real layered density gives a viewer the same "a lot is happening" feeling a cut-together highlight reel produces, without requiring any cuts the model cannot perform. A single sweeping camera move across that layered scene does real work standing in for a montage's usual sense of covering multiple locations or moments — the camera traveling through a busy, multi-layered real space creates a feeling of ground covered and variety seen that is structurally similar to what a montage's multiple cuts accomplish, even though it happens within one uncut take. Building the energetic pace from the density and speed of what's actually happening in frame, rather than expecting cuts to generate the energy, respects the same constraint from a different angle — the excitement a real highlight reel produces through rapid scene changes has to be produced here through how busy and kinetic the single continuous frame itself is, since there is no edit rhythm available inside a single generation to lean on instead. The explicit fallback — generate separate scenes as separate clips and edit them together afterward if a true multi-scene montage is actually needed — is included because that is the only reliable way to get an actual montage from a tool that generates one continuous shot per call; trying to force it into a single generation is the mistake this entire prompt structure exists to prevent.`,
     exampleOutput: `An 8-second single-take clip: the camera tracks fast alongside straining lead runners in the final marathon stretch, a dense cheering crowd waving signs visible behind the barricades throughout, roaring crowd noise and an air horn layered under overlapping shouted encouragement, one continuous sweep, no cuts.`,
-    verifiedAgainst: [
-      { tool: 'Veo', version: '3.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'Veo', version: '3.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2881,9 +2891,7 @@ The finished prompt, followed by one line confirming that the described start st
     tags: [`video`, `loop`, `retention`, `autoplay`, `native-audio`, `feed`],
     whyItWorks: `Autoplay feeds reward a specific and unusual property most video prompts don't need to think about: a clip whose repeat playback is invisible rather than one that visibly restarts every few seconds, and that property depends entirely on how closely the described end state matches the described start state, both visually and sonically — this is why the prompt's design is organized around choosing a naturally cyclical action rather than one with a clear beginning, middle, and end, since a non-cyclical action necessarily has a visible discontinuity the instant it jumps back to its starting frame, no matter how well each individual play of the clip looks on its own. Holding the camera either genuinely static or in a movement that completes its own matching loop addresses a subtler version of the same problem: even a perfectly matched subject motion will still produce a visible seam if the camera itself has traveled somewhere different by the end of the clip than where it started, because the frame's own composition is part of what a viewer's eye is tracking for continuity, not just the subject within it. Keeping lighting genuinely constant rather than allowing any drift — a moving shadow, a traveling highlight — matters for a reason specific to how human perception catches loop seams: a viewer does not need to consciously notice what changed to register that something is off at the loop point, and even a small, technically minor lighting shift is often enough to produce that vague, hard-to-place sense that the video just did something discontinuous. Explicitly ruling out a single dramatic payoff moment in favor of an evenly-paced, hypnotic motion is the least intuitive but most important instruction here, because the natural instinct when generating any short clip is to build toward one strong beat, and a strong beat is memorable specifically because it stands out from what surrounds it — which is exactly the property that makes a viewer consciously register it repeating identically on a loop, undermining the entire seamless effect the format depends on. Keeping the native audio free of any single sharp one-time sound near the seam closes the last common failure mode, since a loud, distinct audio event is often the first thing that gives away a loop even when the visual seam itself is genuinely well hidden.`,
     exampleOutput: `An evenly looping overhead clip: a potter's wheel spins one full, unbroken rotation with wet clay unchanged in shape from start to finish, a steady even hum and soft continuous wet-clay sound underneath, unchanging overhead light with no traveling shadow, no single sharp sound anywhere in the clip.`,
-    verifiedAgainst: [
-      { tool: 'Veo', version: '3.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'Veo', version: '3.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2954,9 +2962,7 @@ The finished prompt for this one chapter transition, followed by one line naming
     tags: [`video`, `chapters`, `transition`, `bumper`, `native-audio`, `editing`],
     whyItWorks: `A chapter-transition bumper only works as a device if it is instantly recognizable as the same recurring element every time it reappears, which means the design problem here is nearly the inverse of most Veo prompts in this library — instead of maximizing what's distinct and specific to one generation, the goal is holding almost everything identical across many separate generations while isolating exactly one small element that's allowed to vary, and stating that split explicitly in the prompt is what keeps the shared motif from drifting the way an unconstrained creative brief naturally would across repeated regenerations. Because Veo has no memory between generations, the shared visual motif has to be described with the same precision and the same wording each time it's requested for a new chapter, for the identical reason continuity matters in a multi-shot list — any variation in how the core visual is phrased is interpreted by the model as an actual instruction to render something at least slightly different, and a set of chapter bumpers that are each subtly different undermines the whole point of a bumper, which is to be recognized instantly as "the thing that happens between chapters," not evaluated fresh each time. Deliberately keeping the shared motif visually simple, rather than elaborate, is a practical response to the same reliability concern — a complex, detailed motif is harder to reproduce identically across many separate generations than a simple geometric one, and a device meant to repeat across every chapter break needs to prioritize repeatability over one-time visual impressiveness. Ruling out on-screen chapter titles as part of the generated video, the same way a channel-intro bumper rules out logo text, reflects both a real rendering limitation and a practical workflow one: Veo doesn't reliably render small legible text, and a bumper that needed regenerating every time a chapter's title changed would defeat the efficiency of having one reusable, mostly-identical template in the first place — adding real chapter titles in post over a consistent generated background solves both problems at once. Allowing the native audio only a minor pitch or texture variation, rather than a fully different sound per chapter, keeps the sonic identity of the device consistent for the same reason the visual motif needs to stay consistent — a transition device that sounds noticeably different each time it appears reads as several different devices, not one recurring one.`,
     exampleOutput: `A 4-second static bumper: a single thin line of soft amber light traces itself across a near-black background, forming a simple geometric shape, a short rising tone accompanying the trace and settling into quiet as it completes.`,
-    verifiedAgainst: [
-      { tool: 'Veo', version: '3.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'Veo', version: '3.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

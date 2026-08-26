@@ -182,9 +182,9 @@ export default function SecurityPage() {
             Where this fits into data protection law
           </h2>
           <p className="mt-3 text-[16px] text-ink-muted leading-7">
-            These are the "reasonable security safeguards" that India's DPDP Act, the older
-            IT Rules, GDPR and CCPA all separately require in some form. How each of those
-            specific laws maps to this site is on the{' '}
+            These are the "reasonable security safeguards" that India's DPDP Act, the
+            older IT Rules, GDPR and CCPA all separately require in some form. How each of
+            those specific laws maps to this site is on the{' '}
             <Link href="/compliance" className={LINK_CLASS}>
               compliance page
             </Link>

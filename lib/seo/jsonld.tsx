@@ -235,7 +235,9 @@ function flattenInline(segments: readonly Inline[]): string {
  */
 export function blogFaqJsonLd(post: BlogPost): object | null {
   if (!post.faq || post.faq.length === 0) return null
-  return genericFaqJsonLd(post.faq.map((item) => ({ q: item.question, a: flattenInline(item.answer) })))
+  return genericFaqJsonLd(
+    post.faq.map((item) => ({ q: item.question, a: flattenInline(item.answer) })),
+  )
 }
 
 /**

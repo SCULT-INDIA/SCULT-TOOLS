@@ -77,7 +77,13 @@ One primary hero image with the headline legible inside the frame, followed by t
       },
     ],
     targetTools: [`ChatGPT (GPT Image)`],
-    tags: [`ad-creative`, `paid-social`, `gpt-image`, `on-image-text`, `aspect-ratio-variants`],
+    tags: [
+      `ad-creative`,
+      `paid-social`,
+      `gpt-image`,
+      `on-image-text`,
+      `aspect-ratio-variants`,
+    ],
     whyItWorks: `GPT Image generates text as part of the same native image-token stream as the rest of the picture rather than compositing it on afterward the way older diffusion-only pipelines effectively had to, which is the specific reason a short, exact headline string rendered directly into the frame comes back legible far more often than it did on prior-generation DALL·E models that reliably garbled anything beyond a couple of words — but that reliability drops fast once the surrounding composition is already busy where the text needs to sit, which is why the brief clears that area explicitly rather than trusting the model to find clean space on its own after the fact. The format-variant instruction leans on a specific mechanical difference between an in-conversation follow-up and a brand-new prompt: asking ChatGPT to re-crop "the image above" conditions the next generation on the actual approved pixels already in the thread, carrying forward the exact product angle, color grade, and headline styling that were just signed off, whereas typing a fresh description of the same ad into a new generation call has nothing to anchor it to that specific result and will re-synthesize the whole scene from language alone — close to the original, but rarely identical, and identical is the entire point once one version has already been approved for use. Naming everything that must stay out of the frame matters because GPT Image, trained on a huge corpus of real ad and product photography where competing badges, watermarks, and secondary products are common, will add one of those elements on its own initiative more often than a brief-writer expects unless it's told explicitly not to.`,
     exampleOutput: `A warm, morning-lit product shot with the exact line "Your first box is half price" rendered crisply over the clear tabletop area, followed by two additional crops of that same approved image in 4:5 and 9:16 with the headline nudged to stay clear of each platform's UI chrome.`,
     verifiedAgainst: [

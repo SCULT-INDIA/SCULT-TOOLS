@@ -160,23 +160,19 @@ describe('searchSite', () => {
     }
   })
 
-  it(
-    'finds every prompt by its own title',
-    () => {
-      // Same reachability bar as tools: a prompt nobody can pull up by typing
-      // its title might as well not be indexed. This test calls searchSite()
-      // once per prompt (O(n²) against the full index), which is a test-suite
-      // cost only — a single real searchSite() call stays fast regardless of
-      // catalogue size. The default 5s budget stopped being enough once the
-      // library crossed ~1000 prompts.
-      for (const prompt of PROMPTS) {
-        const hits = searchSite(prompt.title)
-        expect(
-          hits.map((h) => h.href),
-          `"${prompt.title}" did not find ${prompt.slug}`,
-        ).toContain(`/prompts/${prompt.category}/${prompt.slug}`)
-      }
-    },
-    30_000,
-  )
+  it('finds every prompt by its own title', () => {
+    // Same reachability bar as tools: a prompt nobody can pull up by typing
+    // its title might as well not be indexed. This test calls searchSite()
+    // once per prompt (O(n²) against the full index), which is a test-suite
+    // cost only — a single real searchSite() call stays fast regardless of
+    // catalogue size. The default 5s budget stopped being enough once the
+    // library crossed ~1000 prompts.
+    for (const prompt of PROMPTS) {
+      const hits = searchSite(prompt.title)
+      expect(
+        hits.map((h) => h.href),
+        `"${prompt.title}" did not find ${prompt.slug}`,
+      ).toContain(`/prompts/${prompt.category}/${prompt.slug}`)
+    }
+  }, 30_000)
 })

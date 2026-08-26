@@ -1,6 +1,6 @@
 import { timingSafeEqual } from 'node:crypto'
-import { getVercelOidcToken } from '@vercel/oidc'
 import { createClient } from '@supabase/supabase-js'
+import { getVercelOidcToken } from '@vercel/oidc'
 
 /**
  * The Skills Library's real sync engine — a standalone Vercel project
@@ -63,33 +63,249 @@ const MAX_RETRIES = 4
 // with its own package.json, not because the taxonomy is meant to drift.
 // Update both together.
 const CATEGORY_KEYWORDS = [
-  { slug: 'testing', words: ['testing', 'jest', 'vitest', 'pytest', 'go testing', 'rspec', 'junit', 'playwright', 'cypress', 'e2e', 'unit test', 'integration test', 'mutation testing', 'snapshot testing', 'load testing'] },
-  { slug: 'debugging', words: ['debugging', 'debug', 'stack trace', 'bisect', 'flaky test', 'memory leak', 'production debugging', 'log analysis'] },
-  { slug: 'git-workflows', words: ['git workflow', 'git commit', 'git rebase', 'merge conflict', 'git hooks', 'branching strategy', 'monorepo git'] },
+  {
+    slug: 'testing',
+    words: [
+      'testing',
+      'jest',
+      'vitest',
+      'pytest',
+      'go testing',
+      'rspec',
+      'junit',
+      'playwright',
+      'cypress',
+      'e2e',
+      'unit test',
+      'integration test',
+      'mutation testing',
+      'snapshot testing',
+      'load testing',
+    ],
+  },
+  {
+    slug: 'debugging',
+    words: [
+      'debugging',
+      'debug',
+      'stack trace',
+      'bisect',
+      'flaky test',
+      'memory leak',
+      'production debugging',
+      'log analysis',
+    ],
+  },
+  {
+    slug: 'git-workflows',
+    words: [
+      'git workflow',
+      'git commit',
+      'git rebase',
+      'merge conflict',
+      'git hooks',
+      'branching strategy',
+      'monorepo git',
+    ],
+  },
   { slug: 'code-review', words: ['code review', 'pull request', 'pr review'] },
-  { slug: 'refactoring', words: ['refactoring', 'refactor', 'legacy code migration', 'dead code', 'code smell'] },
-  { slug: 'api-design', words: ['rest api', 'graphql', 'api versioning', 'openapi', 'rate limiting', 'webhook', 'grpc'] },
-  { slug: 'database', words: ['postgres', 'mysql', 'mongodb', 'redis', 'database migration', 'query optimization', 'database indexing', 'sql schema'] },
-  { slug: 'security', words: ['security audit', 'penetration testing', 'pentest', 'secrets management', 'encryption', 'vulnerability', 'owasp', 'authentication'] },
-  { slug: 'performance', words: ['performance optimization', 'caching', 'profiling', 'core web vitals', 'performance tuning'] },
-  { slug: 'deployment-cicd', words: ['ci/cd', 'ci cd', 'github actions', 'release management', 'feature flag', 'deployment', 'rollback', 'canary'] },
-  { slug: 'observability', words: ['observability', 'structured logging', 'distributed tracing', 'incident response', 'monitoring', 'on-call'] },
-  { slug: 'accessibility', words: ['accessibility', 'wcag', 'screen reader', 'aria', 'keyboard navigation'] },
-  { slug: 'frontend-frameworks', words: ['react', 'nextjs', 'next.js', 'vue', 'angular', 'svelte', 'frontend'] },
-  { slug: 'backend-frameworks', words: ['django', 'fastapi', 'rails', 'spring boot', 'laravel', 'go backend', 'rust backend', 'nodejs backend', 'backend'] },
-  { slug: 'mobile', words: ['ios', 'android', 'flutter', 'react native', 'mobile app', 'swift', 'kotlin'] },
-  { slug: 'devops-infra', words: ['docker', 'kubernetes', 'terraform', 'aws', 'gcp', 'azure', 'serverless', 'infrastructure'] },
-  { slug: 'ai-ml', words: ['llm', 'prompt engineering', 'rag', 'vector database', 'fine tuning', 'ai agent', 'langchain', 'machine learning', 'model context protocol'] },
-  { slug: 'data-engineering', words: ['etl', 'airflow', 'spark', 'data warehouse', 'data pipeline'] },
-  { slug: 'architecture', words: ['system design', 'microservices', 'architecture decision', 'event driven architecture'] },
-  { slug: 'design-systems', words: ['design system', 'component library', 'design tokens', 'figma', 'ui theming'] },
-  { slug: 'seo-marketing', words: ['seo', 'technical seo', 'ab testing', 'analytics', 'marketing automation', 'marketing'] },
-  { slug: 'project-management', words: ['sprint planning', 'project estimation', 'onboarding', 'retrospective', 'agile'] },
-  { slug: 'writing-docs', words: ['technical writing', 'readme', 'api documentation', 'changelog', 'release notes', 'documentation'] },
+  {
+    slug: 'refactoring',
+    words: [
+      'refactoring',
+      'refactor',
+      'legacy code migration',
+      'dead code',
+      'code smell',
+    ],
+  },
+  {
+    slug: 'api-design',
+    words: [
+      'rest api',
+      'graphql',
+      'api versioning',
+      'openapi',
+      'rate limiting',
+      'webhook',
+      'grpc',
+    ],
+  },
+  {
+    slug: 'database',
+    words: [
+      'postgres',
+      'mysql',
+      'mongodb',
+      'redis',
+      'database migration',
+      'query optimization',
+      'database indexing',
+      'sql schema',
+    ],
+  },
+  {
+    slug: 'security',
+    words: [
+      'security audit',
+      'penetration testing',
+      'pentest',
+      'secrets management',
+      'encryption',
+      'vulnerability',
+      'owasp',
+      'authentication',
+    ],
+  },
+  {
+    slug: 'performance',
+    words: [
+      'performance optimization',
+      'caching',
+      'profiling',
+      'core web vitals',
+      'performance tuning',
+    ],
+  },
+  {
+    slug: 'deployment-cicd',
+    words: [
+      'ci/cd',
+      'ci cd',
+      'github actions',
+      'release management',
+      'feature flag',
+      'deployment',
+      'rollback',
+      'canary',
+    ],
+  },
+  {
+    slug: 'observability',
+    words: [
+      'observability',
+      'structured logging',
+      'distributed tracing',
+      'incident response',
+      'monitoring',
+      'on-call',
+    ],
+  },
+  {
+    slug: 'accessibility',
+    words: ['accessibility', 'wcag', 'screen reader', 'aria', 'keyboard navigation'],
+  },
+  {
+    slug: 'frontend-frameworks',
+    words: ['react', 'nextjs', 'next.js', 'vue', 'angular', 'svelte', 'frontend'],
+  },
+  {
+    slug: 'backend-frameworks',
+    words: [
+      'django',
+      'fastapi',
+      'rails',
+      'spring boot',
+      'laravel',
+      'go backend',
+      'rust backend',
+      'nodejs backend',
+      'backend',
+    ],
+  },
+  {
+    slug: 'mobile',
+    words: ['ios', 'android', 'flutter', 'react native', 'mobile app', 'swift', 'kotlin'],
+  },
+  {
+    slug: 'devops-infra',
+    words: [
+      'docker',
+      'kubernetes',
+      'terraform',
+      'aws',
+      'gcp',
+      'azure',
+      'serverless',
+      'infrastructure',
+    ],
+  },
+  {
+    slug: 'ai-ml',
+    words: [
+      'llm',
+      'prompt engineering',
+      'rag',
+      'vector database',
+      'fine tuning',
+      'ai agent',
+      'langchain',
+      'machine learning',
+      'model context protocol',
+    ],
+  },
+  {
+    slug: 'data-engineering',
+    words: ['etl', 'airflow', 'spark', 'data warehouse', 'data pipeline'],
+  },
+  {
+    slug: 'architecture',
+    words: [
+      'system design',
+      'microservices',
+      'architecture decision',
+      'event driven architecture',
+    ],
+  },
+  {
+    slug: 'design-systems',
+    words: ['design system', 'component library', 'design tokens', 'figma', 'ui theming'],
+  },
+  {
+    slug: 'seo-marketing',
+    words: [
+      'seo',
+      'technical seo',
+      'ab testing',
+      'analytics',
+      'marketing automation',
+      'marketing',
+    ],
+  },
+  {
+    slug: 'project-management',
+    words: [
+      'sprint planning',
+      'project estimation',
+      'onboarding',
+      'retrospective',
+      'agile',
+    ],
+  },
+  {
+    slug: 'writing-docs',
+    words: [
+      'technical writing',
+      'readme',
+      'api documentation',
+      'changelog',
+      'release notes',
+      'documentation',
+    ],
+  },
   { slug: 'general', words: [] }, // fallback — matched only when nothing else does
 ]
 
-const PERMISSIVE_LICENSES = ['MIT', 'Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'MPL-2.0', 'Unlicense', 'CC0-1.0']
+const PERMISSIVE_LICENSES = [
+  'MIT',
+  'Apache-2.0',
+  'BSD-2-Clause',
+  'BSD-3-Clause',
+  'ISC',
+  'MPL-2.0',
+  'Unlicense',
+  'CC0-1.0',
+]
 const LICENSE_TEXT_MARKERS = [
   ['MIT License', 'MIT'],
   ['Apache License', 'Apache-2.0'],
@@ -122,11 +338,15 @@ function parseFrontmatter(skillMdContents) {
 
 function classifyLicense(frontmatter, files) {
   const stated = frontmatter.license
-  if (stated && PERMISSIVE_LICENSES.includes(stated)) return { license: stated, licenseGated: false }
-  const licenseFile = files.find((f) => /^license(\.(txt|md))?$/i.test(f.path.split('/').pop() ?? ''))
+  if (stated && PERMISSIVE_LICENSES.includes(stated))
+    return { license: stated, licenseGated: false }
+  const licenseFile = files.find((f) =>
+    /^license(\.(txt|md))?$/i.test(f.path.split('/').pop() ?? ''),
+  )
   if (licenseFile) {
     for (const [marker, spdx] of LICENSE_TEXT_MARKERS) {
-      if (licenseFile.contents.includes(marker)) return { license: spdx, licenseGated: false }
+      if (licenseFile.contents.includes(marker))
+        return { license: spdx, licenseGated: false }
     }
   }
   return { license: stated || null, licenseGated: true }
@@ -145,9 +365,12 @@ async function fetchRootLicense(sourceOwner, sourceRepo) {
   for (const branch of ['main', 'master']) {
     for (const name of ['LICENSE', 'LICENSE.txt', 'LICENSE.md']) {
       try {
-        const res = await fetch(`https://raw.githubusercontent.com/${sourceOwner}/${sourceRepo}/${branch}/${name}`, {
-          signal: AbortSignal.timeout(LICENSE_FETCH_TIMEOUT_MS),
-        })
+        const res = await fetch(
+          `https://raw.githubusercontent.com/${sourceOwner}/${sourceRepo}/${branch}/${name}`,
+          {
+            signal: AbortSignal.timeout(LICENSE_FETCH_TIMEOUT_MS),
+          },
+        )
         if (res.ok) return { path: name, contents: await res.text() }
       } catch {
         // try the next branch/filename — a slow/hanging request here must
@@ -239,7 +462,9 @@ async function fetchV1(token, path, deadlineAt) {
       })
     } catch (err) {
       if (attempt < MAX_RETRIES) continue
-      throw new Error(`skills.sh ${path} -> ${err.name === 'TimeoutError' ? 'request timed out' : err.message}`)
+      throw new Error(
+        `skills.sh ${path} -> ${err.name === 'TimeoutError' ? 'request timed out' : err.message}`,
+      )
     }
     if (res.status === 429 && attempt < MAX_RETRIES) {
       const retryAfter = Number(res.headers.get('retry-after'))
@@ -342,7 +567,10 @@ async function splitExistingNew(supabase, items, deadlineAt) {
     if (deadlineAt && Date.now() > deadlineAt) {
       throw new Error('existing-id lookup: time budget exhausted')
     }
-    const { data, error } = await supabase.from('skills').select('id,installs').in('id', ids)
+    const { data, error } = await supabase
+      .from('skills')
+      .select('id,installs')
+      .in('id', ids)
     if (error) throw new Error(`existing-id lookup: ${error.message}`)
     for (const row of data ?? []) {
       existingIds.add(row.id)
@@ -361,7 +589,9 @@ async function splitExistingNew(supabase, items, deadlineAt) {
     // most don't on any given day, which keeps the refresh step's write
     // count (and its share of the time budget) proportional to real change
     // rather than to registry size.
-    changedItems: existingItems.filter((i) => (i.installs ?? 0) !== storedInstalls.get(i.id)),
+    changedItems: existingItems.filter(
+      (i) => (i.installs ?? 0) !== storedInstalls.get(i.id),
+    ),
     newItems: unique.filter((i) => !existingIds.has(i.id)),
   }
 }
@@ -396,7 +626,11 @@ async function refreshExistingFromListing(supabase, items, deadlineAt) {
     else refreshed++
   }
   if (failures.length > 0) {
-    return { ok: false, refreshed, error: `row failures: ${failures.slice(0, 3).join(' || ')}` }
+    return {
+      ok: false,
+      refreshed,
+      error: `row failures: ${failures.slice(0, 3).join(' || ')}`,
+    }
   }
   return { ok: true, refreshed }
 }
@@ -411,7 +645,11 @@ async function upsertSkillFromListing(supabase, token, item, deadlineAt) {
 
   let detail
   try {
-    detail = await fetchV1(token, `/skills/${sourceOwner}/${sourceRepo}/${skillId}`, deadlineAt)
+    detail = await fetchV1(
+      token,
+      `/skills/${sourceOwner}/${sourceRepo}/${skillId}`,
+      deadlineAt,
+    )
   } catch (err) {
     return {
       ok: false,
@@ -535,7 +773,9 @@ export default async function handler(req, res) {
   let cursorPage = meta?.cursor_page ?? 0
   let cursorDone = meta?.cursor_done ?? false
   let curatedDone = meta?.curated_done ?? false
-  const tombstones = new Set(Array.isArray(meta?.tombstoned_ids) ? meta.tombstoned_ids : [])
+  const tombstones = new Set(
+    Array.isArray(meta?.tombstoned_ids) ? meta.tombstoned_ids : [],
+  )
   const newTombstones = []
 
   // The bug that left the registry stuck at a fixed count forever: once
@@ -648,7 +888,11 @@ export default async function handler(req, res) {
           try {
             result = await upsertSkillFromListing(supabase, token, item, deadlineAt)
           } catch (err) {
-            result = { ok: false, error: err.message, rateLimited: isRateLimitExhaustion(err) }
+            result = {
+              ok: false,
+              error: err.message,
+              rateLimited: isRateLimitExhaustion(err),
+            }
           }
           if (result.ok) processed++
           else {
@@ -679,7 +923,11 @@ export default async function handler(req, res) {
     while (timeLeft() > 8_000) {
       let listing
       try {
-        listing = await fetchV1(token, `/skills?page=${cursorPage + 1}&perPage=${PER_PAGE}`, deadlineAt)
+        listing = await fetchV1(
+          token,
+          `/skills?page=${cursorPage + 1}&perPage=${PER_PAGE}`,
+          deadlineAt,
+        )
       } catch (err) {
         errors.push(`page ${cursorPage + 1}: ${err.message}`)
         break
@@ -701,7 +949,11 @@ export default async function handler(req, res) {
       try {
         const split = await splitExistingNew(supabase, items, deadlineAt)
         newItems = split.newItems
-        const refresh = await refreshExistingFromListing(supabase, split.changedItems, deadlineAt)
+        const refresh = await refreshExistingFromListing(
+          supabase,
+          split.changedItems,
+          deadlineAt,
+        )
         if (!refresh.ok) errors.push(`page ${cursorPage + 1} refresh: ${refresh.error}`)
         refreshed += refresh.refreshed
       } catch (err) {
@@ -718,7 +970,11 @@ export default async function handler(req, res) {
           try {
             result = await upsertSkillFromListing(supabase, token, item, deadlineAt)
           } catch (err) {
-            result = { ok: false, error: err.message, rateLimited: isRateLimitExhaustion(err) }
+            result = {
+              ok: false,
+              error: err.message,
+              rateLimited: isRateLimitExhaustion(err),
+            }
           }
           if (result.ok) processed++
           else {
@@ -748,7 +1004,9 @@ export default async function handler(req, res) {
     }
   }
 
-  const { count } = await supabase.from('skills').select('id', { count: 'exact', head: true })
+  const { count } = await supabase
+    .from('skills')
+    .select('id', { count: 'exact', head: true })
   await supabase.from('skills_sync_meta').upsert({
     id: true,
     last_synced_at: new Date().toISOString(),

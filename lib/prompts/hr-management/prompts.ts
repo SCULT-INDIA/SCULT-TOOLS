@@ -68,12 +68,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`job-description`, `hiring`, `recruiting`, `job-posting`, `talent-acquisition`],
+    tags: [
+      `job-description`,
+      `hiring`,
+      `recruiting`,
+      `job-posting`,
+      `talent-acquisition`,
+    ],
     whyItWorks: `The core failure mode this prompt targets is well documented in hiring research: requisitions written by committee or lifted from an old posting accumulate requirements nobody actually needs, and candidates — particularly those from underrepresented groups, per widely cited internal hiring studies at large tech companies — will not apply unless they meet nearly all of them, while over-confident but under-qualified candidates apply anyway. Forcing the model to bucket every line from the raw notes into must-have or preferred, and to explicitly flag anything it demoted, creates an auditable trail the hiring manager can react to ("actually no, the MBA line really does matter because...") rather than a silent rewrite they have to reverse-engineer. Anchoring the requirements to a stated six-month success definition gives the model a concrete test for each requirement — would missing this actually block the person from hitting that outcome — instead of the vaguer instruction to "only include necessary requirements," which GPT-5.1 will otherwise satisfy by simply keeping the list roughly as-is and softening the language. The explicit ban on gendered and inflation language matters because these are exactly the phrases that survive default drafting since they read as enthusiastic rather than exclusionary on a first pass, and a model asked generically to "write an inclusive JD" will often only catch the most obvious slurs, not the subtler coded phrases. Naming a hard cap ("more than five" required items) gives the model a concrete threshold to push back against rather than an open-ended judgment call it can rationalize away.`,
     exampleOutput: `Role Summary: You'll own the growth team's core metrics infrastructure and be the first analytical voice in pricing and retention decisions... Must-Have Requirements: Advanced SQL, hands-on dbt experience, ability to present findings directly to execs. Preferred: Python, Looker familiarity, prior people-management exposure. Callout: Moved 'MBA preferred' and 'manage a junior analyst' from required to preferred/removed — neither is needed to hit the 6-month dashboard-ownership goal described.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -134,12 +138,16 @@ A fillable scorecard: one section per competency (name, 1-4 scale with the four 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`candidate-scorecard`, `hiring`, `interview-process`, `recruiting`, `panel-interview`],
+    tags: [
+      `candidate-scorecard`,
+      `hiring`,
+      `interview-process`,
+      `recruiting`,
+      `panel-interview`,
+    ],
     whyItWorks: `Structured interviewing research (most notably Google's own re:Work findings and decades of industrial-organizational psychology on interview validity) consistently shows that unstructured, holistic "gut feel" scoring has close to zero predictive validity, while structured scoring against pre-defined behavioral anchors dramatically improves both predictive validity and inter-rater agreement — the entire value of a scorecard comes from forcing comparable judgments, not from the form itself. A 1-4 scale rather than 1-5 is a deliberate mechanism to eliminate the safe, noncommittal middle score that raters gravitate toward when uncertain, which is exactly the score that provides no signal at debrief. Requiring a written evidence field next to every number addresses the specific failure mode of a debrief where four interviewers each say "I gave a 3" with no way to tell whether they mean the same thing by it — the evidence field is what actually gets compared, with the number serving only as a sort key. Separating the hire/no-hire lean from the competency average matters mechanically because averaging can mathematically wash out a single disqualifying signal (a strong system-design score cannot offset a candidate who was dishonest about a past project), so the recommendation needs to be captured as its own explicit judgment rather than derived. Feeding in a specific known scoring-drift pattern lets the model add one targeted counter-instruction on the form itself, which is more likely to actually change interviewer behavior in the moment than a generic "be consistent" reminder given once in a training session weeks earlier.`,
     exampleOutput: `System Design (1-4): 1 = could not identify the core bottleneck even with hints; 2 = identified bottleneck but proposed solution ignored a stated constraint; 3 = proposed a workable design, missed one edge case; 4 = proposed a workable design and proactively flagged the tradeoff we were testing for. Evidence: [interviewer fills in]. Hire Lean: Hire / No Hire / Lean Hire, one sentence why.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -200,12 +208,16 @@ One section per competency: definition, four scored anchors, worked example (if 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`interview-rubric`, `hiring-calibration`, `structured-interviewing`, `recruiting`, `panel-training`],
+    tags: [
+      `interview-rubric`,
+      `hiring-calibration`,
+      `structured-interviewing`,
+      `recruiting`,
+      `panel-training`,
+    ],
     whyItWorks: `The distinction this prompt enforces — a rubric as a shared pre-loop calibration document versus a scorecard as a per-candidate scoring form — mirrors how structured-interviewing programs at mature talent-acquisition functions actually separate the two artifacts, because conflating them is exactly how panels end up disagreeing at debrief without realizing they were scoring different definitions of the same number the whole time. Using a real past candidate answer as a worked example is the single highest-leverage calibration technique available: an abstract anchor like "handles escalation well" is interpreted differently by every reader, but showing an actual transcript and asking "what would this score, and why" forces the panel to argue out their disagreement on a concrete case before it costs a real candidate a fair evaluation. Resolving a named past disagreement explicitly, rather than leaving the rubric to imply a general principle and hoping it generalizes, matters because the disagreements that actually recur in a real hiring loop tend to be specific edge cases (tool familiarity, live-AI-assistance, a candidate who over-prepared a rehearsed answer) that a generic rubric never anticipates — writing the resolution into the document is the only way it survives contact with the next controversial candidate. Deliberately including an open calibration question per competency, rather than presenting the rubric as finished, exploits the fact that a panel that is handed a document to silently accept will not internalize it the way a panel that argues through one debatable point per competency will — the discussion itself is what produces consistent scoring later, not the document's existence.`,
     exampleOutput: `Competency: Handling an Angry Escalation. Definition: can the candidate de-escalate before jumping to a remedy? Anchor 3: 'asks at least one diagnostic question before offering any concession, stays calm, offers a specific next step.' Worked example: the past answer offering an immediate discount with no diagnostic question would score a 2 under this rubric — jumps straight to remedy, no de-escalation step. Open question: should offering a discount immediately ever score a 3 if the customer is clearly a high-value account?`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -266,12 +278,16 @@ One section per competency (primary question, 2-3 probes, rough time allocation)
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`interview-questions`, `behavioral-interviewing`, `hiring-compliance`, `recruiting`, `candidate-assessment`],
+    tags: [
+      `interview-questions`,
+      `behavioral-interviewing`,
+      `hiring-compliance`,
+      `recruiting`,
+      `candidate-assessment`,
+    ],
     whyItWorks: `The mechanistic reason a headline behavioral question alone under-performs is well established in interviewing practice: a candidate who has done ten interviews for similar roles has almost certainly rehearsed a polished STAR-format answer to "tell me about a time you coached someone," so the differentiating signal lives in the follow-up, where an unrehearsed candidate either produces specific, consistent detail or starts contradicting themselves and hedging. Naming the specific probe categories — personal contribution versus team's, measurable outcome, what they'd change, the constraint a clean story tends to omit — gives the model a concrete template for manufacturing exactly the kind of probe that catches this, rather than generating generic "can you tell me more?" filler that a prepared candidate handles as easily as the original question. Building in the time-per-competency allocation matters practically because interviewers without an explicit budget tend to let the first question run long and then have to rush or skip the last competency entirely, silently turning a three-competency loop into a two-competency one without anyone noticing until the debrief has a gap. The compliance check is included as a mandatory, non-optional pass specifically because interview questions drift into legally risky territory gradually and innocuously — a manager asking about "availability for a demanding schedule" is often reaching for a legitimate concern about the role's hours but is one follow-up question away from effectively asking about caregiving responsibilities, which is exactly the kind of adjacent-but-not-explicit risk a single compliance pass is designed to catch before it reaches a real candidate.`,
     exampleOutput: `Coaching a rep through a lost deal — Primary: Tell me about a time you coached a rep after they lost a deal they were confident about. Probes: What specifically did you say to them versus what did they figure out on their own? What was different about their next deal? What would you do differently if you coached that same conversation again today? Compliance flag: none in this section. Time: ~9 minutes.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -341,12 +357,16 @@ A table or day-by-day list (Day 1 through Day 10), each day with 2-4 concrete it
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`onboarding-plan`, `new-hire-experience`, `remote-onboarding`, `people-management`, `employee-experience`],
+    tags: [
+      `onboarding-plan`,
+      `new-hire-experience`,
+      `remote-onboarding`,
+      `people-management`,
+      `employee-experience`,
+    ],
     whyItWorks: `Onboarding research consistently identifies time-to-first-contribution as one of the strongest predictors of new-hire retention and engagement, because a new hire's sense of competence and belonging forms in the first two to three weeks and is driven far more by having done something real than by having attended orientation sessions — this is why the prompt structures the entire plan backward from a named first-contribution target rather than forward from a checklist of logistics. Capping pure logistics at two days addresses a specific, common failure pattern where IT provisioning delays and calendar-driven orientation sprawl silently eat the first week, so by the time real work starts the new hire has already disengaged or started to worry they were a bad hiring decision. Naming specific real people for specific days rather than "meet the team" placeholders matters because a generic introduction schedule produces exactly the kind of onboarding experience new hires describe as isolating even when every box was technically checked — a plan that says "pair with Jordan on a live ticket Wednesday" creates an actual accountable commitment that shows up on Jordan's calendar too, whereas a vague plan tends to quietly not happen. Feeding in a specific named past failure and requiring a counter-measure rather than generic advice forces the plan to fix the actual thing that broke last time (e.g., an access-provisioning bottleneck) instead of producing the same generic template that already failed to prevent it once. The structured end-of-week-two check-in closes the loop by turning the new hire's actual lived experience into an input for improving the next onboarding cycle, rather than treating the plan as a one-time artifact nobody revisits.`,
     exampleOutput: `Day 1: laptop/VPN setup, GitHub org access request submitted immediately (flagged urgent given past IT delays), intro call with Alex. Day 3: Jordan walks through the staging deploy process live. Day 7: pairs with Jordan on the identified low-risk bug fix, opens the PR. Day 9: Jordan reviews and approves; new hire ships to production with Jordan watching. Day 10 check-in: what surprised you this week, what's still unclear about the on-call rotation, one thing to change for the next hire.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -414,12 +434,16 @@ Three phase sections (Days 1-30, 31-60, 61-90), each with 3-5 concrete actions, 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`30-60-90-plan`, `new-manager`, `leadership-transition`, `people-management`, `onboarding`],
+    tags: [
+      `30-60-90-plan`,
+      `new-manager`,
+      `leadership-transition`,
+      `people-management`,
+      `onboarding`,
+    ],
     whyItWorks: `Leadership-transition research (echoing the structure Michael Watkins popularized in first-90-days frameworks) consistently finds that the specific failure mode for new managers is not lack of ambition but moving too fast on structural change before earning credibility, or moving too slowly and reading as passive — a generic "listen first, then act" template gives no way to actually calibrate that timing to the specific situation. Requiring the plan to name a genuinely low-risk, reversible change for days 31-60 forces a concrete distinction between a competence-signaling move (visible, contained, easy to reverse if wrong) and the higher-risk structural changes leadership actually wants, which is exactly the distinction new managers blur when they're anxious to prove themselves quickly. Feeding in a known sensitivity — here, a passed-over internal candidate — and requiring the plan to name explicit behavior around it rather than leaving it as subtext matters because this is precisely the kind of dynamic a new manager under pressure will handle by instinct and often get wrong (either over-correcting with visible favoritism to reassure the passed-over peer, or avoiding them altogether, both of which the rest of the team will notice and read as a signal). Explicitly banning a pre-day-30 "vision" announcement targets a specific, common new-manager mistake: arriving with a pre-formed agenda reads as not having actually listened, undermining the exact trust-building the first 30 days are meant to establish, even when the content of the vision is objectively sound.`,
     exampleOutput: `Days 1-30: Run individual 1:1s with all 6 engineers before any group meeting; ask each one directly what's working and what they'd change if they were in this seat; treat the peer who also applied with the same cadence and substance as everyone else, no more no less, since either extra warmth or visible distance will be read as a signal by the team. Days 31-60: Fix one concrete process friction surfaced in the 1:1s (e.g., a slow code-review turnaround) as a visible, reversible win. Days 61-90: Introduce the deploy-cycle-time initiative, framed around the team's own stated frustrations with the current process rather than as a top-down mandate.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -480,12 +504,16 @@ The announcement text itself, formatted for the stated channel, plus one separat
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`employee-announcement`, `internal-communications`, `promotion-announcement`, `people-management`, `workplace-communication`],
+    tags: [
+      `employee-announcement`,
+      `internal-communications`,
+      `promotion-announcement`,
+      `people-management`,
+      `workplace-communication`,
+    ],
     whyItWorks: `The mechanistic problem with a generic corporate announcement template is that it substitutes stock phrasing ("excited to announce," "great team player") for the actual, specific evidence of why a decision was made — and it is precisely the absence of specifics that reads as suspicious or political to an audience that includes people who might have wanted the outcome to go differently. Making the announcement's substance carry the justification, instead of adding a defensive paragraph explaining the decision process, works because a defensive explanation implicitly signals that the decision needs defending, which invites exactly the scrutiny and second-guessing it's trying to prevent, whereas a specific, concrete accomplishment (redesigning the on-call rotation, mentoring new hires) is self-evidently a reason and doesn't read as an argument being made. Explicitly banning a "thank everyone who applied" line in the public announcement addresses a common but backfiring instinct: naming that other people applied, even generously, publicly signals to the whole company that this was a competitive process with named losers, which is a worse outcome for the passed-over candidates' dignity than simply not raising it at all — the actual acknowledgment they need belongs in a private conversation their manager has with them before the public post goes out, which is why the prompt separates that into its own private-note output rather than folding it into the announcement itself. Matching tone and length to the actual channel (a Slack post is read very differently than a company-wide email) prevents the common failure of over-formalizing a genuinely warm piece of news into something that reads as impersonal HR process to an audience that knows the person as a colleague, not a personnel file entry.`,
     exampleOutput: `Maya's moving into the Team Lead role, effective next Monday. Over the past few months she's quietly redesigned our on-call rotation and cut weekend pages in half, and she's been the person the two newest engineers go to when they're stuck. If you've got questions about the transition, reach out to her manager directly. Private note: before this goes out, her manager should tell the two other internal applicants directly and specifically what they'd need to show next time, separate from this announcement.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -549,12 +577,16 @@ A note on scope: this is a working draft to support the manager's own judgment, 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`performance-review`, `people-management`, `employee-feedback`, `hr-documentation`, `manager-tools`],
+    tags: [
+      `performance-review`,
+      `people-management`,
+      `employee-feedback`,
+      `hr-documentation`,
+      `manager-tools`,
+    ],
     whyItWorks: `Performance-review defensibility, both practically and in any later HR or legal review, rests almost entirely on whether every claim is traceable to a specific, dated, checkable instance rather than a general impression, which is exactly the distinction this prompt forces by requiring every strength and growth area to trace back to something concrete in the raw notes. The explicit instruction to flag rather than silently include vague claims like "needs to be more proactive" targets the most common way reviews go wrong: a manager's genuine but underspecified impression gets written into a formal document, the employee reasonably asks "can you give me an example," and the manager has none ready, which damages trust in the whole review regardless of how accurate the other, well-supported points were — catching this at draft time, before the conversation, is far cheaper than catching it in the room. Rewriting growth areas as specific situations with next steps rather than character critiques matters mechanically because language like "needs better time management" is not actionable — it gives the employee nothing concrete to change — while "flag slipping deadlines earlier, at least a week out" describes an observable behavior they can actually demonstrate improvement on at the next review. Requiring the narrative to make the assigned rating "obviously consistent" with the evidence addresses a specific credibility gap that shows up often in real reviews, where a manager's text reads mostly positive but the number assigned is middling, leaving the employee confused about which one to trust — GPT-5.1 left to draft freely will often produce this exact mismatch because it generates the narrative and the rating somewhat independently unless explicitly told to reconcile them.`,
     exampleOutput: `Strengths: Led the pricing page redesign end-to-end, resulting in a 12% conversion lift — a clear, measurable win this cycle. Growth area: The competitor battlecard project slipped two weeks past deadline, and the delay wasn't flagged until the due date itself; going forward, raise a slipping timeline at least a week out so the team can adjust. Needs a specific example: 'sometimes seems disengaged in team meetings' has no concrete instance in the notes — what specifically happened that gave this impression?`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -618,12 +650,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`feedback-conversation`, `difficult-conversations`, `people-management`, `performance-management`, `manager-coaching`],
+    tags: [
+      `feedback-conversation`,
+      `difficult-conversations`,
+      `people-management`,
+      `performance-management`,
+      `manager-coaching`,
+    ],
     whyItWorks: `Feedback research (echoing the radical-candor and crucial-conversations literature managers are commonly trained on) consistently identifies the vague, softened opening as the single biggest reason hard conversations fail to land — an opener like "how have things been going" hands the other person the conversational initiative and lets a well-practiced deflector steer toward safer ground before the actual issue is even stated, which is why this prompt forces a named, dated, specific opening line instead. Explicitly banning the compliment sandwich targets a well-known but counterproductive habit: opening with unrelated praise before a criticism trains the recipient to associate any positive opener from this manager with incoming bad news, which corrodes the value of future genuine praise and doesn't actually soften the blow of the criticism itself, just delays it awkwardly. Preparing for the specific, named typical reaction rather than a generic "how to handle pushback" script matters because the correct response genuinely differs by reaction type — a defensive person needs their fair points acknowledged without conceding the core ask, while a person who goes quiet needs space and a direct question rather than a manager who fills silence with more talking, which is the instinctive but wrong move for that situation. Requiring a concrete, dated follow-up rather than an open-ended "let's see how it goes" close addresses the mechanism by which feedback conversations quietly fail to change anything: without a specific next checkpoint, both parties can silently agree the conversation happened and move on without either party being accountable for whether the actual behavior changed.`,
     exampleOutput: `Opening: 'I want to talk about a pattern — you've missed three internal deadlines in the last two months, and two of those three I only found out the day they were due.' Core: 'This isn't about effort, it's specifically about the lack of a heads-up before the deadline slips.' If defensive: 'You're right that you've had a lot on your plate — that's a real, separate conversation about workload. Separately, I need a heads-up at least two days out every time, no exceptions.' Close: 'Let's check in on this specifically next Friday.'`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -684,12 +720,16 @@ The reusable agenda template itself (section names, rough time allocation, the r
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`1-1-agenda`, `people-management`, `manager-report-meetings`, `career-development`, `team-management`],
+    tags: [
+      `1-1-agenda`,
+      `people-management`,
+      `manager-report-meetings`,
+      `career-development`,
+      `team-management`,
+    ],
     whyItWorks: `The well-documented failure mode of recurring 1:1s is that they quietly regress to status-update meetings because status updates are the path of least resistance for both parties when nothing more specific is on the agenda — a manager under time pressure defaults to asking about ticket progress, and a report with nothing pre-loaded defaults to answering with exactly that, so the drift is structural, not a one-time lapse, which is why a generic reminder to "make 1:1s more personal" rarely fixes it and this prompt instead builds the fix into the template's actual structure. Capping the time-sensitive-items section tightly targets the specific mechanism by which status updates crowd out everything else: without an explicit cap, urgent-feeling but low-value updates naturally expand to consume the full meeting because they feel more immediately actionable than a career conversation, even when they're objectively less important over a longer horizon. Using a rotating prompt instead of a blank "anything else" field addresses a real behavioral pattern: a tired or busy person facing an open-ended blank field defaults to "nothing, I'm good," while a specific rotating question (what's the most interesting problem you worked on this week, what's something you're stuck on that you haven't raised yet) actually produces an answer because it's concrete enough to react to rather than requiring the report to generate a topic from nothing. Building a recurring, guaranteed slot for the stated career goal rather than leaving growth conversations to "whenever there's time" directly counters the observed pattern where career development conversations are the first thing dropped under time pressure precisely because they don't feel urgent in any single week, even though their absence compounds into real career stagnation over a year.`,
     exampleOutput: `This is your meeting — you own the agenda. Time-Sensitive (5 min cap): anything that genuinely can't wait until next week. Your Topic (15 min, rotating prompt): 'What's something you're stuck on that hasn't come up yet?' Career Track (10 min, every other week): progress toward tech-lead scoping experience — what project could you help scope next sprint? Fix for the drift: sprint-ticket status moves out of this meeting entirely and into the async project tracker update, freeing the full 30 minutes for the two sections above.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -752,12 +792,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`team-agenda`, `meeting-design`, `team-management`, `productivity`, `facilitation`],
+    tags: [
+      `team-agenda`,
+      `meeting-design`,
+      `team-management`,
+      `productivity`,
+      `facilitation`,
+    ],
     whyItWorks: `The specific inefficiency this prompt targets — a round-robin status update consuming most of a meeting's time budget — is a well-known meeting-design failure because status information is asynchronous by nature (it doesn't require the whole room's simultaneous attention to transmit) while the things that actually justify a synchronous meeting are decisions and blockers that need real-time back-and-forth among specific people, and conflating the two in one agenda guarantees the synchronous-only items get squeezed. Explicitly moving status into an async pre-read isn't just a formatting change, it changes what the live meeting is mechanically for, which is the actual fix — merely retitling agenda sections while keeping the same status-round-robin content, the thing this prompt explicitly bans, produces no real change in how the time gets spent. Requiring a named owner and a defined output for every live item (a decision, not just "discuss") targets the specific way meeting items expand to fill available time: an item framed as open discussion has no natural stopping point, while an item framed as "we leave this meeting having decided X" gives the room a concrete signal for when it's done. Providing the facilitator specific in-the-moment redirect phrases, rather than just a new agenda document, addresses the real mechanism by which meeting redesigns fail in practice — an established meeting habit doesn't disappear because a new template exists, it resurfaces the first time someone starts a status update out of habit, and without a ready phrase to redirect it gracefully in the moment, the facilitator either lets it happen (reverting to the old pattern) or has to invent an awkward interruption on the spot, which most facilitators avoid doing and so the meeting drifts back within a few weeks.`,
     exampleOutput: `Async pre-read (posted by Friday EOD): what shipped this week, what's blocked and by what, nothing needing live discussion. Live agenda: API contract ownership decision (owner: EM, output: a decided owner by end of item, 15 min); sprint feature cut decision (owner: PM, output: yes/no decided, 15 min). Facilitator phrase: 'That sounds like a status update, let's drop it in the doc and keep this time for the blocker.'`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -818,12 +862,16 @@ The question list (numbered, noting scale vs. open-ended), a one-line note on wh
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`team-health-check`, `psychological-safety`, `team-management`, `employee-wellbeing`, `team-dynamics`],
+    tags: [
+      `team-health-check`,
+      `psychological-safety`,
+      `team-management`,
+      `employee-wellbeing`,
+      `team-dynamics`,
+    ],
     whyItWorks: `The near-universal failure of generic "rate your happiness 1-10" pulse checks, exactly like the past attempt described in this prompt, has a specific mechanistic cause: a bare numeric scale with no concrete framing gives respondents nothing to anchor an honest answer to, so people default to a socially safe middle-to-positive number rather than doing the harder cognitive work of identifying and naming a real problem, which produces flat, uninformative results that look fine on paper regardless of the team's actual state. Wording open-ended questions as constructive asks ("what would make this better") rather than problem-identification asks ("is anything wrong") lowers the specific social cost of an honest answer, because suggesting an improvement is a normal, low-risk act of engagement while naming a problem implicitly requires blaming a cause, which respondents in a small team — where anonymity is thin because there are only a handful of possible authors for any given comment — are reasonably reluctant to do directly. Targeting a named suspected dynamic (senior designers dominating critique) with a carefully generic-enough question threads a real design constraint: specific enough to actually surface the pattern if it's real, but not so specific that a single respondent's answer would be instantly attributable, which matters because if respondents believe their answer is identifiable, the entire mechanism of honest anonymous feedback collapses regardless of how the question is worded. The requirement to close the loop with visible action addresses the single most common reason pulse checks degrade over repeated cycles: people calibrate their willingness to answer honestly based on whether past honesty produced any visible change, so a health check that surfaces real feedback but is followed by no visible action trains the team to stop bothering with honest answers well before the underlying problem is fixed.`,
     exampleOutput: `Q3 (open-ended): 'What's one thing that would make design critique sessions work better for you?' — worded as a constructive ask rather than 'is critique working,' which requires naming a problem directly. Closing note: results shared in aggregate only at the next team meeting, with at least one specific change (e.g., a rotating critique-lead role) named as a direct response to what came up.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -895,12 +943,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`employee-survey`, `engagement-survey`, `attrition`, `hr-analytics`, `people-management`],
+    tags: [
+      `employee-survey`,
+      `engagement-survey`,
+      `attrition`,
+      `hr-analytics`,
+      `people-management`,
+    ],
     whyItWorks: `The core mechanistic weakness of a generic annual engagement survey is that its questions are chosen to be broadly reusable across every company and team rather than to inform any specific decision, which produces data that is comparable year-over-year but rarely actionable for a particular live problem — building the survey backward from a named decision instead forces every question to justify its own inclusion by whether its answer would actually change that decision, which is a fundamentally different and much stricter design constraint. Using existing data (here, exit interviews already pointing at scheduling, not compensation) to eliminate redundant questions and sharpen follow-ups matters because asking a question you already know the general answer to wastes limited survey length and respondent attention on confirmation rather than the more specific detail still needed to act — if scheduling is already implicated, the useful question is not "is scheduling a problem" but "which specific scheduling constraint is the biggest issue," which existing data alone can't answer. Concrete situational recall questions ("think of the last time you considered leaving") outperform abstract satisfaction scales because they engage episodic memory of an actual event rather than asking someone to generate an abstract self-assessment on the spot, which tends to regress toward a socially neutral middle score — this is a well-established survey-methodology finding and is exactly why a satisfaction scale alone produces flat, low-signal results on a small team. Flagging segment-cut anonymity risk explicitly matters because a 22-person population split by 3 team leads means some segments could be as small as 6-8 people, small enough that a distinctive comment is plausibly attributable to a specific respondent, and a survey that promises anonymity but doesn't structurally protect it will be answered less honestly by respondents who correctly suspect they could be identified.`,
     exampleOutput: `Q: 'Think about the last time you seriously considered leaving in the past 6 months. What was the specific trigger?' (decision angle: distinguishes compensation vs. scheduling vs. management driver). Segment-cut note: with only 22 respondents across 3 leads, cutting by individual team risks groups as small as 6-8, so report findings by tenure band instead of by team lead to protect anonymity. Existing-data note: since exit interviews already implicate scheduling, the survey skips a general 'is scheduling flexible enough' question and instead asks which specific schedule constraint (weekend rotation, shift start time, PTO approval lag) is the biggest issue.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -961,12 +1013,16 @@ Ranked themes (1 through up to 5), each with: proportion of respondents, 2-3 ver
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`engagement-analysis`, `employee-survey`, `hr-analytics`, `qualitative-analysis`, `people-management`],
+    tags: [
+      `engagement-analysis`,
+      `employee-survey`,
+      `hr-analytics`,
+      `qualitative-analysis`,
+      `people-management`,
+    ],
     whyItWorks: `The specific failure mode of a naive open-text synthesis is ranking themes by the vividness or emotional intensity of individual comments rather than by how many distinct people actually raised the underlying issue, which systematically overweights a small number of articulate or frustrated respondents and produces a synthesis that reflects who wrote the most memorable comment rather than what the broader population actually experiences — ranking explicitly by respondent count rather than comment intensity corrects for this. Requiring verbatim quotes rather than paraphrases matters because paraphrasing open-text feedback for a leadership audience tends to launder specific, often pointed language into vaguer corporate-safe phrasing, which is exactly the softening that causes leadership to underestimate how strongly a theme is actually felt — the real words people used are the evidence, and paraphrasing loses exactly the signal that should inform how seriously to take it. Forcing every theme's proposed action to be specific enough to be approved or rejected as a real decision, rather than a vague direction like "improve communication," targets the common way survey syntheses fail to produce change: a report that ends in generalities gives leadership nothing concrete to say yes or no to, so it tends to be acknowledged and then shelved, whereas "introduce a company-wide no-meeting day" is a specific proposal someone can actually approve this quarter. Surfacing genuine conflicts between respondents rather than averaging them into a mushy middle addresses a real analytical trap: if half the respondents want more structure post-reorg and half want less, a synthesis that proposes "moderately adjust structure" satisfies neither group and obscures that there are actually two distinct needs in the population that may require two different responses, not one compromise position.`,
     exampleOutput: `Theme 1 (raised by ~40% of respondents): Meeting overload crowding out focus time. Quotes: 'I have 6 hours of meetings some days and no focus time.' Likely unrelated to the reorg — this is a pre-existing calendar-culture issue. Proposed action: pilot a company-wide no-meeting Wednesday for one quarter. Theme 2 (~25%): Unclear ownership since the reorg. Quotes: 'Don't know who owns what anymore.' Likely cause: directly tied to the team merger two months ago. Proposed action: publish an updated RACI for the merged teams within 2 weeks.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1027,12 +1083,16 @@ A phased plan (early / mid / late within the given timeframe), each phase with: 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`learning-plan`, `career-development`, `individual-development-plan`, `people-management`, `employee-growth`],
+    tags: [
+      `learning-plan`,
+      `career-development`,
+      `individual-development-plan`,
+      `people-management`,
+      `employee-growth`,
+    ],
     whyItWorks: `Adult-learning and skill-transfer research consistently finds that capability built through applied, real-stakes practice with fading support (a well-documented pattern sometimes called scaffolded or graduated-responsibility learning) transfers to on-the-job performance far more reliably than content consumed in isolation, which is the specific reason this prompt bans standalone courses or books unless they're tied to a named near-term application slot — a course completed with no immediate place to apply it decays quickly and rarely changes actual behavior on the job. Anchoring every phase to a real, upcoming piece of work rather than a hypothetical practice exercise matters because the stakes and ambiguity of real work are precisely what the target skill (scoping from an ambiguous problem) needs practice handling — a sanitized practice exercise with a pre-defined answer doesn't exercise the actual judgment gap the plan is meant to close. Making the manager-support level explicit and explicitly fading over the timeframe (reviewing a draft scope early, versus full autonomy later) targets a common failure in informal development plans where support either never fades, so the employee never gets to demonstrate real independence and the promotion case stays weak, or fades too abruptly, so the employee is thrown into full autonomy before they're ready and a bad outcome sets back both their confidence and their case for promotion. Building in a mid-point check rather than only a final evaluation addresses the practical reality that a six-month plan with no interim signal risks discovering only at the end that the chosen opportunity didn't actually exercise the gap as intended, or that support needs adjusting, by which point there's no time left in the plan to correct course.`,
     exampleOutput: `Early (Month 1-2): employee drafts an initial scope for the new tooling project from the PM's one-paragraph brief; manager reviews the draft before it's shared with the PM, providing feedback but not rewriting it. Mid (Month 3-4): employee presents the refined scope directly to the PM and stakeholders with manager present but silent, stepping in only if asked. Late (Month 5-6): employee scopes the next project independently with no manager review before it goes out. Mid-point check (end of Month 3): did the manager have to substantially rewrite the scope, or just refine it? If substantial rewriting was still needed, extend the training-wheels phase before removing manager review at the presentation stage.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1112,12 +1172,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`training-program`, `skills-gap`, `l-and-d`, `onboarding`, `performance-management`],
+    tags: [
+      `training-program`,
+      `skills-gap`,
+      `l-and-d`,
+      `onboarding`,
+      `performance-management`,
+    ],
     whyItWorks: `Generic training-program prompts fail because they let the model default to a familiar three-part shape (intro session, workshop, quiz) regardless of what the actual gap is, since that shape is heavily represented in generic corporate-training text GPT-5.1 has seen. Forcing the gap to be restated as a specific behavior change before any design work happens blocks that shortcut, because a behavior-level restatement can't be answered with a stock curriculum — it has to reference the actual failure mode. Requiring a confidence check on the evidence matters mechanically because GPT-5.1, given a stated problem, will proceed to solve it as true by default rather than interrogating whether the premise holds; explicitly asking it to flag thin evidence and propose a validation step counteracts that eagerness-to-solve bias, which matters here because building a multi-week program around one anecdote wastes real manager and employee time. Naming a leading indicator alongside the lagging outcome metric closes a specific gap in how these prompts are usually answered: a model asked only for a success measure will name the outcome metric and stop there, but a training program that only gets checked at the 90-day lagging metric gives no early signal to adjust course, so the instruction has to explicitly ask for both. The constraint-fit rule exists because an unconstrained answer is a worse answer disguised as a better one — a program that would be great with unlimited budget but silently ignores the two-hours-a-week ceiling isn't actually usable, so the prompt forces the model to show its cuts rather than produce an aspirational plan nobody can execute.`,
     exampleOutput: `Gap restated: agents can execute a refund transaction but freeze or over-apologize when a customer is already hostile before a ticket exists, escalating faster than necessary. Evidence confidence: moderate — chargeback data is solid, but QA's "de-escalation miss" tag hasn't been validated by listening to actual calls; recommend pulling 10 flagged calls before finalizing. Program: Stage 1 (30 min self-paced video on de-escalation framework), Stage 2 (90 min live role-play using 3 real anonymized transcripts, led by the QA lead), Stage 3 (weekly 15-min call-review huddle for 3 weeks). 30-day leading indicator: QA de-escalation score; 90-day lagging: chargeback rate.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1190,12 +1254,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`internal-mobility`, `job-posting`, `recruiting`, `career-development`, `hr-communications`],
+    tags: [
+      `internal-mobility`,
+      `job-posting`,
+      `recruiting`,
+      `career-development`,
+      `hr-communications`,
+    ],
     whyItWorks: `The core failure mode this avoids is that internal job posts, left to a model's default instincts, get written as slightly-shortened external ads — the same generic "about us" framing and marketing tone — because that's the dominant pattern in the training data for "job posting." Explicitly instructing the model to skip the company-boilerplate section forces it to recognize the audience difference structurally rather than stylistically, since an internal reader already has that context and the space is better spent on mechanics an external ad would never need to cover. The eligibility-and-mechanics section is the highest-value part of this prompt because internal movers' real anxiety — what happens to my current team, does my manager find out before or after I apply — is exactly the information a generically upbeat job post omits; asking GPT-5.1 to state it plainly counteracts its tendency to default to positive, recruitment-optimized framing when given a "write a job post" instruction, since without an explicit override it treats the task as persuasion rather than disclosure. The "carries over versus new" responsibilities split works because it forces a concrete comparison against the person's current role, which a generic template can't produce since it has no notion of what the reader currently does — this only works because the prompt requires the model to reason about the specific transition, not just describe the destination role in isolation. The honest trade-off paragraph exists to counteract a model's default optimism bias in any "write an ad for X" framing; without it, the output reads as pure upside, which internal audiences recognize immediately as spin and discount accordingly, undermining trust in the posting process itself.`,
     exampleOutput: `Eligibility: open to anyone at Northwind 12+ months, in their current role at least 6 months. Your current manager is looped in after you clear the first interview, not before you apply, so you can explore quietly. Carries over: your SQL and dashboarding skills transfer directly. New: you'll own forecast modeling end-to-end, which is a step up in ambiguity from your current reporting-focused work. The honest trade-off: for the first two quarters you'll have less visibility than you do now, since RevOps reports up through Finance rather than the exec team directly.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1268,12 +1336,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`recruiter-outreach`, `passive-candidates`, `sourcing`, `recruiting-email`, `talent-acquisition`],
+    tags: [
+      `recruiter-outreach`,
+      `passive-candidates`,
+      `sourcing`,
+      `recruiting-email`,
+      `talent-acquisition`,
+    ],
     whyItWorks: `Passive-candidate outreach fails at the volume most recruiters send it, and the reason is structural rather than stylistic: recipients pattern-match on a handful of tells (generic profile flattery, vague "exciting opportunity" language, a bulleted responsibilities list in message one) within the first two lines and stop reading, regardless of how good the actual role is. Explicitly naming the words and patterns to avoid works because GPT-5.1's default register for "recruiter outreach" leans exactly toward that overused vocabulary, since it's overrepresented in the training data for the genre — a negative instruction list is doing real work here, not padding, because without it the model reaches for "passionate," "rockstar," and generic profile praise almost by default. Requiring the hook to be specific enough that "a screenshot would match" forces concreteness that a vague instruction like "personalize the outreach" doesn't reliably produce, since a model can satisfy "personalize" with a paraphrased generality that still reads as templated. Stating the sourcing method plainly rather than let the model default to a mysterious "came across your profile" phrasing matters because that phrase is itself a well-known tell that experienced candidates recognize as evasive, and transparency about sourcing measurably improves response rates because it removes one layer of suspicion the reader would otherwise have to resolve before deciding whether to trust the rest of the message. The word-count ceiling forces every other instruction to compress into what actually matters, since without it the model will default to including the full role rationale in message one, which the low-friction-ask instruction is specifically designed to prevent by pushing detail into a second message the candidate has to opt into first.`,
     exampleOutput: `Subject: Zero-downtime migration talk. Body: Hi Priya — watched your talk on the payments-system migration off the legacy monolith with zero downtime. We're six months into almost the identical migration at a fintech scaleup and don't have anyone on the team who's actually done this before, not just read about it. This role would have you owning the migration architecture directly rather than executing someone else's plan. Worth a 15-minute call to compare notes, even if it's not the right timing? Found your talk on the conference's YouTube channel, for full transparency.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1338,12 +1410,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`rejection-email`, `candidate-experience`, `recruiting-communications`, `employer-branding`, `hr-writing`],
+    tags: [
+      `rejection-email`,
+      `candidate-experience`,
+      `recruiting-communications`,
+      `employer-branding`,
+      `hr-writing`,
+    ],
     whyItWorks: `The instruction to avoid comparative language ("we chose someone with more X") is doing the most legally and practically important work in this prompt: comparative rejection language invites the candidate to reverse-engineer what they supposedly lack relative to another specific person, which both feels worse to receive and creates a paper trail that reads badly out of context if the decision is ever scrutinized, whereas a gap-against-role-requirements framing is defensible because it's about the job's needs, not a ranking of people. GPT-5.1 defaults toward warm, softening language when asked to write a rejection, which without guardrails tends to produce vague reassurance ("you were a strong candidate, it was a tough decision") that says nothing specific — requiring one named, role-tied reason forces the output past that vagueness into something a candidate can actually learn from, which is the entire point of giving final-round feedback at all instead of a form rejection. The instruction against insincere future-consideration promises exists because a model asked to write something "warm" will reach for exactly that kind of soft closer by default, and here it's explicitly gated behind whether it's genuinely true, which requires the requester to have actually decided that before generating the email rather than letting boilerplate warmth manufacture a commitment nobody intends to keep. The prohibition on personality judgments and protected-characteristic-adjacent language matters because "not senior enough" or similar phrasing, even when not legally protected-characteristic language itself, reads as a judgment about the person rather than a fit assessment against the role, and that distinction is exactly the line between defensible hiring communication and something that sounds like a pretext if ever examined.`,
     exampleOutput: `Subject: Update on the Senior PM, Growth role. Body: Hi Marcus — after a lot of deliberation, we've decided to move forward with another candidate for the Senior Product Manager, Growth role. The role specifically needs someone who has run paid-acquisition experiments hands-on in the last two years, and your recent experience has been more on the managerial-oversight side of that work. That said, your breakdown of our onboarding funnel in the case study interview was the sharpest of any candidate we saw — you caught a drop-off point our own team had missed. If a more senior, strategy-focused role opens on our team in the next two quarters, our VP of Product will personally reach out.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1419,9 +1495,7 @@ OUTPUT FORMAT
     tags: [`offer-letter`, `compensation`, `negotiation`, `recruiting`, `total-rewards`],
     whyItWorks: `The instruction to produce a separate internal negotiation brief alongside the candidate-facing email addresses a real operational failure mode: most offer negotiations go wrong not because the offer itself was bad but because whoever fields the candidate's counter has to improvise in real time, and improvised responses to pushback tend to either over-concede on things that were actually fixed or under-offer on things that had real room, both of which cost the company either money or the candidate. Asking GPT-5.1 to name the most likely angle a candidate with a specific competing offer will push on works because it's a concrete prediction task the model can actually reason about from the stated leverage (higher base, no equity implies the push will be on base or on articulating the equity's value), rather than a vague "prepare for negotiation" instruction that produces generic advice with no connection to this specific situation. The explicit prohibition on inventing speculative equity value matters because a model given "write a compelling offer" framing will often reach for a hypothetical payout estimate to make the number feel more concrete and persuasive, which is actively dangerous here since a made-up equity valuation stated in an offer email creates a real expectation the company may not be able to honor and can constitute a misrepresentation if the equity underperforms. Requiring the compensation to be broken into components rather than a lump total reduces the candidate's need to ask basic clarifying questions in a follow-up call, but more importantly it forces transparency about what's actually driving the number, which tends to reduce a specific and common objection pattern where a candidate assumes a headline number is inflated by soft benefits and negotiates against it without understanding what it's actually built from.`,
     exampleOutput: `Candidate email: We're excited to offer you the Senior UX Researcher role. Base salary: $142,000/year. Annual bonus target: 10%, tied to company performance. Equity: 8,000 RSUs vesting over 4 years with a 1-year cliff. Please let us know by [date]. Internal brief: Base has $8,000 of room; bonus target and vesting schedule are fixed. If she pushes on base beyond that, offer an earlier first equity review instead. Likely angle given her competing offer: she'll frame the other company's higher base as the deciding factor — lead with total 4-year value including vesting, not just year-one cash comparison.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1489,12 +1563,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`compensation-review`, `pay-equity`, `pay-compression`, `total-rewards`, `retention`],
+    tags: [
+      `compensation-review`,
+      `pay-equity`,
+      `pay-compression`,
+      `total-rewards`,
+      `retention`,
+    ],
     whyItWorks: `The explicit instruction not to speculate about protected-characteristic patterns from names or proxies is the single most important constraint in this prompt, because a model asked to "look for inequity" in a pay table has enough surface pattern-matching capability to produce guesses that look analytically confident but are actually unfounded inference from names or other proxies — output like that is worse than no analysis at all, since it can manufacture a false equity concern or, just as dangerously, miss a real one while appearing to have covered it; routing anything beyond individual compression flags to the company's formal pay-equity process keeps the tool doing what it can actually do reliably (arithmetic and pattern flagging on the data given) rather than what it can't (causal inference about protected characteristics from insufficient data). The two-part flagging rule — compression by tenure comparison and below-median anomaly by standard deviation — gives GPT-5.1 a concrete, checkable rule to apply consistently across every row rather than an open-ended "look for problems" instruction, which tends to produce inconsistent flagging where the model catches obvious cases and misses subtler ones depending on where they fall in the list; a numeric threshold applied uniformly removes that inconsistency. Ranking flagged cases by retention risk rather than presenting them in table order matters because a compensation review's actual output needs to be a decision under a real budget constraint, not just a list of interesting patterns — without an explicit ranking instruction, the model would present flags neutrally and leave the prioritization work, which is the actual hard part of the task, to the reader instead of doing it as part of the deliverable.`,
     exampleOutput: `L4 group: Priya (hired 3.2 years ago, $118,000, strong performance, no increase in 14 months) sits within 3% of Jordan (hired 5 months ago, $121,000, market-rate new hire) — flagged as compression. Anomaly: no below-median flags in this group. Ranked adjustment: Priya is highest retention risk (strong performer, stale pay, direct compression exposure) — a $9,000 adjustment brings her to $127,000, clearing compression and using about 20% of the $45,000 budget. Two lower-priority flagged cases would need to be deferred to next cycle at current budget.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1559,12 +1637,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`promotion`, `calibration`, `performance-review`, `career-ladder`, `manager-toolkit`],
+    tags: [
+      `promotion`,
+      `calibration`,
+      `performance-review`,
+      `career-ladder`,
+      `manager-toolkit`,
+    ],
     whyItWorks: `Calibration committees exist specifically to catch cases where a manager's genuine belief in their report substitutes for evidence against a shared bar, so a memo that reads as advocacy rather than argument gets discounted immediately regardless of whether the underlying case is actually strong — requiring every evidence item to be explicitly mapped to a specific bar element forces the memo into the form a committee can actually evaluate quickly, rather than one it has to reverse-engineer, which matters practically because committees review many cases in one sitting and an unmapped list of accomplishments reads as unprocessed input rather than a finished argument. The dedicated pushback section exists because GPT-5.1, asked to write a persuasive memo, will default toward presenting the strongest possible case and omitting weaknesses unless explicitly instructed otherwise — that omission is exactly what makes advocacy memos fail in front of a skeptical committee, since the first question calibration reviewers ask is usually the obvious counterargument, and a memo that has visibly already answered it honestly reads as more credible, not less, than one that pretends no counterargument exists. Prohibiting comparative language against named peers matters for the same reason it matters in the compensation-review prompt: a bar-referenced claim is verifiable against a shared standard, while a relative claim ("more ready than X") just imports a different, unstated bar (be better than a specific person) that the committee never agreed to evaluate against, and also creates an unnecessary and unfair comparison on the record. Explicitly requiring the actual evidence timeframe to be stated protects against a subtler failure mode where one strong quarter gets rhetorically inflated into "a consistent pattern," which a model optimizing for persuasiveness will do by default unless told to be precise about how much time the evidence actually spans.`,
     exampleOutput: `Claim: Devon meets the L4 bar of independently owning a subsystem's technical direction and mentoring without oversight. Evidence: led the notifications-service migration off the legacy queue independently over 2 quarters (maps to independent technical ownership); has informally mentored a new L2 hire since March with positive feedback (maps to mentoring criterion). Anticipated pushback: committee may argue one migration project is too narrow to prove sustained ownership — this is a fair concern; the mentoring evidence and the migration's cross-team scope partially offset it, but a second independent project would close this gap more fully. Recommendation: case clears the bar on balance, though a second data point next quarter would remove the one open question.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1631,12 +1713,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`succession-planning`, `bench-strength`, `key-role-risk`, `retention`, `org-development`],
+    tags: [
+      `succession-planning`,
+      `bench-strength`,
+      `key-role-risk`,
+      `retention`,
+      `org-development`,
+    ],
     whyItWorks: `Succession plans routinely fail as an exercise because the default output for this kind of request is a comforting fiction — every internal candidate gets marked as having growth potential regardless of the actual gap, since a model asked to assess readiness will lean toward optimistic, encouraging framing unless explicitly told that overstating readiness is itself the failure mode being guarded against here. Requiring a named, specific gap for every readiness tier, rather than accepting a vague "could grow into it," forces GPT-5.1 to actually reason about what's missing between the candidate's current scope and the role's requirements instead of pattern-matching to generic development language, which is the difference between a plan that produces an actual 12-month assignment and one that produces a sentence nobody can act on. The instruction to say plainly when no internal candidate is genuinely close addresses a specific organizational bias this exercise is prone to: succession planning is often run to demonstrate internal bench depth exists, which creates pressure, even unstated, to find a plausible internal story rather than admit the org needs to look outside — an AI drafting tool has no stake in that internal political pressure, so it's well positioned to state the honest assessment if explicitly instructed to prioritize accuracy over a reassuring narrative. The interim-coverage section exists because a succession plan focused only on the 12-24 month horizon leaves the actually dangerous window uncovered — the two-week-notice gap — and asking for that explicitly, including the tradeoff the interim coverage creates, prevents the plan from looking complete while leaving the highest-probability near-term risk unaddressed. Treating a stated flight-risk signal as urgency-shifting rather than just background color matters because a model given ambiguous risk information will often average it into a moderate, business-as-usual tone unless told directly that the mentioned signal should change the plan's pacing.`,
     exampleOutput: `Candidate A: ready in 12 months with specific development — has strong technical depth but has never owned an architecture decision independently; needs to lead one significant infra project end-to-end with formal ownership, not just execution. Candidate B: 24+ months or unlikely without a role change — strong IC but has shown no interest in the people-management half of this role in two prior conversations. No candidate is ready now; given the recruiter contact mentioned, recommend starting a quiet external search in parallel rather than waiting the full 12 months. Interim coverage: Candidate A could cover architecture decisions with the current person's remote availability for urgent escalations only, which would slow the pending database migration by roughly one quarter.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1706,12 +1792,16 @@ A table with one row per scenario (growth / flat / freeze), columns for: net hea
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`workforce-planning`, `headcount-planning`, `scenario-planning`, `hr-strategy`, `budget-planning`],
+    tags: [
+      `workforce-planning`,
+      `headcount-planning`,
+      `scenario-planning`,
+      `hr-strategy`,
+      `budget-planning`,
+    ],
     whyItWorks: `Workforce plans built without a forced multi-scenario structure tend to collapse into a single optimistic plan with soft hedging language, because a model given "build a workforce plan" without further constraint will default to the scenario implied by the framing of the request, usually growth, and treat the other possibilities as an afterthought footnote rather than a fully worked-out alternative. Requiring each of the three scenarios to name a specific, concrete tradeoff rather than accepting a euphemism like "reprioritized" matters because "reprioritized" is exactly the kind of soft language GPT-5.1 will default to when asked to describe cutting something, since it avoids stating an uncomfortable consequence directly — forcing a named specific consequence (a project slips, a team absorbs more load) produces a plan leadership can actually act on, versus one that sounds responsible while committing to nothing. The freeze scenario's requirement to identify what current work stops, not just what future hiring pauses, closes a common gap in these exercises: a freeze scenario that only talks about not hiring is incomplete, because the actual operational question under a freeze is what the existing team stops doing, and a model left to its own devices will often quietly assume the same output continues with fewer people, which is not a real scenario but an unstated assumption of proportionally higher productivity that usually doesn't hold. Requiring a named trigger signal per scenario converts this from a document that gets built once and filed away into an operational tool leadership can actually check against reality quarter to quarter, which matters because scenario plans without trigger signals tend to never get revisited until the situation has already deteriorated past the point where the flat or freeze plan could be implemented calmly.`,
     exampleOutput: `Growth row: net +2 (the approved req in final interviews plus one of the two unsourced reqs; the second unsourced req is genuinely nice-to-have, not workload-justified). Flat row: net 0, the req in final interviews still proceeds since it's already committed, the two unsourced reqs pause, meaning on-call load per person rises roughly 15%. Freeze row: net 0 including canceling the in-flight interview process, and the team would need to descope proactive account check-ins to cover reactive support only. Trigger for freeze: if Q3 revenue comes in more than 8% under forecast. Recommendation: flat scenario currently looks most likely given the enterprise pipeline is only partially committed.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1781,12 +1871,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`competency-matrix`, `career-ladder`, `job-leveling`, `org-design`, `performance-framework`],
+    tags: [
+      `competency-matrix`,
+      `career-ladder`,
+      `job-leveling`,
+      `org-design`,
+      `performance-framework`,
+    ],
     whyItWorks: `Competency matrices produced without an explicit constraint against adjective-inflation almost universally fall into the exact failure pattern this prompt names directly, because "describe skill X at increasing levels" is a template GPT-5.1 (and most level frameworks it has seen in training data) satisfies most easily by keeping the sentence structure identical and swapping in a stronger word — "solid" becomes "strong" becomes "exceptional" — which produces a matrix that looks complete but gives a calibration committee nothing to actually check a person against, since "exceptional" versus "strong" isn't observable in real work the way "reviewed after the fact" versus "reviewed before shipping" is. Explicitly instructing the model to say so when it can't find a concrete distinction, rather than inventing one to fill the cell, matters because the default behavior when asked to complete a table is to fill every cell somehow, and an honestly blank or flagged cell is more useful output than a confidently fabricated fake distinction that later gets used to make a real promotion decision. The before/after treatment of existing vague language does double duty: it produces the fix, but showing what the vague version was actually failing to distinguish teaches the requester to recognize the pattern themselves in the other level descriptions they didn't submit for rewrite, which is more valuable long-term than a one-time fix. Using real work examples as calibration anchors is the most mechanically important check in the prompt, because a level framework that sounds coherent in the abstract can still misplace real work when applied, and asking the model to actually test its own definitions against concrete examples — and flag when an example doesn't fit — catches exactly the kind of boundary error that only surfaces when a framework meets real cases, which abstract-only construction can never reveal.`,
     exampleOutput: `Design system ownership, IC3: owns a defined pattern within one product area, changes reviewed by a senior designer before shipping. IC4: owns design system decisions across multiple product areas, changes ship without prior review but are audited after the fact in monthly design reviews. Before/after: vague 'strong collaboration with engineering' at both IC3 and IC4 replaced — IC3 collaborates within a single squad's sprint cycle; IC4 sets design-engineering handoff norms adopted by other squads. Calibration check: the IC4 checkout-redesign example fits cleanly (cross-squad scope, no prior oversight); the IC3 empty-states example fits cleanly (single area, weekly review).`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1864,12 +1958,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`okrs`, `goal-setting`, `team-planning`, `performance-metrics`, `strategy-cascade`],
+    tags: [
+      `okrs`,
+      `goal-setting`,
+      `team-planning`,
+      `performance-metrics`,
+      `strategy-cascade`,
+    ],
     whyItWorks: `The most common OKR-cascading failure is a team objective that's just the company goal copy-pasted with the team's name inserted, and this happens because "cascade OKRs from this company goal" is easy for a model to satisfy by restating rather than by doing the harder work of identifying what this specific team, as opposed to any other team, actually contributes — explicitly requiring the objective to state the team's distinct contribution forces that harder reasoning step rather than accepting the shortcut. The two-part check per key result — can the team actually move it, and can it be gamed — matters because these are the two failure modes that make OKRs useless in practice: a key result the team can't control produces frustration and gets ignored by quarter's end, while a gameable metric produces a technically-hit target that doesn't represent real progress, and a model asked only to "write good key results" won't reliably self-check for either failure unless told explicitly to apply both tests, since both require reasoning about causality and second-order effects that a surface-level metric-writing task doesn't naturally prompt. Requiring the target's reasoning to be shown, tied to the actual baseline, rather than accepting a round aspirational number addresses a specific and common tell of low-effort OKR-writing: targets like "increase completion rate to 80%" that sound ambitious but have no connection to what the baseline and known constraints actually support, which either sets teams up to miss by a wide margin or, worse, teaches them that OKR targets are rhetorical rather than real commitments. The hard cap on objectives and key results forces prioritization to actually happen rather than be deferred, since without a limit a model asked to "cascade OKRs" will often generate a comprehensive-looking list that covers every plausible angle, which reads as thorough but actually represents the opposite of the focusing function OKRs are supposed to serve.`,
     exampleOutput: `Objective: Make self-serve onboarding fast enough on its own to meaningfully move the company's 7-day time-to-value goal. Key Result 1: raise setup wizard completion rate from 61% to 72%, paired with a guardrail that average post-setup week-4 retention doesn't drop below its current baseline, since completion could otherwise be inflated by cutting predictive steps. Key Result 2: cut average wizard completion time from 22 to 15 minutes, a target derived from removing two redundant steps identified in last quarter's session recordings, not a round-number guess. Confirmation: both key results are within this team's direct control since sales handoff and CS staffing were explicitly excluded from scope.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1937,12 +2035,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`manager-coaching`, `difficult-conversations`, `feedback`, `first-time-manager`, `people-management`],
+    tags: [
+      `manager-coaching`,
+      `difficult-conversations`,
+      `feedback`,
+      `first-time-manager`,
+      `people-management`,
+    ],
     whyItWorks: `First-time managers rarely fail at feedback conversations because they don't know feedback theory — most have read or heard the standard frameworks — they fail because the specific conversation in front of them has a specific person's specific likely reaction, and generic theory doesn't tell them what to actually say when that reaction happens in real time; this prompt is built around that gap rather than repeating theory the manager has already been exposed to. Asking for the core message as a single sentence before anything else forces clarity that a first-time manager often hasn't actually reached themselves — it's common to enter a hard conversation with a vague sense that "something needs to improve" rather than one crisp, landable point, and a model asked to help with a conversation will happily produce a full script around a fuzzy goal unless the goal is nailed down first, so this step exists to catch that fuzziness before it propagates into the whole script. Pre-scripting the response to the specifically feared reaction is the highest-value part of the prompt mechanically, because rehearsing a response to a predicted reaction reduces in-the-moment improvisation exactly where first-time managers are weakest — under real-time social pressure — and GPT-5.1 can reason concretely about what response neither concedes the core message nor escalates conflict when given the actual feared reaction, rather than producing a generic "stay calm and listen" answer that provides no actual words to say. Diagnosing what a prior soft attempt likely failed to communicate, rather than just recommending a stronger version of the same approach, matters because "say it again but more firmly" is the default naive next step and usually fails the same way, since the actual defect (probably that "let's tighten up on deadlines" was vague enough to not clearly connect to a specific accountability expectation) needs to be named and fixed, not just delivered with more emphasis.`,
     exampleOutput: `Core message: missed deadlines with a silent explanation afterward is the actual problem, not the deadlines themselves — the fix is flagging blockers within 24 hours, every time. Opening line: "I want to talk about the pattern on the last three deadlines, and I want to get straight to what needs to change rather than walk around it." Their likely reaction: "the team doesn't give me enough support to hit these." Your response: "That might be true and I want to hear specifics after this — but the immediate fix isn't more support, it's flagging the blocker the day it happens instead of after the deadline passes." Prior attempt likely failed because "let's tighten up on deadlines" named a symptom, not the actual required behavior change, so it was easy to nod at without changing anything. Avoid saying: don't frame this as "I'm disappointed," which will read as personal and trigger defensiveness rather than focus on the specific behavior.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2012,12 +2114,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`conflict-resolution`, `mediation`, `hr-business-partner`, `team-dynamics`, `manager-toolkit`],
+    tags: [
+      `conflict-resolution`,
+      `mediation`,
+      `hr-business-partner`,
+      `team-dynamics`,
+      `manager-toolkit`,
+    ],
     whyItWorks: `Mediation sessions run without a structural script tend to collapse into an unstructured venting session, because without an explicit sequence a facilitator will let each person respond immediately to the other's account, which turns the session into a back-and-forth relitigating of specific incidents rather than progress toward a forward-looking agreement — sequencing the session so each person states their view fully before any response, and having the facilitator name only the load-bearing points of disagreement rather than every difference, keeps the conversation from sprawling into every minor grievance either person has accumulated. Requiring ground rules to be stated as checkable behaviors rather than values addresses a specific enforcement problem: a rule like "be respectful" gives the facilitator nothing to point to in the room when someone violates it, since the violator can always claim they were being respectful from their own perspective, whereas "uninterrupted time before response" is something the facilitator can visibly and neutrally enforce without it becoming its own dispute. Preparing the facilitator for the specific predicted derailment moment, using the actual private positions given, is the highest-value part of the prompt because GPT-5.1 can reason concretely from two stated, conflicting private accounts to identify where the conversation is most likely to snag — usually where one person's account of "what really happened" contradicts the other's — and scripting a redirect line in advance means the facilitator has language ready rather than improvising under the social pressure of the room, which is exactly when facilitators tend to accidentally take a side. The explicit prohibition on writing this as blame-assignment matters because a model given both people's private positions has enough information to form an implicit judgment about who's more "right," and if that judgment leaks into the ground rules or sequencing, the facilitator loses the neutral positioning the entire mediation structure depends on to function.`,
     exampleOutput: `Ground rules: each person gets two uninterrupted minutes to state their view; no response is given until both have spoken; either person can request a two-minute pause if the conversation escalates; the facilitator names disagreement points before either person responds to them directly. Sequence: Sam states his view, Priya states hers, facilitator names the one load-bearing conflict (who has final call on prioritization) rather than every friction point mentioned. Likely derailment: Priya may bring up a specific incident from two months ago as evidence Sam is 'always too slow' — facilitator redirect: 'Let's park that specific example and focus on the rule going forward so this doesn't happen again, regardless of who was right that time.' Forward agreement: Sam has final call on roadmap prioritization; Priya raises any concern to him directly before it becomes public, with a 24-hour response window before she can escalate to their shared manager.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2097,12 +2203,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`change-management`, `reorg-communications`, `internal-comms`, `organizational-change`, `hr-strategy`],
+    tags: [
+      `change-management`,
+      `reorg-communications`,
+      `internal-comms`,
+      `organizational-change`,
+      `hr-strategy`,
+    ],
     whyItWorks: `The single most damaging and common failure in reorg rollouts is sequencing, not content — people can generally handle difficult news about their role changing, but they cannot forgive hearing it secondhand or from a company-wide email before their own manager told them directly, and that failure mode is purely about order and timing, which is exactly why this prompt forces a strict, explicit ordering of who's told first rather than treating communication as a single document to draft. Requiring the manager-enablement stage to happen before the direct conversations, with a script and FAQ tailored to the specific group's actual likely questions rather than a generic change-communication template, matters because a manager delivering news they haven't been prepared to handle will improvise under pressure and often either overpromise ("nothing will really change" when things clearly will) or underdeliver information the report actually needs, and GPT-5.1 can produce a genuinely tailored FAQ here because the specific changes were stated as input, rather than falling back to generic change-management talking points that don't address what this particular group will actually ask. Explicitly requiring a stated minimum time gap between Stage 1 completing and the broader announcement forces a concrete commitment that prevents the common real-world failure where Stage 1 conversations and the broader announcement get compressed together under time pressure, collapsing the very sequencing the plan exists to protect. The leak-contingency stage exists because reorg plans are frequently disrupted by exactly the risk described in the input — someone already suspects something — and a plan without an explicit contingency for that leaves whoever is running the rollout without a pre-decided answer when it happens, forcing an improvised decision about whether to accelerate under exactly the kind of time pressure that produces bad judgment calls. The explicit instruction against vague talking points matters because a model asked to write "communications for a sensitive reorg" will, without a direct counter-instruction, drift toward safe, non-specific corporate language, which in this specific context reads to affected employees as evasive rather than careful, undermining the trust the entire communication plan depends on.`,
     exampleOutput: `Stage 1 order: 1) the two current team leads losing direct reports, told individually by their VP, day 1 morning. 2) the 20 affected agents/managers, told by their current direct manager in 1:1s, day 1 afternoon through day 2 morning. Stage 2: manager script includes a direct line — 'Your role and team structure are changing; here's specifically what's different and what isn't decided yet' — plus an FAQ answering whether current reports change (yes, to the new director once confirmed) and whether compensation changes (no, confirm explicitly if true). Stage 3: company-wide announcement goes out no earlier than 24 hours after all Stage 1 conversations are confirmed complete. Stage 4: if the team lead who already suspects something asks directly before their scheduled Stage 1 conversation, the VP moves that one conversation up immediately rather than risk them hearing it from a peer first, compressing only that individual's timing, not the whole sequence.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2174,12 +2284,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`hr-faq`, `self-service`, `policy-communication`, `employee-experience`, `hr-operations`],
+    tags: [
+      `hr-faq`,
+      `self-service`,
+      `policy-communication`,
+      `employee-experience`,
+      `hr-operations`,
+    ],
     whyItWorks: `Most HR FAQs fail to reduce ticket volume because they're structured around the policy document's own logic rather than around the actual questions employees are asking, which is a subtle but important distinction — a policy document is organized to be internally consistent and complete, while a FAQ needs to be organized around what a confused employee is actually trying to figure out in the moment, and those two organizing principles produce genuinely different documents even when covering identical content. Explicitly requiring each recurring question to be answered as the specific scenario rather than the general principle it falls under directly targets why FAQs get skipped: an employee wondering whether they can work from a different state for a month doesn't want the general remote-work philosophy restated, they want a yes/no/conditional answer to their exact situation, and a model given only "write an FAQ about this policy" will default to organizing by policy topic rather than by literal question, since that's the more natural document structure without an explicit override. The instruction against inventing confident answers for edge cases the policy doesn't cover is the most operationally important guardrail here, because a model is generally happy to extrapolate a plausible-sounding answer from policy principles when asked a specific edge-case question, and a plausible-sounding wrong answer in a company FAQ can become a de facto policy precedent once an employee acts on it and points back to the document — explicitly requiring an honest "not covered, escalate here" for genuine gaps prevents the FAQ from accidentally making policy it was never authorized to make. Ordering by actual ticket frequency rather than the policy's internal structure matters practically because a long FAQ that requires scrolling past ten low-frequency questions to reach the one generating 80% of tickets fails at its core job regardless of how well each individual answer is written, since most readers won't get that far.`,
     exampleOutput: `Q: Can I work from a different city or state for a few weeks? A: Not under the standard policy — the 3-day in-office requirement assumes you're local enough to be in the office Tuesday-Thursday; a multi-week remote stint needs manager approval as a specific exception, not the standard day-swap process. Edge case: an employee needing 6 weeks fully remote for a medical accommodation isn't addressed by the standard exception process, which is built for one-off days — this needs to go through your manager and then People Ops directly, not the standard exception form. Note: the day-swap question and the holiday question both suggest the policy's exception process itself is ambiguous about anything longer than a single day, which may be worth clarifying at the policy level rather than continuing to explain case by case.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

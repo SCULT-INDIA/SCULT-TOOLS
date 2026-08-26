@@ -69,7 +69,14 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (Figma AI companion)`],
-    tags: [`figma`, `design-systems`, `component-spec`, `variants`, `auto-layout`, `handoff`],
+    tags: [
+      `figma`,
+      `design-systems`,
+      `component-spec`,
+      `variants`,
+      `auto-layout`,
+      `handoff`,
+    ],
     whyItWorks: `The variant-matrix-as-grid instruction directly targets the most common failure mode in Figma component builds: someone builds every mathematically possible combination of a component's properties because nobody said which combinations are actually invalid, which bloats the variant panel and makes instance-swapping unreliable later — forcing the brief to explicitly enumerate invalid combinations turns an implicit judgment call into a checkable fact the builder can point back to. Naming variant properties exactly as they should appear in Figma's variant panel matters because Figma's property names are the literal strings shown in the instance-swap dropdown across the whole file; a property called "Component State" in the brief but "state" in the file creates a silent mismatch that only surfaces when someone else tries to swap an instance and can't find what they expect. Requiring the loading, disabled, error, and empty states to be marked in-scope-or-deferred rather than simply omitted works because an omitted state is ambiguous — a builder can't tell if it was forgotten or intentionally cut — while an explicit deferral is a decision that shows up in review and can be revisited on purpose later. Reusing existing tokens by exact name rather than restating values in prose ("a light blue") prevents the specific drift that happens when a builder eyeballs a color that's close to but not identical to the system token, which is invisible until a designer later notices two near-identical blues in the same file and has to figure out which one is canonical. Because Figma's AI companion and human builders alike work from whatever spec they're handed, a prose description of "clean and modern" gives either of them nothing to execute against, while a table of exact tokens, states, and auto-layout resize rules gives a concrete, buildable target with no interpretation gap.`,
     exampleOutput: `Job: A single-action button that commits the order total shown directly above it, in one auto-layout frame reusable across desktop and mobile card widths.
 Variant matrix: state (default, hover, pressed, disabled, loading) x size (default, compact) = 10 combinations, all valid.

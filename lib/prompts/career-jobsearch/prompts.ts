@@ -67,9 +67,7 @@ A priorities table (priority / matching bullet or "none" / gap severity), the re
     tags: [`resume`, `job-description-matching`, `ats`, `career-tailoring`, `job-search`],
     whyItWorks: `The failure mode this avoids is the most common one in AI-assisted resume editing: a model asked to "tailor this resume to this job" will happily invent a matching metric or reword a responsibility into something the candidate never actually did, because closing every gap reads as more helpful than leaving one open. Forcing an explicit Step 1/Step 2 extraction-then-mapping sequence before any rewriting happens changes what the model is optimizing for — it has to name the specific posting requirement a bullet maps to before it's allowed to touch that bullet's language, which makes a fabricated match visible as an unsupported claim rather than letting it disappear into a plausible-sounding rewrite. The explicit "leave it as-is and tell me" instruction for unmapped bullets matters because GPT-5.1's default instinct on a tailoring task is to touch everything on the page to look thorough, which quietly erodes bullets that might matter for a different application the candidate is running in parallel — most job seekers keep one resume that gets tailored per role, not fifteen resumes, so silent overwrites compound. Requiring a final honest gap list rather than stopping at the rewrite is the part that actually protects the candidate: an ATS-savvy hiring manager or the ATS itself will find the same gap the model just glossed over, so surfacing it lets the candidate decide whether to address it in a cover letter, a portfolio addendum, or simply accept the risk — a decision only the candidate can make, not one a rewrite should make silently on their behalf.`,
     exampleOutput: `Priority: 'own the metrics layer for a 12-person product team' — Matching bullet: 'Built weekly reporting dashboards...' (partial match, scope unclear). Rewritten: 'Owned the metrics layer for a 12-person product team, building and maintaining the weekly reporting dashboards clinical ops relied on for prioritization.' Gap: no bullet addresses 'self-serve reporting migration' — this is a real gap, likely worth one sentence in your cover letter rather than a fabricated resume line.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -142,9 +140,7 @@ End with a one-line verdict: safe to submit as-is, or specific fixes needed befo
     tags: [`ats`, `resume-formatting`, `resume-audit`, `job-search`, `parsing`],
     whyItWorks: `The generic version of this advice — "use a simple ATS-friendly template" — is unhelpful because it doesn't tell a candidate whether their specific document has a real problem or a cosmetic one, and it pushes people to strip visual identity they didn't need to strip. Structuring the prompt as a checklist of seven named, specific parsing failure modes forces the model to check the actual document against each one and report only what applies, rather than defaulting to the same boilerplate warning regardless of input — a two-column layout with a headshot genuinely does risk column-order scrambling in older ATS parsers, but a single-column resume with a slightly unusual section header like "Where I've Worked" has a narrower, more specific risk (header-matching failure on that one section, not the whole document). Asking for the minimal fix that preserves the visual choice, rather than defaulting to plain text, matters because over-correction is the most common bad advice in this space — most modern ATS platforms (Workday, Greenhouse, Lever) parse single-column PDFs with normal fonts reasonably well, so a candidate who guts every visual choice out of fear is trading a real but narrow risk for a resume that reads as less considered to the human reviewer who sees it after the ATS parses it. The explicit "what not to do" instruction exists because a model asked to audit formatting will often pattern-match to generic ATS folklore (never use PDF, never use any icon) that isn't actually true across the range of systems in use, and stating that constraint upfront keeps the answer grounded in the specific document rather than reciting outdated rules.`,
     exampleOutput: `Issue found: two-column layout. Your skills and headshot sit in a left column that many ATS parsers will read out of sequence with your right-column experience text, potentially interleaving the two into garbled parsed text. Fix: move skills to a single-column block either above or below your experience section rather than beside it; you can keep the headshot as a design element since most parsers ignore images rather than misreading them. Verdict: needs one structural fix before submitting.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -217,12 +213,16 @@ After the letter, add a two-line note: which sentence in the letter is doing the
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`cover-letter`, `job-application`, `narrative-writing`, `career-tailoring`, `job-search`],
+    tags: [
+      `cover-letter`,
+      `job-application`,
+      `narrative-writing`,
+      `career-tailoring`,
+      `job-search`,
+    ],
     whyItWorks: `Cover letters generated by AI models tend to read as interchangeable because the model, left to its own defaults, reaches for the same register of enthusiasm phrases that show up across millions of training examples of this exact document type — "passionate about," "great fit," "excited to apply" are statistically the most common phrases in this genre, which is exactly why a hiring manager who reads dozens of these a week recognizes them instantly as filler. Naming the specific banned phrases directly, rather than giving a vague instruction like "avoid clichés," works because GPT-5.1 can reliably avoid a named phrase but is much less reliable at self-identifying what counts as a cliché in the abstract — an explicit list gives it a checkable constraint instead of a vibe to interpret. The upfront honesty check, where the model has to assess whether the input material actually supports a specific letter before writing one, exists because the alternative failure mode is worse than a generic letter: a model asked to write something specific from thin material will often invent a plausible-sounding but false connection to the company rather than admit the gap, and a candidate who ships a cover letter built on a fabricated detail risks it surfacing badly in an interview when asked to elaborate on something they never actually said. The closing self-assessment — which sentence does the most work, which is filler — gives the candidate a fast way to spot-check the output themselves rather than trusting a confident-sounding letter at face value, which matters because a model's own confidence in its writing is not a reliable signal of whether it actually avoided the traps it was told to avoid.`,
     exampleOutput: `"I've used [Company]'s app for two years, back when it was just budgeting alerts — I have specific opinions about where the onboarding funnel loses people, because I watched myself almost drop off at the same step. At my last role, I cut CAC 30% not by adding channels but by killing three that looked fine in aggregate and were quietly burning budget on users who never activated..." Most-work sentence: the CAC line, because it's the one concrete proof point. Kept-by-convention sentence: none — every line ties to the thesis.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -286,12 +286,16 @@ After the rewrite, tell me in one sentence what specific claim in the new versio
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`linkedin`, `personal-branding`, `profile-optimization`, `job-search`, `networking`],
+    tags: [
+      `linkedin`,
+      `personal-branding`,
+      `profile-optimization`,
+      `job-search`,
+      `networking`,
+    ],
     whyItWorks: `LinkedIn truncates the About section behind a "see more" link after roughly two to three lines on both desktop and mobile, which means the overwhelming majority of profile viewers only ever read that opening fragment — a fact most AI-generated About sections ignore entirely, opening instead with a warm-up sentence ("I am a results-driven professional...") that burns the only guaranteed-visible real estate on a sentence that could apply to almost anyone. Instructing the model to make the first two lines work as a standalone unit forces it to front-load the one specific, differentiating claim rather than treating the opening as throat-clearing before the "real" content later in the section that most readers will never scroll to see. The instruction to match the closing call-to-action to a specific named reader — a hiring manager versus a former colleague considering a referral — matters because those two readers are looking for structurally different signals: a hiring manager wants a checkable statement of what you're open to and roughly when, while a colleague considering a referral wants enough specificity to know which of their own contacts to mention you to, and a single generic "open to new opportunities" line serves neither well. The closing fact-check instruction addresses a subtler risk: a rewritten About section that reads compellingly can drift into a claim that isn't quite supported by what's actually listed in the Experience section beneath it, and a profile viewer who scrolls down expecting the About section's claim to be substantiated and finds a mismatch loses trust in the whole profile — catching that gap before publishing is cheaper than fixing it after a recruiter has already formed the impression.`,
     exampleOutput: `"I make enterprise software demos actually convert — usually by rebuilding the deck nobody else wanted to touch. Six years doing this at [Company/industry], watching where prospects tune out and fixing that specific moment..." Fact-check note: the claim 'six years' should match the total tenure visible in your Experience section below — confirm before publishing.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -357,12 +361,16 @@ End with your own recommendation of which option to use given what I said about 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`linkedin`, `headline`, `personal-branding`, `job-search`, `keyword-optimization`],
+    tags: [
+      `linkedin`,
+      `headline`,
+      `personal-branding`,
+      `job-search`,
+      `keyword-optimization`,
+    ],
     whyItWorks: `LinkedIn's own recruiter search tooling matches keywords in the headline field with real weight, which is exactly why the pipe-separated buzzword convention became common — but the specific words most people default to ("Innovator," "Thought Leader," "Synergy") are not terms recruiters actually type into a search bar, so the convention's form survives while its original keyword-matching function has been hollowed out by word choice. Generating four options built around genuinely different positioning logics, rather than four surface rewordings, forces the model to actually reason about the trade-off between searchability and impressiveness-sounding language instead of defaulting to one safe middle-ground answer that tries to please everyone and therefore optimizes for no one in particular. The audience-first framing option exists because most headline advice defaults to role-first framing without asking whether the person's actual goal is to be found by title-matching search versus by a specific type of reader recognizing themselves in the description — these produce structurally different headlines, and asking for both surfaces the trade-off explicitly rather than silently picking one. Naming the specific banned words directly, the same mechanism as the cover letter and About section prompts in this same batch, works better than "avoid buzzwords" as an instruction because GPT-5.1 can reliably suppress a named term but treats "buzzword" itself as a vague category it interprets inconsistently across separate generations. The closing recommendation, tied explicitly back to the stated search goal rather than a general "which is best," keeps the model from hedging with "it depends" as its final answer, which is a common failure mode when a model is asked to choose among its own generated options without a concrete goal to weigh them against.`,
     exampleOutput: `Option 2 (audience-first): 'Helping B2B SaaS teams fix the first 7 days of trial — before churn decides for you.' Trade-off: strong hook for a hiring manager who already has this exact problem, weaker for keyword search on 'Product Designer' broadly. Recommendation: given you said recruiters searching 'UX activation' matter more than broad title search, Option 3 (specificity-over-breadth) is the better fit — it contains the actual search term.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -419,12 +427,16 @@ Do not just restate the posting's bullet points back to me in a different order 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`job-description`, `job-search-strategy`, `interview-prep`, `career-research`, `application-strategy`],
+    tags: [
+      `job-description`,
+      `job-search-strategy`,
+      `interview-prep`,
+      `career-research`,
+      `application-strategy`,
+    ],
     whyItWorks: `A job posting is written by whoever had time to write it — sometimes the hiring manager, sometimes recruiting, sometimes a template inherited from the last time the role was open — and its phrasing carries real signal about team maturity and scope that a plain summary discards by flattening everything into one undifferentiated bullet list. Splitting requirements into genuinely-emphasized versus boilerplate works because postings tend to give real weight (repetition, specificity, tie to a named responsibility) to what the hiring manager actually cares about, while requirements copied from an HR template read as generic and disconnected from the rest of the text — a model instructed to look for that contrast, rather than just listing every bullet at equal weight, surfaces a distinction a skimming human reader usually processes intuitively but couldn't necessarily articulate. The instruction to clearly label inferences as inferences rather than facts matters because this is exactly the kind of task where a confident-sounding model could present a guess ("this role is probably a demotion for someone") with the same authority as a directly stated fact from the posting, and a candidate making an application or negotiation decision needs to know which parts of the analysis are solid ground versus informed speculation. Generating interview questions from the ambiguous parts specifically, rather than generic culture-fit questions, is more useful because it turns the decode into something actionable in the actual interview — a candidate who asks "is this role backfilling someone or is the team splitting existing scope onto a new headcount" gets real signal back, while a generic "what does a typical day look like" question rarely surfaces the same information.`,
     exampleOutput: `Must-have (emphasized): 'own reporting for a team of 40' and 'build the first version of a metrics dashboard from scratch' — both tied to specific, named responsibility. Boilerplate: the six-tool 'nice to have' list reads as the team not yet knowing their own stack, likely inherited from a generic template. Inference (labeled as a read, not fact): a newly created role with an unusually long tool wishlist and a Series B six months ago suggests ops infrastructure is genuinely immature — your hesitation about spending a year on pipes rather than analysis is well-founded and worth asking about directly.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -494,12 +506,16 @@ A three-column gap table (requirement / current status / priority), then the tim
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`skill-gap-analysis`, `career-planning`, `upskilling`, `job-search-strategy`, `learning-plan`],
+    tags: [
+      `skill-gap-analysis`,
+      `career-planning`,
+      `upskilling`,
+      `job-search-strategy`,
+      `learning-plan`,
+    ],
     whyItWorks: `A generic skill-gap output — "you should learn React and TypeScript" — is nearly useless on its own because it doesn't answer the question that actually determines what a candidate should do this week: is this gap severe enough to block getting past an ATS keyword filter or a screening question, or is it something that matters more once a human is already evaluating the whole candidate. Phase 2's split between application-blocking gaps and interview-stage gaps forces the model to reason about where in the funnel a given requirement actually gets checked, which changes the urgency and the kind of proof needed — a hard keyword-matched requirement needs something resume-visible fast, while a requirement that surfaces in a technical interview has more room for in-progress learning to be discussed honestly rather than fully mastered. The instruction to be skeptical of the model's own "transferable" classifications addresses a specific optimism bias: a model asked to assess how close someone's existing skills are to a requirement tends to round up, treating "I've touched HTML/CSS" as closer to "comfortable working from Figma designs" than it honestly is, because a smaller gap makes for a more encouraging-sounding answer — explicitly asking it to flag its own stretch calls counteracts that. Requiring every closing-plan item to tie to a demonstrable proof point, rather than accepting a course-completion certificate as sufficient, matters because what actually gets evaluated in an interview or portfolio review is whether the candidate can show or discuss the skill in action, not whether they can claim exposure to it — a plan built around proof points produces talking points for the interview itself, not just a private sense of having studied.`,
     exampleOutput: `Requirement: 'comfort working from Figma designs.' Status: genuine gap, not transferable — basic CSS knowledge doesn't cover component-based design system work. Priority: interview-stage, not application-blocking, since it's rarely a resume keyword filter. Plan: spend two weekends rebuilding one real Figma community file as working React components, so you have a specific link to show and discuss rather than a claimed familiarity.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -565,12 +581,16 @@ Do not include generic filler questions ("where do you see yourself in 5 years")
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`interview-prep`, `interview-questions`, `job-interview`, `career-prep`, `job-search`],
+    tags: [
+      `interview-prep`,
+      `interview-questions`,
+      `job-interview`,
+      `career-prep`,
+      `job-search`,
+    ],
     whyItWorks: `Generic "top interview questions for X role" lists are low-value precisely because they're generic — they apply equally to any posting with the same title regardless of what that specific posting emphasizes or what stage of the process is being prepped for, which means a candidate using one spends prep time on questions unlikely to actually come up while missing the ones specific to their situation. Tying Tier 1 questions explicitly back to a specific line in the posting or a fact about the interview stage forces the model to reason from this candidate's actual situation rather than pattern-matching to the generic training-data version of "customer success manager interview questions," and stating the source of each prediction lets the candidate judge the model's confidence themselves rather than take a flat list on faith. Tier 2's focus on resume-specific follow-ups matters because an attentive interviewer's most probing questions are frequently reactive to something specific on the resume in front of them — a nine-month tenure or an unusual career pivot — rather than generic behavioral questions, and these are exactly the questions a candidate is most likely to be unprepared for if they only rehearsed generic lists, since they can't be predicted without knowing the specific resume. Adding the "what is the interviewer actually trying to learn" line for every question is the mechanism that makes this genuinely useful for answering rather than just for prediction — a question's surface topic ("tell me about a time you handled conflict") often maps to a specific underlying concern (can this person de-escalate an angry enterprise client without escalating internally), and an answer aimed at the surface topic without addressing the underlying concern reads as technically responsive but ultimately unconvincing to the interviewer.`,
     exampleOutput: `Tier 2: 'You moved from sales into customer success after two years — what made you want off the number?' Likely because your resume flag names an unusual sales-to-CS pivot, and a VP hiring for renewal/expansion revenue will want to know you didn't just burn out on quota. What they're actually learning: whether you view CS as a retreat from sales pressure or a deliberate move toward a different kind of client relationship — answer toward the latter specifically.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -637,12 +657,16 @@ Do not write this as a paragraph I'm meant to memorize and deliver verbatim. Do 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`interview-answers`, `interview-prep`, `behavioral-interview`, `job-search`, `communication-coaching`],
+    tags: [
+      `interview-answers`,
+      `interview-prep`,
+      `behavioral-interview`,
+      `job-search`,
+      `communication-coaching`,
+    ],
     whyItWorks: `A full memorized script is a worse interview prep artifact than talking points because interview delivery of a memorized paragraph has a distinct, recognizable cadence — flatter intonation, recitation pauses, over-precise word choice — that experienced interviewers pick up on even when they can't articulate why an answer feels rehearsed, and it also breaks badly under a follow-up question that doesn't match the script's assumed path, leaving the candidate visibly stuck. Producing short talking-point fragments instead forces the candidate to actually reconstruct the sentence in their own words each time it's practiced, which is closer to how the answer will actually need to be produced live in the room, and the instruction to order them with the strongest point placed just before a natural pause rather than first exploits a real and well-documented memory effect in how interviewers recall answers — recency within a delivered answer weighs more than the same information delivered at the very start. Part 1's explicit statement of what the question is really probing matters because "why did you leave your last job" is rarely actually asking for a factual timeline — it's usually screening for whether the candidate handles conflict or disappointment professionally, and an answer that nails the facts but misses that underlying concern reads as technically responsive but not reassuring. Part 3's requirement that the honest angle survive a good follow-up question, rather than only working if the interviewer doesn't push, is the part that actually protects the candidate in a live conversation — an answer engineered to sound good on the first pass but collapse under "can you say more about that" is a bigger risk than a slightly less polished answer that holds up consistently.`,
     exampleOutput: `Part 3: 'The team went through a manager transition a couple months into my start, which changed some of the day-to-day dynamics — I stayed focused on delivering what I'd committed to, but it became clear the new direction and I weren't a great match long-term, so I started looking for a role with more stability.' This holds up if pushed with 'what wasn't a good match' — you can add one concrete, non-blaming specific rather than deflecting.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -692,12 +716,16 @@ End with a coverage map: my expected themes down one side, my stories across the
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`star-method`, `behavioral-interview`, `interview-prep`, `career-storytelling`, `job-search`],
+    tags: [
+      `star-method`,
+      `behavioral-interview`,
+      `interview-prep`,
+      `career-storytelling`,
+      `job-search`,
+    ],
     whyItWorks: `Building one story per anticipated question is a losing strategy because behavioral interview question banks are effectively infinite in surface phrasing while the underlying competencies they test are a small, stable set — leadership, conflict, ambiguity, failure recovery — which means a well-built small set of stories that each flex across several competencies covers far more ground than a large set of narrow, single-purpose ones, and is also easier to actually keep fresh in memory under interview pressure. The instruction to build 4-5 flexible stories rather than one-per-theme forces the model to identify which real moments in the candidate's history are naturally rich enough to support multiple competencies depending on emphasis, which is a genuine skill difference from just categorizing moments into single boxes. Requiring the Action section to include the reasoning behind a choice, not just the choice and its outcome, matters because a competent interviewer's most revealing follow-up question is almost always "why did you do it that way instead of the alternative," and a candidate whose STAR prep only covers the outcome-level story has nothing prepared for that follow-up, which is exactly the moment a rehearsed-sounding story starts to visibly fall apart. The instruction to preserve an imperfect result rather than polish it into a clean win addresses a subtle credibility problem: STAR stories that resolve too neatly, with every outcome unambiguously positive and every number suspiciously round, read to experienced interviewers as embellished or cherry-picked, while a story that names a real trade-off or partial result reads as something that actually happened. The refusal to invent missing details protects the candidate from the single worst outcome in interview prep — being caught contradicting a detail the candidate never actually said but the model fabricated to fill a gap, which is far worse for credibility than simply not having a number ready.`,
     exampleOutput: `Story 2 (vendor disagreement): covers 'conflict/disagreement with authority' and 'ownership.' For the conflict theme, lead with the specific moment you pushed back and what evidence you brought, not the eventual vindication — the vindication should land as the Result, not be foreshadowed early, since interviewers are testing how you handled the disagreement in the moment, not whether you were later proven right.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -759,12 +787,16 @@ Only break character to give feedback based on what I said about feedback timing
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`mock-interview`, `interview-simulation`, `interview-prep`, `roleplay`, `job-search`],
+    tags: [
+      `mock-interview`,
+      `interview-simulation`,
+      `interview-prep`,
+      `roleplay`,
+      `job-search`,
+    ],
     whyItWorks: `A static list of questions read one after another fails to simulate the actual pressure point of a real interview, which is rarely the first question itself but the follow-up that comes after a vague or incomplete answer — a candidate can rehearse a polished response to every anticipated question on a list and still be caught flat-footed by "can you say more about what specifically you did there" in a live conversation, because that follow-up only exists in response to what was actually said, not to a question written in advance. Explicitly instructing the model to evaluate each answer before deciding whether to advance or follow up forces it to actually behave adaptively turn-by-turn rather than defaulting to its base pattern of working through a pre-planned list regardless of answer quality, which is the single biggest gap between a scripted Q&A and something that resembles a real interview's actual information-seeking behavior. The instruction to stay in persona through follow-ups rather than breaking to coach mid-session matters mechanically because GPT-5.1's default helpful-assistant instinct is to interject encouragement or gentle correction as soon as it notices a weak answer, which is exactly the behavior a real interviewer doesn't exhibit and exactly the behavior that would let the candidate mentally relax between questions instead of staying under the pressure the exercise is meant to simulate. Explicitly forbidding the model from softening follow-ups to spare feelings addresses a specific and well-documented tendency of instruction-tuned models toward excessive agreeableness — without that constraint stated up front, the model will tend to accept a mediocre answer and move on rather than push, which defeats the entire purpose of a stress-test session and would leave the candidate with false confidence walking into the real interview.`,
     exampleOutput: `Interviewer: "Walk me through the last time a direct report was consistently missing deadlines." [Candidate answers vaguely] Interviewer, in character: "You said you 'had a conversation' with them — what did you actually say, and what changed afterward that told you it worked?"`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -831,12 +863,16 @@ After I've worked through the problem with your follow-ups, give me a short hone
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`technical-interview`, `interview-prep`, `coding-interview`, `job-search`, `practice-problems`],
+    tags: [
+      `technical-interview`,
+      `interview-prep`,
+      `coding-interview`,
+      `job-search`,
+      `practice-problems`,
+    ],
     whyItWorks: `The most common failure in AI-assisted technical interview prep is miscalibration in either direction — a model asked to help prep for a technical interview will often default to either generic textbook-difficulty problems that don't reflect what a 45-minute live-coding screen actually tests, or occasionally the opposite, showing off with an unnecessarily advanced problem that wastes the candidate's limited prep time on depth the actual interview will never probe. Forcing an explicit Step 1 calibration — reasoning about what this specific format and level realistically test, separate from the theoretical depth of the topic — makes the model's assumption about difficulty visible and correctable before any practice time is spent, rather than silently baking in a miscalibrated assumption. The instruction to withhold the answer until the candidate attempts the problem and explains their reasoning first is the mechanism that actually produces useful practice rather than passive reading: a model's default behavior when given a problem to "help with" is to be maximally helpful immediately, which for interview prep specifically defeats the purpose, since the actual skill being tested in a live technical interview is producing reasoning under time pressure without help, not recognizing a correct answer once shown one. The instruction to probe the weakest part of the candidate's stated reasoning, rather than a binary right/wrong judgment, mirrors how a real technical interviewer actually operates — most technical interviews are explicitly scored on process and communication, not just a correct final answer, so a mock session that only confirms correctness misses the exact skill (reasoning out loud, handling being questioned mid-thought) that determines the real outcome.`,
     exampleOutput: `Step 1: for a 45-minute live-coding screen at this level, expect one medium-difficulty graph or tree problem with follow-up variations, not a hard-difficulty multi-part problem — the format doesn't have time for that depth. Problem: given a list of flight routes, determine if you can reach a destination within k stops. [Candidate attempts] Follow-up: "You said you'd use BFS — walk me through why BFS and not DFS matters specifically for the 'within k stops' constraint."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -895,12 +931,16 @@ End with which single answer, if any, has the most serious flag and should be fi
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`behavioral-interview`, `interview-prep`, `answer-review`, `job-search`, `communication-coaching`],
+    tags: [
+      `behavioral-interview`,
+      `interview-prep`,
+      `answer-review`,
+      `job-search`,
+      `communication-coaching`,
+    ],
     whyItWorks: `Generic feedback like "sound more confident" or "be more specific" is nearly unusable because it doesn't tell the candidate which sentence to change or how — this prompt instead names five specific, well-documented patterns experienced interviewers are actually trained to notice, which gives the model a checkable framework to apply to the actual text rather than an open-ended impression to form. The "we" pattern specifically matters because it's one of the most common and most subtle red flags in behavioral interviewing — a candidate describing team accomplishments in first-person-plural throughout an answer to a question explicitly asking what they personally did is a pattern interviewers are specifically trained to probe with a direct follow-up ("what did you specifically do"), and catching it before the interview is far cheaper than being caught by that follow-up live. The instruction to flag suspiciously round or precise numbers addresses a specific tell that experienced interviewers watch for: real remembered metrics tend to be oddly specific ("we cut it from 14 days to 9") or explicitly hedged ("roughly a third faster, I'd have to check the exact number"), while a fabricated-sounding number defaults to a clean round figure the brain reaches for when inventing rather than recalling, and a model reviewing a draft can be instructed to notice that same tell a skeptical human interviewer would notice. The explicit instruction against manufacturing a flag on every answer matters because a model asked to "find problems" will tend to find something in every input regardless of actual quality, which erodes the signal value of the flags that are genuinely serious — telling it plainly that a clean answer should be reported as clean keeps the flagged issues meaningful rather than diluted by forced nitpicks.`,
     exampleOutput: `Flag (pattern 2, vague pronouns): "We decided to cut some features" — for a question specifically about your role in a project falling behind, this hides whether the decision was yours to make or you were following someone else's call. Rewrite direction: name your specific role in that decision — did you propose the cut, push back on it, or execute someone else's call — since the interviewer is trying to learn your individual judgment under pressure, not the team's collective outcome.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -969,12 +1009,16 @@ End with one honest sentence on what the biggest risk is in sending this counter
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`salary-negotiation`, `counteroffer`, `job-offer`, `compensation`, `job-search`],
+    tags: [
+      `salary-negotiation`,
+      `counteroffer`,
+      `job-offer`,
+      `compensation`,
+      `job-search`,
+    ],
     whyItWorks: `Generic negotiation advice built around confidence-projecting phrases ("know your worth," "ask with confidence") is weak advice because the actual variable that determines a counteroffer's success is whether the number and the justification behind it are grounded in something the other side finds credible, not the tone in which it's delivered — a confidently delivered ask with no real backing is easier for a recruiter to decline than a modestly delivered ask backed by a specific, verifiable data point. Stage 1's sanity check exists because the single most damaging mistake in a salary negotiation is anchoring on a number the market data doesn't actually support, which can read as out of touch and cost credibility for the rest of the conversation — having the model check the target against only the real data provided, rather than assuming whatever number the candidate wants is defensible, catches that risk before the message is sent rather than after a recruiter has already formed an impression. The explicit instruction never to invent a competing offer or market benchmark the candidate didn't actually provide is the single most important safeguard in this prompt: a fabricated competing offer used as negotiation leverage is not just ethically compromising, it's discoverable and reputation-damaging if a recruiter asks a natural, specific follow-up question about it, and a model that fills in a plausible-sounding number to strengthen a script is optimizing for a persuasive-looking output at the cost of the candidate's actual credibility in a professional relationship they may need again. Building in the Stage 3 pushback rehearsal, rather than stopping at the initial script, matters because the actual point of friction in most salary negotiations isn't the opening ask but what happens after the first "that's not something we can do" — a candidate with a prepared, specific response to that exact moment is far less likely to fold immediately out of the reflexive discomfort many people feel when a negotiation gets pushed back on.`,
     exampleOutput: `Stage 1: your target of $130k is defensible given the Levels.fyi range you cited ($125-135k) — reasonable, not aggressive, especially paired with the certification leverage. Stage 3, pushback 'this is our best offer': 'I understand base is fixed at this stage — given that, would there be flexibility on a remote day per week or a signing bonus to help close the gap?' This holds the ask while redirecting to your stated secondary priority rather than folding outright.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1036,12 +1080,16 @@ After the message, give me one line on what would make a recruiter delete this v
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`recruiter-outreach`, `cold-messaging`, `networking`, `job-search`, `linkedin`],
+    tags: [
+      `recruiter-outreach`,
+      `cold-messaging`,
+      `networking`,
+      `job-search`,
+      `linkedin`,
+    ],
     whyItWorks: `Recruiters who handle high message volume develop fast pattern-recognition for template messages, and the tell isn't usually bad writing — it's a message whose opening line would be equally true sent to any recruiter at any company, which is exactly the kind of line a model defaults to unless explicitly instructed otherwise, because a generic compliment or interest statement is easier to generate than a specific, verifiable one. Requiring the opening to be something a reader could verify is true about them specifically — a real post, a real role, a real team they lead — forces the model to actually use the input material rather than falling back to safe, portable phrasing that would work in any cold message, and it's the single biggest signal that separates a message a recruiter actually reads from one they pattern-match and archive. The explicit word-count ceiling matters mechanically because message length itself functions as a signal independent of content — a long, thorough-sounding message increases the effort of reading it without necessarily increasing its persuasiveness, and a recruiter skimming a message on their phone between other tasks is more likely to fully read and respond to something short enough to finish in the time it takes to glance at it. Making the ask specific and low-effort rather than open-ended ("would love to pick your brain sometime") addresses a real behavioral friction point: an open-ended ask requires the recipient to do the work of proposing a next step themselves, which is an extra cognitive cost that makes ignoring the message the path of least resistance, while a bounded, specific ask ("a 15-minute call next week") only requires a yes or no, which measurably increases reply rates in cold outreach generally, not just in job search contexts.`,
     exampleOutput: `"Hi [Name] — saw your post about the backend role your team's been trying to fill. I've spent the last few years building payment reconciliation systems, which sounds close to what you're describing. Not sure if it's the right fit yet, but would a 15-minute call next week make sense to find out?" Delete-trigger note: if the opening line could've been sent to any fintech recruiter, this reads as templated — the reference to 'your team's been trying to fill' is what makes it specific to them.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1114,12 +1162,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`networking`, `linkedin-outreach`, `cold-message`, `career-search`, `email-drafting`],
+    tags: [
+      `networking`,
+      `linkedin-outreach`,
+      `cold-message`,
+      `career-search`,
+      `email-drafting`,
+    ],
     whyItWorks: `The instruction to open with the connection basis in sentence one exploits how people actually triage LinkedIn and email inboxes: they decide relevance from the first line before reading the ask, so burying the "why you" after a greeting means the message gets judged as generic before the real content is even seen. Forcing the model to name whether the connection is genuinely warm or actually cold prevents GPT-5.1's default politeness bias from inventing a rapport that doesn't exist — left unconstrained, it tends to write "great to reconnect" language for a recipient the user has never actually spoken to, which reads as either confused or dishonest the moment the recipient checks. Specifying that the ask must be low-effort and singular addresses a real failure mode of networking messages: an open-ended "would love to pick your brain" ask requires the recipient to invent the agenda, and busy people route effort-shifting requests straight to ignored rather than doing that work for a near-stranger. The platform-and-length constraint matters mechanically because LinkedIn truncates messages in the notification preview and connection-request notes have a hard character cap — a message written without that constraint in mind often gets cut off mid-sentence exactly where the ask was going to land. Ending on a single yes/no question or proposed time window rather than an open "let me know if you're free" closes the loop the way a specific calendar invite does compared to a vague "we should catch up sometime" — it converts a reply from an effortful scheduling negotiation into a one-tap response, which is the single biggest lever on reply rate for a message this short.`,
     exampleOutput: `Hi Priya — we were both at the SaaStr product track last month (I was on the pricing-model panel audience). I'm restructuring my company's usage-based pricing and would love 15 minutes to hear how your team handles PM interview loops for pricing-focused roles — not asking about openings yet, just comparing notes. Would a quick call next Tuesday or Wednesday work?`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1180,14 +1232,18 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`cold-application`, `speculative-outreach`, `job-search-email`, `career-search`, `networking`],
+    tags: [
+      `cold-application`,
+      `speculative-outreach`,
+      `job-search-email`,
+      `career-search`,
+      `networking`,
+    ],
     whyItWorks: `The explicit instruction against guessing at unconfirmed facts about the company matters because cold applications live or die on credibility in the first two sentences, and GPT-5.1 will otherwise happily fabricate a plausible-sounding company challenge from thin context, which reads as confident until the recipient — who actually knows their own company — spots the guess and discounts the whole email. Naming the problem before announcing the job search reframes the email from a request (give me something) to an offer (here's something useful), which changes which mental bucket a hiring manager sorts it into on first read; unsolicited job requests get filtered fast, unsolicited useful observations get a reply more often because they cost the recipient nothing to consider. The under-150-word constraint is load-bearing rather than arbitrary — a cold email to someone who didn't ask for it competes against a full inbox of email people did ask for, and length itself signals whether this is worth opening now or archiving for later. Asking a small, answerable question ("is this worth 15 minutes") instead of the large, effort-shifting "are you hiring" respects that most recipients cannot honestly answer a headcount question on the spot but can answer a scoped yes/no about whether a problem is real. Separating the resume-summary content out entirely stops the email from duplicating the resume's job, which is the single most common reason cold applications read as generic — they restate a background instead of making a case for why this specific background matters to this specific, named problem right now.`,
     exampleOutput: `Subject: Localization gap in your new market launch
 
 Hi Marcus — I noticed your recent expansion announcement doesn't have a listed localization or in-market operations role yet, which is usually the first hire that determines whether time-to-revenue is 3 months or 9. I ran that exact function for a similarly-sized company's EU launch and cut time-to-first-revenue by six weeks by fixing the localization handoff early. I don't know if this is a gap you're actively solving for right now — worth a 15-minute call if it is?`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1240,16 +1296,20 @@ A single paragraph, 60-90 words, followed by a 3-bullet "key details" list (role
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`portfolio-writing`, `project-description`, `personal-website`, `career-search`, `resume-content`],
+    tags: [
+      `portfolio-writing`,
+      `project-description`,
+      `personal-website`,
+      `career-search`,
+      `resume-content`,
+    ],
     whyItWorks: `Leading with outcome instead of stack directly counters a specific pattern in how portfolios get skimmed: a reader scanning ten project cards in two minutes decides which ones to click based on whether the first sentence signals a problem worth understanding, and "built using React, Node, and PostgreSQL" gives them nothing to evaluate until they've already invested reading time in the stack list. Requiring a real number rather than a vague superlative closes a specific gap that GPT-5.1 otherwise fills by default — asked to describe impact with only qualitative notes, it reaches for "significantly improved" or "greatly reduced," phrasing that reads as filler precisely because it's unfalsifiable, whereas a reader who sees a specific number can decide for themselves whether it's impressive. The role-attribution rule matters because team project descriptions have a specific credibility failure mode in both directions: overclaiming solo ownership of a team deliverable gets caught the moment an interviewer asks a follow-up question the candidate can't answer, while underselling a real individual contribution wastes the one chance the portfolio has to make a specific hire-worthy skill visible. The 60-90 word cap paired with a separate skim-friendly bullet list serves two different reading behaviors simultaneously — the paragraph is for someone who commits to reading, the bullets are for someone who never will, and most portfolio visitors are the second kind, so building only the paragraph leaves that reader with nothing.`,
     exampleOutput: `Support agents were missing duplicate tickets constantly because search only matched exact keywords. I built a similarity-based search backend and ranking logic that surfaced related past tickets even when the wording didn't match, cutting duplicate-ticket investigation time noticeably for the support team. A teammate built the frontend on top of the API I designed.
 
 Role: Backend + ranking logic (solo)
 Stack: Python, embeddings-based similarity search, PostgreSQL
 Result: Reduced duplicate-ticket investigation time for the support team`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1302,7 +1362,13 @@ Full README.md content in Markdown, in this section order: title, one-line tagli
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`github-readme`, `developer-portfolio`, `technical-writing`, `career-search`, `software-engineering`],
+    tags: [
+      `github-readme`,
+      `developer-portfolio`,
+      `technical-writing`,
+      `career-search`,
+      `software-engineering`,
+    ],
     whyItWorks: `The two-audience framing — a contributor who needs setup steps and a recruiter who needs neither — resolves a real structural conflict in most auto-generated READMEs: templates optimized purely for contributor onboarding front-load badges and installation steps, which is correct for someone about to run the code but wastes the exact ten seconds a recruiter actually spends before clicking away, so the ordering has to be deliberately inverted from the contributor-first default. Requiring one concrete technical decision rather than a generic "built with best practices" line matters because a hiring manager skimming a GitHub profile is specifically looking for signal that distinguishes an original project from a tutorial clone, and vague competence claims are exactly what a tutorial-clone README also contains — a specific, named engineering problem (version-incompatible schemas, a tricky race condition, a deliberate tradeoff) is the kind of detail that a copy-pasted project simply doesn't have, because it only exists if the person actually built the thing. Placing that detail in the top third rather than in a "Technical Details" section near the bottom reflects how GitHub renders READMEs — most of the file sits below the fold on first load, and anything meant to influence a fast decision has to survive without scrolling. The explicit instruction to note a screenshot placeholder even without the asset prevents ChatGPT from silently omitting a section it has no image to fill, which would otherwise leave a visually flat README that undersells a project that might have a genuinely good demo to show.`,
     exampleOutput: `# tfdiff
 
@@ -1316,9 +1382,7 @@ tfdiff compares two Terraform state files and flags any change — a forced reso
 
 ## Install
 \`go install github.com/user/tfdiff@latest\``,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1378,14 +1442,18 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`career-planning`, `career-roadmap`, `decision-making`, `career-search`, `long-term-strategy`],
+    tags: [
+      `career-planning`,
+      `career-roadmap`,
+      `decision-making`,
+      `career-search`,
+      `long-term-strategy`,
+    ],
     whyItWorks: `Explicitly asking for a decision tree instead of a linear plan preempts a specific default behavior: asked for a "5-year career roadmap" without this framing, GPT-5.1 tends to produce a single confident year-by-year narrative that reads well but papers over the real uncertainty of an unresolved fork, which is actively counterproductive when the honest state of things is that the user doesn't yet know which path is right and forcing false precision would just produce a plan that gets abandoned at year one. Separating no-regret moves from direction-specific moves gives the plan something actionable to do this week regardless of which fork gets taken, which matters because career plans that are entirely conditional on a future decision tend to produce paralysis in the present — there's always a reason to wait for more information before acting. Requiring a concrete, observable signal for each decision point rather than a vague "see how it goes" addresses the fact that unstructured self-reflection about career fit is notoriously unreliable; a person rarely discovers whether they like people-management by introspecting about it, but they do find out by managing one project and noticing whether it energized or drained them, so the prompt forces the model to name that kind of concrete test rather than deferring the whole decision to an unspecified future feeling. The instruction to say plainly when one direction looks weaker matters because an AI model's default politeness bias tends toward presenting all user-suggested options as equally viable, which is a disservice when the user's own stated constraints — a fixed geography with few ML employers, an income floor — already rule one path down; naming that directly is more useful than diplomatic neutrality.`,
     exampleOutput: `No-regret moves: pick up one hands-on statistical modeling project in your current role within 3 months regardless of direction — this serves both the data-science and analytics-management paths.
 
 Direction: Data science / ML — Decision point: within 6-9 months, whether you can land a genuine modeling project (not just dashboards) internally. If your company has no such project pipeline, this path likely requires a lateral move to test, which conflicts with your no-pay-cut constraint for the next 18 months...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1456,14 +1524,18 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`promotion-case`, `career-advancement`, `performance-review`, `career-search`, `workplace-documentation`],
+    tags: [
+      `promotion-case`,
+      `career-advancement`,
+      `performance-review`,
+      `career-search`,
+      `workplace-documentation`,
+    ],
     whyItWorks: `Mapping evidence directly to the target level's stated criteria, rather than writing a general accomplishments summary, matches how promotion committees actually evaluate cases — most leveling processes score against a defined competency bar, and a document organized around that bar lets a committee member verify the case criterion by criterion instead of having to reverse-engineer which of several achievements maps to which requirement, which is exactly the extra work that gets a case tabled for "more evidence needed" at the next cycle instead of approved this one. Instructing the model to name a criterion with no strong evidence rather than stretching a weak example addresses a specific risk with promotion cases: committees include people who've seen dozens of these and can spot an evidence stretch immediately, and a document that oversells one weak point casts doubt on the strong points sitting right next to it, so an honest gap is actually the more credible choice, not the weaker one. The instruction to reframe known gaps as fact-plus-forward-plan rather than defensive justification matters because language that reads as an excuse ("I wasn't given the opportunity to...") signals passivity to a promotion committee looking specifically for ownership behavior, whereas the same underlying fact stated plainly alongside a concrete next step signals the opposite. The summary-paragraph-first structure exists because promotion packets are frequently skimmed rather than read in full by every committee member, and a document whose strongest argument is buried in section four effectively has no argument for the reader who only gets through the first paragraph before the meeting starts.`,
     exampleOutput: `Summary: [Name] is ready for Staff Engineer based on three concrete signals: cross-team technical influence (led the event-bus migration adopted by four teams), architectural ownership (authored the RFC that became the team's default pattern), and emerging mentorship (informally guided two senior engineers, though not yet in an officially assigned capacity — a natural next step for this cycle).
 
 Criterion: Cross-team technical influence | Evidence: Led migration to new event bus | Scope: Adopted by 4 teams, replacing a legacy system with recurring incident load...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1524,14 +1596,18 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`performance-review`, `self-review`, `workplace-writing`, `career-search`, `professional-development`],
+    tags: [
+      `performance-review`,
+      `self-review`,
+      `workplace-writing`,
+      `career-search`,
+      `professional-development`,
+    ],
     whyItWorks: `Requiring a situation/action/result structure per category rather than a free-flowing paragraph forces specificity precisely where self-reviews tend to go generic under time pressure — most people writing their own review default to restating job duties ("I worked on the onboarding flow") because that's what comes to mind fastest, while a structured prompt for what changed as a result pulls out the actual outcome, which is what a manager or calibration committee is scoring against. The instruction to flag thin categories rather than force a fit matters because self-reviews get read alongside a manager's independent assessment, and an inflated claim that doesn't match the manager's own memory of the period damages credibility on every other claim in the document, not just the weak one — an honest gap is a smaller cost than a credibility hit. Explicitly banning the rehearsed "I care too much about quality" line for the growth-areas section addresses a known pattern reviewers are fatigued by: that exact sentence is common enough that it now reads as a deflection rather than genuine reflection, and naming a real, specific miss (a missed deadline, a risk not flagged early) reads as more mature, not more damaging, precisely because it's concrete enough to have actually been learned from. The ban on both self-deprecating hedges and inflated corporate language matters because both failure modes come from the same underlying problem — writing about your own work without an external structure to anchor to — and GPT-5.1 left unconstrained will often mirror whichever register the raw notes were written in, so both directions need an explicit counter-instruction rather than assuming the model will land in the middle on its own.`,
     exampleOutput: `Impact: I led the redesign of the onboarding flow, identifying the signup-drop-off point through funnel analysis and shipping a revised flow that cut drop-off by 12%. I also ran three A/B tests this period; two shipped changes that held up post-launch, and one was killed early once data showed no lift, which saved the team from building out a feature that wouldn't have paid off.
 
 Growth area: I underestimated the QA cycle on the onboarding redesign and missed the original deadline by two weeks. The real issue was that I didn't flag the risk once I saw QA finding more edge cases than expected — I'm now building a mid-cycle checkpoint into my own project planning specifically to surface that kind of risk earlier.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1595,16 +1671,20 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`career-pivot`, `interview-prep`, `career-change`, `career-search`, `personal-narrative`],
+    tags: [
+      `career-pivot`,
+      `interview-prep`,
+      `career-change`,
+      `career-search`,
+      `personal-narrative`,
+    ],
     whyItWorks: `Anchoring the narrative in the real, even unflattering reason rather than a manufactured passion story matters because experienced interviewers pattern-match on career-change stories constantly, and the generic "I've always been passionate about data" framing from someone with six years in an unrelated field is instantly recognizable as a rehearsed cover story — it invites more scrutiny, not less, precisely because it's the answer everyone gives. Writing the anticipated follow-up as a separate, explicit step rather than folding it into the main narrative reflects how pivot stories actually get tested in an interview: the opening narrative is rarely where an interviewer pushes, it's the immediate next question ("why should we believe this sticks") where a candidate's prepared story either survives or visibly cracks, so preparing only the opening line and improvising the follow-up live is exactly where most pivot narratives fail under real pressure. Naming the real skill gap honestly, paired with a concrete closing action, works because interviewers evaluating a career-changer are specifically screening for self-awareness about the transition's actual difficulty — a candidate who claims the pivot requires no real adjustment reads as either naive about the target field or dishonest about their current skill level, while a candidate who names the gap and shows an active plan to close it demonstrates exactly the judgment a hiring manager is trying to assess. Keeping the core narrative to interview-spoken length (60-100 words) matters mechanically because a written paragraph and a spoken answer have different natural lengths — a narrative drafted to read well on paper often runs 30-40% longer than it should when spoken aloud in an actual interview room, so the length constraint has to be enforced explicitly rather than left to the model's default writing register.`,
     exampleOutput: `Narrative: Six years into corporate accounting, the parts of my job I actually looked forward to were the occasional modeling and analysis projects, not the core reporting work. When I got pulled into a BI-adjacent project last year, it confirmed what I'd been noticing for a while.
 
 Anticipated follow-up: "You have no direct BI experience — why should we believe this sticks?"
 
 Answer: My SQL and financial modeling skills transfer directly to BI work, and I'm actively closing the tooling gap through a self-paced Looker/dbt course rather than waiting to be hired to learn it.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1669,14 +1749,18 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`personal-branding`, `linkedin-headline`, `career-positioning`, `career-search`, `professional-bio`],
+    tags: [
+      `personal-branding`,
+      `linkedin-headline`,
+      `career-positioning`,
+      `career-search`,
+      `professional-bio`,
+    ],
     whyItWorks: `Building in an explicit specificity test before writing any polished copy addresses the single most common failure mode of personal branding exercises: asked to describe what makes them different, most people reach for a trait that's actually near-universal in their field ("data-driven," "passionate about the user"), and a model that writes confident, well-structured prose around that generic input just produces a more polished version of a statement that still says nothing distinguishing — the fix has to happen at the differentiator stage, not the wordsmithing stage, which is why the check comes first as its own explicit step rather than being folded silently into the writing. Tying the statement to concrete supporting evidence, even when the evidence isn't quoted directly in the final copy, keeps the claim honest in a way that matters specifically because personal brand statements get tested in interviews and networking conversations where a follow-up question ("tell me about that") is likely — a differentiator with no real evidence behind it collapses the first time someone asks for an example, while one grounded in a real pattern of work has somewhere to go. Writing distinct versions per audience rather than one statement to paste everywhere reflects that the same true differentiator earns attention differently depending on the reader's own incentives — a hiring manager cares about business outcomes tied to the differentiator, a peer cares about the intellectual approach behind it — and a single generic version optimized for no one in particular tends to undersell the claim to everyone. The instruction to flag whether the input differentiator itself was too generic to build from gives the user a clear signal to do more of their own thinking rather than accepting fluent-sounding output that quietly papered over a weak starting input.`,
     exampleOutput: `Positioning statement: Most UX research in enterprise software chases customer-facing polish while internal tools — the ones employees are stuck using all day — go unresearched. I focus specifically on that gap, and it shows: three internal admin-tool redesigns I led each cut support ticket volume by double digits.
 
 LinkedIn headline: UX Researcher focused on internal/admin tools — the products your employees use all day and no one else researches.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1743,7 +1827,13 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`job-search-tracker`, `application-management`, `job-search-organization`, `career-search`, `productivity-system`],
+    tags: [
+      `job-search-tracker`,
+      `application-management`,
+      `job-search-organization`,
+      `career-search`,
+      `productivity-system`,
+    ],
     whyItWorks: `Requiring a next-action and next-action-due column rather than just status fields addresses the specific reason most job search trackers get abandoned: a spreadsheet that only records what stage each application is in requires the user to independently reconstruct what to do about it every time they open the file, which is exactly the extra cognitive step that makes people stop opening it after a few weeks — a tracker that already states the next action per row removes that reconstruction cost entirely. Defining stage-specific staleness thresholds rather than one blanket rule matters because the natural silence tolerance genuinely differs by stage — two weeks of silence after a first application is unremarkable given typical recruiter workloads, but the same two weeks after a final-round interview is a meaningfully different signal, and collapsing both into one generic "follow up after 10 days" rule either creates false alarms early or misses a real one late. Sizing the check-in routine to the user's actual stated frequency rather than prescribing a daily habit reflects a common failure pattern in productivity system design: a system that assumes more diligence than the person will realistically sustain gets used for a week and then quietly dropped, whereas a routine explicitly scoped to a weekly 10-minute check-in is something that can survive contact with an actual busy job search. Building the routine around sorting by the due-date column rather than reviewing every row in order matters mechanically once the applicant has more than a handful of open applications — without a sort-first instruction, a weekly check-in degenerates into re-reading every stale row from the top, which is precisely the tedium that causes trackers to get abandoned in the first place.`,
     exampleOutput: `Staleness rules:
 Applied -> 14 days no response -> Send a short follow-up note to the recruiter or hiring contact if one exists.
@@ -1751,9 +1841,7 @@ Hiring manager interview -> 7 days no response -> Send a follow-up; if no respon
 Final round -> 5 days no response -> Follow up directly; treat as a signal worth a direct, polite status-check email.
 
 Check-in routine: 1) Sort by "next action due," oldest first. 2) Action every row due today or overdue before touching anything else. 3) Spend no more than 2 minutes per row that isn't yet due.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1814,14 +1902,18 @@ Subject line and email body, under 100 words in the body.`,
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`follow-up-email`, `job-application`, `recruiter-communication`, `career-search`, `email-drafting`],
+    tags: [
+      `follow-up-email`,
+      `job-application`,
+      `recruiter-communication`,
+      `career-search`,
+      `email-drafting`,
+    ],
     whyItWorks: `Conditioning the email's core content on whether a genuine new development exists, rather than always manufacturing urgency, matters because recruiters can tell the difference between a real deadline and a fabricated one, and a fake sense of urgency used once and later found to be hollow (no competing offer ever materializes) costs credibility on every future interaction with that recruiter — the honest version, even the shorter, plainer one with no news to report, is the safer default and the instruction to write it that way when there's genuinely nothing new prevents GPT-5.1 from inventing filler urgency to make the email feel more compelling. Anchoring the opening line to the exact stage and date rather than a vague greeting solves a practical problem: a recruiter managing dozens of open requisitions cannot instantly place which candidate and which role a bare "following up!" refers to, and the extra half-second of friction to figure that out is often enough for the email to get deprioritized rather than answered on the spot. The instruction to keep tone strictly patient regardless of elapsed time addresses a specific temptation that grows the longer a silence lasts — a candidate who's waited three weeks past an expected timeline is naturally more likely to let irritation leak into the phrasing, but from the recruiter's side that irritation reads as a red flag about how the candidate would handle ambiguity on the job, so the instruction has to hold especially firm precisely when the elapsed time is longest. Ending on a specific, easy-to-answer question rather than an open "any updates" converts the ask from something that requires the recruiter to compose a status paragraph into something answerable in one sentence, which is the difference between an email that gets a two-line reply today and one that gets mentally filed as "respond properly later" and then forgotten.`,
     exampleOutput: `Subject: Following up on the [Role] final round (Jan 28)
 
 Hi Sam — following up on my final-round interview for the [Role] position on the 28th. I wanted to flag that I've received a competing offer with a decision deadline next Wednesday, so I wanted to check whether there's a rough timeline I could expect on your end before then. Happy to answer anything further in the meantime.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1867,14 +1959,18 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`recruiter-outreach`, `inbound-recruiter-reply`, `job-search-triage`, `career-search`, `email-drafting`],
+    tags: [
+      `recruiter-outreach`,
+      `inbound-recruiter-reply`,
+      `job-search-triage`,
+      `career-search`,
+      `email-drafting`,
+    ],
     whyItWorks: `Assessing fit against the candidate's own stated criteria rather than the abstract appeal of the message matters because inbound recruiter messages are written to sound exciting regardless of actual fit — "exciting opportunity at a fast-growing startup" is boilerplate language that appears whether or not the role matches what the candidate is actually looking for, and a reply drafted from the tone of the message rather than the candidate's real requirements would happily walk them into a call for a role that was never viable. Instructing the model to flag a vague message rather than proceed politely on missing information addresses a specific time-cost problem in job searching: getting on an intro call only to learn in the first two minutes that the comp range or seniority level is wrong is a preventable waste that a well-placed email question would have avoided, so the reply has to actively surface that information gap rather than treating a call as free to schedule. Keeping the decline reply short and unapologetic rather than heavily justified reflects how professional rejections actually land — recruiters manage high volumes of both outbound and inbound conversations, and a long, over-explained decline reads as more effortful to read than a short one while providing no additional value to either party; a brief, clear no is the version that preserves the relationship for a future, better-matched role. Requiring that qualifying questions be ones that would actually change the decision to proceed, rather than generic questions the candidate would ask anyway on a call, keeps the email from becoming its own multi-round negotiation — the questions exist specifically to filter out a bad fit before a call happens, not to replace the call itself.`,
     exampleOutput: `Fit assessment: Too vague to tell.
 
 Reply: "Thanks for reaching out! Before scheduling a call, could you share a bit more detail — the seniority level for this role, whether it's fully remote, and a rough comp range? Want to make sure we're aligned before we spend time on a call."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1933,14 +2029,18 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`job-offer-comparison`, `salary-negotiation`, `career-decision`, `career-search`, `compensation-analysis`],
+    tags: [
+      `job-offer-comparison`,
+      `salary-negotiation`,
+      `career-decision`,
+      `career-search`,
+      `compensation-analysis`,
+    ],
     whyItWorks: `Requiring the compensation math to be shown rather than just the final normalized number matters because equity valuations and bonus targets involve real assumptions — a startup equity grant's actual value depends entirely on an exit or valuation event that may never happen, and collapsing that into a single comparable dollar figure without showing the assumption baked in would let the user anchor on a false-precision number that treats speculative equity the same as guaranteed cash, which is a genuinely common and costly mistake in offer comparisons. Instructing the model to score priority factors honestly rather than diplomatically split the difference addresses a specific failure mode in AI-assisted decision support: asked to compare two things a user is emotionally invested in, models often default to a balanced, both-sides framing that avoids taking a clear position, which feels safe but is actually unhelpful when one offer is genuinely and clearly stronger on the exact factor the user said matters most — false balance here just pushes the hard decision back onto the user without giving them anything new. The explicit two-year projection phase exists because job offer comparisons evaluated only on year-one numbers systematically undervalue offers with back-loaded structures (a slower-vesting equity grant, a defined promotion path that kicks in at year two) relative to offers that look stronger purely because they're front-loaded, and a comparison that stops at year one is implicitly comparing the two offers at different points in their actual value curves rather than on equal footing. Ending with a direct recommendation rather than a noncommittal "it depends" matters because the entire point of running this comparison was to get help making the decision — a summary that restates both offers' tradeoffs without taking a position given the user's own stated priorities fails at the one thing the exercise was for.`,
     exampleOutput: `Compensation comparison: Offer A guaranteed cash ~$261k/yr (145k base + 80% of 10% target bonus, historically reliable). Offer B guaranteed cash $130k/yr; the 0.15% equity grant is a real-terms unknown tied to a future exit and should not be treated as equivalent to cash — at the last valuation it implies a theoretical ~$600k over 4 years, but Series B equity commonly returns far less or nothing.
 
 Recommendation: Given that remote flexibility ranked as your top priority and Offer B is fully remote versus Offer A's hybrid requirement, and your stated tolerance for equity risk...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1992,14 +2092,18 @@ Subject line and email body, under 120 words.`,
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`thank-you-email`, `interview-follow-up`, `post-interview`, `career-search`, `email-drafting`],
+    tags: [
+      `thank-you-email`,
+      `interview-follow-up`,
+      `post-interview`,
+      `career-search`,
+      `email-drafting`,
+    ],
     whyItWorks: `Requiring the specific conversational moment to appear in the first two sentences rather than after a generic thank-you preamble matters because interviewers who conduct several interviews for the same role read thank-you notes quickly looking specifically for a signal that distinguishes this candidate from the others, and a note that opens with the same boilerplate gratitude line every candidate sends gives them nothing to notice until well into the email, if they keep reading at all. Treating the follow-up point as a brief addition rather than a correction addresses a specific psychological trap candidates fall into after an interview — replaying a weak answer and wanting to fully re-explain it, which read from the interviewer's side as anxiety or a lack of confidence in the original answer rather than as useful supplementary information; framing it as "one more thing that's relevant" rather than "let me try that answer again" keeps the tone forward-looking instead of defensive. The under-120-word constraint exists because a thank-you email's function is narrow and time-sensitive — it needs to land same-day, be read in under a minute, and reinforce a positive impression, not carry the substantive weight the actual interview already carried, so a long thank-you note actually works against its own purpose by implying the interview itself didn't fully make the case and needs a lengthy coda to compensate. Banning the specific generic opening line by name, rather than just instructing the model to "be specific," matters because that exact sentence pattern is common enough across templates that most interviewers have an implicit trained recognition of it, and a soft instruction to be specific doesn't reliably override GPT-5.1's default drift toward familiar professional-email phrasing without a hard constraint naming the pattern to avoid.`,
     exampleOutput: `Subject: Great speaking today, Dana
 
 Hi Dana — thanks for the time today. The sales-and-marketing alignment challenge you mentioned for the Q1 launch stuck with me; it's almost exactly the gap I closed at my current company by building a shared messaging playbook both teams actually used. On my earlier answer about sales enablement experience, that playbook is the concrete example I wish I'd led with. Looking forward to hearing next steps.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2054,14 +2158,18 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`resume-writing`, `achievement-bullets`, `resume-optimization`, `career-search`, `job-application`],
+    tags: [
+      `resume-writing`,
+      `achievement-bullets`,
+      `resume-optimization`,
+      `career-search`,
+      `job-application`,
+    ],
     whyItWorks: `Framing the test as "could you defend this in an interview" rather than "does this sound impressive" changes what the model optimizes for in a way that matters practically: a bullet engineered purely to sound strong on the page can include a number or claim the candidate can't actually walk through when an interviewer asks the natural next question, and that gap gets discovered at the worst possible moment — mid-interview — rather than caught safely during drafting, so building the defensibility test into the instruction itself catches it early. The explicit ban on inventing a metric when the provided context doesn't support one addresses a specific and well-documented behavior: asked to make a resume bullet stronger, models reliably reach for a plausible-sounding percentage because metric-led bullets are the recognized strong pattern, and without a hard constraint against fabrication, a genuinely honest but metric-free achievement gets "improved" into a bullet with a number that was never verified against reality, which is a real risk the candidate would have to answer for later. Tailoring emphasis to the target role rather than writing one universal version of the achievement reflects that resumes get customized per application specifically because the same underlying fact supports different framings — the Instagram growth story is a leadership-and-strategy story for a marketing manager role and could be a completely different technical-execution story for a growth-engineering role, and a bullet optimized generically undersells whichever angle actually matters to this specific reader. Surfacing the likely interview follow-up question alongside the rewritten bullet turns the exercise into interview preparation, not just resume polish — the same information that makes a bullet worth including on the page is what an interviewer will probe on, so preparing the answer at the same time the bullet is written closes a preparation gap that's normally left for the candidate to discover unprepared in the room.`,
     exampleOutput: `Rewrite: Grew company Instagram from 2,000 to 9,000 followers (350%) in 8 months entirely through organic content strategy, with no paid ad budget, while also managing LinkedIn presence for a 40-person company.
 
 Likely follow-up: "What specifically did you change in your content strategy that drove that growth?" — be ready with 2-3 concrete tactics, not just the outcome number.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

@@ -72,9 +72,12 @@ export default async function BlogPostPage({
   const relatedPosts = BLOG_POSTS.filter(
     (p) =>
       p.slug !== post.slug &&
-      (p.pillar === post.pillar || p.relatedTools.some((t) => post.relatedTools.includes(t))),
+      (p.pillar === post.pillar ||
+        p.relatedTools.some((t) => post.relatedTools.includes(t))),
   ).slice(0, 3)
-  const service = post.serviceTarget ? resolveServiceLink(post.serviceTarget, post.slug) : null
+  const service = post.serviceTarget
+    ? resolveServiceLink(post.serviceTarget, post.slug)
+    : null
 
   return (
     <>
@@ -114,9 +117,12 @@ export default async function BlogPostPage({
           <h1 className="mt-3 text-[32px] leading-[1.1] tracking-[-1px] md:text-[42px]">
             {post.h1}
           </h1>
-          <p className="mt-5 text-[17px] text-ink-muted leading-8 md:text-lead">{post.dek}</p>
+          <p className="mt-5 text-[17px] text-ink-muted leading-8 md:text-lead">
+            {post.dek}
+          </p>
           <p className="mt-3 text-[13px] text-ink-subtle">
-            Last updated {formatUpdatedDate(post.updatedAt)} · {post.readingMinutes} min read
+            Last updated {formatUpdatedDate(post.updatedAt)} · {post.readingMinutes} min
+            read
           </p>
         </header>
 
@@ -161,9 +167,9 @@ export default async function BlogPostPage({
               Need this built into your business?
             </h2>
             <p className="mx-auto mt-3 max-w-[46ch] text-[15px] text-white/75 leading-6">
-              The free tools and prompts on this site handle the small, solved problems. If
-              what you need is bigger — {service.label}, built and maintained for you — that's
-              Scult's day job.
+              The free tools and prompts on this site handle the small, solved problems.
+              If what you need is bigger — {service.label}, built and maintained for you —
+              that's Scult's day job.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <a href={service.href} className="btn-brutal btn-white">

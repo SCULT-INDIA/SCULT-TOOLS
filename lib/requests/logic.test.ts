@@ -51,7 +51,9 @@ describe('validateRequest — honeypot', () => {
 
 describe('validateRequest — title bounds', () => {
   it('rejects a title shorter than the minimum', () => {
-    const result = validateRequest(validInput({ title: 'a'.repeat(REQUEST_TITLE_MIN - 1) }))
+    const result = validateRequest(
+      validInput({ title: 'a'.repeat(REQUEST_TITLE_MIN - 1) }),
+    )
     expect(result).toEqual({ error: 'title-too-short' })
   })
 
@@ -61,7 +63,9 @@ describe('validateRequest — title bounds', () => {
   })
 
   it('rejects a title longer than the maximum', () => {
-    const result = validateRequest(validInput({ title: 'a'.repeat(REQUEST_TITLE_MAX + 1) }))
+    const result = validateRequest(
+      validInput({ title: 'a'.repeat(REQUEST_TITLE_MAX + 1) }),
+    )
     expect(result).toEqual({ error: 'title-too-long' })
   })
 
@@ -71,7 +75,9 @@ describe('validateRequest — title bounds', () => {
   })
 
   it('trims surrounding whitespace before measuring length', () => {
-    const result = validateRequest(validInput({ title: `  ${'a'.repeat(REQUEST_TITLE_MIN)}  ` }))
+    const result = validateRequest(
+      validInput({ title: `  ${'a'.repeat(REQUEST_TITLE_MIN)}  ` }),
+    )
     expect('data' in result).toBe(true)
     if ('data' in result) expect(result.data.title).toBe('a'.repeat(REQUEST_TITLE_MIN))
   })

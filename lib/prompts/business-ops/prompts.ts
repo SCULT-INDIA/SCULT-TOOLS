@@ -705,7 +705,13 @@ A table: Email (subject/sender), Bucket, Action (draft reply text, the one quest
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`inbox-triage`, `email-management`, `workflow-automation`, `operations`, `decision-routing`],
+    tags: [
+      `inbox-triage`,
+      `email-management`,
+      `workflow-automation`,
+      `operations`,
+      `decision-routing`,
+    ],
     whyItWorks: `The core failure mode of asking an LLM to "help with my inbox" is that it treats every email with the same generic helpfulness, which either produces a wall of drafted replies you now have to individually vet for made-up commitments, or a wall of summaries that just re-describes the problem back to you without reducing your workload. Forcing an explicit four-way classification before any drafting happens changes the task from open-ended assistance into a bounded sorting problem, which GPT-5.1 handles far more reliably than open-ended judgment — it's much better at applying a stated rule (does this match a standing default, yes or no) than at silently inferring when it should defer to you. The instruction to surface a single answerable question for bucket 2, rather than drafting a placeholder reply, matters because a half-drafted reply with a guessed answer is more dangerous than no draft at all — it looks finished, so it's more likely to get sent without a real check, whereas a bare question forces you to actually supply the missing judgment before anything goes out. Explicitly naming a never-auto-reply category closes a specific failure mode: the model treating a phrase like "is the discount still valid" as routine because the surrounding email reads politely, when in fact any dollar-figure deviation from a rate card is exactly the kind of thing that shouldn't be answered on autopilot. The reclassification instruction — if a routine-looking email hides a judgment call, move it to bucket 2 rather than guessing — exists because the model's default failure under time pressure is to force borderline cases into whichever bucket lets it produce more finished-looking output, and this explicitly removes that incentive.`,
     exampleOutput: `| Email | Bucket | Action |
 |---|---|---|
@@ -714,9 +720,7 @@ A table: Email (subject/sender), Bucket, Action (draft reply text, the one quest
 | Colleague doc link | Routine | Draft: link to /ops/current shared drive folder |
 
 Bucket counts: 2 routine, 1 needs-my-call, 1 needs-someone-else, 1 no-reply-needed.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -777,15 +781,19 @@ A numbered agenda: item name (as a decision statement or FYI), owner, minutes, p
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`meeting-agenda`, `decision-making`, `operations`, `time-management`, `facilitation`],
+    tags: [
+      `meeting-agenda`,
+      `decision-making`,
+      `operations`,
+      `time-management`,
+      `facilitation`,
+    ],
     whyItWorks: `Most agenda generators produce a list of topic labels because that's the shape of the raw input they're given, and GPT-5.1 will happily mirror the input's shape back unless explicitly told to transform it — asking it to rewrite every topic as a decision statement forces a structural change that a topic label can't hide behind: you can't write "decide whether Q3 marketing budget increases by 20%" without someone having to actually pick an answer, whereas "marketing budget" as an item can be discussed indefinitely without resolution. Ordering must-decide items first rather than last directly counters a known meeting-dynamics failure — items placed at the end of an agenda are the first casualties when earlier items run over, so a model that defaults to listing items in the order given (which usually mirrors whatever order they occurred to someone, not priority) will silently reproduce that failure unless explicitly told to reorder by priority instead of input order. The pre-read question per item exists because a model asked to just "add discussion notes" tends to write summary bullets restating the topic, which don't change anyone's preparation; a question specifically aimed at the owner's trade-off forces the model to identify what the actual tension in the decision is, which is a genuinely harder inferential step than restating the topic and produces a materially more useful artifact. The explicit "if we run out of time" section matters because without it, a time-boxed agenda that inevitably runs over defaults back to whichever items happen to be last, re-creating the exact problem being solved — naming in advance which items get bumped versus decided asynchronously turns an implicit, ad-hoc triage decision made under time pressure into an explicit one made calmly beforehand.`,
     exampleOutput: `1. DECIDE: Sign or decline the vendor contract before Friday's expiration — Owner: Finance — 15 min — Pre-read: what's the real cost of a 2-week extension request instead of deciding today?
 2. DECIDE: Approve or hold Q3 marketing budget at 20% increase — Owner: Marketing lead — 12 min — Pre-read: what specific outcome would justify the increase?
 
 If we run out of time: office move update becomes an async Slack post; PTO conflict is resolved by the two people directly involved without a meeting.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -846,7 +854,13 @@ A table: Action item, Owner, Deadline, Dependency/blocker, Repeat flag (yes/no).
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`meeting-notes`, `action-items`, `task-tracking`, `operations`, `accountability`],
+    tags: [
+      `meeting-notes`,
+      `action-items`,
+      `task-tracking`,
+      `operations`,
+      `accountability`,
+    ],
     whyItWorks: `The single biggest reason action items from meetings don't get done is that they were never assigned to an actual person in the first place, and a model asked generically to "extract action items" will faithfully reproduce whatever ambiguity was in the source notes — if the notes say "team will follow up," the naive extraction just repeats that phrase, preserving the exact ambiguity that caused the problem. Explicitly forbidding "team" or "someone" as an owner and requiring either a real name from the attendee list or an explicit "owner unclear" flag forces a binary check GPT-5.1 handles reliably (is there a name attached, yes or no) rather than a fuzzier judgment call about whether an owner is "clear enough," and separating unclear items into their own list means they can't hide inside a table that otherwise looks fully actionable. Explicitly including implied commitments ("look into" phrasing) alongside stated ones matters because meeting notes rarely record commitments in a uniform grammatical form, and a model that only pattern-matches on explicit "X will do Y" phrasing will systematically miss the softer, hedged commitments that are often the ones most likely to be forgotten precisely because they were never stated forcefully. The repeat-flag instruction gives the model a genuinely useful signal to surface: an item phrased as "still need to" or "following up again" indicates the same task survived at least one previous meeting undone, which is exactly the kind of pattern a busy person skimming a flat action-item list would miss but that changes how the item should be handled — it needs a harder deadline or an escalation, not just another polite restatement.`,
     exampleOutput: `| Action item | Owner | Deadline | Dependency | Repeat |
 |---|---|---|---|---|
@@ -854,9 +868,7 @@ A table: Action item, Owner, Deadline, Dependency/blocker, Repeat flag (yes/no).
 | Follow up on API rate-limit issue | Owner unclear | Aug 22 (default) | None mentioned | Yes — flagged "again" in notes |
 
 Owner unclear: API rate-limit follow-up — notes don't say who raised or owns this.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -917,7 +929,13 @@ Two sections: "Today" (ranked task, estimated time, why it made the cut) and "Cu
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`daily-planning`, `prioritization`, `time-management`, `operations`, `capacity-planning`],
+    tags: [
+      `daily-planning`,
+      `prioritization`,
+      `time-management`,
+      `operations`,
+      `capacity-planning`,
+    ],
     whyItWorks: `The failure mode of most AI-generated priority lists is that they rank tasks by apparent importance in the language used to describe them rather than by actual capacity math, producing a list that looks thoughtfully ordered but doesn't fit inside the hours available — asking GPT-5.1 to explicitly subtract fixed commitments from available hours before ranking anything forces it to treat capacity as a hard constraint to solve against, not a vague backdrop, which changes the output from a wish list into something that could actually be executed today. Distinguishing cost-of-delay from felt urgency directly targets a well-documented cognitive bias the model would otherwise mirror from the input: tasks described with urgent-sounding language ("need to," "asap") get inflated priority in naive summarization even when they have no real external consequence, while a task that's quietly time-critical but blandly worded gets underranked; explicitly defining cost of delay in terms of hard external deadlines forces a check against actual consequence rather than surface tone. Requiring an explicit "cut for today" list with reasons, rather than just silently omitting lower-priority tasks, matters because an assistant that just doesn't mention a task creates ambiguity about whether it was considered and rejected or simply missed — stating the cut explicitly turns an implicit gap into a deliberate, reviewable decision you can override if the reasoning is wrong. The instruction to flag a hard-deadline capacity conflict rather than quietly making the numbers work is the most important safety valve: an assistant under instruction to "fit everything in" will often be prompted to produce an artificially tight, unrealistic schedule rather than deliver the harder but more useful message that today's hard deadlines simply don't fit and something needs to be renegotiated.`,
     exampleOutput: `Today:
 1. Vendor contract finalization — 1.5 hrs — hard deadline at 5pm, discount expires
@@ -928,9 +946,7 @@ Cut for today:
 - New hire laptop access — not time-sensitive, delegate to IT
 
 Capacity conflict: none — hard deadlines fit within your 3.5 real working hours.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -991,15 +1007,19 @@ A day-by-day list (Monday through the available days): anchor task, other assign
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`weekly-planning`, `time-blocking`, `operations`, `capacity-planning`, `productivity`],
+    tags: [
+      `weekly-planning`,
+      `time-blocking`,
+      `operations`,
+      `capacity-planning`,
+      `productivity`,
+    ],
     whyItWorks: `A model asked to "plan my week" from a goals list and a calendar will, by default, produce the most visually complete-looking artifact it can — which in practice means filling every open hour, because an empty block reads as an unsolved part of the task rather than a deliberate feature; explicitly instructing it to reserve and protect a buffer block before assigning any work inverts that default, treating unscheduled time as a required output rather than leftover space to be filled. This matters specifically because GPT-5.1's tendency toward thoroughness works against realistic planning here — a longer, denser-looking plan reads as more helpful in isolation, even though a real week with zero slack is structurally guaranteed to fail on first contact with any interruption, which is precisely the failure the person asking for this prompt is trying to escape. The anchor-task framing for each day forces a genuinely different kind of prioritization than a simple task list: naming the one thing that survives even if the day goes sideways requires the model to reason about what's load-bearing versus what's merely scheduled, which produces a plan that degrades gracefully under real-world disruption instead of one where every item has equal, undifferentiated importance. Explicitly instructing the model to say the goals don't fit and to name what should be cut, rather than silently compressing the daily plan to make everything appear to fit, closes off the most common way these plans quietly become fiction — an assistant under implicit pressure to be maximally helpful will compress estimates until the math works on paper, and stating this rule up front removes the incentive to do that.`,
     exampleOutput: `Monday — Anchor: draft outline for Q3 report. Other: start vendor evaluation #1. Buffer: 1.5 hrs reserved, unscheduled.
 Tuesday — Anchor: clear approval backlog (highest interruption-risk day). Buffer: 2 hrs reserved.
 ...
 Most at-risk day: Tuesday, given your historically heavier interruption load and only one anchor task with no fallback if it slips.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1060,7 +1080,13 @@ The scored matrix as a table (options x criteria, weighted total per option). Th
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`decision-matrix`, `decision-making`, `operations`, `prioritization`, `risk-analysis`],
+    tags: [
+      `decision-matrix`,
+      `decision-making`,
+      `operations`,
+      `prioritization`,
+      `risk-analysis`,
+    ],
     whyItWorks: `A standard decision matrix prompt produces a single confident-looking winner, and the danger is that a weighted score table has the visual authority of objective math even when the weights themselves were arbitrary or unexamined — GPT-5.1 will happily compute a clean weighted sum from whatever numbers it's given without flagging that the inputs, not just the arithmetic, are where the real judgment call lives. Explicitly instructing it to treat an even weighting as a real, consequential choice rather than a neutral default addresses a specific, common mistake: people who don't provide weights usually get an implicit equal split, which quietly encodes the assumption that every criterion matters the same amount, and that assumption is rarely true and rarely examined once a matrix produces a tidy-looking table. The sensitivity analysis is the mechanistically important addition, because it's the part a plain decision matrix never does on its own: rather than stopping at "Option A wins with 8.4 vs 7.9," asking how much a weight would need to shift before the winner changes reframes a close numeric margin as what it actually is — a genuinely uncertain decision — rather than letting a 0.5-point gap masquerade as a clear verdict. Requiring assumption-flagging on any guessed score matters because a matrix mixes fact-based and guessed inputs at the same visual weight by default; without an explicit flag, a confidently-stated made-up score for "lease flexibility" looks identical in the table to a score backed by an actual quoted lease term, and the person reading the output has no way to tell which numbers deserve scrutiny before the decision is finalized.`,
     exampleOutput: `| Option | Cost (40%) | Growth room (30%) | Commute (20%) | Flexibility (10%) | Weighted total |
 |---|---|---|---|---|---|
@@ -1069,9 +1095,7 @@ The scored matrix as a table (options x criteria, weighted total per option). Th
 (*flexibility scores are assumptions — no lease terms provided)
 
 Sensitivity: the gap is 0.2 points — shifting cost weight down by just 5% flips the winner to B. This is a close call, not a clear one; cost weighting is the real crux.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1132,7 +1156,13 @@ Four labeled quadrants (Strengths, Weaknesses, Opportunities, Threats), each ent
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`swot-analysis`, `strategy`, `business-analysis`, `operations`, `decision-making`],
+    tags: [
+      `swot-analysis`,
+      `strategy`,
+      `business-analysis`,
+      `operations`,
+      `decision-making`,
+    ],
     whyItWorks: `A generic SWOT prompt produces four lists that all read with identical declarative confidence, and this is a genuine failure mode rather than a stylistic quibble — GPT-5.1, like most models, tends to fill in a requested structure completely even when the underlying evidence to support every cell doesn't actually exist, because leaving a quadrant sparse reads as an incomplete answer to the model even though a thin, honest quadrant is more useful than a padded one. Explicitly requiring a fact/inference/open-question tag on every entry forces a different kind of reasoning: instead of generating a plausible-sounding claim and stopping, the model has to check that claim against what was actually supplied versus what it's extrapolating, which surfaces exactly the boundary between what you actually know and what the model is inferring on your behalf — a boundary a flat, untagged list erases entirely. The instruction against generic industry boilerplate targets a specific, very common SWOT failure: asked for strengths, a model will readily produce category-level truisms ("strong brand," "agile team") that could apply to nearly any company in the sector and therefore convey no actual information about this specific situation; forcing specificity to the given context makes these generic filler answers structurally harder to produce because there's nothing concrete to hang them on. Surfacing the two or three highest-leverage open questions at the end, rather than leaving open questions scattered flatly across four quadrants, does the genuinely useful analytical work of ranking which unknowns are actually load-bearing for the decision — most open questions don't matter equally, and a model that just lists them without ranking leaves you to do that prioritization yourself, defeating the purpose of asking for help in the first place.`,
     exampleOutput: `Strengths:
 [FACT] 40 existing paying UK customers
@@ -1145,9 +1175,7 @@ Weaknesses:
 Most consequential open question: how price-sensitive are continental customers relative to UK ones? Answering this would determine whether current pricing can transfer or needs a local tier.
 
 Flagged pairing: existing UK customer base (strength) and no EU support staff (weakness) are two sides of the same "UK-only operating model" trait.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1208,7 +1236,13 @@ A one-page brief: bottom line (1-2 sentences), key facts supporting it (bullets)
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`executive-brief`, `business-writing`, `communication`, `operations`, `reporting`],
+    tags: [
+      `executive-brief`,
+      `business-writing`,
+      `communication`,
+      `operations`,
+      `reporting`,
+    ],
     whyItWorks: `A generic "summarize this" instruction produces exactly what it sounds like — a shorter version of the original document's own structure — because compression without reorganization is the path of least resistance for a model working section by section through source text; explicitly telling it to work backward from the decision needed forces a genuinely different generation process, where the model has to first identify what matters to the specific reader and then select facts that serve that, rather than mechanically trimming each existing section by the same proportion. Requiring that risks and bad news survive compression even when inconvenient addresses a specific, well-documented tendency in AI-generated business writing: when asked to summarize and told who the audience is, models often smooth toward a more positive-sounding, executive-palatable tone, quietly softening or omitting unflattering details in a way that would be actively harmful in a brief meant to enable a real decision — stating this rule explicitly overrides that default toward diplomatic vagueness. The instruction to flag gaps rather than imply completeness targets a subtler failure: a fluent, confident-sounding brief reads as complete regardless of whether the underlying source material actually had gaps, and a reader has no way to distinguish "this is genuinely resolved" from "the model just didn't mention what it didn't know" unless the uncertainty is stated outright. Enforcing the length constraint as a hard limit that forces explicit trade-offs, rather than a soft target the model quietly overshoots, matters because GPT-5.1 tends toward thoroughness by default — asked to be brief but comprehensive, it will often produce something dense and long rather than genuinely short, and only an explicit instruction to name what was cut, rather than just aiming for brevity, forces the actual triage decision to happen and be visible.`,
     exampleOutput: `Bottom line: The vendor delay pushes launch by two weeks and adds $8k to budget — need your approval on both by Thursday.
 
@@ -1219,9 +1253,7 @@ Risk: if not approved by Thursday, the delay could extend to four weeks due to t
 Ask: approve the 2-week extension and $8k overage.
 
 Left out due to length: workstream-level detail on the two on-track streams — available on request.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1282,16 +1314,20 @@ Overall project status (one line). Then per workstream: status, evidence, next s
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`project-status`, `stakeholder-communication`, `risk-management`, `operations`, `reporting`],
+    tags: [
+      `project-status`,
+      `stakeholder-communication`,
+      `risk-management`,
+      `operations`,
+      `reporting`,
+    ],
     whyItWorks: `The reason status updates drift toward uniform "on track" language isn't usually dishonesty — it's that casual, hedged phrasing from a workstream owner ("mostly done, just a few edge cases") gets faithfully summarized by a model into equally casual, reassuring-sounding language, which reads as on-track even when the underlying evidence describes something genuinely uncertain; explicitly instructing the model to grade status against the evidence rather than the tone of the source notes breaks that mirroring effect and forces a harder, more useful judgment call. Requiring a specific next step attached to every at-risk or blocked item targets a common failure in AI-generated status reports: it's easy for a model to correctly identify a risk from the notes but then stop there, producing a flag with no accompanying plan, which functionally tells a stakeholder there's a problem without telling them what's being done about it — arguably worse than no flag, since it invites anxious follow-up questions the update should have already answered. Explicitly requiring an aggregate on-schedule judgment, not just per-workstream status, addresses a structural blind spot: several workstreams individually described as "a little behind but manageable" can combine into a genuine milestone risk that no single workstream status captures on its own, and a model working workstream-by-workstream without an aggregation step will never surface that combined effect unless specifically told to check for it. Ordering by risk level rather than by whatever order the workstreams were listed in matters because burying the riskiest item at the bottom of a list is a subtle way status updates hide problems even when every individual status is technically accurate — a stakeholder skimming from the top should hit the worst news first, not last.`,
     exampleOutput: `Overall: at risk — combined slippage in design sign-off and unstarted QA threatens the Sept 1 launch date.
 
 1. Design sign-off — AT RISK — evidence: stakeholder approval pending 5 days past the Aug 5 target — next step: Marco escalating directly to the approver today — resolution needed by Aug 15.
 2. QA — AT RISK — evidence: has not started, was scheduled to begin Aug 10 — next step: Sam starting as soon as backend edge cases close — resolution needed by Aug 18.
 3. Backend integration — ON TRACK — edge cases remaining are scoped and estimated at 2 days.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1352,7 +1388,13 @@ A memo: one-sentence ask up top, background (only load-bearing points), direct r
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`business-memo`, `business-writing`, `communication`, `operations`, `persuasion`],
+    tags: [
+      `business-memo`,
+      `business-writing`,
+      `communication`,
+      `operations`,
+      `persuasion`,
+    ],
     whyItWorks: `The instinct to front-load context before the ask is a natural writing habit, but it's actively counterproductive for a reader skimming a memo among a dozen other things — GPT-5.1 asked to "write a memo about X" will, absent explicit instruction, default to something like a chronological narrative structure (background, then reasoning, then request) because that mirrors how the requester's own notes are usually organized when handed over; explicitly requiring the ask in the first sentence forces a structural inversion that has to be deliberately instructed rather than assumed. The single-ask detection step exists because a memo trying to secure two separate decisions at once is a common and specific failure mode — a reader who's asked to approve a budget and simultaneously weigh in on a vendor choice will often stall on the harder or more ambiguous of the two, which then blocks the easier one from getting decided at all; checking for this explicitly and surfacing it before drafting, rather than silently drafting a memo that tries to do both, catches the problem before it costs a delayed decision. Requiring the memo to address expected pushback directly and specifically, rather than with generic reassurance, matters because a model asked to draft a persuasive memo will often produce confident, one-sided language that omits counterarguments entirely — which reads well in isolation but is far less effective with an actual skeptical reader who will think of the objection anyway; addressing it head-on inside the memo is generally more persuasive than hoping it doesn't come up, and forces the draft to actually reason through the strongest objection rather than avoid it. Placing the constraint or deadline near the ask rather than at the end targets simple reading behavior: readers skimming for the action item often stop once they've registered the ask, so a deadline buried in a closing paragraph is genuinely more likely to be missed than one stated adjacent to the request itself.`,
     exampleOutput: `Ask: I need approval for a $15k budget increase to complete the contractor extension by end of week.
 
@@ -1363,9 +1405,7 @@ Anticipated question — why wasn't this caught in original scoping: the feature
 Deadline: approval needed by Friday or the contractor's current rate lock expires and re-negotiation could cost more.
 
 Action needed: approve or decline by Friday EOD.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1426,14 +1466,18 @@ A numbered list of ideas: idea, why it fits the constraints (or how it was adapt
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`brainstorming`, `ideation`, `operations`, `problem-solving`, `constraint-based-planning`],
+    tags: [
+      `brainstorming`,
+      `ideation`,
+      `operations`,
+      `problem-solving`,
+      `constraint-based-planning`,
+    ],
     whyItWorks: `A plain brainstorm prompt produces ideas evaluated only against the abstract problem statement, not the real constraints surrounding it, because generating and constraint-checking are two separate reasoning steps and a model asked only to generate will stop after the first one — explicitly requiring every idea to be checked against budget, timeline, and team constraints before inclusion forces the second step to actually happen, rather than leaving the filtering work for the person reading the list to do by hand, which is exactly the wasted effort this prompt exists to eliminate. The instruction to check against the already-tried list, and specifically to name the resemblance when a new idea is a close cousin of a failed one, targets a real limitation: without an explicit failed-attempts list, the model has no way to know that "add more canned responses" was already tried, and will readily suggest a lightly rephrased version of it as if it were new, since surface novelty in phrasing is easy to produce even when the underlying approach is identical to something that already didn't work. Deliberately requiring a constraint-removing idea and a low-effort-test idea, rather than leaving idea diversity to chance, counters the tendency of brainstorm outputs to cluster around variations of the most obvious framing of the problem — asked generically for ideas about slow support response times, most generated ideas will be "more of the same category" (more macros, more staff, more automation) rather than a genuinely different angle like eliminating the underlying cause of ticket volume; naming these categories explicitly forces genuine variety in approach, not just in wording. Requiring a stated failure mode for every idea addresses the fact that brainstorm output is naturally generated in an optimistic, pitch-like register — each idea sounds appealing because that's the framing the task implies — and without an explicit instruction to also state how it could fail, that one-sided framing goes unchallenged, leaving the reader to independently discover the downside only after time has been invested trying it.`,
     exampleOutput: `1. Implement a tiered triage system routing simple tickets to auto-suggested answers — Type: standard, adapted to fit no-new-hire constraint by using existing Zendesk automation rather than new tooling — Failure risk: auto-suggestions could feel impersonal and increase complaint rate if not tuned carefully.
 2. Publish a public self-serve FAQ to deflect the most common ticket categories before they're ever filed — Type: removes-constraint, sidesteps the team-size limit by reducing incoming volume rather than processing it faster — Failure risk: only works if the top ticket categories are genuinely repetitive; needs a quick audit first.
 3. Run a 1-week test giving the 3-person team a shared "first response within 4 hours" target on just the top 20% highest-volume ticket type — Type: low-effort-test — Failure risk: could reveal the real bottleneck is elsewhere in the process, not response speed itself.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1494,7 +1538,13 @@ A short message: restated goal, list of assumptions needing confirmation (each p
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`reverse-brief`, `communication`, `operations`, `expectation-setting`, `workflow`],
+    tags: [
+      `reverse-brief`,
+      `communication`,
+      `operations`,
+      `expectation-setting`,
+      `workflow`,
+    ],
     whyItWorks: `A reverse brief only works if it restates the request at the level of underlying goal rather than surface wording, because a literal rephrasing of an ambiguous request will faithfully preserve the exact same ambiguity — if the original request never specified format, restating it in slightly different words without addressing that gap gives the requester nothing new to confirm or correct, which defeats the entire purpose; explicitly instructing the model to restate at the goal level forces it to make an interpretive leap the requester can then actually validate or reject. Converting every ambiguity into an explicit yes/no question, rather than folding a best guess silently into the restated brief, matters because a model asked to "clarify a request" will often resolve ambiguity on its own by picking the most plausible interpretation and presenting it as settled fact — which looks efficient but reintroduces exactly the risk a reverse brief is meant to eliminate, since a busy requester skimming a confident-sounding brief is more likely to just say "looks good" without noticing that a real assumption was quietly baked in rather than actually asked. Checking the user's own stated interpretation against the original request, rather than accepting it uncritically, matters because the person asking is often the one most likely to have already anchored on a plausible-but-wrong reading of the request — an assistant that just formats their interpretation nicely without independently checking it against the source adds no real value over what they'd have written themselves. Naming the single most important clarifying question, rather than presenting a flat list of equally-weighted assumptions, does the actual prioritization work a rushed requester needs — a five-item confirmation list often gets skimmed and rubber-stamped, but a message that clearly flags one specific, well-chosen question is far more likely to actually get a considered answer before the work begins.`,
     exampleOutput: `Restated goal: you want something that gives the board a clear read on the new product line's traction so far — sounds like this is about giving them confidence in the direction, not a comprehensive operational report.
 
@@ -1505,9 +1555,7 @@ Assumptions needing confirmation:
 Done looks like: a board member could glance at it and answer 'is this product line working' in under a minute.
 
 Most important question: is this meant to stand alone, or will you be presenting it live and just need supporting visuals?`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1568,7 +1616,13 @@ A table: Risk, Likelihood, Impact, Owner, Early-warning signal, Preventive step,
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`risk-register`, `risk-management`, `operations`, `project-management`, `planning`],
+    tags: [
+      `risk-register`,
+      `risk-management`,
+      `operations`,
+      `project-management`,
+      `planning`,
+    ],
     whyItWorks: `A risk register that's just a severity-rated list fails in practice because severity alone doesn't tell anyone what to actually watch for, and a model asked generically to "assess risks" will readily produce a plausible-sounding score without being forced to specify anything observable — requiring an early-warning signal per risk, and explicitly rejecting a restated risk as a valid signal ("budget overrun" isn't a signal for a budget-overrun risk), forces a genuinely harder inferential step: identifying what a person doing ordinary work would actually notice in the days or weeks before the risk fully materializes, which is a different and more useful kind of reasoning than just restating the risk with a number attached. Assigning ownership based on who's best positioned to notice the risk, rather than defaulting to the most senior person or the project sponsor, matters because risk ownership tied to hierarchy rather than proximity to the actual signal produces a register where the nominal owner is the last person to find out something's going wrong — GPT-5.1 left to its own devices will often default the highest-authority person as owner of everything, since that reads as the safe, deferential choice, and explicitly overriding that default toward proximity-to-signal produces a more functionally useful register. Separating a preventive mitigation step from a fallback response addresses a common conflation in risk documentation: "monitor the situation and address if it happens" gets written as if it covers both prevention and response, when in fact it does neither — forcing the two apart makes it obvious when a risk actually has no real preventive action available, which is itself useful information the combined phrasing would have hidden. Explicitly flagging the low-likelihood, high-impact risk separately from the severity ranking counters a specific bias in how these registers get used in practice: a straightforward severity sort naturally buries a low-likelihood item near the bottom, right where it's most likely to be ignored, even though the entire reason risk registers separate likelihood from impact in the first place is that some of the worst outcomes are exactly the ones that look unlikely until the day they happen.`,
     exampleOutput: `| Risk | Likelihood | Impact | Owner | Early-warning signal | Preventive step | Fallback |
 |---|---|---|---|---|---|---|
@@ -1576,9 +1630,7 @@ A table: Risk, Likelihood, Impact, Owner, Early-warning signal, Preventive step,
 | Support contract expires mid-migration | Low | High | Theo | Contract renewal notice not received 30 days before expiration | Renegotiate contract extension now, before migration start | Emergency short-term support agreement at premium rate |
 
 Flagged: support contract expiration is low-likelihood but high-impact — don't let its low ranking on the severity list delay Theo starting the renewal conversation now.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1639,7 +1691,13 @@ An update: bad news first (or explicit "no bad news this cycle"), cause and resp
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`stakeholder-update`, `communication`, `operations`, `transparency`, `reporting`],
+    tags: [
+      `stakeholder-update`,
+      `communication`,
+      `operations`,
+      `transparency`,
+      `reporting`,
+    ],
     whyItWorks: `The instinct to lead with good news before delivering bad news is a natural social softening move, but it's precisely the pattern that erodes trust with sophisticated stakeholders over repeated updates, because they learn to read the good-news preamble as a signal that something worse is coming — a model asked generically to "write an update" will default toward this same softening structure since it mirrors typical business-writing conventions it's seen, so explicitly instructing bad news first is necessary to override that trained default rather than something the model would naturally choose on its own. Requiring cause and response to appear together with the bad news, rather than as a separate section, matters because separating them creates a gap where the reader sits with unresolved anxiety about what's being done, and a model asked only to "report the bad news" will often state the fact cleanly and leave the response for a later paragraph, which is a reasonable document structure in the abstract but a worse experience for a stakeholder reading top to bottom. Explicitly requiring that good news stays proportional to its actual significance targets a specific failure where a model, having just delivered bad news, tends to compensate by inflating the following good news slightly to balance the emotional register of the whole document — this is a subtle drift toward narrative balance rather than factual accuracy, and stating the rule directly prevents a small pilot signing from getting described with the same weight as a major milestone. Separating what's changed since the last update from unchanged background context solves a real problem with recurring stakeholder updates specifically: without this instruction, a model summarizing raw material has no way to know what the reader already heard last cycle, and will default to a complete restatement of the full situation every time, which trains recipients to skim past updates because most of the content is stale repetition rather than genuinely new information.`,
     exampleOutput: `We missed the mid-August integration milestone by a week due to a vendor delay we identified this cycle. We're addressing it by adding a second engineer to the integration work and have a firm new date of Aug 22.
 
@@ -1648,9 +1706,7 @@ What's new this cycle: the vendor delay (previously unknown) and two new pilot c
 Other progress: budget remains on target; two new pilot customers signed, a solid but expected addition given our current pipeline.
 
 Ask: need your sign-off on shifting the public launch date by one week to Aug 29.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1716,9 +1772,7 @@ Numbered steps: action, expected outcome/how to verify it worked, mechanical or 
     exampleOutput: `Step 3: Set up payment method in Stripe. Expected outcome: a successful test charge confirmation appears in Stripe before proceeding — do not proceed on account creation alone. Judgment required: no, mechanical verification. Recovery: if the client is later found active without a verified charge, immediately pause the account in the CRM and re-run verification before re-activating — do not wait for a billing cycle to surface the issue.
 
 Highest-stakes step: Step 3 (payment verification) — skipping this is the single most common source of downstream billing disputes.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1803,12 +1857,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`process-improvement`, `operations`, `workflow-audit`, `root-cause`, `efficiency`],
+    tags: [
+      `process-improvement`,
+      `operations`,
+      `workflow-audit`,
+      `root-cause`,
+      `efficiency`,
+    ],
     whyItWorks: `Most process-improvement requests fail because they ask the model to diagnose and fix in one pass, which produces generic advice pattern-matched to the word 'process' rather than to the specific flow described — GPT-5.1 will happily generate 'streamline communication and adopt a PM tool' for almost any input if not forced to locate a concrete constraint first. Separating mapping from bottleneck-identification forces the model to commit to a specific step or handoff as the actual constraint before it's allowed to propose anything, which closes off the easy move of recommending something vague enough to sound applicable to any process. The instruction to distinguish 'annoying' from 'actually the bottleneck' matters because models trained on general business writing conflate the two constantly — a step can generate the most complaints while a different, quieter handoff is what's actually queuing work, and only forcing an explicit distinction surfaces that. Requiring every fix to respect a stated unchangeable constraint prevents the single most common failure mode in AI-generated operational advice: recommendations that implicitly assume unlimited budget, headcount, or a system swap that isn't actually on the table, which reads well but is useless to the person who has to implement it. Naming a specific decision-maker per fix converts the output from an essay into something that can actually move — a fix with no owner is advice, a fix with a named approver and a stated ask is a next step someone can take into a real conversation this week.`,
     exampleOutput: `The actual bottleneck isn't sales or finance — it's the manual re-keying step ops does alone, with no backup when the ops lead is out. Cheapest fix: build a shared intake template sales fills in correctly the first time, cutting rework. Needs the Ops Director's sign-off to make the template mandatory before a contract routes to ops.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1885,9 +1943,7 @@ OUTPUT FORMAT
     tags: [`delegation`, `management`, `raci`, `handoff`, `operations`],
     whyItWorks: `The single most common delegation failure is not unclear task description but an unclear authority boundary, and GPT-5.1 defaults toward diplomatic hedging language ('use your best judgment', 'feel free to decide') when asked to write delegation instructions in a neutral tone — which is precisely the failure mode this prompt targets by forcing every decision type into an explicit decide-alone / inform-after / wait-for-me bucket instead of a soft suggestion. Stating the escalation trigger as an observable, checkable condition rather than an open-ended 'if something goes wrong' matters because an unobservable trigger leaves the delegate guessing whether the current situation qualifies, which recreates the exact dependency on the delegator the brief is supposed to eliminate — a concrete signal like a vendor threatening to walk removes that guesswork entirely. Requiring a documented default action for what happens if the delegator is unreachable within the check-in cadence addresses a specific structural gap in most handoff documents: they describe the ideal case where the delegator responds promptly, but say nothing about the realistic case of a two-week absence, so the delegate stalls exactly when autonomy matters most. Asking the model to flag ambiguity in the authority input rather than silently resolving it in either direction is important because an AI-generated brief that guesses wrong on scope either grants too much authority (creating real risk) or too little (recreating the bottleneck) — surfacing the ambiguity lets the actual delegator make that call instead of an assumption baked silently into the document.`,
     exampleOutput: `Decide-alone: accepting standard terms, price changes up to 5%. Inform-after: any change to payment terms or delivery timelines. Wait-for-me: anything involving exclusivity clauses or contract termination language. Escalation trigger: a vendor refuses the 5% cap outright — stop, do not counter-offer, message me directly rather than waiting for Friday's check-in.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1956,12 +2012,16 @@ A day-by-day table (Mon-Fri) with time blocks labeled by type — Fixed / Deep W
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`time-blocking`, `productivity`, `calendar-planning`, `focus-time`, `operations`],
+    tags: [
+      `time-blocking`,
+      `productivity`,
+      `calendar-planning`,
+      `focus-time`,
+      `operations`,
+    ],
     whyItWorks: `Generic time-blocking templates fail in practice because they're built around an idealized week with no meetings, so the first real fixed commitment collides with the plan and the whole thing gets abandoned by Tuesday — anchoring the model to the actual fixed commitments as immovable, and instructing it to say plainly when the remaining gaps can't fit the requested deep work hours, forces an honest schedule instead of an aspirational one that looks good but doesn't survive contact with the real calendar. GPT-5.1's default advice on deep work timing leans heavily on generic 'mornings are best for focus' guidance from its training distribution; explicitly requiring the schedule to match the stated energy pattern, and to flag it directly when the high-energy window is already occupied by a fixed meeting, prevents the model from overriding your actual reported energy data with textbook productivity advice that doesn't apply to your week. Placing the top priority in the first usable slot rather than wherever fits addresses a subtle scheduling bias: without an explicit instruction, priority-ranking naturally gets treated as informational rather than structural, and the stated priority ends up in the least protected slot simply because it was mentioned last in the reasoning. Forcing a decision between 'contain' and 'eliminate' for each named time-waster is what separates a time-blocking plan from a wish list — scheduling around a bad habit without addressing it just reproduces the same lost time inside a nicer-looking grid.`,
     exampleOutput: `Monday: 8-9:30am Deep Work (budget model — top priority gets the first slot), 9:30-10am Fixed (standup), 10-10:15am Buffer, 10:15-11am Time-Waster Containment (batch Slack replies)... Flag: Wednesday's only open deep-work window is 1-2:30pm, which falls in your stated post-lunch energy crash — consider swapping a lower-focus task into that slot instead.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2040,12 +2100,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`kpi-review`, `reporting`, `operations`, `scorecard`, `executive-communication`],
+    tags: [
+      `kpi-review`,
+      `reporting`,
+      `operations`,
+      `scorecard`,
+      `executive-communication`,
+    ],
     whyItWorks: `A flat KPI list gives every metric the same visual weight, which is exactly why scorecard reviews are forgettable — GPT-5.1, left to its own devices, tends to reproduce that same flatness by summarizing metrics in the order given rather than by relevance, so explicitly instructing a re-rank by decision-relevance in Phase 1 is what forces the output to read as a narrative instead of a restated table. The instruction to say 'cause unconfirmed' rather than inventing an explanation directly targets a known failure mode of language models asked to explain metric movement: without a hard constraint, the model will construct a plausible-sounding causal story connecting the external factor to the number even when no such link was actually stated, because a confident causal narrative is a more satisfying completion than an honest gap — forcing the model to distinguish stated fact from inference keeps a fabricated cause from being presented with the same authority as a real one. Matching the register to the named audience matters mechanically because a model with no audience constraint defaults to a dashboard-analyst register full of internal shorthand, which reads as noise to a CFO or VP who doesn't touch the underlying data day to day. Ending with a stated confidence level on the recommendation, rather than a hedge-everything summary, is the difference between a review that produces a decision and one that produces another meeting to decide whether to decide — an explicit confidence level gives leadership something to either act on or explicitly challenge, instead of a non-committal 'it depends' that changes nothing.`,
     exampleOutput: `Headline: Churn worsened for the second straight month, and the timing lines up closely enough with the pricing increase that it's the leading suspect, though not confirmed. Churn: 4.2% vs 3% target, worse than last month's 3.1% — plausibly tied to the pricing change, cause unconfirmed. Recommendation (moderate confidence): hold off on a full rollback, but exempt the renewal cohort most exposed to the increase before next month's cycle.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2115,12 +2179,16 @@ A slide-by-slide outline (4-6 slides), each with a one-line slide title and 2-3 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`qbr`, `executive-presentation`, `operations`, `business-review`, `stakeholder-communication`],
+    tags: [
+      `qbr`,
+      `executive-presentation`,
+      `operations`,
+      `business-review`,
+      `stakeholder-communication`,
+    ],
     whyItWorks: `QBR decks built chronologically bury the ask because that's the default narrative shape for 'here's what happened this quarter' writing, and GPT-5.1 will reproduce that shape reliably unless explicitly told to build backwards from the decision instead — putting the ask on slide one and instructing every subsequent slide to justify it, rather than simply report on the quarter, restructures the entire piece of writing around a different organizing principle than the one models default to for review documents. Addressing the biggest miss on slide three rather than letting it surface as a Q&A ambush is a specific, well-known pattern in how executive reviews actually go wrong: an unaddressed known miss doesn't stay quiet, it gets raised by someone in the room, and if the deck hasn't already framed it, the framing gets set live and adversarially instead of on your terms — pre-empting it with the real reason and the fix in progress removes the highest-risk moment in the meeting before it happens. The instruction against excuse-padding on the miss slide matters because models asked to 'address a miss' tend to over-explain and stack justifications, which reads to a leadership audience as defensiveness and actually undermines credibility more than a single plain sentence would. Ending with a stated prediction of the one question leadership will ask forces the model to actually stress-test its own outline from the audience's side rather than just presenting content, which is what catches gaps a purely forward-written recap would miss.`,
     exampleOutput: `Slide 1 — The Ask: Approve two additional AM hires to protect renewal coverage heading into Q3, where 30% of ARR is up for renewal. Slide 2 — Headline: Beat new ARR target by $300K, but that growth is exposed if renewal coverage doesn't improve. Slide 3 — The Miss: Renewal rate fell to 84%, driven by one large account with no dedicated AM; a proactive check-in pilot is already scoped for Q3.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2192,12 +2260,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`presentation-outline`, `stakeholder-communication`, `operations`, `executive-buy-in`, `storytelling`],
+    tags: [
+      `presentation-outline`,
+      `stakeholder-communication`,
+      `operations`,
+      `executive-buy-in`,
+      `storytelling`,
+    ],
     whyItWorks: `Generic presentation templates place objection-handling at the end because that's the conventional structure in business-writing training data, but a load-bearing objection left until the final slides means the audience spends the entire presentation in silent skepticism, discounting every earlier claim — forcing the model to explicitly decide where the objection belongs based on how fundamental it is to the audience's stated stake, rather than defaulting to end-placement, produces a structure that actually matches how a skeptical stakeholder processes information in real time. The instruction against papering over insufficient evidence targets a specific and costly failure mode: language models asked to 'address an objection' will often generate confident-sounding language that implies the evidence fully settles the concern even when it doesn't, because a hedged answer reads as weaker prose — but a stakeholder audience that later discovers the confident answer was thinner than it sounded stops trusting every other claim in the deck, which is a worse outcome than an honest acknowledgment up front. Sizing the section count to the actual time limit matters because outlines generated without a hard constraint tend toward comprehensive coverage of the topic rather than a version cut down to what fits, and a presenter who walks in with more content than time available either rushes past the objection-handling section (defeating the whole point of this structure) or runs over and loses the room before the ask lands. Anchoring every section to either 'sets up the objection rebuttal' or 'advances the goal' as a binary filter is what prevents scope creep back toward a generic comprehensive-overview structure.`,
     exampleOutput: `Objection placement: address it second, right after stating the goal, since the CFO's skepticism about repeat budget overruns will color every subsequent slide if left unaddressed. Section 2 — Why This Isn't Last Year: the fixed-price quote and parallel-run plan, stated plainly, with an honest note that we don't have a same-size case study yet, followed by what would trigger an early stop if the pilot underperforms.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2267,12 +2339,16 @@ A ready-to-send announcement: subject line, opening two sentences stating the ch
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`internal-communications`, `change-management`, `operations`, `announcement`, `employee-communication`],
+    tags: [
+      `internal-communications`,
+      `change-management`,
+      `operations`,
+      `announcement`,
+      `employee-communication`,
+    ],
     whyItWorks: `Reply-all pile-ons on internal announcements are, mechanically, almost always caused by an obvious question left unanswered in the original message — someone asks it publicly because there was no other visible channel, and once one person replies-all, others pile on with their own questions in the same thread; instructing the model to specifically anticipate this group's likely questions and answer them inline, rather than writing a generic body paragraph, closes off the exact trigger condition. GPT-5.1's default register for internal announcements leans toward soft, values-forward corporate phrasing ('to better serve our team') when not given a concrete reason, and that vagueness reads as evasive to an audience already primed to be annoyed by a process change — requiring the reasoning to be specific and honest, even when it's less flattering, produces language that reads as trustworthy specifically because it doesn't sound like boilerplate. The instruction to open with the change and date in the first two sentences targets how people actually read mass internal emails: they scan for personal relevance before reading justification, so an announcement that leads with preamble gets skimmed past its own reasoning entirely and the reader goes straight to asking the question the announcement was trying to pre-empt. Naming exactly one contact channel, and instructing the model not to let multiple people appear as valid contacts, prevents the scattered-and-conflicting-answers problem that happens when questions get fielded by whoever happens to reply first, which is often not the person with the actual correct answer.`,
     exampleOutput: `Subject: Expense approvals move to weekly starting [date]. Starting the first Monday of next month, expense reimbursements will be approved weekly instead of in a monthly batch. This is changing because the monthly cycle was creating a two-week backlog that left people fronting real money longer than it should. If you're mid-cycle when this switches, your current report will be processed under the new weekly schedule automatically. Questions go to #finance-help, not individual Finance staff.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2339,12 +2415,16 @@ A short, ready-to-review draft with the draft-status header, then Purpose / Scop
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`policy-drafting`, `operations`, `internal-policy`, `hr-adjacent`, `governance`],
+    tags: [
+      `policy-drafting`,
+      `operations`,
+      `internal-policy`,
+      `hr-adjacent`,
+      `governance`,
+    ],
     whyItWorks: `The single biggest risk of AI-drafted internal policy is that a fluent, confidently-formatted document gets treated as final and distributed before the right person has actually reviewed it, so the explicit draft-status header instruction addresses that risk structurally rather than relying on the reader to remember it's a draft — putting the caveat inside the artifact itself means it travels with the document even if it gets forwarded or copied into another tool. GPT-5.1 tends to write policy rules in soft, non-checkable language ('with reasonable notice', 'as appropriate') when not explicitly constrained, because that phrasing sounds professional in isolation — but a rule that can't be checked against an actual case is unenforceable and just relocates the ambiguity from before the policy existed to after it exists, so requiring specific, checkable requirements is what makes the draft actually useful rather than cosmetically official. The instruction against inventing a specific compliance or legal basis is a direct guard against a common and risky failure mode: a model asked to justify a policy will sometimes reach for a plausible-sounding regulatory reason to make the writing sound more authoritative, and presenting a fabricated compliance basis as fact inside a document that might get treated as settled is exactly the kind of error that compounds if nobody catches it before distribution. Ending with an explicit open-questions list converts the draft from something that looks finished into something that visibly still needs a specific person's judgment, which is the entire point of treating this as a redline starting point rather than a shortcut around the actual review the topic requires.`,
     exampleOutput: `DRAFT — for internal review, not yet approved; requires sign-off from HR before distribution or enforcement. Purpose: to resolve inconsistent remote-work approvals across support teams following manager disagreement over informal rules. Scope: applies to all customer support staff below director level; does not apply to on-site facilities or IT roles. Open Questions for Reviewer: who audits manager sign-offs after the fact is not yet defined and needs a named owner before this can be enforced consistently.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -2418,12 +2498,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`brd`, `requirements-gathering`, `operations`, `project-management`, `scope-definition`],
+    tags: [
+      `brd`,
+      `requirements-gathering`,
+      `operations`,
+      `project-management`,
+      `scope-definition`,
+    ],
     whyItWorks: `Stakeholders reliably describe a desired solution when asked for a problem statement, and a model that accepts the solution-shaped input at face value locks in an approach before anyone has actually verified it's the right one — instructing the model to separate problem from solution and flag when the input conflates them catches this at the one point in the process where it's still cheap to fix, before a developer has built against it. The out-of-scope section is weighted as heavily as in-scope specifically because late-stage project disputes are overwhelmingly about unstated assumptions rather than stated requirements — nobody argues about what's explicitly written down, they argue about what one side assumed was included and the other side never confirmed, so forcing explicit exclusions surfaces exactly the kind of assumption that would otherwise surface as a disagreement three sprints in. The instruction to convert ambiguity into a tagged open question rather than a silent assumption directly targets how GPT-5.1 behaves under an underspecified brief: left unconstrained, it fills gaps with a plausible-sounding default that reads as confident and settled, which is more dangerous in a requirements document than an admitted gap, because a developer building against a confidently-stated but silently-assumed requirement has no signal that it was ever in question. Pushing back on a vague success metric rather than accepting it verbatim matters because 'managers stop asking Finance for reports' is not something anyone can verify was achieved — a requirements document that inherits an unmeasurable goal from the original stakeholder ask guarantees an unresolvable argument later about whether the project succeeded.`,
     exampleOutput: `Business Problem (restated): Team managers currently lack direct visibility into their own team's KPI performance and depend on ad hoc requests to Finance, creating delay and repeated manual reporting work for Finance. Open Question (for VP of Operations): should the weekly refresh be a fixed day/time, and does 'per-team only' visibility need any exception for cross-team roll-up views for the VP's own use? Success Metric (pushback): 'managers stop asking Finance for reports' isn't directly measurable — proposing instead: a 90% reduction in ad hoc reporting requests to Finance within 60 days of launch, tracked via the Finance team's existing request log.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2497,12 +2581,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`project-kickoff`, `project-management`, `operations`, `team-alignment`, `scope-planning`],
+    tags: [
+      `project-kickoff`,
+      `project-management`,
+      `operations`,
+      `team-alignment`,
+      `scope-planning`,
+    ],
     whyItWorks: `Kickoff meetings that feel like they accomplished nothing usually spent the hour re-litigating exactly three things live — who's actually responsible for what, what counts as finished, and what happens if scope turns out to be bigger than expected — because none of them were pinned down beforehand in writing, so building the brief specifically around pre-answering those three collapses the part of the meeting that otherwise eats all the time into a document people can react to instead of construct from scratch in the room. The instruction to assign ownership to a named individual for specific decision types, not a role or a shared team, targets a very common and costly ambiguity: 'the engineering team owns backend decisions' sounds like an assignment but functions as no assignment at all the moment a real decision needs to be made under time pressure, because no single person feels the accountability is theirs specifically. Sharpening a vague definition of done into a checkable condition — and explicitly flagging that it needs sponsor confirmation rather than silently presenting the sharpened version as agreed — matters because GPT-5.1 will otherwise happily generate a confident-sounding 'done' criterion that reads as settled, when in fact it's the model's own interpretation standing in for a decision the sponsor never actually made; flagging it preserves the sponsor's authority to correct it before the team builds against the wrong target. The scope-pressure section addresses the single most common cause of late-project conflict: without a stated-in-advance answer to 'who decides whether we cut scope or move the deadline,' that decision gets made reactively and often by whoever's loudest in a stressed conversation, rather than by whoever was actually supposed to make it.`,
     exampleOutput: `Goal: Ship a self-serve refund flow so customers can request and receive standard refunds without opening a support ticket. Definition of done (sharpened, needs Marcus's confirmation): customers can request a refund for any order under $200 placed within 30 days, receive automatic approval without support involvement, and see confirmation within 24 hours — orders over $200 or outside 30 days still route to support manually. Scope-pressure plan: Marcus decides whether to cut a refund type from scope; the six-week launch deadline itself does not move without the Head of Support's sign-off.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2575,12 +2663,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`okr`, `goal-setting`, `operations`, `performance-management`, `quarterly-planning`],
+    tags: [
+      `okr`,
+      `goal-setting`,
+      `operations`,
+      `performance-management`,
+      `quarterly-planning`,
+    ],
     whyItWorks: `OKRs get sandbagged constantly because a target set comfortably close to the current baseline is easy to defend in the moment and easy to hit later, and a model asked to 'draft ambitious OKRs' without a baseline comparison has no way to actually judge ambition — it can only generate ambitious-sounding language attached to whatever number it's given, which is exactly how confidently-worded sandbagged targets get through review. Explicitly checking each key result against the stated current baseline, and flagging anything too close to it as likely sandbagged rather than accepting the framing given, forces a numeric sanity check instead of a vibes-based one, and showing the stretch alternative alongside it gives the person reviewing something concrete to compare against rather than just a warning. The instruction to respect the stated stretch-vs-committed intent, rather than uniformly dressing every KR in ambitious language, matters because a common failure of AI-assisted goal-setting is flattening a genuinely mixed portfolio — some targets meant to be safe, some meant to carry real risk — into uniformly optimistic phrasing that obscures which is which, defeating the entire point of separating stretch from committed goals in the OKR framework to begin with. Flagging cross-team dependencies explicitly next to the affected key result addresses a specific accountability failure mode: a team held to a target that quietly depends on another team's unshipped work gets blamed for a miss that wasn't actually within its control, and surfacing the dependency in the document itself — rather than leaving it as an unstated assumption — gives the team something concrete to raise in the actual OKR review before commitments are locked in.`,
     exampleOutput: `KR1 (committed): Reduce first-response time from 2 hours to under 90 minutes by end of quarter. KR2 (stretch, dependency flagged): Reduce average resolution time from 9.5 hours to under 5 hours by end of quarter — partly dependent on Engineering shipping the macro-automation feature; if that slips, this target is at real risk regardless of Support's own execution. Sandbagged-target check: a target of 8.5 hours would have been within easy reach of the current baseline without real effort — 5 hours is the genuine stretch version shown here instead.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2650,12 +2742,16 @@ A single page: decision requested (one sentence), recommendation (one paragraph)
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`strategy-plan`, `executive-communication`, `operations`, `one-pager`, `resource-allocation`],
+    tags: [
+      `strategy-plan`,
+      `executive-communication`,
+      `operations`,
+      `one-pager`,
+      `resource-allocation`,
+    ],
     whyItWorks: `Strategy documents that fail to get read in full almost always front-load context and save the actual ask for the end, which works against how executives actually triage reading material — they decide within the first few seconds whether something requires their full attention, and a document that makes them read background before reaching the decision gets skimmed or deferred; opening with the decision requested as a single sentence is a direct fix for that triage behavior rather than a stylistic preference. GPT-5.1 tends toward comprehensive, mission-framed openings on strategy documents by default because that's the register most strategy-writing training data uses, so explicitly forbidding the 'as we look to the future' framing and capping supporting reasons at three is necessary to override that default toward something that actually reads as a one-pager in substance, not just in page count. Requiring the competing-priority trade-off to be stated plainly, rather than omitted, targets a specific credibility problem: any real resource allocation decision has an opportunity cost, and an executive evaluating a recommendation is implicitly comparing it against what else those resources could do — a one-pager that omits the trade-off either looks naive about how resourcing actually works or looks like it's deliberately hiding the cost, and either read undermines the recommendation's credibility more than stating the trade-off honestly would. Tying urgency explicitly to the stated time horizon prevents the common failure of strategy documents that argue a course of action is correct without ever establishing why it needs deciding now rather than next quarter, which is often the first question a resourcing-constrained executive actually asks.`,
     exampleOutput: `Decision requested: Approve reallocating the 4-person engineering pod to a two-quarter SMB pilot. Recommendation: Pursue the SMB pilot now rather than waiting, because the competitive window in that segment is narrowing faster than our enterprise roadmap slip would cost us. Trade-off: this delays the enterprise SSO integration by one quarter — a real cost, but a recoverable one against a 9-month check-in.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2729,12 +2825,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`positioning`, `messaging`, `operations`, `competitive-strategy`, `marketing-ops`],
+    tags: [
+      `positioning`,
+      `messaging`,
+      `operations`,
+      `competitive-strategy`,
+      `marketing-ops`,
+    ],
     whyItWorks: `Positioning statements that name no real alternative aren't actually positioning — they're just describing the product in isolation, and a sophisticated reader's very first move is to ask what this is being compared to, which is exactly the question an alternative-free statement has no answer for; anchoring the whole exercise to the stated main alternative from the start forces the output to actually answer that question rather than merely sound like it does. The instruction to characterize the alternative honestly, including what it does reasonably well, targets a specific weakness in AI-generated competitive copy: models asked to differentiate a product will often default to a strawman characterization of the alternative because a weak alternative makes the differentiation land more easily in the text — but a reader who knows the real alternative and recognizes the strawman discounts the entire claim, so an honest characterization is what actually earns the comparison's credibility. Requiring the claim's confidence level to match the actual strength of the given proof point is a direct guard against a common failure mode where a thin, small-sample data point gets inflated into confident, unqualified language purely because confident language reads better — stating the claim at the level the evidence supports, and flagging when it isn't yet strong enough for external competitive use, prevents a company from making a claim in the market that a beefed-up sample size or a competitor's rebuttal could later expose as overstated. Leading with the category frame addresses a structural precondition for positioning to work at all: a reader has to understand what category both the offer and the alternative belong to before a comparison between them means anything, and skipping that frame is a common reason otherwise sharp positioning statements fail to land with an unfamiliar audience.`,
     exampleOutput: `Category: a scheduling platform built for appointment-based service businesses. The alternative: generic calendar booking tools handle scheduling fine, but leave cancellations to manual texting, which is slow and depends on whoever's at the front desk that day. The sharp difference: automated waitlist fill for last-minute cancellations, structurally something a generic calendar tool isn't built to do. Confidence note: the 60% vs. 15% fill-rate comparison comes from three pilot salons — directionally strong, but too small a sample to state as a hard competitive claim externally without a larger study first.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2807,12 +2907,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`vendor-evaluation`, `procurement`, `operations`, `decision-making`, `scorecard`],
+    tags: [
+      `vendor-evaluation`,
+      `procurement`,
+      `operations`,
+      `decision-making`,
+      `scorecard`,
+    ],
     whyItWorks: `Vendor decisions get hijacked by whoever argues most persuasively in the room specifically when there's no pre-agreed structure forcing the comparison to happen on stated criteria rather than in-the-moment rhetoric — building the must-have filter and weighting scheme before any vendor-specific scoring happens is what takes the decision out of the room and puts it into a structure that was agreed to before anyone knew which vendor it would favor. Treating must-haves and the budget ceiling as hard filters rather than weighted criteria matters because folding a genuine non-negotiable into a weighted score allows a vendor to compensate for failing it with strength elsewhere, which quietly defeats the entire reason for calling something a must-have in the first place — a requirement that can be outweighed was never actually a requirement. The instruction to mark 'insufficient information' rather than guessing a plausible score directly targets a specific and dangerous failure mode of AI-generated comparison tables: a clean, fully-populated scorecard looks more rigorous and more finished than a partially-populated honest one, so a model under no constraint will tend to fill every cell with a confident-looking number even where the input evidence doesn't actually support one, which makes a genuinely uncertain comparison look more settled than it is. Explicitly separating incumbent switching cost into its own scored line item, rather than letting it silently bias every other score, addresses a well-documented bias in vendor re-evaluations — status quo familiarity tends to get baked invisibly into every criterion in favor of the incumbent unless it's forced into the open as one explicit, debatable line that can be weighed on its own merits against the stated priorities.`,
     exampleOutput: `Must-have filter: VendorB eliminated — no SOC 2 Type II certification in place, only 'in progress.' Budget filter: VendorA and VendorC both within the $45,000 ceiling. Weighted scorecard: Reliability (weight 4) — VendorA: 4/5, VendorC: 3/5. Switching cost (weight 2, scored explicitly): VendorC scores 5/5 (no migration needed), VendorA scores 2/5 (3 weeks migration, 15 staff retrained). Final recommendation: VendorA, on the strength of reliability and integration outweighing VendorC's switching-cost advantage — though the margin is close enough that a final gut-check on integration risk with your specific stack is worth a direct reference call before committing.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2885,12 +2989,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`business-case`, `investment-memo`, `operations`, `resource-allocation`, `decision-making`],
+    tags: [
+      `business-case`,
+      `investment-memo`,
+      `operations`,
+      `resource-allocation`,
+      `decision-making`,
+    ],
     whyItWorks: `Business case memos that lead with benefits and defer the opportunity cost to a footnote read, to a sophisticated reader, as though the trade-off is being obscured rather than genuinely weighed — and since the reader's actual job is to compare this option against everything else the same resources could do, opening with the trade-off stated plainly is what respects that the comparison, not the pitch, is the real content of the decision. Requiring the expected return to be stated in units comparable to the cost — same timeframe, same kind of measure — directly targets a common weakness in AI-generated business cases, where the model will happily produce compelling but incommensurable language ('this unlocks significant strategic value') that sounds substantive but can't actually be checked against the dollar-and-time cost stated a paragraph earlier, leaving the reader to do the comparison work the memo was supposed to do for them. Insisting the key risk or assumption be stated with the same weight as the rest of the case, rather than softened into a bottom-of-page caveat, matters because a case that rests entirely on one uncertain assumption but presents that assumption as a minor footnote is functionally misleading about its own confidence level — a reader who only skims the confident-sounding return section and skips the caveat walks away with a false sense of certainty that the memo itself created by underweighting its own biggest risk. Requiring internal consistency between the confidence of the return section and the honesty of the risk section addresses a specific and common tell in AI-drafted business writing: sections generated somewhat independently can end up reading as though written by two different people with two different risk appetites, which an attentive reader notices immediately and which undermines trust in the whole document once spotted.`,
     exampleOutput: `Trade-off: this investment costs roughly $180,000 in engineering time over 5 months, against the alternative of finishing the mobile app redesign that's been queued for two quarters using the same team. Expected return: eliminates a $95,000/year vendor contract and is projected to cut a roughly one-day reporting delay in two downstream processes, though full payback on the $180,000 build cost takes about 22 months at current vendor pricing. Key risk: the whole case depends on the in-house platform matching the vendor's current uptime, which this team has not built at this scale before — recommend a scoped 6-week proof-of-concept on the highest-risk data pipeline before committing the full 5-month build.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',

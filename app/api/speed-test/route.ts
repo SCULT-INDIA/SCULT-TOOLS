@@ -85,10 +85,7 @@ export interface SpeedTestApiError {
 
 export function isSpeedTestApiError(value: unknown): value is SpeedTestApiError {
   return (
-    typeof value === 'object' &&
-    value !== null &&
-    'code' in value &&
-    'error' in value
+    typeof value === 'object' && value !== null && 'code' in value && 'error' in value
   )
 }
 
@@ -123,7 +120,8 @@ export async function runSpeedTest(
       if (addresses.some((a) => isPrivateAddress(a.address))) {
         return {
           code: 'blocked-url',
-          error: 'That hostname resolves to a private network address, so it cannot be tested.',
+          error:
+            'That hostname resolves to a private network address, so it cannot be tested.',
         }
       }
     } catch {
@@ -168,10 +166,14 @@ export async function runSpeedTest(
     if (err instanceof DOMException && err.name === 'TimeoutError') {
       return {
         code: 'timeout',
-        error: 'The test did not finish within 60 seconds. Slow or hanging pages can exceed the limit — try again.',
+        error:
+          'The test did not finish within 60 seconds. Slow or hanging pages can exceed the limit — try again.',
       }
     }
-    return { code: 'upstream', error: 'Could not reach the PageSpeed service. Try again in a moment.' }
+    return {
+      code: 'upstream',
+      error: 'Could not reach the PageSpeed service. Try again in a moment.',
+    }
   }
 
   const contentLength = Number(upstream.headers.get('content-length') ?? '0')
@@ -189,7 +191,8 @@ export async function runSpeedTest(
   } catch {
     return {
       code: 'upstream',
-      error: 'The PageSpeed service returned an unreadable response. Try again in a moment.',
+      error:
+        'The PageSpeed service returned an unreadable response. Try again in a moment.',
     }
   }
 
@@ -198,7 +201,8 @@ export async function runSpeedTest(
     if (upstream.status === 429 || /quota|rate limit/i.test(message)) {
       return {
         code: 'quota',
-        error: 'The free testing quota is briefly exhausted. Wait a minute, then run the test again.',
+        error:
+          'The free testing quota is briefly exhausted. Wait a minute, then run the test again.',
       }
     }
     if (
@@ -208,18 +212,21 @@ export async function runSpeedTest(
     ) {
       return {
         code: 'unreachable',
-        error: 'PageSpeed could not load that page. Check it opens in your own browser and is not blocking crawlers.',
+        error:
+          'PageSpeed could not load that page. Check it opens in your own browser and is not blocking crawlers.',
       }
     }
     if (upstream.status === 400) {
       return {
         code: 'invalid-url',
-        error: 'PageSpeed rejected that URL. Check it is a public web page, not a file or an intranet address.',
+        error:
+          'PageSpeed rejected that URL. Check it is a public web page, not a file or an intranet address.',
       }
     }
     return {
       code: 'upstream',
-      error: 'The PageSpeed service failed to run the test. Running it again usually works.',
+      error:
+        'The PageSpeed service failed to run the test. Running it again usually works.',
     }
   }
 

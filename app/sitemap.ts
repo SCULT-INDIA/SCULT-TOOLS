@@ -167,9 +167,14 @@ async function siteSitemap(): Promise<MetadataRoute.Sitemap> {
     (c) => getPromptsByCategory(c.slug).length > 0,
   )
 
-  const [skillCounts, skillSyncMeta] = await Promise.all([getAllCategoryCounts(), getSyncMeta()])
+  const [skillCounts, skillSyncMeta] = await Promise.all([
+    getAllCategoryCounts(),
+    getSyncMeta(),
+  ])
   const skillsLastModified = skillSyncMeta.lastSyncedAt ?? '2026-08-23'
-  const liveSkillCategories = SKILL_CATEGORIES.filter((c) => (skillCounts[c.slug] ?? 0) > 0)
+  const liveSkillCategories = SKILL_CATEGORIES.filter(
+    (c) => (skillCounts[c.slug] ?? 0) > 0,
+  )
 
   return [
     {
@@ -267,7 +272,11 @@ async function skillsShardSitemap(shardIndex: number): Promise<MetadataRoute.Sit
   }))
 }
 
-export default async function sitemap({ id }: { id: number }): Promise<MetadataRoute.Sitemap> {
+export default async function sitemap({
+  id,
+}: {
+  id: number
+}): Promise<MetadataRoute.Sitemap> {
   if (id === 0) return siteSitemap()
   return skillsShardSitemap(id - 1)
 }

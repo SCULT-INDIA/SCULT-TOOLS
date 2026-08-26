@@ -18,11 +18,15 @@ function validInput(overrides: Partial<Parameters<typeof validateFeedback>[0]> =
 
 describe('validateFeedback — honeypot and required fields', () => {
   it('flags a non-empty company field as a bot', () => {
-    expect(validateFeedback(validInput({ company: 'Acme Inc' }))).toEqual({ error: 'bot' })
+    expect(validateFeedback(validInput({ company: 'Acme Inc' }))).toEqual({
+      error: 'bot',
+    })
   })
 
   it('rejects a missing tool slug', () => {
-    expect(validateFeedback(validInput({ toolSlug: '' }))).toEqual({ error: 'missing-tool' })
+    expect(validateFeedback(validInput({ toolSlug: '' }))).toEqual({
+      error: 'missing-tool',
+    })
   })
 
   it('falls back toolTitle to toolSlug when title is blank', () => {
@@ -34,12 +38,16 @@ describe('validateFeedback — honeypot and required fields', () => {
 
 describe('validateFeedback — message bounds', () => {
   it('rejects a message shorter than the minimum', () => {
-    const result = validateFeedback(validInput({ message: 'a'.repeat(FEEDBACK_MESSAGE_MIN - 1) }))
+    const result = validateFeedback(
+      validInput({ message: 'a'.repeat(FEEDBACK_MESSAGE_MIN - 1) }),
+    )
     expect(result).toEqual({ error: 'message-too-short' })
   })
 
   it('rejects a message longer than the maximum', () => {
-    const result = validateFeedback(validInput({ message: 'a'.repeat(FEEDBACK_MESSAGE_MAX + 1) }))
+    const result = validateFeedback(
+      validInput({ message: 'a'.repeat(FEEDBACK_MESSAGE_MAX + 1) }),
+    )
     expect(result).toEqual({ error: 'message-too-long' })
   })
 })
@@ -61,7 +69,9 @@ describe('validateFeedback — rating', () => {
 
   it('rejects 0, 6, a non-integer, and a negative number', () => {
     for (const rating of [0, 6, 2.5, -1]) {
-      expect(validateFeedback(validInput({ rating }))).toEqual({ error: 'invalid-rating' })
+      expect(validateFeedback(validInput({ rating }))).toEqual({
+        error: 'invalid-rating',
+      })
     }
   })
 })
@@ -90,7 +100,9 @@ describe('validateFeedback — category and visitorId pass-through', () => {
 
 describe('validateFeedback — email', () => {
   it('rejects a malformed email', () => {
-    expect(validateFeedback(validInput({ email: 'nope' }))).toEqual({ error: 'invalid-email' })
+    expect(validateFeedback(validInput({ email: 'nope' }))).toEqual({
+      error: 'invalid-email',
+    })
   })
 })
 

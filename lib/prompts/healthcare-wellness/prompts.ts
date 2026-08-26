@@ -60,16 +60,20 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`caregiving`, `patient-communication`, `family-caregiver`, `visit-summary`, `health-literacy`],
+    tags: [
+      `caregiving`,
+      `patient-communication`,
+      `family-caregiver`,
+      `visit-summary`,
+      `health-literacy`,
+    ],
     whyItWorks: `The instruction to mark paraphrases as paraphrases rather than quotes directly counters a specific failure mode of language models summarizing informal notes: given a loosely worded fragment like "much better than last time," the model's default behavior is to smooth it into a confident, quote-like clinical statement, which misrepresents the certainty of what was actually said and can mislead family members who weren't present to judge tone or hedging themselves. Explicitly forbidding inference of diagnosis or severity from ambiguous notes matters because GPT-5.1 is otherwise very good at pattern-completing a plausible-sounding medical interpretation from partial information — a term like "BNP levels trending down" invites exactly the kind of confident elaboration a caregiver has no way to fact-check, so the prompt forces the gap to surface as a flagged unknown instead of a filled-in guess. Routing unclear abbreviations into a dedicated "terms to clarify" section rather than silently expanding them prevents a second, subtler failure: a wrong expansion of an abbreviation reads exactly as confidently as a correct one, and family members downstream have no signal to distinguish the two. The closing disclaimer is placed at the very end, after the substantive content, specifically so it reads as a genuine boundary statement about the document's status rather than legal boilerplate skimmed past at the top — its function is to make sure nobody in the family thread treats this caregiver's paraphrase as equivalent to the actual chart note.`,
     exampleOutput: `Visit summary: Mom saw Dr. Patel (cardiology) for a post-hospital follow-up on Aug 5.
 What happened: Ankle swelling described as much improved since last visit. Water-pill dose was lowered. A follow-up echo was scheduled for 6 weeks out.
 What changed: Furosemide dose reduced (exact new dose not captured in the notes — confirm with pharmacy). Echo ordered.
 Terms to clarify: what "BNP levels trending down" means for her specific case.
 This is a personal family summary based on one caregiver's notes, not a medical record — confirm any care decision directly with Dr. Patel's office.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -134,7 +138,13 @@ One line at the end reminding the person to write down the clinician's actual an
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`appointment-prep`, `patient-advocacy`, `question-list`, `health-literacy`, `primary-care`],
+    tags: [
+      `appointment-prep`,
+      `patient-advocacy`,
+      `question-list`,
+      `health-literacy`,
+      `primary-care`,
+    ],
     whyItWorks: `Ranking by decision-relevance rather than by anxiety level is the core mechanism here, because left unguided a model asked to prioritize "worries" will over-weight whatever sounds most alarming in the raw text rather than whatever is most likely to change what the clinician actually does — a scary-sounding but low-stakes question about clicking joints will otherwise crowd out a question that genuinely affects a return-to-activity decision. The explicit two-minutes-per-question budget forces a real cutoff instead of an open-ended list that looks thorough on paper but is impossible to get through in a 15-minute slot, which is the single most common reason patients report leaving appointments having forgotten their most important question — it got buried in a long list rather than surfaced first. Rewriting vague worries into specific, answerable questions matters because "is this normal" invites a generic reassurance response from any clinician working quickly, whereas a specific version ("is a clicking sound going up stairs at three weeks post-injury expected, or does it need imaging") gets a real, checkable answer in the same amount of time. Merging duplicate concerns keeps the list from padding itself with restated variations, which otherwise eats into the same fixed time budget the ranking rule is trying to protect. The closing instruction to write down the clinician's actual answers reinforces that this list is scaffolding for the conversation, not a replacement for whatever the treating clinician says once asked.`,
     exampleOutput: `Top questions (fits 15 min):
 1. Is the clicking when going up stairs expected at three weeks, or does it warrant an MRI now?
@@ -142,9 +152,7 @@ One line at the end reminding the person to write down the clinician's actual an
 3. Based on today's exam, does this look like something surgery would ever be on the table for?
 If there's time: Is the gym (non-running exercise) okay to resume next week?
 Remember to write down the doctor's actual answers — this list is only meant to prepare for the conversation.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -199,15 +207,19 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`lab-results`, `health-literacy`, `patient-education`, `plain-language`, `medical-jargon`],
+    tags: [
+      `lab-results`,
+      `health-literacy`,
+      `patient-education`,
+      `plain-language`,
+      `medical-jargon`,
+    ],
     whyItWorks: `The explicit ban on words like "concerning" or "nothing to worry about" targets a very specific and common model behavior: when a language model is shown an out-of-range lab value, its default instinct — trained on medical text where out-of-range values are usually discussed alongside their clinical significance — is to append an implied severity judgment even when only asked to define the term, because definition and interpretation are rarely separated in the source material it learned from. Forcing the explanation to stop at "what it measures" and "where it falls against the report's own stated range" breaks that habitual pairing and keeps the tool inside its actual competence, which is language translation, not clinical judgment that depends on symptoms, history, and other results the report alone doesn't contain. Refusing to backfill a missing reference range from general population data closes a subtler risk: lab reference ranges vary meaningfully by lab, by assay method, and by patient population (age, sex, pregnancy status), so a plausible-looking generic range presented as if it were this report's own range could make a genuinely normal result look abnormal or vice versa. Converting every out-of-range or unclear item into a question for the ordering clinician, rather than leaving it as a flat statement, keeps the deliverable oriented toward the actual conversation that needs to happen, and the closing disclaimer is stated in terms of what the document is (a reading aid) rather than generic boilerplate, which keeps it from being skimmed as filler.`,
     exampleOutput: `TSH (thyroid-stimulating hormone): a hormone that signals the thyroid gland to produce thyroid hormone. This report's value is above the stated reference range.
 Free T4: the active thyroid hormone TSH regulates. This value is within the stated reference range.
 Questions worth asking: My TSH is above range but my Free T4 is within range — what does that combination usually get checked next for?
 This is a plain-language reading aid, not an interpretation of these results — only the ordering clinician can explain what they mean for you specifically.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -271,7 +283,13 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`medication-safety`, `pharmacist-questions`, `patient-advocacy`, `prescription`, `health-literacy`],
+    tags: [
+      `medication-safety`,
+      `pharmacist-questions`,
+      `patient-advocacy`,
+      `prescription`,
+      `health-literacy`,
+    ],
     whyItWorks: `The instruction to raise categories of question rather than assert an interaction directly addresses the highest-stakes failure mode in this whole prompt: a language model asked to compare two medications will often produce a confident-sounding interaction claim that is either outdated, missing a dosage-dependent nuance, or simply wrong for this specific formulation, and a patient acting on that claim instead of a pharmacist's actual lookup against current drug-interaction databases is a realistic harm path. Converting every candidate concern into a question rather than a statement keeps the output structurally incapable of being mistaken for clinical advice, because a question has no truth value to be wrong about — it just directs attention to the right place, which is exactly what the pharmacist's actual professional tool (real-time interaction-checking software tied to the person's full medication history) is built to resolve. Flagging which questions specifically benefit from being asked before leaving the pharmacy — rather than treating the whole list as equally deferrable — reflects a real practical distinction: a timing or food-interaction question is often quick and best resolved at the counter, while a general side-effect question can wait, so the priority split makes the list usable in the actual two-minute window most people get with a pharmacist. Suppressing generic filler questions unless the specific context makes them relevant keeps the list short enough to actually get through in that window, which matters more here than looking exhaustive.`,
     exampleOutput: `Priority questions — ask before leaving the pharmacy:
 1. Does metronidazole need to be spaced apart from my warfarin dose, or can they be taken together?
@@ -279,9 +297,7 @@ OUTPUT FORMAT
 Worth asking if there's time:
 3. Does this need to be taken with food?
 This list is meant to prompt a conversation with your pharmacist — no interaction, risk, or dosing decision should be assumed from it alone.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -353,7 +369,13 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`symptom-tracking`, `patient-advocacy`, `appointment-prep`, `health-literacy`, `timeline`],
+    tags: [
+      `symptom-tracking`,
+      `patient-advocacy`,
+      `appointment-prep`,
+      `health-literacy`,
+      `timeline`,
+    ],
     whyItWorks: `The instruction not to upgrade vague self-reported language ("bad") into a numeric or clinical-sounding scale prevents a subtle distortion that language models introduce by default when asked to "organize" symptom data: normalizing loose language into structured severity scores makes the output look more rigorous than the underlying data actually is, and a clinician reading a fabricated 7/10 next to a headache the person only ever described as "bad" is being handed false precision. Separating observed patterns from proposed explanations is the load-bearing rule in this prompt — stating "occurred on 4 of 5 days after evening exercise" is a factual claim about the data itself, fully verifiable by rereading the log, whereas naming a trigger or cause requires clinical judgment about physiology, other conditions, and information the log doesn't contain, and GPT-5.1 will readily supply a plausible-sounding cause if not explicitly blocked from doing so, since pattern-plus-explanation is the default shape this kind of write-up takes in general text. Flagging logging gaps rather than treating silence as "symptom-free" matters because an absent entry is genuinely ambiguous — a clinician needs to know the difference between a good week and an unlogged week, and collapsing that distinction would misrepresent the actual frequency of the symptom. The undated-entries bucket keeps the chronological timeline itself trustworthy by refusing to force an uncertain placement into a false-precision date slot.`,
     exampleOutput: `Timeline:
 Jul 30 (evening): headache, took ibuprofen.
@@ -363,9 +385,7 @@ Undated entries: "felt fine most of last week" — no specific dates given.
 Logging gaps: Aug 3-4 not logged.
 Observed pattern: headaches reported on 2 of 3 logged days following gym/exercise sessions.
 This timeline is an organizational aid built from your own notes — the pattern shown needs your neurologist's interpretation.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -429,15 +449,19 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`patient-education`, `health-literacy`, `clinical-handout`, `plain-language`, `content-drafting`],
+    tags: [
+      `patient-education`,
+      `health-literacy`,
+      `clinical-handout`,
+      `plain-language`,
+      `content-drafting`,
+    ],
     whyItWorks: `Forcing every specific clinical claim into an explicit, labeled placeholder rather than letting the model state a plausible number as fact is the central safeguard here, because a language model asked to draft "what to expect after knee arthroscopy" will readily generate a specific-sounding but unverified statistic or timeline that reads with the same confident tone as something the clinic actually vetted — and a wrong number embedded in an otherwise well-formatted, professional-looking handout is far more dangerous than an obviously blank field, since clinic staff are far less likely to catch it in review. Structuring the handout around decisions and actions (what to expect, when to call) rather than mechanism-first explanation reflects how patients actually use these documents under stress or discomfort — they're scanning for "is what I'm feeling normal" and "when do I need to act," not reading linearly for background education, so burying the warning-signs section under general pathophysiology defeats the handout's actual purpose. The instruction against softening a genuine warning sign to sound gentler exists because plain-language rewriting has a real failure mode where clarity gets traded for a warmer tone, and a hedged warning sign is a worse outcome than a blunt one. Framing the closing disclaimer as something the clinic must adjust to match its own approved language — rather than a fixed boilerplate line — keeps the deliverable honest about its own status: a draft awaiting the clinic's actual clinical sign-off, not a finished patient-facing document.`,
     exampleOutput: `What to expect: Most people can walk with crutches the same day, though [clinic to confirm: typical timeframe] before walking without support varies by procedure extent.
 Warning signs — call us if: your knee becomes hot, red, or swollen well beyond the surgical area, or you develop a fever.
 Placeholders to resolve: typical timeframe for walking unassisted; typical return-to-driving window; pain medication schedule.
 [Clinic-approved disclaimer to be inserted here before distribution.]`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -495,16 +519,20 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`hospital-discharge`, `caregiving`, `patient-safety`, `checklist`, `recovery-planning`],
+    tags: [
+      `hospital-discharge`,
+      `caregiving`,
+      `patient-safety`,
+      `checklist`,
+      `recovery-planning`,
+    ],
     whyItWorks: `The rule against rewording any dosage, restriction, or warning sign — even slightly — exists because discharge instructions are precise clinical language where a synonym swap can quietly change meaning: "no heavy lifting over 10 lbs" restated loosely as "take it easy with lifting" removes the actual threshold a caregiver needs to enforce, and a model asked to "simplify" text will do exactly that kind of lossy paraphrase by default unless explicitly told the content itself is off-limits for rewording. Converting relative timeframes into calculated calendar dates, while keeping the original wording visible alongside the calculation, solves a real and common home-recovery failure — "follow up in 5-7 days" is easy to lose track of once a person is managing pain and medication schedules, but a wrong date silently substituted for the original phrase with no way to check the math is worse than the ambiguity it replaced, so showing both lets an error be caught rather than trusted blindly. Reorganizing by category instead of preserving the document's original order reflects that hospital discharge forms are typically laid out to satisfy documentation and billing requirements, not to be read linearly by an exhausted caregiver managing several concerns at once — grouping by "medications" versus "warning signs" matches how the information actually gets used day to day. Routing illegible or contradictory content into a separate "call to confirm" bucket rather than silently resolving it prevents the model from guessing at clinical intent it has no authority to guess at, which is exactly the kind of gap-filling behavior that turns a helpful reorganization into a genuine safety risk if left unchecked.`,
     exampleOutput: `Medications: Amoxicillin 500mg, 3x daily, for 7 days (as written).
 Follow-up: Dr. Reyes, in 5-7 days (original wording) = Aug 16-18, 2026 (calculated from Aug 11 discharge).
 Activity restrictions: No lifting over 10 lbs, for 2 weeks (original wording) = through Aug 25, 2026.
 Call the facility immediately if: fever over 101F, redness spreading from the incision, or the wound reopens (verbatim).
 This checklist reorganizes the discharging facility's own instructions and does not replace them.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -569,7 +597,13 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`clinical-documentation`, `note-drafting`, `soap-note`, `clinician-workflow`, `medical-scribe`],
+    tags: [
+      `clinical-documentation`,
+      `note-drafting`,
+      `soap-note`,
+      `clinician-workflow`,
+      `medical-scribe`,
+    ],
     whyItWorks: `The hard rule against adding any clinical content not present in the dictation is what keeps this tool inside a documentation-formatting role rather than drifting into clinical decision support, which matters because a language model organizing an abdominal-pain encounter has more than enough pattern knowledge to "helpfully" suggest a differential or a typical next step — exactly the kind of unsolicited addition that could get silently absorbed into a signed chart note if the clinician is reviewing quickly and the added line reads plausibly. Only expanding shorthand the clinician has explicitly defined, rather than the model's own best guess at common medical abbreviations, protects against a subtler risk: many abbreviations are genuinely ambiguous or practice-specific (a clinician's "f/u" might mean something different in a different specialty or even a different clinician's personal habit), and a wrong silent expansion inserted into clinical documentation is a data-integrity problem, not just a stylistic one. Flagging rather than resolving ambiguous section placement matters because the assessment/exam distinction is itself a clinical judgment in gray-area cases, and making that call invisibly would mean the tool quietly participated in clinical reasoning rather than just reformatting it. The mandatory unsigned/draft header and footer is there specifically so this text can never be mistaken for or accidentally copy-pasted as a finalized, attested chart entry — it has to carry that status visibly at both ends of the document, not just in a cover note that could get stripped off.`,
     exampleOutput: `DRAFT — unsigned, pending clinician review. Not a final chart entry.
 S: Patient reports right lower quadrant pain for 2 days, no fever, decreased appetite.
@@ -578,9 +612,7 @@ A: [not stated in dictation — clinician to add]
 P: CBC, abdominal ultrasound, follow-up with results tomorrow.
 Shorthand left unexpanded: none — all terms matched practice_shorthand provided.
 DRAFT — unsigned, pending clinician review. Not a final chart entry.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -631,7 +663,13 @@ Mark the entire output, top and bottom, as: "UNSIGNED DRAFT — for clinician re
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`soap-note`, `clinical-documentation`, `clinician-workflow`, `note-drafting`, `ehr`],
+    tags: [
+      `soap-note`,
+      `clinical-documentation`,
+      `clinician-workflow`,
+      `note-drafting`,
+      `ehr`,
+    ],
     whyItWorks: `The rule that Assessment must default to "not stated — clinician to complete" rather than an inferred diagnosis is the single most important line in this prompt, because SOAP notes are exactly the kind of text a model has seen enormous volumes of during training, and it has a strong learned prior that a Subjective plus Objective section is almost always followed by a plausible Assessment — the model will readily generate one that sounds clinically reasonable given the symptoms described, and a fabricated assessment silently inserted into a note the clinician later signs without noticing is a direct path to a documentation error attributed to the wrong author. Splitting a sentence that mixes observation and interpretation at its natural boundary, rather than forcing the whole sentence into one section, respects the fact that clinicians genuinely do write notes this way in practice — a single sentence often contains both a measured finding and an interpretive comment — and silently choosing one section for the whole sentence would either lose the objective content or misrepresent an interpretation as a raw observation. Restricting patient context to age and visit reason only, rather than allowing broader clinical background into that field, keeps the reorganization task honestly scoped to what the free-text notes themselves contain, so nothing outside the clinician's own documentation can leak into the draft as if it had been part of the visit record. The unsigned-draft framing at both the top and bottom guards against exactly the failure mode of a note being copy-pasted into an EHR mid-review, before the clinician has completed the Assessment section the tool deliberately left blank.`,
     exampleOutput: `UNSIGNED DRAFT — for clinician review and completion, not a final note.
 S: 45-year-old presents for annual physical, feels well overall. Reports occasional lower back stiffness in the mornings, no numbness or radiation.
@@ -640,9 +678,7 @@ A: Not stated in source notes — clinician to complete.
 P: Routine labs ordered, follow-up in 3 months.
 Couldn't confidently place: discussion of weight-loss goals and plan to walk 3x/week — placed under Subjective as reported intent, flag if it belongs in Plan instead.
 UNSIGNED DRAFT — for clinician review and completion, not a final note.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -706,14 +742,18 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`patient-communication`, `follow-up-message`, `clinic-workflow`, `portal-messaging`, `patient-experience`],
+    tags: [
+      `patient-communication`,
+      `follow-up-message`,
+      `clinic-workflow`,
+      `portal-messaging`,
+      `patient-experience`,
+    ],
     whyItWorks: `Restricting the message to only the key points supplied, in the same terms, is what keeps this a communication-drafting tool rather than something making an independent clinical characterization: if a model is handed "cholesterol results back, within range" and asked to write a warm patient message, its default instinct is to add reassuring color ("great news, nothing to worry about here") that goes slightly beyond what was actually stated, and that small addition compounds badly when the same drafting pattern is reused for an abnormal result, where an unintended reassuring tone could actively undercut a warning the sender meant to convey. Ordering the content by what's resolved, then action items, then contact information reflects how people actually read short messages on a phone — they skim for whether they need to do anything before reading the full context, so front-loading resolved status and burying action items in paragraph three means they're more likely to be missed. The explicit ban on "automated message" framing matters for a specific reason: presenting this as automated would misrepresent the fact that a licensed clinician or staff member is reviewing and personally sending it, which is exactly the accountability structure that makes this drafting tool appropriate to use in the first place — it's a draft awaiting a real person's review, not a system generating patient-facing clinical communication unsupervised. The closing bracketed reminder is placed outside the message body itself so it never accidentally gets copy-pasted into what the patient actually receives.`,
     exampleOutput: `Subject: Your recent bloodwork results
 Hi [Patient name], your cholesterol panel from last week is back and within normal range — no action needed on your end. Keep up your current diet and exercise routine, and we'll see you for your next annual bloodwork in about 12 months unless anything changes before then. Reach out anytime if you have questions.
 [Reminder: confirm every clinical detail above matches the actual result before sending — this draft only reflects the key points you supplied.]`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -769,16 +809,20 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`caregiving`, `care-coordination`, `family-caregiver`, `care-plan`, `health-literacy`],
+    tags: [
+      `caregiving`,
+      `care-coordination`,
+      `family-caregiver`,
+      `care-plan`,
+      `health-literacy`,
+    ],
     whyItWorks: `The rule against inferring who's responsible for an unassigned task addresses the most common real-world breakdown in family caregiving — a task with no clearly designated owner tends to get either duplicated or dropped entirely, and a model asked to organize a care plan by role will otherwise make a plausible-sounding assumption about who probably handles it, which papers over the actual coordination gap instead of surfacing it for the family to resolve deliberately. Compressing the language around an instruction while leaving its substance untouched matters for the same reason it matters in discharge instructions: "weekly weight checks to monitor fluid retention" compressed into "keep an eye on weight" quietly drops both the frequency and the clinical reason for the task, and a family member skimming a shortened summary has no way to recover what was lost unless the instruction's actual content was preserved exactly. Answering recurring family questions only when the plan itself actually answers them — and saying so plainly when it doesn't — prevents the summary from becoming a second, informal source of truth that quietly diverges from the plan the care team actually wrote; if the model filled an unanswered question with a reasonable-sounding guess, that guess could get treated as settled by a family member who never goes back to the original document. The closing line reasserting the full plan's authority exists because a one-page summary is deliberately lossy by design — it's meant to make the plan usable day to day, not to replace it as the record the care team should be consulted against when something changes.`,
     exampleOutput: `Daughter (daily visits): morning and evening medication administration; weekly weight checks (currently unassigned in the plan — needs a family decision on who tracks this).
 Son (remote): monthly cardiology follow-up scheduling and confirming attendance.
 Home health aide (weekday mornings): assistance with medication per the plan; PT exercises not explicitly assigned to the aide in the plan — needs confirmation from the PT team.
 Recurring questions: Weekly weight tracking — not assigned to anyone in the plan as written; PT exercise responsibility — not addressed in the plan.
 The full care plan remains the authoritative document — any change should go through the care team that authored it.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -843,15 +887,19 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`health-content`, `wellness-writing`, `content-drafting`, `editorial-review`, `plain-language`],
+    tags: [
+      `health-content`,
+      `wellness-writing`,
+      `content-drafting`,
+      `editorial-review`,
+      `plain-language`,
+    ],
     whyItWorks: `The instruction to flag every specific statistic or study reference as "[verify]" rather than let the model produce one directly targets a well-documented failure mode: language models writing on health topics will generate plausible-sounding but unverifiable specifics — a percentage, a study name, an effect size — because the surrounding prose pattern strongly favors that kind of concrete-sounding detail, and readers cannot distinguish a fabricated statistic from a real one by tone alone since both are written with identical confidence. Framing content as general information rather than personalized guidance, and enforcing that through word choice ("generally recommended" instead of "you should"), keeps the article structurally honest about what it actually is — broad-audience content that necessarily can't account for an individual reader's medications, conditions, or circumstances — which matters because the moment an article starts issuing reader-specific imperatives, it's implicitly claiming to know things about the reader it has no way to know. Anchoring the draft to one key angle rather than exhaustive topic coverage is a genuine engagement mechanism, not just a stylistic preference — a focused wellness article that a reader actually finishes delivers its one accurate, verified point, while a broader piece that loses the reader halfway through delivers none of its content at all, verified or not. The separated verification list exists specifically so an editor reviewing a finished-looking draft doesn't have to hunt through prose for inline flags — every claim needing a real check is pulled into one place where it's actually likely to get checked before publication.`,
     exampleOutput: `Headline options: "Why the Time You Sleep Might Matter More Than How Long"; "Consistency, Not Just Hours: Rethinking Sleep"
 Draft excerpt: Getting seven or eight hours matters, but going to bed and waking up at roughly the same time each day may be just as important for how rested you feel. [verify: specific statistic/study on sleep regularity and daytime alertness].
 Flagged for verification: any specific study or percentage referenced regarding sleep-consistency effects.
 This article is for general informational purposes and is not a substitute for professional medical advice; readers with specific health concerns should consult a qualified clinician.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -905,16 +953,20 @@ A closing line stating this glossary defines general medical vocabulary only and
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`health-literacy`, `medical-jargon`, `patient-education`, `glossary`, `plain-language`],
+    tags: [
+      `health-literacy`,
+      `medical-jargon`,
+      `patient-education`,
+      `glossary`,
+      `plain-language`,
+    ],
     whyItWorks: `The line between defining a term generally and interpreting what it means for this specific document is the entire safety mechanism of this prompt, and it's a genuinely fine line for a model to hold: asked to define "pes planus" in a document that also says "mild" and "as needed," the natural pull is to blend the general definition with an implicit read on how significant this particular finding is — a model will often slide from "pes planus means flat feet" into something like "this is a mild, not particularly concerning finding," which has quietly crossed from vocabulary into case interpretation using information (the surrounding words "mild," "as needed") that the person building a glossary didn't ask to have synthesized into a judgment. Alphabetizing rather than following document order reinforces that this is meant to be a standing reference tool, not a narrative walkthrough of the report — someone re-reading their chart six months later needs to look up one term quickly, not re-read the whole structure. Explicitly allowing ambiguous abbreviations to be flagged as possibly meaning something else, rather than picking one confident definition, matters because medical abbreviations are genuinely overloaded across specialties, and a wrong confident definition is worse than an honestly uncertain one since the reader has no independent way to catch the error. The instruction to define everything rather than exercise editorial judgment about what's "worth" defining keeps the tool from silently deciding what matters in someone else's own medical document, which isn't a call a glossary tool should be making on the patient's behalf.`,
     exampleOutput: `Bilateral: affecting both sides of the body (already known — skipped).
 Osseous: relating to bone.
 Pes planus: the medical term for flat feet, a condition where the arch of the foot is lower than typical. (Appears in the impression section.)
 PRN: a common medical abbreviation meaning "as needed" — could occasionally appear with a different specific meaning depending on context, but this is the standard reading. (Appears in the recommendation section.)
 This glossary defines general medical vocabulary only and does not interpret what these terms mean for your own health — that requires your podiatrist.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -979,16 +1031,20 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`wellness-habits`, `habit-tracking`, `personal-wellness`, `self-improvement`, `behavior-change`],
+    tags: [
+      `wellness-habits`,
+      `habit-tracking`,
+      `personal-wellness`,
+      `self-improvement`,
+      `behavior-change`,
+    ],
     whyItWorks: `Anchoring the plan to the smallest trackable version of each habit rather than its aspirational form directly counters the most common and well-documented reason self-directed habit plans collapse within two to three weeks: an ambitious daily target creates a binary pass/fail every single day, and a handful of missed days early on tends to trigger total abandonment rather than a scaled-back continuation, whereas a genuinely minimal version is easy enough to hit on a bad day that the habit survives the bad day instead of dying with it. Explicitly requiring the plan to address the stated reason a past attempt failed — rather than proposing a generically "better" version of the same mechanism — matters because "logging felt like homework" is a structural complaint about the tracking method itself, not about willpower, and a model that isn't forced to engage with that specific failure will default to recommending another daily-log-style app that fails for the identical reason. Matching cadence and reward structure to the person's stated motivation style rather than a one-size streak-counter reflects that habit-formation research finds meaningfully different people respond to different reinforcement mechanisms, and defaulting to whatever the most commonly discussed method is (streaks, reminders) ignores a preference the person already told you doesn't work for them. The closing note about checking with a treating clinician exists because general lifestyle habits like hydration or sleep timing can intersect with an actual medical condition or medication regimen in ways this general planning exercise has no visibility into.`,
     exampleOutput: `Water: track only "did I refill my bottle at my desk by 10am" — yes/no, once a day, not ounce counts.
 Walking: track "did I take one walk today," any length, rather than a step-count target.
 Bedtime: track "lights out within 30 minutes of target time" rather than an exact clock-time streak.
 Why this fits: replaces the app-based daily log (which felt like homework) with a single visual weekly grid you fill in by hand — you said you respond better to seeing progress visually than to streaks.
 This is a general lifestyle plan, not medical guidance — if any of these habits are tied to managing a diagnosed condition, check the approach with your doctor first.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1053,15 +1109,19 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`nutrition`, `dietitian-consult`, `patient-advocacy`, `question-list`, `health-literacy`],
+    tags: [
+      `nutrition`,
+      `dietitian-consult`,
+      `patient-advocacy`,
+      `question-list`,
+      `health-literacy`,
+    ],
     whyItWorks: `The rule against resolving conflicting nutrition claims directly is the central guardrail, because nutrition is a domain saturated with confident-sounding but genuinely conflicting popular claims, and a model asked to help someone "figure out" whether skipping breakfast is fine will readily pick a side and defend it persuasively — which feels helpful but substitutes the model's synthesis of general internet-level nutrition discourse for what should be an individualized answer from someone who can actually account for this person's metabolism, medication, and goals. Turning the health context into questions about how that context should shape recommendations, rather than answering those questions directly, matters specifically because the person mentioned taking metformin for prediabetes — a real drug-diet interaction consideration that a general-purpose model has no business resolving unprompted, since getting it wrong in a domain this consequential is a meaningfully different risk than getting a generic productivity tip wrong. Anchoring every question to the person's actual stated current habits rather than leaving them abstract is what makes the resulting consult productive at all: a dietitian can give a genuinely useful, specific answer to "given that I currently skip breakfast and snack heavily around 9pm while working late, what would you actually change first" in a way they can't to an unanchored "how do I eat better," which just produces the same generic lecture the person could have gotten anywhere. Grouping by topic rather than order-encountered keeps the list usable inside whatever limited time the actual consult allows.`,
     exampleOutput: `Questions about your goal: Given that I currently skip breakfast and snack heavily around 9pm while working late, what would you suggest changing first to help afternoon energy specifically?
 Reconciling conflicting info: I've seen conflicting claims about whether skipping breakfast affects metabolism — what's the actual answer for someone with my current eating pattern?
 Health context questions: Given that I take metformin for prediabetes, does my current meal timing (skipping breakfast, large 1pm lunch) matter for how the medication works?
 This list is meant to make the consult more productive and does not itself contain dietary advice — any specific recommendation should come from the dietitian directly.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1134,12 +1194,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`exercise-planning`, `fitness-program`, `wellness`, `personal-training`, `injury-aware`],
+    tags: [
+      `exercise-planning`,
+      `fitness-program`,
+      `wellness`,
+      `personal-training`,
+      `injury-aware`,
+    ],
     whyItWorks: `A flat, undifferentiated workout template fails the moment it meets a real body with a real injury history, because GPT-5.1 will happily generate a polished-looking plan without ever surfacing the fact that it's guessing about what's safe for a specific joint or muscle group — the injury field forces the model to either name a concrete modification per phase or explicitly flag the gap, rather than silently writing around the risk. Requiring named phase-transition triggers (a soreness threshold, not a calendar date) matters because a generic plan that just says "week 3, add more weight" treats progress as guaranteed, when the actual failure mode in home fitness programs is people pushing through pain because the plan gave them permission to advance regardless of how the previous phase felt. Structuring a checkpoint after every phase, with an explicit branch for what happens on a worse-than-expected answer, converts the plan from a one-way script into something that can regress or pause itself — which is the behavior a real coach would have and a static template never does. The mandatory disclaimer is placed first, not buried at the end, because that's the point where someone with a genuine injury history decides whether to keep reading or to book a physical therapy appointment first, and a caveat appended after the exercises have already been prescribed does far less to change behavior than one that precedes them. None of this replaces a clinical assessment — it constrains the model to flag exactly the moments where one is warranted instead of asserting confidence it hasn't earned.`,
     exampleOutput: `Note: This is a general fitness planning aid, not a physical therapy assessment — given the ankle history, have a PT review the balance-work phases before starting. Phase 1 (Weeks 1-2, 3x/week): bodyweight squats, glute bridges, banded lateral walks; ankle modification: hold a wall for balance work rather than free-standing. Checkpoint: rate soreness 0-10 and note if the ankle felt unstable — if unstable, repeat Phase 1 rather than advancing.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1213,12 +1277,16 @@ The disclaimer, then one prompt per day, numbered, each 1-2 sentences, with a on
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`journaling`, `mental-wellness`, `self-reflection`, `stress-management`, `guided-writing`],
+    tags: [
+      `journaling`,
+      `mental-wellness`,
+      `self-reflection`,
+      `stress-management`,
+      `guided-writing`,
+    ],
     whyItWorks: `Generic journal-prompt lists fail because they're written to apply to anyone, which means they apply to no one in particular — asking for the specific stressor and what's already been tried forces GPT-5.1 to write prompts that reference the actual shape of the problem instead of reaching for its default stock of gratitude and self-compassion phrasing, which is the most common failure mode when a prompt underspecifies the situation. Sequencing prompts from observation to trigger-context to next-step gives the week an arc instead of seven interchangeable questions, which matters because reflective writing tends to go shallow when every prompt sits at the same level of abstraction; a person needs the early days to just notice the pattern before being asked what to do about it. The instruction against presumptive framing (prompts that assume gratitude or a resolved feeling) exists because that phrasing is a common failure specific to wellness content generation — it silently invalidates whatever the person is actually feeling by writing the answer into the question. The instruction to name when a described pattern suggests professional support may help, rather than staying silent, is the safety-relevant piece: a model that only ever produces journal prompts regardless of severity risks implicitly framing serious, persistent distress as something self-help writing alone should resolve, so the prompt explicitly requires the model to flag that boundary rather than assume journaling is always sufficient. The disclaimer sits before the content because it needs to frame expectations before the person starts engaging with prompts that could otherwise read as a stand-in for actual mental health care.`,
     exampleOutput: `Note: This is reflective journaling support for everyday stress, not therapy — if this pattern feels persistent or overwhelming, a licensed therapist is worth involving. Day 1: Describe the last visit in plain detail — what happened right before the resentment showed up? (Building toward: noticing the trigger moment.) Day 2: What did you do with that feeling in the moment — say it, swallow it, distract from it?`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1295,12 +1363,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`health-research`, `appointment-prep`, `patient-advocacy`, `consumer-health`, `medical-questions`],
+    tags: [
+      `health-research`,
+      `appointment-prep`,
+      `patient-advocacy`,
+      `consumer-health`,
+      `medical-questions`,
+    ],
     whyItWorks: `The core risk in this task is a model quietly sliding from organizing research into interpreting it — GPT-5.1 is fluent enough to produce a confident-sounding synthesis that reads like a diagnosis even when it's just pattern-matching across the sources it was given, so the prompt explicitly forbids resolving disagreements or ranking likelihood, forcing the output to stay in the category of "here's what you found and where it conflicts" rather than "here's what's probably going on." Structuring output around agreement/disagreement/personal-relevance rather than a flat restatement gives the person something a clinician can actually use in a short visit, because a clinician's limited appointment time is better spent resolving the disagreement than re-reading a wall of undifferentiated notes. Requiring urgent-sounding symptoms to be pulled into their own flagged line matters because burying a red flag inside general prep notes defeats the purpose — if something in their own description suggests waiting for a scheduled appointment isn't appropriate, that needs to be impossible to miss, not one bullet among many. The rule against inventing statistics or study findings addresses a specific failure mode of consumer health prompts: a model asked to "summarize research" will sometimes fabricate a plausible-sounding number to fill a gap, which is worse than no number at all since it launders a guess as fact. Framing this explicitly as appointment prep, not diagnosis, both in the disclaimer and in the structural rules, keeps the tool doing the thing it can actually do well — organizing what a person already knows — instead of the thing only an examining clinician can do.`,
     exampleOutput: `Note: This organizes your own research for your appointment — it isn't a diagnosis. Sources agreed: fatigue + cold sensitivity are commonly discussed together with thyroid function. Sources disagreed: whether lab work is needed before or after ruling out sleep issues. Specific to you: the hair thinning wasn't mentioned in the general articles you read. Questions to ask: "Given the fatigue, hair thinning, and duration, would you order thyroid labs at this visit or wait?"`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1368,12 +1440,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`clinical-literature`, `evidence-synthesis`, `medical-research`, `literature-review`, `clinical-brief`],
+    tags: [
+      `clinical-literature`,
+      `evidence-synthesis`,
+      `medical-research`,
+      `literature-review`,
+      `clinical-brief`,
+    ],
     whyItWorks: `The single biggest risk in literature synthesis tasks is a model quietly supplementing the provided papers with its own general training-data knowledge of a topic, producing a brief that reads as more comprehensive than the actual evidence base the clinician assembled — the explicit instruction to extract only what's stated in the given excerpts, and never to cite anything not provided, closes that gap by keeping the model's role strictly extractive rather than generative on the factual content. Requiring per-paper extraction of design, population, and self-reported limitations before any synthesis forces the model to surface the methodological differences that make studies hard to compare, rather than jumping straight to a smoothed conclusion that hides the fact that a 24-person industry-funded pilot and a 450-person observational study don't actually carry equal evidentiary weight. Grouping into agreement/disagreement/not-comparable, instead of a single blended paragraph, mirrors how an actual evidence review is read by a clinician deciding how much to trust it — averaging conflicting findings into one number is a well-documented failure mode in lay summarization of research and is exactly what this structure prevents. The explicit ban on translating synthesis into a recommendation matters because that is precisely the point where a language model's fluency becomes dangerous: it can produce a confident-sounding "should" statement about patient care with no access to the actual patient, and the brief's whole value is in organizing evidence for someone who does have that context to make the call. The disclaimer is framed around independent verification specifically because a model can misstate what a paper says even when instructed not to, so the clinician using this brief is told upfront to check the brief against the original sources, not just accept the synthesis at face value.`,
     exampleOutput: `Note: Built only from the three abstracts provided; verify each against the original publication before relying on this brief, and have a qualified clinician review it before it informs any care decision. Agreement: none of the three fully agree. Disagreement: the RCT and pilot show improvement, the larger observational study shows none. Limitation flagged: the pilot showing the largest effect is small (n=24) and industry-funded per the abstract, which should reduce how much weight it carries relative to the larger observational study.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1450,12 +1526,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`patient-faq`, `patient-communication`, `healthcare-content`, `procedure-prep`, `front-desk`],
+    tags: [
+      `patient-faq`,
+      `patient-communication`,
+      `healthcare-content`,
+      `procedure-prep`,
+      `front-desk`,
+    ],
     whyItWorks: `Most procedure FAQs are written entirely around logistics because that's what front-desk staff actually get asked, but the questions a patient is silently anxious about rarely get voiced to a receptionist and never make it into the source material — asking the model to explicitly infer a second tier of anxiety-adjacent questions specific to this procedure, rather than pulling from a generic FAQ template, produces content that addresses what's actually keeping someone up the night before, which is where a lot of patient FAQ pages fall short. The instruction against minimizing real discomfort ("most patients describe mild discomfort" versus a blanket "painless") matters because overpromising comfort is a specific, common failure in patient-facing healthcare copy that erodes trust the moment a patient's actual experience doesn't match the page, and it's also the kind of overclaim that shouldn't be published without clinical sign-off in the first place. Routing any question that depends on individual risk factors to "ask your care team" rather than attempting a general answer prevents the page from accidentally functioning as personalized medical advice — a FAQ page is read by people with wildly different health histories, and a generically correct answer for a typical patient can be actively wrong for someone with an atypical one. The ban on inventing specific complication or success rates addresses a distinct risk: a fluent model asked to write reassuring healthcare copy will sometimes produce a plausible-sounding statistic to round out an answer, and a fabricated number on a real clinical FAQ page is a credibility and safety problem, not just a stylistic one. The clinical-review note at the top exists because this is a draft for a real publishing workflow, and it should never reach a patient before someone with clinical authority has checked every answer against how the practice actually performs the procedure.`,
     exampleOutput: `Clinical review required before publishing. Q: Will the procedure hurt? A: Most patients under sedation don't recall the procedure at all; some describe mild bloating afterward from the air used during the exam, not pain. Q: What if I have questions about my own risk given my health history? A: That depends on your specific situation — please raise it with your care team at your pre-procedure appointment.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1531,12 +1611,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`healthcare-copywriting`, `plain-language`, `patient-communication`, `readability`, `content-rewrite`],
+    tags: [
+      `healthcare-copywriting`,
+      `plain-language`,
+      `patient-communication`,
+      `readability`,
+      `content-rewrite`,
+    ],
     whyItWorks: `Readability rewrites of healthcare copy fail in a specific, predictable way: simplifying jargon-heavy sentences tends to accidentally strengthen or soften the underlying claim, because plain words carry different connotations than the hedged clinical phrasing they replace — "significantly reducing time to full functional restoration for the majority of our patient population" simplified carelessly can turn into "you'll heal faster," which is a stronger, unqualified promise the original never actually made. Explicitly separating the readability job from the accuracy job, and instructing the model to preserve hedge strength exactly, is what prevents that drift, since GPT-5.1 will otherwise optimize for a punchier, more confident-sounding sentence when asked to make copy "clearer," which reads well but changes the claim. Flagging any claim that implies an uncited statistic or clinical validation, rather than inventing a number or silently cutting the sentence, matters because both of those alternatives make an editorial decision that isn't the model's to make — a deleted claim might be one the practice can actually support with data they have but didn't paste in, and an invented statistic is a fabricated clinical claim on a real patient-facing page. The explicit ban on adding new reassurances addresses the very common failure mode where a model asked to make marketing copy "warmer" adds outcome language that sounds natural for the genre but was never actually claimed by the source. The disclaimer here is addressed to the internal team, not the patient, because the deliverable itself is a draft in a publishing pipeline — the point where a clinician needs to intervene is before publication, checking the flagged list against what the practice can actually substantiate.`,
     exampleOutput: `Rewritten: "After surgery, our physical therapy team helps you get back to moving comfortably. We use methods backed by research, and most patients recover function sooner than they expected." Flagged: the original's "significantly reducing time to full functional restoration for the majority" implies a comparative statistic — confirm this against actual outcome data before publishing, or soften to avoid an unsupported comparison claim.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1613,12 +1697,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`telehealth`, `intake-forms`, `patient-triage`, `healthcare-operations`, `form-design`],
+    tags: [
+      `telehealth`,
+      `intake-forms`,
+      `patient-triage`,
+      `healthcare-operations`,
+      `form-design`,
+    ],
     whyItWorks: `Intake forms fail operationally in a specific, well-known way: open-ended free-text fields produce answers too vague for triage staff to act on directly, forcing a callback loop that defeats the purpose of an intake form in the first place — forcing structured-choice answers wherever a routing decision depends on the response, and reserving free text for genuinely unstructured information, is what closes that gap. Requiring explicit branching logic with a stated patient-facing message at the urgent-flag trigger matters because a form that silently "flags" something in a back-end field without telling the patient what to do next leaves a person with a real emergency sitting at their screen waiting for a callback instead of calling for help immediately, which is the actual harm this kind of form exists to prevent. Ordering urgent-relevant questions early rather than after routine demographic fields is a direct fix for a common form-design mistake: a patient in genuine distress filling out ten fields about insurance before reaching the question that would flag them is a real, documented failure pattern in badly sequenced intake forms. The instruction against clinical terminology in the questions themselves keeps the form usable by the patient population it's actually written for, since a triage question phrased in clinical language will get inconsistent, sometimes wrong answers from patients who don't recognize the term. The explicit ban on the form rendering any diagnosis or treatment suggestion is the safety-critical rule — an intake form's entire legitimate function is structured information-gathering and urgency flagging, and any drift toward the form appearing to offer clinical judgment on its own would mislead a patient about what they're interacting with, which is why clinical sign-off on the final logic is stated as mandatory before real use.`,
     exampleOutput: `Q3: Is the rash spreading noticeably within the last few hours? (Yes / No / Not sure) -> If Yes, and combined with reported facial or throat swelling, trigger urgent flag. Patient-facing message on trigger: "Based on your answers, this may need immediate attention. Please call 911 or go to the nearest emergency department now rather than waiting for this form to be reviewed."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1695,12 +1783,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`healthcare-chatbot`, `conversation-design`, `patient-routing`, `chatbot-scripting`, `escalation-flows`],
+    tags: [
+      `healthcare-chatbot`,
+      `conversation-design`,
+      `patient-routing`,
+      `chatbot-scripting`,
+      `escalation-flows`,
+    ],
     whyItWorks: `The failure mode this prompt is built around is chatbot scope creep: a bot scripted only for scheduling will, without an explicit and specific escalation instruction, still generate a plausible-sounding reassuring reply the moment a user types something symptom-adjacent, because a fluent model asked to be "helpful" will try to be helpful about whatever the user actually said rather than staying inside its intended lane — which is why the rule bans not just diagnosis but reassurance lines like "probably nothing to worry about," since even a well-meaning reassurance is clinical judgment the bot has no basis to offer. Writing the escalation handoff as a warm, specific line rather than a form-letter refusal matters because the moment someone types a symptom into a healthcare chatbot is often a moment of real anxiety, and a cold "I cannot assist with that" at that exact moment reads as dismissive in a way that can discourage someone from then seeking the human help they actually need. Requiring the mid-flow branch (a user asking to reschedule "because I feel too unwell") to be scripted explicitly, rather than left implicit, addresses a realistic edge case that generic chatbot scripts typically miss — real users don't cleanly separate a logistics request from a health complaint, and a flow that only handles the clean case will mishandle the common messy one. The standing session-start disclaimer, shown before any interaction rather than only triggered on escalation, sets the user's expectation of what the bot is for from the first message, which reduces the odds someone treats a routing bot as a source of medical judgment in the first place. The internal review note is there because a chatbot's scripted flows are a deployed product surface, not a one-off document — clinical and compliance review before launch is the actual safeguard, not the disclaimer text alone.`,
     exampleOutput: `Session start: "Hi, I can help you schedule, reschedule, or ask about office hours and refills. I can't assess symptoms or give medical advice — for a health concern, I'll connect you with your care team, and for an emergency please call emergency services." Escalation line: "That sounds like something your care team should hear directly rather than me trying to sort out — I'm connecting you with our nurse line now, and if this feels urgent, please call 911 or go to the nearest ER."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1768,12 +1860,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`medical-documents`, `plain-language`, `patient-summary`, `caregiver-support`, `discharge-instructions`],
+    tags: [
+      `medical-documents`,
+      `plain-language`,
+      `patient-summary`,
+      `caregiver-support`,
+      `discharge-instructions`,
+    ],
     whyItWorks: `Discharge summaries and medical letters are written in an order that makes clinical sense to another clinician — background, findings, then instructions at the end — which is close to the worst order for a caregiver skimming under stress, so reordering the summary around action items first directly fixes the actual failure mode of these documents in real use: important instructions getting missed because they were buried on the second page. The rule to preserve every specific number and date exactly, even while simplifying the surrounding language, exists because the single most dangerous failure in a plain-language medical summary isn't clunky phrasing, it's a dropped or altered dose, date, or threshold — GPT-5.1 is fluent enough to paraphrase a dosage instruction in a way that sounds natural but subtly loses precision ("take it a couple times a day" instead of "875mg twice daily"), and this rule exists specifically to prevent that class of error. Requiring ambiguous or contradictory content to be listed separately as "confirm with your care team," rather than resolved with a best guess, matters because a model guessing at what an unclear abbreviation or an apparently contradictory instruction means is exactly the situation where a wrong guess does more harm than an honest gap — the reader can act on an acknowledged unknown by calling the clinic, but they can't correct a wrong interpretation they don't know is wrong. The explicit ban on adding interpretation or reassurance not present in the source keeps the summary a translation, not a second medical opinion, which is the line this task must not cross. The disclaimer directs the reader back to the original clinician for anything they're unsure about, because the summary's job is comprehension, not decision-making on ambiguous or worrying content.`,
     exampleOutput: `Note: this is a plain-language translation of the discharge paperwork, not a substitute for talking to the care team. What to do now: take amoxicillin-clavulanate 875mg twice a day for 7 days (don't skip doses even if feeling better); schedule a follow-up chest X-ray in 4 to 6 weeks; go back to the ER right away if fever goes above 101F or breathing gets worse. Confirm with care team: the discharge note also mentions "cont. prior home meds" without listing them — confirm which medications this refers to.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1851,12 +1947,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`care-coordination`, `clinical-handoff`, `case-management`, `patient-safety`, `healthcare-communication`],
+    tags: [
+      `care-coordination`,
+      `clinical-handoff`,
+      `case-management`,
+      `patient-safety`,
+      `healthcare-communication`,
+    ],
     whyItWorks: `Handoff notes fail patients most often not through missing information but through smoothed-over conflicting information — two sources disagreeing about whether a medication is active is a well-documented root cause of care-coordination errors, and a model asked to "summarize" the situation will, by default, tend to resolve the conflict into one clean-sounding version rather than presenting the discrepancy, because a single coherent narrative reads better than two contradictory ones. The explicit instruction to show both conflicting versions and flag them for reconciliation, rather than picking the more plausible one, exists specifically to prevent that smoothing, since the coordinator reading this note is the person positioned to actually call and resolve it — the note's job is to make the conflict impossible to miss, not to guess at an answer. Leading with active issues and pending actions rather than a chronological account matches how a care coordinator actually uses a handoff note under time pressure — they need the open loop first, not a full narrative history, which is the same structural logic that improves any operational handoff document. Explicitly marking ownership as unclear when it is, rather than defaulting an action item to whichever party is mentioned last, prevents the common failure where an item silently falls through the cracks because everyone assumed someone else owned it. The ban on adding clinical interpretation matters because this note sits between multiple licensed clinicians' own judgment — it is a coordination artifact, and any drift toward the model contributing its own diagnostic reasoning would insert an unlicensed opinion into a clinical decision chain, which is exactly why review by a clinician or care lead is required before this note is finalized or entered into a record.`,
     exampleOutput: `Note: Coordination draft from information gathered so far — conflicting and missing items below must be reconciled and confirmed by the treating clinicians before this is finalized. Conflict flagged: discharge summary marks the blood thinner as discontinued; home health notes still list it as active — needs reconciliation before the next dose is given. Missing: PT clinic has not yet received the discharge summary. Open action, owner unclear: confirming which medication list is current.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1924,12 +2024,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`health-screening`, `workplace-wellness`, `risk-checklist`, `preventive-health`, `self-assessment`],
+    tags: [
+      `health-screening`,
+      `workplace-wellness`,
+      `risk-checklist`,
+      `preventive-health`,
+      `self-assessment`,
+    ],
     whyItWorks: `The most dangerous thing a lay-audience risk checklist can do is imply diagnostic precision it doesn't have — a point-scored checklist that outputs "you are at moderate risk" sounds authoritative but is built on self-report data with no clinical context, and a person reading a false "low risk" result may reasonably (and wrongly) decide a real symptom doesn't need attention, which is worse than no checklist at all. Explicitly banning any scoring formula or cutoff threshold, and requiring every group to end in "consider discussing this with a doctor" rather than a tier label, keeps the tool doing the one thing it can safely do: prompting a conversation, not replacing clinical judgment with an unearned number. Phrasing items as plain behavioral or frequency questions rather than ones requiring the respondent to have already assessed their own risk ("do you have high blood pressure risk") matters because self-assessment questions produce unreliable answers from people without clinical training — a frequency question ("how many days in the past month") is something anyone can answer accurately regardless of health literacy, which is exactly the design principle behind validated screening instruments used in real preventive care programs. The anonymous-compatible design rule exists because centralizing or ranking individual results turns a private self-reflection tool into something that functions like workplace health surveillance, which raises a different set of concerns entirely and isn't what this checklist is meant to be. The disclaimer stating explicitly that no score is calculated addresses a specific expectation mismatch: many people assume any checklist with yes/no questions must produce some kind of number, so the note has to say plainly that this one deliberately doesn't, and why.`,
     exampleOutput: `Note: this is a self-reflection tool, not a medical screening — it does not calculate a risk score. Sleep: In the past month, how many nights did you get less than 6 hours of sleep? / How many days did you feel tired despite a full night's sleep? If you answered yes to several of these, consider raising your sleep patterns with your doctor rather than assuming it's just normal tiredness.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1996,12 +2100,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`informed-consent`, `plain-language`, `patient-rights`, `healthcare-compliance`, `legal-clinical-review`],
+    tags: [
+      `informed-consent`,
+      `plain-language`,
+      `patient-rights`,
+      `healthcare-compliance`,
+      `legal-clinical-review`,
+    ],
     whyItWorks: `Informed consent forms are a genuinely high-stakes readability task because the entire ethical and legal purpose of the document is that the patient actually understood what they agreed to — a plain-language rewrite that quietly drops a risk, trims the alternatives section, or softens "rare but serious" into just "rare" doesn't just read more smoothly, it changes what informed consent was actually obtained for, which is why the rule requires every risk, obligation, and right to be preserved at full strength rather than trading completeness for readability. The specific instruction to preserve both halves of a qualified risk statement (rare, and separately, serious) exists because simplification pressure naturally collapses two-part hedges into one, and a model optimizing purely for plain phrasing will tend to keep whichever half reads more smoothly and drop the other, silently changing the risk disclosure. Requiring the alternatives section to stay fully intact, even flagging it as often the least-read part of the original, addresses a known pattern in consent-form drafting where alternatives get compressed first because they feel secondary — but they're a required element of informed consent precisely because a patient can't meaningfully consent to one option without knowing what the others were. The instruction to flag rather than resolve ambiguity about the actual scope of what's being authorized matters because a plain-language rewrite is not the place to make a substantive legal or clinical decision about what a vague original clause covers — that has to go back to whoever drafted it. The mandatory disclaimer to the requester, not the patient, reflects that this is a draft in a compliance pipeline: a rewritten consent form must be checked against the original by both clinical and legal review before it can be used to obtain actual consent from a real patient.`,
     exampleOutput: `Rewritten: "This surgery repairs the weak spot in your abdominal wall (hernia) using general anesthesia, which means you'll be fully asleep. Risks include infection and bleeding, which happen sometimes. There's also a rare but serious risk related to the anesthesia itself. An alternative to surgery is a non-surgical option using a supportive belt, which doesn't fix the hernia but may reduce discomfort for some patients — your doctor can explain whether that's a reasonable choice for you." Internal note: readability pass only, not yet reviewed for legal or clinical accuracy — clinical and compliance sign-off required before patient use.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2077,12 +2185,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`public-health-campaign`, `health-communication`, `campaign-messaging`, `behavior-change`, `risk-communication`],
+    tags: [
+      `public-health-campaign`,
+      `health-communication`,
+      `campaign-messaging`,
+      `behavior-change`,
+      `risk-communication`,
+    ],
     whyItWorks: `Public health messaging that only restates "you should do this" fails the audience that already knows the recommendation but faces a practical barrier to acting on it — addressing the specific named barrier (no regular provider, assumed cost or appointment hassle) rather than generic persuasion is what actually moves behavior, because the messaging now removes the exact obstacle in the audience's way instead of repeating information they've likely already heard. The instruction to use only explicitly provided facts and to insert a placeholder rather than inventing a statistic addresses a specific and serious risk in public health content: a fabricated number that later gets fact-checked and found wrong doesn't just discredit that one claim, it gives skeptical audiences a concrete reason to distrust the entire campaign, which is a much larger cost than a temporary placeholder. Capping the intensity of the messaging to what the provided facts actually support, rather than allowing fear-based escalation, reflects a well-established pattern in health communication research: messaging that overstates risk to drive urgency tends to produce short-term compliance at the cost of longer-term credibility once the audience recognizes the exaggeration, which is a worse outcome for a campaign that will need to be trusted again in future cycles. Requiring two distinct framings (benefit-forward versus barrier-removal) rather than a single take gives the requester an actual choice grounded in which barrier matters more for this specific audience, instead of presenting one draft as though it were the only reasonable option. The disclaimer requiring verification of every factual claim before publication exists because campaign messaging is public-facing content representing an organization's authority on health guidance, and that authority is only as good as the accuracy of what it claims — a step no drafting tool can substitute for.`,
     exampleOutput: `Barrier-removal variant — headline: "No doctor? No appointment needed." Body: "Get your flu shot at one of three community clinics through the end of November — free, walk-in, no appointment required." Placeholder flagged: none used, all claims traced to the provided fact about free walk-in clinics.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2150,12 +2262,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`health-content-qa`, `content-accuracy`, `editorial-review`, `misinformation-check`, `medical-fact-check`],
+    tags: [
+      `health-content-qa`,
+      `content-accuracy`,
+      `editorial-review`,
+      `misinformation-check`,
+      `medical-fact-check`,
+    ],
     whyItWorks: `The specific trap in health content QA is a vague-but-confident claim like "studies show" that sounds sourced without actually citing anything checkable — treating that phrasing as its own flagged category, distinct from a plainly unsourced claim, matters because a lazy content-QA pass would only catch claims with zero supporting language and miss the more common pattern of hedge-language doing the work of a citation without any of its accountability. Separating "supported," "unsourced," and "vague-unverifiable" into three distinct statuses rather than a binary sourced/unsourced check gives whoever reviews the report a much more actionable picture, since a vague claim and a flatly unsupported one require slightly different fixes (add a real citation versus rewrite the claim entirely). Flagging sentences that read as personalized advice or diagnostic framing as a wholly separate category from sourcing issues addresses a distinct risk: a claim can be perfectly well-sourced in general and still be dangerous if it's phrased in a way that lets an individual reader apply it to themselves as a diagnosis ("if you have X, you likely have Y"), which is a framing problem, not a citation problem, and needs to be caught even when the underlying fact is accurate. The instruction against the model fixing the draft itself, and against softening flagged issues to be polite, keeps this pass functioning as a QA gate rather than a co-authoring pass — a QA report that quietly resolves issues on the writer's behalf, or downgrades a real problem because the prose reads well, stops being a reliable gate before it reaches clinical review. The disclaimer is explicit that this pass is not itself a clinical fact-check, because internal consistency and sourcing checks are necessary but not sufficient — only a qualified clinician can confirm the underlying medical accuracy the sourcing check assumes.`,
     exampleOutput: `Note: this checks sourcing, consistency, and framing only — it is not a clinical fact-check; final sign-off must come from a qualified clinician. Claim: "studies show magnesium significantly improves sleep for most adults" — status: vague-unverifiable (no specific source named in the sentence, and the one provided source is a small study on older adults with insomnia, not "most adults" generally). Flagged as overreaching relative to the underlying evidence.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2232,12 +2348,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`patient-education`, `recovery-guidance`, `healthcare-handout`, `post-op-care`, `self-care-instructions`],
+    tags: [
+      `patient-education`,
+      `recovery-guidance`,
+      `healthcare-handout`,
+      `post-op-care`,
+      `self-care-instructions`,
+    ],
     whyItWorks: `Patient handouts commonly fail by presenting recovery as a flat list of tips rather than a sequence, which forces a patient who is often reading it while still groggy or in pain to do the mental work of figuring out what applies today versus next week — organizing the handout day-by-day or stage-by-stage does that sequencing for them, which matters most exactly when their capacity to do it themselves is lowest. Writing guidance only at the level of general self-care practices, and explicitly routing anything that depends on individual risk factors (blood thinners, diabetes, other conditions) back to "ask your care team," prevents the handout from silently functioning as personalized medical advice for a population of patients who don't all share the same risk profile — a tip that's safe for a healthy 30-year-old can be actively wrong for someone with a bleeding disorder, and a general handout has no way to know which reader is which. Making the warning-signs section its own unmissable block, described in plain recognizable symptoms rather than clinical terms, and paired with a specific action rather than a vague "contact your doctor if concerned," directly targets the actual failure mode of buried warning signs — a patient skimming a long handout is far more likely to notice a clearly labeled, separated section than a warning folded into paragraph six. The ban on inventing a specific medication name or dose unless it was explicitly provided addresses a genuinely dangerous failure mode: a plausible-sounding but wrong dosage guess in a handout could directly contradict what this particular patient's surgeon actually prescribed, so the handout defers to "as directed" rather than guessing. The clinical-review note at the close exists because, however carefully structured, this is still a draft entering a real clinical publishing workflow and needs sign-off before a patient ever sees it.`,
     exampleOutput: `Note: this is general self-care guidance, not a substitute for what your surgical team told you — if anything here conflicts with their instructions, follow their instructions and ask them to clarify. Days 1-3: ice the knee 20 minutes every 2-3 hours, keep it elevated above heart level when resting, take prescribed medication as directed. Call your care team if: the incision area becomes increasingly red or warm, you develop a fever, or you notice new calf swelling or pain — these should be reported the same day, not saved for your next appointment.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',

@@ -28,8 +28,16 @@ function formatInstalls(n: number): string {
  * role instead — the same one-glance "what is this actually for" signal a
  * logo gives on `PromptCard`.
  */
-export function SkillCard({ skill, category }: { skill: Skill; category: SkillCategory }) {
-  const techBrands = [...new Set(skill.tags.map(brandForTag).filter((b): b is string => b !== null))].slice(0, 3)
+export function SkillCard({
+  skill,
+  category,
+}: {
+  skill: Skill
+  category: SkillCategory
+}) {
+  const techBrands = [
+    ...new Set(skill.tags.map(brandForTag).filter((b): b is string => b !== null)),
+  ].slice(0, 3)
 
   return (
     <Link
@@ -52,7 +60,9 @@ export function SkillCard({ skill, category }: { skill: Skill; category: SkillCa
         </div>
       </div>
 
-      <p className="line-clamp-2 text-[13.5px] text-ink-muted leading-[1.5]">{skill.description}</p>
+      <p className="line-clamp-2 text-[13.5px] text-ink-muted leading-[1.5]">
+        {skill.description}
+      </p>
 
       <div className="mt-auto flex items-center justify-between gap-3 pt-1">
         <div className="flex items-center gap-1">

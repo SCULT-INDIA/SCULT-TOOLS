@@ -9,6 +9,7 @@
       "!docs",
       "!coverage",
       "!scripts",
+      "!content-engine",
       "!next-env.d.ts",
       "!app/globals.css"
     ]

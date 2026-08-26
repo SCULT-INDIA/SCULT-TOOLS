@@ -103,7 +103,12 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   bannerLeft: { flexDirection: 'column', maxWidth: '68%' },
-  bannerBrandRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 10, gap: 6 },
+  bannerBrandRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    gap: 6,
+  },
   bannerMark: { width: 16, height: 16, borderRadius: 8 },
   bannerEyebrow: {
     fontSize: 8,
@@ -139,7 +144,12 @@ const styles = StyleSheet.create({
   },
   scoreNumber: { fontSize: 26, fontFamily: 'Times-Bold', color: COLOR.white },
   scoreOutOf: { fontSize: 8, color: '#e9d5ff', marginTop: -2 },
-  scoreBand: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: COLOR.white, marginTop: 6 },
+  scoreBand: {
+    fontSize: 8,
+    fontFamily: 'Helvetica-Bold',
+    color: COLOR.white,
+    marginTop: 6,
+  },
 
   // Sections
   section: { marginTop: 16 },
@@ -154,7 +164,11 @@ const styles = StyleSheet.create({
   },
 
   // Generic table primitives
-  row: { flexDirection: 'row', borderBottomWidth: 0.75, borderBottomColor: COLOR.lineGrey },
+  row: {
+    flexDirection: 'row',
+    borderBottomWidth: 0.75,
+    borderBottomColor: COLOR.lineGrey,
+  },
   cell: { padding: 6, justifyContent: 'center' },
   cellLabel: { backgroundColor: COLOR.tileLavender },
   cellLabelText: { fontSize: 8.5, fontFamily: 'Helvetica-Bold', color: COLOR.violet700 },
@@ -179,7 +193,12 @@ const styles = StyleSheet.create({
     borderWidth: 1.2,
     backgroundColor: 'transparent',
   },
-  checkLabel: { fontSize: 8.5, fontFamily: 'Helvetica-Bold', color: COLOR.ink, marginBottom: 2 },
+  checkLabel: {
+    fontSize: 8.5,
+    fontFamily: 'Helvetica-Bold',
+    color: COLOR.ink,
+    marginBottom: 2,
+  },
   checkFinding: { fontSize: 8, color: COLOR.inkMuted, lineHeight: 1.35 },
   checkFix: { fontSize: 8, color: COLOR.ink, lineHeight: 1.35, marginTop: 2 },
   statusWordText: { fontSize: 7.5, fontFamily: 'Helvetica-Bold', letterSpacing: 0.3 },
@@ -203,7 +222,13 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     marginBottom: 8,
   },
-  ctaTitle: { fontSize: 18, fontFamily: 'Times-Bold', color: COLOR.white, marginBottom: 10, textAlign: 'center' },
+  ctaTitle: {
+    fontSize: 18,
+    fontFamily: 'Times-Bold',
+    color: COLOR.white,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
   ctaBody: {
     fontSize: 9.5,
     color: '#e9d5ff',
@@ -229,7 +254,12 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     padding: 10,
   },
-  serviceTitle: { fontSize: 9, fontFamily: 'Helvetica-Bold', color: COLOR.violet900, marginBottom: 4 },
+  serviceTitle: {
+    fontSize: 9,
+    fontFamily: 'Helvetica-Bold',
+    color: COLOR.violet900,
+    marginBottom: 4,
+  },
   serviceBody: { fontSize: 8, color: COLOR.inkSubtle, lineHeight: 1.35 },
   footerStrip: {
     flexDirection: 'row',
@@ -245,7 +275,8 @@ const styles = StyleSheet.create({
 
 function StatusDot({ status }: { status: CheckStatus }) {
   const color = statusColor(status)
-  if (status === 'pass') return <View style={[styles.statusDot, { backgroundColor: color }]} />
+  if (status === 'pass')
+    return <View style={[styles.statusDot, { backgroundColor: color }]} />
   return <View style={[styles.statusDotOutline, { borderColor: color }]} />
 }
 
@@ -268,7 +299,9 @@ function CheckRow({ check }: { check: CheckResult }) {
       <View style={[styles.cell, { flex: 1 }]}>
         <Text style={styles.checkLabel}>{check.label}</Text>
         <Text style={styles.checkFinding}>{check.finding}</Text>
-        {check.status !== 'pass' ? <Text style={styles.checkFix}>Fix: {check.fix}</Text> : null}
+        {check.status !== 'pass' ? (
+          <Text style={styles.checkFix}>Fix: {check.fix}</Text>
+        ) : null}
       </View>
       <View style={[styles.cell, { width: 46, alignItems: 'flex-start' }]}>
         <Text style={[styles.statusWordText, { color }]}>{statusWord(check.status)}</Text>
@@ -349,9 +382,20 @@ function BotRow({ bot }: { bot: VisibilityReport['bots'][number] }) {
       <View style={[styles.cell, { width: 70 }]}>
         <Text style={styles.botCompany}>{bot.company}</Text>
       </View>
-      <View style={[styles.cell, { width: 58, flexDirection: 'row', alignItems: 'center', gap: 4 }]}>
+      <View
+        style={[
+          styles.cell,
+          { width: 58, flexDirection: 'row', alignItems: 'center', gap: 4 },
+        ]}
+      >
         <StatusDot status={bot.allowed ? 'pass' : 'fail'} />
-        <Text style={{ fontSize: 8, fontFamily: 'Helvetica-Bold', color: bot.allowed ? COLOR.green : COLOR.red }}>
+        <Text
+          style={{
+            fontSize: 8,
+            fontFamily: 'Helvetica-Bold',
+            color: bot.allowed ? COLOR.green : COLOR.red,
+          }}
+        >
           {bot.allowed ? 'Allowed' : 'Blocked'}
         </Text>
       </View>
@@ -378,7 +422,12 @@ function ActionPlanSection({ report }: { report: VisibilityReport }) {
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Prioritised Action Plan</Text>
       {outstanding.length === 0 ? (
-        <View style={[styles.cell, { borderWidth: 0.75, borderColor: COLOR.lineGrey, borderRadius: 4 }]}>
+        <View
+          style={[
+            styles.cell,
+            { borderWidth: 0.75, borderColor: COLOR.lineGrey, borderRadius: 4 },
+          ]}
+        >
           <Text style={{ fontSize: 9, fontFamily: 'Helvetica-Bold', color: COLOR.green }}>
             Nothing to fix — every scored check passes.
           </Text>
@@ -387,14 +436,28 @@ function ActionPlanSection({ report }: { report: VisibilityReport }) {
         outstanding.map((check, i) => (
           <View key={check.id} wrap={false} style={styles.row}>
             <View style={[styles.cell, { width: 22, alignItems: 'center' }]}>
-              <Text style={{ fontSize: 9, fontFamily: 'Helvetica-Bold', color: COLOR.violet700 }}>{i + 1}</Text>
+              <Text
+                style={{
+                  fontSize: 9,
+                  fontFamily: 'Helvetica-Bold',
+                  color: COLOR.violet700,
+                }}
+              >
+                {i + 1}
+              </Text>
             </View>
             <View style={[styles.cell, { flex: 1 }]}>
               <Text style={styles.checkLabel}>{check.label}</Text>
               <Text style={styles.checkFinding}>{check.fix}</Text>
             </View>
             <View style={[styles.cell, { width: 52, alignItems: 'flex-start' }]}>
-              <Text style={{ fontSize: 8, fontFamily: 'Helvetica-Bold', color: COLOR.violet700 }}>
+              <Text
+                style={{
+                  fontSize: 8,
+                  fontFamily: 'Helvetica-Bold',
+                  color: COLOR.violet700,
+                }}
+              >
                 +{CHECK_WEIGHT[check.id]} pts
               </Text>
             </View>
@@ -405,12 +468,26 @@ function ActionPlanSection({ report }: { report: VisibilityReport }) {
   )
 }
 
-function OverviewSection({ report, generatedAt }: { report: VisibilityReport; generatedAt: string }) {
+function OverviewSection({
+  report,
+  generatedAt,
+}: {
+  report: VisibilityReport
+  generatedAt: string
+}) {
   const bandColor = scoreColor(report.score)
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Report Overview</Text>
-      <View wrap={false} style={{ borderWidth: 0.75, borderColor: COLOR.lineGrey, borderRadius: 4, overflow: 'hidden' }}>
+      <View
+        wrap={false}
+        style={{
+          borderWidth: 0.75,
+          borderColor: COLOR.lineGrey,
+          borderRadius: 4,
+          overflow: 'hidden',
+        }}
+      >
         <View style={styles.row}>
           <View style={[styles.cell, styles.cellLabel, { width: 90 }]}>
             <Text style={styles.cellLabelText}>Website</Text>
@@ -422,7 +499,12 @@ function OverviewSection({ report, generatedAt }: { report: VisibilityReport; ge
             <Text style={styles.cellLabelText}>Score</Text>
           </View>
           <View style={[styles.cell, { flex: 1 }]}>
-            <Text style={[styles.cellText, { fontFamily: 'Helvetica-Bold', color: bandColor }]}>
+            <Text
+              style={[
+                styles.cellText,
+                { fontFamily: 'Helvetica-Bold', color: bandColor },
+              ]}
+            >
               {report.score}/100 — {report.band}
             </Text>
           </View>
@@ -449,10 +531,16 @@ function OverviewSection({ report, generatedAt }: { report: VisibilityReport; ge
           </View>
           <View style={[styles.cell, { flex: 1 }]}>
             <Text style={styles.cellText}>
-              {SCULT_PHONE}   ·   {SCULT_EMAIL}
+              {SCULT_PHONE} · {SCULT_EMAIL}
             </Text>
             <Link src={SCULT_BOOKING_URL} style={{ marginTop: 3 }}>
-              <Text style={{ fontSize: 8.5, fontFamily: 'Helvetica-Bold', color: COLOR.violet700 }}>
+              <Text
+                style={{
+                  fontSize: 8.5,
+                  fontFamily: 'Helvetica-Bold',
+                  color: COLOR.violet700,
+                }}
+              >
                 Book a free AI readiness call
               </Text>
             </Link>
@@ -466,7 +554,11 @@ function OverviewSection({ report, generatedAt }: { report: VisibilityReport; ge
 function InsightsSection({ report }: { report: VisibilityReport }) {
   const insights = report.pageInsights
   const titleTone =
-    insights.title === undefined ? COLOR.red : insights.titleLength <= 60 ? COLOR.green : COLOR.amber
+    insights.title === undefined
+      ? COLOR.red
+      : insights.titleLength <= 60
+        ? COLOR.green
+        : COLOR.amber
   const descTone =
     insights.metaDescription === undefined
       ? COLOR.red
@@ -477,7 +569,15 @@ function InsightsSection({ report }: { report: VisibilityReport }) {
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Website Insights</Text>
-      <View wrap={false} style={{ borderWidth: 0.75, borderColor: COLOR.lineGrey, borderRadius: 4, overflow: 'hidden' }}>
+      <View
+        wrap={false}
+        style={{
+          borderWidth: 0.75,
+          borderColor: COLOR.lineGrey,
+          borderRadius: 4,
+          overflow: 'hidden',
+        }}
+      >
         <View style={styles.row}>
           <View style={[styles.cell, styles.cellLabel, { width: 90 }]}>
             <Text style={styles.cellLabelText}>Title tag</Text>
@@ -519,9 +619,13 @@ function InsightsSection({ report }: { report: VisibilityReport }) {
           </View>
           <View style={[styles.cell, { flex: 1 }]}>
             <Text style={styles.cellText}>
-              {insights.homepageResponseMs !== undefined ? `${insights.homepageResponseMs} ms` : '—'}
+              {insights.homepageResponseMs !== undefined
+                ? `${insights.homepageResponseMs} ms`
+                : '—'}
               {'  ·  '}
-              {insights.homepageSizeBytes !== undefined ? formatBytes(insights.homepageSizeBytes) : '—'}
+              {insights.homepageSizeBytes !== undefined
+                ? formatBytes(insights.homepageSizeBytes)
+                : '—'}
             </Text>
           </View>
         </View>
@@ -593,17 +697,32 @@ function FooterStrip() {
     <View style={styles.footerStrip}>
       <View>
         <Text style={styles.footerStripName}>Scult India</Text>
-        <Text style={styles.footerStripSub}>AI-first digital agency - Noida, Delhi NCR</Text>
+        <Text style={styles.footerStripSub}>
+          AI-first digital agency - Noida, Delhi NCR
+        </Text>
       </View>
       <View style={{ alignItems: 'flex-end' }}>
-        <Text style={[styles.footerStripSub, { color: '#e9d5ff', fontFamily: 'Helvetica-Bold' }]}>scult.in</Text>
+        <Text
+          style={[
+            styles.footerStripSub,
+            { color: '#e9d5ff', fontFamily: 'Helvetica-Bold' },
+          ]}
+        >
+          scult.in
+        </Text>
         <Text style={styles.footerStripSub}>Report generated by tools.scult.in</Text>
       </View>
     </View>
   )
 }
 
-function Banner({ report, generatedAt }: { report: VisibilityReport; generatedAt: string }) {
+function Banner({
+  report,
+  generatedAt,
+}: {
+  report: VisibilityReport
+  generatedAt: string
+}) {
   const heroImage = report.pageInsights.heroImageUrl
   let hostname = report.url
   try {
@@ -617,7 +736,9 @@ function Banner({ report, generatedAt }: { report: VisibilityReport; generatedAt
         <View style={styles.bannerLeft}>
           <View style={styles.bannerBrandRow}>
             <Image src={SCULT_MARK_SRC} style={styles.bannerMark} />
-            <Text style={styles.bannerEyebrow}>SCULT INDIA · AI-FIRST DIGITAL AGENCY</Text>
+            <Text style={styles.bannerEyebrow}>
+              SCULT INDIA · AI-FIRST DIGITAL AGENCY
+            </Text>
           </View>
           <Text style={styles.bannerTitle}>AI Visibility Report</Text>
           {/* Identity row — a small, contained circular avatar (never
@@ -660,7 +781,11 @@ export function AiVisibilityPdfDocument({
   generatedAt: string
 }) {
   return (
-    <Document title={`AI Visibility Report — ${report.url}`} author="Scult India" creator="Scult Tools">
+    <Document
+      title={`AI Visibility Report — ${report.url}`}
+      author="Scult India"
+      creator="Scult Tools"
+    >
       <Page size="A4" style={styles.page}>
         <Banner report={report} generatedAt={generatedAt} />
         <OverviewSection report={report} generatedAt={generatedAt} />

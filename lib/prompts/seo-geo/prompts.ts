@@ -1614,12 +1614,16 @@ A table with columns: Cluster name, Target page (existing or new), Funnel stage,
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`keyword-clustering`, `topical-map`, `search-intent`, `content-strategy`, `on-page-seo`],
+    tags: [
+      `keyword-clustering`,
+      `topical-map`,
+      `search-intent`,
+      `content-strategy`,
+      `on-page-seo`,
+    ],
     whyItWorks: `GPT-5.1 clusters keywords well by surface similarity by default because that's the cheapest pattern to complete from a raw list, which is exactly the failure mode this prompt targets: instructing it to cluster around "what a single page could satisfy in one visit" forces it to reason about search intent as the grouping variable instead of shared tokens, which is the actual signal that predicts whether two keywords should share a URL or cannibalize each other if they do. The explicit funnel-stage tag matters because a cluster that spans top and bottom funnel almost always means the underlying page would have to serve two contradictory jobs — educate a stranger and convert a ready buyer — and naming that split up front catches a structural content problem before a writer builds one page that does neither well. Asking the model to flag cannibalization risk rather than silently keep clusters separate matters because ChatGPT, left unprompted, treats each cluster as an independent unit and won't cross-reference them against each other for overlap unless told to explicitly hold the full set in mind as it goes — a real risk with SEO clustering, since two clusters built from a genuinely large keyword export can easily target the same query space without either cluster's description making that obvious on its own. The leftover-keyword list exists because forcing every row into a cluster produces artificially padded clusters that look complete but actually bury a handful of keywords that don't belong on this site at all, which wastes a content brief on a page that was never going to rank for its stated intent.`,
     exampleOutput: `Cluster: "Expense software vs Expensify" | Target: /compare/expensify (existing) | Stage: middle-to-bottom | Keywords: expense management software vs Expensify, Expensify alternative, expense software better than Expensify | Intent: comparison | Cannibalization: none. Leftover: "free expense tracking app" — belongs on a different site entirely aimed at individual users, not our B2B buyer.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1691,12 +1695,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`content-brief`, `content-strategy`, `outline`, `competitive-analysis`, `seo-writing`],
+    tags: [
+      `content-brief`,
+      `content-strategy`,
+      `outline`,
+      `competitive-analysis`,
+      `seo-writing`,
+    ],
     whyItWorks: `A content brief fails as a deliverable the moment a writer has to invent what a heading actually means, which is the default output shape GPT-5.1 reaches for when asked for "an outline" without being told to attach guidance sentences to every H2 — headings alone are cheap to generate and look complete, but they push all the real thinking back onto the writer, defeating the point of commissioning a brief at all. Explicitly separating table-stakes subtopics from the content gap forces the model to reason in two distinct passes instead of blending them, which matters because an LLM asked directly for "what should this piece cover" tends to merge "what's expected" and "what's differentiated" into one flat list, and a writer reading that list can't tell which sections are competitive necessities versus the actual reason to publish the piece at all. Instructing the model to flag that it's inferring competitor structure from URLs rather than having crawled them live matters because ChatGPT cannot actually browse the linked pages in this workflow unless browsing is explicitly enabled and used, and a brief that presents inferred structure as verified fact would send a writer chasing subtopics that may not actually be on the page — naming the inference honestly lets the requester decide whether to paste real excerpts before the writer starts. The explicit ban on inventing statistics addresses a known hallucination risk in brief-writing specifically: a plausible-sounding placeholder stat left in a brief has a real chance of surviving into the published piece if a writer skims past the caveat.`,
     exampleOutput: `H2: What actually breaks when you switch payroll mid-year (150 words) — cover the two tax-filing gaps generic guides skip: W-2 reconciliation across two providers and state unemployment insurance rate carryover. Primary keyword in title and first 100 words; secondary keywords "mid-year payroll transition," "payroll provider switch checklist" worked into H2s naturally.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1755,12 +1763,16 @@ A table: Keyword | Primary intent | Dominant format | Matching page type (or "ga
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`search-intent`, `serp-analysis`, `content-strategy`, `keyword-research`, `on-page-seo`],
+    tags: [
+      `search-intent`,
+      `serp-analysis`,
+      `content-strategy`,
+      `keyword-research`,
+      `on-page-seo`,
+    ],
     whyItWorks: `Left to its own defaults, GPT-5.1 classifies search intent almost entirely from the lexical pattern of the keyword phrase — question words toward informational, "buy"/"price" toward transactional — because that's the only signal available when no SERP evidence is supplied, and it will present that guess with the same confident tone as an evidence-grounded classification unless explicitly told to separate the two. That's the exact failure this prompt structure prevents: forcing a confidence label per row (evidence-based versus wording-based-guess) stops a plausible-sounding but ungrounded classification from being treated as equally reliable, which matters in SEO specifically because building the wrong page format for a keyword's real intent is a multi-week content investment that fails silently — the page can be well-written and still underperform because the SERP was never going to reward that format regardless of quality. Naming the dominant ranking format as a required output field, separate from the abstract intent label, is what actually operationalizes the classification into a page-type decision; "commercial investigation" alone doesn't tell a content team whether to build a comparison table or a long buying guide, but "top 5 results are category-page-plus-product-grid hybrids" does. The explicit refusal to force-fit a format gap into the closest available page type matters because an LLM asked to pick from a fixed list will pick the closest option even when none of them fit well, quietly hiding a real gap — that this site has no page type that can compete for this keyword at all — inside a recommendation that looks like a normal match.`,
     exampleOutput: `best running shoes for flat feet | Commercial investigation | Category page + buying guide hybrid | Product category page (existing) | Evidence-based. how does plantar fasciitis form | Informational | Long-form medical/health guide | Gap — need a dedicated editorial guide format | Evidence-based.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1828,12 +1840,16 @@ A coverage table (Subtopic | Our coverage | Relevance to keyword | Effort to clo
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`content-gap-analysis`, `competitive-analysis`, `content-strategy`, `seo-audit`, `prioritization`],
+    tags: [
+      `content-gap-analysis`,
+      `competitive-analysis`,
+      `content-strategy`,
+      `seo-audit`,
+      `prioritization`,
+    ],
     whyItWorks: `A flat gap list is the default output shape here because listing missing subtopics is a simpler completion than jointly reasoning about relevance and production cost for each one, and GPT-5.1 will produce the simpler shape unless the effort dimension is made a required, per-row field rather than a closing suggestion — forcing it into the table structure itself is what prevents the model from mentioning effort only in passing for one or two items and dropping it for the rest. Distinguishing "partially covers" from genuinely covered matters mechanically because a keyword match between our page and the competitor's subtopic list would otherwise let a one-sentence mention on our page get silently credited as coverage, hiding a real content thinness problem that a manual audit would have caught — the instruction to treat shallow mentions as functional gaps closes that specific loophole. Scoring relevance to the target keyword's intent separately from raw subtopic overlap stops the model from recommending that every topic the competitor happens to cover gets added to our page; competitor content routinely includes topics that serve their own internal linking or monetization strategy rather than the shared keyword's actual intent, and without an explicit relevance filter those get inherited uncritically. The explicit ban on copying framing or wording addresses a real risk in this exact workflow: because the model is directly comparing two pieces of pasted content side by side, an unconstrained rewrite instruction would produce recommendations phrased so close to the competitor's actual sentences that acting on them verbatim would create a duplication or paraphrasing risk rather than genuinely original coverage.`,
     exampleOutput: `Subtopic: Tax deductibility rules | Our coverage: none | Relevance: high — directly tied to "how does a HELOC work" intent | Effort: medium, needs review-worthy accuracy but no licensed advisor required for general tax-rule explanation | Priority: close first.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1901,12 +1917,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`topical-map`, `content-architecture`, `internal-linking`, `content-strategy`, `pillar-content`],
+    tags: [
+      `topical-map`,
+      `content-architecture`,
+      `internal-linking`,
+      `content-strategy`,
+      `pillar-content`,
+    ],
     whyItWorks: `Asked for a topical map without a stated capacity constraint, GPT-5.1 defaults to an idealized, comprehensive-looking structure — often 20 to 40 cluster articles — because that pattern matches what "complete topical coverage" looks like in its training data, regardless of whether anyone requesting it can actually produce that volume; forcing the reality-check step as a required final stage is what makes the model reconcile the aspirational map against the stated constraint instead of handing back a plan that was never buildable. Requiring an explicit internal-linking relationship for every single cluster article, not just a general statement that clusters link to the pillar, matters because topical authority signals depend on the actual link graph existing on the site, and a map that names the concept once but doesn't specify per-article anchor context produces a list of loosely related articles that a team will publish without ever actually wiring the internal links between them. Naming the build sequence explicitly addresses a real launch-order problem specific to pillar pages: a pillar page published with links to cluster articles that don't exist yet either ships with dead links or gets delayed waiting on content that isn't finished, so sequencing which cluster pieces need to exist before the pillar goes live is a genuine dependency question, not a nice-to-have. The instruction to name a realistic competitive subset rather than imitate a competitor's full breadth matters because a smaller site trying to out-publish an established competitor's 150-page topic cluster on volume alone is simply not a winnable strategy, and the model needs an explicit constraint to recommend a narrower, winnable wedge instead of an imitation of scale it has no way to actually assess as achievable.`,
     exampleOutput: `Pillar: "Remote Payroll Compliance by State: A Practical Guide" (target: remote team payroll compliance). Cluster: "California Remote Employee Payroll Rules" — target keyword: california remote payroll compliance — links to pillar via "see our full state-by-state guide" in intro — build order: 1st (highest customer concentration).`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1959,12 +1979,16 @@ Two tables. Table 1 — Outbound links from new page: Target existing page | Sec
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`internal-linking`, `on-page-seo`, `content-architecture`, `anchor-text`, `site-structure`],
+    tags: [
+      `internal-linking`,
+      `on-page-seo`,
+      `content-architecture`,
+      `anchor-text`,
+      `site-structure`,
+    ],
     whyItWorks: `Asked in the abstract to suggest internal links, GPT-5.1 tends to produce advice at the level of "link to related pages where relevant," which is true but not actionable — the prompt structure here forces specificity by requiring the literal anchor text string and the named section of the new page as separate required fields, which is what turns a suggestion into something a writer can paste directly rather than interpret. The reciprocal-linking step matters because internal link equity flows in both directions and a genuinely useful internal linking plan for a new page is incomplete if it only considers outbound links; a brand-new page has no accumulated authority of its own, and the single fastest way to help it get crawled and ranked is an inbound link from an already-indexed, higher-authority page on the same site — a detail that's easy for a model (and a human) to skip if only asked to think about the new page's own outbound structure. The anchor-text diversity check addresses a specific, well-documented pattern search engines evaluate: unnaturally repetitive exact-match anchor text across many links on a site can read as manipulative link architecture even when each individual link is topically legitimate, so an internal linking plan that doesn't self-check for that pattern can inadvertently recommend something that looks fine link-by-link but looks off in aggregate. Capping the count and requiring a specific in-context relevance reason for each link also prevents the model's tendency to pad a linking list with marginal, category-level matches purely because they exist on the site — a link that's topically adjacent but doesn't fit the actual sentence a reader would be in is worse than no link, because it reads as SEO scaffolding rather than a genuinely useful cross-reference.`,
     exampleOutput: `Outbound: Target: "California Labor Law Guide" | Section: "State-specific exceptions" | Anchor: "California's daily overtime threshold" | Why: directly explains the CA-specific rule this section only summarizes. Inbound: Existing page: "California Labor Law Guide" | Where: within its overtime-mention paragraph | Anchor: "how to calculate overtime pay step by step."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2024,12 +2048,16 @@ Three numbered variants, each with: the title text, character count, truncation 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`meta-title`, `ctr-optimization`, `on-page-seo`, `serp-optimization`, `title-tag`],
+    tags: [
+      `meta-title`,
+      `ctr-optimization`,
+      `on-page-seo`,
+      `serp-optimization`,
+      `title-tag`,
+    ],
     whyItWorks: `GPT-5.1's default instinct when asked to "rewrite a title for SEO" is to front-load the exact-match keyword and lightly restate the page's category, producing three variants that are really one variant reworded — requiring each rewrite to commit to a genuinely distinct angle (query-match, benefit-led, differentiation-led) is what forces actual variety instead of superficial rephrasing dressed up as options. The explicit ban on manufacturing a statistic when the page content doesn't supply one addresses a specific hallucination risk in title rewriting: a compelling-sounding number in a title tag is exactly the kind of small, plausible fabrication that's easy to let slip past review because it looks like normal marketing copy rather than a factual claim, and once published it's a real number a search engine and a searcher will both take at face value. Tying the character-count and truncation flag to an approximate pixel-width reality rather than a hard character rule matters because title truncation in search results is actually rendered by pixel width, not character count, so a title with wide characters can truncate well under 60 characters while a narrow-character title might not — presenting 60 as a soft, evidence-informed ceiling rather than a strict rule keeps the guidance accurate instead of falsely precise. Routing the final recommendation through the performance-context data, rather than always defaulting to "pick the most compelling title," matters because a title rewrite genuinely cannot fix a low-impression problem caused by weak ranking position — that requires content or authority work — and a model that recommends a title change regardless of which underlying problem the metrics point to would waste a testing cycle on the wrong fix.`,
     exampleOutput: `Variant 2 (benefit-led): "Project Management Built for Remote Teams Across Time Zones" — 58 characters, low truncation risk. Recommendation: CTR is well below the position-4-6 benchmark while impressions are healthy, meaning the ranking is fine but the title isn't earning clicks — test the benefit-led variant first since it speaks to the specific remote/async pain point rather than restating the generic category.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2091,12 +2119,16 @@ Two variants with character counts. One paragraph assessing rewrite likelihood g
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`meta-description`, `ctr-optimization`, `serp-optimization`, `on-page-seo`, `google-snippets`],
+    tags: [
+      `meta-description`,
+      `ctr-optimization`,
+      `serp-optimization`,
+      `on-page-seo`,
+      `google-snippets`,
+    ],
     whyItWorks: `The single biggest thing a meta-description prompt can get wrong is treating the tag as guaranteed to appear verbatim in search results, when in practice Google's snippet algorithm frequently substitutes a passage pulled directly from the page body when it judges that passage a better match to the specific query — a well-documented behavior that's especially common for informational and long-tail queries where an exact on-page sentence answers the query more precisely than a generic summary tag can. Building the rewrite-likelihood assessment into the prompt as a required output, tied to the stated query type, is what stops the deliverable from being false confidence in a lever that may not actually fire — a meta description alone is incomplete SEO advice for an informational query specifically, and naming that limitation lets the requester also fix the on-page passage rather than over-investing polish into a tag Google may discard. Requiring the target keyword to appear only once and paired with a concrete differentiator, rather than a generic value phrase, matters because Google visibly bolds query-matching terms in the snippet and a keyword-dense but otherwise vague description reads as filler next to a competitor's snippet that answers the actual question; a concrete claim tied to something real about the page is what actually earns a click among several similar-looking blue links. The instruction against overpromising addresses a slower-acting but real SEO risk: pogo-sticking (a click that immediately bounces back to search results) is a signal that can suppress a page's performance over time, so a description engineered purely to maximize CTR at the cost of accuracy can actively hurt the page it was meant to help.`,
     exampleOutput: `Variant 1: "Free return to office policy template with a built-in hybrid-schedule clause. Editable in Google Docs, no email required." (147 chars). Rewrite risk: moderate — this is a hybrid informational/transactional query, so Google may pull an on-page sentence instead; make sure the page has a clear first-paragraph sentence stating the template includes a hybrid clause and is free to edit.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2158,12 +2190,16 @@ Each FAQ as Q: / A: pairs in order, word count of the answer noted after each, f
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`faq-schema`, `people-also-ask`, `structured-data`, `on-page-seo`, `serp-optimization`],
+    tags: [
+      `faq-schema`,
+      `people-also-ask`,
+      `structured-data`,
+      `on-page-seo`,
+      `serp-optimization`,
+    ],
     whyItWorks: `FAQPage and PAA rich results are pulled and displayed entirely out of the surrounding page context, which is the mechanical reason the self-containment rule is the load-bearing instruction in this prompt — a model asked simply to "write an FAQ section" naturally writes answers that lean on the page's earlier sentences for context ("as mentioned above," implicit pronouns referring to something established two paragraphs up), which reads fine on the page itself but produces a broken or confusing snippet the moment it's extracted and shown alone in a search result, since that's exactly what the schema markup invites Google to do. Capping answer length at roughly 40-60 words addresses a real display constraint: rich-result snippets truncate longer answers, and an answer engineered for full page context rather than standalone display tends to run long and get cut off mid-thought when extracted, which looks worse than a shorter answer would have. The explicit ban on inventing PAA-style questions matters because a fabricated question has zero actual search demand behind it — the entire value of targeting real PAA data is capturing existing query volume, and a model asked for "FAQ questions" without real data supplied will happily generate plausible-sounding but unverified ones, which wastes schema markup on queries nobody is actually typing. Requiring the model to flag a question it can't answer honestly from the given facts, rather than filling the gap with a plausible-sounding but ungrounded answer, is the direct application of a broader hallucination guardrail to this specific format — an FAQ answer is a factual claim displayed with implied authority in a rich result, so an invented detail here carries more real-world consequence than an invented detail in ordinary prose.`,
     exampleOutput: `Q: Can employees use a business VPN on personal devices? A: Yes — BYOD is supported through a mobile configuration profile, but it requires the device to be enrolled in your company's MDM system first. Without MDM enrollment, personal devices can't connect. (38 words)`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2225,12 +2261,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`featured-snippet`, `serp-optimization`, `on-page-seo`, `content-formatting`, `position-zero`],
+    tags: [
+      `featured-snippet`,
+      `serp-optimization`,
+      `on-page-seo`,
+      `content-formatting`,
+      `position-zero`,
+    ],
     whyItWorks: `The single most important variable in featured snippet competition is format match, not content quality — Google's snippet selection has already decided, per query, whether it wants to surface a paragraph, a list, or a table, and a page competing with the wrong format for that query type will lose to a lower-quality page in the right format, which is why this prompt makes format identification a mandatory first step rather than an afterthought folded into the rewrite. Restricting the rewrite to a single named section, rather than letting the model rewrite or restructure the whole page, matters because a full-page rewrite risks breaking existing rankings the rest of the page holds for other keywords entirely unrelated to the snippet target — a targeted, surgical instruction keeps the blast radius of the change limited to exactly the content competing for this one snippet. The ban on introducing a fact not present in the original section addresses a specific and easy-to-miss hallucination risk in this exact task: winning a featured snippet sometimes genuinely requires a more specific claim than what's currently on the page (an exact number of steps, a specific measurement), and a model optimizing purely for snippet-winning form could plausibly invent that missing specific to make the rewrite look more complete, which would publish an unverified fact directly into position zero — the highest-visibility placement on the page. Requiring the length and format to match empirically what wins (roughly 40-60 words for paragraph snippets, parallel concise steps for lists) rather than a generic "be concise" instruction is what makes the rewrite genuinely competitive rather than just shorter — actual Google-winning snippets follow fairly consistent length and structure patterns that a vague brevity instruction alone won't reliably reproduce.`,
     exampleOutput: `Format: Numbered list (inferred from "how to" query pattern, high confidence). Rewrite: "To reset your Wi-Fi router: 1. Locate the small reset button on the back or bottom of the device. 2. Press and hold it for 10 seconds using a pin or paperclip. 3. Release once the lights begin flashing. 4. Wait 60 seconds before reconnecting devices." Slots in under the existing "Resetting Your Router" H2, replacing the current paragraph.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2294,12 +2334,16 @@ A findings table: Check | Finding | Impact (high/medium/cosmetic) | Fix. Followe
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`on-page-audit`, `seo-checklist`, `content-optimization`, `site-audit`, `prioritization`],
+    tags: [
+      `on-page-audit`,
+      `seo-checklist`,
+      `content-optimization`,
+      `site-audit`,
+      `prioritization`,
+    ],
     whyItWorks: `A generic on-page SEO checklist treats every item — title tag, alt text, keyword density, heading structure, content depth — as equally worth fixing, which is a real and common failure mode because each item is individually a legitimate best practice; the actual skill in an audit is knowing that a page failing on content depth for a competitive keyword has a fundamentally different problem than a page missing alt text on three images, and this prompt forces that distinction by requiring an explicit impact tier per finding rather than a flat pass/fail list. GPT-5.1 without this constraint will happily generate all twelve checklist items with equal-weight phrasing, because listing checks is the easier default than weighing which ones actually correlate with ranking movement for this specific keyword and page — the impact classification forces the harder, more useful reasoning step. Tying the final recommendation to stated team capacity rather than an idealized "fix everything" list matters because an audit handed to a resource-constrained team with no prioritization functionally produces zero action; a ranked shortlist scoped to what two people can actually do in a sprint is the difference between an audit that changes something and one that becomes a document nobody acts on. The caution flag for pages that already rank reasonably well addresses a specific risk in on-page auditing: rewriting a page purely to satisfy a checklist, when that page is already performing adequately, risks a ranking drop from disrupting whatever combination of factors is currently working, and an audit that doesn't weigh current performance against proposed changes can recommend a net-negative rewrite in the name of technical completeness.`,
     exampleOutput: `Check: Keyword in first 100 words | Finding: target keyword doesn't appear until sentence 4 of the intro | Impact: high — this page is competing on a commercial keyword where early keyword match to search intent is a strong relevance signal | Fix: move a keyword-bearing sentence into the first two sentences of the intro.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2361,12 +2405,16 @@ Diagnosis section naming the supported cause(s) with evidence cited. Refresh pla
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`content-refresh`, `content-decay`, `seo-audit`, `serp-analysis`, `content-strategy`],
+    tags: [
+      `content-refresh`,
+      `content-decay`,
+      `seo-audit`,
+      `serp-analysis`,
+      `content-strategy`,
+    ],
     whyItWorks: `The default failure mode for a content-refresh request is treating every case of traffic decline as a staleness problem solvable by updating dates and prose, because that's the simplest and most common refresh pattern in the training data — this prompt structure forces the model through an explicit differential diagnosis across four distinct causes before it's allowed to recommend a fix, which matters because staleness, SERP feature displacement, competitive out-coverage, and genuine intent drift each require a materially different response, and applying a content refresh to a page whose real problem is an AI overview or featured snippet sitting above it will not recover the lost clicks no matter how well the prose is updated. Explicitly including SERP feature displacement as a candidate cause matters specifically because this is the category most likely to be missed by a naive "refresh the content" instinct — the organic ranking itself can be perfectly stable while a new on-SERP element eats the click-through opportunity above it, and the fix for that (structuring content to compete for the feature itself, or accepting a lower click ceiling) is completely different from a content update. Requiring the model to name intent drift as a possible diagnosis, and to recommend a rebuild rather than a refresh when the evidence supports it, guards against the sunk-cost pull toward always saving the existing page — sometimes a page's fundamental premise no longer matches what the query means today, and a light edit to an outdated premise produces a page that reads as freshly updated but still doesn't answer the question being asked, which is a worse outcome than an honest rebuild recommendation.`,
     exampleOutput: `Diagnosis: evidence supports both staleness (pricing/feature details for two tools are outdated) and SERP feature displacement (an AI overview now sits above organic results, summarizing the same comparison this page provides) — the position-9 ranking may partly reflect Google deprioritizing a page it can detect as dated, but even a full content update likely won't recover the clicks the AI overview is now absorbing. Refresh plan: update all five tool listings with current pricing and features, and additionally restructure the top of the page as a scannable comparison table, since that format has a better chance of being pulled into the AI overview itself as a cited source.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2437,12 +2485,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`programmatic-seo`, `content-scale`, `thin-content`, `technical-seo`, `site-architecture`],
+    tags: [
+      `programmatic-seo`,
+      `content-scale`,
+      `thin-content`,
+      `technical-seo`,
+      `site-architecture`,
+    ],
     whyItWorks: `Programmatic SEO's most common real-world failure is generating thousands of pages that pass a superficial "they're all different" check because a name or number is swapped, while the actual reading experience across pages is close to identical boilerplate — this prompt forces an honest static-versus-dynamic ratio assessment per section specifically because GPT-5.1, asked simply to "design a programmatic template," will produce a plausible-looking structure without flagging that ratio problem unless required to state it explicitly, and that ratio is the single strongest predictor of whether a search engine treats a page set as genuinely useful or as scaled thin content. Requiring a stated uniqueness floor — a minimum bar for what counts as genuinely distinct content, not just a swapped value — matters because programmatic SEO's core trade-off is between page count and per-page substance, and an unconstrained design tends to maximize page count since more pages sounds like more opportunity, without weighing that a smaller set of genuinely differentiated pages usually outperforms a much larger set of near-duplicates that risk collective devaluation. Checking the static template copy against at least two different plausible data substitutions is what catches a template that reads naturally for the example given but breaks down or sounds generic for a different value in the same field — a template validated against only one example can hide awkward phrasing that only shows up at certain values (a population of 40 million reading oddly in a sentence built around "a mid-sized city of around 200,000"). The explicit noindex/canonicalization guardrail step matters because manual review doesn't scale to thousands of generated pages, so the actual production-safe version of programmatic SEO requires a programmatic rule for which pages don't meet the bar — without that rule stated up front, a team ships all pages by default and only discovers the thin ones after a ranking or indexing problem appears in aggregate.`,
     exampleOutput: `Section: "Cost of Living Overview" — dynamic (population, rent, commute figures pulled per city) — low thin-content risk if the surrounding analysis paragraph genuinely references the specific numbers. Section: "Why People Move Here" — currently designed as static boilerplate with only the city name swapped — high thin-content risk, recommend cutting this section or making it genuinely dynamic using the year-over-year rent trend data instead.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2509,12 +2561,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`local-seo`, `google-business-profile`, `nap-consistency`, `local-landing-page`, `on-page-seo`],
+    tags: [
+      `local-seo`,
+      `google-business-profile`,
+      `nap-consistency`,
+      `local-landing-page`,
+      `on-page-seo`,
+    ],
     whyItWorks: `Local SEO advice is often given as two disconnected checklists — one for the Google Business Profile, one for the landing page — because that mirrors how the two are managed in separate tools, but local ranking evaluation actually reads for cross-signal consistency, meaning small mismatches between how a business describes itself in each place (a service area stated differently, a suite number present in one listing and absent in another) function as a real signal of unreliability rather than a cosmetic inconsistency; building both deliverables in one prompt and explicitly requiring a final cross-check against each other is what catches this class of problem, which two separately-run optimization tasks would each individually pass while still being inconsistent with each other. The instruction against keyword-stuffing the business name or category in the GBP description addresses a specific, consequential risk beyond just looking spammy: Google Business Profile has an active policy against keyword-stuffed business names and descriptions and can suspend or restrict a listing found violating it, which is a materially worse outcome than a slightly under-optimized description, so this isn't a stylistic nicety but a real risk the model needs to actively write around rather than default toward keyword density. Recommending specific primary and secondary categories rather than only touching the description text matters because category selection is one of the most heavily weighted local ranking factors and is also one of the most commonly under-optimized, since most businesses pick the first closest-sounding category during initial signup and never revisit it, leaving a real ranking lever untouched while attention goes entirely to the description copy instead. Requiring at least one genuinely location-specific detail on the landing page, rather than accepting "we serve the local area" as sufficient, directly targets the most common failure of multi-location local pages — templated boilerplate that's technically about the right city in name only, which both reads as low-effort to a local searcher and gives a local ranking algorithm nothing genuinely location-specific to key off of.`,
     exampleOutput: `GBP description: "Round Rock-based HVAC repair serving Austin metro homeowners — AC repair, furnace repair, duct cleaning, and 24/7 emergency service. Family-owned, licensed and insured." (162 chars). Recommended primary category: HVAC Contractor. Consistency flag: landing page is missing the GBP listing's suite number in its NAP block — add it to match exactly.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2581,12 +2637,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`e-e-a-t`, `author-bio`, `ymyl-content`, `trust-signals`, `content-credibility`],
+    tags: [
+      `e-e-a-t`,
+      `author-bio`,
+      `ymyl-content`,
+      `trust-signals`,
+      `content-credibility`,
+    ],
     whyItWorks: `The most common failure in E-E-A-T content advice is treating it as a copywriting exercise — adding trust-sounding language like "expert-reviewed" or "trusted authority" to a byline regardless of whether a real credential backs it — when Google's quality rater guidelines and its broader ranking systems for YMYL topics specifically evaluate demonstrable expertise and experience, not the presence of trust-adjacent vocabulary, meaning invented or embellished credentials add zero real signal and create actual reputational and legal exposure if a reader relies on advice from a byline that overstates the author's qualifications. This prompt's honest fit-check step exists specifically to stop that pattern: forcing a genuine comparison between what the author actually has and what the topic calls for, with an explicit "partial gap" or "significant gap" verdict as a valid and expected outcome rather than always producing a flattering bio, is what keeps the output from becoming a confidence-building exercise disconnected from the real facts given. Specificity in the bio — a named number of years, a real project type, an actual credential — matters mechanically because vague trust language is exactly the kind of unverifiable filler both human readers and automated content-quality signals have gotten better at discounting; a bio that could describe literally any writer conveys no real information, while "four years covering personal finance, has interviewed licensed CFPs for past reporting" is a checkable, specific claim that actually functions as an expertise signal. Recommending a named reviewer credit specifically when a genuine credential gap exists, rather than only ever polishing the existing byline, addresses the real solution E-E-A-T gaps call for on YMYL topics — pairing non-credentialed writing with credentialed review is a legitimate and common pattern, and the prompt treats it as the correct fix for exactly the case where inventing author authority would otherwise be the tempting shortcut.`,
     exampleOutput: `Fit check: partial gap — strong finance journalism experience, but no financial-planning license, and this topic involves specific tax-treatment guidance. Bio: "Jane Doe has covered personal finance for four years, reporting on retirement planning and interviewing licensed CFPs for reader-facing guides." Trust signal recommendation: add a named reviewer credit from a licensed CFP who reviewed the tax-treatment claims, plus a visible last-reviewed date given how often IRA contribution limits change.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2648,12 +2708,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`competitor-analysis`, `content-gap`, `seo-strategy`, `on-page-seo`, `serp-research`],
+    tags: [
+      `competitor-analysis`,
+      `content-gap`,
+      `seo-strategy`,
+      `on-page-seo`,
+      `serp-research`,
+    ],
     whyItWorks: `GPT-5.1 defaults to generic SEO commentary ("add more depth," "improve authority") when given two unstructured page summaries and asked to compare them, because those phrases are statistically the most common completion pattern in SEO-advice training data and require no actual claim about either page's content — the explicit ban on that language forces the model to instead search the two summaries for named, checkable differences, which is the only kind of finding a content team can actually act on. Separating content gaps from non-content gaps (backlinks, domain authority, page experience) matters mechanically because ranking correlation is not causation, and a model asked only "why does this page rank higher" will confidently attribute the entire gap to content even when the summaries given don't support that conclusion — forcing it to flag ambiguity keeps it from overstating certainty it doesn't have. Asking the model to explicitly withhold judgment when the summaries don't contain enough detail to identify a real gap directly counters the tendency of large language models to fill an evidence gap with a plausible-sounding but fabricated specific, since a request for "specific gaps" without that guardrail tends to produce confident-sounding invented details rather than an honest "insufficient information" flag. The final instruction to name what NOT to copy addresses a real failure mode of competitor teardowns: the highest-ranking page sometimes wins despite thin or manipulative tactics rather than because of them, and copying those tactics without acknowledging the trade-off would optimize for the wrong signal.`,
     exampleOutput: `1. Missing: state-by-state compliance breakdown — competitor lists specific rules for CA, NY, TX; ours stays generic. 2. Missing: named case studies — competitor cites three real company examples with numbers; ours has none. 3. Possibly non-content: competitor's domain likely carries more backlinks in this niche — recommend checking referring domains before assuming content alone explains the gap. Do not copy: the embedded calculator appears to duplicate content already covered in prose, which may be padding word count rather than adding real value.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -2712,12 +2776,16 @@ A table with columns: Question Group | Real Customer Phrasing (2-3 examples) | C
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`long-tail-keywords`, `keyword-research`, `content-strategy`, `customer-language`, `seo-planning`],
+    tags: [
+      `long-tail-keywords`,
+      `keyword-research`,
+      `content-strategy`,
+      `customer-language`,
+      `seo-planning`,
+    ],
     whyItWorks: `Long-tail keyword lists generated purely from keyword-tool volume data reflect how people phrase things when typing into a search box that autocompletes, which systematically differs from how they phrase a question to a human support agent — the raw-ticket approach captures the actual mental model behind the question, including the specific constraint or edge case that made someone ask in the first place, which is exactly the detail a generic keyword list strips out. Explicitly instructing GPT-5.1 to group by underlying intent rather than surface keyword overlap matters because the model's default clustering behavior on short text snippets leans on lexical similarity, which will incorrectly merge two different questions that happen to share a word and split one real question that was phrased two different ways — naming the failure mode directs the model to reason about intent first and phrasing second. The instruction not to "clean up" the customer phrasing into generic marketing language counters GPT-5.1's default paraphrasing behavior, which naturally smooths idiosyncratic real language into polished, generic prose — exactly the transformation that destroys the long-tail specificity this exercise exists to capture. The coverage-check step forces the model to reason about whether content already answers a question under different wording rather than pattern-matching on whether the literal keyword string appears, which prevents the common false-positive of flagging something as a content gap when it's actually a findability or internal-linking problem instead.`,
     exampleOutput: `Question Group: Downgrade data retention | Phrasing: 'what happens to my data if I downgrade', 'do I lose historical usage data on a lower plan' | Coverage: gap — plan comparison page lists feature differences but never addresses data retention | Priority: high | Reason: signals a user actively deciding whether to downgrade, a revenue-relevant moment with no content currently answering it.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -2766,12 +2834,16 @@ Output as: (1) the sort of existing posts into the three categories with reasoni
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`pillar-page`, `content-architecture`, `internal-linking`, `topic-authority`, `content-strategy`],
+    tags: [
+      `pillar-page`,
+      `content-architecture`,
+      `internal-linking`,
+      `topic-authority`,
+      `content-strategy`,
+    ],
     whyItWorks: `Most pillar-page requests fail because they're written as a fresh outline in isolation, which produces a page that either duplicates existing posts word-for-word or ignores them entirely — forcing the sort-first step means GPT-5.1 has to reason about the existing corpus as material to be organized rather than generating a new structure from scratch, which is the actual job a pillar page does. Requiring an explicit reason for anything moved into the merge or exclude categories counters the model's tendency to quietly reorganize content without surfacing the judgment calls involved, which matters here because merging two posts or excluding a tagged-similar post are both decisions a content owner needs visibility into before they happen, not silent recommendations buried in an outline. The instruction that each section must add real value beyond being a table of contents addresses the single most common failure mode of AI-drafted pillar pages: because the model has been asked to "link out" to existing depth, it defaults to writing thin one-line section stubs that are functionally just a linked list, which search engines and readers both recognize as low-value duplication of a sitemap rather than a genuine hub page. Explicitly asking for coverage gaps — subtopics no existing post addresses — turns the exercise into a content-planning tool as well as an architecture tool, since a pillar strategy that only reorganizes what already exists will have visible holes the moment a competitor's pillar covers the full topic.`,
     exampleOutput: `Sort: Merge — '1099 vs W2: What's the Difference' and '...Which Should You Hire' cover near-identical ground from different angles; recommend combining into one comparison post before linking. Keep separate — misclassification red flags and 1099-NEC filing mechanics are distinct enough to stand alone. Outline: H2 'What Counts as a 1099 Contractor' (new — no existing post covers legal definition)... Coverage gap: no existing post addresses state-level contractor law variations.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2825,12 +2897,16 @@ Output as a table: Source Page | Target Page | Suggested Location | Anchor Text 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`internal-linking`, `topic-cluster`, `site-architecture`, `on-page-seo`, `content-strategy`],
+    tags: [
+      `internal-linking`,
+      `topic-cluster`,
+      `site-architecture`,
+      `on-page-seo`,
+      `content-strategy`,
+    ],
     whyItWorks: `Asked for an internal linking map without constraint, GPT-5.1 defaults to recommending links based on topical adjacency alone, because "these pages are about a related subject" is the cheapest justification the model can produce without reasoning about actual reader flow — explicitly rejecting adjacency as a sufficient reason forces it to simulate where in a specific page's content a reader would hit a natural jumping-off point, which produces links that mirror how a human editor actually reads through a page rather than a graph of topical similarity. Requiring a location within the source page's existing structure, not just a source-target pair, matters because a link recommendation without a placement is not actionable — a content editor implementing the map needs to know where in the text the sentence lives, not just that a link should exist somewhere on the page. The instruction against bare keyword-matched anchor text addresses a specific, checkable pattern: search engines can treat unnaturally repeated exact-match anchors pointing to the same URL as a manipulation signal, and instructing the model to describe what the reader gets rather than restate the keyword produces anchor text that reads naturally in running prose while still being descriptive enough to carry relevance signal. Flagging repeated near-identical anchors as a pattern worth knowing about — without asserting it as a confirmed problem — respects the brief's constraint against fabricating specific claims as fact, since whether repeated anchor text is actually risky depends on site-wide context this prompt doesn't have visibility into.`,
     exampleOutput: `Source: 'Remote Onboarding Best Practices' | Target: 'Onboarding Software Comparison' | Location: near the paragraph discussing async check-in tools | Anchor: 'compare tools built for distributed teams' | Reason: page mentions using software for remote check-ins in passing; target page is the deep comparison a reader evaluating options would want next.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2876,9 +2952,7 @@ A table: Image ID | Alt Text | Note (only if the alt text had to stay generic du
     exampleOutput: `IMG-01 | Red ceramic mug on a wood table, steam rising from hot coffee | 
 IMG-02 | Top-down view of the mug showing the glossy interior glaze | 
 IMG-03 | Mug held in hand, showing size relative to an average grip |`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2927,12 +3001,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`schema-markup`, `structured-data`, `technical-seo`, `rich-results`, `dev-handoff`],
+    tags: [
+      `schema-markup`,
+      `structured-data`,
+      `technical-seo`,
+      `rich-results`,
+      `dev-handoff`,
+    ],
     whyItWorks: `The step that requires ruling out the next most plausible schema type exists because the actual difficulty in schema selection is rarely picking a type in isolation — it's distinguishing between two adjacent types that both technically apply, and a model asked simply to "pick the schema type" will name one confidently without surfacing that the choice was close, leaving a developer no way to sanity-check the decision against their own judgment of the page. Splitting properties into required-for-validation versus optional-but-recommended matters because these two categories carry different implementation priority and a flat list forces a developer to separately go look up which is which in Google's documentation — providing the split in the brief itself is what makes this handoff-ready rather than just informative. The instruction to mark a property as needing input rather than guessing a value directly targets a known and costly failure mode: GPT-5.1 will readily invent a plausible aggregateRating, price, or review count if asked to produce complete JSON-LD from thin content, and shipping a fabricated numeric value in structured data is worse than shipping no value at all, since search engines can take manual action against pages whose structured data doesn't match visibly rendered content. The accuracy-warning step is scoped specifically to properties with real consequences rather than applied blanket to every field, because flagging every property equally would train the developer to ignore the warnings — reserving them for rating, price, and availability keeps the signal meaningful exactly where a mismatch is a policy risk rather than a cosmetic one.`,
     exampleOutput: `Schema type: Recipe (not HowTo) — the content is a specific dish with ingredients and yield, not a general multi-step process without a food outcome, which is the distinguishing line between the two types. Property table: name (required, from page title) | prayTime/cookTime (required, from listed prep/cook times) | aggregateRating (recommended, from the 40 ratings averaging 4.6 — WARNING: must match the visibly displayed rating exactly, mismatched aggregateRating is a common trigger for manual structured data actions).`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2993,12 +3071,16 @@ OUTPUT: (1) the intent-versus-promise mismatch check, (2) heading structure with
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`landing-page`, `seo-ppc-alignment`, `conversion-copywriting`, `content-brief`, `search-intent`],
+    tags: [
+      `landing-page`,
+      `seo-ppc-alignment`,
+      `conversion-copywriting`,
+      `content-brief`,
+      `search-intent`,
+    ],
     whyItWorks: `A landing page brief that treats organic intent and paid ad promise as automatically aligned produces pages that satisfy neither audience well, because the two traffic sources genuinely can want structurally different things — an organic searcher for a broad comparison keyword arrives expecting to evaluate options, while a paid visitor arrives already primed by a specific claim and expects to find exactly that claim fulfilled immediately; asking GPT-5.1 to check for this mismatch before drafting anything prevents it from defaulting to whichever framing it read first (usually the ad promise, since it's stated more narrowly and is easier to write headings around). Requiring the heading structure to reflect genuine informational value rather than ad copy restated as headings counters a common and checkable failure mode where a model asked to write "SEO headings" for a page whose main brief is an ad promise will just rephrase the ad's claims into H2 format, producing a page that reads as promotional to an organic visitor who arrived wanting a comparison, and that mismatch between apparent intent and actual content is exactly what search engines' intent-matching increasingly penalizes. The instruction to flag ad-promise oversell against the given offer details is the load-bearing accuracy control here: without it, the model will simply carry the ad's claim through into page copy, and if that claim isn't actually supported by the offer details, the page repeats and amplifies an overstatement rather than surfacing it as something the ad-copy owner needs to resolve — the brief's job is to catch this before it compounds across both the ad and the landing page.`,
     exampleOutput: `Mismatch check: organic searchers want a comparison; ad promise is single-offer specific. Recommend leading with a brief honest comparison framework (3-4 evaluation criteria) before narrowing to our offer, so organic visitors don't bounce feeling sold-to immediately. Oversell flag: 'cut reporting time in half' is based on one case study, not an average — recommend the page state it as 'one agency reported cutting reporting time in half' rather than implying a typical guaranteed result.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -3054,12 +3136,16 @@ Give a clear go/reconsider/no-go recommendation on the originally intended conte
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`serp-analysis`, `search-intent`, `content-planning`, `keyword-strategy`, `seo-strategy`],
+    tags: [
+      `serp-analysis`,
+      `search-intent`,
+      `content-planning`,
+      `keyword-strategy`,
+      `seo-strategy`,
+    ],
     whyItWorks: `The instruction to treat the actual SERP composition as evidence rather than override it with an assumed intent label directly counters GPT-5.1's default behavior when asked to classify search intent, which is to reach for one of the standard four-way taxonomy labels (informational, navigational, commercial, transactional) even when the real SERP is genuinely mixed — forcing the model to describe the SERP as evidence first prevents it from flattening a legitimately ambiguous ranking pattern into a false certainty. The gap check in phase 2 exists because the most common and most expensive content-strategy mistake is deciding on a format before checking what format Google is actually already rewarding for that specific query — a blog post can be well-researched and well-written and still structurally lose to a SERP dominated by interactive tools, and catching that mismatch before drafting saves the actual writing effort rather than diagnosing the failure after publication when traffic doesn't materialize. Banning "be more comprehensive" as a differentiation answer matters because it's the single most common non-answer a model gives when asked what's missing from a set of ranking pages — it sounds like actionable advice but names nothing a writer could actually go implement, whereas requiring a specific named element forces the model to actually compare the given result descriptions against each other rather than defaulting to generic completeness advice. The final go/reconsider/no-go framing, rather than an openended discussion, respects that this prompt is meant to inform a real resourcing decision before writing time is spent, and a content lead needs a clear recommendation to act on, not just an analysis to interpret.`,
     exampleOutput: `Phase 1: SERP is mixed — two calculator tools, one forum thread, one blog post, suggesting Google is satisfying multiple sub-intents (some want an instant number, some want community discussion, some want the underlying logic). Phase 2: intended blog-post format does match the one blog post already ranking at position 3, so format isn't a blocker. Phase 3: none of the current top results explain how to adjust the rate formula for different tax situations (W-2 vs 1099) — that's a specific, missing angle. Recommendation: go, with the tax-situation adjustment as the differentiating section.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -3123,12 +3209,16 @@ Output as: a checked/unchecked/insufficient-evidence status for each of the four
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`content-decay`, `traffic-analysis`, `seo-diagnosis`, `content-audit`, `keyword-cannibalization`],
+    tags: [
+      `content-decay`,
+      `traffic-analysis`,
+      `seo-diagnosis`,
+      `content-audit`,
+      `keyword-cannibalization`,
+    ],
     whyItWorks: `The instruction to check causes in a specific order rather than jumping to a conclusion counters the strongest default behavior GPT-5.1 has around traffic-drop questions, which is to reach immediately for "the content is outdated, refresh it" because that's the most common advice pattern in SEO content the model was trained on — but that diagnosis is frequently wrong, since a stable or even improving average position paired with a real traffic drop is actually the signature of cannibalization or SERP feature displacement, not content staleness, and applying a rewrite to that situation wastes real effort while leaving the actual cause (a competing internal page, or a new AI overview eating clicks) untouched. Requiring the model to explicitly mark a cause as "insufficient evidence" rather than confirming or denying it on a guess is the load-bearing accuracy control, since the input data given here is often genuinely incomplete (no algorithm-update timeline, no cannibalization check run yet), and a model under pressure to give a confident diagnosis will otherwise fill that gap with a plausible-sounding but unverified explanation. Tying the final recommendation explicitly to the specific cause identified — rather than giving a generic list of things that might help — is what makes this triage actionable rather than just descriptive, since a cannibalization fix (consolidate or differentiate the two competing pages) and a staleness fix (update specific facts) are different work with different owners, and conflating them under one "refresh the content" recommendation would send the wrong team down the wrong path.`,
     exampleOutput: `Cannibalization: likely — a newer post on a very similar topic was published 2 months ago, right before the traffic decline started, and average position for the original page has stayed roughly flat, which fits a traffic-splitting pattern better than a genuine ranking loss. SERP feature displacement: insufficient evidence — no information given on whether a new SERP feature appeared. Genuine ranking drop: unlikely — average position hasn't meaningfully changed. Content staleness: partially relevant but secondary — outdated pricing should be fixed regardless. Recommended action: audit whether the newer post targets the same primary keyword; if so, consolidate or differentiate them rather than rewriting the original page first.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -3183,12 +3273,16 @@ OUTPUT: for each of the four factors, a helps/hurts verdict with the supporting 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ai-search-visibility`, `generative-engine-optimization`, `content-structure`, `answer-engine-optimization`, `seo-strategy`],
+    tags: [
+      `ai-search-visibility`,
+      `generative-engine-optimization`,
+      `content-structure`,
+      `answer-engine-optimization`,
+      `seo-strategy`,
+    ],
     whyItWorks: `Asked generically "how do I improve AI search visibility," GPT-5.1 tends to produce a checklist of best practices detached from the specific page in question — requiring it to evaluate the actual given content against four named extraction-friendliness factors, with a quote as evidence for each verdict, forces it to reason about this specific page's actual structure rather than restate generic advice that would apply equally to any page. The first factor — whether the answer is stated directly near the top of a section versus buried in narrative setup — targets the real mechanical reason summarization systems skip technically-correct content: extraction systems favor self-contained, front-loaded statements because they can be lifted cleanly without needing surrounding context to make sense, and a well-written page that builds up to its point through several sentences of context is often harder to extract from than a blunter, less elegant paragraph, even though the blunter version reads worse to a human. The instruction to compare only the specific competing excerpt rather than judge a competitor's overall page quality keeps the analysis honest and narrow — a competitor's page being cited doesn't mean the whole page is better, it means one specific excerpt was more extractable, and conflating the two would misdirect the edit recommendations toward a full competitive rewrite instead of the two or three targeted structural changes that actually matter. Explicitly banning keyword stuffing or manipulative phrasing as a recommended fix matters because the actual lesson from how extraction-friendly content performs is that stating things plainly and structuring them clearly is what helps — gaming language patterns doesn't reliably improve citation and actively degrades the page for human readers, so ruling it out keeps the recommendations aligned with what's actually earning citations rather than what merely looks like an SEO trick.`,
     exampleOutput: `Factor 1 (direct answer): hurts — the cost figure is mentioned mid-paragraph after two sentences about risk factors rather than stated as the section's opening claim. Factor 2 (delimited section): hurts — no subheading maps directly to 'cost,' it's folded into a broader 'What Affects Your Premium' section. Recommended edit: add a subheading literally reading 'Average Cost' immediately followed by the specific dollar range as the first sentence underneath it, mirroring the structural pattern the competing citation already uses.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -3241,12 +3335,16 @@ OUTPUT: numbered plan following the four steps above, ending with a one-paragrap
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ai-citations`, `generative-engine-optimization`, `digital-pr`, `original-research`, `brand-visibility`],
+    tags: [
+      `ai-citations`,
+      `generative-engine-optimization`,
+      `digital-pr`,
+      `original-research`,
+      `brand-visibility`,
+    ],
     whyItWorks: `Asked generically for a citation-building or GEO plan, GPT-5.1 tends to produce a repackaged backlink-outreach or digital-PR checklist, because that's the closest well-represented pattern in its training data for "getting mentioned online" — explicitly starting from the principle that models cite specific checkable facts rather than well-known sources redirects the model away from that template and toward reasoning about what your brand actually possesses that's citable, which is a fundamentally different and narrower question. The instruction not to invent a statistic the brand doesn't actually have is the load-bearing accuracy control in this prompt, because a plan built on a fabricated data point isn't a plan at all — it's a suggestion to publish something false, and the brief this prompt operates under specifically requires never presenting invented statistics as fact; forcing the model to say "this is a gap, not a plan" when the input lacks real data keeps the output honest even when the honest answer is less satisfying than a confident list of tactics. Requiring the model to distinguish whether current citations win on a genuinely stronger fact versus first-mover advantage or brand recognition matters because these two situations call for different responses — if the association's report is cited mainly because of prior brand recognition, a strategy of "give AI models something better cited" can genuinely displace it, but if it's cited because no competing data exists, publishing something is the prerequisite over publishing something more optimized. The closing honest-assessment requirement counters the natural pull toward ending on an upbeat, actionable-sounding note even when the actual input reveals the brand doesn't yet have a strong citation play — which is a real and useful answer a stakeholder needs to hear before investing in a plan built on a data gap.`,
     exampleOutput: `1. Real data point: average freelance payment delay by industry, drawn from 50,000 processed invoices — not currently published anywhere. 2. Best-fit query: 'average time to get paid as a freelancer by industry' — should be published as a standalone, dated, labeled statistics page, not folded into a blog post. 3. Current citations (the industry association's 2-year-old report) appear to win mainly on brand recognition and recency of nothing better existing, not because their underlying data is stronger — a fresher, more granular data set has a real chance of displacing them. 4. Honest assessment: the underlying data exists and is strong; the actual blocker is that it's never been packaged as a citable public asset, so the real next step is publication, not further research.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -3301,12 +3399,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`content-quality`, `editorial-process`, `content-review`, `quality-rubric`, `editorial-standards`],
+    tags: [
+      `content-quality`,
+      `editorial-process`,
+      `content-review`,
+      `quality-rubric`,
+      `editorial-standards`,
+    ],
     whyItWorks: `Generic content rubrics built around dimensions like "clarity" and "engagement" fail at the one job a rubric exists to do — producing consistent scores across different reviewers — because those words don't resolve to a checkable observation in the text, so two reviewers with different personal taste will genuinely disagree on the same draft even when both are acting in good faith; requiring every criterion to be restatable as something a reviewer could point to a specific passage and definitively check forces GPT-5.1 to translate vague quality language into an operational test, which is the actual mechanism that makes inter-reviewer consistency possible. Building the rubric directly around named past failures rather than a generic quality checklist matters because a rubric that doesn't specifically target the mistakes that have actually happened will keep letting them through — a generic "originality" criterion doesn't reliably catch a draft that pads word count by restating the same point three ways, but a criterion asking "does any section restate a point already made elsewhere in different words" catches exactly that failure by name. Capping the scale at 3 points rather than defaulting to a 10-point scale, which is GPT-5.1's more common default for rubric requests, directly addresses a known measurement problem: finer gradations on an inherently subjective judgment create an illusion of precision without actually improving reviewer agreement, since the extra distinctions between, say, a 6 and a 7 are exactly the kind of judgment call the rest of this rubric is designed to eliminate. Requiring an explicit note on dimensions deliberately left out keeps the rubric honest about its own limits rather than silently pretending it covers every aspect of quality, which matters operationally because a content team needs to know a real quality dimension is being tracked outside the rubric, not assume the rubric is complete just because it exists.`,
     exampleOutput: `Criterion: 'Redundancy check' | Fails: same core point restated in two or more sections using different wording without adding new information | Meets: each section advances the argument with new information, no repeated point | Built to catch: freelancer draft that padded word count via repetition. Pass threshold: no criterion below 'partially meets,' and at least two-thirds of criteria at 'meets.' Left out: overall 'brand voice fit' — too dependent on reviewer-specific taste to make checkable without a much larger style guide than given here; tracked as a known gap, not silently dropped.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

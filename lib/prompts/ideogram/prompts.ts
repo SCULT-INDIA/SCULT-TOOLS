@@ -160,9 +160,7 @@ export const prompts: readonly Prompt[] = [
     tags: [`ideogram`, `social-media`, `carousel-cover`, `text-in-image`, `hook-copy`],
     whyItWorks: `A carousel cover lives or dies on one thing: whether the hook text is instantly readable at feed-thumbnail size, which is exactly the constraint most diffusion models fail at, since they treat short caption text as a texture to approximate rather than a string to reproduce. Ideogram's text-rendering training specifically targets short, high-contrast strings like headlines and pill-shaped labels, which is why this prompt keeps both quoted strings short and explicitly separates them by role — headline versus tag — rather than letting the model guess which text is more important. The instruction to leave generous negative space around the text is doing real work here too: Ideogram (like other text-capable models) still occasionally crops or overlaps glyphs when text sits too close to the frame edge or another element, and giving the composition room reduces that failure mode noticeably. Naming the exact platform aspect ratio matters because carousel covers get judged when scaled down to a two-inch-wide thumbnail in-feed, so a design that only reads well at full size is a design that fails in practice — this prompt asks for legibility at that shrunk scale directly instead of assuming it as a byproduct.`,
     exampleOutput: `A clean portrait-format cover slide with the hook line rendered in bold, mostly-correct type across the upper two-thirds and a small rounded pill tag beneath it — check the pill text closely, since short tags in unusual fonts are still the more error-prone of the two strings.`,
-    verifiedAgainst: [
-      { tool: 'Ideogram', version: 'V3', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'Ideogram', version: 'V3', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -218,9 +216,7 @@ export const prompts: readonly Prompt[] = [
     tags: [`ideogram`, `youtube-thumbnail`, `text-in-image`, `high-contrast`, `ctr`],
     whyItWorks: `Thumbnail text has the harshest legibility bar of any format on this list because it gets viewed at roughly 120x68 pixels on a phone screen, so this prompt caps the quoted string at 2-4 words and explicitly asks for a thick outline stroke — the classic broadcast-graphics trick for keeping text readable against a busy, saturated background, which Ideogram can actually render as an instruction rather than something you'd have to add in Photoshop afterward. The hard word-count ceiling in the closing constraint is deliberate: Ideogram's text accuracy is strong for short strings but degrades as string length grows, and a thumbnail with more than four words is already a losing design regardless of render quality, since nobody reads a thumbnail — they scan it in under a second. Pushing saturation to maximum and specifying the emotional framing of the subject both address the same underlying job (stopping a thumb mid-scroll), and naming them as separate directives keeps the model from defaulting to a flat, editorial-photo look, which is the most common way AI-generated thumbnails read as generic rather than clickable.`,
     exampleOutput: `A tightly cropped, high-saturation thumbnail with the subject's expression dominating the frame and a short outlined hook phrase in the specified corner, legible even when the preview is shrunk to mobile size.`,
-    verifiedAgainst: [
-      { tool: 'Ideogram', version: 'V3', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'Ideogram', version: 'V3', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -275,12 +271,16 @@ What to avoid: no photorealistic faces, no stock-photo-style people, no text cra
       },
     ],
     targetTools: [`Ideogram V3`],
-    tags: [`ideogram`, `linkedin-banner`, `personal-branding`, `text-in-image`, `profile-cover`],
+    tags: [
+      `ideogram`,
+      `linkedin-banner`,
+      `personal-branding`,
+      `text-in-image`,
+      `profile-cover`,
+    ],
     whyItWorks: `Most LinkedIn banner generations from other image models default to abstract gradient wallpaper because that's the safest thing a model can produce when it doesn't have a reliable way to draw the words that actually carry the message — which means the banner ends up saying nothing. This prompt is built around that gap: it treats the positioning line as the actual point of the image and gives Ideogram exactly the short strings it renders most reliably, split into a main line and a supporting line so the hierarchy is unambiguous rather than one run-on sentence. The explicit safe-zone instruction (profile-photo circle left blank, text confined to the right two-thirds) exists because LinkedIn's fixed circular photo mask sits in a known location on every profile, and a model with no knowledge of that UI overlay will happily center your one good line directly behind where the photo goes — naming the dead zone up front avoids a banner that has to be manually recropped after generation. Capping it at two quoted lines keeps both strings inside Ideogram's comfortable accuracy range for verbatim text.`,
     exampleOutput: `A wide corporate-style banner with the positioning statement rendered clearly across the right two-thirds, a shorter title line beneath it, and the bottom-left corner left visually quiet where the profile photo will sit.`,
-    verifiedAgainst: [
-      { tool: 'Ideogram', version: 'V3', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'Ideogram', version: 'V3', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -338,9 +338,7 @@ Render the wordmark text with clean, highly legible letterforms — prioritize t
     tags: [`ideogram`, `logo-design`, `wordmark`, `branding`, `startup-naming`],
     whyItWorks: `Structuring this as sequential steps rather than one dense sentence matters specifically for logo work because the brief has to communicate two different kinds of information the model handles differently: brand context (personality, industry) that shapes style choices, and an exact string (the brand name) that must render as legible text — collapsing those into one run-on prompt tends to make Ideogram treat the brand name as just another descriptive phrase instead of the literal wordmark to draw. The closing instruction to prioritize correct spelling over decorative flourish exists because Ideogram, like every current text-to-image model, trades off some legibility for stylization when a prompt leans hard into an ornate aesthetic, and for a brand-name wordmark, a slightly plainer but correctly-spelled result beats a beautiful but misspelled one every time. Framing the whole output explicitly as moodboard input rather than a deliverable is a deliberate expectation-setting move: even a strong Ideogram wordmark generation is a raster image at model resolution, not a scalable vector, so a founder using this to pick a direction still needs a designer to redraw the winning concept in real vector software before it touches a business card or a website header.`,
     exampleOutput: `Three or four flat, similarly-styled logo concepts, each pairing the same abstract icon idea with a mostly-correct rendering of the brand name — pick the direction with the cleanest wordmark rendering as the one to hand a designer, not necessarily the most elaborate one.`,
-    verifiedAgainst: [
-      { tool: 'Ideogram', version: 'V3', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'Ideogram', version: 'V3', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -401,12 +399,16 @@ Important: treat every number in this brief as placeholder/example data supplied
       },
     ],
     targetTools: [`Ideogram V3`],
-    tags: [`ideogram`, `infographic`, `text-in-image`, `data-visualization`, `layout-design`],
+    tags: [
+      `ideogram`,
+      `infographic`,
+      `text-in-image`,
+      `data-visualization`,
+      `layout-design`,
+    ],
     whyItWorks: `An infographic prompt fails in a specific way if you don't constrain it: asked generically for 'stats about remote work,' an image model will confidently render plausible-looking but fabricated numbers as crisp, authoritative-looking text, which is worse than no infographic at all since the fabrication is dressed up as data. This prompt closes that gap two ways — it requires the exact stat/label pairs to be supplied as an input variable rather than generated, and it adds an explicit closing instruction telling the model not to invent additional statistics, which matters because Ideogram will otherwise fill visual gaps in a mostly-empty layout with invented supporting numbers to make the composition feel complete. Structuring the layout instruction around box count, arrangement, and consistent spacing exists because infographic panels read as broken the moment alignment is inconsistent between callouts, and calling that out explicitly counters diffusion models' general weakness at maintaining strict grid discipline across a multi-element composition. As with the logo brief, the honest framing here is that this produces a polished mockup of the layout and copy — a designer still typically rebuilds the final version in a tool with real data-binding (Figma, Canva, a BI tool's export) so the numbers stay accurate and editable.`,
     exampleOutput: `A vertically stacked infographic panel with the title rendered at the top and each stat/label pair rendered as its own aligned card with a simple icon — a solid pitch-deck-ready mockup to review, not a chart with live data behind it.`,
-    verifiedAgainst: [
-      { tool: 'Ideogram', version: 'V3', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'Ideogram', version: 'V3', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -465,12 +467,16 @@ Important: treat every number in this brief as placeholder/example data supplied
       },
     ],
     targetTools: [`Ideogram V3`],
-    tags: [`ideogram`, `travel-poster`, `vintage-illustration`, `text-in-image`, `typography`],
+    tags: [
+      `ideogram`,
+      `travel-poster`,
+      `vintage-illustration`,
+      `text-in-image`,
+      `typography`,
+    ],
     whyItWorks: `Vintage travel posters are a genre defined as much by their lettering as their illustration — the destination name in bold period display type is the whole point of the format — which makes them a poor fit for image models that can't reliably spell a place name, since a garbled 'LISBQN' breaks the illusion immediately even if the illustration around it is beautiful. This prompt puts the destination name in quotes twice in effect (once as the illustrated subject, once as the literal text string), which reinforces to Ideogram that this exact word needs to appear both as scene content and as rendered typography, reducing the chance it treats the name as purely descriptive context. Calling out the specific era and illustration technique (gouache, halftone, woodblock, whatever fits) does real work beyond aesthetics: it steers the model toward flatter, more graphic-design-like rendering rather than photorealism, and flatter compositions are exactly where Ideogram's text engine performs most reliably, since photorealistic scenes with embedded signage text are a noticeably harder case for any current model. The paper grain and border frame instructions are finishing touches that sell the vintage read without affecting text accuracy, so they're placed after the text-critical instructions rather than competing with them for the model's attention.`,
     exampleOutput: `A warm, muted-palette illustrated poster with a stylized cityscape and the destination name rendered in bold vintage display lettering across the bottom third, aged paper texture completing the period look.`,
-    verifiedAgainst: [
-      { tool: 'Ideogram', version: 'V3', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'Ideogram', version: 'V3', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -555,9 +561,7 @@ Do not merge the three details lines into one sentence — keep them as three vi
     tags: [`ideogram`, `event-poster`, `text-in-image`, `flyer-design`, `typography`],
     whyItWorks: `The single most common failure in AI-generated event posters isn't the headline — models handle a short bold event name reasonably well — it's the details block, where date, time, and venue tend to blur into one garbled line or get half-rendered as illegible fine print, because that block is functionally three separate short strings the model has to keep distinct rather than one phrase to stylize. This prompt addresses that directly by labeling each line explicitly (Line 1, Line 2, Line 3) inside the prompt itself rather than just concatenating them, which gives Ideogram a clearer structural cue to keep them as three separate visual lines instead of merging them into a single run-on sentence — a known weakness even in text-capable models when multiple short facts sit close together. The closing instruction not to add extra text matters because a mostly-empty bottom third is exactly where diffusion models like to add plausible-looking filler (a fake website URL, a made-up ticket price) to make the composition feel finished, and naming that boundary up front heads it off. Keeping the theme and background instructions separate from the text block, rather than interleaved with it, also reduces the chance that stylistic instructions bleed into how the model renders the factual details, which need to stay plain and legible even when the rest of the poster is stylistically loud.`,
     exampleOutput: `A bold typographic poster with the event name dominating the upper two-thirds and a clean three-line details block in the bottom third — verify the date and venue spelling before printing, since multi-word proper nouns are the most error-prone part of the render.`,
-    verifiedAgainst: [
-      { tool: 'Ideogram', version: 'V3', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'Ideogram', version: 'V3', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

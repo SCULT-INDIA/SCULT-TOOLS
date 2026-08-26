@@ -2395,7 +2395,13 @@ Leave the ledger in a state where the very next row needing attention is unambig
       },
     ],
     targetTools: [`Claude Code`],
-    tags: [`migration`, `ledger-file`, `strangler-fig`, `long-running-tasks`, `verification`],
+    tags: [
+      `migration`,
+      `ledger-file`,
+      `strangler-fig`,
+      `long-running-tasks`,
+      `verification`,
+    ],
     whyItWorks: `A migration that spans many Claude Code sessions has a failure mode that a single-session task does not: each new session starts with a fresh context window and no memory of what a previous session decided, so unless the state of the migration is written down somewhere Claude Code will read automatically, every session either re-derives the plan from scratch or, worse, silently assumes a different plan than the one actually in progress. The ledger table exists specifically to make 'where are we' a lookup instead of an investigation — a session that reads a table of pending/migrated/verified rows can pick up exactly where the last one stopped, whereas a session that has to infer progress from a git log or a half-remembered conversation is likely to either redo finished work or, more dangerously, assume something is done when it is only compiling. The distinction between migrated and verified is the single most load-bearing rule in the file, because a migrated-but-unverified unit that a later session assumes is safe to build on top of is exactly how a migration produces a regression that surfaces weeks after the fact, once nobody is looking at that code anymore. Fixing the strategy — strangler-fig versus big-bang — as a stated fact rather than a per-session judgment call matters because the two strategies imply opposite answers to questions like 'is it safe to delete the old path yet,' and an agent that re-decides the strategy file-by-file will produce an inconsistent migration that is neither fully incremental nor a clean cutover. The freeze-line rule targets a well-documented agentic-coding failure mode directly: an agent given latitude inside a file it is already touching tends to also fix nearby things it notices, which turns a reviewable, single-purpose migration diff into a sprawling change nobody can review with confidence, and is why the instruction states explicitly that adjacent, related-looking code stays untouched regardless of how easy the fix would be.`,
     exampleOutput: `## Ledger
 | Unit | Status | PR | Shim depended on |
@@ -2405,9 +2411,7 @@ Leave the ledger in a state where the very next row needing attention is unambig
 | POST /refunds | pending | — | — |
 
 Next session: GET /invoices/:id needs contract verification before its shim can be removed; POST /refunds has not been started.`,
-    verifiedAgainst: [
-      { tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -2480,16 +2484,20 @@ End each phase by stating explicitly what was decided and what is still open, so
       },
     ],
     targetTools: [`Claude Code`],
-    tags: [`language-porting`, `code-conversion`, `idiom-mapping`, `parity-testing`, `task-brief`],
+    tags: [
+      `language-porting`,
+      `code-conversion`,
+      `idiom-mapping`,
+      `parity-testing`,
+      `task-brief`,
+    ],
     whyItWorks: `The core failure mode of an AI-assisted language port is transliteration — code that compiles in the target language but is structurally still thinking in the source language, which is worse than it sounds because it passes review at a glance and only becomes a maintenance liability months later when someone tries to extend it the target-language way and the transliterated parts fight back. Forcing an explicit idiom map as its own phase, before any porting happens, catches this at the point where it's cheapest to fix: a wrong mapping decision written down and confirmed against one representative file costs a few minutes, while the same wrong decision discovered after all nine files have been ported costs a full re-pass. Porting one representative file before the rest applies the same checkpoint logic Claude Code benefits from in any multi-file task — an agent working file-by-file with no interim checkpoint tends to compound an early wrong assumption silently across every subsequent file, because nothing in the loop forces reconsideration until the very end, by which point the fix touches everything rather than one file. The parity-testing phase is deliberately specified as comparing against the original's behavior on identical input rather than 'passing tests,' because a test suite authored in the same pass that wrote the port is written by something that already believes the port is correct — it will tend to encode the port's own assumptions as the expected behavior rather than catch a case where the port silently changed behavior, which is precisely the blind spot that matters most in a language conversion where semantics like error handling or numeric precision can shift without anyone writing new code that looks obviously wrong. The what-not-to-do section names transliteration, dropped error semantics, and unauthorized new dependencies specifically because these are the three ways a port can look finished while quietly being wrong, none of which show up as a compile error or an obvious code-review red flag.`,
     exampleOutput: `Phase 1 idiom map (excerpt):
 - Python \`except ValueError\` broad catch -> Go explicit \`if err != nil\` with \`errors.Is(err, ErrInvalidInput)\`
 - Python list comprehension building report rows -> Go slice with explicit append loop (no lazy-eval need here)
 
 Phase 4 parity check: 47/47 fixture reports byte-identical between python and go binaries; 1 discrepancy found in currency rounding, traced to Go's default float formatting — fixed by matching Python's decimal.ROUND_HALF_UP explicitly.`,
-    verifiedAgainst: [
-      { tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2552,14 +2560,18 @@ WHAT NOT TO DO
       },
     ],
     targetTools: [`Claude Code`],
-    tags: [`architecture-review`, `layering`, `coupling-analysis`, `code-audit`, `clean-architecture`],
+    tags: [
+      `architecture-review`,
+      `layering`,
+      `coupling-analysis`,
+      `code-audit`,
+      `clean-architecture`,
+    ],
     whyItWorks: `Claude Code's advantage over a review done from memory or from a diagram is that it can actually open every file, trace an import statement to where it resolves, and follow a call chain across module boundaries with tools like Grep and Glob rather than trusting what a folder name implies about layering — which is exactly why the prompt insists on citing file and line for every finding: a claim that isn't tied to an actual location is unfalsifiable, and an unfalsifiable architecture finding is worse than none because a reviewer then has to go hunting for something that may not exist. Bounding the review to a named scope and a specific stated concern, rather than an open-ended 'review the architecture,' matters because a generic review prompt reliably produces a generic essay — one that lists best practices any codebase could benefit from, restates SOLID principles in the abstract, and reaches for a familiar big recommendation like microservices or a rewrite regardless of whether the actual code supports that conclusion, since that's the median answer for the median unscoped prompt of this shape. Requiring the risk ranking to state two separate factors, blast radius and likelihood of recurrence, rather than a single severity label, forces the model to reason about each finding on its own evidence instead of defaulting to a template severity scale that doesn't actually reflect this codebase's specific coupling. The what-not-to-do section exists because architecture review and code style review get conflated by default — a review asked for broadly will often pad its findings with naming and formatting nits because those are easy, verifiable, and plentiful, which crowds out the harder structural findings the review actually exists to surface, and explicitly ruling that out redirects the effort toward the layering and coupling questions that were the actual point of asking.`,
     exampleOutput: `1. Layering violations: rag/retrieval/hybrid.py:34 imports \`qdrant_client\` directly instead of going through \`vectorstore.base.VectorStorePort\` — introduced in the reranking commit, bypasses the port added for the pgvector swap.
 2. Coupling hotspots: services/query_service.py has 11 inbound imports (highest in services/), mostly other services reaching into it for its retry helper.
 3. Risk ranking: #1 above ranked highest — low blast radius (one file) but high recurrence risk, since it reintroduces the exact coupling VectorStorePort was built to prevent.`,
-    verifiedAgainst: [
-      { tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2618,7 +2630,13 @@ Do not log anything here that is actually a bug (something already broken now) o
       },
     ],
     targetTools: [`Claude Code`],
-    tags: [`technical-debt`, `ledger-file`, `code-audit`, `prioritization`, `maintenance`],
+    tags: [
+      `technical-debt`,
+      `ledger-file`,
+      `code-audit`,
+      `prioritization`,
+      `maintenance`,
+    ],
     whyItWorks: `Technical debt tracked only in conversation or in someone's memory decays the same way any unwritten institutional knowledge does — it gets rediscovered repeatedly, argued about from scratch each time, and eventually just becomes ambient background complaint rather than something anyone acts on, which is why the ledger's most important structural feature is the same one that makes CLAUDE.md itself useful: it is a file a fresh Claude Code session reads automatically, so the debt list survives across sessions instead of resetting to zero every time context runs out. Requiring an actual file and line per item, rather than an area description, is what makes the difference between a ledger and a complaint list — 'the ingestion pipeline is messy' cannot be acted on by a future session or verified as fixed later, while 'rag/loaders/pdf_loader.py:88, silent except that swallows corrupt-PDF errors' can be found, fixed, and checked off with no ambiguity about whether it's the same item someone meant three weeks ago. Scoring severity and effort as two independent numbers rather than one blended priority is a deliberate correction against the natural bias to rank by how alarming something sounds — a severity-only ranking will bury a five-minute fix to a genuinely risky pattern beneath a terrifying-sounding but multi-week rewrite, when the actual next best action is almost always the cheap fix to the dangerous thing, not the expensive fix to anything. The rule against fixing debt silently mid-task exists because an agent that notices nearby debt while working tends to want to clean it up on the spot, which feels helpful in the moment but produces an unreviewable diff that mixes the actual requested change with an unrelated opportunistic rewrite, and quietly removes the paper trail the ledger exists to provide — the rule instead routes that impulse into either leaving a now-accurate ledger entry for deliberate future work, or fixing it only when the current task's own scope genuinely requires it, at which point it's a legitimate part of that diff rather than a surprise inside it.`,
     exampleOutput: `| Item | Location | Severity | Effort | Why it matters |
 |---|---|---|---|---|
@@ -2626,9 +2644,7 @@ Do not log anything here that is actually a bug (something already broken now) o
 | Chunk size hardcoded, not from Settings | rag/chunking/fixed.py:14 | medium | 1h | can't tune per ingestion job without a code change and redeploy |
 
 Ordering rule: severity desc, effort asc as tiebreaker -> broad except fix ranked first (high severity, only 2h).`,
-    verifiedAgainst: [
-      { tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

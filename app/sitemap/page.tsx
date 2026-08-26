@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { SKILLS_PER_SHARD } from '@/app/sitemap'
 import { BLOG_POSTS } from '@/lib/blog/registry'
 import type { BlogPillar } from '@/lib/blog/types'
 import { GUIDES } from '@/lib/guides/registry'
@@ -7,7 +8,6 @@ import { getCategoriesByGroup, PROMPT_GROUPS } from '@/lib/prompts/categories'
 import { getPromptsByCategory, PROMPTS } from '@/lib/prompts/registry'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
-import { SKILLS_PER_SHARD } from '@/app/sitemap'
 import { SKILL_CATEGORIES } from '@/lib/skills/categories'
 import { getAllCategoryCounts, getSyncMeta, getTotalSkillCount } from '@/lib/skills/db'
 import { CATEGORIES } from '@/lib/tools/categories'
@@ -147,8 +147,8 @@ export default async function SitemapPage() {
         </h1>
         <p className="mt-5 max-w-[62ch] text-[17px] text-ink-muted leading-7 md:text-lead">
           {TOOLS.length} tools, {PROMPTS.length} prompts, {totalSkills.toLocaleString()}{' '}
-          synced agent skills, {GUIDES.length} guides, {BLOG_POSTS.length} blog posts
-          and every trust page, grouped by section.
+          synced agent skills, {GUIDES.length} guides, {BLOG_POSTS.length} blog posts and
+          every trust page, grouped by section.
         </p>
         <p className="mt-3 max-w-[62ch] text-[15px] text-ink-muted">
           Prefer a machine-readable version?{' '}
@@ -267,10 +267,10 @@ export default async function SitemapPage() {
           ) : null}
         </p>
         <p className="mt-2 max-w-[62ch] text-[13.5px] text-ink-subtle">
-          Individual skills aren't listed here one by one — at this scale (growing
-          toward the full skills.sh registry) that would make this page unusable.
-          The categories below are real and daily-synced; every skill under them is
-          in the machine-readable{' '}
+          Individual skills aren't listed here one by one — at this scale (growing toward
+          the full skills.sh registry) that would make this page unusable. The categories
+          below are real and daily-synced; every skill under them is in the
+          machine-readable{' '}
           <a href="/sitemap.xml" className={LINK_CLASS}>
             XML sitemap
           </a>
@@ -279,7 +279,10 @@ export default async function SitemapPage() {
         <ul className="mt-3 flex flex-wrap gap-2">
           {liveSkillCategories.map(({ category, count }) => (
             <li key={category.slug}>
-              <Link href={`/skills/${category.slug}`} className="chip-tool px-4 py-2 text-[14px]">
+              <Link
+                href={`/skills/${category.slug}`}
+                className="chip-tool px-4 py-2 text-[14px]"
+              >
                 {category.name} ({count.toLocaleString()})
               </Link>
             </li>

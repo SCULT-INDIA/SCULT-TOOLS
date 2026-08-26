@@ -419,7 +419,8 @@ export const SKILL_CATEGORIES: readonly SkillCategory[] = [
   {
     slug: 'general',
     name: 'General & Other',
-    blurb: 'Real skills outside the dev-tool categories above — legal, creative, business, and more.',
+    blurb:
+      'Real skills outside the dev-tool categories above — legal, creative, business, and more.',
     intro:
       'Skills that are genuinely useful but don’t fit a dev-tool-specific bucket — legal and compliance, creative writing, finance, gaming, healthcare, and other domains the open skills.sh registry covers.',
     icon: 'Sparkles',
@@ -437,9 +438,8 @@ export const SKILL_CATEGORIES: readonly SkillCategory[] = [
   },
 ] as const
 
-export const SKILL_CATEGORY_BY_SLUG: ReadonlyMap<SkillCategorySlug, SkillCategory> = new Map(
-  SKILL_CATEGORIES.map((c) => [c.slug, c]),
-)
+export const SKILL_CATEGORY_BY_SLUG: ReadonlyMap<SkillCategorySlug, SkillCategory> =
+  new Map(SKILL_CATEGORIES.map((c) => [c.slug, c]))
 
 export function getSkillCategory(slug: string): SkillCategory | undefined {
   return SKILL_CATEGORY_BY_SLUG.get(slug as SkillCategorySlug)

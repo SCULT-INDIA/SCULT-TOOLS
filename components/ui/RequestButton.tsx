@@ -50,8 +50,7 @@ const KIND_TITLE_PLACEHOLDER: Record<RequestKind, string> = {
 
 const KIND_DESCRIPTION_PLACEHOLDER: Record<RequestKind, string> = {
   tool_request: "What should it do, and why isn't an existing tool enough?",
-  prompt_request:
-    "Tell us the job you're trying to do and which AI tool you use for it.",
+  prompt_request: "Tell us the job you're trying to do and which AI tool you use for it.",
   skill_request: 'What should it do, and where would you use it?',
 }
 
@@ -111,7 +110,10 @@ export function RequestButton({
   function handleOpen(): void {
     if (status === 'sent') reset()
     setOpen(true)
-    trackEvent('request_opened', { kind: defaultKind, context: trackContext ?? 'unknown' })
+    trackEvent('request_opened', {
+      kind: defaultKind,
+      context: trackContext ?? 'unknown',
+    })
   }
 
   function handleClose(): void {
@@ -292,6 +294,7 @@ export function RequestButton({
                   className="mt-4 flex gap-1.5 rounded-pill border border-line-grey bg-offwhite p-1"
                 >
                   {(Object.keys(KIND_TAB_LABEL) as RequestKind[]).map((k) => (
+                    // biome-ignore lint/a11y/useSemanticElements: the WAI-ARIA radiogroup pattern on buttons is deliberate — these are pill-styled segmented tabs, and restyling native radio inputs to match would trade real markup semantics for a heap of appearance-none CSS.
                     <button
                       key={k}
                       type="button"

@@ -103,9 +103,7 @@ Negative guidance: avoid any camera shake, avoid embedding readable text or word
     tags: [`video`, `motion-graphics`, `loop`, `brand`, `ad-creative`],
     whyItWorks: `Loop-able motion graphics fail in one of two ways with generative video models: the model treats the brief as a one-shot narrative and produces motion that never returns to a matching state, or a moving camera introduces a parallax jump exactly at the loop point that no amount of trimming can hide. This prompt heads off both by explicitly naming the loop constraint in the motion clause ("returns close enough to the first frame to be trimmed into a seamless loop") rather than assuming Gen-4.5 will infer it, and by locking the camera to a fixed frame so the only moving element is the described shape — removing the single biggest source of visible seams. Naming a short base duration (4 seconds) also matters mechanically: asking for one complete motion cycle in a tightly bounded window gives the model a concrete arc to complete, rather than an open-ended "animate forever" instruction that tends to drift in pace over a longer clip. The negative-guidance line calling out embedded text and color drift exists because both are common Gen-4.5 failure modes on abstract motion-design prompts specifically — the model will sometimes render illegible pseudo-text into busy loops, and gradual hue drift across a clip is the most common reason an otherwise well-looped animation still shows a visible cut.`,
     exampleOutput: `A 4-second seamless loop of soft coral and off-white polygons slowly orbiting a shared center against a flat navy background, gently pulsing in size, camera locked, no text, no shadows, first and last frames matching closely enough to cut into a continuous loop.`,
-    verifiedAgainst: [
-      { tool: 'Runway Gen-4.5', version: 'Gen-4.5', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'Runway Gen-4.5', version: 'Gen-4.5', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -171,9 +169,7 @@ Audio: ambient only, no dialogue, consistent ambience bed across the whole seque
     tags: [`video`, `continuity`, `product-video`, `multi-shot`, `runway`],
     whyItWorks: `Runway Gen-4.5 has no memory between separate generation calls — each shot in a sequence is an independent inference, so continuity across shots only exists if the operator re-supplies the same locked language every time, verbatim, rather than trusting the model to "remember" the previous shot's look. Splitting the brief into a MASTER LOCK block that never changes and a PER-SHOT DELTA block that only carries what's different is the mechanical fix: it stops the common failure mode where an operator paraphrases the lighting or grade slightly differently on shot 4 than shot 1, which reads as almost-but-not-quite matching footage once cut together — worse than an obvious mismatch because it's subtly distracting rather than clearly intentional. The explicit continuity-check step exists because Gen-4.5's grade and lighting interpretation can still drift slightly even with identical wording, particularly on saturation and color temperature; catching that after each shot and restating the lock clause verbatim in the next call is cheaper than regrading five separate clips in post to match. Keeping the lens lock as a stated constraint (rather than a specific focal length number, which the model can't literally honor) targets the more common failure of shots feeling like different "cameras" were used, which breaks continuity even when subject and lighting are correct.`,
     exampleOutput: `Shot 3 of 5: a close-up 45-degree angle onto the same matte-black ceramic dripper from shots 1-2, same warm 3200K key light and rim light, steam rising as water pours over the grounds, grade matching the established warm neutral baseline with lifted blacks, 4 seconds, ambient kitchen sound carried through from the previous shot.`,
-    verifiedAgainst: [
-      { tool: 'Runway Gen-4.5', version: 'Gen-4.5', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'Runway Gen-4.5', version: 'Gen-4.5', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -241,9 +237,7 @@ Do not generate: motion blur, multiple competing subjects, or fine detail that w
     tags: [`thumbnail`, `still-frame`, `youtube`, `composition`, `runway`],
     whyItWorks: `A thumbnail lives or dies at a size roughly 15 times smaller than the frame it was generated at, which is why this prompt front-loads instructions most video briefs skip entirely: subject fill percentage, exaggerated legible expression, and a named text-safe zone. Asking Gen-4.5 for a single still rather than a clip also matters mechanically — treating it as a video generation invites motion blur and mid-action ambiguity in the frame the model happens to land on, whereas explicitly requesting one still forces the model to commit to a single, deliberately composed peak moment instead of an arbitrary frame from a moving sequence. The high-contrast lighting and simplified, slightly blurred background instruction exists to preserve the silhouette read at small sizes — busy or evenly-lit backgrounds are the most common reason a technically good generation fails as a thumbnail once shrunk down, because the eye can no longer separate subject from background at 120 pixels wide. Explicitly telling the model not to render text keeps the composition clean for a real overlay added in an editor, since Gen-4.5's native text rendering is inconsistent enough that leaving it in-frame risks unreadable or misspelled pseudo-text that would need to be painted out anyway.`,
     exampleOutput: `A tight, high-contrast still of a chef mid-flip with an orange-red flame flare-up filling most of the frame, wide-eyed exaggerated expression, warm flame light against a blurred darkened kitchen line, clear open space in the lower third for a text overlay, no text rendered in the image.`,
-    verifiedAgainst: [
-      { tool: 'Runway Gen-4.5', version: 'Gen-4.5', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'Runway Gen-4.5', version: 'Gen-4.5', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -302,9 +296,7 @@ Do not write the actual Runway generation prompts themselves in this brief — t
     tags: [`production-brief`, `shot-list`, `pre-production`, `planning`, `runway`],
     whyItWorks: `The most common way small teams waste Runway generation credits is jumping straight into prompt-writing on an under-planned idea, discovering mid-sequence that the closet-to-trail idea needs the shoe to look identical in shot 1 and shot 6 with no reference image ever specified, and re-generating from scratch. Structuring this as a planning document rather than a generation prompt is deliberate — it forces the consistency notes and technical settings to exist on paper before a single Gen-4.5 call is made, so reference images and locked-language clauses (the kind used in a per-shot continuity brief) get identified up front instead of discovered by trial and error. The explicit 'rules for what NOT to generate' section exists because Gen-4.5's default behavior on ambiguous briefs tends toward adding motion, dialogue, or on-screen text the team didn't ask for; naming exclusions here means every downstream shot prompt inherits the same guardrails instead of each shot's author re-inventing them. The 'open questions' section is the other load-bearing piece: it stops the brief from silently guessing at underspecified details (exact platform aspect ratio, whether the product needs a reference image) and instead surfaces them as decisions for a human, which is cheaper to resolve on paper than after three generations have already gone out with three different guesses baked in.`,
     exampleOutput: `1. Shot list: Shot 1 (0-4s) — cluttered closet, shoe half-buried under other pairs, static frame, establishes contrast with later shots... 2. Technical settings: 9:16 for Reels, shots 1-2 static, shots 3-5 slow push-in, product reference image required for shots featuring the shoe close-up... 3. Consistency notes: red laces and shoe silhouette must match across shots 1, 3 and 6... 4. Do not generate: no logo overlays, no dialogue, no shot exceeding 5 seconds... 5. Open questions: is the sunrise trail a real location reference or fully generated?`,
-    verifiedAgainst: [
-      { tool: 'Runway Gen-4.5', version: 'Gen-4.5', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'Runway Gen-4.5', version: 'Gen-4.5', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

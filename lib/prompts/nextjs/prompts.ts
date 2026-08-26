@@ -1956,7 +1956,13 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`Claude Code (Sonnet 4.6)`],
-    tags: [`nextjs`, `app-router`, `server-components`, `architecture-planning`, `claude-code`],
+    tags: [
+      `nextjs`,
+      `app-router`,
+      `server-components`,
+      `architecture-planning`,
+      `claude-code`,
+    ],
     whyItWorks: `Claude Code, like most coding agents, will happily start writing a component before it has decided whether that component should be a Server or Client Component, and its default under ambiguity in an App Router codebase skews toward adding 'use client' at the top of the file because that unlocks useState and event handlers without the agent having to reason about the boundary at all — this is the single most common architectural regression an unscoped feature request produces, and it silently bloats the client JS bundle by pulling every import in that subtree along with it. Forcing a route-segment-by-route-segment table with an explicit Server/Client decision and a justification means the agent has to commit to a rendering model before generation starts, which is exactly the point where the decision is cheap to get right and expensive to unwind afterward once event handlers and hooks are already threaded through a component that should have stayed on the server. Naming the specific data-fetching mechanism per segment (direct async fetch in a Server Component versus a Route Handler versus a Server Action) matters because these three have different revalidation, caching, and error-surfacing behavior in Next.js, and an agent that picks one without being asked to justify it tends to default to Route Handlers even when a direct server-side fetch would be simpler and avoid an extra network hop. The prop-drilling check catches a specific failure mode of Server Component composition: because Server Components can't hold client-side context providers to pass data down, agents often thread fetched data through multiple layers of props instead of just fetching again closer to where it's consumed, and colocating the fetch is usually cheaper than the plumbing since Next.js dedupes identical fetch calls within a single render pass automatically.`,
     exampleOutput: `Feature: adds a persistent saved-searches panel so a user's filter combination survives a page refresh and can be reapplied with one click.
 
@@ -1966,9 +1972,7 @@ OUTPUT FORMAT
 | app/dashboard/saved-searches/save-button.tsx | Client | Needs onClick + optimistic UI state | Server Action \`saveSearch()\` | none |
 
 Files to change: app/dashboard/page.tsx (import and render the new list), new files: app/dashboard/saved-searches/list.tsx, save-button.tsx, actions.ts.`,
-    verifiedAgainst: [
-      { tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'Claude Code', version: 'Sonnet 4.6', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',

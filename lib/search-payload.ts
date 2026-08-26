@@ -1,6 +1,6 @@
+import { PROMPT_INDEX, TOOL_ENTRIES } from './search'
 import type { PromptSearchEntry, SearchEntry, ToolSearchEntry } from './search-client'
 import { VERBATIM_HAYSTACK_MARKER } from './search-payload-client'
-import { PROMPT_INDEX, TOOL_ENTRIES } from './search'
 
 /**
  * The wire format for the search index.
@@ -63,7 +63,15 @@ export interface SearchPayload {
   /** Distinct `tile` values, referenced by index. */
   readonly t: readonly string[]
   /** Tool entries: [slug, name, categoryIdx, iconIdx, haystackTail, category, tagline] */
-  readonly tools: readonly (readonly [string, string, number, number, string, string, string])[]
+  readonly tools: readonly (readonly [
+    string,
+    string,
+    number,
+    number,
+    string,
+    string,
+    string,
+  ])[]
   /**
    * Prompt + prompt-category entries:
    * [isCategory, slug, name, categoryIdx, iconIdx, tileIdx, haystackTail, promptCategorySlug]
@@ -108,7 +116,9 @@ function intern(table: string[], value: string): number {
  */
 function haystackTail(haystack: string, name: string): string {
   const prefix = `${name.toLowerCase()} `
-  return haystack.startsWith(prefix) ? haystack.slice(prefix.length) : `${VERBATIM_HAYSTACK_MARKER}${haystack}`
+  return haystack.startsWith(prefix)
+    ? haystack.slice(prefix.length)
+    : `${VERBATIM_HAYSTACK_MARKER}${haystack}`
 }
 
 export function buildSearchPayload(

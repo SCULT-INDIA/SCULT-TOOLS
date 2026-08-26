@@ -684,12 +684,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`storytelling`, `narrative-structure`, `personal-narrative`, `public-speaking`, `creative-writing`],
+    tags: [
+      `storytelling`,
+      `narrative-structure`,
+      `personal-narrative`,
+      `public-speaking`,
+      `creative-writing`,
+    ],
     whyItWorks: `GPT-5.1's default move on a raw, chronological anecdote is to summarize it faithfully in order, because that's the safest way to preserve the facts it was given — which produces a report, not a story, since a report and a story differ mainly in where they start and what they cut. Naming the true moment of uncertainty and forcing the model to open there, rather than at the chronological beginning, works against its instinct to front-load context the way a status update would; most people's retelling of their own story has already been smoothed by hindsight into starting too early and explaining too much, so the instruction has to explicitly override the source material's own framing, not just follow it. Making stakes and want concrete and in-scene rather than summarized matters because the model will otherwise produce a sentence like 'I knew this mattered a lot,' which does the reporting work of a stakes statement without doing the story work of making a reader feel it — the difference only shows up when you require it to happen inside a moment rather than as connective narration. The explicit instruction against inventing dialogue or people addresses a specific and common failure mode: asked to make a true anecdote 'read more vividly,' models reliably add plausible-sounding texture — a remembered quote, a described reaction — that wasn't in the source, which is fine for pure fiction but turns a true story into an embellished one the moment it's presented as fact, so the prompt has to make fabrication a flagged exception rather than a silent default.`,
     exampleOutput: `The Slack notification came in at 4:47 on a Tuesday: our integration partner was shutting down their API in ten days. I read it twice before I understood what it meant for the renewal call I had booked for Thursday. The only real decision was whether the client heard it from me first, or from someone else's press release...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -770,12 +774,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`short-story`, `flash-fiction`, `fiction-writing`, `creative-writing`, `narrative-craft`],
+    tags: [
+      `short-story`,
+      `flash-fiction`,
+      `fiction-writing`,
+      `creative-writing`,
+      `narrative-craft`,
+    ],
     whyItWorks: `Asked for a 'short story,' GPT-5.1 will often default to plot density calibrated for a novel chapter — an inciting incident, a complication, a climax, and a denouement all compressed into a few hundred words — which produces something that feels rushed rather than short, because the model is pattern-matching to 'story structure' generically rather than to the specific compression flash fiction requires. Forcing a single named turn before any prose is drafted works against that default by constraining scope at the planning stage, where it's cheap to fix, rather than trying to trim an overstuffed draft after the fact, which usually just produces a shorter but still-crowded piece. The 'enter late, leave early' instruction targets a second, related failure: models tend to open scenes with orienting description — where someone is, what the room looks like — because that's a safe, low-risk way to start, but in a length-constrained piece that orientation consumes a disproportionate share of the available words before any tension exists. Explicitly banning a closing moral or summarizing paragraph matters because models are trained on a lot of writing (personal essays, LinkedIn posts) that ends by stating its own takeaway, and that habit reads as amateurish in fiction, where the meaning is supposed to live in what happened, not in a sentence explaining it afterward. The self-check step gives the model a concrete diagnostic — 'does this read like a fragment' — rather than an abstract quality bar, which produces a more honest second pass than simply asking it to 'review and improve.'`,
     exampleOutput: `The wrench still had his grip oil on the handle, dark in the grooves where a hand had worn it smooth. I turned it over twice before I understood I wasn't looking for anything in these boxes. I was looking for a reason to keep them a little longer, and I'd just run out of one...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -848,12 +856,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`novel-writing`, `fiction-writing`, `voice-consistency`, `long-form-fiction`, `creative-writing`],
+    tags: [
+      `novel-writing`,
+      `fiction-writing`,
+      `voice-consistency`,
+      `long-form-fiction`,
+      `creative-writing`,
+    ],
     whyItWorks: `GPT-5.1 is very good at matching an explicit style description ('short declarative sentences') but far less reliable at inferring voice implicitly from a pasted excerpt alone, because voice-matching from example is a soft pattern-completion task the model performs unevenly across a long generation — it tends to hold the reference voice for the first few paragraphs and then drift toward its own default competent-novel register as the chapter goes on, especially once dialogue or exposition kicks in. Forcing it to name three specific, checkable voice features before drafting converts an implicit imitation task into an explicit constraint it can be held to sentence by sentence, which measurably reduces mid-chapter drift compared to just supplying the excerpt and asking it to 'match this style.' The instruction to deliver the chapter goal through scene rather than narration addresses the model's tendency, under a stated 'must accomplish X' requirement, to write a paragraph that announces the accomplishment directly — which reads as summary rather than as a lived chapter, and is a giveaway of AI-assisted drafting to an experienced reader. Banning unplanned new characters and unrelated thread resolution matters specifically for serialized fiction: an isolated chapter-drafting request has no visibility into the rest of the outline, so left unconstrained the model will sometimes 'helpfully' tie off a loose end or introduce a minor character to smooth a transition, silently altering continuity the author didn't ask it to touch — flagging invented details is the mechanism that lets an author catch this before it compounds across chapters.`,
     exampleOutput: `The seal had been broken and reset before, she was almost sure of it — the wax sat a shade too even along the fold, like something pressed twice. She didn't say anything to Julien at breakfast. She watched him butter his toast the same way he had every morning for eleven years and wondered how long she could keep doing that too...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -924,12 +936,16 @@ For each premise: a title, a 2-3 sentence pitch, and one line naming the specifi
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`story-premise`, `brainstorming`, `creative-writing`, `idea-development`, `fiction-writing`],
+    tags: [
+      `story-premise`,
+      `brainstorming`,
+      `creative-writing`,
+      `idea-development`,
+      `fiction-writing`,
+    ],
     whyItWorks: `Asked to brainstorm premises from a spark idea, GPT-5.1's first few outputs reliably cluster around whatever the single most statistically common treatment of that idea is in its training distribution, because that's the lowest-perplexity, most reinforced completion for the prompt — which is exactly the version a writer wants to skip past, since if it's the first thing the model reaches for, it's likely also the first thing most other writers reach for. Explicitly naming the obvious version and instructing the model to treat it as a boundary rather than an option forces it to search a different, less-traveled part of its own output space for the actual answers, which produces measurably more distinct results than simply asking for 'creative' or 'unexpected' premises in the abstract — vague creativity instructions don't give the model anything concrete to diverge from. Requiring each premise to name the specific structural element it varies (protagonist, want-versus-need, obstacle, or timeline entry point) prevents the common failure mode of 'reskinned' premises that swap surface details like names and settings while leaving the same underlying shape intact, which happens because changing surface details is the cheapest way to appear to have generated something new without doing the harder work of restructuring. The audience field matters because premise quality is not audience-neutral — a premise with real potential for literary readers may be a poor fit for a middle-grade audience, and without that constraint the model tends to average toward a generic 'broadly appealing' pitch that doesn't strongly serve anyone.`,
     exampleOutput: `1. The Wrong Frequency — A retired keeper's estranged daughter, now a radio engineer, starts receiving the messages herself after inheriting the lighthouse, and has to decide whether decoding them means reopening a relationship she'd rather leave closed. Varies: protagonist is the inheritor, not the original keeper, shifting the story from haunting to inheritance.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1005,12 +1021,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`plot-outline`, `story-structure`, `novel-planning`, `fiction-writing`, `creative-writing`],
+    tags: [
+      `plot-outline`,
+      `story-structure`,
+      `novel-planning`,
+      `fiction-writing`,
+      `creative-writing`,
+    ],
     whyItWorks: `GPT-5.1 can reproduce the shape of a three-act or Save the Cat structure fluently because those labels are heavily represented in its training data, but fluency with the labels is not the same as causal soundness — a common failure is an outline where beats are correctly placed at the right percentage marks of the structure but connected to each other only by sequence ('and then'), which reads as competent on a beat-sheet but flat as an actual story, since readers track causation, not percentages. Requiring a stated causal spine before any beats are generated gives the model a single throughline to check every subsequent beat against, rather than generating beats independently from the structure template and hoping they cohere — this is the same reason outlining a spine first works for human writers, but it matters more for a model, which has no persistent sense of the story's logic across a long generation unless it's been made explicit and referable. The specific instruction about the midpoint (redirect the pursuit, not just escalate it) targets a very common generic-outline failure where the model treats midpoint purely as a stakes-raising checkpoint, producing a story that's structurally correct but monotonic in tension rather than genuinely turning. The causality audit as a separate, final pass matters because self-critique performed in the same breath as generation is measurably weaker than a dedicated second pass explicitly told what to look for — asking the model to re-read its own outline hunting specifically for coincidence-driven or out-of-character transitions catches problems that generating the outline correctly the first time often doesn't.`,
     exampleOutput: `Spine: Elena wants to restore some version of the legal legitimacy she lost, and takes the ghostwriting job believing it lets her practice law by proxy without the risk of practicing law directly — until she finds evidence that makes staying at arm's length morally impossible, forcing her to choose between the safety of her new, diminished role and the professional identity she gave up...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1080,12 +1100,16 @@ A profile of 300-500 words organized under: Want vs. Need, How the Wound Leaks O
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`character-profile`, `character-development`, `fiction-writing`, `creative-writing`, `character-design`],
+    tags: [
+      `character-profile`,
+      `character-development`,
+      `fiction-writing`,
+      `creative-writing`,
+      `character-design`,
+    ],
     whyItWorks: `Asked generically for a 'character profile,' GPT-5.1 defaults to a biographical-form structure — name, age, occupation, backstory, personality traits — because that's the most common shape 'character profile' takes across writing guides and templates in its training data, and that shape is genuinely unhelpful for a working novelist because most of those fields don't constrain how the character behaves in any specific scene. Forcing the profile to be organized around a stated want-versus-need gap does two things a flat trait list can't: it gives the model (and the writer) a testable prediction for how the character should behave in any new scene — check what they'd do if want and need pulled in different directions — and it prevents the common flattening where a model-generated character has consistent traits but no actual internal tension, which is what makes fictional characters feel inert rather than alive. The instruction to show how the wound 'leaks out' unconsciously, as a tell rather than a confession, pushes back against the model's tendency to have characters explain their own psychology in dialogue or narration, which is a frequent tell of AI-assisted or amateur characterization — real subtext shows up in behavior a character themselves would deny, not in self-aware statements. Explicitly refusing to resolve the contradiction in the profile matters because a model asked to build out a character will often, helpfully, also imply how their arc concludes — which pre-empts the writer's own plotting and can flatten the tension the profile was built to preserve for the actual story.`,
     exampleOutput: `Want vs. Need: He wants the protagonist's endorsement of his continued relevance in the field; he needs to stop needing anyone's endorsement at all, and to trust his own judgment even when it's wrong. The Crack Point: pressed privately, in a room with no audience, by someone who was there for the original humiliation and never mentions it — he'll fill the silence himself...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1155,12 +1179,16 @@ A table or list with one row per structural checkpoint: Belief / Plot Pressure /
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`character-arc`, `story-structure`, `screenwriting`, `fiction-writing`, `creative-writing`],
+    tags: [
+      `character-arc`,
+      `story-structure`,
+      `screenwriting`,
+      `fiction-writing`,
+      `creative-writing`,
+    ],
     whyItWorks: `A generic request for a 'character arc' pulls GPT-5.1 toward a well-known but shallow template — belief at the start, belief at the end, a sentence in between gesturing at 'growth' — because that's the level of detail at which arcs are usually discussed in writing guides, without the connective machinery of exactly which plot event forces which internal shift. Requiring belief, plot pressure, and resulting change to be stated at every structural checkpoint forces the model to commit to a causal claim at each stage rather than a summary one, which surfaces the gap most quickly at the midpoint, where models left unconstrained tend to simply escalate the external stakes of the existing goal rather than making the goal and the belief actively incompatible — the explicit instruction to make them mutually exclusive at the midpoint is what produces a turn rather than an intensification. The low-point instruction — that the character's choice must be a direct consequence of the old belief, and must cost something tied to the external goal — targets a specific and common weak arc where a character 'hits bottom' through outside misfortune rather than through their own flaw, which makes the eventual change feel unearned because the character didn't actually cause their own crisis. Requiring the climax choice to determine the external outcome, rather than running alongside it, is the single most important constraint here: it's very easy for a model to write a satisfying internal realization in one paragraph and a satisfying plot resolution in the next without making the first one cause the second, and readers register that gap as a story where the character's growth 'didn't matter' to what actually happened.`,
     exampleOutput: `Midpoint: Dara is offered the exact loan that would save the restaurant, on the condition that her estranged brother co-signs — meaning the rescue itself now requires the one form of help she's spent the story refusing. Low point: rather than ask him, she takes a predatory short-term loan instead, believing it preserves her independence; it doesn't, and the terms accelerate the foreclosure timeline she was trying to avoid...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1232,12 +1260,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`dialogue-writing`, `subtext`, `fiction-writing`, `screenwriting`, `creative-writing`],
+    tags: [
+      `dialogue-writing`,
+      `subtext`,
+      `fiction-writing`,
+      `screenwriting`,
+      `creative-writing`,
+    ],
     whyItWorks: `GPT-5.1's default dialogue-writing pattern leans toward resolution and clarity — characters tend to arrive, by the end of a scene, at stating plainly what they feel, because that produces a satisfying-feeling close and mirrors how conflicts are typically resolved in explanatory prose, but it's exactly wrong for subtext-driven scenes, where the tension is supposed to remain unspoken and the reader does the work of inferring it. Explicitly banning a direct statement of the real conflict, especially near the end, closes off the model's most natural exit ramp and forces it to keep the scene running on the surface topic, which is where genuine subtext-driven dialogue actually lives. The ban on adverbial dialogue tags targets a specific, well-documented model habit — reaching for 'she said sharply' or 'he retorted' to convey emotional tone that the dialogue itself should be carrying — which is treated as a craft weakness in most professional style guides precisely because it lets the writer (or model) skip the harder work of making the line itself carry the tone through word choice and rhythm. Requiring distinct, tag-removable voices matters because models writing two characters in the same scene tend to converge both toward a similar 'neutral competent dialogue' register unless explicitly told to differentiate rhythm and vocabulary, which is checkable by the specific test given here — read it with the tags stripped and see if you can still tell who's talking. Finally, requiring the surface disagreement to be genuinely arguable from both sides, not a thin pretext, prevents the common failure where the ostensible topic feels obviously fake and the reader sees straight through to the 'real' conflict immediately, which collapses the layering the scene is built on.`,
     exampleOutput: `"It's forty thousand under what the Hendersons offered in March." "The Hendersons wanted to gut it. This buyer's keeping the kitchen." "Since when do you care what happens to the kitchen." Nell didn't answer that. Priya waited a beat too long before adding, "I just think we should get what it's worth."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1308,12 +1340,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`scene-writing`, `fiction-writing`, `creative-writing`, `narrative-craft`, `story-structure`],
+    tags: [
+      `scene-writing`,
+      `fiction-writing`,
+      `creative-writing`,
+      `narrative-craft`,
+      `story-structure`,
+    ],
     whyItWorks: `Left to its own devices, GPT-5.1 tends to write scenes as a sequence of plausible actions loosely connected by 'and then,' because without an explicit driving question a scene has no internal test for what belongs in it and what doesn't — goal-conflict-disaster (a structure from the Dwight Swain school of scene craft) gives the model a concrete filter: every line either advances the stated goal, embodies the opposition, or sets up the disaster, and anything else is noise. Requiring the goal to be scene-scale and achievable-or-failable within the scene, rather than a restatement of the character's book-length ambition, matters because an underspecified goal produces a scene with no real tension to track — the reader (and the model generating the prose) has nothing concrete to be uncertain about. Instructing the opposition to act with its own logic rather than as a passive obstacle addresses a frequent weak-scene pattern where the antagonist or obstacle exists only to be overcome, with no legitimate reasoning of its own — scenes read as more genuinely tense when the opposing force has a real, defensible position, which is why the example asks for the attending's caution to be grounded in a specific prior incident rather than generic authority-figure resistance. The instruction to end on disaster rather than a clean win directly counters GPT-5.1's tendency toward satisfying, resolved endings even at the scene level, which is appropriate for a scene that closes out a story but actively undermines momentum mid-narrative — a scene that gives the character exactly what they wanted removes the question that was supposed to pull the reader into the next one.`,
     exampleOutput: `"You're not ready," Dr. Ansari said, not unkindly, already turning back toward the sink. Tomas kept his hands under the water a beat longer than necessary, the cold finally starting to bite. "I've done forty of these in sim." "Sim doesn't bleed." She handed him the retractor instead of the scalpel, which was, he understood slowly, its own kind of answer...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1387,12 +1423,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`plot-twist`, `foreshadowing`, `mystery-writing`, `story-structure`, `creative-writing`],
+    tags: [
+      `plot-twist`,
+      `foreshadowing`,
+      `mystery-writing`,
+      `story-structure`,
+      `creative-writing`,
+    ],
     whyItWorks: `GPT-5.1 is capable of generating a plausible twist and capable of generating plausible foreshadowing for it, but it doesn't automatically check the two against each other for the specific failure mode that ruins most amateur twists: foreshadowing planted in isolation tends to either give too much away (because the model, knowing the answer, writes clues that are obvious in hindsight-aware terms) or contradict existing material it wasn't explicitly checked against. Requiring an explicit contradiction check against the already-written scenes first addresses the more serious of the two risks, because a twist that technically doesn't fit what's already on the page is a worse failure than weak foreshadowing — readers forgive an under-clued twist more readily than one that required something earlier to have not been true. The instruction to identify a 'cover explanation' for every planted clue is the mechanism that actually produces fair-play foreshadowing rather than either over-signposting or pure retcon: a clue only works if a first-time reader has a more plausible, more obvious reason to read past it than the truth, and asking the model to state that alternative explanation explicitly forces it to check that the clue is genuinely deniable on a first read, not just technically present. This matters because models asked simply to 'add foreshadowing' tend to plant detail that's neutral to a first-time reader but also neutral in hindsight — it doesn't reread as meaningful, so it doesn't deliver the 'oh, of course' feeling twists are supposed to produce — whereas a clue with a named cover story is far more likely to gain retroactive weight specifically because it was disguised as something else, not just background noise.`,
     exampleOutput: `The malfunctioning hallway camera already on the page can be reread, after the twist, as her disabling the one angle that would have shown her own badge swipe at the wrong hour — cover explanation for a first-time reader: lab security systems are established elsewhere as generally unreliable, so one more glitch reads as institutional incompetence, not sabotage...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1471,12 +1511,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`worldbuilding`, `fantasy-writing`, `fiction-writing`, `creative-writing`, `story-development`],
+    tags: [
+      `worldbuilding`,
+      `fantasy-writing`,
+      `fiction-writing`,
+      `creative-writing`,
+      `story-development`,
+    ],
     whyItWorks: `Asked to 'build a world,' GPT-5.1 tends toward breadth-first, encyclopedia-style output — a bit of geography, a bit of history, a bit of religion, a bit of politics, each covered shallowly — because that mirrors how worldbuilding is often presented in wikis and guides, but it's close to useless for an actual writer, since most of that content will never touch a page and dilutes attention away from the one area the story actually needs developed in depth. Anchoring the pass to a stated story need before any content is generated is the single biggest lever here: it converts an open-ended creative task into a targeted one, and it gives a concrete test for scope creep — if a detail doesn't trace back to the stated scene or constraint, it shouldn't have been generated in the first place, rather than being generated and left for the writer to sort through afterward. The instruction to develop with internal cause-and-effect ('survive a reader asking why twice') pushes against the model's tendency to state worldbuilding facts as flat assertions — 'the guild controls water rights' — without the causal history that makes an institution feel real rather than declared; specificity that implies more of the world (a named local custom, a friction point) reads as authored, while broad summary reads as generated, and that distinction is often what separates worldbuilding that serves fiction from worldbuilding that serves a wiki page. Requiring an explicit list of deliberately unresolved adjacent questions matters because models default toward completeness and internal consistency when asked to build something, but real institutions have unaddressed edge cases and open tensions, and a world with none of those reads as artificially tidy — naming what's intentionally left open is what keeps the world from over-explaining itself.`,
     exampleOutput: `Story-need anchor: the protagonist's forged seal needs to be convincing enough to pass a checkpoint, which means the licensing system needs a specific, learnable visual/procedural signature a forger could study and almost-but-not-quite replicate. Deliberately unresolved: how the guild originally acquired water rights generations ago is left vague — a matter of competing oral histories the story doesn't need to adjudicate...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1550,12 +1594,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`worldbuilding`, `magic-system`, `fantasy-writing`, `creative-writing`, `story-development`],
+    tags: [
+      `worldbuilding`,
+      `magic-system`,
+      `fantasy-writing`,
+      `creative-writing`,
+      `story-development`,
+    ],
     whyItWorks: `Asked to design a magic system, GPT-5.1 tends to generate an interesting source and mechanism first and treat limitations as an afterthought bolted on at the end ('but it's very draining'), because power and mechanism are the more generative, more colorful part of the design space, while genuine constraint requires actively working against the model's tendency to make its own creation impressive — leading with the cost instead inverts that default and produces a system that's load-bearing for story tension rather than merely decorative. The explicit stress test against a named plot conflict is the mechanism that catches the single most common hard-magic-system failure in amateur fantasy writing: a system that seems appropriately limited in the abstract turns out, the moment it's checked against the story's actual central problem, to trivially solve it — because the author (or model) designed the system and the plot separately and never checked them against each other. Requiring the limit to be mechanically specific rather than a vague gesture at danger or toll matters because vague costs are the ones writers (and models) quietly forget to apply consistently in later scenes — a concrete, checkable rule like memory-loss scaled to effect size can be applied predictably scene to scene, while 'it's exhausting' can be waived whenever it's inconvenient to the plot. Naming who would rationally choose not to use the magic despite being able to is a specific test for whether the cost is real within the fiction's own logic — if every character in the world would obviously use this magic constantly regardless of the stated cost, the cost hasn't actually been designed with enough weight, which is a subtler failure mode than an absent cost but produces the same trivializing effect over the course of a story.`,
     exampleOutput: `Stress test: could the protagonist simply burn a minor memory to magically locate her sister across the border? Tightened limit: the spell doesn't locate a person, it only recalls a specific place tied to a specific shared memory as it existed at the time of that memory — meaning she can only 'find' places she and her sister have already been together, and only as they were then, forcing her to reconstruct where her sister might realistically go rather than simply being handed an answer...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1635,12 +1683,16 @@ Four clearly labeled sections matching Phases 1-4 above, each concrete and speci
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`worldbuilding`, `science-fiction`, `speculative-fiction`, `creative-writing`, `story-development`],
+    tags: [
+      `worldbuilding`,
+      `science-fiction`,
+      `speculative-fiction`,
+      `creative-writing`,
+      `story-development`,
+    ],
     whyItWorks: `GPT-5.1 is reliably good at generating first-order effects of a speculative technology — the immediate, obvious consequences are the most heavily represented pattern in science fiction writing and analysis it's seen — but it stops there more often than not unless explicitly pushed, because second- and third-order effects require simulating how institutions, markets, and social norms adapt over time, which is a harder, less pattern-matched reasoning chain than describing the technology's direct use. Structuring the request as an explicit phase sequence (first-order, then second-order, then third-order) forces the extrapolation past the point where most AI-generated worldbuilding stops — the phase 2 instruction to consider new black markets, new regulation, and new incentive structures targets specifically what separates memorable science fiction worldbuilding from technology that's just described as existing without changing anything structural about the society around it. The phase 3 instruction — what would a generation raised inside this world take for granted — is a specific technique for surfacing worldbuilding detail that reads as authentically lived-in rather than externally described, because it forces a shift in narrative distance from an outside observer cataloguing a technology to an inside perspective for which the technology is unremarkable background, which is closer to how real people actually experience the technologies that shape their lives. Requiring uneven distribution between who benefits and who's left behind, tied to a concrete friction point, is what keeps the extrapolation dramatically useful rather than merely clever — a technology that benefits everyone equally generates description, but a technology that creates winners and losers generates the specific kind of tension a plot can be built on, and naming that friction point concretely (rather than gesturing at 'inequality' abstractly) is what makes it usable in an actual scene.`,
     exampleOutput: `Third-order: the generation that grew up entirely under the licensing system doesn't experience 'not having a transferred skill' as a lack — it experiences it as a caste marker, visible in small unconscious ways (which hand you favor for fine motor tasks, which questions you hesitate on) that licensed professionals have stopped noticing they're reading in others...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1716,12 +1768,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`mystery-writing`, `plot-construction`, `fiction-writing`, `creative-writing`, `story-structure`],
+    tags: [
+      `mystery-writing`,
+      `plot-construction`,
+      `fiction-writing`,
+      `creative-writing`,
+      `story-structure`,
+    ],
     whyItWorks: `Asked to build a mystery, GPT-5.1 will readily generate a plausible-sounding solution and a set of clues, but without an explicit backward-construction step it tends to generate clues and solution somewhat independently, which is exactly how unfair mysteries happen — a clue that supports the solution only in retrospect, or a reveal that depends on a fact never actually shown to the reader, which is the single most common complaint against amateur mystery writing. Working backward from the solution and requiring every fair clue to be something the culprit 'could not have avoided leaving behind' forces logical consistency between what actually happened and what evidence exists, rather than generating evidence that merely sounds suggestive without a real causal link to the crime as committed. The instruction to build red herrings around suspects who look genuinely guilty on their own independent merits, not just coincidentally present, targets a specific weak-mystery pattern where misdirection relies purely on narrative suspicion-casting (a suspect acts nervous, for no clear reason) rather than the suspect having their own real, freestanding reason to look guilty — the latter is what makes a red herring satisfying to have been fooled by rather than annoying in hindsight. The final fairness audit — checking whether a reader who noticed and correctly interpreted every fair clue could reach the solution using only on-page information — is the mechanism that actually enforces the fair-play constraint, since it's a specific, checkable test rather than a vague aspiration to 'make it fair,' and running it as an explicit final pass catches the common case where an otherwise well-built mystery quietly depends on one piece of information that's only ever revealed in the final chapter.`,
     exampleOutput: `Fair clue: the accountant's ledger entries for the past two harvests show unusually round numbers in a business that never otherwise produces round numbers — presented on the page as a background detail the critic notices only because she happens to be numerically minded, not flagged as significant by the narrative itself. Red herring: the owner's estranged son, who inherits the estate and had a public argument with his father the week before...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1804,12 +1860,16 @@ Five labeled sections matching Meet / Deepening / Midpoint / Black Moment / Reso
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`romance-writing`, `story-structure`, `character-arc`, `fiction-writing`, `creative-writing`],
+    tags: [
+      `romance-writing`,
+      `story-structure`,
+      `character-arc`,
+      `fiction-writing`,
+      `creative-writing`,
+    ],
     whyItWorks: `GPT-5.1's default romance-plotting tends to sequence recognizable beats correctly — meet-cute, growing closeness, a misunderstanding, a breakup, a reconciliation — while leaving the connective tissue between beats largely circumstantial, because circumstance-driven plotting (a job transfer, a lie uncovered, a jealous rival) is easier to generate than psychologically caused plotting, which requires holding two separate internal wounds consistently across the whole arc and deriving each external beat from them. Explicitly requiring the meet, the deepening, the midpoint, and the black moment to each trace back to a named wound is what prevents the single most common weak-romance failure: the 'misunderstanding that one honest sentence would fix,' which readers register as an artificial plot device rather than real conflict, because there's no stated reason the character wouldn't just say the sentence — tying the silence explicitly to what the wound is protecting turns an arbitrary plot contrivance into psychologically motivated behavior. The midpoint instruction — that this exact intimacy is what makes the coming crisis land harder because it raises the stakes of loss — targets a subtler weakness where models write a midpoint high point and a subsequent black moment as separate beats without connecting what makes the fall matter more because of how high the high point was; naming that connection explicitly produces a more felt crisis rather than a merely sequenced one. Finally, requiring the resolution to be earned through the wounded character's own action rather than through the other person's words alone addresses a common soft-resolution pattern where one character 'convinces' the other to change through a speech — which resolves the plot mechanically but not psychologically, since real change in a wound-driven arc has to be demonstrated by the character choosing differently under the same kind of pressure that used to make them choose wrong.`,
     exampleOutput: `Black moment: when he finally, quietly asks for her help with something he can't manage alone — the first time in years he's asked anyone — she deflects into fixing it for him without being asked, exactly the pattern he fled the last time, and he reads her efficiency as proof he was right to never need anyone, not as the love it actually was...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1882,12 +1942,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`horror-writing`, `short-fiction`, `scene-writing`, `creative-writing`, `fiction-craft`],
+    tags: [
+      `horror-writing`,
+      `short-fiction`,
+      `scene-writing`,
+      `creative-writing`,
+      `fiction-craft`,
+    ],
     whyItWorks: `Horror scenes that state the threat immediately collapse the one mechanism that actually produces fear in prose: the gap between what the character can still rationalize and what the reader already suspects. Forcing an ordinary opening and a staged sequence of closing rationalizations gives GPT-5.1 an explicit scaffold to escalate against, which matters because left unconstrained the model's default instinct for horror is to front-load an explicit monster description or a named threat within the first few lines — it reaches for clarity where the genre needs withholding. Requiring the threat to stay implicit until two-thirds through the scene, and requiring physical sensory detail instead of abstract fear-naming ("I felt terror"), directly targets the model's tendency to summarize an emotional state in a single adjective-driven sentence rather than construct the concrete image that would make a reader supply that emotion themselves — dread is a reader inference, not a stated fact, and a model left to its own devices will state it because stating is cheaper than constructing. The explicit ban on a duplicate final stinger addresses a specific, observable failure mode: models trained on horror-adjacent fiction often try to land two shocks — a mid-scene reveal and then a twist ending — which dilutes both, since the emotional peak has already fired once. Ending on unresolved confirmation rather than defeat or explanation matters structurally too, since a self-contained scene (as opposed to a full story) has no room for denouement, and a model asked for "a horror scene" without that constraint will often accidentally wrap it up like a complete short story with a false sense of closure.`,
     exampleOutput: `The unit door wasn't just unlatched — it was open exactly the width Dale always left his own supply closet, a habit he'd never described to anyone. He told himself the wind had found some new way through concrete block. He told himself that twice more before the flashlight caught the sign-in sheet clipped to unit 214's door, its ink still wet, dated correctly, signed by a name he recognized from a obituary he'd read out loud to his wife eight months ago.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1951,12 +2015,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`comedy-writing`, `sketch-comedy`, `scriptwriting`, `creative-writing`, `humor`],
+    tags: [
+      `comedy-writing`,
+      `sketch-comedy`,
+      `scriptwriting`,
+      `creative-writing`,
+      `humor`,
+    ],
     whyItWorks: `Comedy sketches fail most often not from weak individual jokes but from a missing comedic engine — a string of quips in the same setting reads as loosely funny at best, while a single game escalated through the scene builds compounding laughs because the audience's understanding of the rule sharpens with each beat. Requiring the game to be stated in one sentence before drafting forces GPT-5.1 to commit to a single mechanism rather than its default pattern of generating several loosely related jokes tied only by shared setting, which is the model's most common failure mode when asked for "a funny sketch" without a stated structural constraint. The instruction to open sincerely rather than announcing the absurdity targets a specific tendency models have toward lampshading their own jokes — having a character remark on how strange the situation is, which reads as the model hedging rather than trusting the premise, and which reliably kills the deadpan commitment that makes an absurd premise land as funny rather than just weird. Assigning each character a distinct relationship to the game (driving it, reluctantly complying, oblivious) prevents a flat scene where every character responds to the absurdity with the same generic exasperation, which is a second common default when a model isn't told characters need differentiated stances. Banning a tidy "everyone agrees to stop" ending matters because sketch comedy's comedic momentum depends on escalation continuing past the point of comfort — a model asked to write a short scene will often reach for narrative closure out of habit, and closure is the opposite of a strong act-out or button.`,
     exampleOutput: `CEO: (beaming) Look, Q3 is basically a full-court press with two minutes left and we're down a receiver, so what I need from Marketing is to just — throw it deep, you know? HR LEAD: (flat) We understand. We'll... throw it deep. NEW HIRE: (nodding earnestly, taking notes) Got it — deep throw, no receiver, got it.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2031,9 +2099,7 @@ OUTPUT FORMAT
     tags: [`screenwriting`, `scene-writing`, `dialogue-craft`, `subtext`, `film-writing`],
     whyItWorks: `Two-hander confrontation scenes live or die on subtext, and the single most common failure mode when a model is asked to write conflict dialogue is to have characters state their wants and grievances plainly, because explicit statement is the most direct path to conveying information and models default toward directness unless explicitly redirected. Naming both wants and the unspoken stakes for the writer, while explicitly banning either character from voicing the unspoken stakes even once, forces GPT-5.1 to route the actual content of the scene through indirect dialogue moves — deflection, a smaller stand-in ask, a pointed silence — which is mechanically closer to how real confrontations under emotional stakes actually play out, since people rarely announce what they most want precisely when it matters most. Restricting action lines to only camera-capturable behavior addresses a specific screenplay-format failure: models frequently slip into prose-style interiority in action lines ("she feels betrayed but hides it"), which is unfilmable and is also a category error in the format itself — a script is a blueprint for what can be shot, not a description of interior states, and a director or actor has nothing to do with an unfilmable line. Requiring a clear power-shift turn partway through prevents the flatter default of two characters repeating their positions at each other until the page count is met, which is what happens when a model treats "conflict" as static opposition rather than a dynamic exchange with a hinge. Ending on the sharpest unresolved beat rather than a resolution matters because scenes that resolve too cleanly undercut the tension the whole page built, and a model given no explicit instruction about the ending will often default to a soft, conclusive final line out of a general pull toward narrative closure.`,
     exampleOutput: `A stands at the counter, turning a coffee mug slowly in her hands without drinking from it. B watches the mug, not her face. B: You still take it black. A: (a beat) You remembered that and not the part where you had Legal call me on a Friday.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2095,12 +2161,16 @@ A table with columns: Beat Name | Approx. Page | What Happens | Why It Belongs H
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`screenwriting`, `story-structure`, `beat-sheet`, `three-act-structure`, `outlining`],
+    tags: [
+      `screenwriting`,
+      `story-structure`,
+      `beat-sheet`,
+      `three-act-structure`,
+      `outlining`,
+    ],
     whyItWorks: `A beat sheet is only useful if each beat is load-bearing and placed for a structural reason, and the single most common failure when a model generates one unprompted is to produce a plot summary chopped into named sections — an Opening Image and a Midpoint label slapped onto whatever events happen to fall near those page counts, without the events themselves doing the structural job those labels imply. Requiring a justification sentence alongside every beat forces GPT-5.1 to check its own placement rather than just naming beats in sequence, which surfaces the difference between a Midpoint that merely occurs at the halfway page and one that actually raises stakes — a distinction the model will not reliably self-enforce unless asked to argue for it. The explicit instruction to flag when the given premise doesn't naturally produce a strong midpoint or a clean final-image inversion matters because loglines supplied by a human are frequently underspecified for structure, and a model that silently forces a weak beat into a slot to satisfy the template produces an outline that looks complete but would fall apart the moment someone tried to write scenes from it — surfacing the tension instead lets the actual writer make the creative call rather than inheriting an invisible compromise. Pinning approximate page numbers to a one-page-per-minute convention gives the runtime target real teeth instead of leaving "105 minutes" as a number that never touches the actual beat placement, which is what happens when a runtime is stated but never operationalized against where events land. Banning dialogue and scene-level detail keeps the deliverable at the correct altitude — a beat sheet mixed with prose scenes is neither a clean structural document nor a usable draft, and separating the two lets each later stage of development work from the right level of abstraction.`,
     exampleOutput: `Midpoint (approx. p.55): Mara's storm model is confirmed correct by a rival network hours before her old bosses would admit it — but the confirmation comes from her daughter's amateur weather account going viral, which means Mara is now competing with the one person she was trying to reconnect with. Why here: this converts her external professional goal into an internal relational cost right at the point the story needs to complicate rather than simply confirm her original want.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2170,12 +2240,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`voiceover-script`, `video-scriptwriting`, `ad-copy`, `script-timing`, `explainer-video`],
+    tags: [
+      `voiceover-script`,
+      `video-scriptwriting`,
+      `ad-copy`,
+      `script-timing`,
+      `explainer-video`,
+    ],
     whyItWorks: `Voiceover scripts that run long almost never fail because the writer misjudged the topic — they fail because word count and spoken duration are different units, and a model asked to write "a 60-second script" defaults to producing a script that looks the right length on the page, since it has no built-in mechanism forcing it to check word count against a spoken-pace ceiling unless explicitly told to calculate one before drafting. Requiring the ceiling to be computed and stated up front, then checked against the actual draft's word count, converts an implicit assumption into a verifiable number the writer can catch before ever handing the script to a narrator, which matters because the cost of discovering a script runs long is highest at the recording session, not at the drafting stage. Timestamping segments against the given on-screen structure keeps the audio and visual tracks synchronized at the level of the actual deliverable, rather than producing a generic paragraph of narration that someone downstream has to manually chop and match to the storyboard — a task that introduces its own errors. The instruction to write for the ear rather than the eye targets a specific and common defect in model-written voiceover: sentences with stacked subordinate clauses read fine silently but force a narrator to make an unplanned interpretive choice about emphasis or pause mid-recording, and marking explicit breath points removes that ambiguity by giving the voice talent a concrete cue instead of a guess. Instructing the model to cut content rather than ask the narrator to speed up when a draft runs over budget matters because a rushed read measurably reduces comprehension and perceived trustworthiness in explainer-video research, so the fix belongs in the script, not in the performance.`,
     exampleOutput: `Word budget: 60 seconds at 150 wpm = approx. 150 words. Draft: 147 words. [0:00] Bills pile up. / Paychecks disappear before you notice. [0:08] What if your money sorted itself the moment it landed? [0:25] Meet AutoSplit — it divides every paycheck into savings, / bills, and spending, automatically.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2239,12 +2313,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`poetry-writing`, `occasion-poem`, `formal-verse`, `creative-writing`, `greeting-verse`],
+    tags: [
+      `poetry-writing`,
+      `occasion-poem`,
+      `formal-verse`,
+      `creative-writing`,
+      `greeting-verse`,
+    ],
     whyItWorks: `Occasion poems default toward generic sentiment because a fixed form imposes real constraints (meter, rhyme, line count) that are easiest to satisfy with abstract, high-frequency emotional vocabulary — words like "cherish" and "forever" are metrically flexible and rhyme easily, which is exactly why they show up so often in weak occasion verse, and it's the same reason a model under a strict form constraint will reach for them unless explicitly redirected. Anchoring the entire poem on one supplied concrete detail and explicitly forbidding the introduction of a second, unrelated image forces GPT-5.1 to generate the form's required additional material by examining the given detail more closely rather than padding with new, generic content — which is the difference between a poem that could only be about this specific person and one that's a template with a name dropped in. Requiring the form's scheme to be stated explicitly before the poem itself creates a checkable commitment: a model asked simply to "write a sonnet" will sometimes produce fourteen lines with an inconsistent or drifting rhyme scheme because nothing forces it to track the pattern it's supposed to be holding, and stating the scheme up front makes any drift visible to both the model and the reader rather than silently smoothed over in generation. The instruction to flag trade-offs between the form's technical demands and the anchor detail's specificity matters because those two goals do genuinely conflict sometimes — a perfect rhyme sometimes only exists in more generic language — and surfacing the trade-off rather than silently resolving it toward the easier, blander option keeps the writer in control of which one wins.`,
     exampleOutput: `Not treasure, no — a coffee can of screws, / mismatched, unsorted, thirty years deep-worn; / his hand knew which to choose before he'd choose, / found by feel alone, past needing to be shown.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2307,7 +2385,13 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`free-verse`, `poetry-writing`, `personal-narrative`, `creative-writing`, `image-driven-poetry`],
+    tags: [
+      `free-verse`,
+      `poetry-writing`,
+      `personal-narrative`,
+      `creative-writing`,
+      `image-driven-poetry`,
+    ],
     whyItWorks: `Free verse has no formal scaffold — no meter, no rhyme — to disguise a weak line, which means the entire burden of the poem's effect falls on image specificity and line-break rhythm, and a model without explicit constraint on those two levers will default to the easier path: stating the emotional payoff directly, since naming a feeling is more reliably "correct" than constructing an image that implies it. Keeping the underlying meaning as private context rather than content the poem can use forces GPT-5.1 to build toward that meaning through the sensory details actually supplied, which is the mechanical difference between a poem that shows and one that explains itself in its own final line — a distinction models don't reliably self-enforce because summarizing a feeling reads as a satisfying, complete-feeling gesture even though it's the weaker choice in the genre. Requiring at least three sensory details, with explicit preference for unusual over generic ones, counters a specific model tendency to reach for the most conventional sensory shorthand available (rain for sadness, sunlight for hope) rather than the oddly specific detail that actually distinguishes one memory from every other similar memory — genericness is the free-verse equivalent of the greeting-card cliché in formal poetry. The instruction to vary line-break placement rather than breaking only at clause boundaries targets a real default: models often produce free verse that is really just prose sentences chopped into roughly even lines, which forfeits the one structural tool free verse actually has. Banning a chronological, start-to-finish retelling matters because a memory poem organized as narrative reads as an anecdote with line breaks, while one organized around its most charged fragments reads as something closer to how memory itself actually resurfaces.`,
     exampleOutput: `The dog again, under the same gap in the fence,
 as if no one had told him the yard
@@ -2315,9 +2399,7 @@ was already someone else's guess.
 Boxes stacked wrong-side-out by the door,
 their labels facing in, like even the tape
 knew not to look at what it was leaving.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2387,12 +2469,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`children-story`, `early-reader`, `read-aloud`, `creative-writing`, `kids-content`],
+    tags: [
+      `children-story`,
+      `early-reader`,
+      `read-aloud`,
+      `creative-writing`,
+      `kids-content`,
+    ],
     whyItWorks: `Children's stories that state their moral outright reliably read as flatter and less memorable than ones where the lesson emerges from consequence, and a model asked for "a story that teaches X" will very often default to a closing sentence naming the lesson directly, because explicit statement is the most reliable way to guarantee the stated goal was technically satisfied — it's the same shortcut that shows up in occasion poems reaching for "cherish" and "forever." Keeping the lesson as private context the model must build toward, rather than content available to state, forces the actual causal chain of the plot (a choice, a consequence, a changed feeling) to carry the meaning, which is mechanically closer to how children actually absorb narrative lessons — through pattern recognition across the story's events, not through being told. Matching vocabulary and sentence length explicitly to the given age range matters because a model's default register for a "children's story" prompt tends to land somewhere in a broad middle-grade zone unless a specific age is pinned down and enforced, which produces sentences with subordinate clauses or vocabulary a four-year-old listener would lose track of mid-sentence. Requiring the character to resolve their own situation rather than have an adult step in addresses a common softening instinct in generated children's content — an adult swooping in to fix things removes the exact narrative mechanism (agency leading to consequence leading to change) that makes the lesson land as earned rather than externally imposed. The instruction to keep tone warm rather than shaming matters because a consequence written as frightening or punitive teaches a different, unintended lesson about safety and self-worth rather than the intended one about behavior.`,
     exampleOutput: `Pip zoomed past Otto and Marisol without looking back. The path split into three, and Pip picked the middle one, sure his friends were right behind him. But when he stopped to catch his breath, the woods were quiet. Really quiet. "Otto?" he called. Nothing called back.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -2456,15 +2542,19 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`interactive-fiction`, `branching-narrative`, `choose-your-own-adventure`, `creative-writing`, `story-structure`],
+    tags: [
+      `interactive-fiction`,
+      `branching-narrative`,
+      `choose-your-own-adventure`,
+      `creative-writing`,
+      `story-structure`,
+    ],
     whyItWorks: `Interactive fiction generated without explicit structural constraint tends to produce what's sometimes called an illusion of choice — branches that diverge cosmetically for a paragraph and then reconverge on an identical scene, because maintaining genuinely separate story states across multiple future decision points is combinatorially expensive, and a model optimizing for a complete-feeling response within a reasonable length will quietly collapse branches back together rather than track divergent state all the way through. Requiring a branch map before the prose forces GPT-5.1 to commit to the tree's actual shape as a discrete planning step, which makes silent reconvergence visible and checkable rather than something that happens invisibly inside prose generation — a map is much harder to fudge than a paragraph transition. Explicitly requiring consequences to remain visible a minimum number of decision points later targets the specific failure of a choice mattering for exactly one immediate beat and then evaporating, which is the most common way "branching" fiction ends up not actually being branching in any way a reader would notice on a replay. Permitting deliberate, flagged convergence rather than banning it outright is important because real interactive fiction does converge sometimes for practical reasons — the instruction isn't that convergence is always wrong, it's that unflagged, accidental convergence disguised as meaningful choice is the actual defect, and making the model own that trade-off explicitly prevents it from being hidden inside the narrative. Requiring a specific number of genuinely distinct endings, each tied to an accumulated choice history rather than a single final swapped sentence, closes the same gap at the story's terminal nodes that the branch-depth rule closes in the middle.`,
     exampleOutput: `Branch map:
 - Investigate alone -> discover the signal is a recorded loop -> [go deeper / turn back]
 - Report to captain -> squad sent together -> [reader leads / reader follows]
 - Ignore signal -> station's automated distress becomes ship's problem later -> forced convergence, flagged below`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2529,12 +2619,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`game-writing`, `worldbuilding`, `lore-bible`, `faction-design`, `narrative-design`],
+    tags: [
+      `game-writing`,
+      `worldbuilding`,
+      `lore-bible`,
+      `faction-design`,
+      `narrative-design`,
+    ],
     whyItWorks: `Lore documents generated without explicit structural guidance tend to read as completed history — a tidy account of what each faction is and what already happened between them — because a model asked to "write the lore" treats the task as documentation of a finished world rather than infrastructure for content that doesn't exist yet, and finished-sounding prose is what a general-purpose writing request optimizes toward. Requiring an internal disagreement inside every faction and a specific, current tension (rather than a one-word relationship label) for every faction pair forces GPT-5.1 to generate hooks rather than flavor text, since a quest designer can build an actual mission from "a contested resource neither side will formally negotiate over" but cannot build one from "they are rivals." Explicitly instructing the model to leave the core conflict unresolved, with no predetermined winner even implied, targets a specific and common defect in generated worldbuilding: models tend toward narrative closure by habit, and an unprompted lore document will often subtly signal which faction is "right" through more sympathetic framing or a more competent-sounding strategy, which quietly forecloses story directions a studio's actual writers might want later. Requiring explicitly marked open questions matters for a practical production reason — a lore bible that answers everything invites future contradiction the moment a different writer needs to add something the document didn't anticipate, whereas deliberately flagged gaps signal "this is yours to define" rather than leaving ambiguity that reads as an oversight. Banning static flavor descriptions divorced from usable traits keeps every sentence in the document tied to something an actual designer could act on, rather than worldbuilding that reads well but produces nothing playable.`,
     exampleOutput: `Engineers' Guild vs. Skyborn Clans — Current Tension: the Guild holds the only functioning repair schematics, but the Clans physically control access to the engine sites themselves; neither will grant the other side unilateral authority, and a three-year-old agreement to share access has quietly stopped being honored by both sides without either formally breaking it.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2599,12 +2693,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`game-design`, `quest-writing`, `narrative-design`, `rpg-writing`, `branching-choice`],
+    tags: [
+      `game-design`,
+      `quest-writing`,
+      `narrative-design`,
+      `rpg-writing`,
+      `branching-choice`,
+    ],
     whyItWorks: `The single most common defect in generated RPG quest design is a moral choice that's cosmetically branching but mechanically flat — every path awards the same gold and item, and the only thing that differs is the line of dialogue the NPC delivers at the end, because generating genuinely different downstream game states (reputation changes, unlocked or locked vendors, altered NPC availability) is significantly harder than generating different flavor text, and a model will gravitate toward the cheaper version unless the downstream table is explicitly required. Requiring a stated cost for the "obviously good" option and a stated benefit for the self-interested one directly targets a specific model habit: default moral framing in generated content tends to make the altruistic choice strictly dominant so the player is never punished for being kind, which flattens the dilemma into a non-choice — real quest tension requires the good option to actually hurt in some dimension the player cares about. Requiring a mid-quest complicating reveal rather than presenting full moral complexity in the opening briefing matters because a quest that shows its whole hand immediately gives the player nothing to discover mid-play, which is a pacing defect distinct from the choice-design defect but equally common in a single-pass quest generation. Requiring a shared complication that lands regardless of path chosen prevents the quest from reading as a pure binary fork with two disconnected outcome trees, and mirrors how real narrative design uses a consequence the player can't fully avoid to make the choice feel like it happened inside a living world rather than a menu of options with no bleed-through between them. The explicit table format for downstream changes forces the concrete specificity (a named NPC's reputation, a specific vendor's availability) that prevents the vague "the story continues differently" hand-wave a model will otherwise default to.`,
     exampleOutput: `Path: Expose the quartermaster | Immediate Outcome: deserters cleared, medicine returned | Downstream Change: camp reputation +15, but the quartermaster's black-market contact (a recurring merchant NPC) refuses to trade with the player for the rest of the game | Cost: loses access to that merchant's discounted rare crafting materials entirely.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2669,12 +2767,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`character-voice`, `dialogue-writing`, `script-revision`, `creative-writing`, `fiction-craft`],
+    tags: [
+      `character-voice`,
+      `dialogue-writing`,
+      `script-revision`,
+      `creative-writing`,
+      `fiction-craft`,
+    ],
     whyItWorks: `Interchangeable dialogue is usually a symptom of a model (or a first draft) defaulting to one implicit voice — complete grammatical sentences, moderate hedging, neutral vocabulary — and applying it to every speaker regardless of background, because that neutral register is the safest, most broadly comprehensible way to convey plot information, and conveying information correctly is what a first pass optimizes for before voice is considered at all. Requiring an explicit diagnosis of shared patterns before any rewriting forces GPT-5.1 to identify the actual mechanism of the sameness rather than jumping straight to a surface fix, which matters because the two most common surface fixes — an accent or a catchphrase — treat voice as decoration applied on top of identical underlying sentence construction, and neither holds up across a full script the way differences in sentence completeness, question-versus-assertion ratio, or what a character avoids saying actually do. Deriving each character's speech habits from their stated background rather than from an arbitrary contrast (one blunt, one polite) ties the differentiation to something with in-fiction logic — a detective who's spent twenty years distrusting testimony would genuinely construct sentences differently from a retired teacher accustomed to filling nervous silence, and that causal link is what makes the voice read as characterization rather than an assigned quirk. The explicit instruction to preserve plot content and information timing while changing only delivery isolates the actual variable under test — voice — from the scene's substance, which prevents the rewrite from accidentally becoming a different scene instead of the same scene said differently, which is a common side effect when a model given loose license to "make the dialogue more distinct" changes what's said along with how it's said.`,
     exampleOutput: `DETECTIVE: She's lying. Not about everything — about the timeline. NEIGHBOR: Do you think so? I mean — I don't know, maybe I'm reading too much into the way she kept looking at the clock, but— DETECTIVE: Tomorrow morning. We go back.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2738,12 +2840,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`developmental-editing`, `story-revision`, `manuscript-feedback`, `fiction-craft`, `editing`],
+    tags: [
+      `developmental-editing`,
+      `story-revision`,
+      `manuscript-feedback`,
+      `fiction-craft`,
+      `editing`,
+    ],
     whyItWorks: `Developmental problems and line-level prose problems require genuinely different fixes, and feedback that mixes them together — a note about a plot-logic gap sitting next to a note about a clunky adjective — makes it hard for a writer to know which fix actually matters most, because both read with equal weight on the page even though fixing a structural problem can make an entire section's prose issues moot by cutting or rewriting it wholesale. Explicitly restricting the pass to four named structural categories, evaluated in a fixed order, prevents GPT-5.1 from defaulting to its more comfortable mode of general encouraging feedback mixed with scattered line notes, which is what an unconstrained "give me feedback" request tends to produce since line-level comments are easier to generate in volume and feel more immediately actionable even when they're not the actual bottleneck. Requiring the mechanism of each problem to be named, not just flagged as "confusing," forces a causal explanation a writer can actually act on — knowing that a scene is confusing doesn't tell you what to fix, but knowing that a character acts against an established want without acknowledgment tells you exactly what needs to change. Ranking by impact rather than by location in the draft matters because writers (and models given no explicit instruction) tend to give feedback in the order they encounter it, which buries a high-impact early problem under several lower-impact ones simply because of where they happen to sit in the text. Requiring a direct, specific response to the author's own suspicion — confirm, refine, or push back with reasoning — prevents the sycophantic default many models fall into of agreeing with whatever the user already suspects, which defeats the actual purpose of asking for outside diagnostic feedback in the first place.`,
     exampleOutput: `Problem 1 — Location: paragraph 14, the narrator's account of the anniversary dinner. Category: plot logic / reliability setup. Mechanism: this is the first and only moment before the twist where her account of events could plausibly be doubted, and it's a single throwaway detail rather than a pattern — a reader has no real chance to suspect her before the reveal, which is exactly the rug-pull effect you suspected. Severity: high.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2798,12 +2904,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`pacing-audit`, `manuscript-feedback`, `story-structure`, `editing`, `fiction-craft`],
+    tags: [
+      `pacing-audit`,
+      `manuscript-feedback`,
+      `story-structure`,
+      `editing`,
+      `fiction-craft`,
+    ],
     whyItWorks: `Pacing problems are notoriously hard to self-diagnose because "this section drags" is a felt impression, not a located cause, and a model asked for general pacing feedback will tend to produce an equally impressionistic response — a paragraph confirming the vague feeling back to the writer without the underlying evidence, since impression-level feedback is easier to generate than a structured scene-by-scene accounting. Forcing a per-scene tension rating relative to the immediately preceding scene, rather than an absolute score, matters mechanically because pacing is a rate of change, not a static level — a scene rated 6/10 tension reads as a slowdown after a run of 8s and as a rise after a run of 3s, and an absolute scoring scheme would obscure exactly the pattern that constitutes a pacing problem. Requiring the new-information-or-stakes-change field alongside the tension score targets the actual mechanism of a dragging section: tension and plot momentum aren't the same thing, and a scene can maintain surface tension while delivering nothing new to the reader, which is the real signature of a stall even when no individual scene looks obviously weak in isolation. Requiring the model to identify runs of consecutive flat scenes, rather than commenting scene-by-scene without synthesis, is what actually converts the data into a usable diagnosis — a table of forty individual scores without a called-out pattern puts the synthesis work back on the writer, defeating the point of asking for an audit instead of raw notes. Requiring a direct, specific verdict on the author's own suspicion — rather than reflexive agreement — closes the same sycophancy gap relevant to developmental editing generally: a writer's instinct about where a problem lives is frequently pointed at the symptom (a flashback that felt slow to write) rather than the actual cause (a run of low-stakes scenes building up to it), and only a model willing to contradict the stated suspicion with evidence is useful here.`,
     exampleOutput: `Scene 14 (ch.5, the flashback): Tension 3/10 (down from 7 in scene 13). New info: none — restates backstory already established in chapter 2. Length vs. info: mismatch flagged, 900 words for zero new stakes. Pattern: scenes 12-15 show a four-scene flat run with no new information, which is the actual drag — not the flashback itself, but that it lands inside an already-declining stretch.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2867,12 +2977,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`opening-hook`, `first-page`, `manuscript-revision`, `fiction-craft`, `editing`],
+    tags: [
+      `opening-hook`,
+      `first-page`,
+      `manuscript-revision`,
+      `fiction-craft`,
+      `editing`,
+    ],
     whyItWorks: `Weak opening pages are one of the most common and well-documented reasons manuscripts fail to hook an agent or reader, and the specific failure pattern is well known in the industry — description, backstory, or a character waking up alone with their thoughts before anything is actually at stake — yet a model asked simply to "make the opening better" will often polish the prose of that same weak structure rather than replacing the structure itself, because sentence-level improvement is a safer, more bounded task than committing to a genuinely different entry point into the story. Requiring three options that each use a distinct entry strategy, rather than three lightly reworded versions of the same scene, forces GPT-5.1 to actually test different structural solutions instead of converging on one "safe" fix, which matters because the right entry point for a given story isn't obvious in advance and a writer benefits from seeing real alternatives rather than variations on a single guess. The instruction to flag required context that doesn't naturally fit the opening, rather than forcing all of it in, directly targets the most common reason writers themselves produce backstory-heavy openings: they've been told certain information is essential and try to front-load all of it, which is precisely the instinct that produces an opening full of exposition instead of action — separating what's genuinely needed on page one from what only feels urgent to the author is the actual fix, and a model that silently complies with "all of this is non-negotiable" reproduces the same problem rather than solving it. Requiring each option to raise an explicit, stated question that only continued reading resolves operationalizes "hook" into something checkable rather than a vague quality judgment — if a reader can't name the specific unanswered question after reading the page, the page hasn't actually hooked them regardless of how well-written the prose is.`,
     exampleOutput: `Option 2 (mid-conversation, something already at stake): "You're going to tell me the truth about that logbook, or I will." Maria set the leather-bound book on the table between them, its spine cracked from forty years of being kept somewhere no one would look. Her father didn't reach for it. Question raised: what actually happened the night the log was falsified, and why has Maria waited until now to confront it?`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -2945,12 +3059,17 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`storytelling`, `social-media`, `linkedin`, `content-writing`, `narrative-structure`, `personal-branding`],
+    tags: [
+      `storytelling`,
+      `social-media`,
+      `linkedin`,
+      `content-writing`,
+      `narrative-structure`,
+      `personal-branding`,
+    ],
     whyItWorks: `GPT-5.1's default move on a request like 'turn this into a LinkedIn post' is to reach for the format it has seen most densely represented in training data for that exact request — the rhetorical-question hook, the chronological retell, the closing bullet list of 'lessons learned' — because those are the statistically safe, most-reinforced shape of a 'story post' as a genre, not because they're actually the strongest version of your specific story. Explicitly banning that named set of openers in the WHAT NOT TO DO section forces the model off its highest-probability default and back into the raw material you actually gave it, which is the only place a genuinely non-generic opening line can come from. The instruction to reorder around the tension rather than retell chronologically matters because models tend to preserve the sequence information was given in unless told otherwise — a chronological brain-dump fed in raw comes back as a chronological post unless the prompt explicitly authorizes restructuring, which is why the anecdote is deliberately supplied out of order here rather than pre-organized. Naming one single takeaway rather than letting the model infer 'the lessons' is what prevents the closing-bullet-list failure mode: an unconstrained model asked to wrap up a story will often hedge by offering two or three possible takeaways so it can't be wrong about which one you wanted, which is exactly the flattening effect that makes so many of these posts forgettable. The instruction not to invent missing beats matters mechanically too — a model filling narrative gaps with plausible-sounding invented dialogue or detail is the single fastest way a personal story stops being true, and asking the model to flag the gap instead keeps the authorship and factual accuracy with you rather than quietly delegating it.`,
     exampleOutput: `Friday, 9:47pm. A Slack message from a client I almost didn't see. Two days before their launch, they wanted out — convinced a bug we hadn't even confirmed was ours was about to blow up their weekend. [...] I picked up the phone not because it was my job, but because nobody else had seen the message yet. It turned out to be a caching issue on their end. That part didn't matter. What mattered was that someone answered. That's the part of client work nobody puts in the deck: the fix is rarely what saves the relationship. Being reachable when it counts is.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',

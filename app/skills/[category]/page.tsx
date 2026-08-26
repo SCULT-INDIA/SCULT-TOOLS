@@ -3,13 +3,18 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
-import { Icon } from '@/components/ui/Icon'
 import { SkillCard } from '@/components/skills/SkillCard'
-import { getSkillCategory, SKILL_CATEGORIES } from '@/lib/skills/categories'
-import { getAllCategoryCounts, getSkillCountByCategory, getSkillsPage, SKILLS_PAGE_SIZE } from '@/lib/skills/db'
-import type { Skill, SkillCategory } from '@/lib/skills/types'
+import { Icon } from '@/components/ui/Icon'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
+import { getSkillCategory, SKILL_CATEGORIES } from '@/lib/skills/categories'
+import {
+  getAllCategoryCounts,
+  getSkillCountByCategory,
+  getSkillsPage,
+  SKILLS_PAGE_SIZE,
+} from '@/lib/skills/db'
+import type { Skill, SkillCategory } from '@/lib/skills/types'
 
 type Params = { category: string }
 type SearchParams = { page?: string }
@@ -103,10 +108,17 @@ async function SkillGrid({
       </div>
 
       {totalPages > 1 ? (
-        <nav aria-label="Pagination" className="mt-8 flex items-center justify-center gap-3">
+        <nav
+          aria-label="Pagination"
+          className="mt-8 flex items-center justify-center gap-3"
+        >
           {page > 1 ? (
             <Link
-              href={page - 1 === 1 ? `/skills/${category.slug}` : `/skills/${category.slug}?page=${page - 1}`}
+              href={
+                page - 1 === 1
+                  ? `/skills/${category.slug}`
+                  : `/skills/${category.slug}?page=${page - 1}`
+              }
               className="rounded-full border border-line-grey bg-white px-4 py-2 font-medium text-[14px] text-ink-body transition-colors hover:border-violet-300 hover:text-violet-700"
             >
               ← Previous

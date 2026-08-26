@@ -72,7 +72,14 @@ CMD ["node", "dist/server.js"]`,
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`docker`, `dockerfile`, `containers`, `image-security`, `ci-cd`, `build-optimization`],
+    tags: [
+      `docker`,
+      `dockerfile`,
+      `containers`,
+      `image-security`,
+      `ci-cd`,
+      `build-optimization`,
+    ],
     whyItWorks: `The rewrite works because it forces the model to reason about the two Dockerfiles that actually matter — the one that builds and the one that ships — as separate artifacts with separate concerns, which is exactly the distinction most tutorial-derived Dockerfiles skip; a single-stage build has no structural way to keep a compiler or dev-dependency tree out of the final image, so asking generically to 'optimize' a Dockerfile without naming the multi-stage requirement tends to produce cosmetic changes like combining RUN lines rather than the actual attack-surface reduction. Pinning the base image to a digest instead of a tag matters mechanically because \`latest\` and even semver tags are mutable pointers — a rebuild six months later can silently pull a different image with different CVEs, which defeats any scanning done at review time; naming this explicitly stops GPT-5.1 from defaulting to the more common but weaker \`FROM node:20-alpine\` pattern it has seen far more often in training data than the pinned-digest form. The non-root user requirement addresses a specific, checkable failure mode: a container running as root inside is one kernel-level container-escape bug away from root on the host, and this is exactly the kind of finding that gets deferred as 'we'll fix it later' unless the Dockerfile is rejected for missing it up front. The layer-ordering instruction is a direct lever on build cache economics — Docker invalidates every layer after the first changed one, so copying source before installing dependencies means every single build reinstalls all dependencies from scratch, which compounds into real CI minutes and cost at scale; stating the ordering rule explicitly prevents the model from defaulting to whatever order the original Dockerfile happened to use.`,
     exampleOutput: `\`\`\`dockerfile
 # ---- build stage ----
@@ -95,9 +102,7 @@ HEALTHCHECK --interval=15s --timeout=3s --retries=3 CMD node healthcheck.js
 CMD ["node", "dist/server.js"]
 \`\`\`
 Layer table follows, noting the npm token now never touches a committed layer and the image dropped from 1.1GB to roughly 240MB.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -160,16 +165,20 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ci-cd`, `github-actions`, `flaky-tests`, `pipeline-design`, `test-automation`],
+    tags: [
+      `ci-cd`,
+      `github-actions`,
+      `flaky-tests`,
+      `pipeline-design`,
+      `test-automation`,
+    ],
     whyItWorks: `Structuring this as sequential phases matters because CI design has a dependency chain that a single flat request tends to skip over: you cannot design a sensible quarantine mechanism before understanding what actually causes the flakiness, and you cannot pick a caching strategy without knowing the CI provider's actual constraints, so collapsing all of it into one unstructured ask produces a plausible-sounding but generic pipeline that ignores the team's real bottleneck. Naming that retries alone are not a fix directly heads off GPT-5.1's most common default answer to 'handle flaky tests,' which is to suggest a retry-on-failure wrapper — a real fix but one that, applied alone, actively makes the flakiness invisible in dashboards and removes the pressure to ever actually diagnose it, which is worse than doing nothing if the goal is reliability rather than a quieter merge queue. Asking for actual cache keys and invalidation triggers rather than 'cache dependencies' forces engagement with the specific stack's lockfile format and build tool, since a wrong cache key (for example, keyed on branch name instead of lockfile hash) silently serves stale dependencies across PRs, a bug that's expensive to diagnose precisely because CI passing gives false confidence. The failure-modes phase exists because a pipeline design reviewed only for the happy path is exactly the kind of artifact that looks complete in a PR review but has no answer for what happens during a release-week runner crunch — asking for this explicitly, and pairing each failure mode with a specific alert, converts the deliverable from a static config file into an operationally accountable design a team can actually run without surprises.`,
     exampleOutput: `Clarifying question: Can integration tests run against ephemeral per-PR databases, or do they share one staging DB today? Assuming shared DB based on the pain point described.
 
 Stage design: lint (parallel, fails fast) -> unit tests sharded across 4 runners (fails fast) -> integration tests (sequential, non-blocking for the 3 known-flaky tests, tracked separately) -> build -> deploy-gate (manual approval).
 
 ... [full Actions YAML and quarantine procedure follow]`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -241,9 +250,7 @@ OUTPUT FORMAT
 (based on p95 CPU 180m + 10% headroom; memory limit set above the 220Mi steady-state to absorb GC spikes, not equal to request to avoid CPU throttling)
 readinessProbe: initialDelaySeconds 15, periodSeconds 5 (accounts for the 12s warm-up plus margin)
 livenessProbe: initialDelaySeconds 30, periodSeconds 10, failureThreshold 3 (deliberately looser than readiness so a slow warm-up never triggers a restart)...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -309,9 +316,7 @@ OUTPUT FORMAT
     tags: [`security-review`, `infrastructure-as-code`, `appsec`, `iam`, `compliance`],
     whyItWorks: `Anchoring the review to the actual diff and exposure surface, rather than inviting a general security checklist, is what stops GPT-5.1 from defaulting to its most common failure mode on open-ended security prompts: producing a broad, textbook-derived list of best practices (rotate keys, enable MFA, use least privilege) that sounds thorough but doesn't engage with what the specific change actually does, which reads well in a PR comment but gives the reviewer nothing they couldn't have found in a generic OWASP page. Requiring a concrete exploit path per finding, tied to the stated exposure surface, forces the model to reason about actual reachability rather than severity in the abstract — a public S3 read policy is a very different risk on an internal-tools bucket behind a VPN than on a customer-facing invoice bucket, and ranking by textbook severity alone (which is what an unscoped prompt tends to produce) would flag both identically, burying the finding that actually matters under equally-weighted noise. The explicit ban on inventing a specific CVE or compliance clause number addresses a known and serious failure mode of LLM-generated security content: models will confidently cite a plausible-sounding CVE ID or GDPR article that does not correspond to the real one, which is actively dangerous in a security review because a wrong citation can make a reviewer trust a finding (or dismiss one) based on authority that doesn't actually exist — instructing the model to describe the vulnerability class generically and defer the specific citation to human verification keeps the review useful without smuggling in fabricated authority. The confidence field matters because a static diff reviewer genuinely cannot see the full IAM role, the rest of the network policy, or runtime behavior, and a review that doesn't distinguish 'I can see this is wrong' from 'I can't rule this out without more context' invites false confidence in exactly the kind of review meant to prevent it.`,
     exampleOutput: `Verdict: has issues that should block merge. Finding: the new bucket policy statement grants \`s3:GetObject\` to \`Principal: "*"\`, meaning any unauthenticated party with an object URL or key pattern can fetch invoice PDFs containing customer names and addresses; exploit path is trivial URL enumeration or leaked link sharing, no auth bypass needed since none exists in the new policy. Confidence: high, based directly on the diff. Needs human verification: whether object keys are guessable/sequential, which I can't assess from this diff alone.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -394,12 +399,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`dependency-management`, `major-version-upgrade`, `migration-planning`, `breaking-changes`, `test-coverage`],
+    tags: [
+      `dependency-management`,
+      `major-version-upgrade`,
+      `migration-planning`,
+      `breaking-changes`,
+      `test-coverage`,
+    ],
     whyItWorks: `Grounding the breaking-change inventory explicitly in the changelog excerpt provided, with a required label distinguishing 'from the changelog' versus 'inferred, verify yourself,' is the single most important guard here: major-version migration guides are exactly the kind of specific, verifiable technical content where an LLM will otherwise blend real changes it has seen in training with plausible-sounding ones it's pattern-matching from similar libraries, and for something like a SQLAlchemy 1.4-to-2.0 upgrade, an invented breaking change that isn't real wastes engineering time chasing a non-issue while a real one that gets missed ships silently. Sequencing this as four dependent steps rather than one combined answer mirrors how the actual risk assessment has to work — you cannot sensibly recommend a rollback trigger before knowing which breaking changes are risky, and you cannot judge whether existing tests are sufficient without first knowing what specifically needs to keep working, so a flattened single-pass prompt tends to produce a rollback trigger like 'watch error rates' that's too vague to act on because it wasn't derived from the actual risky code paths identified two steps earlier. The requirement to name what specific tests to write, rather than a generic 'improve test coverage' recommendation, matters because 'add more tests' is unfalsifiable advice that every migration plan could say regardless of the dependency; naming the actual assertion (in the example output, transaction rollback behavior under the new engine) ties the recommendation to the exact gap the test-coverage description revealed. Asking for a concrete post-deploy rollback signal rather than accepting 'monitor closely' forces the plan to commit to something operationally checkable, which is the difference between a migration plan a team can actually execute against and one that reads well but leaves the hardest judgment call — when do we actually revert — unanswered.`,
     exampleOutput: `Breaking change: Query.get() removed, replaced by Session.get() (source: changelog, directly stated). Affects roughly 30 model files using the legacy Query API — mechanical find-and-replace with a signature change, low risk. Breaking change: autocommit mode removed entirely (source: changelog). This is the risky one given your Flask app relies on implicit autocommit — every place a session currently commits implicitly now needs an explicit commit() call, and since your test coverage doesn't currently assert transaction/rollback behavior, this is the specific gap to close with tests before touching the dependency, not the CRUD happy-path tests you already have...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

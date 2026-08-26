@@ -3,7 +3,11 @@
 import { Check, Copy } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { trackSkillEvent } from '@/lib/analytics'
-import { exportSkillAs, SKILL_EXPORT_FORMATS, type SkillExportFormat } from '@/lib/skills/export'
+import {
+  exportSkillAs,
+  SKILL_EXPORT_FORMATS,
+  type SkillExportFormat,
+} from '@/lib/skills/export'
 import type { Skill } from '@/lib/skills/types'
 
 /**
@@ -43,8 +47,8 @@ export function SkillCopyBlock({
     return (
       <div className="rounded-panel border border-ink bg-offwhite p-6 text-center">
         <p className="text-[15px] text-ink-muted leading-6">
-          This skill's source license couldn't be confirmed as safe to mirror here, so
-          it isn't inlined. View the full skill directly on its source repository.
+          This skill's source license couldn't be confirmed as safe to mirror here, so it
+          isn't inlined. View the full skill directly on its source repository.
         </p>
         <a
           href={skill.sourceUrl}
@@ -60,7 +64,11 @@ export function SkillCopyBlock({
 
   return (
     <div>
-      <div className="mb-3 flex flex-wrap gap-2" role="tablist" aria-label="Export format">
+      <div
+        className="mb-3 flex flex-wrap gap-2"
+        role="tablist"
+        aria-label="Export format"
+      >
         {SKILL_EXPORT_FORMATS.map((f) => (
           <button
             key={f.format}

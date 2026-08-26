@@ -58,12 +58,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`contract-review`, `plain-language`, `legal-drafting`, `small-business`, `risk-flagging`],
+    tags: [
+      `contract-review`,
+      `plain-language`,
+      `legal-drafting`,
+      `small-business`,
+      `risk-flagging`,
+    ],
     whyItWorks: `General-purpose contract summarization prompts tend to mirror the document's own structure and compress every clause by roughly the same amount, which buries the handful of terms that actually determine financial exposure underneath restated boilerplate the model treats as equally important. Reorganizing the instruction around what the signer has to do and what could go wrong for them forces GPT-5.1 to triage by consequence rather than by section order, and explicitly naming the categories that are boilerplate-but-dangerous (indemnification, liability caps, auto-renewal, exclusivity, assignment) counteracts a real pattern where a summarizer skims past clauses that read as standard legal filler precisely because they're common, when commonality has nothing to do with risk to this particular signer. The instruction to state what a defined term means in this contract rather than that it exists addresses the model's tendency to name a clause ("this is a standard indemnification provision") without translating what invoking it would actually cost the signer, which is the information a non-lawyer needs and the thing a bare label doesn't provide. Explicitly forbidding a fairness judgment or an interpretation prediction matters because a model asked to "summarize" will often drift into evaluative language unprompted, and that drift is exactly the line between a reading aid and something that reads as legal advice — keeping the output a faithful restatement rather than a verdict is what makes the mandatory closing disclaimer accurate rather than a token afterthought bolted onto advice-shaped content.`,
     exampleOutput: `Overview: This agreement makes you the exclusive reseller of the product in your territory for 12 months, in exchange for a minimum quarterly purchase commitment... Obligations table: Quarterly minimum order ($15,000) — due end of each quarter — missing it voids exclusivity, not the whole contract. Standard clauses: Indemnification (Section 9) — you'd be on the hook for legal costs if your marketing claims about the product turn out to be false, even if you didn't know they were false. Before you sign: this is a draft summary to help you read faster, not legal advice — have a lawyer review Section 9 and the exclusivity clause before signing.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -133,12 +137,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`contract-risk`, `negotiation-prep`, `redlining`, `risk-assessment`, `vendor-contracts`],
+    tags: [
+      `contract-risk`,
+      `negotiation-prep`,
+      `redlining`,
+      `risk-assessment`,
+      `vendor-contracts`,
+    ],
     whyItWorks: `A generic "find the risky clauses" instruction produces a flat list because the model has no anchor for what counts as disproportionate, so it either flags everything that sounds legally serious or nothing at all; requiring the deal size and the user's specific side as inputs gives GPT-5.1 a concrete basis for relative judgment — a broad indemnification clause is a minor flag on a $2,000 deal and a major one on a $2 million deal, and the model can only make that distinction if the comparison point is stated rather than implied. Separating the scan phase from the ranking phase keeps the model from prematurely deciding a clause isn't worth mentioning while it's still cataloguing — a common failure mode where an LLM's first pass at "is this important" quietly drops borderline items before a ranking step ever gets to weigh them against each other. Forcing each flagged item into a specific negotiation ask rather than a general objection matters because "this seems risky" gives the person going back to the other side nothing to actually propose, while "cap liability at 12 months' fees" is something that can be pasted into a redline comment directly. The explicit ban on asserting enforceability or citing a specific law is the load-bearing safety constraint here: risk-flagging for negotiation prep is a business-judgment task the model can reasonably help with, but the moment it states a clause is unenforceable under some jurisdiction's law it has crossed into legal opinion territory without the facts, jurisdiction confirmation, or license to back it up.`,
     exampleOutput: `1. Indemnification (Sec. 8) — vendor requires us to indemnify them for any claim arising from our use of the product, uncapped. Exposure: could exceed contract value many times over in a serious incident. Talking point: propose a mutual indemnification cap at 2x annual fees. 2. Auto-renewal (Sec. 14) — renews for a full year unless cancelled 90 days out. Talking point: shorten notice window to 30 days. Dealbreaker match: none of the above conflicts with your stated non-negotiables. This is a draft risk-flagging pass, not a legal opinion — have a lawyer review the indemnification and liability sections before signing.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -197,12 +205,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`nda-review`, `checklist`, `contract-prep`, `small-business`, `confidentiality`],
+    tags: [
+      `nda-review`,
+      `checklist`,
+      `contract-prep`,
+      `small-business`,
+      `confidentiality`,
+    ],
     whyItWorks: `NDAs are short enough that a model asked to "review" one in the abstract will often produce a generic list of NDA concepts rather than checking this specific document against them, because nothing in an open-ended request forces a claim-by-claim comparison; giving GPT-5.1 a fixed six-point checklist and instructing it to state what the text actually says before assigning a flag converts a vague review into a verification task, which is a much more reliable mode for a language model than open-ended risk judgment. Requiring the counterparty relationship and the actual information at stake as inputs is what lets the mutuality and duration checks mean anything — a one-way NDA is unremarkable when you're the one receiving someone else's trade secrets and alarming when the relationship is peer-to-peer, and a model without that context has no way to tell which situation it's looking at. Naming the specific carve-outs to check for (public-domain information, prior knowledge, independent development, legal compulsion) matters because their absence is a silent risk — a clause that isn't there doesn't announce itself, and a model scanning for "problems" tends to notice what's present and overlook what's conspicuously missing unless it's told exactly what to look for. The three-way flag system (Standard / Worth a Question / Push Back) keeps the output actionable without tipping into a legal severity rating the model has no basis to assign, and restricting the enforceability question entirely keeps the checklist a reading aid rather than something that could be mistaken for legal sign-off on a document with real confidentiality exposure.`,
     exampleOutput: `Mutuality: text says obligations apply to "both parties" — Standard, matches the relationship. Duration: confidentiality survives 7 years after termination — Worth a Question, longer than typical for pricing/approach info, ask if it can be reduced to 2-3 years. Carve-outs: missing an independent-development carve-out — Push Back, add standard language. Closing: this is a preparation checklist, not a legal opinion — take the Push Back item to a lawyer before signing.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -273,12 +285,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`clause-comparison`, `redline-review`, `contract-negotiation`, `legal-drafting`, `risk-flagging`],
+    tags: [
+      `clause-comparison`,
+      `redline-review`,
+      `contract-negotiation`,
+      `legal-drafting`,
+      `risk-flagging`,
+    ],
     whyItWorks: `A model asked to "compare these two clauses" defaults to describing the textual diff, which is exactly what a word processor's track-changes view already shows for free — the actual value has to come from translating a wording shift into a practical consequence, which requires a separate, explicit step because language models tend to describe what changed in the sentence rather than what changed in the world unless told to make that translation deliberately. Splitting mechanical identification from practical translation into two steps prevents a common shortcut where the model jumps straight to a vague summary judgment ("this version favors the vendor") without ever surfacing the specific word that caused it, which leaves the reader unable to verify the claim against the actual redline. Naming the specific small-sounding-but-large-effect patterns to watch for — modal verb shifts, removed caps, shortened notice, one-sided discretion — matters because these are the exact changes an experienced contract reviewer trains themselves to catch and a first read tends to skim past, since the sentence structure looks almost identical to the original; giving the model this checklist compensates for the fact that it has no innate sense of which redlines are the ones lawyers specifically watch for. Instructing the model to flag missing context rather than guess at it addresses a real failure mode where an LLM asked for a "net assessment" will invent a plausible-sounding rationale to fill a gap in the facts it was given, which is exactly the kind of confident-sounding fabrication that's dangerous in a document meant to inform an actual negotiation position.`,
     exampleOutput: `Change: Vendor's termination right changed from mutual 60-day notice to a one-sided 10-day sole-discretion right. Practical effect: Vendor can now exit the engagement on 10 days' notice while you remain bound to 60, and "sole discretion" means they don't need a reason. Who it favors: Vendor, clearly. Net assessment: worse for Client — this redline removes the mutuality entirely. This is a drafting aid, not a legal opinion — confirm with a lawyer before accepting or rejecting.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -331,12 +347,16 @@ Section-by-section: original section heading, then a plain-English paragraph, th
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`plain-language`, `legal-translation`, `contract-literacy`, `accessibility`, `consumer-legal`],
+    tags: [
+      `plain-language`,
+      `legal-translation`,
+      `contract-literacy`,
+      `accessibility`,
+      `consumer-legal`,
+    ],
     whyItWorks: `The largest failure mode in plain-English legal translation isn't vocabulary, it's silent loss of qualifiers — a model asked to "simplify" a sentence will very naturally drop the "unless," "except where," or "subject to" clause because those words make a sentence harder to read, and yet those exact words are where the legal effect actually lives; explicitly instructing GPT-5.1 to preserve every condition and exception while only simplifying structure and vocabulary directly targets this failure rather than trusting a general "make it simpler" instruction to somehow preserve substance on its own. Going section by section instead of producing one blended summary matters for a document the reader will need to return to later — a reader confused about paragraph 4 of the original needs to be able to find paragraph 4's plain-English counterpart, not hunt through a merged narrative that reorganized the document's own structure. The instruction to flag genuine ambiguity rather than resolve it addresses a specific overconfidence pattern: language models asked to explain a legal sentence will often pick the more common or more sensible-sounding of two plausible readings and present it as settled, which is actively worse than leaving the ambiguity visible, because the reader now believes something is certain that a lawyer might read the opposite way. Separating translation from evaluation (no commentary on fairness) keeps the tool doing one job well instead of quietly sliding into legal opinion territory, which is what makes the closing disclaimer an accurate description of what was actually produced rather than a formality attached to something that already reads as advice.`,
     exampleOutput: `Section 14 — Default and Remedies. Plain English: If you don't pay rent by the date it's due, and you still haven't paid after receiving a written notice giving you 3 days to catch up, the landlord can start the legal process to end your lease early — but only after giving you that 3-day notice first. Key terms: 'notice to cure' means the landlord has to formally warn you and give you a chance to fix the problem before taking further action. This is a plain-language translation, not legal advice — confirm your understanding with a lawyer before making any decision based on it.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -403,12 +423,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`policy-drafting`, `hr-policy`, `internal-governance`, `compliance-drafting`, `workplace-policy`],
+    tags: [
+      `policy-drafting`,
+      `hr-policy`,
+      `internal-governance`,
+      `compliance-drafting`,
+      `workplace-policy`,
+    ],
     whyItWorks: `A policy draft's most common failure isn't bad prose, it's unenforceable rules dressed up as clear ones — asking for "policy rules" without insisting on checkable statements produces sentences like "employees should use good judgment when incurring expenses," which sounds like a rule but gives a manager nothing to actually enforce consistently, so the instruction here forces specific, verifiable conditions instead. Requiring an explicit scope with a stated "not covered" side matters because most real policy disputes happen exactly at the boundary the policy never named — a remote work policy silent on contractors will inevitably get invoked or ignored inconsistently for that group, and naming the boundary up front is what actually prevents the ambiguity from surfacing later as a dispute. The exceptions section is deliberately separated from the rules themselves because a policy that presents its rules as absolute either gets quietly broken in the first edge case or gets enforced rigidly against a situation nobody anticipated — naming realistic edge cases and an explicit exception authority gives the policy a pressure valve instead of leaving that decision to whoever encounters the edge case first. The instruction to mark enforcement consequences as placeholders rather than asserting them is the safety-critical piece: disciplinary consequences are a joint HR/legal decision with real employment-law exposure, and a model confidently inventing "first offense: written warning, second offense: termination" would hand a manager language that reads as settled policy when it's actually an unreviewed guess — flagging it as a placeholder keeps the draft honest about what still needs real institutional sign-off before anyone relies on it.`,
     exampleOutput: `Purpose: This policy establishes consistent rules for remote work equipment and expense reimbursement to eliminate the ad-hoc decisions currently causing employee complaints. Scope: Applies to full-time employees working remotely 3+ days/week; does not apply to contractors or hybrid employees under this threshold. Rules: 1. Employees may request reimbursement up to $500/year for home office equipment... Enforcement: [Draft — pending HR/legal input] Repeated over-budget claims without pre-approval may result in... This is a first draft for legal and leadership review, not a final document — it must be reviewed by a qualified lawyer before being published or enforced.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -472,12 +496,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`compliance-checklist`, `regulatory-compliance`, `audit-prep`, `risk-management`, `governance`],
+    tags: [
+      `compliance-checklist`,
+      `regulatory-compliance`,
+      `audit-prep`,
+      `risk-management`,
+      `governance`,
+    ],
     whyItWorks: `The most dangerous failure mode in this task isn't a badly organized checklist, it's a confidently expanded one — a model asked to build a compliance checklist around a named regulation will often fill in plausible-sounding additional requirements from its general training data about what that category of law "usually" includes, which is exactly backwards when the user hasn't provided the actual regulatory text; explicitly restricting the model to the requirement as described, and forbidding it from adding requirements it merely suspects apply, keeps the output scoped to what was actually verified rather than what sounds right. Requiring an evidence-needed column for every item is what separates a compliance checklist from a generic to-do list — a checklist that just says "notify affected individuals" without specifying what documentation proves that happened (dated notification letters, a log of who was contacted and when) is useless in front of an actual auditor or regulator, and a model not explicitly told to think about evidence will produce action items without their proof trail. Cross-referencing against existing measures before assigning status matters because organizations rarely start from zero, and a checklist that ignores what's already in place either duplicates existing work or, worse, gets treated as the full task list when half of it was already handled — an inaccurate Done/Not Started read is arguably worse than no checklist at all because it creates false confidence. The instruction to flag insufficient information rather than guess directly targets the model's tendency to fill any gap with a specific, invented detail rather than an honest "I don't have enough to specify this" — which matters enormously here because a specific action item that isn't actually what the regulation requires is worse than an acknowledged gap, since the gap at least prompts someone to go check.`,
     exampleOutput: `1. Draft breach notification letter template — Owner: outside counsel — Evidence: signed-off template on file — Status: Not Started. 2. Define internal escalation path for suspected breaches — Owner: IT Lead — Evidence: documented escalation procedure — Status: Partial (incident response doc exists, lacks timeline). Flagged: unclear from your description whether the 30-day clock starts at discovery or confirmation — confirm with counsel. This checklist organizes the requirement as described; it is not a determination of full compliance — confirm scope and completeness with a qualified compliance lawyer.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -541,12 +569,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`privacy-policy`, `data-compliance`, `policy-drafting`, `gdpr-ccpa-prep`, `startup-legal`],
+    tags: [
+      `privacy-policy`,
+      `data-compliance`,
+      `policy-drafting`,
+      `gdpr-ccpa-prep`,
+      `startup-legal`,
+    ],
     whyItWorks: `The single biggest liability risk in an AI-drafted privacy policy is a confidently asserted compliance claim — a model given a template-style prompt will often include boilerplate language like "we comply with GDPR and CCPA" because that phrase appears constantly in real privacy policies it learned from, without any actual verification that the described practices meet either framework's requirements, which is precisely the kind of assertion that turns a helpful draft into a legal exposure if it ships unreviewed; explicitly forbidding that specific claim, and requiring geography-dependent rights to be flagged rather than assumed, keeps the model from manufacturing false confidence in a document users will actually read and potentially rely on. Building the policy from the described data practices rather than a generic template matters because privacy policies are routinely scrutinized clause-by-clause against actual practice during a regulatory inquiry or a lawsuit, and boilerplate language describing data handling the company doesn't actually do (or omitting handling it does do) is worse than an incomplete but accurate policy — a template swap-in produces exactly that mismatch risk. Requiring missing information (like retention periods) to be flagged rather than filled with an invented plausible default addresses the model's tendency to complete a structured document fully even when a specific fact wasn't provided, which here would mean fabricating a retention period that the company doesn't actually follow, creating a policy that promises something operationally untrue. Keeping the invented-detail prohibition explicit for third-party vendor names and rights processes closes the same gap for the sections most likely to be wrong in exactly the way a regulator or a plaintiff's lawyer would find first.`,
     exampleOutput: `Data We Collect: We collect your name, email address, IP address, and in-app usage data when you use our product. Why: Email is used for account access and product updates; usage data helps us improve features. Sharing: We share payment information with Stripe and usage analytics with Mixpanel; we do not sell data to advertisers. Flagged for legal review: retention period not specified — needs input; EU user rights (GDPR) require specific confirmation of applicability and process, not assumed. This is a first draft, not a finished policy — a qualified privacy lawyer must review it against applicable regulations before publishing.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -610,12 +642,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`terms-of-service`, `legal-drafting`, `startup-legal`, `product-legal-prep`, `compliance-drafting`],
+    tags: [
+      `terms-of-service`,
+      `legal-drafting`,
+      `startup-legal`,
+      `product-legal-prep`,
+      `compliance-drafting`,
+    ],
     whyItWorks: `Most ToS templates are ordered and weighted by convention rather than by what actually matters for a given product, and a model asked to "outline a ToS" without product-specific grounding will reproduce that same generic ordering — requiring the product description, business model, and content/account details up front forces the outline to be scoped to this product's actual risk surface, so a marketplace with direct user messaging and payment disputes gets those sections built out and ordered near the top, while a product with none of that skips sections that would otherwise be generic filler nobody needed. Writing a purpose paragraph instead of legal language for each section is the deliberate boundary that keeps this a scoping tool rather than an unauthorized attempt at drafting binding text — a lawyer working from "here's what this section needs to accomplish and why it matters for this product" starts from genuine leverage, while a lawyer handed AI-generated arbitration or liability language has to fully re-derive it anyway, so skipping straight to fake legal language for the highest-stakes clauses would waste effort and create false confidence. Explicitly flagging which sections need direct counsel input rather than treating everything as equally templatable reflects a real asymmetry in ToS risk: liability limitation and arbitration clauses have outsized legal consequences if worded even slightly wrong and courts scrutinize them heavily, while other sections are comparatively low-stakes boilerplate — treating them identically would either waste legal review time on the boilerplate or, worse, let the highest-risk sections get treated as templatable when they're exactly the ones that need the most careful, jurisdiction-specific drafting.`,
     exampleOutput: `1. Payment and Commission Disputes — Purpose: since the business takes a 15% commission on bookings, this section must define how disputes between client and photographer over completed work are handled and where the commission stands if a refund occurs — Needs counsel: yes. 2. User Content and IP Ownership — Purpose: portfolio images are user-uploaded; this section needs to clarify who owns uploaded content and how copyright disputes between users are handled — Needs counsel: yes. Top risk summary: payment disputes and uploaded-content IP ownership carry the most real-world risk for this product. This is a scoping outline, not usable ToS language — a qualified lawyer must draft or review the actual document before publishing.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -686,12 +722,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`vendor-contracts`, `negotiation-prep`, `meeting-prep`, `procurement`, `risk-flagging`],
+    tags: [
+      `vendor-contracts`,
+      `negotiation-prep`,
+      `meeting-prep`,
+      `procurement`,
+      `risk-flagging`,
+    ],
     whyItWorks: `Vendor contract calls tend to go badly not because someone missed a clause but because the gaps — the things the contract is silent about — never get surfaced until they matter, usually during an actual outage or dispute; scanning specifically for vagueness and silence rather than just "problems" targets that pattern directly, since a model asked to find problems in a contract will focus on what's explicitly there and can walk right past what was left out, which is exactly where operational risk with a critical vendor tends to hide. Phasing this into scan-then-question-then-assign keeps the questions grounded in the actual contract text instead of drifting into a generic "things to ask vendors" list — the named blind spots (SLA specifics, breach/outage consequences, data portability, price mechanics) are given as things to check for in this text, not asserted as present, which keeps the output tied to what this draft specifically does or doesn't say. Assigning a suggested asker based on the real call participants matters practically: a technical SLA question landing from the CTO carries different weight and gets a different quality of vendor answer than the same question from Operations, and skipping this step produces a list that reads right but doesn't map to how the actual conversation will unfold. The instruction against pre-filling the vendor's likely answer addresses a subtle failure where a model, having just identified a gap, immediately starts speculating about what the vendor probably means or intends — which defeats the purpose of a live question and can anchor the team on an assumption that turns out to be wrong when the vendor actually answers.`,
     exampleOutput: `1. "What happens to our data if we terminate the contract — do we get an export, and how long do we have to retrieve it?" — Suggested asker: CTO (technical/data implications). Priority: high, since this hosts our core production database. 2. "Can you walk us through exactly what counts as a qualifying outage under the SLA, and what the credit actually looks like in dollars?" — Suggested asker: Head of Finance. Legal review list: the liability cap language in Section 11 should go to legal before signature. This is call-prep, not a legal review — a qualified lawyer should review the final contract before signing.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -756,12 +796,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`employee-handbook`, `hr-policy`, `workplace-policy`, `manager-enablement`, `compliance-drafting`],
+    tags: [
+      `employee-handbook`,
+      `hr-policy`,
+      `workplace-policy`,
+      `manager-enablement`,
+      `compliance-drafting`,
+    ],
     whyItWorks: `A handbook policy drafted from the topic name alone tends to cover the easy, textbook version of the situation and stay silent on exactly the messy real cases that prompted someone to want a written policy in the first place — requiring the actual real situations as input and instructing the model to write the policy around them, including a worked example for the trickiest one, is what keeps the draft from being technically about the right topic while being practically useless the first time a manager hits an edge case. Insisting that every rule be applicable "without a judgment call beyond what the policy gives" — or explicit about whose judgment it is when one is unavoidable — targets a specific and common handbook failure where vague language ("managers should use discretion") gets written in because it sounds reasonable, but in practice produces inconsistent enforcement across managers, which is the exact problem multi-state or multi-manager companies write handbooks to prevent. Flagging the gap between the draft and existing informal practice matters because handbooks don't get written into a vacuum — employees and managers already have some shared understanding of how things work, and a new written policy that silently contradicts that understanding, rather than naming the change explicitly, creates a fairness problem for anyone who reasonably relied on the old norm. The prohibition on stating specific legal minimums as settled fact is the highest-stakes safety rule here: employment law thresholds (leave entitlements, notice periods, accommodation standards) are jurisdiction-specific and change over time, and a model asserting a specific number with confidence risks the handbook being factually wrong from the moment it's adopted in exactly the area — mandatory minimums — where getting it wrong creates real legal exposure.`,
     exampleOutput: `Unplanned Sick Leave. If you're unable to work due to illness, notify your manager as early as possible before your shift or scheduled meetings begin — a text or Slack message is sufficient; you do not need to provide a doctor's note for absences of [confirm minimum with legal/HR for applicable jurisdiction] days or fewer. Worked example: if you call in sick the morning of an important client meeting, notify your manager immediately so they can arrange coverage; the sick leave itself is still approved under this policy regardless of meeting timing. Flagged for legal/HR: minimum documentation threshold, and any state-specific paid sick leave requirements across your 4 states. This is a first draft pending HR and legal review — do not add to the handbook until confirmed by a qualified lawyer.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -825,12 +869,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`risk-register`, `compliance-management`, `risk-assessment`, `governance`, `audit-prep`],
+    tags: [
+      `risk-register`,
+      `compliance-management`,
+      `risk-assessment`,
+      `governance`,
+      `audit-prep`,
+    ],
     whyItWorks: `A risk register that scores every listed item as roughly the same severity fails at its one job, which is telling leadership where to act first — that flattening happens by default because a model given a list of compliance areas without instruction to differentiate will tend to rate most things Medium, the safe middle answer, unless it's explicitly forced to justify each rating against specific organizational facts and sort by combined exposure so the ranking is visible rather than something the reader has to reconstruct themselves. Requiring the risk to be stated as a concrete scenario rather than a category label ("PII stored without encryption at rest" instead of "data privacy risk") matters because a vague category doesn't tell leadership what to actually fix, while a specific failure mode does — and it also makes the likelihood/impact rating checkable, since a reader can look at the specific scenario and judge whether Medium or High makes sense, which a bare category name doesn't allow. Cross-referencing against current mitigations before rating is what keeps the register honest about present-tense risk rather than theoretical risk — the same category (data privacy) is a very different actual risk with encryption at rest in place versus without it, and rating in a vacuum would produce a register that doesn't reflect the organization's actual current exposure, defeating the register's purpose of guiding where new investment is most needed. The prohibitions on inventing dollar figures and on asserting current compliance violation status are both aimed at the same failure: a model will readily produce a specific-sounding number or a definitive compliance verdict because specificity reads as more authoritative, but neither is something the model can actually determine from a short description, and leadership acting on a fabricated fine estimate or an unverified violation claim is a worse outcome than the register simply flagging that a compliance lawyer or auditor needs to confirm it.`,
     exampleOutput: `1. Risk: Customer PII stored without encryption at rest, exposed in a breach scenario. Likelihood: Medium (e-commerce data is a common attack target; no current at-rest encryption). Impact: High (customer PII breach carries notification obligations and reputational cost). Current mitigation: encryption in transit only. Combined exposure: High. Top priority #1: this combines a plausible likelihood with severe impact and only partial mitigation — closing the at-rest encryption gap addresses the largest single exposure on this register. This register is a prioritization tool, not a compliance audit — validate actual compliance status with a qualified lawyer or auditor before final resourcing decisions.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -896,12 +944,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`regulatory-brief`, `compliance-communication`, `internal-comms`, `policy-monitoring`, `executive-briefing`],
+    tags: [
+      `regulatory-brief`,
+      `compliance-communication`,
+      `internal-comms`,
+      `policy-monitoring`,
+      `executive-briefing`,
+    ],
     whyItWorks: `The realistic failure mode for this task isn't a badly structured brief, it's a model quietly upgrading an unverified rumor into a confidently stated fact — given a vague input like "I heard our state is introducing pay transparency requirements," a model asked to "write a brief" will often fill in a plausible effective date, scope, or penalty because briefs conventionally include those details and the model has seen many real regulatory briefs with them present, which here would mean inventing exactly the facts that haven't actually been confirmed and handing leadership something that looks authoritative but isn't. Explicitly restricting the model to what was described, and instructing it to list open questions rather than guess at their answers, is the direct countermeasure — it keeps the brief honest about the boundary between what's known and what needs verification, which is the entire point of a brief meant to prompt action rather than substitute for it. Requiring the organizational relevance section to stay concrete and specific (based only on the org_relevance input) rather than drifting into general commentary about the regulatory area keeps the brief useful to this specific audience instead of reading like a generic explainer they could have found in a newsletter themselves. Separating "open questions" from "immediate next steps that don't depend on those answers" solves a real organizational stall pattern where a brief that only lists unknowns produces no action because everyone is waiting for someone else to resolve the uncertainty first — giving concrete, unblocked next steps (confirm with counsel, assign an owner) means the brief drives movement even while the underlying facts are still being verified, which is exactly the state most regulatory-change briefs are written in.`,
     exampleOutput: `Summary (unverified, pending confirmation): We've heard from an industry newsletter that our state may introduce pay transparency requirements for job postings, though we haven't seen the actual bill text or an effective date. Relevance to us: we post 15-20 openings monthly across 3 states without salary ranges, so if this applies to us as described, it would require a real change to our hiring workflow. Open questions: exact effective date, which of our 3 states are covered, whether existing postings need updating or only new ones. Next steps: assign HR to confirm the bill's actual text and status this week; loop in outside counsel before making any posting changes. This brief is based on unverified information and must be confirmed against the actual regulatory source and reviewed by a qualified compliance lawyer before any action is taken.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -965,12 +1017,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`issue-spotting`, `legal-prep`, `fact-pattern-analysis`, `pre-consultation`, `dispute-prep`],
+    tags: [
+      `issue-spotting`,
+      `legal-prep`,
+      `fact-pattern-analysis`,
+      `pre-consultation`,
+      `dispute-prep`,
+    ],
     whyItWorks: `Issue-spotting is a genuinely different task from legal advice, and the difference lives entirely in whether the output narrows to a conclusion or stays open across possibilities — a model that isn't explicitly told to surface multiple angles will naturally converge on the single most likely-sounding issue and present it with more confidence than the fact pattern alone actually supports, which is the opposite of what someone preparing for a lawyer conversation needs, since the lawyer's actual value is often in the angles the client didn't think to ask about. Requiring each flagged issue to cite the specific triggering fact rather than stand as a bare label keeps the exercise anchored to what's actually in the fact pattern instead of a generic "situations like this often involve" list, and it gives the person reading the output a way to judge for themselves whether the flag makes sense given what they know that wasn't in the prompt. Explicitly asking what additional facts would change which issues matter is what makes this genuinely useful pre-consultation prep rather than a parlor trick — a lawyer's first move in an actual consultation is almost always to ask for missing facts, and surfacing that need in advance means the person walks in already knowing what to have ready, shortening the expensive part of the actual legal conversation. The hard prohibition on stating likely liability, lawfulness, or outcome is the core safety mechanism distinguishing this from unauthorized legal advice: issue-spotting from an incomplete, one-sided fact pattern cannot responsibly produce a liability judgment, because the model has only heard one side and none of the actual applicable law's nuance, and pretending otherwise would hand someone a false sense of their position's strength or weakness before they've even talked to someone qualified to assess it.`,
     exampleOutput: `Legal area: Breach of confidentiality agreement — Triggering fact: employee had access to the client list under a signed confidentiality agreement — Uncertainty: depends on whether the client list meets the agreement's definition of confidential information, which you'd need to check against the actual document. Legal area: Trade secret misappropriation — Triggering fact: use of a client list to compete — Uncertainty: depends on whether reasonable steps were taken to keep the list secret, which is a factual question a lawyer would need more detail to assess. Facts to clarify: what does the confidentiality agreement's definition section actually say; did you take any steps to mark the list confidential. This is issue-spotting to prepare for a lawyer conversation, not legal advice — consult a qualified lawyer before taking any further action, including anything related to your cease-and-desist email.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1034,12 +1090,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`due-diligence`, `mergers-and-acquisitions`, `deal-prep`, `risk-assessment`, `investment-prep`],
+    tags: [
+      `due-diligence`,
+      `mergers-and-acquisitions`,
+      `deal-prep`,
+      `risk-assessment`,
+      `investment-prep`,
+    ],
     whyItWorks: `A generic due diligence checklist treats every deal identically, which is exactly wrong — a customer-concentration worry in a $3M ARR SaaS acquisition needs sharp, specific questions about top-client contract terms and renewal history, while the same checklist applied to a manufacturing asset purchase would waste effort on categories that don't actually carry the deal's real risk; requiring the deal structure, target description, and named concerns up front is what lets the model weight categories by actual relevance instead of listing all of them with equal, shallow coverage. Instructing the model to write questions specific enough that an evasive answer would itself be informative targets a real weakness in how models default to writing diligence questions — "describe your customer contracts" is the kind of question a target's counsel can answer with three vague sentences that sound complete but reveal nothing, while a question asking for a specific percentage and a specific contract term structurally can't be answered evasively without the evasion itself being a signal worth noting. The instruction not to re-ask what's already known and instead go one level deeper is what keeps the list from wasting the actual diligence conversation's limited time restating things the buyer's team has already established, and pushes the model to produce the harder, more useful follow-up question instead of the easy first-level one. The prohibition on predicting answers or recommending whether to proceed is the necessary boundary here: due diligence question generation is a legitimate prep task, but assessing the deal itself requires the actual documents, financials, and legal review that this exercise explicitly hasn't done, and a model volunteering a walk-away recommendation from a short description would be substituting a guess for the entire diligence process this list is meant to kick off.`,
     exampleOutput: `Customer Concentration: What percentage of total revenue comes from your top 3 customers individually and combined? For your largest customer specifically (the 3-year logistics client), what does the current contract term look like, when is the renewal date, and does it include a change-of-control termination right that could be triggered by this acquisition? Flagged: too little information provided about the company's cap table to write specific questions on equity structure — need target's cap table before that category can be scoped. This is a due diligence question-prep aid, not the diligence process itself — qualified legal and financial advisors should conduct the actual review before any decision to proceed.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1113,12 +1173,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`contract-negotiation`, `legal-draft`, `business-ops`, `briefing-document`, `risk-tiering`],
+    tags: [
+      `contract-negotiation`,
+      `legal-draft`,
+      `business-ops`,
+      `briefing-document`,
+      `risk-tiering`,
+    ],
     whyItWorks: `The three-tier clause structure works because it forces GPT-5.1 to make an explicit tradeoff judgment per clause instead of producing a flat, undifferentiated summary of the contract — a model asked to just 'summarize the negotiation points' tends to list every clause with equal weight, which is useless in an actual room where you have maybe three real asks and need to know which one to spend leverage on first. Requiring a stated floor per must-hold clause, and explicitly flagging clauses where no floor was given, closes a specific failure mode: language models are fluent enough to generate a plausible-sounding fallback position on their own, and a briefing that quietly fills that gap can hand a negotiator a false sense of where the walk-away line is. The instruction to never draft actual contract language keeps the output in the right lane — a negotiation-points briefing is a human coordination document, and blurring it into redline drafting is exactly where an unqualified AI opinion starts masquerading as legal work product. The explicit refusal to characterize enforceability or governing law matters because indemnification caps, non-compete lengths, and exclusivity terms are all enforced wildly differently across jurisdictions, and a model has no way to know which jurisdiction's courts would actually hear this deal from a plain-text summary — asserting a view here would be indistinguishable from legal advice to someone reading quickly under time pressure, which is precisely the moment this document is meant to be used.`,
     exampleOutput: `MUST-HOLD: Uncapped indemnification — Ask: cap at 12 months' fees. Floor: not yet specified, needs a decision before the call. Trade: offer faster payment terms in exchange. NEGOTIABLE: Non-compete length — Ask: 6 months. Floor: 9 months. Trade: accept if exclusivity territory count is reduced by one. This briefing is a negotiation planning draft only, not legal advice — have a qualified lawyer review the underlying terms and confirm fallback positions before the call.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1186,12 +1250,16 @@ A short memo: one-paragraph overview stating how many changes are risk/money, co
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`redline-summary`, `contract-review`, `plain-language`, `stakeholder-communication`, `legal-draft`],
+    tags: [
+      `redline-summary`,
+      `contract-review`,
+      `plain-language`,
+      `stakeholder-communication`,
+      `legal-draft`,
+    ],
     whyItWorks: `The three-way sort into risk/money, control/flexibility, and administrative-only exists because GPT-5.1's default instinct on a raw redline is to walk through changes in document order and describe each with roughly equal narrative weight, which buries the two or three items a stakeholder actually needs to react to inside a wall of renumbering and defined-term cleanup — sorting first, and explicitly naming when most changes are administrative, gives the reader permission to skim past the noise instead of reading every line with the same anxious attention. Asking for the plain-business-meaning framed specifically around the named stakeholder's role, rather than a generic explanation, matters because 'why does this change matter' has a different answer for a salesperson worried about account continuity than for a finance lead worried about liability exposure, and a summary that answers the wrong version of that question gets skimmed and ignored. The instruction to say what's missing rather than guess at practical impact heads off a known model behavior: given a change plus adjacent business context, GPT-5.1 will readily infer a plausible-sounding consequence even when the actual facts needed (deal history, insurance coverage, prior relationship terms) weren't supplied, and a stakeholder repeating that inferred consequence to their own boss as if it were confirmed is exactly the failure this prompt is built to prevent. The refusal to characterize enforceability or industry-standard-ness keeps the summary in translation territory rather than legal-opinion territory, which is the only place an AI-generated document belongs before a lawyer has actually reviewed it.`,
     exampleOutput: `Overview: 5 changes total — 2 shift risk/money, 1 shifts control, 2 are administrative renumbering only. RISK CHANGE: Liability cap raised 1x to 3x annual fees. Before: capped at one year's fees. After: capped at three years' fees. What it means for you: if something goes wrong, our maximum exposure on this account triples — worth a direct conversation with legal before signing. This is a plain-language summary for internal discussion only, not legal advice — a qualified lawyer should review the actual redline before signing.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1253,12 +1321,16 @@ A table: Obligation | Trigger | Responsible Party | Cadence | Consequence-if-mis
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`obligation-extraction`, `contract-management`, `compliance-tracking`, `legal-draft`, `operations`],
+    tags: [
+      `obligation-extraction`,
+      `contract-management`,
+      `compliance-tracking`,
+      `legal-draft`,
+      `operations`,
+    ],
     whyItWorks: `The instruction to separate one-time closing obligations from truly recurring ones addresses a common and costly extraction mistake: a naive prompt asked to 'list obligations' will mix in signing-day deliverables with genuinely ongoing duties, and an operations owner scanning that combined list either wastes time re-tracking things already done or, worse, treats a stale one-time item as still active and misses the recurring one buried below it. Requiring the exact trigger rather than a paraphrased sense of timing matters because GPT-5.1, like most models, will smooth over vague contractual language such as 'reasonable notice' or 'periodically' into a specific-sounding default (commonly 30 days) if not explicitly told to flag ambiguity instead — that smoothing is fine for a casual reading but dangerous in a tracker someone will set calendar reminders from, since the fabricated specificity looks identical to an actual contractual deadline once it's sitting in a spreadsheet cell. The refusal to calculate calendar dates from relative language without an anchor date closes the same gap at the point of highest consequence: 'within 30 days of go-live' is meaningless as a tracked deadline until go-live actually happens, and a model willing to just pick a plausible date would hand the owner a false due date that could cause an actual missed obligation. Restricting the model from judging whether any obligation is burdensome or negotiable keeps this squarely a post-signature operational tool rather than a re-litigation of a deal that's already closed, which is the correct scope for something meant to run for the life of the contract, not just at drafting time.`,
     exampleOutput: `Obligation: Maintain cyber liability insurance, $2M minimum. Trigger: continuous, certificate due annually on contract anniversary. Responsible: Vendor. Consequence if missed: not stated in excerpt provided — flag for full-document check. Ambiguous: no. This extraction is a draft operational aid only — a qualified lawyer should review the source contract and confirm completeness before this tracker is relied on.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1326,12 +1398,16 @@ A sorted table: Contract | Term End | Auto-Renew (Y/N) | Notice Window | Calcula
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`renewal-tracking`, `contract-management`, `compliance-calendar`, `legal-draft`, `deadline-management`],
+    tags: [
+      `renewal-tracking`,
+      `contract-management`,
+      `compliance-calendar`,
+      `legal-draft`,
+      `deadline-management`,
+    ],
     whyItWorks: `Requiring GPT-5.1 to show the calculation rather than just the final deadline date exists because a language model computing backward from a term-end date through a notice window and an internal lead-time buffer is doing multi-step arithmetic on dates, a task where a fluent-sounding wrong answer is common and hard to spot without the intermediate steps shown — a visible calculation lets a human catch an off-by-one error in the notice window before it becomes a missed deadline, where a bare final date would hide the exact same error behind confident formatting. The flag for already-passed deadlines is placed as the single most emphasized output element because that's the one scenario where an auto-renewal may have already silently locked in, and a sorted list that treats a passed deadline the same visual weight as a comfortable future one buries the actual emergency inside routine housekeeping. The refusal to assume a default notice window like 30 or 60 days when the contract doesn't state one directly targets a plausible-completion failure mode: those are the two most common notice-window lengths in commercial contracts, so a model filling the gap with one of them will often just happen to be right, which is exactly what makes it dangerous — an occasionally-correct guess presented with the same confidence as a verified figure teaches the user to trust a number that was, this time, fabricated. Keeping the tracker to deadline mechanics only, with no opinion on whether renewing is a good idea, is what keeps this a scheduling tool instead of a business-advice tool, which matters because the consequence of getting the underlying renewal decision wrong is a business call for a human, while the consequence of getting the date math wrong is the kind of error this specific prompt structure is built to catch.`,
     exampleOutput: `URGENT — Contract B: action deadline needs source check, term end date unclear from input, cannot confirm status relative to 2026-08-14. Contract A: term end 2026-11-30, 90-day notice window starts 2026-09-01, minus 14-day internal buffer = action deadline 2026-08-18. Nearest deadline: Contract A in 4 days. This tracker is a draft scheduling aid only — a qualified lawyer should verify actual notice requirements against the signed contracts before anyone relies on these dates.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1396,9 +1472,7 @@ For each issue: Issue / Governing Framework (general category only) / Relevant F
     tags: [`legal-memo`, `issue-spotting`, `irac`, `internal-draft`, `legal-research`],
     whyItWorks: `Structuring the Rule section to name only the general category of governing framework, never the substance of what a law actually requires, is the mechanism that keeps this exercise from silently becoming legal advice: GPT-5.1's training data includes enormous amounts of general legal commentary, which makes it fluent at producing a specific-sounding statement of 'what the law says' that is frequently outdated, jurisdiction-mismatched, or simply an oversimplification of a more nuanced doctrine — restricting the model to naming the category (contract interpretation, a named statute only if the user supplied it) rather than its content removes the exact surface where that fluent-but-unverified confidence would otherwise leak into the output. Requiring the Conclusion section to name research needed rather than a legal conclusion inverts the normal shape of a memo on purpose, because the actual value of a first-pass issue-spotting draft is organizing facts and questions for a lawyer to pick up efficiently, not pre-empting the answer a lawyer is specifically qualified and retained to determine — a memo that confidently concluded 'this is likely retaliation' would get treated as the answer by a busy reader even with a disclaimer attached, while a memo that says 'this needs a lawyer to check California Labor Code retaliation standards against these specific facts' cannot be mistaken for anything but a to-do list. Framing each issue as a question rather than a statement reinforces the same discipline throughout the document, and the urgency-ranking step gives the memo practical value — telling a reader which open question to send to counsel first — without requiring the model to have resolved any of them, which is the one thing it is never positioned to do reliably from a fact pattern alone.`,
     exampleOutput: `ISSUE: Does termination two days after an internal overtime complaint raise a retaliation concern under the applicable framework? GOVERNING FRAMEWORK: Employment retaliation principles generally (jurisdiction-specific statute not yet confirmed). RELEVANT FACTS: two-day gap between complaint and termination; stated reason (restructuring) has no supporting documentation. RESEARCH NEEDED: confirm applicable state retaliation statute and its causation standard; request documentation of the restructuring decision timeline. URGENCY: high, given proximity in time. This is an internal issue-spotting draft only, not legal advice — a qualified lawyer must research and complete this analysis before any conclusion is acted on.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1460,12 +1534,16 @@ A strict chronological table: Date (or approximate date, noted as such) | Event 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`evidence-chronology`, `timeline-building`, `litigation-support`, `legal-draft`, `document-review`],
+    tags: [
+      `evidence-chronology`,
+      `timeline-building`,
+      `litigation-support`,
+      `legal-draft`,
+      `document-review`,
+    ],
     whyItWorks: `The single hardest rule in this prompt — no interpretation, no causal claims, no characterizing adjectives — exists because a chronology's evidentiary value depends entirely on it being a neutral ordering of sourced facts, and GPT-5.1 left to its own devices will naturally narrate a sequence of events with connective interpretive language ('this suggests,' 'following this pattern') because that's what makes prose readable; that narrative gloss is exactly the thing that turns a useful organizational tool into an argument a lawyer would need to have deliberately constructed with full awareness of its persuasive framing, not something that arrived pre-baked from an AI draft. Requiring a source citation on every single entry, rather than a general note about which documents were used, matters because a chronology someone actually relies on needs to be independently checkable line by line against the underlying material — an entry without a traceable source is a claim resting on the model's summarization alone, which is not a standard anyone should accept for something meant to represent facts, not analysis. The instruction to preserve, not resolve, conflicting dates across sources is a specific defense against a model's tendency to quietly pick the more coherent-sounding version when two sources disagree; that conflict is frequently itself the meaningful fact (who said what, when, and whether accounts differ), and silently smoothing it away would erase exactly the kind of detail a chronology exists to preserve. Refusing to exclude events that seem unfavorable to the stated matter context keeps the model from doing the lawyer's job of selecting a narrative, which is a judgment call that requires legal strategy and privilege considerations an AI model has no visibility into and should never be making unsupervised.`,
     exampleOutput: `March 14, 2026 — Partner A emails Partner B proposing a 60/40 profit split, citing 'increased time commitment.' Source: Email, March 14 2026, 9:42am. Approx. late March 2026 (referenced as 'the March call' in handwritten notes, exact date not stated) — Handwritten note references a phone call where B allegedly agreed to revisit the split 'after Q2.' Source: Handwritten note, undated, cross-referenced to March. CONFLICT: Partner A's April 2 email states B 'never agreed to revisit anything.' This chronology is a draft organizational aid only — a qualified lawyer must verify its accuracy against original documents before it is used in any matter.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1532,12 +1610,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`legal-research-brief`, `case-research`, `internal-knowledge-audit`, `legal-draft`, `outside-counsel`],
+    tags: [
+      `legal-research-brief`,
+      `case-research`,
+      `internal-knowledge-audit`,
+      `legal-draft`,
+      `outside-counsel`,
+    ],
     whyItWorks: `The three-bucket sort — confirmed by prior counsel, assumed or inherited, and contradictory — targets a specific and expensive failure mode in how legal knowledge actually degrades inside a company: a piece of advice given by a lawyer in one specific context (a particular state, a particular year, a particular fact pattern) gets repeated informally until the team treats it as a general, portable rule, and by the time it reaches a new context nobody remembers it was ever conditional. GPT-5.1 is well suited to surfacing this pattern because it can read a mixed pile of notes and messages and separate what was actually attributed to counsel from what was inferred or assumed along the way, but only if explicitly instructed not to smooth the two together into one confident-sounding narrative, which is what a plain summarization request would naturally do. The instruction never to upgrade a repeated assumption to 'confirmed' status directly targets the mechanism by which company folklore acquires false authority — frequency of repetition inside internal messages has zero bearing on whether a lawyer actually verified the claim, and a model that let repetition count as evidence would launder an unverified assumption into something that reads as settled. The hard rule against attempting even a provisional answer to the core question exists because the entire value of this document is in making the handoff to a real lawyer cleaner and faster, not in trying to shortcut it — a provisional AI answer sitting at the top of a research brief is the single most likely thing to get copy-pasted into a decision memo under time pressure, which is exactly the scenario this prompt is designed to prevent.`,
     exampleOutput: `RESTATED QUESTION: Is the existing NDA's non-solicit clause, originally advised as enforceable in our home state, also enforceable against a former employee now in the new expansion state? CONFIRMED BY PRIOR COUNSEL: Non-solicit enforceability in home state — source: outside counsel email, 2023. ASSUMED OR INHERITED: That this advice extends to the new state — source: internal Slack thread, no counsel involved, never actually confirmed. RESEARCH GAP: Whether the new state's law treats non-solicit clauses the same way as the home state. This is a research-organization draft only — a qualified lawyer must research and answer the actual question.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1606,12 +1688,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`client-intake`, `legal-triage`, `law-firm-operations`, `legal-draft`, `conflicts-check`],
+    tags: [
+      `client-intake`,
+      `legal-triage`,
+      `law-firm-operations`,
+      `legal-draft`,
+      `conflicts-check`,
+    ],
     whyItWorks: `Instructing the model to preserve the client's stated goal in their own words, rather than translating it into legal terminology, matters because the gap between what a client asks for ('I want my deposit back') and what they may actually need (a claim under a specific statutory deposit-return framework, or a broader dispute about habitability) is exactly the judgment a lawyer is trained and retained to make, and a summary that's already been translated into legal-sounding language robs the lawyer of seeing the client's original framing, which often contains cues about what they actually care about beyond the literal ask. The explicit conflicts-check extraction step exists because conflict screening is a procedural requirement most firms run before any substantive engagement, and it depends on completely and plainly listing every named party and organization mentioned — a summary that only surfaces 'legally relevant' names, using the model's own judgment of relevance, risks quietly dropping a name that turns out to matter for conflicts purposes even though it seemed incidental to the narrative. The hard rule against filling ambiguous gaps with plausible assumptions is the single most load-bearing instruction here: intake notes are frequently incomplete or contradictory because clients themselves are recalling events under stress, and GPT-5.1's default behavior when summarizing incomplete information is to quietly smooth it into a coherent narrative — converting every such gap into an explicit clarifying question instead means the lawyer's first follow-up call is targeted at the real open questions rather than starting from a summary that has silently papered over exactly the details that needed to be asked about. Refusing to characterize claim strength or likely outcome keeps the tool in the pre-legal-judgment lane, which is the only appropriate lane for an intake summary a lawyer hasn't yet independently reviewed against the client directly.`,
     exampleOutput: `CLIENT'S STATED GOAL (own words): 'I just want my deposit back before I move.' URGENCY FLAG: Client moving in 3 weeks; unclear if a legal filing deadline applies — ask client for exact move-out and lease-end dates. NAMES FOR CONFLICTS CHECK: [Landlord name], [Roommate name] — both mentioned, run through conflicts database. OPEN QUESTION: Client did not specify state or lease terms — needed before applying any deposit-return timeline. This is an intake organization draft only — a qualified lawyer must review it and speak with the client directly before any advice is given.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1682,12 +1768,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`compliance-training`, `learning-design`, `policy-training`, `legal-draft`, `scenario-based-learning`],
+    tags: [
+      `compliance-training`,
+      `learning-design`,
+      `policy-training`,
+      `legal-draft`,
+      `scenario-based-learning`,
+    ],
     whyItWorks: `Requiring every learning objective to map to a specific provision in the supplied policy text, and explicitly permitting the model to say the policy is thin on an expected topic, prevents the single most common failure of AI-generated compliance training: a model asked to write a generic 'gift and hospitality training' will readily produce plausible-sounding content drawn from common industry patterns rather than the organization's actual rules, and an employee trained on generic best practices instead of the specific $75 threshold and 5-day reporting window their own company enforces will confidently apply the wrong standard, which is arguably worse than no training at all. Anchoring the scenario exercises in real past incidents, when supplied, works because GPT-5.1 can extrapolate a believable 'tempting wrong instinct' from an actual documented mistake (employees rationalizing that an experience isn't a gift) far more precisely than it can invent a generic temptation from scratch — and a scenario built on the organization's real failure mode teaches the exact judgment call that previously went wrong, rather than a plausible-sounding but different one. The hard prohibition on inventing legal citations or penalties not present in the supplied policy text is the load-bearing safety rule in this prompt: compliance training that states a wrong dollar threshold, an incorrect reporting deadline, or a fabricated regulatory citation doesn't just fail to reduce risk, it actively creates a paper trail showing employees were affirmatively trained on incorrect information, which is a materially worse position in any later investigation than having given no training at all — grounding every substantive claim strictly in what was supplied, and asking for real citations rather than generating plausible ones, is what keeps the training outline from becoming that liability.`,
     exampleOutput: `LEARNING OBJECTIVE: Correctly identify when a vendor-provided experience (not just physical gifts) triggers the $75 reporting threshold, addressing last year's conference-ticket incident directly. SCENARIO: A vendor offers you two tickets to a conference valued at $200 each, framed as a 'networking opportunity' rather than a gift. Correct action per policy: report within 5 business days, since value exceeds $75 regardless of framing. Tempting wrong instinct: assuming 'experiences' are exempt from the gift definition, which the policy text does not support. This outline is a training-design draft only — the underlying policy content and any legal citations must be reviewed and approved by a qualified lawyer or compliance officer before delivery.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1749,12 +1839,16 @@ A prioritized table: Control | Expected Evidence Type | Evidence Status (have / 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`audit-prep`, `compliance-checklist`, `controls-testing`, `legal-draft`, `risk-prioritization`],
+    tags: [
+      `audit-prep`,
+      `compliance-checklist`,
+      `controls-testing`,
+      `legal-draft`,
+      `risk-prioritization`,
+    ],
     whyItWorks: `The distinction drawn throughout this prompt between a control existing in policy versus being evidenced in operation is the central mechanism auditors themselves use, and it's the exact distinction a naive AI summary would collapse — asked simply to 'check our controls,' a model will tend to treat a well-written policy description as if it implies operating evidence, when in reality an auditor's actual job is verifying the gap between the two, and a checklist that makes the same assumption an auditor is specifically trained to distrust would be actively counterproductive prep. Ranking prior audit findings above newly-known gaps, above untested-but-believed-solid controls, reflects how audits actually work in practice: an auditor who flagged something last cycle will specifically check whether it was remediated, so an unaddressed repeat finding carries materially higher risk than a fresh gap the auditor hasn't seen yet, and a flat, unprioritized checklist would waste limited prep time treating both with equal urgency. Suggesting interim compensating steps rather than full fixes is a deliberately narrow scope decision — with real time constraints before an audit date, the useful output is 'what reduces exposure right now,' not a long-term remediation plan that can't be executed before the audit anyway, and conflating the two would produce a checklist too ambitious to actually act on in the available window. The refusal to invent specific regulatory citations or standard-specific evidence requirements matters most in audits against a named framework (SOC 2, ISO 27001, a specific regulation), because those standards have precise, versioned requirements that change over time and vary by scope — a model confidently asserting what 'SOC 2 typically requires' from general pattern-matching risks giving false comfort that a gap is covered when the actual current standard requires something different, which is precisely the kind of false readiness an audit is meant to catch, not create.`,
     exampleOutput: `CONTROL: Offboarding checklist completion. EXPECTED EVIDENCE: Signed-off checklist per departure, system access-removal timestamp. EVIDENCE STATUS: Partial — checklist exists, sign-off evidence missing for last two departures. RISK RANK: High (known gap, and adjacent to last year's access-review sign-off finding). INTERIM STEP: Retroactively document and have the control owner sign off on the last two departures' completion before the audit window opens. This checklist is an audit-preparation draft only — a qualified compliance professional or lawyer must confirm actual requirements and review it before it represents audit readiness.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1822,12 +1916,16 @@ A table: Our Requirement | Corresponding DPA Clause (or "none found") | Match St
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`dpa-review`, `data-processing-agreement`, `vendor-risk`, `legal-draft`, `privacy-compliance`],
+    tags: [
+      `dpa-review`,
+      `data-processing-agreement`,
+      `vendor-risk`,
+      `legal-draft`,
+      `privacy-compliance`,
+    ],
     whyItWorks: `Structuring this as a clause-mapping exercise against explicitly stated requirements, rather than an open-ended 'review this DPA' request, matters because it forces a binary, checkable comparison for each requirement instead of a general narrative impression — a model asked to just review a DPA will produce a plausible-sounding summary of its overall tenor, while a model asked to map each stated requirement to its corresponding clause (or the explicit absence of one) produces something legal can act on directly, sorted by exactly where the gaps are. Treating silence on sub-processor approval rights or data location as a flag in its own right, rather than something to note only if it seems concerning, reflects a specific and common pattern in vendor DPAs: vendors frequently omit or soften exactly these two topics because they're the ones most likely to constrain the vendor's own operational flexibility, so a DPA that says nothing about data location isn't neutral, it's often a deliberate gap, and treating silence as equivalent to 'no issue found' would miss the most common way real risk hides in these documents. The explicit prohibition on asserting what data protection law actually requires — retention limits, transfer mechanisms, breach deadlines — protects against the most consequential failure mode in this domain: those requirements are jurisdiction-specific, frequently updated, and materially different across frameworks, so a model stating a specific number (like a breach notification deadline) from general pattern knowledge rather than the user's stated requirement risks the reviewer treating an outdated or wrong figure as an authoritative benchmark, when the only safe move is comparing against what the organization has actually confirmed as its own requirement.`,
     exampleOutput: `OUR REQUIREMENT: Prior approval required for new sub-processors. DPA CLAUSE: Schedule A lists current sub-processors, section 4.2 states notice-only for future additions. MATCH STATUS: Gap — DPA provides notice, not approval rights. FLAG: Sub-processor topic addressed but weaker than our stated requirement; recommend legal push for approval-rights language given known use of offshore contractors. This is a pre-review comparison draft only — a qualified lawyer must review the full agreement and make the actual acceptance decision.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1889,12 +1987,16 @@ A structured policy draft with the five sections above, each opening with "DRAFT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ai-governance`, `internal-policy`, `risk-tiering`, `legal-draft`, `ai-compliance`],
+    tags: [
+      `ai-governance`,
+      `internal-policy`,
+      `risk-tiering`,
+      `legal-draft`,
+      `ai-compliance`,
+    ],
     whyItWorks: `Grounding the scope and risk tiers in the organization's actual described AI usage, rather than producing a generic 'responsible AI' template, is what makes this draft something legal can meaningfully edit instead of discard — a boilerplate governance policy pulled from common patterns will describe use cases the organization doesn't have and miss the ones it does (like an unrouted AI chatbot pilot in customer support), and a lawyer reviewing a policy that doesn't reflect reality has to do the harder job of first figuring out what's actually happening before they can even assess whether the policy addresses it. The risk-tier structure, with a different approval bar for internal brainstorming versus AI-drafted external communications or decisions about a person, matters because a single blanket rule for all AI use either over-restricts low-stakes internal experimentation (killing adoption teams actually need) or under-restricts genuinely consequential uses, and GPT-5.1 can meaningfully differentiate these tiers once given real examples of both ends of the spectrum, which a generic prompt without that input could not do credibly. The refusal to cite specific AI regulations or their provisions unless explicitly supplied is the most consequential guardrail in this prompt, because AI-specific regulatory frameworks are genuinely new and actively evolving across jurisdictions as of this writing, and a model asserting 'the law requires X' from general pattern knowledge in this exact space is more likely than in almost any other legal domain to be citing something outdated, proposed-but-not-enacted, or simply invented — the instruction to name regulatory compliance only as a consideration for legal to verify, never as a stated requirement, keeps the document honest about the limits of what an AI-generated policy draft can respons ibly assert. Opening every section with "DRAFT —" and repeating the do-not-distribute instruction is a deliberate redundancy against the specific risk that a policy document, once it exists in a shareable form, tends to get treated as final by whoever finds it first, regardless of what a single closing disclaimer says.`,
     exampleOutput: `DRAFT — RISK TIERS: Tier 1 (internal brainstorming, no external output) — no approval required, general awareness training sufficient. Tier 2 (AI-assisted drafting of anything sent externally, e.g. customer communications) — requires manager sign-off and human review before sending. Tier 3 (AI used to make or materially influence a decision about a person, e.g. hiring screening) — requires legal and compliance approval before any pilot begins. This entire document is an internal working draft only, not reviewed or approved by legal — a qualified lawyer must review it against current applicable law before any part of it is adopted.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1956,12 +2058,16 @@ A short policy: title, one-paragraph "why this exists" framed positively, a numb
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ai-use-policy`, `employee-policy`, `plain-language`, `legal-draft`, `data-handling`],
+    tags: [
+      `ai-use-policy`,
+      `employee-policy`,
+      `plain-language`,
+      `legal-draft`,
+      `data-handling`,
+    ],
     whyItWorks: `The instruction to lead with what's encouraged before what's prohibited, and to keep the whole thing under 500 words, directly targets a known failure mode of internal policy documents: a policy that opens with restrictions and runs long reads as adversarial compliance theater, gets skimmed rather than internalized, and employees default back to whatever they were already doing the moment they close the document — a short, front-loaded-with-permission policy is measurably more likely to actually change behavior, which is the entire point of writing one. Requiring data red lines as concrete, instantly-checkable examples rather than abstract categories like 'personally identifiable information' matters because an employee about to paste something into a chat window needs a rule they can apply in the two seconds before hitting enter, and 'PII' requires them to first correctly classify what they're holding as PII, a step most people skip under time pressure — 'customer names paired with account numbers' requires no classification step at all, just pattern recognition against something they're looking at right now. The honest, non-punitive framing of first-violation consequences is a deliberate behavioral design choice, not just a tone preference: a policy that implies severe consequences for any AI-related mistake predictably drives underreporting, since an employee who accidentally pastes something sensitive will hide it rather than flag it if they believe disclosure ends badly for them, which defeats the entire purpose of having a reporting mechanism — stating plainly that a first accidental violation is a training moment, not a punishment, is what makes the reporting channel something people will actually use. The refusal to claim regulatory sufficiency unless legal has actually confirmed it protects against the document being relied on as evidence of compliance it hasn't actually earned, which matters most in exactly the scenario where this policy would later be scrutinized — after an incident, not before one.`,
     exampleOutput: `WHY THIS EXISTS: AI tools genuinely help us move faster — this policy exists so we can use them with confidence, not to slow anyone down. HARD RED LINES: Never paste a customer's name together with their account number or full card number into any AI tool. Never paste unreleased financial results. If you're not sure whether something counts, ask before pasting, not after. FIRST MISTAKE: If you accidentally paste something on this list, tell your manager right away — this is treated as a training moment, not a punishment, the first time. This is a draft pending legal review and must be approved by a qualified lawyer or compliance officer before being published or enforced.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2023,12 +2129,16 @@ A table grouped by business function: Document Category | Business Reason to Ret
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`record-retention`, `document-management`, `compliance-schedule`, `legal-draft`, `litigation-hold`],
+    tags: [
+      `record-retention`,
+      `document-management`,
+      `compliance-schedule`,
+      `legal-draft`,
+      `litigation-hold`,
+    ],
     whyItWorks: `The absolute rule that every legal-minimum retention field reads 'to be confirmed by counsel,' with no exception even for document types where a period like 'seven years for financial records' is widely known informally, is the single most important guardrail in this prompt because retention periods are exactly the kind of fact GPT-5.1 can state with high, unwarranted confidence — these numbers genuinely are common across many organizations, which makes a plausible-sounding assertion frequently correct by coincidence, and that occasional correctness is precisely what makes an unconfirmed number dangerous: a reviewer who sees it hold up twice stops checking the third time, when this specific organization's actual jurisdiction, industry, or contractual obligations require something different. Separating business reason to retain from legal reason to retain, and flagging the origin of current practice as confirmed, rule-of-thumb, or unclear, targets a very common organizational blind spot: retention practices that started as someone's reasonable guess years ago calcify into 'the policy' simply through repetition, and by the time anyone tries to formalize a schedule, nobody can distinguish an actually-confirmed legal requirement from an inherited habit — making the model surface that distinction explicitly, rather than smoothing all current practices into a single confident-sounding table, is what turns this into a genuinely useful audit of existing assumptions rather than a rubber stamp on them. The absolute, no-exceptions rule against recommending disposal of anything under a legal hold exists because a litigation hold is a preservation obligation that overrides any retention schedule by design, and a mistake here — even one flowing from a plausible-sounding schedule an AI produced — could constitute actual spoliation of evidence with real legal consequences, which is categorically different in severity from every other kind of error a retention-schedule draft could contain, and is why this is the one instruction in the prompt stated with zero conditional language.`,
     exampleOutput: `CATEGORY: Accounts payable invoices. BUSINESS REASON TO RETAIN: Audit trail, dispute resolution with vendors. CURRENT PRACTICE: 7 years. ORIGIN: Rule-of-thumb, no one currently recalls a specific confirmed requirement. LEGAL-MINIMUM RETENTION: TO BE CONFIRMED BY COUNSEL. LEGAL HOLD STATUS: Not applicable. CATEGORY: Jensen contract dispute records. LEGAL HOLD STATUS: ACTIVE HOLD since March 2026 — exempt from any disposal regardless of schedule. This schedule is a draft organizational framework only — a qualified lawyer must review and populate confirmed retention periods before it is adopted or used to guide disposal.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2093,12 +2203,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`internal-legal-qa`, `policy-response-draft`, `legal-draft`, `knowledge-reuse`, `response-triage`],
+    tags: [
+      `internal-legal-qa`,
+      `policy-response-draft`,
+      `legal-draft`,
+      `knowledge-reuse`,
+      `response-triage`,
+    ],
     whyItWorks: `The instruction to draft only the covered portion from prior approved language, and to explicitly separate out anything not covered rather than blending it in, is built around a specific and dangerous pattern-matching failure that language models are prone to: given a prior approved answer and a new, similar-sounding question, GPT-5.1 will readily generalize the underlying principle and apply it to the new facts, because that's exactly what makes it useful for most tasks — but a legal answer approved for one specific fact pattern (US offices, a specific approval matrix, a specific dollar threshold) was approved for those exact facts, and whether the same reasoning extends to a different office, a different matrix, or a different threshold is itself a legal judgment call, not a resemblance the model is positioned to validate. Explicitly calling out the EU-versus-US distinction as an example of where similarity assessment matters illustrates why this separation is not pedantic: an EU office may follow an entirely different approval matrix, and a draft that silently applied the US-approved threshold to an EU question would hand someone specific, wrong operational guidance dressed up as previously-approved policy, which is worse than an obviously incomplete draft because it looks fully resolved. Requiring a source note tying the draft back to which specific prior answer it drew from creates an audit trail that lets the reviewing lawyer instantly verify the draft actually tracks what was approved rather than a plausible-sounding paraphrase that drifted from the original substance during rewriting — language models restate things fluently, and fluent restatement is not the same guarantee as faithful restatement, so making the source traceable is what lets a human catch drift before it goes out. The repeated, unconditional instruction that this must never be sent without lawyer review — regardless of how closely it tracks prior approved language — exists because the entire value of this workflow (saving the lawyer time) creates exactly the temptation to skip the review step on a draft that looks clean, which is the one shortcut this prompt is explicitly designed to prevent.`,
     exampleOutput: `DRAFT RESPONSE (covered portion, drawn from prior approved 2025 answer): Per our approval matrix, managers may approve reimbursements up to $2,500 without additional sign-off; anything above that requires finance director approval. NOT COVERED BY PRIOR APPROVAL: The prior approved answer was specific to US offices under the 2025 matrix — whether the EU office follows the same matrix or a separate regional one was not addressed and needs confirmation before this answer can be extended to the EU manager's question. SOURCE: Prior approved answer, US offices, 2025 approval matrix. This is an internal draft only and must not be sent until a lawyer has reviewed and approved it.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

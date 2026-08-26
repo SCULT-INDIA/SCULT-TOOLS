@@ -2587,16 +2587,20 @@ OUTPUT
       },
     ],
     targetTools: [`Midjourney v7`],
-    tags: [`midjourney`, `cinematic-portrait`, `lighting-ratio`, `film-emulation`, `headshot`],
+    tags: [
+      `midjourney`,
+      `cinematic-portrait`,
+      `lighting-ratio`,
+      `film-emulation`,
+      `headshot`,
+    ],
     whyItWorks: `Naming an explicit key-to-fill ratio gives Midjourney a quantifiable instruction instead of a mood word with no fixed meaning — "4:1" specifies exactly how much darker the shadow side of the face should read relative to the lit side, whereas "moody lighting" or "dramatic lighting" is a phrase the model has seen attached to an enormous range of actual contrast levels in training, so it produces an inconsistent, often too-flat result because it has no single number to converge on. V7's default portrait behavior leans toward even, flattering, front-heavy fill light — a holdover from the aesthetic bias baked into what the model considers a "good" portrait — so an explicit ratio is doing real corrective work against that default rather than just adding flavor text on top of it.
 
 Naming a specific film stock instead of the word "cinematic" works for the same reason the ratio does: "cinematic" is a category label with no fixed visual content, while "Kodak Vision3 500T, tungsten-balanced" names an actual color response — warm highlights, cooler shadows, a specific grain structure — that the model has strong, consistent associations for because that stock's look is well-represented and consistently labeled in its training data. Two different film-stock names will reliably produce two visibly different color grades from the same lighting ratio, which is the whole point of naming one specifically rather than reaching for a generic mood tag.
 
 The warning against stacking a vignette on top of the ratio targets a specific, avoidable failure: a strong lighting ratio already produces natural edge falloff as a physical consequence of the light source's falloff curve, and adding an explicit vignette instruction on top of that double-darkens the frame edges, frequently crushing the graded, still-detailed shadow side the ratio was built to produce into flat, textureless black — losing exactly the shadow detail a genuine low-key cinematic look depends on to read as lit rather than simply underexposed.`,
     exampleOutput: `A tightly cropped three-quarter portrait with a clearly deeper shadow side of the face than lit side, warm tungsten-leaning highlights and a cooler shadow tone consistent with the named film stock, and visible shadow detail rather than crushed black at the frame edges.`,
-    verifiedAgainst: [
-      { tool: 'Midjourney', version: 'v7', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'Midjourney', version: 'v7', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -2668,16 +2672,21 @@ One anchor slide, followed by each additional slide sharing its exact --sref val
       },
     ],
     targetTools: [`Midjourney v7`],
-    tags: [`midjourney`, `instagram`, `carousel`, `style-reference`, `sref`, `social-content`],
+    tags: [
+      `midjourney`,
+      `instagram`,
+      `carousel`,
+      `style-reference`,
+      `sref`,
+      `social-content`,
+    ],
     whyItWorks: `A carousel's actual success metric — swipe-through completion — depends on the slides reading as one continuous piece when viewed in rapid sequence, which is a stricter visual bar than five unrelated single posts each judged on their own merits days apart; a viewer's eye catches the edges of adjacent slides in their peripheral vision while swiping, so a color-grade or lighting mismatch between slide two and slide three is far more noticeable here than the identical mismatch would be between two unrelated feed posts. Generating all five slides from five independently-worded prompts, even with identical keyword lists, produces exactly that kind of drift, because each generation still runs through Midjourney's own aesthetic judgment fresh each time with only text to anchor it.
 
 Anchoring every later slide to one chosen first-slide image via --sref, rather than to keywords alone, is what actually closes that gap — --sref conditions each subsequent generation on the anchor's real color grade, lighting character, and texture rather than on the model's independent interpretation of the same adjectives, which is why slide five can depict a completely different subject than slide one and still visually belong to the same shoot. Raising --sw specifically for the slides whose subject matter differs most from the anchor addresses the same style-thinning problem seen across any --sref workflow: the bigger the gap between the anchor's original subject and a new slide's subject, the harder Midjourney's own default aesthetic pulls against the reference style, so an outlier slide often needs a stronger style weight than the rest of the set to stay visually anchored.
 
 Checking each slide against the anchor before generating the next, rather than batch-generating the whole set and reviewing at the end, catches drift while it is still a one-slide problem instead of letting an early inconsistency compound silently across three more generations before anyone notices — by the time a five-slide batch is fully generated, tracing a mismatch back to which slide introduced it is far harder than catching it at slide two.`,
     exampleOutput: `A five-slide carousel where a coffee pour, a bean grind close-up, a finished-drink table shot, an outdoor hands-around-the-cup shot, and a fifth closing shot all share the same warm morning light and neutral palette, reading as one continuous morning-routine story when swiped through.`,
-    verifiedAgainst: [
-      { tool: 'Midjourney', version: 'v7', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'Midjourney', version: 'v7', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2767,16 +2776,21 @@ Treat the result as a fast visual gut-check for a pitch or internal review, not 
       },
     ],
     targetTools: [`Midjourney v7`],
-    tags: [`midjourney`, `brand-moodboard`, `flat-lay`, `grid-composition`, `branding`, `color-palette`],
+    tags: [
+      `midjourney`,
+      `brand-moodboard`,
+      `flat-lay`,
+      `grid-composition`,
+      `branding`,
+      `color-palette`,
+    ],
     whyItWorks: `Describing the image explicitly as a flat-lay photograph arranged into an equal, gutter-divided 2x2 grid gives Midjourney a recognizable compositional template — this exact style of divided product/texture flat-lay is a well-represented photography genre in its training data, distinct from an open-ended "moodboard collage" request with no stated layout logic, which tends to produce an unevenly weighted composition where one visually dominant element crowds the frame instead of four genuinely separate, equally-weighted quadrants. Stating the equal sizing and the thin white gutter explicitly is what actually forces that even division, because an unstated grid defaults to whatever composition the model finds most visually interesting for the described objects, not necessarily the balanced reference-sheet layout a moodboard needs.
 
 Treating each quadrant as its own separately-described physical object — a paint chip, a fabric close-up, a printed card, a standalone object — rather than one paragraph describing "a brand moodboard with these elements" matters because Midjourney renders concrete physical objects with specific material properties far more reliably than it renders an abstract compositional concept like "moodboard" on its own, which has no fixed visual referent and gets interpreted inconsistently. Framing the typography quadrant as a physical printed or embossed card, rather than asking for rendered on-screen lettering, sidesteps Midjourney's well-known unreliability at generating legible arbitrary text — a photographed physical letterform sample is something the model can render convincingly, while asking it to spell out actual brand copy usually produces garbled or misspelled characters.
 
 Locking the palette to hex codes rather than named colors matters here for the same reason it matters in any pattern or brand-matching workflow: a moodboard's entire purpose is color-accurate reference, and named colors drift generation to generation in a way a specific hex value does not. The closing instruction to treat this as a fast first pass rather than a finished deliverable is an honest limitation, not a hedge — a single generated image cannot be individually sourced, credited, or edited quadrant by quadrant the way an actual client-facing brand-guideline document needs to be, so its real value is speeding up the gut-check stage before that real document gets built.`,
     exampleOutput: `One flat-lay image divided into four equal quadrants by a thin white gutter — an olive-green fabric swatch, a macro shot of raw linen weave against cork, a letterpress-printed serif type card, and a hand-thrown ceramic vessel — all lit evenly against the same neutral surface.`,
-    verifiedAgainst: [
-      { tool: 'Midjourney', version: 'v7', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'Midjourney', version: 'v7', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2848,16 +2862,20 @@ OUTPUT
       },
     ],
     targetTools: [`Midjourney v7`],
-    tags: [`midjourney`, `tilt-shift`, `miniature-effect`, `diorama`, `photography-technique`],
+    tags: [
+      `midjourney`,
+      `tilt-shift`,
+      `miniature-effect`,
+      `diorama`,
+      `photography-technique`,
+    ],
     whyItWorks: `The tilt-shift miniature illusion is a specific, well-documented optical effect — a real tilt-shift lens physically angles its lens plane relative to the camera's sensor, which produces an unusually narrow, sometimes wedge-shaped band of sharp focus instead of the ordinary near-to-far focus falloff a normal lens produces, and it is that specific focus geometry the human eye associates with toy and model photography, not the word "small" or "miniature" itself. Prompting Midjourney with "miniature" or "tiny" alone gives the model no information about this focus geometry at all, so it just as often interprets the request literally — rendering small toy-scale props scattered inside an otherwise normal, fully-in-focus scene — as it produces the intended illusion, because both readings are plausible completions of a vague size adjective with no optical instruction attached.
 
 Naming the elevated, oblique camera angle explicitly matters for the same reason: the miniature illusion depends on a viewing angle people associate with looking down at a tabletop model, and a straight-on eye-level shot of the identical scene with the identical focus band applied reads far less convincingly as toy-scale, because that viewing angle is itself part of what the brain recognizes as "looking down at a small thing" independent of focus. Describing both the angle and the focus band together gives the model two mutually reinforcing physical cues rather than one vague style label doing all the work alone.
 
 The saturation and contrast push targets a secondary but well-established convention of toy photography — plastic and resin miniatures reflect light differently than the full-scale materials they represent, typically reading as glossier and more saturated under the same lighting, so real tilt-shift photography of full-scale scenes is conventionally graded with boosted color and contrast specifically to borrow that plastic-toy color signature, and skipping that step leaves an image with the right focus geometry but a color palette that still reads as a real, full-scale photograph rather than a model.`,
     exampleOutput: `A downtown intersection viewed from a high oblique rooftop angle, with only a narrow band across the middle of the frame in sharp focus and the foreground and background falling into soft blur, taxis and traffic lights rendered in boosted, glossy, toy-like saturation.`,
-    verifiedAgainst: [
-      { tool: 'Midjourney', version: 'v7', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'Midjourney', version: 'v7', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2938,16 +2956,21 @@ If this scene is one shot in a longer sequence, keep the {{anamorphic_lens_note}
       },
     ],
     targetTools: [`Midjourney v7`],
-    tags: [`midjourney`, `cinematic-scene`, `anamorphic`, `color-script`, `wide-shot`, `film-look`],
+    tags: [
+      `midjourney`,
+      `cinematic-scene`,
+      `anamorphic`,
+      `color-script`,
+      `wide-shot`,
+      `film-look`,
+    ],
     whyItWorks: `The word "cinematic" on its own is a category label with no consistent visual content — it has been attached to an enormous range of actual looks across the model's training data, so it produces an unpredictable result each time. Anamorphic lens character has specific, well-documented physical traits instead: oval rather than circular background bokeh, caused by the lens's non-spherical elements; horizontal-streaking flare off practical light sources, caused by the anamorphic squeeze itself; and mild edge distortion. Naming those traits directly gives the model concrete optical geometry to render, which is why two different anamorphic-trait descriptions produce two visibly different, specifically anamorphic-looking results, while two different uses of the bare word "cinematic" might produce nothing in common at all.
 
 A color script — borrowed directly from real film production, where a handful of deliberate color beats are planned across an entire sequence before any shot is lit — solves a problem that is otherwise invisible shot to shot: without a locked, reused color description, each individual generated shot might look perfectly graded in isolation while still drifting slightly warmer, cooler, more saturated, or less saturated than its neighbors once several shots from the same intended sequence sit next to each other. Naming two or three specific colors and reusing that exact wording, unchanged, across every shot in the sequence is what actually prevents that drift, since it is the only thing giving each independent generation the same fixed color target to converge toward — Midjourney has no memory between separate generations, so nothing except identically-worded text carries the color decision from one shot's prompt to the next.
 
 The instruction to keep the lens-note and color-script lines worded identically across a multi-shot sequence, while letting the scene and time-of-day lines vary freely, isolates the two variables that actually determine whether a sequence reads as one production: everything else in a shot list naturally changes shot to shot by design, but the optical character and color grade are the two threads that need to stay constant underneath that variation, and even small unintentional wording drift in either one is the most common cause of a shot sequence that ends up looking like footage from several different films spliced together.`,
     exampleOutput: `A wide, 21:9 night highway shot with a lone receding figure, taillights producing horizontal blue-tinted flare streaks and oval background bokeh, graded toward deep teal shadows and warm amber practicals — a look that would hold consistently across other shots in the same sequence sharing the identical lens and color-script wording.`,
-    verifiedAgainst: [
-      { tool: 'Midjourney', version: 'v7', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'Midjourney', version: 'v7', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -3034,16 +3057,21 @@ Reuse the identical {{model_reference_url}} for every look in the set, and re-ch
       },
     ],
     targetTools: [`Midjourney v7`],
-    tags: [`midjourney`, `fashion-editorial`, `cref`, `lookbook`, `character-consistency`, `fabric-rendering`],
+    tags: [
+      `midjourney`,
+      `fashion-editorial`,
+      `cref`,
+      `lookbook`,
+      `character-consistency`,
+      `fabric-rendering`,
+    ],
     whyItWorks: `A fashion lookbook creates a specific conflict that a comic-panel or portrait use of --cref does not: every look is, by definition, a different garment, so the reference image's own clothing is actively unwanted information in every generation after the first. --cw 100, the default, matches face, hair, and clothing together because Midjourney has no separate lever for "match the face but not the outfit" built into the parameter itself — the only way to get that selective match is to deliberately lower --cw into the 10-40 range, which biases the reference match toward facial features and general build while letting the new look's own text description take over the garment entirely, rather than having the reference outfit bleed through or visibly compete with the described one.
 
 Naming actual fabric behavior instead of feeling-words like "flowing" or "elegant" targets a specific, well-known rendering bias: Midjourney's default clothing rendering tends toward a flat, catalog-still drape because that is how a large share of its fashion-photography training data actually presents garments — folded, hung, or standing still rather than caught mid-movement — so a word like "elegant" gives the model an emotional target with no physical information about how the material actually behaves, and it falls back to that same static default regardless of which garment is named. Describing how a specific fabric moves — raw silk lifting in a breeze versus a structured wool coat holding its shape through the same stride — gives the model an actual physical difference to render between two different garments, which "flowing" and "elegant" alone cannot supply since neither names a material property at all.
 
 Re-checking --cw whenever a new look's silhouette differs sharply from the reference image's original outfit addresses the same style-thinning dynamic seen in other reference-image workflows: the bigger the visual gap between what the reference image actually shows and what the current generation is describing, the harder the reference tries to reassert its own visual information, so an oversized, loose silhouette following a reference photographed in a fitted outfit typically needs --cw pushed even lower than the rest of the lookbook to keep the reference's original clothing from fighting the new look's shape.`,
     exampleOutput: `A mid-stride editorial shot of a model whose face and build clearly match the reference image, wearing an oversized raw-silk trench with visible texture and a front hem lifting naturally in motion, against a stark high-contrast studio backdrop — with the same face carrying recognizably into other looks in the set that swap the garment entirely.`,
-    verifiedAgainst: [
-      { tool: 'Midjourney', version: 'v7', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'Midjourney', version: 'v7', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

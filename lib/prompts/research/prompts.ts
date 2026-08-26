@@ -68,12 +68,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`research-plan`, `decision-making`, `deep-research`, `scoping`, `prompt-engineering`],
+    tags: [
+      `research-plan`,
+      `decision-making`,
+      `deep-research`,
+      `scoping`,
+      `prompt-engineering`,
+    ],
     whyItWorks: `A research plan that starts from a topic rather than a decision tends to produce a symmetrical, balanced-sounding outline because there's no asymmetry in the prompt to break the tie — every sub-question looks equally worth including, which is exactly how Deep Research-style tools end up spending their run breadth-first across ten shallow angles instead of depth-first on the one or two that matter. Anchoring the plan to a specific decision and a stated current belief gives the model something to be wrong against: sub-questions get filtered by whether an answer would actually change what happens next, which is a checkable test rather than a vibe. The disconfirming-evidence field matters mechanically because absent an explicit instruction to look for the falsifying case, a model doing broad research over many sources tends toward confirmation by default — most retrievable content about any given belief skews toward supporting evidence simply because that's what gets published and indexed, so the plan has to name the specific shape of contrary evidence to actively hunt for rather than passively wait to encounter it. The explicit exclusions list closes a related gap: without a stated boundary, a sufficiently capable research pass will treat "related and interesting" as license to include, and every included tangent competes for the same limited research budget as the questions that actually matter to the decision.`,
     exampleOutput: `Decision: whether to launch a self-serve annual plan by Q1. Sub-questions: (1) Do comparable SaaS tools see conversion drops after adding annual-only upsells? [would push against launching] (2) What ARPU lift have similar companies reported? [would push toward launching]... Disconfirming check: actively search for post-mortems or forum threads describing conversion drops above 15%, not just case studies celebrating ARPU wins. Excluded: enterprise multi-year contracts.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -135,12 +139,16 @@ Produce the final brief as: (1) the research question restated in one line, (2) 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1 Deep Research)`],
-    tags: [`deep-research`, `source-evaluation`, `research-brief`, `fact-checking`, `prompt-engineering`],
+    tags: [
+      `deep-research`,
+      `source-evaluation`,
+      `research-brief`,
+      `fact-checking`,
+      `prompt-engineering`,
+    ],
     whyItWorks: `Deep Research-style tools operate by issuing many search queries and synthesizing across whatever surfaces, and without an explicit priority ordering the synthesis step treats every retrieved passage as roughly interchangeable evidence — a benchmark with a disclosed methodology and a vendor's own marketing copy both just become "a source that says X," and the summarization step has a structural tendency to average disagreeing numbers into a plausible-sounding midpoint that no individual source actually reported, because a middle value reads as the most defensible synthesis even though it's evidence-free. Naming the low-trust categories upfront gives the model a concrete pattern to check retrieved content against — "is this a vendor's own claim about its own product" is a checkable question the model can apply source-by-source, whereas "be skeptical of biased sources" with no examples leaves the judgment call underspecified and inconsistently applied across the dozens of sources a long run touches. The recency window matters because search-based retrieval doesn't rank by publish date unless told to, so an older, more heavily-cited source can outrank a newer, more accurate one simply because it has more inbound links and mentions; stating the cutoff explicitly forces the model to check dates rather than default to citation volume as its proxy for authority. Requiring a per-claim source tier in the final output creates an audit trail that lets you catch it if the process quietly violated its own priority order somewhere in a long run.`,
     exampleOutput: `Research question: How does on-device transcription accuracy for accented English compare to cloud transcription in 2026? Findings — Tier 1 (independent benchmark, published methodology): a 2026 university study found on-device models trailed cloud by 4-7 WER points on non-native accents. Tier 3 (vendor blog, flagged as self-interested): Vendor X's own post claims near-parity, but discloses no test set. Disagreement noted: the two claims conflict; the independent benchmark is weighted higher per the stated priority order.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -205,12 +213,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`literature-review`, `academic-research`, `synthesis`, `evidence-evaluation`, `research-writing`],
+    tags: [
+      `literature-review`,
+      `academic-research`,
+      `synthesis`,
+      `evidence-evaluation`,
+      `research-writing`,
+    ],
     whyItWorks: `Asked to summarize a set of papers with no other instruction, a model's default organizing principle is the input order — one paragraph per paper, in the sequence they were pasted — because that requires no synthesis judgment and is the safest way to guarantee every source gets mentioned; the result reads complete but never actually compares anything. Restructuring the task around claims rather than papers forces a different kind of pass over the material: the model has to first extract what each paper actually found, then re-group by finding rather than by source, which is the step that surfaces disagreement, because two papers addressing the identical claim sit next to each other instead of three sections apart. Explicitly forbidding invented consensus language matters because language models have a documented tendency toward hedge-free, harmonizing phrasing when synthesizing multiple sources — "the literature suggests" is a smoother sentence to generate than "these two sources disagree and neither is obviously more reliable," so without an explicit instruction against it, real disagreement gets written over with false unity. Tying each conflict back to named methodological differences gives the model a legitimate way to explain disagreement without picking a winner — it's the difference between "these studies contradict each other" (an unhelpful dead end) and "these studies used different pain-measurement instruments and different sample sizes, which plausibly explains the gap" (an actual analytical finding a reader can act on).`,
     exampleOutput: `Claim: standing desks reduce self-reported lower-back pain. Four of six sources report a modest reduction; two report no significant effect. The two null-result studies both used the validated clinical instrument rather than self-reported weekly scores, suggesting the positive results may partly reflect a less sensitive measurement approach rather than a true larger effect. Verdict: conflicting, likely methodology-driven rather than a genuine contradiction in the underlying effect.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -266,12 +278,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`paper-summary`, `academic-research`, `evidence-evaluation`, `critical-reading`, `research-writing`],
+    tags: [
+      `paper-summary`,
+      `academic-research`,
+      `evidence-evaluation`,
+      `critical-reading`,
+      `research-writing`,
+    ],
     whyItWorks: `Summarization inherently compresses, and the easiest compression a model can produce is one that drops qualifiers — "a moderate effect was observed in a small non-representative sample" loses its hedges far more readily than it loses its subject and verb, because hedges are exactly the words a shorter sentence sacrifices first. That default produces summaries that are technically about the right topic but overstate the paper's actual evidentiary weight, which matters enormously when the summary's reader — often someone who will never open the original paper — treats the compressed version as the full claim. Explicitly instructing the model to preserve sample size, design, and the authors' own limitations forces those details to survive the compression pass rather than being the first casualties of it. The instruction to separate finding from discussion-section speculation addresses a specific structural feature of academic papers: authors routinely speculate more broadly in the discussion than their actual data supports, because that's where a paper is allowed to gesture at implications, and a summary that draws from the discussion section as if it were the results section imports that broader, less-supported claim without flagging that it's speculation rather than evidence. Naming the intended use and asking for an explicit verdict on whether the paper alone can support it prevents the summary from silently doing the reader's decision-making for them by implication — it forces the gap between what was found and what someone wants to do with it into the open instead of leaving it to be assumed.`,
     exampleOutput: `What was studied: self-reported productivity among 24 remote tech employees over 8 weeks. Finding: participants reported feeling moderately more productive, but the study used self-report only, no objective output measure, and the sample was small and drawn from a single company. Authors' own caveat: they explicitly note the finding may not generalize beyond tech-sector knowledge work. Verdict: too limited alone to anchor a company-wide policy memo — useful as one supporting data point, not a standalone justification.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -335,12 +351,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`research-question`, `hypothesis-design`, `study-design`, `research-methodology`, `prompt-engineering`],
+    tags: [
+      `research-question`,
+      `hypothesis-design`,
+      `study-design`,
+      `research-methodology`,
+      `prompt-engineering`,
+    ],
     whyItWorks: `A question like "does gamification improve training outcomes" has no single answer because "outcomes" and "improve" are undefined variables the model has to silently pick a value for in order to respond at all — left unspecified, it will typically answer about the most commonly-discussed version of the topic in its training data, which may not be the version relevant to the actual decision at hand. Asking the model to first diagnose the specific ambiguity, rather than jumping straight to a rewrite, forces it to name what's actually missing (population, outcome measure, or baseline) instead of pattern-matching to a generically "better-sounding" version of the same underspecified question. Requiring the tightened question to support a describable "no" result is the practical test for falsifiability: a question phrased so broadly that literally any finding could be spun as a confirming answer isn't actually researchable, it's just a topic, and stating the shape of a negative result upfront is the cheapest way to check whether the rewrite actually fixed that. The trade-off flag at the end matters because tightening a question for falsifiability and preserving the original motivation are in some tension — a maximally falsifiable question is often narrower than the thing someone actually cares about — and surfacing that trade-off explicitly means the person asking gets to decide whether the narrower, answerable version still serves their real purpose, rather than discovering the gap only after the research is done.`,
     exampleOutput: `Ambiguity: "improve training outcomes" doesn't specify whether that means completion rate, quiz score, or long-term retention. Tightened question: Among adult employees completing mandatory annual compliance training, does adding badges and a leaderboard increase 30-day post-training quiz retention scores compared to the same training without gamification? A "no" result: retention scores show no statistically meaningful difference between the gamified and non-gamified groups.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -404,12 +424,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`hypothesis`, `research-methodology`, `study-design`, `causal-reasoning`, `data-analysis`],
+    tags: [
+      `hypothesis`,
+      `research-methodology`,
+      `study-design`,
+      `causal-reasoning`,
+      `data-analysis`,
+    ],
     whyItWorks: `An informal hunch like "X is related to Y" is compatible with almost any observed pattern, which is precisely why it isn't useful as a research hypothesis — a claim that can't be wrong under any realistic outcome hasn't actually staked out a position, it's described a topic. Forcing a stated direction and named variables converts a vague intuition into something a specific dataset could actually contradict, which is the property that makes it worth testing at all rather than just discussing. The alternative-explanation step matters because a model asked directly "is my hunch right" will tend to validate the framing it was given, since the informal belief supplies most of the context for what a "good answer" looks like — explicitly requiring a competing explanation and a way to distinguish it forces a genuine adversarial check rather than an agreeable elaboration of the user's own idea. The final data-sufficiency check closes the most common practical failure in DIY hypothesis testing: someone forms a hypothesis and a plausible alternative, but the data they actually have access to (in this example, ticket timestamps without a way to separate weekend-origin tickets from Monday-origin ones) can't actually tell the two apart, so the whole exercise would produce a result that looks like confirmation regardless of which explanation is true. Surfacing that gap before analysis starts, rather than after producing an unfalsifiable-in-practice conclusion, is the difference between a hypothesis that's testable in principle and one that's testable with the data actually on hand.`,
     exampleOutput: `Hypothesis: Weekend-originated user issues increase Monday ticket volume, independent of overall Monday usage levels. Alternative: ticket volume simply scales with daily active users, which may also be higher Monday. Distinguishing evidence: if ticket volume normalized per active user is still higher on Mondays, the backlog theory holds; if it's flat once normalized, usage volume alone explains it. Data check: available data (timestamps + DAU) is sufficient to run this normalization — no additional data needed.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -461,12 +485,16 @@ A table with columns: Source | Claim | Source Type | Reliability Grade | Basis f
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`evidence-table`, `source-evaluation`, `fact-checking`, `research-methodology`, `decision-support`],
+    tags: [
+      `evidence-table`,
+      `source-evaluation`,
+      `fact-checking`,
+      `research-methodology`,
+      `decision-support`,
+    ],
     whyItWorks: `An evidence table with no grading column implicitly treats every row as equally weighted evidence, and readers tend to take a table's structure at face value — ten rows of claims reads as ten independent confirmations, even if seven of them trace back to the same underlying press release or the same company's own marketing. Requiring an explicit reliability grade with a stated basis forces the model to actually interrogate each source's provenance rather than just extracting its headline claim, which is the step that catches a vendor blog post dressed up as independent evidence or a small pilot study being cited with the same confidence as a large peer-reviewed one. Explicitly forbidding a default-to-Medium pattern matters because "Medium" is the safest grade to assign when a model wants to avoid committing to a judgment — it sounds appropriately cautious without actually being useful, and a table where most rows land on Medium has quietly abdicated the one job the table exists to do. Separating the summary of what the highest-reliability sources support from what the full source list suggests as a whole directly addresses the averaging failure mode: if three low-quality sources and one high-quality source disagree, a naive synthesis leans toward the majority view by source count, when the correct read is usually to weight the single well-evidenced source more heavily than three weaker ones saying the opposite.`,
     exampleOutput: `Source: 2023 UK four-day-week pilot report | Claim: burnout scores dropped, output held steady | Type: independent pilot study | Grade: High | Basis: large multi-company sample, pre-registered methodology, no financial stake in outcome. Source: Company X blog post | Claim: "huge productivity gains" | Type: vendor/company self-report | Grade: Low | Basis: single company, no control group, incentive to report success publicly.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -527,12 +555,16 @@ Per competitor: 1) one-line summary of their actual positioning, 2) a table of t
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`, `Perplexity`],
-    tags: [`competitor-research`, `market-research`, `product-strategy`, `fact-checking`, `research-methodology`],
+    tags: [
+      `competitor-research`,
+      `market-research`,
+      `product-strategy`,
+      `fact-checking`,
+      `research-methodology`,
+    ],
     whyItWorks: `A model asked to research a competitor will, absent other instruction, gravitate toward that competitor's own homepage and pricing page as the primary source, simply because that content is written to be the clearest, most quotable summary of the product and is usually the most heavily indexed page about it — which means the research ends up repeating the subject's own sales pitch back as if it were neutral fact. Explicitly separating "what they claim" from "what's independently verifiable" forces a second retrieval pass against a different kind of source, and naming specific independent source types (review sites, changelogs, documentation) gives the model concrete places to check a claim against rather than leaving "verify" as an abstract instruction it has no obvious way to act on. Requiring a three-way verdict per capability — confirmed, claimed-but-unverified, or absent — matters because it removes the middle-ground option of just describing the feature neutrally without committing to whether it's real; a plain description reads as tacit endorsement even when the model never actually confirmed the claim. Asking specifically for the single most overstated marketing claim trains attention on the genre of vague SaaS superlative language ("AI-powered," "enterprise-grade") that's specifically designed to sound substantive while being unfalsifiable, which is exactly the kind of claim that would otherwise slip through a feature-comparison table unchallenged because it isn't a concrete enough statement to obviously flag as false.`,
     exampleOutput: `Competitor: Monday.com. Positioning: broad work-OS platform targeting cross-functional teams. Native time tracking: confirmed present (documented in their help center), but billable/non-billable tagging requires a paid add-on per their own docs — claimed as "built-in" on the marketing page, actually gated behind a higher tier. Most overstated claim: "AI-powered resource management" with no specifics on what the AI actually does differently from rule-based automation.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -595,12 +627,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`market-research`, `market-sizing`, `tam-analysis`, `business-research`, `data-analysis`],
+    tags: [
+      `market-research`,
+      `market-sizing`,
+      `tam-analysis`,
+      `business-research`,
+      `data-analysis`,
+    ],
     whyItWorks: `Market-sizing exercises are especially prone to a specific failure mode where a model chains several multiplications together and, when it hits a step with no clean data, fills the gap with a plausible round number — a "15% adoption rate" or "roughly 20% of companies" — that reads as confidently as the sourced figures around it, because the output format doesn't distinguish a cited statistic from a made-up placeholder once they're both just numbers in the same equation. Requiring every line to be explicitly labeled sourced or assumed breaks that camouflage: an assumed number sitting next to its stated reasoning invites scrutiny in a way the same number embedded silently in a multiplication chain never would. The sensitivity-flagging requirement matters because market sizing math compounds multiplicatively, so a single soft assumption near the start of the chain can swing the final TAM by multiples, and a single polished output number gives no signal about which input to actually go verify if the number needs to hold up under real scrutiny — asking specifically which assumption the output is most sensitive to turns a black-box calculation into something a reader can prioritize checking. Requiring a range rather than a single figure directly counters the false-precision problem: a bottom-up calculation built partly from assumptions cannot honestly produce a number precise to the dollar, and presenting one anyway implies a level of certainty the underlying inputs don't support.`,
     exampleOutput: `45,000 eligible companies [sourced: Census data] x $8,400 average contract value [sourced: internal data] x est. 30% realistic penetration ceiling within 5 years [assumed: comparable SaaS categories typically plateau between 20-40% penetration] = roughly $113M-$151M TAM range. Most sensitive assumption: the 30% penetration ceiling — at 20% the TAM drops to roughly $76M, at 40% it rises to roughly $151M.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -654,12 +690,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`customer-research`, `jobs-to-be-done`, `qualitative-research`, `user-research`, `product-strategy`],
+    tags: [
+      `customer-research`,
+      `jobs-to-be-done`,
+      `qualitative-research`,
+      `user-research`,
+      `product-strategy`,
+    ],
     whyItWorks: `Synthesizing qualitative interviews into a single narrative is a compression task, and the model's default compression strategy is to find the central tendency and state that as the finding — which works fine when the underlying interviews genuinely cluster around one job-to-be-done, but actively destroys information when they don't, because a blended "customers want debt payoff and also savings tracking" statement ends up describing neither group's actual motivation precisely. Explicitly instructing the model to check for multiple distinct jobs before synthesizing, rather than synthesizing first, changes the order of operations in a way that matters: it has to hold the segments apart mentally before it's allowed to average anything, rather than averaging by default and only noticing the split if asked to check afterward. The instruction to preserve a minority pattern from even one or two interviews addresses a specific statistical misunderstanding that creeps into small-sample qualitative synthesis — with 8 interviews, "only 2 people said this" is not a weak signal to be smoothed toward the majority the way it would be in a 500-person survey, because there's no law of large numbers operating at n=8 to justify treating a minority view as noise. Forbidding percentage language on a small qualitative sample matters because stating "25% of customers" about 2 out of 8 people borrows the rhetorical authority of quantitative research for a sample size where that framing is actively misleading — someone skimming the report would treat that percentage as more robust than the underlying two conversations actually support.`,
     exampleOutput: `Primary job-to-be-done (6 of 8 interviews): When I'm carrying credit card debt and feel like I'm not making progress, I want a clear payoff plan I can actually follow, so I can see a real end date instead of an open-ended balance. Distinct minority pattern (2 interviews): these two users weren't in debt at all — they wanted the app purely to save toward a specific goal (a house down payment), a meaningfully different job the debt-payoff framing doesn't serve.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -723,12 +763,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`trend-analysis`, `data-analysis`, `business-research`, `strategy`, `research-methodology`],
+    tags: [
+      `trend-analysis`,
+      `data-analysis`,
+      `business-research`,
+      `strategy`,
+      `research-methodology`,
+    ],
     whyItWorks: `A model asked to analyze "what looks like a trend" is primed by the user's own framing to find and elaborate on that trend, since agreeing with the premise of a request is the path of least resistance — which means without a specific instruction to stress-test the pattern, the output will tend to describe why the trend makes sense rather than checking whether it's actually there. Requiring the mundane alternative explanation first forces a genuinely adversarial pass: a specific one-off cause (a single referral partner, a seasonal event, a measurement artifact) is concrete enough to actually check against the data, unlike a vague instruction to "be careful" which produces no real scrutiny. The time-window check matters mechanistically because six weeks of data has no way to distinguish a structural shift from a seasonal or coincidental blip — the honest answer when longer historical context isn't available is genuine uncertainty, and a model that fills that gap with a confident trend narrative anyway is doing exactly the kind of unwarranted extrapolation that turns short-term noise into a strategy-deck slide. Explicitly forbidding a recommendation to act on a pattern the analysis itself just flagged as possibly noise closes the most consequential failure mode: a hedge buried in paragraph three of an analysis gets ignored by a reader skimming for the recommendation in the executive summary, so the instruction has to prevent the recommendation from being made at all rather than trusting the hedge to survive downstream summarization.`,
     exampleOutput: `Verdict: can't tell yet given available data. Mundane alternative checked: a single dental-industry conference happened in week 3 of the window and one attendee posted about the product in a niche Slack community — this alone could explain a temporary spike without any lasting shift in the dental-clinic segment's interest. Additional data needed: sign-up trend for this vertical over the prior 6 months, and whether the spike sustains for another 4-6 weeks after the conference effect fades. Current recommendation: do not yet build a dedicated onboarding flow based on this data alone.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -792,12 +836,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`tech-landscape`, `buy-vs-build`, `technology-research`, `vendor-evaluation`, `decision-making`],
+    tags: [
+      `tech-landscape`,
+      `buy-vs-build`,
+      `technology-research`,
+      `vendor-evaluation`,
+      `decision-making`,
+    ],
     whyItWorks: `A generic "map the landscape" request gives a model no principle for what to include or exclude, so it defaults to the most common organizing scheme for that technology category found in its training data — usually a category taxonomy like open-source-vs-managed that may have nothing to do with the actual decision at hand, and it tends toward completeness (listing every notable player) because that reads as more thorough even when most of those players are irrelevant to the specific choice being made. Anchoring the map explicitly to one decision changes the sorting logic entirely: instead of grouping by industry-standard category labels, the model has to group by how each option answers the actual question, which is a fundamentally different and more useful cut of the same information. Treating hard constraints as filters rather than soft caveats matters because a model asked to "keep constraints in mind" will often include a constraint-violating option anyway with a footnote acknowledging the mismatch, which leaves a decision-maker to do the actual filtering themselves — explicitly requiring exclusion forces that filtering to happen upfront where it belongs. Refusing to force a "clear winner" when the evidence doesn't support one addresses a specific pressure in landscape research: a confident recommendation reads as more useful and complete than an honest "it depends, here's what would tip it," so a model will lean toward manufacturing a top pick unless explicitly told that a genuinely still-open decision is an acceptable and more honest output than a premature one.`,
     exampleOutput: `Decision: self-host vs. managed vector store for a 4-person eng team. Excluded outright: fully cloud-only managed options with no on-prem deployment path (fails data residency constraint for one client). Remaining options table: pgvector (self-hosted) — right fit if the team is comfortable owning Postgres ops; wrong fit if uptime SLAs matter more than cost. Weaviate (self-hostable, has managed tier) — right fit if wanting a migration path to managed later without a rewrite. Open question for both: actual ops burden estimate given the team's current bandwidth is still unverified.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -861,12 +909,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`patent-research`, `prior-art`, `ip-strategy`, `legal-research-aid`, `tech-landscape`],
+    tags: [
+      `patent-research`,
+      `prior-art`,
+      `ip-strategy`,
+      `legal-research-aid`,
+      `tech-landscape`,
+    ],
     whyItWorks: `This is deliberately scoped as a non-legal internal research aid, not a substitute for counsel, because a model has no reliable way to perform an actual freedom-to-operate search against the real patent record, and asserting novelty or infringement as fact would present an unverified guess with the confidence of a real legal opinion — the explicit disclaimer at the top, plus the instruction never to invent a specific patent number or filing date, exists precisely to prevent that guess from being mistaken for verified legal fact. The three-tier confidence framing (clear overlap worth flagging / unclear, needs review / distinction looks meaningful) matters mechanically because a binary yes/no on novelty forces the model to resolve genuine uncertainty in one direction or the other, and either resolution overclaims confidence it doesn't actually have; a graded confidence note lets the brief honestly represent "I can see why this might matter, but I can't determine the actual answer" as a legitimate output rather than forcing a false binary. Explicitly forbidding both pure reassurance and pure alarm addresses the two failure modes a model tends toward under ambiguity — either agreeably confirming the user's belief that their invention is novel (since that's what the framing implies they want to hear), or overcorrecting into exaggerated caution that treats every tangential similarity as a serious risk; both directions are less useful to an attorney than a plainly stated, specific list of open questions. The instruction to route any need for a real patent number to an actual database or counsel, rather than fabricating one, is the direct guardrail against the single most damaging failure mode here: a specific-sounding but invented patent citation would look exactly as credible as a real one to someone relying on this brief.`,
     exampleOutput: `This is a preliminary, non-legal research aid only — it does not constitute legal advice or a freedom-to-operate opinion, and any filing or launch decision should be reviewed by a qualified patent attorney before acting on it. Claimed novelty: live, pre-click scroll-based re-ranking versus post-click historical re-ranking. Known similar art: [Search Engine] blog post describing session-based signals — unclear, needs review, since the blog post doesn't specify whether it's pre-click or post-click. Open questions for counsel: does the described competitor patent filing cover pre-click behavioral signals specifically, or only post-click data.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -927,12 +979,16 @@ Section-by-section: 1) section name, 2) the one-sentence claim it exists to esta
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`academic-outline`, `research-writing`, `argument-structure`, `academic-research`, `writing-process`],
+    tags: [
+      `academic-outline`,
+      `research-writing`,
+      `argument-structure`,
+      `academic-research`,
+      `writing-process`,
+    ],
     whyItWorks: `A generic academic outline defaults to the conventional section names for the paper's format because those are the most heavily represented pattern in any training data covering that genre, and generic headers require no actual engagement with the argument to produce — which is exactly why an outline built this way so often turns out to be hollow scaffolding once someone sits down to actually write the Discussion section and realizes it has no defined content. Requiring a one-sentence claim per section forces the model to work out what each section is actually for in this specific argument before naming it, which is a meaningfully different and harder task than just recalling that papers in this format conventionally have a Discussion section. Tying each claim to specific available evidence, and flagging gaps where none exists yet, surfaces the outline's actual weaknesses at the cheapest possible stage — before a full draft has been written around a claim nobody can actually support with the data on hand. The instruction to deliberately place the acknowledged weakness rather than let it go unaddressed matters because a model given a thesis to argue for will, absent explicit instruction otherwise, tend to build the outline as pure advocacy for that thesis, since that's the straightforward way to satisfy "help me argue for X" — deliberately building in the paper's own weak point, and choosing where to address it head-on, produces a more credible outline than one that silently hopes a reviewer won't notice the confound, which they will.`,
     exampleOutput: `Methods section — Claim: the study design isolates review-style effects on merge time and burnout while being transparent about its limitations. Evidence: 6 months of merge-time data, both teams' burnout surveys. Weakness placement: the confound (async team also had a lighter project load) is addressed directly in Methods rather than left for Discussion, framed as a limitation the Results section's interpretation must account for rather than a surprise raised later.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -986,12 +1042,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`research-synthesis`, `conflicting-evidence`, `data-analysis`, `decision-support`, `research-methodology`],
+    tags: [
+      `research-synthesis`,
+      `conflicting-evidence`,
+      `data-analysis`,
+      `decision-support`,
+      `research-methodology`,
+    ],
     whyItWorks: `Asked to produce one coherent brief from multiple findings, a model's cleanest path is to write a unifying narrative sentence that sits comfortably between disagreeing results — "studies suggest a moderate effect" when the actual inputs were one strong effect and one null result — because that sentence is fluent and sounds authoritative even though no individual source actually supports it; it's synthetic in the worst sense, a claim manufactured by the act of averaging rather than found in any evidence. Grouping by claim rather than by source is what makes disagreement visible in the first place, since findings about the identical question end up adjacent instead of scattered across separate per-source summaries where a reader has to notice the contradiction themselves. Checking each disagreement against named source differences gives the model a legitimate, evidence-grounded way to explain a conflict without picking a winner arbitrarily — and explicitly allowing "this doesn't cleanly explain it" as a valid answer matters because not every disagreement has a tidy methodological explanation, and forcing one where none genuinely exists just relocates the false-resolution problem one level down. The final "bottom line" structure that separates well-supported, contested, and genuinely unknown directly serves the stated decision purpose: a decision-maker reading this needs to know not just what the evidence says but how confident to be in each piece of it, and collapsing that distinction into one smooth paragraph would strip out exactly the information needed to weigh a split evidence base responsibly.`,
     exampleOutput: `Claim: the pricing change increased churn. Conflicting — cohort analysis shows a measurable churn increase among new customers; survey data shows long-tenured customers reporting no noticed change. Explanation checked: source difference (new vs. long-tenured customers) plausibly explains part of the gap, since new customers have less switching-cost inertia, but doesn't fully resolve it since the survey may simply be less sensitive than behavioral cohort data. Bottom line: churn impact on new customers looks reasonably well-supported; impact on the existing base remains genuinely unclear and needs more data before a company-wide rollback decision.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1056,12 +1116,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`literature-review`, `research-gap`, `evidence-synthesis`, `academic-writing`, `deep-research`],
+    tags: [
+      `literature-review`,
+      `research-gap`,
+      `evidence-synthesis`,
+      `academic-writing`,
+      `deep-research`,
+    ],
     whyItWorks: `The core failure this avoids is the model quietly averaging a genuine disagreement between sources into a hedged middle position — GPT-5.1's default synthesis behavior tends to smooth conflicting claims into something like "results are mixed," which erases exactly the information a gap statement needs, since a real contradiction between two credible sources is often the gap itself, not noise to be flattened. Forcing three explicit buckets (convergence, conflict, silence) rather than one blended narrative keeps the disagreement visible as a disagreement, with sources attributed to each side, so the writer can later argue "camp A and camp B haven't been reconciled" instead of just asserting a vague absence. The instruction to only count a sub-question as uncovered if it's tied to a specific piece of the stated research question closes a common failure mode where a model pads out a gap list with tangential curiosities that sound like gaps but were never actually in scope — this keeps the gap map defensible rather than padded for length. Explicitly forbidding invented sources matters because when a coverage definition is ambiguous, a model under instruction to be thorough will sometimes produce a plausible-sounding citation-shaped claim to fill a bucket rather than admit uncertainty; naming this as the one thing to never do gives the model a clear, checkable failure to avoid rather than a vague quality aspiration. Checking the suspected gap against the sorted evidence rather than accepting it at face value also protects against confirmation bias baked into the prompt itself.`,
     exampleOutput: `Convergence: all three sources agree written documentation matters for async setups. Conflict: Smith reports a velocity gain, Chen finds no significant difference — worth noting Chen's sample is much smaller and may be underpowered rather than genuinely null. Uncovered: none of the three sources measure outcomes specifically for teams spanning more than 6 time zones. Suspected gap verdict: partially supported — timezone-spread specifically is untouched, but the broader async-vs-sync velocity question already has conflicting rather than absent evidence.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1132,12 +1196,16 @@ For each theme: name, participant count, 2-3 attributed quotes, and one line not
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`interview-synthesis`, `qualitative-research`, `thematic-analysis`, `user-research`, `deep-research`],
+    tags: [
+      `interview-synthesis`,
+      `qualitative-research`,
+      `thematic-analysis`,
+      `user-research`,
+      `deep-research`,
+    ],
     whyItWorks: `The step-by-step structure — open coding before theme grouping — exists specifically to stop GPT-5.1 from doing what it does by default when handed raw transcripts in one pass: jumping straight to plausible-sounding themes and retrofitting quotes to match them, rather than letting the themes emerge from what's actually attributed to specific speakers. Requiring a minimum-participant threshold before something counts as a theme prevents a single vivid quote from one participant getting inflated into a headline finding, which is a common and misleading pattern in synthesized qualitative writeups where the most quotable line wins regardless of how many people actually said something like it. The tension-check step targets a specific failure mode of language-model synthesis: the model tends to treat surface-similar phrasing as semantic agreement, collapsing "communication was hard" into one meaning when the underlying complaints might be structurally different — naming this explicitly as something to check, rather than resolve, keeps the nuance visible instead of smoothing it away for a cleaner-sounding output. Explicitly forbidding fabricated or approximate quotes matters because a model asked to synthesize themes under a fixed format will, absent this constraint, sometimes generate a quote that reads as representative of a theme even if no participant said anything that close to it — flagging that as the single thing never to do gives it a hard boundary rather than a vague accuracy aspiration, and the requirement to mark theories as "my inference" when unsupported keeps analytical leaps distinguishable from participant-sourced findings.`,
     exampleOutput: `Theme: 'Data entry feels like busywork' (4/5 participants). Quotes: A — 'nobody ever looked at the data anyway'; C — 'I fill it in because I have to, not because it helps me.' Tension: B's version is about fields not mapping to their sales motion, which is a design complaint rather than a motivation complaint — worth treating as adjacent, not identical. Outlier: participant E actually finds the CRM useful for tracking their own follow-ups, contradicting the majority pattern.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1204,12 +1272,16 @@ A table: question number, issue type (or "clean"), and rewrite where applicable.
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`survey-design`, `questionnaire-review`, `research-methods`, `bias-check`, `deep-research`],
+    tags: [
+      `survey-design`,
+      `questionnaire-review`,
+      `research-methods`,
+      `bias-check`,
+      `deep-research`,
+    ],
     whyItWorks: `Naming four specific, checkable failure categories instead of asking for a general wording review matters because an open-ended "review this survey" prompt tends to produce GPT-5.1's default critique register — broad, hedged observations like "consider whether questions are neutral" — which sounds thorough but gives nothing a survey author can act on directly; a named failure type with a definition forces a verdict per question instead of vague commentary. The instruction to only flag categories that actually apply, rather than reporting pass/fail on every category for every question, prevents the output from ballooning into a padded audit where genuine issues get buried under routine "no issue here" notes — this is a common failure mode when a model is given a checklist and defaults to exhaustively confirming every box rather than surfacing only what matters. Requiring the actual rewrite rather than just the diagnosis closes the gap between "here's what's wrong" and something a researcher can paste directly into the field-ready instrument, which matters because leading and double-barreled phrasing is often genuinely hard to fix well, and a diagnosis without a fix just shifts the hard part back onto the person who asked for help. The sensitive-topic handling check exists because default survey phrasing frequently telegraphs an expected answer on topics respondents already feel judged about, and a model reviewing generically won't reliably catch this unless the specific topic is named as something to check for — naming it turns a general awareness into a targeted, checkable pass.`,
     exampleOutput: `Q1: double-barreled (helpful and well-organized can diverge) — rewrite as two separate questions, one per attribute, each on a 1-5 scale. Q2: leading phrasing (assumes enjoyment) — rewrite: 'How would you describe your experience using the product in your first week?' with a neutral 1-5 scale labeled from 'very negative' to 'very positive.' Order-effect risk: placing the cancellation-consideration question immediately after a satisfaction question may anchor respondents' answer — consider separating them with a neutral filler question.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1274,12 +1346,16 @@ Three labeled tiers as above, each with short bulleted points. End with a one-li
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`desk-research`, `secondary-research`, `research-brief`, `decision-support`, `deep-research`],
+    tags: [
+      `desk-research`,
+      `secondary-research`,
+      `research-brief`,
+      `decision-support`,
+      `deep-research`,
+    ],
     whyItWorks: `The three-tier confidence structure directly counters the single biggest risk of using a language model for desk research: GPT-5.1 states well-established background knowledge and half-remembered, possibly outdated specifics in the exact same fluent, confident register, so a reader has no built-in signal for which claims to trust — forcing an explicit tier split makes the model's own uncertainty visible instead of hidden behind uniformly confident prose. The instruction to never invent a specific number targets a well-documented failure mode where a model asked for concrete figures will produce a plausible-sounding statistic that fits the expected shape of an answer even when it has no reliable basis for that exact number — permitting a qualitative description instead of a fabricated figure gives the model an honest way out that doesn't sacrifice usefulness. Naming Tier 3 as questions desk research genuinely cannot answer matters because a model under pressure to be comprehensive will otherwise stretch a weak inference to cover a real gap rather than admitting the gap exists, which is far more dangerous for a decision-maker than an honest "we don't know" — an unacknowledged gap gets treated as covered ground. The time-box instruction to prioritize Tier 1 and Tier 3 breadth over Tier 2 depth reflects how these briefs actually get used: a decision-maker on a clock needs to know what's solid and what's missing far more urgently than an exhaustive list of maybes, so the prioritization keeps the brief matched to how much attention it will realistically get.`,
     exampleOutput: `Tier 1: Usage-based pricing is now standard for infrastructure and API-metered products; hybrid seat-plus-usage models are increasingly common as a transition step. Tier 2: exact adoption percentages across mid-market SaaS specifically vary by source and may be dated — verify against a recent survey before citing a number in the meeting. Tier 3: how usage-based pricing affects net revenue retention specifically for products with highly variable per-customer usage isn't something desk research alone can answer confidently; this needs your own cohort data.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1344,12 +1420,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`executive-summary`, `research-communication`, `decision-brief`, `stakeholder-communication`, `deep-research`],
+    tags: [
+      `executive-summary`,
+      `research-communication`,
+      `decision-brief`,
+      `stakeholder-communication`,
+      `deep-research`,
+    ],
     whyItWorks: `The instruction to open with the bottom line rather than background targets a specific and very common failure of model-generated summaries: GPT-5.1's default compression of long notes tends to preserve the original narrative order — methodology, then findings, then implications — because that's the shape most source material comes in, but that order is precisely backwards for an executive reader who needs the implication first and only wants the methodology if they ask. Reorganizing by decision relevance instead of chronology forces genuinely different findings that happen to be about the same topic into an argument structure (supports, against, uncertain) rather than a list, which is what actually helps someone make a call rather than just informs them. The instruction to check the given recommendation against the compressed evidence rather than assume it's correct directly counters a subtle form of sycophancy: when a draft already states what the requester wants to conclude, a model asked to summarize supporting research tends to shape the compression toward confirming that conclusion, quietly downgrading contradicting notes to minor caveats — naming this risk explicitly and requiring an honest verdict (supports, partially supports, or contradicts) breaks that default and makes the briefing actually useful for catching a wrong call before it's made in front of a board. Pushing supporting detail to a clearly labeled appendix rather than cutting it entirely solves the real tension in executive communication between being skimmable and being defensible when someone asks a follow-up question in the room — the appendix keeps both properties without forcing a choice between them.`,
     exampleOutput: `Bottom line: the price increase carries real churn risk based on Competitor B's outcome, and our own exit-survey data suggests the actual driver of churn is feature gaps, not price — raising prices without addressing that gap first repeats the pattern that hurt Competitor B rather than Competitor A. Supports: no visible churn from Competitor A's increase. Against: Competitor B's near-identical move lost 8% of accounts. Uncertain: whether our product's feature-gap profile is closer to A's or B's at the time of their price changes. Recommendation verdict: partially supported — new-customer-only pricing avoids the existing-base churn risk seen in Competitor B's case, but the underlying feature-gap issue should be addressed independently of the pricing decision.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1416,12 +1496,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`research-communication`, `content-strategy`, `article-outline`, `science-communication`, `deep-research`],
+    tags: [
+      `research-communication`,
+      `content-strategy`,
+      `article-outline`,
+      `science-communication`,
+      `deep-research`,
+    ],
     whyItWorks: `The explicit caveat-placement map exists because the single most predictable failure of turning a hedged research writeup into a punchier public-facing piece is that hedges are the first thing a simplification pass cuts, precisely because they weaken the hook a general-audience piece is built around — GPT-5.1, when asked generically to make research "more readable," will smooth away qualifiers like small sample size or interviewer bias by default, since removing them genuinely does make the writing punchier, which is exactly the wrong optimization for a piece whose credibility depends on those limits being visible. Requiring the outline to name where each specific caveat lands, rather than trusting it to survive an unstructured rewrite, forces the tradeoff to be made consciously at outline stage instead of silently during drafting, when it's much harder to notice something is missing. The instruction to flag claims that were safely hedged in the original but would read as unqualified fact once simplified targets the same failure from a different angle — it's not just about preserving caveats that already exist as sentences, but catching claims whose entire safety depended on surrounding qualification that a simpler sentence structure would strip away invisibly. Choosing the hook based on the strongest concrete finding rather than the broadest claim also matters mechanically: a model asked to make research "compelling" for a wide audience will often reach for the most sweeping, generalizable-sounding claim in the source material because it sounds impactful, even when that's the claim the original research supported most weakly — anchoring the hook selection to concreteness rather than scope keeps the article's headline claim as strong as its underlying evidence.`,
     exampleOutput: `Hook: exit interviews surface complexity complaints twice as often as the survey does — chosen over the broader 'customers find our product too complex' claim because it's the specific, surprising, evidence-backed finding, not an inflated generalization. Caveat placement: the small sample size (n=14) belongs in the section explaining the finding itself, stated plainly rather than buried in a footnote; the interviewer-bias caveat belongs immediately after any claim that leans on interview data specifically. Flagged claim: 'customers find the product too complex' reads as fact if published without noting it's drawn from a small, potentially primed sample — needs the caveat attached directly to the sentence, not just nearby.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1474,12 +1558,16 @@ A matrix table: rows are sources, columns are the comparison dimensions. Below i
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`literature-review`, `comparison-matrix`, `academic-research`, `evidence-synthesis`, `deep-research`],
+    tags: [
+      `literature-review`,
+      `comparison-matrix`,
+      `academic-research`,
+      `evidence-synthesis`,
+      `deep-research`,
+    ],
     whyItWorks: `Requiring the matrix to be the sole deliverable rather than a matrix-plus-summary combination forces genuine dimensional extraction instead of GPT-5.1's default tendency to fall back on prose summarization, which is a more natural output shape for the model but defeats the entire point of a comparison matrix — the value of a matrix is that identical dimensions sit in the same column across every row, letting a reader scan down and compare directly, and a parallel summary paragraph lets the model quietly avoid the harder job of forcing inconsistent source reporting into consistent categories. The explicit "not reported" rule instead of leaving cells blank or silently inferring a value targets a specific and consequential failure: a model filling a structured table under implicit pressure to look complete will often infer a plausible value for a missing dimension rather than admit the source didn't report it, and for a literature comparison this is actively harmful because gaps in reporting are frequently the most useful signal — for instance if none of the studies report attrition rate, that absence itself is worth knowing, not something to paper over with a guess. The instruction to only attribute a divergence to a methodological difference when the sources genuinely differ on that specific method guards against a related pattern where a model asked to explain disagreement reaches for the most available tidy explanation (different sample sizes, different populations) even when the sources are actually just similar-method studies that disagree, which would misrepresent the disagreement as more resolved than it is. Closing with which cells are load-bearing for the stated purpose keeps the matrix from becoming an undifferentiated wall of comparison points, directing attention to the specific evidence that actually bears on the decision at hand rather than treating every dimension as equally decision-relevant.`,
     exampleOutput: `Row for Study A: n=200/retail, survey-based, +12% retention, not reported (wellbeing), authors note self-selection bias in respondents. Pattern note on retention effect: two of three studies find a positive effect, but Study C's effect is concentrated specifically among caregivers, suggesting the retention benefit may not be uniform. Load-bearing cells: the population column and Study C's caregiver-specific finding matter most for deciding whether to recommend flexible scheduling company-wide versus segment-targeted.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1543,12 +1631,16 @@ For each slide: number, claim-headline, core or supporting, and a one-line note 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`research-presentation`, `storyline-design`, `data-storytelling`, `stakeholder-communication`, `deep-research`],
+    tags: [
+      `research-presentation`,
+      `storyline-design`,
+      `data-storytelling`,
+      `stakeholder-communication`,
+      `deep-research`,
+    ],
     whyItWorks: `Requiring slide headlines to state the actual claim rather than a topic label directly targets the most common structural weakness in research decks — a title like 'Retention Results' asks the audience to hold the interpretation in their head until they've processed the chart beneath it, while a claim-headline front-loads the interpretation so the argument survives even if someone only reads the headline row, which is closer to how a skimming or distracted audience actually consumes a deck. The instruction to cut findings that don't serve the stated core argument, even effortful ones, counters GPT-5.1's default bias toward exhaustive inclusion when it has a rich set of findings available — a model building a deck from a full findings list will tend to give every real finding a slide out of a sense that leaving out something true wastes the research, when a presentation's job is persuasion toward one argument, not a complete report of everything discovered. Marking each slide's dependency on an earlier claim addresses a real structural risk specific to live presentations that a slide deck built for linear reading ignores: executives frequently jump to a slide that interests them or interrupt with a question out of the planned order, and a deck built without accounting for this leaves the presenter unable to answer a mid-deck question without silently backfilling context the audience hasn't seen yet — flagging dependencies in advance lets the presenter prepare a one-line bridge rather than getting caught improvising it live. The core-versus-supporting split tied to the actual time limit gives an honest answer to a pressure a presenter genuinely faces (running long and needing to cut on the fly) rather than a deck that implicitly claims every slide is equally load-bearing, which is what happens by default when a model is simply asked to "turn these findings into a deck" without being told time is genuinely constrained.`,
     exampleOutput: `Slide 3: 'Flexible scheduling costs under $50/employee/year to implement' — core, no dependency on earlier slides, safe to present out of order. Slide 5: 'The 12% retention gain is concentrated among caregivers, not evenly spread' — supporting but load-bearing for the fairness argument; depends on slide 3's cost figure being established first if asked why not just restrict it to caregivers. Core argument: offer flexible scheduling to all employees as opt-in, since the cost is low and restricting it by role risks a fairness backlash without saving meaningfully on cost.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

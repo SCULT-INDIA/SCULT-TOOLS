@@ -2028,9 +2028,7 @@ Error case coverage:
 - order not yet captured -> 409 { error: { code: 'not_captured', message } }
 
 No fields added beyond RESPONSE SHAPE.`,
-    verifiedAgainst: [
-      { tool: 'Cursor', version: '2.2', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'Cursor', version: '2.2', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -2098,7 +2096,13 @@ Name the single most likely cause and the fix you'd propose for it, but do not w
       },
     ],
     targetTools: [`Cursor 2.2`],
-    tags: [`bug-diagnosis`, `agent-mode`, `incident-response`, `root-cause-analysis`, `production-debugging`],
+    tags: [
+      `bug-diagnosis`,
+      `agent-mode`,
+      `incident-response`,
+      `root-cause-analysis`,
+      `production-debugging`,
+    ],
     whyItWorks: `A language model asked to diagnose a bug from a symptom description has a strong pull toward premature convergence on a single coherent, confident-sounding narrative, because that's the shape of answer its training rewards — and a story that merely fits the symptom's surface description is trivially easy to construct for almost any plausible cause, which is exactly why it isn't evidence of anything on its own. Requiring at least a stated minimum of genuinely distinct candidates before any scoring happens breaks that premature convergence by making the model commit to breadth before it's allowed to narrow, and the line-by-line evidence-scoring step in Stage 2 is what actually does the diagnostic work: it forces each candidate to be checked against specific facts rather than against the symptom's prose, which is where hypotheses that sound equally good on the surface start to separate, since real evidence supports some and contradicts others even when both stories are individually coherent. Naming the one piece of deciding evidence that would distinguish the top two remaining candidates matters because it converts "I believe it's X" into a falsifiable claim with a named test, which is the only thing that actually resolves a genuine tie between two evidence-consistent explanations — without it, the model defaults to picking whichever candidate it introduced first or described most fluently, which has no correlation with which one is actually correct. Marking an unconfirmed recommendation as unconfirmed, rather than presenting it with the same tone of certainty as a checked conclusion, matters specifically for incidents: a fix shipped against an unconfirmed cause can make the symptom subside for an unrelated reason — traffic dropping, a concurrent deploy, a cache expiring — and get credited as "fixed" while the actual cause ships unaddressed and recurs later under conditions nobody thought to re-check.`,
     exampleOutput: `Candidates: (1) new zone-pricing tier in shipping-rates returns a shape calculateShippingTotal doesn't expect for certain zones. (2) unrelated null-check regression already present before 14:05, coincidentally surfaced by unrelated traffic composition. (3) a race condition between cart total and shipping calc, unrelated to the deploy.
 
@@ -2107,9 +2111,7 @@ Scoring: no error-rate spike in shipping-rates itself contradicts candidate (1) 
 Deciding evidence: pull one affected request's raw shipping-rates response body from logging and check whether it includes the new zone-tier field that calculateShippingTotal's null-check doesn't handle.
 
 Recommendation (unconfirmed pending that check): calculateShippingTotal doesn't handle the new zone-tier field shape introduced at 14:05.`,
-    verifiedAgainst: [
-      { tool: 'Cursor', version: '2.2', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'Cursor', version: '2.2', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2176,16 +2178,20 @@ State the number of characterization tests written, the number passing unmodifie
       },
     ],
     targetTools: [`Cursor 2.2`],
-    tags: [`refactoring`, `agent-mode`, `characterization-tests`, `behavior-preservation`, `code-review`],
+    tags: [
+      `refactoring`,
+      `agent-mode`,
+      `characterization-tests`,
+      `behavior-preservation`,
+      `code-review`,
+    ],
     whyItWorks: `A model asked to refactor code will often quietly conflate "restructure" with "improve," because its training rewards output that looks better along every visible axis at once, and fixing a bug or renaming an awkward variable it notices along the way reads as strictly positive — but a refactor's entire value as a reviewable unit of work depends on the diff being behavior-neutral, and any snuck-in fix inside that diff makes it impossible for a reviewer to tell which lines are structural and which quietly changed what the system does. Requiring characterization tests written against current behavior, bugs and all, before any code moves converts the existing contract from something trusted to memory into something pinned down in an executable, checkable form, and explicitly instructing the model to capture a known bug as current behavior rather than fix it while it's right there closes the most common version of this conflation, where a genuine correctness fix hides inside what's presented as a pure restructure and becomes essentially unreviewable as a result, since a reviewer scanning a "just a refactor" diff has no reason to scrutinize logic for correctness the way they would a feature change. The instruction that a failing characterization test after refactor means the refactor is wrong, not the test, closes a related and easy-to-miss loophole: a model under pressure to make its own tests pass again will edit the test if that's the path of least resistance, which quietly redefines "unchanged" as whatever the new code happens to produce rather than what the old code actually did — the entire point of writing the test first is that it isn't allowed to move once behavior is supposed to be fixed.`,
     exampleOutput: `Step 1: wrote 14 characterization tests covering domestic/international/tax-exempt branches, rounding at each subtotal step, and line-item ordering. Flagged: tax-exempt orders emit a $0.00 tax line rather than omitting it — captured as-is per KNOWN QUIRKS, not fixed.
 
 Step 2: split generateInvoice into lineItemCalculator.ts, taxCalculator.ts, and formatter.ts. No behavior-changing moves made; one planned extraction (memoizing the tax lookup) was skipped because it would have changed rounding order — flagged instead of made.
 
 Step 3: all 14 characterization tests pass unmodified against the refactored code. 14/14 passing, 0 changed, 1 quirk logged as a separate follow-up (not fixed here).`,
-    verifiedAgainst: [
-      { tool: 'Cursor', version: '2.2', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'Cursor', version: '2.2', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2254,7 +2260,13 @@ Go through SECURITY INVARIANTS one at a time and state, for each, whether it sti
       },
     ],
     targetTools: [`Cursor 2.2`],
-    tags: [`authentication`, `agent-mode`, `security-review`, `session-management`, `token-rotation`],
+    tags: [
+      `authentication`,
+      `agent-mode`,
+      `security-review`,
+      `session-management`,
+      `token-rotation`,
+    ],
     whyItWorks: `A model implementing an auth change optimizes for the functional signal it's actually given — the feature works, the test suite passes — and a security check that was never named as an invariant is invisible to that optimization, which is exactly how a check gets loosened during development to unblock a local test and never gets tightened back, since nothing in "make refresh rotation work" flags that as a regression on its own. Stating security invariants as literal checkable facts, and requiring the model to walk through each one individually before finishing rather than give a single overall "looks secure" impression, forces an audit against a fixed list instead of a vibe check, which is the only format that reliably catches a narrow regression buried inside an otherwise-working diff. The explicit ban on logging raw secrets targets one of the most common and most easily forgotten transient habits in agent-assisted debugging: adding a console.log of a token to check why a comparison is failing is a completely reasonable debugging instinct, and it is also exactly the kind of line that survives into a shipped diff because nothing about "the feature now works" prompts its removal. The rule against a new bypass path for internal tooling addresses the single most common way a real backdoor actually ships — not through malice, but through a supposedly low-risk shortcut for a test harness or an admin script that's added with good intentions, works fine, and is never revisited once the real feature is done, quietly becoming the weakest link in the whole system. Naming mid-flight token behavior explicitly matters because an auth change is deployed against a live population of already-issued tokens, not a fresh empty database, and a quick local test only ever exercises newly issued tokens — the failure mode of a change that silently keeps trusting or silently orphans an old-format token in production is invisible to any test that doesn't specifically construct that scenario.`,
     exampleOutput: `Invariant check:
 - Expired access token always rejected: holds — no change to the access-token verification path, confirmed by re-reading verifyAccessToken(), untouched by this diff.
@@ -2262,9 +2274,7 @@ Go through SECURITY INVARIANTS one at a time and state, for each, whether it sti
 - All tokens pass through verifyCredentials(): holds — no new issuance path added.
 
 Mid-flight tokens: refresh tokens issued before this deploy have no rotation record yet; first refresh attempt on one of these is treated as a first use and rotated normally rather than rejected, so the ~40,000 existing tokens keep working without requiring a forced re-login.`,
-    verifiedAgainst: [
-      { tool: 'Cursor', version: '2.2', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'Cursor', version: '2.2', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2339,9 +2349,7 @@ For each edge case listed above, quote the line of code that handles it and conf
 }
 // Empty input: loop never runs, returns an empty Map — matches SIGNATURE (Map<T[K], T[]>, never undefined).
 // null/undefined key values: Map.get/set treat them as valid keys directly, so items group correctly under that exact value — no widening to any was needed for this case.`,
-    verifiedAgainst: [
-      { tool: 'Cursor', version: '2.2', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'Cursor', version: '2.2', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2417,16 +2425,20 @@ Walk through what happens, step by step, if the process is killed at three point
       },
     ],
     targetTools: [`Cursor 2.2`],
-    tags: [`node-service`, `agent-mode`, `background-jobs`, `idempotency`, `graceful-shutdown`],
+    tags: [
+      `node-service`,
+      `agent-mode`,
+      `background-jobs`,
+      `idempotency`,
+      `graceful-shutdown`,
+    ],
     whyItWorks: `A straightforward "build a worker that processes X from a queue" brief tends to produce code that's correct on the happy path — a message arrives, gets processed, gets acknowledged — because that's the only path a quick manual test naturally exercises, while the failure modes that actually matter for a background service, a restart mid-job, a duplicate delivery, a crash between two specific steps, never surface under that kind of testing since they require literally killing the process at a precise moment, which nobody does by hand during a normal review. Stating a literal PROCESSED_DEFINITION turns "handle it correctly" into a checkable line: does the code acknowledge before or after that specific durable condition, rather than an implicit assumption that's easy to get subtly wrong — acknowledging on dispatch instead of on durably-recorded completion is a one-line difference that looks harmless in a diff and only manifests as silent data loss under a crash that's hard to reproduce on demand. The instruction to implement idempotency against durable state rather than in-memory targets a specific and common shortcut: an in-memory Set of processed ids is trivial to write, passes any test that doesn't literally restart the process, and provides zero protection against exactly the restart scenario the idempotency requirement exists for in the first place — the two implementations look identical in a demo and diverge only in production, under precisely the condition hardest to catch in code review. Requiring the walk-through of process-killed-at-three-points at the end forces explicit reasoning about the code's failure behavior instead of letting a reader assume it handles it because the happy path looks fine — a background worker's actual correctness lives almost entirely in these restart-boundary cases, which a review skimming the main logic will not naturally exercise.`,
     exampleOutput: `Process killed before dispatch: message remains unacknowledged in SQS, redelivered after visibility timeout — no job lost, no duplicate created since nothing started.
 
 Process killed mid-processing (PDF generated, not yet uploaded): message still unacknowledged, redelivered. On redelivery, checks invoices.exports for this orderId, finds no 'complete' row, re-generates and uploads — correctly handled, no duplicate customer-facing invoice since the previous attempt never reached upload.
 
 Process killed after upload but before acknowledgment: message redelivered. Checks invoices.exports, finds a 'complete' row with a matching checksum already written before the crash, no-ops and acknowledges — correctly handled exactly once, no second PDF generated or uploaded.`,
-    verifiedAgainst: [
-      { tool: 'Cursor', version: '2.2', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'Cursor', version: '2.2', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2485,16 +2497,20 @@ Measure the actual cost against BUDGET_SCOPE the same way CURRENT_BASELINE was m
       },
     ],
     targetTools: [`Cursor 2.2`],
-    tags: [`performance-optimization`, `agent-mode`, `performance-budget`, `frontend`, `proactive-optimization`],
+    tags: [
+      `performance-optimization`,
+      `agent-mode`,
+      `performance-budget`,
+      `frontend`,
+      `proactive-optimization`,
+    ],
     whyItWorks: `A "make it fast" instruction given only after a feature already exists puts the model in the position of reducing a cost it has already committed a specific shape to — a chosen data-fetching pattern, a re-render trigger, a dependency — which is measurably harder and more invasive than never incurring that cost in the first place, since by the time anyone measures it, the expensive choice is already threaded through several files and unwinding it is a second, larger diff on top of the first. Stating the budget upfront as a constraint on the choices being made, rather than a target to hit afterward, changes which question the model is actually answering at each step — from "does this work" to "does this work within this number" — and those two questions produce genuinely different code, not the same code that just happens to get measured differently later. The instruction to price a new dependency against the budget before adding it targets a specific and reliable blind spot: an agent evaluating whether a library is a good choice for a feature will confidently answer "does this solve the stated functional problem," but virtually never checks it against a performance budget unless explicitly asked to, because those are two different questions and only one of them is implied by "pick a library that does X." Requiring the final measurement to use the exact same method as CURRENT_BASELINE, rather than a fresh ad hoc check, matters because two numbers produced by two different measurement methodologies aren't actually comparable even though they look like they are — and a looser, less careful measurement taken at the end, under time pressure to call the feature done, is exactly where a real budget overage hides behind noise in how it was measured rather than getting caught.`,
     exampleOutput: `Dependency check: considered use-debounce (2KB gzipped) vs. hand-rolling a 15-line debounce hook (0KB) — hand-rolled version chosen, since the library's extra API surface isn't needed here and every KB counts against the 15KB ceiling.
 
 Data-fetching: chose a single AbortController-cancelled fetch per keystroke over a library-based query cache, since a full query-cache dependency would have consumed roughly a third of the bundle budget on its own for a feature that only needs cancel-on-new-keystroke behavior.
 
 Final measurement (same method as baseline): product-listing chunk now 153.4KB gzipped (+11.4KB, under the 15KB ceiling). First result paints at 210ms after debounce fire on throttled 4G (under the 250ms ceiling).`,
-    verifiedAgainst: [
-      { tool: 'Cursor', version: '2.2', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'Cursor', version: '2.2', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

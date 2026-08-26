@@ -1154,13 +1154,18 @@ export function analyzeAuthorSignals(html: string): AuthorSignalsResult {
 
   // Byline patterns in HTML — common patterns used by CMSes
   const hasByline =
-    /class\s*=\s*["'][^"']*\b(?:author|byline|by-line|post-author)\b[^"']*["']/i.test(html) ||
+    /class\s*=\s*["'][^"']*\b(?:author|byline|by-line|post-author)\b[^"']*["']/i.test(
+      html,
+    ) ||
     /rel\s*=\s*["']author["']/i.test(html) ||
     /<[^>]+\bitemprop\s*=\s*["']author["']/i.test(html)
 
-  const signalCount = [hasAuthorMeta, hasPublicationDate, hasOrganizationName, hasByline].filter(
-    Boolean,
-  ).length
+  const signalCount = [
+    hasAuthorMeta,
+    hasPublicationDate,
+    hasOrganizationName,
+    hasByline,
+  ].filter(Boolean).length
 
   return {
     hasAuthorMeta,
@@ -1515,7 +1520,7 @@ export function buildReport(input: ReportInput): VisibilityReport {
       : 'The site is served over plain HTTP. Most AI crawlers, browsers, and search engines treat non-HTTPS sites as untrustworthy.',
     fix: isHttpsFlag
       ? 'Nothing to do. Ensure your SSL certificate stays valid and renews automatically.'
-      : 'Obtain an SSL/TLS certificate (free via Let\'s Encrypt) and redirect all HTTP traffic to HTTPS. This affects both search ranking and AI crawler trust signals.',
+      : "Obtain an SSL/TLS certificate (free via Let's Encrypt) and redirect all HTTP traffic to HTTPS. This affects both search ranking and AI crawler trust signals.",
     scored: false,
   })
 
@@ -1560,29 +1565,36 @@ export function buildReport(input: ReportInput): VisibilityReport {
   checks.push({
     id: 'author-signals',
     label: 'Author & citation signals',
-    status: authorSignals.signalCount >= 3 ? 'pass' : authorSignals.signalCount >= 1 ? 'warn' : 'fail',
-    finding: authorSignals.signalCount >= 3
-      ? `Strong citation signals: ${[
-          authorSignals.hasAuthorMeta && 'author meta tag',
-          authorSignals.hasPublicationDate && 'publication date',
-          authorSignals.hasOrganizationName && 'organization name',
-          authorSignals.hasByline && 'on-page byline',
-        ]
-          .filter(Boolean)
-          .join(', ')}.`
-      : authorSignals.signalCount > 0
-        ? `Partial citation signals (${authorSignals.signalCount}/4 present): ${[
-            authorSignals.hasAuthorMeta && 'author meta',
-            authorSignals.hasPublicationDate && 'date',
-            authorSignals.hasOrganizationName && 'org name',
-            authorSignals.hasByline && 'byline',
+    status:
+      authorSignals.signalCount >= 3
+        ? 'pass'
+        : authorSignals.signalCount >= 1
+          ? 'warn'
+          : 'fail',
+    finding:
+      authorSignals.signalCount >= 3
+        ? `Strong citation signals: ${[
+            authorSignals.hasAuthorMeta && 'author meta tag',
+            authorSignals.hasPublicationDate && 'publication date',
+            authorSignals.hasOrganizationName && 'organization name',
+            authorSignals.hasByline && 'on-page byline',
           ]
             .filter(Boolean)
-            .join(', ')}. AI engines prefer to cite content with clear authorship.`
-        : 'No authorship or publication date signals detected. AI engines prioritise content with clear authorship, publication dates, and organisation attribution for citations.',
-    fix: authorSignals.signalCount >= 3
-      ? 'Good. Keep author meta tags and dates current — AI engines weight recency.'
-      : 'Add: (1) <meta name="author" content="Name"> in <head>, (2) visible publication dates on content pages, (3) og:site_name for your organisation, (4) on-page bylines. These signals improve citation likelihood in AI answers.',
+            .join(', ')}.`
+        : authorSignals.signalCount > 0
+          ? `Partial citation signals (${authorSignals.signalCount}/4 present): ${[
+              authorSignals.hasAuthorMeta && 'author meta',
+              authorSignals.hasPublicationDate && 'date',
+              authorSignals.hasOrganizationName && 'org name',
+              authorSignals.hasByline && 'byline',
+            ]
+              .filter(Boolean)
+              .join(', ')}. AI engines prefer to cite content with clear authorship.`
+          : 'No authorship or publication date signals detected. AI engines prioritise content with clear authorship, publication dates, and organisation attribution for citations.',
+    fix:
+      authorSignals.signalCount >= 3
+        ? 'Good. Keep author meta tags and dates current — AI engines weight recency.'
+        : 'Add: (1) <meta name="author" content="Name"> in <head>, (2) visible publication dates on content pages, (3) og:site_name for your organisation, (4) on-page bylines. These signals improve citation likelihood in AI answers.',
     scored: false,
   })
 
@@ -1591,19 +1603,23 @@ export function buildReport(input: ReportInput): VisibilityReport {
   checks.push({
     id: 'twitter-card',
     label: 'Twitter / X Card',
-    status: twitterCard.completeness >= 0.75 ? 'pass' : twitterCard.hasCard ? 'warn' : 'warn',
+    status:
+      twitterCard.completeness >= 0.75 ? 'pass' : twitterCard.hasCard ? 'warn' : 'warn',
     finding: twitterCard.hasCard
-      ? `Twitter Card type "${twitterCard.cardType ?? 'unknown'}" declared. ${[
-          !twitterCard.hasTitle && 'missing twitter:title',
-          !twitterCard.hasDescription && 'missing twitter:description',
-          !twitterCard.hasImage && 'missing twitter:image',
-        ]
-          .filter(Boolean)
-          .join(', ') || 'All card fields present — full social preview.'}`
+      ? `Twitter Card type "${twitterCard.cardType ?? 'unknown'}" declared. ${
+          [
+            !twitterCard.hasTitle && 'missing twitter:title',
+            !twitterCard.hasDescription && 'missing twitter:description',
+            !twitterCard.hasImage && 'missing twitter:image',
+          ]
+            .filter(Boolean)
+            .join(', ') || 'All card fields present — full social preview.'
+        }`
       : 'No Twitter Card meta tags found. Many AI link-preview crawlers and social sharing features consume these alongside Open Graph.',
-    fix: twitterCard.completeness >= 0.75
-      ? 'Nothing to do.'
-      : 'Add twitter:card (use "summary_large_image"), twitter:title, twitter:description, and twitter:image to your <head>. Many AI systems consume these tags for page context.',
+    fix:
+      twitterCard.completeness >= 0.75
+        ? 'Nothing to do.'
+        : 'Add twitter:card (use "summary_large_image"), twitter:title, twitter:description, and twitter:image to your <head>. Many AI systems consume these tags for page context.',
     scored: false,
   })
 

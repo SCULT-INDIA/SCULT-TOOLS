@@ -6,7 +6,7 @@ export const prompts: readonly Prompt[] = [
     category: 'nano-banana',
     title: 'Shoot a catalog-ready e-commerce product photo with Nano Banana',
     description:
-      "A full studio-photography brief for Nano Banana (Gemini 3.1 Flash Image) — material, surface, lighting rig, and angle specified separately so the model renders accurate reflections and shadow behavior instead of a generic glossy render.",
+      'A full studio-photography brief for Nano Banana (Gemini 3.1 Flash Image) — material, surface, lighting rig, and angle specified separately so the model renders accurate reflections and shadow behavior instead of a generic glossy render.',
     promptText: `Act as a studio product photographer briefing a shot for an e-commerce listing. Render one photorealistic image from this brief — do not add any element that isn't listed below.
 
 PRODUCT
@@ -36,7 +36,8 @@ One image, square or the aspect ratio implied by the framing above, lit and comp
       {
         name: 'product_description',
         description: 'The product, including its material and finish.',
-        example: 'a matte-black ceramic pour-over coffee dripper with a pale ash-wood collar',
+        example:
+          'a matte-black ceramic pour-over coffee dripper with a pale ash-wood collar',
         required: true,
       },
       {
@@ -48,37 +49,51 @@ One image, square or the aspect ratio implied by the framing above, lit and comp
       {
         name: 'background_description',
         description: 'What the backdrop looks like.',
-        example: 'a seamless soft off-white paper backdrop, fading to pale grey toward the frame edges',
+        example:
+          'a seamless soft off-white paper backdrop, fading to pale grey toward the frame edges',
         required: true,
       },
       {
         name: 'lighting_setup',
         description: 'A specific lighting rig, described like a real studio setup.',
         example:
-          'a large overhead softbox as the key light, a smaller fill card bounced in from the left at roughly a third of the key\'s intensity, and a thin rim light behind the product separating its right edge from the background',
+          "a large overhead softbox as the key light, a smaller fill card bounced in from the left at roughly a third of the key's intensity, and a thin rim light behind the product separating its right edge from the background",
         required: true,
       },
       {
         name: 'camera_angle',
         description: 'The shooting angle and implied lens character.',
-        example: 'a three-quarter angle, slightly above eye level, as if shot on an 85mm lens',
+        example:
+          'a three-quarter angle, slightly above eye level, as if shot on an 85mm lens',
         required: true,
       },
       {
         name: 'focus_detail',
         description: 'The one texture or detail that must be tack-sharp.',
-        example: 'the ceramic glaze texture on the dripper\'s front face and the wood grain of the collar',
+        example:
+          "the ceramic glaze texture on the dripper's front face and the wood grain of the collar",
         required: false,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'product-photography', 'ecommerce', 'photorealism', 'studio-lighting'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'product-photography',
+      'ecommerce',
+      'photorealism',
+      'studio-lighting',
+    ],
     whyItWorks:
       "Nano Banana's underlying model, Gemini 3.1 Flash Image, was trained heavily on grounded real-world photography rather than stylized art datasets, which is the documented reason it renders plausible material response — the way matte ceramic scatters light differently than a glossy plastic, the way a contact shadow softens with distance from its source — more reliably than image generators optimized for illustrative or painterly output. This prompt exploits that by describing the lighting rig as physical equipment with a position and relative intensity (key, fill, rim) instead of a vague adjective like \"good lighting,\" because a model trained on real photographs has actually learned how a three-point rig falls off in the real world, and giving it the rig's geometry lets it apply that learned physics instead of guessing at a generically pleasant look. Second, Nano Banana has no negative-prompt field and no bracketed exclusion syntax the way some diffusion pipelines do — every unwanted element has to be named as a positive instruction inside the same prose block the model is already reading, which is exactly why this prompt states \"no hands, no props, no second product\" directly in the brief rather than assuming a separate exclusion channel exists to catch it; models genuinely add a stray hand or a second product into frame around 5-10% of the time on product-photo prompts that never explicitly rule it out. Third, e-commerce catalog images are judged on focus discipline in a way generic photography isn't — a shallow depth-of-field artistic blur that looks great on a lifestyle shot actively hurts conversion on a listing thumbnail because a shopper can't evaluate the product's actual texture — so naming the exact plane that must stay sharp, and explicitly capping how much natural falloff is acceptable elsewhere, keeps the output usable for its actual commercial purpose instead of optimized for aesthetic drama the brief never asked for.",
     exampleOutput:
       'A clean, evenly lit product photo with a physically plausible contact shadow and a correctly placed specular highlight along the rim light edge — exact reflection intensity and crop will vary between generations, and nailing the background gradient exactly sometimes takes one conversational follow-up ("make the background a touch brighter at the edges") rather than a single perfect pass.',
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-20' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-20',
+      },
     ],
     changelog: [
       {
@@ -92,7 +107,7 @@ One image, square or the aspect ratio implied by the framing above, lit and comp
     category: 'nano-banana',
     title: 'Turn a hex palette into a brand mood-board flat-lay with Nano Banana',
     description:
-      'A composited overhead flat-lay brief that locks every object and surface in the frame to an exact hex palette — the natural next step after generating a palette with the Colour Palette Generator, built for Nano Banana\'s literal reading of pasted color codes.',
+      "A composited overhead flat-lay brief that locks every object and surface in the frame to an exact hex palette — the natural next step after generating a palette with the Colour Palette Generator, built for Nano Banana's literal reading of pasted color codes.",
     promptText: `Act as an art director composing a brand mood-board flat-lay for a pitch deck. Render one overhead photograph — every physical object and surface in the frame must be color-matched to the palette given below, with no object outside that palette.
 
 OBJECTS
@@ -134,7 +149,8 @@ One overhead flat-lay image, color-graded so the dominant read of each object is
       },
       {
         name: 'hex_palette',
-        description: 'The exact hex codes to lock the palette to — paste output straight from a palette tool.',
+        description:
+          'The exact hex codes to lock the palette to — paste output straight from a palette tool.',
         example:
           '#2E4034 (deep forest green), #C9A66B (warm brass), #F5F0E6 (warm off-white), #7A8B99 (dusty slate blue)',
         required: true,
@@ -142,24 +158,37 @@ One overhead flat-lay image, color-graded so the dominant read of each object is
       {
         name: 'lighting_description',
         description: 'Light direction and quality.',
-        example: 'soft, even natural window light from one side, with gentle but not harsh shadows',
+        example:
+          'soft, even natural window light from one side, with gentle but not harsh shadows',
         required: true,
       },
       {
         name: 'composition_style',
         description: 'How the objects are laid out relative to each other.',
-        example: 'loosely gridded with generous negative space, editorial flat-lay style, nothing touching the frame edge',
+        example:
+          'loosely gridded with generous negative space, editorial flat-lay style, nothing touching the frame edge',
         required: false,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'mood-board', 'brand-identity', 'color-palette', 'flat-lay'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'mood-board',
+      'brand-identity',
+      'color-palette',
+      'flat-lay',
+    ],
     whyItWorks:
-      "Nano Banana processes a prompt as one dense block of prose rather than a weighted set of tags the way Midjourney treats comma-separated keywords, which means a hex code pasted directly into that prose is read as a literal, specific instruction rather than one keyword competing for attention against a dozen others — this is why pasting exact codes, rather than only color-name adjectives like \"forest green,\" gives measurably tighter color matching in testing, since \"forest green\" alone leaves the model free to pick any point in a wide range while #2E4034 pins it to one. Second, naming the surface itself as part of the constrained palette closes a specific and common failure: models composing a flat-lay will often treat the tabletop as a neutral backdrop exempt from color rules stated for \"the objects,\" so an otherwise perfectly on-palette arrangement gets undercut by a background that reads as an unrelated fifth color the brief never approved — stating explicitly that the surface counts is what stops that leak. Third, the lighting constraint is there because color accuracy and lighting choice are not independent in this specific image: a warm tungsten-style key light or a mixed color-temperature setup will visibly shift how a rendered hex reads on camera, the same way it would on a real photoshoot, so a mood-board brief whose entire purpose is palette fidelity has to constrain lighting evenness or it undermines its own hard color constraint by introducing a color cast the brief never asked for. This is built as the direct next step after the Colour Palette Generator specifically because that tool's output is already in the pasteable hex format this prompt is designed to consume — running the two back to back turns an abstract palette into a concrete, presentable pitch-deck asset in two steps instead of requiring the brand strategist to manually translate hex codes into material and color-name language themselves.",
+      'Nano Banana processes a prompt as one dense block of prose rather than a weighted set of tags the way Midjourney treats comma-separated keywords, which means a hex code pasted directly into that prose is read as a literal, specific instruction rather than one keyword competing for attention against a dozen others — this is why pasting exact codes, rather than only color-name adjectives like "forest green," gives measurably tighter color matching in testing, since "forest green" alone leaves the model free to pick any point in a wide range while #2E4034 pins it to one. Second, naming the surface itself as part of the constrained palette closes a specific and common failure: models composing a flat-lay will often treat the tabletop as a neutral backdrop exempt from color rules stated for "the objects," so an otherwise perfectly on-palette arrangement gets undercut by a background that reads as an unrelated fifth color the brief never approved — stating explicitly that the surface counts is what stops that leak. Third, the lighting constraint is there because color accuracy and lighting choice are not independent in this specific image: a warm tungsten-style key light or a mixed color-temperature setup will visibly shift how a rendered hex reads on camera, the same way it would on a real photoshoot, so a mood-board brief whose entire purpose is palette fidelity has to constrain lighting evenness or it undermines its own hard color constraint by introducing a color cast the brief never asked for. This is built as the direct next step after the Colour Palette Generator specifically because that tool\'s output is already in the pasteable hex format this prompt is designed to consume — running the two back to back turns an abstract palette into a concrete, presentable pitch-deck asset in two steps instead of requiring the brand strategist to manually translate hex codes into material and color-name language themselves.',
     exampleOutput:
       'An overhead flat-lay image with the requested objects graded toward — not laser-precise to — the specified hex codes; treat it as directional mood-board material for a pitch or brand deck, not a pixel-accurate color proof, and expect one follow-up edit ("make the fabric closer to the brass tone") to land the trickiest object.',
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-21' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-21',
+      },
     ],
     changelog: [
       {
@@ -174,7 +203,7 @@ One overhead flat-lay image, color-graded so the dominant read of each object is
     category: 'nano-banana',
     title: 'Make one surgical edit to a photo without touching anything else',
     description:
-      'A conversational edit instruction for an uploaded photo that isolates exactly one change and explicitly locks everything else — lighting, pose, background, composition — so Nano Banana\'s edit doesn\'t quietly redraw the whole frame.',
+      "A conversational edit instruction for an uploaded photo that isolates exactly one change and explicitly locks everything else — lighting, pose, background, composition — so Nano Banana's edit doesn't quietly redraw the whole frame.",
     promptText: `You are editing the photo I've uploaded in this conversation. This is a single, targeted edit — not a regeneration. Everything not named in the change below must remain visually identical to the source image: same pose, same expression, same lighting direction and color temperature, same background, same crop, same camera angle.
 
 SOURCE IMAGE
@@ -201,7 +230,8 @@ One edited image. If any part of the requested change genuinely cannot be made w
       {
         name: 'source_image_description',
         description: 'What the uploaded photo actually shows, for context.',
-        example: 'a founder headshot, seated at a desk, warm window light from the left, plain grey wall behind them',
+        example:
+          'a founder headshot, seated at a desk, warm window light from the left, plain grey wall behind them',
         required: true,
       },
       {
@@ -212,7 +242,8 @@ One edited image. If any part of the requested change genuinely cannot be made w
       },
       {
         name: 'preservation_instructions',
-        description: 'What must stay pixel-for-pixel identical in feel, even if not literally.',
+        description:
+          'What must stay pixel-for-pixel identical in feel, even if not literally.',
         example:
           'their face, expression, hand position, the desk and background, the exact same warm lighting direction and shadow falloff on their face',
         required: true,
@@ -220,22 +251,36 @@ One edited image. If any part of the requested change genuinely cannot be made w
       {
         name: 'output_use_case',
         description: 'What the edited image will actually be used for.',
-        example: 'replacing the current LinkedIn profile photo — needs to look like the same photo shoot, not a different day',
+        example:
+          'replacing the current LinkedIn profile photo — needs to look like the same photo shoot, not a different day',
         required: true,
       },
       {
         name: 'iteration_notes',
-        description: 'How much back-and-forth is expected, and what kind of feedback works best.',
-        example: 'expect one or two rounds of small correction if the shirt\'s new color picks up an odd color cast from the background',
+        description:
+          'How much back-and-forth is expected, and what kind of feedback works best.',
+        example:
+          "expect one or two rounds of small correction if the shirt's new color picks up an odd color cast from the background",
         required: false,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'photo-editing', 'image-editing', 'retouching', 'consistency'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'photo-editing',
+      'image-editing',
+      'retouching',
+      'consistency',
+    ],
     whyItWorks:
       "Nano Banana's edit mode operates conversationally on an uploaded image inside one session rather than regenerating from a text prompt alone, and its documented behavior under a vague edit instruction is to sometimes treat the request as license to refine the whole frame — sharpen details, shift color balance, subtly recompose — rather than touch only the named element, which is precisely the failure this prompt heads off by stating up front that this is a single targeted edit and listing, by name, everything that must stay identical. Second, the explicit rule to find another way to make the change rather than quietly trading off something on the preservation list matters because a model under a hard instruction to change X will sometimes resolve an apparent conflict (the new shirt color doesn't sit well under the existing warm light) by adjusting the lighting itself instead of rendering the shirt correctly under the light that's already there — naming that trade-off as forbidden forces the harder, correct solution instead of the easier wrong one. Third, the instruction to match the new element's lighting direction, color temperature, and depth of field to the existing photo is what separates a genuinely seamless single-element edit from an obviously composited one: an added or altered object rendered with flat, generic lighting reads immediately as pasted-in against a photo that has a clear directional key light, and stating the exact light direction the model needs to respect turns an implicit continuity requirement most edit prompts never mention into an explicit, checkable instruction. Finally, structuring iteration as a targeted correction rather than a full re-prompt matters because re-describing the whole scene from scratch on a second attempt effectively restarts the generation with slightly different wording each time, which risks losing whatever the first pass got right — a correction note that names only what drifted keeps the parts that were already correct anchored while the model focuses its next attempt on the one thing that needs fixing.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-21' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-21',
+      },
     ],
     changelog: [
       {
@@ -249,7 +294,7 @@ One edited image. If any part of the requested change genuinely cannot be made w
     category: 'nano-banana',
     title: 'Keep one character consistent across a set of different scenes',
     description:
-      'Locks a defined character\'s face, proportions, and defining features across a run of separately-described scenes in the same Nano Banana conversation, instead of letting each new generation quietly redesign the character.',
+      "Locks a defined character's face, proportions, and defining features across a run of separately-described scenes in the same Nano Banana conversation, instead of letting each new generation quietly redesign the character.",
     promptText: `You are generating a set of illustrations or photos that must all depict the exact same character, {{character_reference_description}}. Treat every scene below as a costume and setting change for one fixed individual — never as an opportunity to redesign their face, build, or defining features.
 
 CHARACTER — LOCKED FEATURES
@@ -276,32 +321,38 @@ The full numbered set of scenes, each as its own image, plus a one-line note on 
       {
         name: 'character_reference_description',
         description: 'The character being kept consistent, described once as the anchor.',
-        example: 'a brand mascot: a small orange fox wearing round wire glasses and a forest-green scarf',
+        example:
+          'a brand mascot: a small orange fox wearing round wire glasses and a forest-green scarf',
         required: true,
       },
       {
         name: 'character_defining_features',
         description: 'The specific features that must never change between scenes.',
-        example: 'the round wire glasses, the exact scarf color and knot style, the white chest-fur patch, and the slightly oversized left ear',
+        example:
+          'the round wire glasses, the exact scarf color and knot style, the white chest-fur patch, and the slightly oversized left ear',
         required: true,
       },
       {
         name: 'scene_list',
         description: 'The numbered scenes the character needs to appear in.',
         example:
-          '1. Sitting at a laptop in a bright home office. 2. Walking through a farmer\'s market carrying a paper bag. 3. Waving from behind a podium at a small conference.',
+          "1. Sitting at a laptop in a bright home office. 2. Walking through a farmer's market carrying a paper bag. 3. Waving from behind a podium at a small conference.",
         required: true,
       },
       {
         name: 'pose_and_expression_notes',
-        description: 'How pose and expression should vary or stay grounded scene to scene.',
-        example: 'friendly and approachable in every scene, but the specific pose and hand position should suit each scene\'s action naturally',
+        description:
+          'How pose and expression should vary or stay grounded scene to scene.',
+        example:
+          "friendly and approachable in every scene, but the specific pose and hand position should suit each scene's action naturally",
         required: true,
       },
       {
         name: 'style_consistency_notes',
-        description: 'The rendering treatment that must stay constant across the whole set.',
-        example: 'flat, warm-toned vector-illustration style with soft cel-shaded shadows, consistent line weight throughout',
+        description:
+          'The rendering treatment that must stay constant across the whole set.',
+        example:
+          'flat, warm-toned vector-illustration style with soft cel-shaded shadows, consistent line weight throughout',
         required: true,
       },
       {
@@ -312,11 +363,22 @@ The full numbered set of scenes, each as its own image, plus a one-line note on 
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'character-consistency', 'branding', 'illustration', 'mascot'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'character-consistency',
+      'branding',
+      'illustration',
+      'mascot',
+    ],
     whyItWorks:
       "Nano Banana retains a running visual context within a single conversation thread rather than starting from a blank slate on every message, which is the documented mechanism that makes character consistency across a set of prompts even possible in the first place — but that same session memory degrades gradually across a long run of separately-worded scene descriptions unless each one is explicitly anchored back to the same locked feature list, which is why this prompt repeats the character's defining features as a named, comparable checklist rather than trusting the model to remember an earlier description verbatim ten scenes later. Second, the instruction not to substitute a \"cleaner\" generic version when a feature is partly obscured by pose or angle targets a specific and common drift pattern: a model asked to render the same round-glasses, orange fox character from behind, where the glasses are barely visible, will sometimes default to a simpler, more generic fox rendering for that one frame rather than working out how this specific character's proportions would actually look from an unusual angle, and the result is a set where one scene subtly doesn't match the others even though nothing was technically changed on purpose. Third, requiring an explicit self-check against both the locked-feature list and the first generated scene — rather than trusting a single generation pass to get it right — matters because consistency errors in multi-image sets compound directionally: a slight drift in scene two, uncorrected, becomes the new implicit reference for scene three, and by scene five the character has walked measurably away from where it started without any single step looking obviously wrong in isolation, which is exactly the kind of gradual failure that only becomes visible when someone lines up the whole set side by side after delivery instead of catching it mid-generation.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-22' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-22',
+      },
     ],
     changelog: [
       {
@@ -330,7 +392,7 @@ The full numbered set of scenes, each as its own image, plus a one-line note on 
     category: 'nano-banana',
     title: 'Put a specific garment on a specific person without changing their identity',
     description:
-      'A virtual try-on edit that fits an uploaded garment onto an uploaded person photo, treating the person\'s face, body, and pose as fixed and the garment\'s own fabric physics — drape, wrinkle, fit — as the only thing that should adapt to their body.',
+      "A virtual try-on edit that fits an uploaded garment onto an uploaded person photo, treating the person's face, body, and pose as fixed and the garment's own fabric physics — drape, wrinkle, fit — as the only thing that should adapt to their body.",
     promptText: `You are compositing a garment onto a person in an uploaded photo — a virtual try-on, not a new photoshoot. The person's identity and pose are fixed; the garment must adapt to fit their body, not the other way around.
 
 PERSON PHOTO
@@ -357,19 +419,23 @@ One composited image. If the requested garment's cut or style genuinely conflict
       {
         name: 'person_photo_description',
         description: 'What the uploaded photo of the person shows.',
-        example: 'a three-quarter-length shot of a woman standing, arms relaxed at her sides, facing slightly left, soft window light from the right',
+        example:
+          'a three-quarter-length shot of a woman standing, arms relaxed at her sides, facing slightly left, soft window light from the right',
         required: true,
       },
       {
         name: 'garment_description',
         description: 'The garment being tried on, including its material.',
-        example: 'a cropped, oversized denim jacket in mid-wash blue with a soft, slightly stiff cotton-denim texture',
+        example:
+          'a cropped, oversized denim jacket in mid-wash blue with a soft, slightly stiff cotton-denim texture',
         required: true,
       },
       {
         name: 'fit_and_pose_notes',
-        description: 'Anything specific about how the garment should sit given the person\'s pose.',
-        example: 'jacket should look slightly loose through the shoulders, sleeves pushed up to just below the elbow',
+        description:
+          "Anything specific about how the garment should sit given the person's pose.",
+        example:
+          'jacket should look slightly loose through the shoulders, sleeves pushed up to just below the elbow',
         required: true,
       },
       {
@@ -381,16 +447,28 @@ One composited image. If the requested garment's cut or style genuinely conflict
       {
         name: 'identity_preservation_notes',
         description: 'An explicit statement of what must not change about the person.',
-        example: 'her face, hairstyle, exact pose, and skin tone must be pixel-identical to the source photo',
+        example:
+          'her face, hairstyle, exact pose, and skin tone must be pixel-identical to the source photo',
         required: true,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'virtual-tryon', 'fashion', 'ecommerce', 'compositing'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'virtual-tryon',
+      'fashion',
+      'ecommerce',
+      'compositing',
+    ],
     whyItWorks:
       "Nano Banana's multi-image input handling lets it condition a single output on more than one uploaded reference — a person photo and a separate garment reference — which is the specific capability this prompt is built around, but that same flexibility means the model has to be told explicitly which reference is the fixed anchor and which one is the adaptable element, or it will sometimes resolve conflicts between the two by quietly adjusting the person's pose or proportions to make the garment fit more easily instead of adapting the garment to the person, which is the opposite of what a real try-on needs to demonstrate. Second, the instruction to render fabric folds according to the person's actual pose — rather than a flat, mannequin-style drape — targets a specific and common quality failure in AI-generated try-on images: a garment rendered as if it were laid on a flat surface and then pasted onto a photo of a moving body reads as obviously synthetic the instant a viewer notices the fabric isn't responding to the arm's bend or the seated compression at the waist, which is precisely the kind of physical detail a model trained on real photographs has actually learned to render when it's explicitly told the pose matters to the outcome. Third, the lighting-consistency instruction is the detail that most separates a convincing composite from an obviously fake one in practice — a garment lit with generic, source-agnostic studio lighting sitting on a person photographed under a single soft directional light creates a visible mismatch a viewer registers as \"something's off\" even without being able to name why, and stating the original light's direction as a constraint the garment must also obey is what closes that specific, hard-to-articulate but easy-to-spot gap. Finally, giving the model explicit permission to refuse a physically implausible combination — a full-length garment applied to a seated, upper-body-only crop — rather than forcing a best-effort result matters because a silently-forced unconvincing render wastes the generation and gives no useful signal about what to change, whereas a stated refusal with a concrete alternative pose recommendation turns a dead end into an actionable next step.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-22' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-22',
+      },
     ],
     changelog: [
       {
@@ -404,7 +482,7 @@ One composited image. If the requested garment's cut or style genuinely conflict
     category: 'nano-banana',
     title: "Get a pure-white marketplace background that actually meets Amazon's spec",
     description:
-      'Strips and replaces a product photo\'s background with an exact RGB(255,255,255) white that satisfies marketplace main-image requirements, while keeping the product itself untouched — built for sellers whose current photo has an off-white or shadowed background that keeps getting flagged.',
+      "Strips and replaces a product photo's background with an exact RGB(255,255,255) white that satisfies marketplace main-image requirements, while keeping the product itself untouched — built for sellers whose current photo has an off-white or shadowed background that keeps getting flagged.",
     promptText: `You are preparing a product photo to meet a marketplace's main-image requirements — specifically, a pure white background at RGB(255,255,255), with the product itself completely unedited.
 
 CURRENT PHOTO
@@ -431,34 +509,51 @@ One image: product unchanged, background pure white RGB(255,255,255) edge to edg
       {
         name: 'product_description',
         description: 'The product in the current photo.',
-        example: 'a stainless-steel insulated water bottle with a matte navy powder-coated finish',
+        example:
+          'a stainless-steel insulated water bottle with a matte navy powder-coated finish',
         required: true,
       },
       {
         name: 'current_background_problem',
-        description: 'What is wrong with the current background that this fix is solving.',
-        example: 'a slightly warm off-white background with a visible soft shadow gradient in the bottom-left corner',
+        description:
+          'What is wrong with the current background that this fix is solving.',
+        example:
+          'a slightly warm off-white background with a visible soft shadow gradient in the bottom-left corner',
         required: true,
       },
       {
         name: 'shadow_treatment',
-        description: 'Whether to keep, soften, or remove any ground shadow beneath the product.',
-        example: 'remove any ground shadow entirely — the marketplace this is headed to flags visible shadows on main images',
+        description:
+          'Whether to keep, soften, or remove any ground shadow beneath the product.',
+        example:
+          'remove any ground shadow entirely — the marketplace this is headed to flags visible shadows on main images',
         required: true,
       },
       {
         name: 'cropping_and_fill',
         description: 'How tightly the product should be framed.',
-        example: 'crop so the bottle fills about 90% of the frame height, centered with even margin left and right',
+        example:
+          'crop so the bottle fills about 90% of the frame height, centered with even margin left and right',
         required: true,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'background-removal', 'ecommerce', 'marketplace-listing', 'photo-editing'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'background-removal',
+      'ecommerce',
+      'marketplace-listing',
+      'photo-editing',
+    ],
     whyItWorks:
-      "Marketplace listing specs like Amazon's main-image requirement are unusually literal — they define compliant white as an exact RGB(255,255,255) value, not a subjective \"looks white enough\" judgment, and a background that a human eye reads as basically white can still fail an automated background check if it's actually a very light grey or carries a faint warm cast from the original shoot's lighting. Stating the exact RGB value in the prompt, rather than the word \"white\" alone, matters for the same reason pasting a hex code works better than a color-name adjective elsewhere in image prompting: Nano Banana reads the specific numeric value as a literal target rather than a loose stylistic suggestion, which measurably tightens how close the rendered background lands to true white compared to leaving the model to interpret \"white background\" on its own judgment. Second, the explicit instruction not to color-correct the product itself addresses a subtle but real risk in background-swap edits: a model replacing a background sometimes normalizes the whole image's color balance as part of the same pass, which can shift how the product's actual color reads — a navy product that looked slightly warm-toned under its original lighting might come out looking like a different, cooler navy against a suddenly neutral white background, which is a problem specifically because marketplace policies also penalize listings where the photographed color doesn't match the delivered product, so an edit that \"fixes\" the background but subtly changes the product's apparent color trades one compliance risk for another. Third, naming the specific edge-quality failure mode — a soft halo or color fringing where the old background used to be — matters because that exact artifact is the most common tell that a background was swapped rather than shot fresh, and it's precisely the kind of defect a marketplace's automated image-quality check, or a manual reviewer glancing at a listing, is trained to catch; describing it explicitly gives the model a concrete failure to actively avoid rather than leaving \"clean edges\" as an unstated assumption.",
+      'Marketplace listing specs like Amazon\'s main-image requirement are unusually literal — they define compliant white as an exact RGB(255,255,255) value, not a subjective "looks white enough" judgment, and a background that a human eye reads as basically white can still fail an automated background check if it\'s actually a very light grey or carries a faint warm cast from the original shoot\'s lighting. Stating the exact RGB value in the prompt, rather than the word "white" alone, matters for the same reason pasting a hex code works better than a color-name adjective elsewhere in image prompting: Nano Banana reads the specific numeric value as a literal target rather than a loose stylistic suggestion, which measurably tightens how close the rendered background lands to true white compared to leaving the model to interpret "white background" on its own judgment. Second, the explicit instruction not to color-correct the product itself addresses a subtle but real risk in background-swap edits: a model replacing a background sometimes normalizes the whole image\'s color balance as part of the same pass, which can shift how the product\'s actual color reads — a navy product that looked slightly warm-toned under its original lighting might come out looking like a different, cooler navy against a suddenly neutral white background, which is a problem specifically because marketplace policies also penalize listings where the photographed color doesn\'t match the delivered product, so an edit that "fixes" the background but subtly changes the product\'s apparent color trades one compliance risk for another. Third, naming the specific edge-quality failure mode — a soft halo or color fringing where the old background used to be — matters because that exact artifact is the most common tell that a background was swapped rather than shot fresh, and it\'s precisely the kind of defect a marketplace\'s automated image-quality check, or a manual reviewer glancing at a listing, is trained to catch; describing it explicitly gives the model a concrete failure to actively avoid rather than leaving "clean edges" as an unstated assumption.',
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-23' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-23',
+      },
     ],
     changelog: [
       {
@@ -502,25 +597,30 @@ One restored image, plus a separate, clearly labeled list of every area where a 
       {
         name: 'photo_condition_description',
         description: 'The overall condition of the photo being restored.',
-        example: 'a 1940s family portrait, black and white, with a large diagonal crease across the lower half and heavy foxing spots in both corners',
+        example:
+          'a 1940s family portrait, black and white, with a large diagonal crease across the lower half and heavy foxing spots in both corners',
         required: true,
       },
       {
         name: 'known_facts_about_subjects',
-        description: 'Anything actually known about the people, clothing, or setting, to ground the restoration.',
-        example: 'the woman on the left wore a navy-blue wool coat, per a family letter describing this exact photo session',
+        description:
+          'Anything actually known about the people, clothing, or setting, to ground the restoration.',
+        example:
+          'the woman on the left wore a navy-blue wool coat, per a family letter describing this exact photo session',
         required: true,
       },
       {
         name: 'damage_specifics',
         description: 'The specific physical damage present.',
-        example: 'the crease cuts directly across one subject\'s torso, and foxing has partially obscured the face of the child on the right',
+        example:
+          "the crease cuts directly across one subject's torso, and foxing has partially obscured the face of the child on the right",
         required: true,
       },
       {
         name: 'colorization_preference',
         description: 'Whether to colorize, and any constraints on how.',
-        example: 'yes, colorize using period-appropriate 1940s tones — nothing that looks like a modern color grade',
+        example:
+          'yes, colorize using period-appropriate 1940s tones — nothing that looks like a modern color grade',
         required: true,
       },
       {
@@ -531,11 +631,22 @@ One restored image, plus a separate, clearly labeled list of every area where a 
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'photo-restoration', 'colorization', 'archival', 'image-editing'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'photo-restoration',
+      'colorization',
+      'archival',
+      'image-editing',
+    ],
     whyItWorks:
       "Photo restoration is one of the few image-editing tasks where a fluent, confident-looking result can be actively worse than an honest, partial one, because the entire value of a restoration to a family or archive is its claim to represent what was actually there — a model that fills a badly foxed face with a plausible but fabricated expression isn't restoring the photo, it's replacing a piece of family history with a guess dressed up as fact, and nothing about how convincing the output looks tells the requester which parts of it are real. This prompt's honesty rule targets that directly by asking for a separate, explicit list of uncertain reconstruction calls rather than trusting the model to volunteer that caveat unprompted, because an image model's default behavior under a restoration request is to produce the most visually complete and confident result it can, not to flag its own uncertainty unless it's specifically asked to track and report it. Second, weighting known facts above generic guesses when the two would conflict matters because a model with no grounding information will default to the statistically most common visual pattern for a given era or context — the most common 1940s coat color, the most typical period hairstyle — which is a reasonable fallback only in the absence of anything better, and stating that real, specific facts about these actual subjects should override that generic default is what keeps the restoration anchored to this particular photo instead of drifting toward a generic period-photo template. Third, explicitly separating damage repair from unrelated enhancement — no sharpening or stylizing of areas that were never actually damaged — closes a common overreach in AI restoration tools, where a repair pass quietly smooths skin texture, boosts contrast, or otherwise modernizes the whole image's look well beyond what damage repair required, which can make an otherwise successful restoration look subtly anachronistic or lose the authentic photographic grain that gave the original image its character in the first place.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-24' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-24',
+      },
     ],
     changelog: [
       {
@@ -549,7 +660,7 @@ One restored image, plus a separate, clearly labeled list of every area where a 
     category: 'nano-banana',
     title: 'Combine two separate photos into one believable scene',
     description:
-      'Blends two independently-uploaded reference photos into a single coherent image with unified lighting and perspective — Nano Banana\'s signature multi-image compositing feature, briefed so the merge doesn\'t read as two photos stitched together.',
+      "Blends two independently-uploaded reference photos into a single coherent image with unified lighting and perspective — Nano Banana's signature multi-image compositing feature, briefed so the merge doesn't read as two photos stitched together.",
     promptText: `You are compositing two separately uploaded photos into one single, coherent scene, as if both subjects had actually been photographed together in the same place at the same time.
 
 FIRST IMAGE
@@ -576,46 +687,63 @@ One composited image where, if a viewer didn't know the two subjects came from s
       {
         name: 'first_image_content',
         description: 'What the first uploaded photo shows.',
-        example: 'a headshot of a woman in a navy blazer, photographed indoors under soft, even light',
+        example:
+          'a headshot of a woman in a navy blazer, photographed indoors under soft, even light',
         required: true,
       },
       {
         name: 'second_image_content',
         description: 'What the second uploaded photo shows.',
-        example: 'a headshot of a man in a grey sweater, photographed outdoors under bright overcast daylight',
+        example:
+          'a headshot of a man in a grey sweater, photographed outdoors under bright overcast daylight',
         required: true,
       },
       {
         name: 'combined_scene_description',
         description: 'What the merged scene should actually depict.',
-        example: 'both of them standing together in a bright, modern office lobby, as if photographed for a company leadership page',
+        example:
+          'both of them standing together in a bright, modern office lobby, as if photographed for a company leadership page',
         required: true,
       },
       {
         name: 'interaction_between_subjects',
         description: 'How the two subjects relate to each other physically in the frame.',
-        example: 'standing side by side, slightly angled toward each other, both facing the camera with a relaxed, professional posture',
+        example:
+          'standing side by side, slightly angled toward each other, both facing the camera with a relaxed, professional posture',
         required: true,
       },
       {
         name: 'lighting_unification_notes',
         description: 'Which lighting scenario should win for the combined image.',
-        example: 'use the indoor soft even lighting from the first photo as the base — it suits an office lobby setting better than the outdoor daylight from the second',
+        example:
+          'use the indoor soft even lighting from the first photo as the base — it suits an office lobby setting better than the outdoor daylight from the second',
         required: true,
       },
       {
         name: 'perspective_notes',
         description: 'How camera distance and framing should be reconciled.',
-        example: 'both should be framed at the same medium-shot distance, roughly waist-up, standing at a natural conversational distance apart',
+        example:
+          'both should be framed at the same medium-shot distance, roughly waist-up, standing at a natural conversational distance apart',
         required: false,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'photo-compositing', 'multi-image', 'image-blending', 'team-photos'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'photo-compositing',
+      'multi-image',
+      'image-blending',
+      'team-photos',
+    ],
     whyItWorks:
       "Merging two independent reference images into one coherent output is Nano Banana's most distinctive and heavily marketed capability relative to single-image generators — it can genuinely condition on more than one uploaded photo at once rather than only accepting one reference plus a text prompt — but that capability doesn't automatically resolve conflicts between the two sources, which is why the lighting-unification instruction is the single highest-leverage part of this brief: two photos shot under different light sources, color temperatures, and shadow hardness are the most common and most visually obvious tell of a composite, more so than any scale or interaction mismatch, because human perception is unusually sensitive to inconsistent light direction even when it can't immediately articulate why an image looks fake. Second, explicitly requiring a decision about relative camera distance rather than simply resizing subjects to match height addresses a documented artifact of naive photo compositing: two people who were originally photographed at different distances from the camera have different amounts of lens perspective compression on their features, so scaling one to match the other's height without correcting for that underlying distance difference produces a subtle but real proportion mismatch that reads as \"something's off\" about the combined image even when the two subjects are technically the same height. Third, requiring anatomically plausible physical contact — a handshake or an arm around a shoulder rendered with hands and arms that actually connect at the right point, rather than overlapping silhouettes — targets a specific and common compositing failure where two independently-generated figures are placed near each other convincingly but any point of actual physical contact between them looks approximate rather than physically grounded, which is exactly the detail a viewer's eye goes to first in a photo depicting two people interacting, making it the place a merge is most likely to visibly fail if it isn't named as its own explicit requirement.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-24' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-24',
+      },
     ],
     changelog: [
       {
@@ -659,7 +787,8 @@ One staged image with the room's real architecture untouched, plus a one-line re
       {
         name: 'room_photo_description',
         description: 'What the empty room photo actually shows.',
-        example: 'an empty rectangular room with light oak flooring, one large south-facing window, and a plain white wall behind where a bed would go',
+        example:
+          'an empty rectangular room with light oak flooring, one large south-facing window, and a plain white wall behind where a bed would go',
         required: true,
       },
       {
@@ -671,22 +800,35 @@ One staged image with the room's real architecture untouched, plus a one-line re
       {
         name: 'target_buyer_style',
         description: 'The buyer demographic and aesthetic this staging should appeal to.',
-        example: 'a young professional couple looking for a calm, modern, move-in-ready feel',
+        example:
+          'a young professional couple looking for a calm, modern, move-in-ready feel',
         required: true,
       },
       {
         name: 'furniture_list',
         description: 'The specific furniture and decor to add.',
-        example: 'a queen bed with a light linen headboard, two matching nightstands with simple lamps, a folded throw blanket at the foot of the bed, and a small area rug',
+        example:
+          'a queen bed with a light linen headboard, two matching nightstands with simple lamps, a folded throw blanket at the foot of the bed, and a small area rug',
         required: true,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'real-estate', 'virtual-staging', 'interior-photography', 'listing-photos'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'real-estate',
+      'virtual-staging',
+      'interior-photography',
+      'listing-photos',
+    ],
     whyItWorks:
       "The scale-reference instruction — using a real, fixed architectural element like a doorway to ground added furniture's proportions — matters because virtual staging's most common failure isn't an ugly furniture choice, it's furniture rendered at a subtly wrong scale relative to the room, which either makes the space look artificially larger than it is (a real risk that can constitute a form of listing misrepresentation) or makes an otherwise good staging attempt look obviously synthetic the moment a viewer compares the bed's apparent size to the window beside it. Second, matching new furniture's lighting to the room's actual existing light source and direction rather than a generic, independently-lit render is what determines whether a staged photo reads as one coherent photograph or as furniture cut out and pasted into an empty room — a bed lit from a different angle than the room's real window light is one of the most immediately recognizable tells of low-quality virtual staging, and stating the exact light source as a hard constraint pushes the model toward the physically grounded rendering its training on real photography actually supports. Third, the disclosure requirement isn't a generic ethics add-on — it reflects an actual, current listing-platform and real-estate-board practice: virtually staged images are treated as promotional renderings rather than photographs of the property's real condition specifically because a buyer showing up expecting the furnished room they saw online, only to find an empty room, is a well-documented source of complaints and, in some markets, regulatory scrutiny of listing accuracy — building the disclosure reminder into the prompt's own output means the staging workflow doesn't quietly produce an asset that looks final and ready to publish without the labeling step it actually needs before it can legally and ethically go live.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-24' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-24',
+      },
     ],
     changelog: [
       {
@@ -732,47 +874,65 @@ One image, cropped and lit to work as a thumbnail-sized delivery-app listing pho
     variables: [
       {
         name: 'dish_description',
-        description: 'The dish being photographed, with enough detail to render accurately.',
-        example: 'a stacked beef birria taco trio, cheese-crisped edges, served with a small side cup of consommé',
+        description:
+          'The dish being photographed, with enough detail to render accurately.',
+        example:
+          'a stacked beef birria taco trio, cheese-crisped edges, served with a small side cup of consommé',
         required: true,
       },
       {
         name: 'plating_and_garnish',
         description: 'How the dish is plated and garnished.',
-        example: 'tacos fanned slightly on a dark slate plate, garnished with chopped white onion, cilantro, and a lime wedge',
+        example:
+          'tacos fanned slightly on a dark slate plate, garnished with chopped white onion, cilantro, and a lime wedge',
         required: true,
       },
       {
         name: 'surface_and_props',
         description: 'The surface the plate sits on and any supporting props.',
-        example: 'a dark, slightly textured wood table, with a folded linen napkin and one small dish of extra consommé just at the edge of frame',
+        example:
+          'a dark, slightly textured wood table, with a folded linen napkin and one small dish of extra consommé just at the edge of frame',
         required: true,
       },
       {
         name: 'lighting_setup',
         description: 'The lighting arrangement for the shot.',
-        example: 'soft window-style light from the upper left, a small reflector card to the right to keep shadows from going too dark on that side',
+        example:
+          'soft window-style light from the upper left, a small reflector card to the right to keep shadows from going too dark on that side',
         required: true,
       },
       {
         name: 'camera_angle',
         description: 'The shooting angle chosen for this specific dish.',
-        example: 'a 45-degree three-quarter angle, close enough to see the cheese-crisped taco edges clearly',
+        example:
+          'a 45-degree three-quarter angle, close enough to see the cheese-crisped taco edges clearly',
         required: true,
       },
       {
         name: 'steam_or_freshness_cues',
         description: 'Any steam, moisture, or freshness cue to include.',
-        example: 'a thin wisp of steam rising from the consommé cup, since it should read as served hot',
+        example:
+          'a thin wisp of steam rising from the consommé cup, since it should read as served hot',
         required: false,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'food-photography', 'menu-photos', 'delivery-apps', 'photorealism'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'food-photography',
+      'menu-photos',
+      'delivery-apps',
+      'photorealism',
+    ],
     whyItWorks:
-      "Delivery-app browsing behavior is genuinely different from a sit-down menu: a user scrolling a results feed spends a very short window deciding whether a thumbnail is worth tapping, which is why this brief front-loads the single most appetite-driving visual cue for the specific dish — a cross-section for a layered item, a top-down view for a bowl — rather than defaulting to one generic \"food photo\" angle regardless of what the dish actually is, since the angle that sells a burger and the angle that sells a poke bowl are genuinely different and a one-size-fits-all instruction leaves that choice to chance. Second, the steam-as-wisps instruction targets a specific and recognizable AI-food-photo tell: models asked for \"steam rising from the food\" without more guidance frequently render a thick, uniform fog effect that looks like a stock photo overlay rather than real steam, which real steam never actually looks like — it's uneven, thin, and rises from the specific hottest point on a dish, not blanketing the whole plate, and naming that physical behavior explicitly steers the model away from the generic effect toward the physically grounded one its real-photography training data actually supports. Third, the color-accuracy constraint exists because food photography carries a business risk generic product photography mostly doesn't: an oversaturated, unrealistically vibrant menu photo drives the order, but the customer compares the delivered dish to that exact photo within minutes of it arriving, and a visible color mismatch — a sauce that looked deep red in the photo but is actually a muted brown-red in reality — is a documented, specific driver of delivery-app complaints and refund requests, which is why this brief explicitly trades a small amount of visual drama for accuracy that survives the moment of actual delivery.",
+      'Delivery-app browsing behavior is genuinely different from a sit-down menu: a user scrolling a results feed spends a very short window deciding whether a thumbnail is worth tapping, which is why this brief front-loads the single most appetite-driving visual cue for the specific dish — a cross-section for a layered item, a top-down view for a bowl — rather than defaulting to one generic "food photo" angle regardless of what the dish actually is, since the angle that sells a burger and the angle that sells a poke bowl are genuinely different and a one-size-fits-all instruction leaves that choice to chance. Second, the steam-as-wisps instruction targets a specific and recognizable AI-food-photo tell: models asked for "steam rising from the food" without more guidance frequently render a thick, uniform fog effect that looks like a stock photo overlay rather than real steam, which real steam never actually looks like — it\'s uneven, thin, and rises from the specific hottest point on a dish, not blanketing the whole plate, and naming that physical behavior explicitly steers the model away from the generic effect toward the physically grounded one its real-photography training data actually supports. Third, the color-accuracy constraint exists because food photography carries a business risk generic product photography mostly doesn\'t: an oversaturated, unrealistically vibrant menu photo drives the order, but the customer compares the delivered dish to that exact photo within minutes of it arriving, and a visible color mismatch — a sauce that looked deep red in the photo but is actually a muted brown-red in reality — is a documented, specific driver of delivery-app complaints and refund requests, which is why this brief explicitly trades a small amount of visual drama for accuracy that survives the moment of actual delivery.',
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-25' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-25',
+      },
     ],
     changelog: [
       {
@@ -816,7 +976,8 @@ One mockup image with the design applied convincingly to the garment's actual su
       {
         name: 'logo_or_design_description',
         description: 'The flat design being applied, including its colors.',
-        example: 'a two-color circular badge logo, cream and forest green, roughly 4 inches in diameter',
+        example:
+          'a two-color circular badge logo, cream and forest green, roughly 4 inches in diameter',
         required: true,
       },
       {
@@ -827,14 +988,16 @@ One mockup image with the design applied convincingly to the garment's actual su
       },
       {
         name: 'model_or_flatlay_choice',
-        description: 'Whether this is a worn mockup, a flat-lay, or on a mannequin/hanger.',
+        description:
+          'Whether this is a worn mockup, a flat-lay, or on a mannequin/hanger.',
         example: 'worn by a model, three-quarter angle, cropped from mid-thigh up',
         required: true,
       },
       {
         name: 'placement_and_scale',
         description: 'Where on the garment the design goes and roughly how large.',
-        example: 'centered chest placement, sized to sit comfortably within the upper chest area without approaching the collar or shoulder seams',
+        example:
+          'centered chest placement, sized to sit comfortably within the upper chest area without approaching the collar or shoulder seams',
         required: true,
       },
       {
@@ -846,16 +1009,28 @@ One mockup image with the design applied convincingly to the garment's actual su
       {
         name: 'setting_description',
         description: 'The background and setting for the mockup shot.',
-        example: 'a plain, softly lit studio background in warm light grey, nothing else in frame',
+        example:
+          'a plain, softly lit studio background in warm light grey, nothing else in frame',
         required: false,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'apparel-mockup', 'print-on-demand', 'merch', 'compositing'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'apparel-mockup',
+      'print-on-demand',
+      'merch',
+      'compositing',
+    ],
     whyItWorks:
       "The instruction to make the design bend and compress with the garment's actual surface — rather than float above it undistorted — targets the single most common tell of a low-effort apparel mockup: a design that reads as a flat rectangle pasted over a photo, ignoring the fact that fabric across a chest or shoulder is a curved, folding surface, which a viewer's eye registers as fake almost instantly even if they can't articulate exactly why the mockup looks off. Second, naming the actual print method — screen-print, embroidery, heat-transfer vinyl — and describing each one's distinct real-world surface texture matters because these three methods genuinely look different in a way that affects a buyer's or client's expectations: a mockup that renders every design as a flat, textureless color fill regardless of what production method was actually planned sets an expectation the eventual physical product won't match, which is the same delivered-versus-photographed mismatch problem that shows up in food photography and product photography alike, just with a different failure mode specific to how ink or thread actually sits on fabric. Third, keeping placement and scale tied to real print-shop convention rather than an arbitrary size and position is what makes the mockup usable for its actual business purpose — a client or customer evaluating a mockup is implicitly comparing it against every other centered-chest or left-chest design they've seen, and a design placed at a genuinely unconventional size or position without that being the deliberate ask reads as unprofessional or amateur regardless of how well-rendered the fabric physics otherwise are, which is why the brief treats placement convention as its own explicit constraint rather than leaving it to whatever position looks visually balanced in isolation.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-26' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-26',
+      },
     ],
     changelog: [
       {
@@ -869,7 +1044,7 @@ One mockup image with the design applied convincingly to the garment's actual su
     category: 'nano-banana',
     title: 'Turn a flat label design into a photorealistic packaging mockup',
     description:
-      'Wraps a flat, uploaded label or artwork file around a specific packaging shape — box, bottle, pouch, or jar — with correct material finish and light wrap distortion, for a design that hasn\'t gone to physical print yet.',
+      "Wraps a flat, uploaded label or artwork file around a specific packaging shape — box, bottle, pouch, or jar — with correct material finish and light wrap distortion, for a design that hasn't gone to physical print yet.",
     promptText: `You are rendering a photorealistic packaging mockup from a flat label or artwork design. The uploaded artwork needs to wrap correctly onto the packaging's actual 3D shape, not sit as a flat sticker on top of it.
 
 LABEL OR ARTWORK
@@ -899,7 +1074,8 @@ One photorealistic packaging mockup, artwork faithfully and dimensionally wrappe
       {
         name: 'label_design_description',
         description: 'The flat artwork or label design being mocked up.',
-        example: 'a minimalist label with a hand-drawn botanical illustration, deep green background, cream serif logotype at the top',
+        example:
+          'a minimalist label with a hand-drawn botanical illustration, deep green background, cream serif logotype at the top',
         required: true,
       },
       {
@@ -917,22 +1093,35 @@ One photorealistic packaging mockup, artwork faithfully and dimensionally wrappe
       {
         name: 'setting_description',
         description: 'The background and setting for the mockup.',
-        example: 'standing on a pale wood shelf, softly blurred kitchen background behind it',
+        example:
+          'standing on a pale wood shelf, softly blurred kitchen background behind it',
         required: true,
       },
       {
         name: 'lighting_setup',
         description: 'The lighting for the mockup shot.',
-        example: 'soft directional daylight from one side, creating a gentle highlight along the bottle\'s curved edge',
+        example:
+          "soft directional daylight from one side, creating a gentle highlight along the bottle's curved edge",
         required: false,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'packaging-mockup', 'label-design', 'product-render', 'branding'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'packaging-mockup',
+      'label-design',
+      'product-render',
+      'branding',
+    ],
     whyItWorks:
       "The instruction to render text and logo elements curving naturally as they cross a wrap line targets a specific geometric detail that flat-mockup generators frequently get wrong: a label design is created flat, but a cylindrical bottle or can genuinely distorts anything printed on it in perspective as the surface curves away from the viewer, and a mockup that keeps the artwork perfectly flat and undistorted across a visibly curved surface looks like a digital overlay rather than a photograph of a real wrapped label, which is exactly the difference between a mockup a client trusts as representative and one they discount as \"just a preview.\" Second, requiring the material's real optical properties — glass transparency and refraction, cardboard's light-absorbing matte finish, a laminated pouch's specular highlight — matters because these three materials genuinely behave differently under the same light, and a generic, material-agnostic render defaults to a flat, plastic-looking sheen regardless of what the packaging is actually made of, which undersells exactly the tactile, premium quality a lot of packaging design is trying to communicate in the first place. Third, treating the label's actual text and logo content as fixed and requiring faithful reproduction rather than creative reinterpretation is the detail that makes this genuinely useful for a real pre-print workflow rather than just a pretty render: a packaging mockup's entire business purpose is often to get sign-off from a client or a print vendor on exactly what the finished product will say and look like, and a model that subtly re-kerns text, shifts a logo's proportions, or simplifies a detail during the 3D-wrap process undermines that purpose by presenting an approval-ready image that doesn't actually match the file that will go to print.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-27' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-27',
+      },
     ],
     changelog: [
       {
@@ -946,7 +1135,7 @@ One photorealistic packaging mockup, artwork faithfully and dimensionally wrappe
     category: 'nano-banana',
     title: 'Composite a product into a natural-looking lifestyle ad photo',
     description:
-      'Blends an uploaded product photo into a person-and-setting scene styled to match a specific ad register — polished lifestyle or deliberately rougher UGC-style — with the product\'s own packaging and proportions locked exactly as photographed.',
+      "Blends an uploaded product photo into a person-and-setting scene styled to match a specific ad register — polished lifestyle or deliberately rougher UGC-style — with the product's own packaging and proportions locked exactly as photographed.",
     promptText: `You are compositing an uploaded product photo into a lifestyle scene for use as ad creative. The product itself must render exactly as photographed — this composite exists specifically because the product's real appearance matters for ad accuracy and platform compliance.
 
 PRODUCT
@@ -976,40 +1165,57 @@ One composited image in the requested style register, with the product rendered 
       {
         name: 'product_photo_description',
         description: 'The uploaded product photo being composited in.',
-        example: 'a 12oz amber glass bottle of cold-brew coffee concentrate with a cream-and-black label',
+        example:
+          'a 12oz amber glass bottle of cold-brew coffee concentrate with a cream-and-black label',
         required: true,
       },
       {
         name: 'person_and_setting_description',
         description: 'The person and setting for the lifestyle scene.',
-        example: 'a woman in her late 20s in a sunlit kitchen, morning light, casual loungewear',
+        example:
+          'a woman in her late 20s in a sunlit kitchen, morning light, casual loungewear',
         required: true,
       },
       {
         name: 'interaction_with_product',
         description: 'How the person is physically interacting with the product.',
-        example: 'pouring the concentrate into a glass of milk over ice, mid-pour, looking down at the glass',
+        example:
+          'pouring the concentrate into a glass of milk over ice, mid-pour, looking down at the glass',
         required: true,
       },
       {
         name: 'style_reference',
         description: 'The overall creative register — UGC-style or polished lifestyle.',
-        example: 'UGC-style, as if shot on an iPhone for a casual product-review post, not a professional lifestyle campaign',
+        example:
+          'UGC-style, as if shot on an iPhone for a casual product-review post, not a professional lifestyle campaign',
         required: true,
       },
       {
         name: 'lighting_matching_notes',
-        description: 'The scene\'s actual light source and direction the product needs to match.',
-        example: 'warm, slightly golden morning sunlight coming through a window just behind and to the left of her',
+        description:
+          "The scene's actual light source and direction the product needs to match.",
+        example:
+          'warm, slightly golden morning sunlight coming through a window just behind and to the left of her',
         required: true,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'ugc-ads', 'lifestyle-photography', 'ad-creative', 'compositing'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'ugc-ads',
+      'lifestyle-photography',
+      'ad-creative',
+      'compositing',
+    ],
     whyItWorks:
       "Explicitly naming which creative register is wanted — UGC-style versus polished lifestyle — matters more here than in most compositing tasks because these two registers succeed through opposite visual signals: UGC-style ad creative works specifically because it reads as unpolished and real, so a model that defaults toward its usual instinct to make an image look clean and professional actively undermines the format's entire purpose, which is why this brief states the imperfection requirement as a positive instruction rather than trusting the model to under-polish an image on its own initiative. Second, the lighting-matching requirement carries specific weight in this exact use case because a composited product retaining its neutral studio-photo lighting inside an otherwise warm, naturally-lit kitchen scene is the single most common tell that separates a real customer's candid photo from an obviously composited ad, and ad-savvy audiences on platforms saturated with UGC-style creative have gotten specifically attuned to spotting that particular mismatch, which is precisely why unifying the light source is treated as a hard constraint rather than a nice-to-have polish step. Third, the compliance note reflects a real and specific advertising-standards risk that's easy to miss when focused purely on visual craft: consumer-protection frameworks and ad-platform policies in multiple jurisdictions evaluate implied claims in imagery, not just written text, so a lifestyle composite that visually implies an effect or outcome the product itself doesn't support can trigger the same substantiation requirements as a written claim would — building that constraint into the creative brief itself, rather than treating it as a legal review step that happens after the image already exists, is what keeps the output usable without a late-stage rejection.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-27' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-27',
+      },
     ],
     changelog: [
       {
@@ -1050,39 +1256,54 @@ One professional headshot, same person, unmistakably recognizable, dressed and l
       {
         name: 'selfie_description',
         description: 'What the source selfie shows.',
-        example: 'a front-facing phone selfie taken at arm\'s length, indoor lighting, wearing a casual t-shirt, slightly looking up at the camera',
+        example:
+          "a front-facing phone selfie taken at arm's length, indoor lighting, wearing a casual t-shirt, slightly looking up at the camera",
         required: true,
       },
       {
         name: 'attire_and_grooming_changes',
         description: 'What wardrobe or grooming changes to apply, if any.',
-        example: 'change the t-shirt to a simple charcoal button-down collar shirt; leave hair exactly as photographed',
+        example:
+          'change the t-shirt to a simple charcoal button-down collar shirt; leave hair exactly as photographed',
         required: true,
       },
       {
         name: 'background_and_lighting_style',
         description: 'The target professional look for background and lighting.',
-        example: 'a softly blurred neutral warm-grey background, even soft studio-style lighting with no harsh shadows',
+        example:
+          'a softly blurred neutral warm-grey background, even soft studio-style lighting with no harsh shadows',
         required: true,
       },
       {
         name: 'framing',
         description: 'The target crop and camera angle for the headshot.',
-        example: 'head-and-shoulders crop, camera at eye level, straight-on angle rather than looking up',
+        example:
+          'head-and-shoulders crop, camera at eye level, straight-on angle rather than looking up',
         required: true,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'headshot', 'linkedin', 'portrait-editing', 'identity-preservation'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'headshot',
+      'linkedin',
+      'portrait-editing',
+      'identity-preservation',
+    ],
     whyItWorks:
       "This prompt's identity-preservation list is written as a set of named, checkable features — bone structure, eye shape, specific distinguishing marks — rather than a single vague instruction like \"keep it looking like them,\" because a model asked generically to \"make a selfie more professional\" has a well-documented drift toward beautification: subtly slimming a face, enlarging eyes, or smoothing skin texture toward a generic template, all changes that individually look like reasonable polish but that compound into a result a close colleague genuinely wouldn't recognize at a glance, which defeats the entire purpose of a headshot meant to represent a real, specific person on a professional profile. Second, the lens-distortion correction is a real, physically grounded detail worth naming explicitly rather than leaving implicit: a selfie shot at arm's length on a phone's wide-angle-adjacent lens measurably distorts facial proportions — the nose reads larger and the face rounder than the same person photographed from three to five feet away on a longer focal length, which is standard headshot-photography distance — so correcting for that specific, well-understood optical effect is genuinely restoring the person's real appearance, not altering it, and framing the instruction this way keeps the correction inside the bounds of the identity-preservation rule rather than contradicting it. Third, requiring the model to flag anything it found genuinely hard to render confidently from the source photo's resolution or angle turns an otherwise silent best-effort guess into a visible signal the requester can act on — a selfie shot at a steep upward angle may not clearly show certain features from the new, more level headshot angle, and knowing that a specific detail was a lower-confidence reconstruction is far more useful than a confident-looking headshot that quietly guessed wrong on something as significant as a distinguishing facial feature.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-28' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-28',
+      },
     ],
     changelog: [
       {
         date: '2026-07-28',
-        note: 'Initial publish, verified against Nano Banana (Gemini 3.1 Flash Image) converting an arm\'s-length phone selfie into a studio-style headshot.',
+        note: "Initial publish, verified against Nano Banana (Gemini 3.1 Flash Image) converting an arm's-length phone selfie into a studio-style headshot.",
       },
     ],
   },
@@ -1121,40 +1342,56 @@ One mockup image showing the proposed sign mounted realistically in place, at fa
       {
         name: 'sign_or_logo_description',
         description: 'The flat sign or logo design being mocked up.',
-        example: 'a wordmark logo in brushed-gold dimensional letters reading "MERIDIAN COFFEE"',
+        example:
+          'a wordmark logo in brushed-gold dimensional letters reading "MERIDIAN COFFEE"',
         required: true,
       },
       {
         name: 'storefront_photo_description',
         description: 'What the storefront photo shows.',
-        example: 'a narrow brick storefront with a single large window and a plain fascia board above the entrance, shot straight-on from across the street',
+        example:
+          'a narrow brick storefront with a single large window and a plain fascia board above the entrance, shot straight-on from across the street',
         required: true,
       },
       {
         name: 'mounting_location_and_scale',
         description: 'Exactly where on the storefront the sign should be mounted.',
-        example: 'centered on the fascia board above the entrance, sized to fill roughly two-thirds of the fascia\'s width with even margin on both sides',
+        example:
+          "centered on the fascia board above the entrance, sized to fill roughly two-thirds of the fascia's width with even margin on both sides",
         required: true,
       },
       {
         name: 'material_and_lighting_effect',
-        description: 'The sign\'s real material and how it should respond to light.',
-        example: 'brushed-metal dimensional letters, non-illuminated, should show a soft metallic highlight from the sun and a subtle cast shadow onto the fascia',
+        description: "The sign's real material and how it should respond to light.",
+        example:
+          'brushed-metal dimensional letters, non-illuminated, should show a soft metallic highlight from the sun and a subtle cast shadow onto the fascia',
         required: true,
       },
       {
         name: 'time_of_day',
         description: 'The time of day the mockup scene is set in.',
-        example: 'mid-afternoon daylight, sun coming from the upper right based on the shadows already visible in the storefront photo',
+        example:
+          'mid-afternoon daylight, sun coming from the upper right based on the shadows already visible in the storefront photo',
         required: true,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'signage-mockup', 'storefront', 'branding', 'compositing'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'signage-mockup',
+      'storefront',
+      'branding',
+      'compositing',
+    ],
     whyItWorks:
       "Grounding the sign's scale in the storefront's own visible architectural measurements — doorway width, fascia depth — rather than an arbitrary visually-balanced size matters because this specific mockup has a real downstream consequence a purely aesthetic mockup doesn't: a business owner or landlord is going to make a fabrication and, often, a permitting decision partly based on how this image looks, and a sign rendered at a size that couldn't actually be fabricated to fit the real fascia board creates expectations the physical installation can't meet, turning a helpful visualization into a source of an expensive surprise later. Second, tying the sign's lighting effect to the specified time of day, and requiring the rest of the storefront's ambient lighting to stay consistent with that same time of day, targets a subtle inconsistency that's easy to introduce when compositing a new element into an existing photo: a sign rendered with a confident dusk-time illuminated glow, mounted onto a storefront photo whose windows and shadows clearly show midday sun, reads as visually contradictory the moment someone looks closely, even if neither element is wrong in isolation. Third, the perspective-matching requirement addresses a specific compositing error that's common precisely because it's easy to overlook: a sign added to a photo shot at a slight angle needs to share that same angle's foreshortening on its own letters and edges, and a flat, straight-on rendering of the sign pasted onto an angled photo produces a mockup where the new sign looks like a sticker applied after the fact rather than an object that was actually mounted on the building when the photo was taken — which undermines the entire credibility of the mockup as a preview of a real installation rather than a rough concept sketch.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-28' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-28',
+      },
     ],
     changelog: [
       {
@@ -1168,7 +1405,7 @@ One mockup image showing the proposed sign mounted realistically in place, at fa
     category: 'nano-banana',
     title: 'Re-theme a product photo for a new season without touching the product',
     description:
-      'Swaps a product photo\'s background, props, and color grade to match a target season or holiday while keeping the product itself locked pixel-for-pixel — built for sellers who need a whole seasonal campaign\'s worth of variants from one hero shot.',
+      "Swaps a product photo's background, props, and color grade to match a target season or holiday while keeping the product itself locked pixel-for-pixel — built for sellers who need a whole seasonal campaign's worth of variants from one hero shot.",
     promptText: `You are re-theming an existing product photo for a new seasonal campaign. The product must remain completely unedited — only the background, supporting props, and ambient color grade change.
 
 BASE PRODUCT PHOTO
@@ -1198,7 +1435,8 @@ One re-themed image with the product locked exactly as it was in the original ph
       {
         name: 'base_product_photo_description',
         description: 'The original product photo being re-themed.',
-        example: 'a hand-poured soy candle in a clear glass jar with a kraft-paper label, currently shot against a plain white background',
+        example:
+          'a hand-poured soy candle in a clear glass jar with a kraft-paper label, currently shot against a plain white background',
         required: true,
       },
       {
@@ -1209,8 +1447,10 @@ One re-themed image with the product locked exactly as it was in the original ph
       },
       {
         name: 'product_lock_instructions',
-        description: 'An explicit restatement of what must stay identical about the product.',
-        example: 'the jar\'s exact shape, the label\'s exact text and kraft-paper color, and the candle wax\'s cream color must not shift at all',
+        description:
+          'An explicit restatement of what must stay identical about the product.',
+        example:
+          "the jar's exact shape, the label's exact text and kraft-paper color, and the candle wax's cream color must not shift at all",
         required: true,
       },
       {
@@ -1222,16 +1462,28 @@ One re-themed image with the product locked exactly as it was in the original ph
       {
         name: 'prop_additions',
         description: 'Supporting seasonal props to add near the product.',
-        example: 'a few scattered dried maple leaves and a small stack of cinnamon sticks, arranged loosely nearby, not touching the jar',
+        example:
+          'a few scattered dried maple leaves and a small stack of cinnamon sticks, arranged loosely nearby, not touching the jar',
         required: true,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'seasonal-marketing', 'ecommerce', 'product-photography', 'campaign-assets'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'seasonal-marketing',
+      'ecommerce',
+      'product-photography',
+      'campaign-assets',
+    ],
     whyItWorks:
       "The explicit warning against letting a new background's color temperature bleed into the product's own reading addresses a real and easy-to-miss rendering behavior: a model asked to place a product into a warmly-lit autumn scene will often, as a side effect of rendering a coherent, unified color grade for the whole image, subtly shift the product's own true color warmer too — which is exactly backwards for a seasonal-variant campaign, where the entire point is that the same product looks identical across every seasonal version and only its surroundings change, so a customer comparing the summer and winter versions of a listing shouldn't perceive a color-corrected product, they should perceive the same product in two different rooms. Second, the cross-campaign consistency instruction — locking framing, crop, and angle identical across every seasonal variant generated from the same base photo — matters because these variants are typically going to appear together across a season's worth of marketing, and even a small drift in crop or angle between the autumn and winter versions of the same product reads as inconsistent brand execution the moment two versions are placed side by side in an ad set or an email campaign, which undercuts the professional, cohesive look a seasonal campaign is supposed to project. Third, keeping added props explicitly secondary and non-overlapping with the product protects against a specific listing-accuracy risk that echoes the marketplace and food-photography cases: a prop that visually overlaps or partially obscures the product risks a customer misreading what's actually included in the purchase, so treating \"props stay clearly separate from the product\" as a hard compositional rule rather than a loose styling preference is what keeps a seasonal creative choice from accidentally becoming a customer-service problem.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-29' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-29',
+      },
     ],
     changelog: [
       {
@@ -1275,7 +1527,8 @@ One edited image with the object fully removed and the space behind it reconstru
       {
         name: 'source_photo_description',
         description: 'What the uploaded photo shows overall.',
-        example: 'a living-room photo being prepared for a real-estate listing, patterned hardwood floor, plain painted wall',
+        example:
+          'a living-room photo being prepared for a real-estate listing, patterned hardwood floor, plain painted wall',
         required: true,
       },
       {
@@ -1287,13 +1540,16 @@ One edited image with the object fully removed and the space behind it reconstru
       {
         name: 'surrounding_context_for_reconstruction',
         description: 'What surrounds the object that should guide what fills the gap.',
-        example: 'the hardwood floor\'s plank pattern is visible on both sides of the boxes, and the wall behind them is a plain, unpatterned off-white',
+        example:
+          "the hardwood floor's plank pattern is visible on both sides of the boxes, and the wall behind them is a plain, unpatterned off-white",
         required: true,
       },
       {
         name: 'lighting_and_shadow_notes',
-        description: 'Any shadow or light-blocking effect the object was creating that needs correcting.',
-        example: 'the boxes are blocking some window light from reaching that corner of the floor — the corner should look brighter once they\'re removed',
+        description:
+          'Any shadow or light-blocking effect the object was creating that needs correcting.',
+        example:
+          "the boxes are blocking some window light from reaching that corner of the floor — the corner should look brighter once they're removed",
         required: true,
       },
       {
@@ -1304,11 +1560,22 @@ One edited image with the object fully removed and the space behind it reconstru
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'object-removal', 'photo-cleanup', 'retouching', 'real-estate'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'object-removal',
+      'photo-cleanup',
+      'retouching',
+      'real-estate',
+    ],
     whyItWorks:
       "Requiring the reconstruction to continue an actual visible pattern — a specific floorboard seam, a specific wallpaper repeat — rather than accepting a generic smoothed patch is what separates a genuinely convincing removal from the telltale soft blur that gives away most quick object-removal edits: real backgrounds usually have some structure (a line, a repeat, a texture direction), and a model given the specific pattern to continue through the gap can extend it correctly, while a model given only \"remove this and fill the background\" defaults to the easiest visually plausible fill, which is very often a texture-less smudge that reads as an edit the moment anyone looks closely at that exact spot. Second, the lighting-and-shadow cleanup instruction targets a failure mode that's specific to removal edits rather than additions: an object being removed was very likely interacting with the scene's light — blocking it, casting a shadow — and simply deleting the object while leaving its shadow or its light-blocking effect in place produces an image with a shadow that has nothing left to explain it, which is a subtle but real inconsistency a careful viewer notices even without being able to say exactly what looks wrong, so correcting for the object's absence has to include correcting for what its absence changes about the light, not just erasing its visible shape. Third, giving the model permission to flag when a removal is complex enough to need iterative correction — a large object obscuring a highly detailed, patterned background — rather than forcing a single confident pass matters because reconstruction difficulty genuinely scales with how much detail was hidden behind the object: removing something in front of a plain wall is a much easier reconstruction than removing something in front of an intricate patterned rug, and treating both as equally one-shot-solvable sets an unrealistic expectation that leads to accepting a subtly wrong result rather than asking for the targeted second pass the harder case actually needs.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-30' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-30',
+      },
     ],
     changelog: [
       {
@@ -1322,7 +1589,7 @@ One edited image with the object fully removed and the space behind it reconstru
     category: 'nano-banana',
     title: 'Generate consistent alternate angles of the same product for a gallery',
     description:
-      'Produces a set of additional camera angles of one specific product from a single reference photo, holding the product\'s exact appearance fixed while only the viewing angle changes — for listings that need a multi-image gallery from one original shoot.',
+      "Produces a set of additional camera angles of one specific product from a single reference photo, holding the product's exact appearance fixed while only the viewing angle changes — for listings that need a multi-image gallery from one original shoot.",
     promptText: `You are generating additional camera angles of one specific product for a listing image gallery, using the uploaded reference photo as the ground truth for exactly what this product looks like.
 
 BASE PRODUCT PHOTO
@@ -1348,41 +1615,60 @@ The full set of requested angles, each as its own image, all traceable back to t
     variables: [
       {
         name: 'base_product_photo_description',
-        description: 'The single reference photo establishing the product\'s true appearance.',
-        example: 'a wireless charging stand in matte white plastic with a rose-gold accent ring, photographed from a three-quarter front angle',
+        description:
+          "The single reference photo establishing the product's true appearance.",
+        example:
+          'a wireless charging stand in matte white plastic with a rose-gold accent ring, photographed from a three-quarter front angle',
         required: true,
       },
       {
         name: 'target_angles_list',
         description: 'The specific additional angles needed.',
-        example: 'straight-on front view, direct top-down view showing the charging surface, and a rear three-quarter view showing the cable port',
+        example:
+          'straight-on front view, direct top-down view showing the charging surface, and a rear three-quarter view showing the cable port',
         required: true,
       },
       {
         name: 'consistency_requirements',
         description: 'The specific details that must match exactly across every angle.',
-        example: 'the rose-gold accent ring\'s exact width and position, and the exact placement of the small status LED near the base',
+        example:
+          "the rose-gold accent ring's exact width and position, and the exact placement of the small status LED near the base",
         required: true,
       },
       {
         name: 'background_and_lighting_match',
-        description: 'What background and lighting setup should stay identical across the set.',
-        example: 'same seamless soft-grey background and same overhead-softbox-with-side-fill lighting as the base photo',
+        description:
+          'What background and lighting setup should stay identical across the set.',
+        example:
+          'same seamless soft-grey background and same overhead-softbox-with-side-fill lighting as the base photo',
         required: true,
       },
       {
         name: 'use_case',
-        description: 'Where this angle set is headed and how many angles it actually needs.',
-        example: 'a five-image gallery for an online marketplace listing — front, top-down, rear, and two three-quarter angles',
+        description:
+          'Where this angle set is headed and how many angles it actually needs.',
+        example:
+          'a five-image gallery for an online marketplace listing — front, top-down, rear, and two three-quarter angles',
         required: false,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'product-photography', 'ecommerce', 'multi-angle', 'consistency'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'product-photography',
+      'ecommerce',
+      'multi-angle',
+      'consistency',
+    ],
     whyItWorks:
       "The instruction to reason through what a genuinely new vantage point would reveal — rather than approximate a new angle by rotating the existing flat image — targets the core technical challenge this task actually poses: a top-down view of a product photographed only from a three-quarter front angle shows real surface detail (a charging pad's texture, a previously hidden port) that simply doesn't exist anywhere in the original 2D photo, so generating that view correctly requires the model to infer the product's real 3D form from the one photo it has and extrapolate, not transform pixels that were never captured, which is a meaningfully harder and more error-prone task than a same-angle edit, and naming it explicitly sets the right expectation for how the model should approach it. Second, the self-check-before-delivering step matters specifically because multi-image consistency errors in a generated set are asymmetric in how they're noticed: a single product photo with a slightly-off detail might pass unnoticed, but a five-image gallery where the accent ring is a hair wider in one angle than another becomes obvious the moment a shopper scrolls through the set, precisely because the comparison is trivial to make when the images sit right next to each other — which is exactly the situation a single-image product shot never has to survive. Third, requiring identical background and lighting direction across the whole set, rather than treating each angle as its own independent generation, is what makes the output read as one coherent photoshoot instead of several separate renders that each happen to feature a similar product — a listing gallery's credibility partly rests on looking like it came from one real photo session, and a lighting direction that flips from one image to the next is a fast, easy-to-spot signal to a buyer that something about the listing's photos doesn't add up, even if they can't articulate the specific inconsistency.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-07-31' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-07-31',
+      },
     ],
     changelog: [
       {
@@ -1396,7 +1682,7 @@ The full set of requested angles, each as its own image, all traceable back to t
     category: 'nano-banana',
     title: 'Design a poster or flyer with text that actually renders legibly',
     description:
-      'A poster brief that specifies exact text content and hierarchy word-for-word, built around Nano Banana\'s native multimodal architecture rendering in-image text more reliably than pure diffusion-based image models.',
+      "A poster brief that specifies exact text content and hierarchy word-for-word, built around Nano Banana's native multimodal architecture rendering in-image text more reliably than pure diffusion-based image models.",
     promptText: `Act as a graphic designer producing a finished poster or flyer. Every piece of text specified below must render exactly as written, spelled correctly, and legible at the sizes implied by the layout hierarchy — this image's success is judged on the text being readable and accurate, not just the overall visual composition.
 
 PURPOSE
@@ -1426,7 +1712,8 @@ One finished poster or flyer image, with every specified line of text present, c
       {
         name: 'poster_purpose',
         description: 'What this poster or flyer is for.',
-        example: 'a flyer for a neighborhood weekend farmers market, to be posted on community boards and shared as a social image',
+        example:
+          'a flyer for a neighborhood weekend farmers market, to be posted on community boards and shared as a social image',
         required: true,
       },
       {
@@ -1439,19 +1726,22 @@ One finished poster or flyer image, with every specified line of text present, c
       {
         name: 'layout_and_hierarchy',
         description: 'How the text should be arranged and sized relative to itself.',
-        example: 'headline centered near the top, large and bold; subhead directly below it, smaller; body text centered in the lower-middle area; footer small at the very bottom',
+        example:
+          'headline centered near the top, large and bold; subhead directly below it, smaller; body text centered in the lower-middle area; footer small at the very bottom',
         required: true,
       },
       {
         name: 'visual_style',
         description: 'The overall visual and illustrative style of the poster.',
-        example: 'a warm, hand-illustrated style with a loose watercolor texture, showing a simple illustration of vegetables and bread in a basket',
+        example:
+          'a warm, hand-illustrated style with a loose watercolor texture, showing a simple illustration of vegetables and bread in a basket',
         required: true,
       },
       {
         name: 'color_and_typography_notes',
         description: 'Color palette and typeface character preferences.',
-        example: 'warm earthy tones — terracotta, cream, sage green — with a friendly rounded sans-serif for the headline and a simpler serif for body text',
+        example:
+          'warm earthy tones — terracotta, cream, sage green — with a friendly rounded sans-serif for the headline and a simpler serif for body text',
         required: true,
       },
       {
@@ -1462,11 +1752,22 @@ One finished poster or flyer image, with every specified line of text present, c
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'poster-design', 'text-in-image', 'flyer', 'typography'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'poster-design',
+      'text-in-image',
+      'flyer',
+      'typography',
+    ],
     whyItWorks:
       "Nano Banana's underlying model reads and generates text as part of the same multimodal token space it uses for images, rather than treating text-in-image rendering as a purely visual pattern to approximate the way earlier pure-diffusion image models did — which is the documented, concrete reason Gemini's image models handle in-image text more reliably than models with no native language grounding, and it's exactly why specifying exact text content verbatim, rather than a loose description of what the poster should say, gets meaningfully better spelling and word accuracy here than the same instruction would on a diffusion-only competitor. Second, the explicit permission to flag text that's too long to fit legibly, rather than silently shrinking or truncating it, matters because a poster's core job is communicating specific information — a date, a time, a URL — and a model under pressure to fit everything into a fixed layout will sometimes resolve that tension by rendering the overflow line at an illegibly small size or quietly dropping a word, either of which produces an image that looks complete at a glance but has actually failed at its one real job; asking for the conflict to be surfaced instead of hidden turns a silent failure into an actionable one. Third, the text-integrity check — re-reading every rendered word character by character against the source content — targets the single most damaging failure mode specific to AI-generated text-in-image content: a poster can be beautifully composed, perfectly on-brand, and completely unusable because one word has a dropped letter or two words have merged together, and because that kind of error is easy to miss on a quick visual scan of an otherwise polished-looking image, building a deliberate verification step into the generation instructions catches exactly the class of mistake a purely aesthetic review would sail right past.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-01' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-08-01',
+      },
     ],
     changelog: [
       {
@@ -1479,7 +1780,8 @@ One finished poster or flyer image, with every specified line of text present, c
   {
     slug: 'nano-banana-interior-design-concept-from-room-photo',
     category: 'nano-banana',
-    title: 'Restyle a furnished room to a new design concept while keeping its architecture',
+    title:
+      'Restyle a furnished room to a new design concept while keeping its architecture',
     description:
       'Re-imagines an already-furnished room in a new interior style while locking its fixed architecture — windows, layout, structural walls — so the concept stays honest about what the existing space can actually become.',
     promptText: `You are generating an interior-design concept render from a photo of an existing, furnished room. The room's fixed architecture does not change — only furnishings, materials, and decor are being reimagined.
@@ -1511,40 +1813,58 @@ One restyled concept image with the room's real architecture completely intact a
       {
         name: 'room_photo_description',
         description: 'What the current furnished room photo shows.',
-        example: 'a living room with a large south-facing window, a fireplace on the left wall, and a doorway on the right leading to a hallway',
+        example:
+          'a living room with a large south-facing window, a fireplace on the left wall, and a doorway on the right leading to a hallway',
         required: true,
       },
       {
         name: 'current_style',
         description: 'How the room is currently furnished and styled.',
-        example: 'a mismatched mix of dated furniture, heavy dark curtains, and beige walls',
+        example:
+          'a mismatched mix of dated furniture, heavy dark curtains, and beige walls',
         required: true,
       },
       {
         name: 'target_style',
         description: 'The specific interior design style to restyle toward.',
-        example: 'Scandinavian minimalism — light woods, white and soft grey tones, simple clean-lined furniture, minimal but warm textiles',
+        example:
+          'Scandinavian minimalism — light woods, white and soft grey tones, simple clean-lined furniture, minimal but warm textiles',
         required: true,
       },
       {
         name: 'elements_to_preserve',
-        description: 'Specific existing elements, beyond fixed architecture, that should stay.',
-        example: 'the fireplace and its stone surround should stay, though its mantel decor can change',
+        description:
+          'Specific existing elements, beyond fixed architecture, that should stay.',
+        example:
+          'the fireplace and its stone surround should stay, though its mantel decor can change',
         required: true,
       },
       {
         name: 'budget_or_material_notes',
-        description: 'A realistic constraint on what materials or furniture level to suggest.',
-        example: 'mid-range, achievable with off-the-shelf furniture from a mainstream retailer, not custom-built pieces',
+        description:
+          'A realistic constraint on what materials or furniture level to suggest.',
+        example:
+          'mid-range, achievable with off-the-shelf furniture from a mainstream retailer, not custom-built pieces',
         required: false,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'interior-design', 'room-restyling', 'concept-render', 'renovation'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'interior-design',
+      'room-restyling',
+      'concept-render',
+      'renovation',
+    ],
     whyItWorks:
-      "Locking the room's fixed architecture — window position, doorway, ceiling height, structural walls — as a hard, non-negotiable constraint addresses the specific way an interior-restyling render's usefulness can quietly collapse: a client evaluating a Scandinavian-style concept for their actual living room is implicitly checking whether this is achievable in their actual space, and a render that subtly widens the window or repositions the fireplace to make the new style look better isn't showing them their room restyled, it's showing them a different, better room that happens to look similar, which sets an expectation the real renovation can never deliver on. Second, the instruction to commit fully to a style's real, specific visual vocabulary rather than a generic version of it matters because \"Scandinavian,\" \"industrial,\" and \"mid-century\" each have concrete, well-documented material and color conventions that differ meaningfully from each other and from a generic catch-all \"modern\" look, and a model that defaults to safe, generic styling under a vague style label produces a render that doesn't actually demonstrate what the requested style would look like in this room — undermining the whole point of asking for a specific named style in the first place. Third, the budget-and-material-realism constraint targets a documented failure of AI-generated design concepts specifically: an unconstrained render often defaults toward the most visually striking, aspirational version of a style — designer pieces, custom millwork, bespoke lighting — because that reads as more impressive in isolation, but a concept render whose actual job is helping a client plan a real renovation needs to stay honest about what's achievable at the budget and sourcing level they actually have, or the concept becomes aspirational marketing rather than a genuinely useful planning tool.",
+      'Locking the room\'s fixed architecture — window position, doorway, ceiling height, structural walls — as a hard, non-negotiable constraint addresses the specific way an interior-restyling render\'s usefulness can quietly collapse: a client evaluating a Scandinavian-style concept for their actual living room is implicitly checking whether this is achievable in their actual space, and a render that subtly widens the window or repositions the fireplace to make the new style look better isn\'t showing them their room restyled, it\'s showing them a different, better room that happens to look similar, which sets an expectation the real renovation can never deliver on. Second, the instruction to commit fully to a style\'s real, specific visual vocabulary rather than a generic version of it matters because "Scandinavian," "industrial," and "mid-century" each have concrete, well-documented material and color conventions that differ meaningfully from each other and from a generic catch-all "modern" look, and a model that defaults to safe, generic styling under a vague style label produces a render that doesn\'t actually demonstrate what the requested style would look like in this room — undermining the whole point of asking for a specific named style in the first place. Third, the budget-and-material-realism constraint targets a documented failure of AI-generated design concepts specifically: an unconstrained render often defaults toward the most visually striking, aspirational version of a style — designer pieces, custom millwork, bespoke lighting — because that reads as more impressive in isolation, but a concept render whose actual job is helping a client plan a real renovation needs to stay honest about what\'s achievable at the budget and sourcing level they actually have, or the concept becomes aspirational marketing rather than a genuinely useful planning tool.',
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-02' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-08-02',
+      },
     ],
     changelog: [
       {
@@ -1558,7 +1878,7 @@ One restyled concept image with the room's real architecture completely intact a
     category: 'nano-banana',
     title: 'Turn a rough hand sketch into a photorealistic product render',
     description:
-      'Converts a rough concept sketch into a photorealistic product render, with an explicit split between what the sketch defines literally (proportions, form, key features) and what it leaves open for interpretation (exact material, finish, color) — so the render doesn\'t invent detail the sketch never specified, or ignore detail it did.',
+      "Converts a rough concept sketch into a photorealistic product render, with an explicit split between what the sketch defines literally (proportions, form, key features) and what it leaves open for interpretation (exact material, finish, color) — so the render doesn't invent detail the sketch never specified, or ignore detail it did.",
     promptText: `You are turning a rough hand sketch into a photorealistic product concept render. The sketch defines this product's form — respect what it actually shows, and use the notes below to resolve anything the sketch itself leaves ambiguous.
 
 SKETCH
@@ -1591,7 +1911,8 @@ One photorealistic render, faithful to the sketch's actual form, using the descr
       {
         name: 'sketch_description',
         description: 'What the uploaded rough sketch shows.',
-        example: 'a quick pen sketch of a handheld electric kettle with a curved spout, a side-mounted handle, and a small circular button near the base',
+        example:
+          'a quick pen sketch of a handheld electric kettle with a curved spout, a side-mounted handle, and a small circular button near the base',
         required: true,
       },
       {
@@ -1602,14 +1923,17 @@ One photorealistic render, faithful to the sketch's actual form, using the descr
       },
       {
         name: 'materials_and_finish',
-        description: 'The real materials and finish the sketch doesn\'t specify.',
-        example: 'body in matte cream powder-coated steel, handle in warm walnut wood, a small brushed-steel ring around the base button',
+        description: "The real materials and finish the sketch doesn't specify.",
+        example:
+          'body in matte cream powder-coated steel, handle in warm walnut wood, a small brushed-steel ring around the base button',
         required: true,
       },
       {
         name: 'fidelity_notes',
-        description: 'How strictly the sketch\'s proportions and details should be followed.',
-        example: 'treat the spout curve and handle position as exact — those are the two features the design is actually built around; the base button\'s exact size is a rough guide only',
+        description:
+          "How strictly the sketch's proportions and details should be followed.",
+        example:
+          "treat the spout curve and handle position as exact — those are the two features the design is actually built around; the base button's exact size is a rough guide only",
         required: true,
       },
       {
@@ -1620,11 +1944,22 @@ One photorealistic render, faithful to the sketch's actual form, using the descr
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'sketch-to-render', 'product-design', 'concept-art', 'prototyping'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'sketch-to-render',
+      'product-design',
+      'concept-art',
+      'prototyping',
+    ],
     whyItWorks:
       "Splitting the sketch's authority explicitly — form and functional features are fixed, material and finish are open for interpretation because the sketch was never going to specify them — matters because a rough hand sketch is genuinely underspecified in exactly the dimension a photorealistic render needs most: it shows shape, not surface, and a model asked to \"photorealistically render this sketch\" without that split will either invent material choices with no guidance at all, producing a plausible but arbitrary result, or worse, treat loose pencil shading as if it specified an actual material, rendering a confident but wrong interpretation of a mark that was never meant to carry that meaning. Second, the instruction to flag genuinely ambiguous marks rather than silently picking an interpretation addresses a real risk specific to early-stage product concepts: at the sketch stage, a designer often hasn't resolved every detail themselves yet, and a render that confidently commits to one reading of an ambiguous line without saying so can accidentally become the new de facto design decision simply because it's the version that got rendered and shown to a client or investor, foreclosing a choice the designer may not have actually intended to make yet. Third, the explicit rule against inventing new functional features protects against a documented tendency in generative rendering to \"complete\" an object with plausible-looking details a sketch never asked for — an extra button, a port, a seam implying a mechanism that doesn't exist — which is a bigger problem here than it would be in ordinary product photography because this render's entire purpose is often to represent a real, unbuilt design to an investor, manufacturer, or crowdfunding backer, and a render that visually implies functionality the actual product design doesn't have is misrepresenting the product to exactly the audience whose decisions depend on an accurate concept.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-04' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-08-04',
+      },
     ],
     changelog: [
       {
@@ -1668,19 +2003,23 @@ The complete numbered set of slide images, each following the same visual system
       {
         name: 'carousel_topic_and_slide_count',
         description: 'The topic and how many slides the carousel needs.',
-        example: '6 slides explaining "5 signs your invoice process needs automation," plus a closing slide with a call to action',
+        example:
+          '6 slides explaining "5 signs your invoice process needs automation," plus a closing slide with a call to action',
         required: true,
       },
       {
         name: 'shared_style_description',
-        description: 'The illustration or photographic treatment and layout logic shared by every slide.',
-        example: 'flat, minimal line-art icons paired with short bold headline text at the top and a one-line supporting sentence below',
+        description:
+          'The illustration or photographic treatment and layout logic shared by every slide.',
+        example:
+          'flat, minimal line-art icons paired with short bold headline text at the top and a one-line supporting sentence below',
         required: true,
       },
       {
         name: 'color_and_typography_system',
         description: 'The exact palette and type treatment to hold constant.',
-        example: 'deep navy background, warm coral accent color for icons and highlights, off-white text, a bold rounded sans-serif for headlines',
+        example:
+          'deep navy background, warm coral accent color for icons and highlights, off-white text, a bold rounded sans-serif for headlines',
         required: true,
       },
       {
@@ -1698,11 +2037,22 @@ The complete numbered set of slide images, each following the same visual system
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'social-media', 'carousel', 'content-design', 'consistency'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'social-media',
+      'carousel',
+      'content-design',
+      'consistency',
+    ],
     whyItWorks:
       "Defining the color and typography system as a fixed constraint the model must hold even when a specific slide's content \"wants\" a different accent color addresses a real tension in multi-image generation: each individual slide, generated with only its own content in mind, will tend to drift toward whatever visual choice looks best for that one slide in isolation, and across a seven-slide set that individually-optimized drift compounds into a carousel that doesn't actually look like one designed piece, which defeats the entire point of a carousel format that depends on visual continuity to keep someone swiping through it. Second, the consistency check comparing every later slide back to the first one specifically — rather than just to the general style description — matters because Nano Banana's session memory of an established visual system tends to degrade gradually rather than fail all at once, the same drift pattern that shows up in multi-scene character consistency work, so a carousel's sixth or seventh slide is the one most at risk of quietly departing from the system established on slide one, and that's precisely the failure a viewer swiping start-to-finish is most likely to actually notice, since they're comparing each new slide against the visual memory of the ones before it in real time. Third, requiring a consistent slide-position indicator styled as part of the same system, rather than treated as an afterthought, matters because a carousel's format-specific advantage over a single image is its implied sequence — a viewer expects to swipe through an ordered set — and a set of otherwise-consistent slides that lacks any visual cue about where they are in that sequence loses part of what makes the carousel format work as a content structure in the first place, even before considering the visual-consistency question at all.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-06' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-08-06',
+      },
     ],
     changelog: [
       {
@@ -1714,7 +2064,8 @@ The complete numbered set of slide images, each following the same visual system
   {
     slug: 'nano-banana-pet-costume-portrait',
     category: 'nano-banana',
-    title: "Create a costume portrait of a specific pet without losing what makes it recognizable",
+    title:
+      'Create a costume portrait of a specific pet without losing what makes it recognizable',
     description:
       'Composites an uploaded pet photo into a costume or scene concept while locking the specific markings, proportions, and expression that make that exact animal recognizable — so the result reads as "my actual dog" in costume, not a generic breed-template animal.',
     promptText: `You are creating a costume or themed portrait of a specific pet, using the uploaded photo as the source of truth for what this exact animal looks like. This is a costume added to a real, specific pet — not a generic illustration of their breed.
@@ -1746,19 +2097,22 @@ One portrait image where the pet is unmistakably the same specific animal from t
       {
         name: 'pet_reference_description',
         description: 'What the uploaded reference photo of the pet shows.',
-        example: 'a medium-sized corgi with a distinctive asymmetrical white patch over one eye and slightly larger left ear, photographed sitting, looking slightly off-camera',
+        example:
+          'a medium-sized corgi with a distinctive asymmetrical white patch over one eye and slightly larger left ear, photographed sitting, looking slightly off-camera',
         required: true,
       },
       {
         name: 'costume_or_scene_concept',
         description: 'The costume or themed scene concept to apply.',
-        example: 'a small knight costume — soft foam armor pieces and a tiny cape, sitting on a stone castle step',
+        example:
+          'a small knight costume — soft foam armor pieces and a tiny cape, sitting on a stone castle step',
         required: true,
       },
       {
         name: 'pose_and_expression',
         description: 'How the pet should be posed and what expression to aim for.',
-        example: 'sitting proudly, head slightly tilted the same way as in the reference photo, alert and slightly curious expression',
+        example:
+          'sitting proudly, head slightly tilted the same way as in the reference photo, alert and slightly curious expression',
         required: true,
       },
       {
@@ -1770,16 +2124,28 @@ One portrait image where the pet is unmistakably the same specific animal from t
       {
         name: 'identity_preservation_notes',
         description: 'A final explicit reminder of what must not be genericized.',
-        example: 'the white eye patch and slightly larger left ear are the two features people recognize this dog by — do not smooth these into symmetrical corgi markings',
+        example:
+          'the white eye patch and slightly larger left ear are the two features people recognize this dog by — do not smooth these into symmetrical corgi markings',
         required: false,
       },
     ],
     targetTools: ['Nano Banana (Gemini 3.1 Flash Image)', 'Gemini app'],
-    tags: ['nano-banana', 'gemini', 'pet-portrait', 'costume-portrait', 'identity-preservation', 'compositing'],
+    tags: [
+      'nano-banana',
+      'gemini',
+      'pet-portrait',
+      'costume-portrait',
+      'identity-preservation',
+      'compositing',
+    ],
     whyItWorks:
       "The instruction to preserve this pet's specific coat pattern and markings rather than a generic version of their breed's typical coloring targets a real and common drift in AI pet portraits: a model asked to render \"a corgi in a knight costume\" without a locking reference will often default toward the most statistically typical, idealized version of that breed's markings, which for an animal with a specific asymmetrical feature — an off-center eye patch, an oversized ear — produces a technically breed-accurate but personally wrong result, and the entire emotional value of a pet portrait for its owner rests on it being recognizably their specific, imperfect, individual animal rather than a breed-standard illustration. Second, carrying the pet's actual habitual expression and head-carriage characteristics into the new pose — rather than defaulting to a generic sit-and-look-at-camera pose — matters for the same recognition reason applied to behavior rather than appearance: a lot of what makes a specific pet feel like themselves in a photo is a characteristic head tilt or ear position that's part of how that individual animal actually carries itself, and losing that in favor of a generic, breed-stock pose is a second, separate way the result can technically be \"the right dog\" while still not feeling like their dog to the person who knows them best. Third, the realism-versus-stylization instruction matters because costume-portrait generation defaults easily toward an illustrated or overly polished look once a whimsical concept like a knight costume is introduced, and that stylization shift, however charming on its own, works against the same identity-preservation goal the rest of the brief is built around — a photorealistic treatment keeps the pet's actual markings and proportions rendered as real, specific detail, while a stylized illustration necessarily simplifies and generalizes those same features, which is exactly the trade-off this portrait is trying to avoid.",
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-08' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-08-08',
+      },
     ],
     changelog: [
       {
@@ -1848,11 +2214,22 @@ One photorealistic image — one angle of the set — styled so that regeneratin
       },
     ],
     targetTools: [`Nano Banana (Gemini 3.1 Flash Image)`, `Gemini app`],
-    tags: [`nano-banana`, `gemini`, `product-photography`, `ecommerce`, `multi-angle`, `consistency`],
+    tags: [
+      `nano-banana`,
+      `gemini`,
+      `product-photography`,
+      `ecommerce`,
+      `multi-angle`,
+      `consistency`,
+    ],
     whyItWorks: `Nano Banana has no exposed seed parameter or style-lock control the way some diffusion tools do, so consistency across a set of separately generated angles has to be engineered entirely through the prose the model reads each time, not through a shared random state — which is exactly why this prompt separates a reusable, copy-pasteable style-spec block from the one field that's actually allowed to change between calls. Left unstructured, asking for "the same product from another angle" in a follow-up message tends to drift: the model re-imagines the lighting and surface tone slightly fresh each time rather than treating the earlier description as binding, since a conversational edit or regeneration isn't guaranteed to weight prior turns as strict constraints on new ones. Explicitly telling the model that an angle catching more or less background must not justify re-exposing or re-color-grading the shot heads off the specific failure where a three-quarter angle that reveals more backdrop comes out visibly brighter or warmer than a straight-on shot of the same product, which is a common and otherwise subtle tell that a supposed matched set was actually four independent generations. Naming the surface and lighting rig with the same level of physical specificity used in single-shot studio prompts (position, relative intensity) rather than vague adjectives is what makes the spec block genuinely reusable rather than open to reinterpretation on each regeneration — a rig described only as "good lighting" gives the model a different plausible interpretation every time it's asked to render it again.`,
     exampleOutput: `A clean, evenly lit front-angle product shot with a light natural contact shadow; running the same locked spec again with only the angle field swapped to a three-quarter view produces a visually matching companion shot, though small color-temperature drift between generations is still common enough that one follow-up nudge ("match the warmth of the first shot exactly") is often needed to fully unify a four-angle set.`,
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-08' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-08-08',
+      },
     ],
     changelog: [
       {
@@ -1915,11 +2292,22 @@ One image, shot like a real photograph a customer's own environment might produc
       },
     ],
     targetTools: [`Nano Banana (Gemini 3.1 Flash Image)`, `Gemini app`],
-    tags: [`nano-banana`, `gemini`, `ecommerce`, `lifestyle-photography`, `product-photography`, `listing-images`],
+    tags: [
+      `nano-banana`,
+      `gemini`,
+      `ecommerce`,
+      `lifestyle-photography`,
+      `product-photography`,
+      `listing-images`,
+    ],
     whyItWorks: `Nano Banana's underlying training leans heavily on grounded, real-world photography, which means it's genuinely capable of rendering a believably lived-in scene — but left without direction it tends to average toward a generically tidy, evenly detailed result, since a broad training distribution pulls both foreground and background toward the same moderate level of polish rather than deliberately favoring one. That's the specific problem this prompt targets: explicitly stating that the background must not out-detail the product, and asking for named small imperfections rather than a pristine set, counteracts the model's default pull toward uniform tidiness and pushes the output toward the specific visual hierarchy a lifestyle photo actually needs — product sharp and central, environment authentic but secondary. Second, because Nano Banana has no negative-prompt channel, every unwanted element (a competitor logo appearing on background packaging, an oversaturated color grade) has to be ruled out as a positive instruction inside the same prose the model is reading, which is why the DO NOT list is stated directly rather than assumed. Third, restricting a human presence to a hand or forearm rather than a full figure is a deliberate hedge against a specific and well-documented failure mode: full-figure human generation introduces far more chances for anatomical or proportional error than a cropped limb does, and a lifestyle product shot rarely needs a full face in frame anyway, so narrowing what's asked for narrows what can go wrong.`,
     exampleOutput: `A warmly lit, slightly imperfect bedroom scene with the basket clearly in focus and a hand tucking a sweater inside; expect the first pass to occasionally over-tidy the background despite the instruction, in which case a follow-up like "make the throw blanket a little more rumpled, less perfectly folded" typically fixes it in one round.`,
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-09' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-08-09',
+      },
     ],
     changelog: [
       {
@@ -1985,10 +2373,21 @@ One headshot-cropped image of the same person, professionally lit and dressed, i
       },
     ],
     targetTools: [`Nano Banana (Gemini 3.1 Flash Image)`, `Gemini app`],
-    tags: [`nano-banana`, `gemini`, `headshot`, `photo-editing`, `linkedin`, `portrait-retouching`],
+    tags: [
+      `nano-banana`,
+      `gemini`,
+      `headshot`,
+      `photo-editing`,
+      `linkedin`,
+      `portrait-retouching`,
+    ],
     whyItWorks: `Nano Banana's conversational edit mode works from an uploaded reference image, but a large simultaneous change to background, lighting, and clothing gives the model more room than a small local edit does, and more room is exactly where identity drift creeps in — under a big enough scene change, an image model will sometimes quietly regenerate a face that's subtly more symmetrical, younger, or generically attractive rather than a strict edit of the one that was uploaded, because that idealized direction is what its training data skews toward for "professional headshot" as a category. Stating explicitly that this must remain the same person, not a person who merely resembles them, and naming the specific features that must stay put (moles, asymmetry, skin texture) gives the model a concrete checklist to hold onto instead of an implicit expectation it can drift away from unnoticed. The retouching-limits field matters for the same reason a photographer's retouching brief matters with a human editor: "professional headshot" alone is ambiguous between a light touch-up and a heavily smoothed beauty-retouch look, and without specifying which one is wanted the model defaults toward the more aggressively polished interpretation it's seen more often labeled that way. Finally, giving the model explicit permission to say the result can't be produced cleanly — rather than forcing a silent best-effort attempt — matters because a headshot with a subtly wrong face is worse than no output at all for this specific use case, where the entire point is that the viewer recognizes the actual person.`,
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-10' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-08-10',
+      },
     ],
     changelog: [
       {
@@ -2057,11 +2456,22 @@ One photorealistic image of the physical package as a finished object, artwork c
       },
     ],
     targetTools: [`Nano Banana (Gemini 3.1 Flash Image)`, `Gemini app`],
-    tags: [`nano-banana`, `gemini`, `packaging-design`, `product-mockup`, `brand-identity`, `concept-render`],
+    tags: [
+      `nano-banana`,
+      `gemini`,
+      `packaging-design`,
+      `product-mockup`,
+      `brand-identity`,
+      `concept-render`,
+    ],
     whyItWorks: `Text rendering is the single most failure-prone part of any image-generation model, including Gemini-based Nano Banana — even models that handle short text reasonably well still misspell, duplicate, or garble longer strings a meaningful percentage of the time, which is exactly why this prompt isolates the exact brand text as its own labeled field with an explicit character-for-character instruction rather than folding it loosely into the general artwork description, and why it gives the model permission to prioritize legibility of specific words over strict layout fidelity when the two conflict — a slightly larger word that's still readable beats a perfectly-sized one that renders as illegible noise. Second, wrapping flat artwork onto real package geometry is a distinct failure mode from text: without an explicit instruction, models frequently render packaging labels as a flat decal sitting on top of a curved surface rather than actually respecting that surface's curvature, because pasting a flat design over an object is visually simpler than correctly distorting it — naming the specific curvature and crease behavior expected pushes the model toward the harder, correct interpretation. Third, describing the finish in terms of its actual optical behavior (diffuse scatter versus a moving specular highlight) rather than a single adjective like "shiny" matters because Nano Banana's photographic training gives it real learned behavior for how different finishes respond to light — the same reason this works in general product photography prompts — so spelling out which behavior is wanted lets it apply the right physics instead of defaulting to a generic uniform sheen.`,
     exampleOutput: `A photorealistic can render with the label correctly curved around the cylinder and the exact wording legible; on a first pass, a long secondary tagline sometimes renders slightly soft — a follow-up like "keep the tagline text sharp even if you have to enlarge it slightly" usually resolves that in one more turn.`,
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-11' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-08-11',
+      },
     ],
     changelog: [
       {
@@ -2118,10 +2528,21 @@ One image of the finished object with the design convincingly applied, suitable 
       },
     ],
     targetTools: [`Nano Banana (Gemini 3.1 Flash Image)`, `Gemini app`],
-    tags: [`nano-banana`, `gemini`, `product-mockup`, `print-on-demand`, `merch-design`, `ecommerce`],
+    tags: [
+      `nano-banana`,
+      `gemini`,
+      `product-mockup`,
+      `print-on-demand`,
+      `merch-design`,
+      `ecommerce`,
+    ],
     whyItWorks: `The default failure mode for design-onto-object mockups is the flat-sticker look: without an explicit instruction, an image model tends to composite a 2D design onto a 3D object the same way a quick Photoshop overlay would, ignoring the object's actual curvature and material response because rendering a design as if it were physically printed or dyed into the surface is a harder inference than simply placing it visually on top. Naming the specific physical deformation expected — curvature compression near a mug handle, drape and weave show-through on fabric — gives the model a concrete target instead of leaving it to default to the visually simpler flat overlay. Second, the material-behavior field exists because Nano Banana's photographic grounding means it can render a genuinely convincing reflected highlight moving across a glossy surface, but only when told that behavior is wanted; left unprompted, it will often flatten the design into a uniformly lit decal that ignores the glaze's actual glossiness entirely. Third, keeping the design-reproduction instruction strict and separate from the placement instructions matters because a model asked to "apply a design realistically" sometimes takes that as license to reinterpret the design's colors or proportions along the way, softening or shifting them toward what looks more natural on the object — stating explicitly that the design's colors, layout, and text must not change keeps creative liberty confined to the wrap and lighting, not the design content itself.`,
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-12' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-08-12',
+      },
     ],
     changelog: [
       {
@@ -2193,7 +2614,11 @@ One image with the polished, precise look of a rendered 3D hero asset — the ki
     tags: [`nano-banana`, `gemini`, `3d-render`, `cgi`, `product-render`, `landing-page`],
     whyItWorks: `Nano Banana's training distribution skews heavily toward grounded photography, which is a genuine strength for photorealistic product shots but works against it here: without deliberate steering, the model's default pull is back toward photographic texture and imperfection rather than the clean, precise look of an actual rendered CGI asset. This prompt counters that by borrowing the specific vocabulary of a render pipeline — ambient occlusion, roughness versus reflectivity per material, CAD-precision edges — because those terms are strongly associated in the model's training data with rendered imagery specifically, not photography, and naming them shifts the output's register in a way that a vague request for "a 3D-looking image" does not reliably do. Second, specifying material behavior per surface rather than as one overall description matters because a multi-material product rendered without that distinction tends to default toward a single generic shiny finish applied uniformly, since "product render" as a category is disproportionately represented by simple glossy hero shots in training data — explicitly contrasting brushed-metal streak reflections against tight plastic highlights forces the model to differentiate rather than flatten every surface to the same look. Third, calling out ambient occlusion at contact points directly addresses a specific and common render-prompt failure: models asked for a "clean" render often over-correct into flat, uniformly bright lighting with no contact shadow at all, which reads as an object floating unnaturally rather than a grounded, physically lit render — asking for it by its actual technical name gives the model a concrete rendering behavior to reproduce instead of an ambiguous aesthetic goal.`,
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-13' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-08-13',
+      },
     ],
     changelog: [
       {
@@ -2267,11 +2692,22 @@ One image styled and lit like an editorial food photograph — the kind that run
       },
     ],
     targetTools: [`Nano Banana (Gemini 3.1 Flash Image)`, `Gemini app`],
-    tags: [`nano-banana`, `gemini`, `food-photography`, `editorial`, `recipe-content`, `styling`],
+    tags: [
+      `nano-banana`,
+      `gemini`,
+      `food-photography`,
+      `editorial`,
+      `recipe-content`,
+      `styling`,
+    ],
     whyItWorks: `"Make it look appetizing" is not something an image model can act on directly — it's a subjective aesthetic judgment, not a rendering instruction, so left at that level of abstraction Nano Banana has to guess which of many possible visual choices actually produces that effect. This prompt works by translating that vague goal into the literal, physical cues that genuinely drive appetite appeal in real food photography — a glaze's glisten, a curl of steam, a torn rather than knife-cut herb — each of which is a concrete, renderable detail the model's photographic training has actually learned to reproduce convincingly, rather than an abstract mood it has to invent a visual proxy for on its own. Second, explicitly asking for one or two small plating imperfections addresses a specific tell that separates real food photography from an obviously synthetic image: machine-perfect symmetry and uniform placement is something an image model defaults toward when optimizing for a "clean" result, but real plated food never looks that precise, so a photo that's too symmetrical reads immediately as staged or artificial rather than appetizing. Third, the instruction to keep props secondary and less detailed than the food itself matters because food photography prompts routinely lose the food to a beautifully rendered background or prop styling that the model, without direction, treats as equally important — naming the food as the mandatory sharpest and most detailed element in frame keeps the composition's hierarchy correct even when the props described are visually interesting in their own right.`,
     exampleOutput: `A warmly lit bowl of glazed fish with a faint steam wisp and a light glaze sheen catching the window light, garnish slightly asymmetric rather than perfectly centered; if the first pass renders the plating too neat, a follow-up like "loosen up the rice pile and let the glaze pool a little unevenly" typically gets it there in one more turn.`,
     verifiedAgainst: [
-      { tool: 'Nano Banana / Gemini 3.1 Flash Image', version: 'Gemini 3.1 Flash Image', date: '2026-08-14' },
+      {
+        tool: 'Nano Banana / Gemini 3.1 Flash Image',
+        version: 'Gemini 3.1 Flash Image',
+        date: '2026-08-14',
+      },
     ],
     changelog: [
       {

@@ -46,7 +46,6 @@ import { BrandIcon, brandForCompany } from '@/components/ui/BrandIcon'
 import { trackToolEvent } from '@/lib/analytics'
 import { downloadTextFile, slugifyUrlForFilename } from '@/lib/download-file'
 import { SITE } from '@/lib/site'
-import scultMark from '@/public/brand/scult-mark.png'
 import {
   AI_BOTS,
   type ApiError,
@@ -67,6 +66,7 @@ import {
   type VisibilityReport,
   validateTargetUrl,
 } from '@/lib/tools/ai-visibility-checker/logic'
+import scultMark from '@/public/brand/scult-mark.png'
 
 /**
  * AI visibility checker — single-column report, no left/right split.
@@ -323,12 +323,20 @@ function CompanySpecGroup({
 /** Compact, always-visible stand-in for `CompanySpecGroup` — logo, name and a
  * crawler count only, no per-bot purpose text. Cuts the pre-run legend's
  * vertical footprint roughly in half; the full detail is one click away. */
-function CompactSpecGroup({ company, bots }: { company: string; bots: readonly BotSpec[] }) {
+function CompactSpecGroup({
+  company,
+  bots,
+}: {
+  company: string
+  bots: readonly BotSpec[]
+}) {
   return (
     <div className="flex items-center gap-2 rounded-card border border-line-grey bg-white p-2.5">
       <CompanyLogo company={company} size={16} />
       <div className="min-w-0">
-        <p className="truncate font-display font-semibold text-[12.5px] text-ink">{company}</p>
+        <p className="truncate font-display font-semibold text-[12.5px] text-ink">
+          {company}
+        </p>
         <p className="text-[11px] text-ink-subtle">
           {bots.length === 1 ? '1 crawler' : `${bots.length} crawlers`}
         </p>
@@ -643,7 +651,8 @@ function TextPreviewCard({
   emptyHint: string
 }) {
   const inRange = length >= idealMin && length <= idealMax
-  const lengthTone = text === undefined ? 'text-ink-subtle' : inRange ? 'text-green' : 'text-violet-700'
+  const lengthTone =
+    text === undefined ? 'text-ink-subtle' : inRange ? 'text-green' : 'text-violet-700'
   return (
     <div className="rounded-card border border-line-grey bg-white p-4">
       <div className="flex items-baseline justify-between gap-2">
@@ -692,7 +701,10 @@ function WebsiteInsightsSection({ insights }: { insights: PageInsights }) {
   return (
     <section id="insights" aria-labelledby="insights-heading" className="scroll-mt-32">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h4 id="insights-heading" className="font-display font-semibold text-[19px] text-ink">
+        <h4
+          id="insights-heading"
+          className="font-display font-semibold text-[19px] text-ink"
+        >
           Website insights
         </h4>
         <span className="shrink-0 rounded-pill border border-[var(--color-violet-accent-text,var(--color-violet-700))] bg-cream px-2.5 py-0.5 font-semibold text-[12px] text-[var(--color-violet-accent-text,var(--color-violet-700))]">
@@ -757,7 +769,9 @@ function WebsiteInsightsSection({ insights }: { insights: PageInsights }) {
           icon={Timer}
           label="Response time"
           value={
-            insights.homepageResponseMs !== undefined ? `${insights.homepageResponseMs}ms` : '—'
+            insights.homepageResponseMs !== undefined
+              ? `${insights.homepageResponseMs}ms`
+              : '—'
           }
           tone={responseTone}
         />
@@ -809,7 +823,11 @@ function CategorySection({
   const weight = category.checkIds.reduce((sum, id) => sum + CHECK_WEIGHT[id], 0)
 
   return (
-    <section id={category.id} aria-labelledby={`${category.id}-heading`} className="scroll-mt-32">
+    <section
+      id={category.id}
+      aria-labelledby={`${category.id}-heading`}
+      className="scroll-mt-32"
+    >
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h4
           id={`${category.id}-heading`}
@@ -844,9 +862,8 @@ function CategorySection({
             </div>
           )}
           <p className="hint mt-2">
-            A group naming the bot beats{' '}
-            <span className="font-mono">User-agent: *</span> entirely — each card
-            quotes whichever group won.
+            A group naming the bot beats <span className="font-mono">User-agent: *</span>{' '}
+            entirely — each card quotes whichever group won.
           </p>
         </div>
       ) : null}
@@ -889,7 +906,12 @@ function ScoreSparkline({ history }: { history: readonly HistoryEntry[] }) {
   const pointsAttr = points.map((p) => `${p.x},${p.y}`).join(' ')
   return (
     <div className="flex flex-col items-end gap-1">
-      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
+      <svg
+        width={width}
+        height={height}
+        viewBox={`0 0 ${width} ${height}`}
+        aria-hidden="true"
+      >
         <polyline
           points={pointsAttr}
           fill="none"
@@ -900,8 +922,11 @@ function ScoreSparkline({ history }: { history: readonly HistoryEntry[] }) {
           strokeLinejoin="round"
         />
         {points.map((p, i) => (
+          // x positions are evenly spaced and unique per point, so the
+          // coordinate IS the identity — unlike a bare array index, it stays
+          // stable if the history array is ever reordered.
           <circle
-            key={i}
+            key={p.x}
             cx={p.x}
             cy={p.y}
             r={i === points.length - 1 ? 3 : 1.5}
@@ -1084,7 +1109,11 @@ function ScultCtaModal({ onDismiss }: { onDismiss: () => void }) {
       aria-modal="true"
       aria-labelledby="scult-cta-heading"
     >
-      <div className="absolute inset-0 bg-black/50" onClick={onDismiss} aria-hidden="true" />
+      <div
+        className="absolute inset-0 bg-black/50"
+        onClick={onDismiss}
+        aria-hidden="true"
+      />
       <div
         ref={panelRef}
         className="relative w-full max-w-md overflow-hidden rounded-panel border border-ink bg-white shadow-brutal"
@@ -1163,13 +1192,17 @@ function PreRunLegend() {
           The {AI_BOTS.length} crawlers we evaluate
         </h4>
         <p className="mt-1 text-[14px] text-ink-muted leading-5">
-          Each one gets its own robots.txt verdict, because they are separate
-          user-agents with separate rules. OpenAI alone ships three: you can allow
-          ChatGPT search while opting out of training.
+          Each one gets its own robots.txt verdict, because they are separate user-agents
+          with separate rules. OpenAI alone ships three: you can allow ChatGPT search
+          while opting out of training.
         </p>
         <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
           {SPEC_GROUPS.map((group) => (
-            <CompactSpecGroup key={group.company} company={group.company} bots={group.bots} />
+            <CompactSpecGroup
+              key={group.company}
+              company={group.company}
+              bots={group.bots}
+            />
           ))}
         </div>
       </div>
@@ -1187,7 +1220,11 @@ function PreRunLegend() {
         <div className="mt-3 flex flex-col gap-6">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {SPEC_GROUPS.map((group) => (
-              <CompanySpecGroup key={group.company} company={group.company} bots={group.bots} />
+              <CompanySpecGroup
+                key={group.company}
+                company={group.company}
+                bots={group.bots}
+              />
             ))}
           </div>
           <div>
@@ -1198,12 +1235,16 @@ function PreRunLegend() {
               {CHECK_LEGEND.map((item) => (
                 <div key={item.label} className="py-2.5">
                   <dt className="flex items-baseline justify-between gap-3">
-                    <span className="font-semibold text-[14px] text-ink">{item.label}</span>
+                    <span className="font-semibold text-[14px] text-ink">
+                      {item.label}
+                    </span>
                     <span className="shrink-0 font-medium text-[13px] text-ink-subtle tabular-nums">
                       {item.weight}
                     </span>
                   </dt>
-                  <dd className="mt-0.5 text-[13px] text-ink-muted leading-5">{item.meaning}</dd>
+                  <dd className="mt-0.5 text-[13px] text-ink-muted leading-5">
+                    {item.meaning}
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -1624,10 +1665,10 @@ export function AiVisibilityChecker() {
             </ul>
             <p className="mt-3 text-[14px] text-ink-muted leading-5">
               It identifies itself as{' '}
-              <span className="font-mono text-[13px] text-ink">ScultToolsBot/1.0</span>, gives
-              up after 10 seconds, and follows at most three redirects. If your WAF blocks
-              unfamiliar crawlers, allow that user-agent before you run this — otherwise you
-              are measuring your firewall, not your robots.txt.
+              <span className="font-mono text-[13px] text-ink">ScultToolsBot/1.0</span>,
+              gives up after 10 seconds, and follows at most three redirects. If your WAF
+              blocks unfamiliar crawlers, allow that user-agent before you run this —
+              otherwise you are measuring your firewall, not your robots.txt.
             </p>
           </div>
         </details>
@@ -1784,7 +1825,7 @@ export function AiVisibilityChecker() {
                 <div className="mt-4 flex items-center gap-3">
                   <span className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white/50 bg-violet-700">
                     {report.pageInsights.heroImageUrl !== undefined ? (
-                      // eslint-disable-next-line @next/next/no-img-element -- a runtime data: URI, not a static/optimizable asset next/image can handle.
+                      // biome-ignore lint/performance/noImgElement: a runtime data: URI from the just-fetched report, not a static/optimizable asset next/image can handle.
                       <img
                         src={report.pageInsights.heroImageUrl}
                         alt=""
@@ -1800,7 +1841,9 @@ export function AiVisibilityChecker() {
                     <p className="truncate font-display font-semibold text-[16px] text-white">
                       {reportHostname}
                     </p>
-                    <p className="truncate font-mono text-[12px] text-white/60">{report.url}</p>
+                    <p className="truncate font-mono text-[12px] text-white/60">
+                      {report.url}
+                    </p>
                   </div>
                 </div>
 
@@ -1813,7 +1856,9 @@ export function AiVisibilityChecker() {
                       /100
                     </span>
                   </div>
-                  {scoreHistory.length >= 2 ? <ScoreSparkline history={scoreHistory} /> : null}
+                  {scoreHistory.length >= 2 ? (
+                    <ScoreSparkline history={scoreHistory} />
+                  ) : null}
                 </div>
 
                 <div
@@ -1927,7 +1972,9 @@ export function AiVisibilityChecker() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-pill border-2 border-white px-4 py-2 font-semibold text-[14px] text-white transition-colors hover:bg-white hover:text-violet-900"
                     onClick={() =>
-                      trackToolEvent('ai-visibility-checker', 'cta_click', { source: 'inline' })
+                      trackToolEvent('ai-visibility-checker', 'cta_click', {
+                        source: 'inline',
+                      })
                     }
                   >
                     <Calendar className="size-4" aria-hidden="true" />

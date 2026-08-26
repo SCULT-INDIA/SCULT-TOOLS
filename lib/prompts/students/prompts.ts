@@ -60,12 +60,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`concept-explainer`, `study-help`, `diagnostic-learning`, `physics`, `study-skills`],
+    tags: [
+      `concept-explainer`,
+      `study-help`,
+      `diagnostic-learning`,
+      `physics`,
+      `study-skills`,
+    ],
     whyItWorks: `Most concept-explainer prompts just ask a model to "explain X simply," which produces a generically simplified restatement of the same source material the student already read and got stuck on — GPT-5.1 defaults to reorganizing available information rather than identifying what's actually absent, so without an explicit diagnostic step it will happily re-explain the definition in slightly different words and the student stays stuck at the same point. Forcing a diagnostic question before any explanation changes the task from "simplify this text" to "identify a specific missing prerequisite," which uses the breakdown-point detail as a symptom to reason backward from, the way a tutor would ask a clarifying question rather than launching into a lecture. Ordering the explanation as prerequisite-first, then explicit connection, then concept, then a single worked example at the stated course level matters because it mirrors how conceptual gaps actually cascade — a student who is stuck on torque's directionality is very often actually missing how the right-hand rule encodes rotation direction as a vector, and no amount of rephrasing torque itself fixes that; the model has to be forced to consider the layer beneath the stated confusion, not the confusion itself. Restricting the explanation to one worked example rather than several analogies matters because GPT-5.1's default instinct when uncertain about what will land is to offer multiple framings, which fragments attention and gives an unfocused student three half-understood models instead of one solid one; committing to a single path forces the diagnosis to actually be used rather than hedged around.`,
     exampleOutput: `Diagnostic question: Do you understand why a force applied off-center (not through the object's pivot point) makes something rotate rather than just slide? Provisional explanation: Torque isn't a new kind of force — it's how we measure a force's twisting effect, which depends on both how hard you push and where you push relative to the pivot. Because that twisting effect has a specific rotational direction (clockwise vs counterclockwise, or in 3D, an axis), we represent it as a vector using the right-hand rule: curl your fingers in the rotation direction, your thumb points along the torque vector...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -123,9 +127,7 @@ OUTPUT FORMAT
     tags: [`eli5`, `analogy`, `simple-explanation`, `study-help`, `concept-learning`],
     whyItWorks: `A bare "explain like I'm 5" request lets GPT-5.1 default to whatever analogy sounds most vivid rather than one that actually maps cleanly onto the mechanism, and models under a simplicity instruction tend to drift toward oversimplification that quietly drops or distorts the part of the concept that made it confusing in the first place — the double-spending problem, for instance, gets glossed into "it's like a shared ledger everyone can see," which is true but skips the actual mechanism of why consensus prevents fraud. Requiring an explicit piece-by-piece mapping between the analogy and the real components forces the model to check its own analogy against the actual mechanism rather than free-associating a comparison and hoping it's roughly right, which is the difference between an analogy that teaches and one that just entertains. The "where this breaks down" section exists because every analogy simplifies by dropping some structure, and a student who only gets the analogy without being told what it doesn't cover will confidently apply the wrong parts of it later — a blockchain isn't literally a Google Doc where anyone can just overwrite history, and if that gap isn't flagged the learner will eventually get tripped up by their own mental model. Committing to one analogy rather than offering alternates matters because GPT-5.1, when uncertain which framing will land, tends to hedge by offering two or three comparisons in parallel, which for a genuine beginner just means juggling several partially-understood metaphors instead of building one solid one all the way through.`,
     exampleOutput: `Analogy: think of a shared notebook that everyone in your class has an identical copy of. Mapping: each new transaction = a new line written in everyone's notebook at once; a "block" = a page that gets sealed once it's full; mining/consensus = everyone comparing notebooks and only accepting the version most people agree on. Where this breaks down: unlike a real classroom notebook, nobody can just physically show you their copy is fake — the actual mechanism uses cryptographic math to make copying or forging a page computationally expensive rather than socially checked...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -192,12 +194,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`study-plan`, `exam-prep`, `time-management`, `active-recall`, `study-schedule`],
+    tags: [
+      `study-plan`,
+      `exam-prep`,
+      `time-management`,
+      `active-recall`,
+      `study-schedule`,
+    ],
     whyItWorks: `The most common failure of AI-generated study plans is that they divide topics evenly across however many days are left without ever checking whether the total hours actually support the depth implied by the topic list, producing a plan that looks organized but silently assumes the student has more time than they do — forcing an explicit total-hours calculation up front, stated as a number before any schedule is built, catches that mismatch the same way a real tutor would say "you don't have enough time to cover all of this at the level you want, here's what to cut" rather than pretending otherwise. Weighting allocation by both exam weight and current weakness rather than exam weight alone matters because a naive weighting scheme still wastes hours reviewing a heavily-tested topic the student already knows cold, when that same time would close a bigger score gap in a weaker area; GPT-5.1 will default to a simple proportional split unless explicitly told to cross-reference weight against weakness, since that's the lower-effort interpretation of "allocate by importance." Reserving the final 48 hours specifically for active recall and practice problems rather than new material reflects a well-established real effect in learning: cramming genuinely new content in the last day or two before an exam has a worse time-to-retention payoff than retrieval practice on material already seen once, because recognition-level familiarity from a first pass doesn't transfer to exam-condition recall without a retrieval attempt — a plan that lets new material bleed into the final two days is optimizing for coverage instead of what the exam actually measures. Capping study blocks at 90 minutes with breaks marked directly in the schedule matters because a plan is only useful if it's actually followable, and a schedule of unbroken 3-hour blocks looks efficient on paper but gets abandoned by day two.`,
     exampleOutput: `Total available hours: 10 weekdays x 2h + 2 Saturdays x 5h + 2 Sundays x 3h = 36 hours. Given four topics at this weighting and your stereochemistry gap, 36 hours is workable but tight — spectroscopy review will need to be compressed to a single pass rather than the two passes ideally warranted. Day 1 (Mon, 2h): Stereochemistry fundamentals, R/S assignment drills (new + practice)...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -269,12 +275,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`lesson-plan`, `differentiated-instruction`, `teaching`, `classroom-management`, `formative-assessment`],
+    tags: [
+      `lesson-plan`,
+      `differentiated-instruction`,
+      `teaching`,
+      `classroom-management`,
+      `formative-assessment`,
+    ],
     whyItWorks: `A generic lesson-plan prompt produces a single linear sequence of activities that implicitly assumes a homogeneous class, which is why so many AI-drafted lesson plans look clean on paper but fall apart the moment a third of the room finishes in half the time and another third is stuck on a prerequisite skill the plan didn't account for — explicitly requiring two branches inside independent practice, keyed to the actual readiness spread the teacher described, forces the plan to engage with the classroom that actually exists rather than an idealized average student. Naming a concrete, observable trigger for switching a student onto either branch (finishing with a specific number of minutes left, or being stuck on a specific step for a specific duration) matters because differentiation instructions that just say "give struggling students more support" are unusable in the middle of teaching thirty kids — a teacher needs a decision rule they can apply in the moment without stopping to think, and GPT-5.1 will produce that level of concreteness only when explicitly asked for a trigger rather than a general description of who needs what. Requiring the extension task to go deeper on the same objective rather than being generically harder addresses a common shallow pattern where "advanced" work is just more repetitions of the same skill at bigger numbers, which doesn't actually extend understanding of the underlying objective. The formative check requirement — something collectible in under two minutes with a stated failure signal — exists because "any questions?" produces silence regardless of whether the room understood the material, and a lesson plan without a real read on whether the objective landed leaves the teacher planning tomorrow's lesson on a guess rather than evidence.`,
     exampleOutput: `Hook (5 min): Show a two-step equation from last week (one-step-plus-familiar) next to today's target equation with a negative coefficient, ask students to predict what's different. Direct instruction (12 min)... Independent practice (18 min): Core task — 6 two-step equations with negative coefficients. Extension (trigger: finishes core task with 8+ min left): equations requiring the same skill but with a variable on both sides, extending the same objective rather than just more repetitions. Scaffold (trigger: stuck on step 2, sign of the coefficient, for 3+ min): equations pre-marked with the sign-flip step isolated as its own line...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -338,12 +348,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`worksheet`, `practice-problems`, `answer-key`, `math-practice`, `teaching-resources`],
+    tags: [
+      `worksheet`,
+      `practice-problems`,
+      `answer-key`,
+      `math-practice`,
+      `teaching-resources`,
+    ],
     whyItWorks: `A default worksheet-generation prompt produces problems that are all roughly the same difficulty with only surface-level numbers changed, because GPT-5.1's easiest interpretation of "practice problems" is variation on a template rather than genuine escalation — explicitly defining three bands with a stated purpose for each (isolate the mechanic, apply it in context, combine it with something else) forces a real difficulty gradient instead of a list that only looks varied. Engineering a specific problem to trigger a named common mistake — rather than just hoping some problem happens to catch it — is what makes a worksheet diagnostic instead of just repetitive; a problem constructed so that the exact shortcut behind {{common_mistake}} produces a plausible-looking wrong answer means a teacher can look at which students got that one specific problem wrong and know precisely what to reteach, rather than only knowing a student missed a problem for unspecified reasons. Requiring worked steps in the answer key rather than final answers only matters because a bare answer key can confirm a student got something wrong but can't show where, which is the entire diagnostic value of an error-pattern-targeted worksheet in the first place — and adding an explicit note on what the wrong answer looks like if the targeted mistake was made turns grading from a slow re-derivation into instant pattern recognition, since the teacher doesn't have to reconstruct the error path themselves for every wrong answer they see. Bounding the stretch band to stay within {{level}}'s existing content, rather than letting difficulty escalate into material not yet taught, keeps the worksheet aligned to what "stretch" is supposed to mean — harder application of known material, not a preview of next unit.`,
     exampleOutput: `[Foundational] 1. Find the area of a rectangle 8cm x 5cm. [Applied] 5. A garden is shaped like a rectangle 10m x 6m with a triangular flower bed (base 4m, height 3m) removed from one corner — find the remaining area. [Stretch, targets common mistake] 9. A room's floor plan is an L-shape formed by a 12ft x 10ft rectangle with a 4ft x 3ft triangular corner cut off for a closet nook — find the usable floor area. Answer key #9: Correct approach subtracts the triangle (6 sq ft) from the rectangle (120 sq ft) = 114 sq ft. If a student adds instead of subtracts the cut corner, they'd get 126 sq ft — that wrong answer flags the targeted misconception directly...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -406,12 +420,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`homework-help`, `homework-coach`, `step-by-step`, `math-tutoring`, `active-learning`],
+    tags: [
+      `homework-help`,
+      `homework-coach`,
+      `step-by-step`,
+      `math-tutoring`,
+      `active-learning`,
+    ],
     whyItWorks: `Left unconstrained, GPT-5.1's default response to a homework question is to solve it end to end, because a complete solution is the most directly "helpful"-looking output and the model has no built-in incentive to withhold it — the explicit rule against giving the full solution, plus the instruction to reiterate that rule even under direct pressure to just give the answer, is what keeps the interaction pedagogically useful instead of collapsing into an answer-delivery service the first time the student pushes back. Requiring a diagnosis before any help is given matters because {{stuck_point}} and {{attempts_so_far}} together usually contain enough signal to identify the actual misconception (in the example, the student's work reveals they don't yet know how to handle x-terms canceling to a false statement), and skipping straight to "here's the next step" without naming that misconception means the student can execute the fix mechanically without understanding why the previous approach failed, which sets them up to repeat the same error on the next problem. Limiting help to exactly one step at a time, gated behind the student showing their own work before the next step is revealed, forces genuine retrieval and application rather than passive reading — this mirrors how effective human tutoring actually works and directly counters the model's tendency to front-load everything it knows about a problem into one response. The instruction to check specifically for the diagnosed error pattern on the student's follow-up, rather than just checking if the final answer is right, means a student who fixes the symptom but not the underlying misconception gets caught immediately rather than being told "looks good" and moving on with a fragile understanding.`,
     exampleOutput: `Diagnosis: it looks like you haven't yet hit variable-on-both-sides equations as a named topic, so when the x terms combined to 5x on both sides, you didn't have a frame for what that means (the equation becomes 5x - 12 = 5x - 6). Next step: try subtracting 5x from both sides and tell me what you're left with — what does that tell you about this equation?`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -463,12 +481,16 @@ Just the single opening question. Every message after this, in the whole session
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`socratic-method`, `tutoring`, `active-recall`, `economics`, `critical-thinking`],
+    tags: [
+      `socratic-method`,
+      `tutoring`,
+      `active-recall`,
+      `economics`,
+      `critical-thinking`,
+    ],
     whyItWorks: `GPT-5.1's default conversational instinct, even when explicitly asked to be Socratic, is to slip an explanation or confirmation into the response alongside a question — a phrase like "That's close, remember that a shift means..." followed by a question still does the cognitive work for the student, because the student can extract the fact from the sentence before the question mark ever registers. The hard, absolute rule that every single message must be a question and literally nothing else closes that loophole mechanically rather than relying on the model's general sense of what "Socratic" means, which is exactly the kind of instruction that needs to be stated as an inviolable constraint rather than a stylistic preference, since a partial adherence still lets the answer leak through. The instruction for what to do when the student is simply wrong — ask a question that surfaces the failure themselves, such as applying their own answer to a case where it breaks — is the actual mechanism of Socratic method: the student discovers the contradiction in their own reasoning rather than being told there is one, which produces a correction that's self-generated and therefore stickier than one handed to them. The fallback for a genuinely stuck student, decomposing into a smaller answerable question rather than defaulting to an explanation, keeps the entire session inside the question-only constraint even at the point where a normal tutor would be most tempted to just explain — this is the hardest part of the rule to hold and the part most likely to break down without an explicit instruction for exactly that failure case. The instruction to resist a direct request for the answer by reframing rather than breaking character prevents the single most common way this kind of prompt collapses in practice, since students under time pressure will predictably ask for the answer directly at some point in the session.`,
     exampleOutput: `Opening question: If the price of gasoline suddenly drops for reasons unrelated to the demand for cars, what do you think happens to how many cars people want to buy at each possible price — and would you draw that as the same demand curve, or a new one?`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -535,9 +557,7 @@ OUTPUT FORMAT
     tags: [`essay-feedback`, `writing-help`, `rubric`, `revision`, `academic-writing`],
     whyItWorks: `An unconstrained feedback request produces a flat, undifferentiated list where a missing comma and a thesis that doesn't match the argument get roughly equal billing, because GPT-5.1 without a ranking instruction tends to surface issues in the order it notices them while reading, not in the order that matters for the grade — explicitly requiring a rubric-anchored, point-impact ranking forces the model to weigh severity against the actual grading weights rather than treating every observation as equally worth mentioning. Requiring the criterion-by-criterion pass to reference actual passages from {{essay_text}} rather than give an impressionistic summary keeps the assessment grounded and falsifiable — a vague "your evidence use is a bit thin" is not actionable, but pointing to the specific paragraph where a claim has no citation is. Explicitly checking whether the essay answers {{assignment_prompt}} as asked, as a distinct and prioritized first check, matters because this is the single highest-impact category of essay problem and the easiest for both a rushed student and a surface-reading model to miss — an essay that's well-written but argues a different question than the one assigned will lose points no amount of sentence-level polish recovers, and it needs to surface before line-level feedback, not buried inside a general comment. Weighting fixes by effort-to-impact given the actual time budget in {{time_available}} is what turns generic feedback into a usable revision plan under real constraints — the same feedback that's correct in the abstract is useless if it recommends restructuring three paragraphs when the student has ninety minutes, and asking the model to reason about realistic revision scope rather than idealized thoroughness is what keeps the top-3 list actually followable before the deadline.`,
     exampleOutput: `Thesis clarity: PARTIALLY MET — your intro thesis states inequality was 'the primary cause,' but paragraphs 3 and 4 spend more analytical depth on institutional breakdown (the Gracchi reforms, Senate gridlock) than on inequality itself, creating a mismatch a grader will notice. Priority fix #1 (highest impact, ~20 min): either revise the thesis to reflect that institutional breakdown gets the stronger argument in your body paragraphs, or add a paragraph of evidence that actually supports the inequality claim at the same depth...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -600,12 +620,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`research-question`, `academic-writing`, `research-paper`, `topic-narrowing`, `research-methods`],
+    tags: [
+      `research-question`,
+      `academic-writing`,
+      `research-paper`,
+      `topic-narrowing`,
+      `research-methods`,
+    ],
     whyItWorks: `Students given a broad topic and asked to "make it a research question" typically get back a question that's just the topic with "How does" or "What is the impact of" tacked onto the front, which is exactly what GPT-5.1 will produce without explicit pressure to actually narrow scope — the model's default move is light rephrasing rather than genuine decomposition into an answerable, arguable claim. Requiring an honest scope assessment before any candidate questions are proposed forces the model to actually reason about whether "social media's effects on teenagers" fits in 8-10 pages, which it plainly does not without narrowing by platform, outcome measure, or age band — and stating that mismatch explicitly, rather than silently producing a still-too-broad question, is what prevents a student from writing four pages of introduction just trying to bound an unbounded topic. Requiring three candidates at different scope sizes rather than one "best" answer gives the student a genuine choice calibrated to how much time and how many pages they actually have, since the right scope depends on constraints the model can't fully anticipate on its own. Naming the specific narrowing lens for each candidate (a particular platform, age range, or outcome) is what separates an actual research question from a restated topic — a question only becomes researchable once it specifies which mechanism or comparison it's isolating, and without being asked to name that lens explicitly, a model tends to produce questions that sound narrower than they actually are. Checking each candidate against sources the student has already found closes the gap between an interesting question and a writeable one — a beautifully scoped question that requires source types outside {{available_sources}} sets the student up to discover a research dead-end days before the deadline instead of now.`,
     exampleOutput: `Scope assessment: 'The effects of social media on teenagers' is too broad for 8-10 pages — it spans multiple platforms, age ranges, and outcome domains (mental health, academic performance, social skills), any one of which could fill a full paper alone. Candidate 1 (shorter scope): Does daily Instagram use duration correlate with self-reported anxiety symptoms in 13-15 year-olds, based on 2023-2024 studies? Candidate 2 (mid scope, fits your platform-comparison interest): How do anxiety outcomes associated with image-based platforms like Instagram differ from those associated with short-video platforms like TikTok among teenagers?...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -661,12 +685,16 @@ Nested header/bullet study notes with inline [LIKELY TESTED] tags and inline "as
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`study-notes`, `note-taking`, `lecture-notes`, `exam-prep`, `study-organization`],
+    tags: [
+      `study-notes`,
+      `note-taking`,
+      `lecture-notes`,
+      `exam-prep`,
+      `study-organization`,
+    ],
     whyItWorks: `A raw lecture transcript is organized by the order a professor happened to speak, which is rarely the same as the logical hierarchy of the material — professors circle back, digress, and answer questions out of sequence — so a naive "summarize this lecture" prompt tends to preserve that chronological messiness rather than restructure it, leaving the student with cleaner sentences but the same disorganized shape. Explicitly instructing a first pass focused on extracting the real content hierarchy, independent of speaking order, is what actually produces studyable notes rather than a tidied transcript, since exam prep depends on being able to scan main ideas and drill into supporting detail, not read linearly. Inline emphasis tagging tied to concrete signals — repetition, board work, or a direct statement of exam relevance — rather than a generic sense of "important-sounding," gives the tagging an actual evidentiary basis; without being anchored to {{emphasis_signals}}, GPT-5.1 tends to guess at importance based on which sentences sound authoritative in isolation, which frequently misses what a specific professor actually emphasized in the room and instead reflects generic textbook-style weighting. Placing those tags inline at the relevant bullet rather than collecting them into a separate "key points" list keeps the emphasis signal attached to its actual content, which matters because a detached importance list loses the supporting detail a student would need to actually explain that point on an exam. The instruction to flag rather than fabricate any content that depends on unincluded prior material directly guards against a known failure mode — a model asked to produce comprehensive-looking notes will readily invent a plausible-sounding gap-filler explanation of a prerequisite concept, and a student studying from notes containing confidently fabricated content has no way to distinguish it from what was actually said in the room.`,
     exampleOutput: `## Electron Transport Chain\\n- Located in inner mitochondrial membrane [LIKELY TESTED — repeated twice, extended board diagram]\\n  - Complexes I-IV pass electrons down an energy gradient\\n  - Creates H+ gradient across membrane (chemiosmosis) [LIKELY TESTED — professor said 'this will definitely be on the test']\\n    - assumes prior material on proton gradients from the intro membrane transport unit — check earlier notes\\n  - ATP synthase uses gradient to produce ATP\\n- (Lab research tangent about professor's own ETC research — omitted, not exam-relevant)`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -720,12 +748,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`chapter-summary`, `study-notes`, `reading-comprehension`, `exam-prep`, `textbook-review`],
+    tags: [
+      `chapter-summary`,
+      `study-notes`,
+      `reading-comprehension`,
+      `exam-prep`,
+      `textbook-review`,
+    ],
     whyItWorks: `A generic "summarize this chapter" request produces a compressed version of the chapter's own structure — a shorter recap that hits the same points in the same order the text presented them — because that's the lowest-effort form of summarization and matches what GPT-5.1 defaults to without a specific instruction to restructure around argument rather than sequence; the problem is that a sequential recap preserves surface content while discarding the thing a student actually needs to retain, which is the logical chain connecting evidence to claim. Requiring the central claim to be stated first, separate from the summary itself, forces the model to commit to what the chapter is actually arguing before it's allowed to list supporting content, which prevents the common failure where a summary lists five interesting facts from the chapter without ever making clear what they were collectively building toward. Reordering the evidence chain by logical support rather than textual appearance order matters specifically for chapters (common in history, philosophy, and argument-driven science writing) that build up to a thesis rather than stating it in the first paragraph — a sequential summary of such a chapter reproduces the suspense structure of the original writing, which is exactly backward for study purposes, where the student needs the destination stated up front and the evidence organized as support for it. The load-bearing versus illustrative distinction directly serves the stated {{purpose}} — a student reviewing the night before an exam across four chapters needs to know which examples are structurally necessary to explain the argument if asked, versus which ones were included mainly to aid comprehension and can be skipped under time pressure; without this explicit split, all content in a summary reads as equally essential, which is precisely the information a time-constrained review needs but a flat summary doesn't provide.`,
     exampleOutput: `Central claim: The chapter argues that railroad expansion, more than gold rushes, was the primary structural driver of westward settlement patterns in the 1850s-1870s. Evidence chain: [LOAD-BEARING] Settlement density data showing towns clustering along rail lines rather than mining sites after 1869 — this is the chapter's core empirical support, the argument doesn't work without it. [ILLUSTRATIVE] The anecdote about a specific boomtown that emptied after its mine dried up but persisted because of a rail spur — helps make the pattern concrete but the argument doesn't structurally depend on this one case...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -783,9 +815,7 @@ OUTPUT FORMAT
     tags: [`memory-technique`, `mnemonics`, `study-skills`, `exam-prep`, `active-recall`],
     whyItWorks: `The default AI response to any memorization request, regardless of what's actually being memorized, tends to be "make flashcards and use spaced repetition" — which is genuinely good general advice but is content-agnostic and misses that different information structures have well-established, structurally-matched techniques that dramatically outperform generic flashcards for that specific structure; an ordered sequence like the steps of glycolysis is a textbook case for a method-of-loci or linking mnemonic that encodes the order itself, something flashcards don't do at all, since flashcards test each fact in isolation without reinforcing sequence. Forcing an explicit classification step before recommending any technique is what prevents the model from defaulting to its generic answer — stating which of the four structural categories the material falls into, and requiring a justification, means the recommendation has to actually follow from the content's shape rather than being a one-size-fits-all suggestion. Requiring the technique to be worked through on the actual content in {{material}}, rather than described abstractly ("use vivid imagery to link each item"), is what makes this usable rather than theoretical — a student told to "use the method of loci" in the abstract still has to do all the hard creative work of actually applying it, whereas walking through specific images tied to specific enzyme names does that generative work for them, which is the actual value of asking an AI for this rather than reading a general study-skills article. Accounting for {{test_format}} matters because a recognition-based test (multiple choice) tolerates a much lighter memory technique than free recall does — building an elaborate mnemonic system for content that will only ever be recognized, not produced from scratch, is more effort than the task warrants, and the reverse mismatch (light review for a fill-in-blank test with no word bank) leaves the student underprepared for what retrieval will actually demand.`,
     exampleOutput: `Classification: ordered sequence — glycolysis's 8 steps must be recalled in exact order with the matching enzyme for a fill-in-blank diagram, so this needs a technique that encodes sequence, not just facts. Technique: method of loci through your bedroom, one location per step... Step 1 (Hexokinase phosphorylates glucose) = your bedroom door, glowing and being 'locked' shut by a giant key (hexokinase = 'hex' key)...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -848,12 +878,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`learning-roadmap`, `self-directed-learning`, `skill-building`, `web-development`, `study-plan`],
+    tags: [
+      `learning-roadmap`,
+      `self-directed-learning`,
+      `skill-building`,
+      `web-development`,
+      `study-plan`,
+    ],
     whyItWorks: `A generic "learning roadmap" prompt tends to produce a topic list ordered by conventional curriculum sequence (HTML, then CSS, then JavaScript, then a framework) without any mechanism for the learner to know whether they've actually reached proficiency at any stage, which is why so many self-taught learners either move on prematurely with gaps that compound later, or stall indefinitely on one stage with no objective signal that they're ready to progress. Requiring each stage to be defined by a doable capability rather than a covered topic, paired with a concrete checkpoint with a real pass/fail signal, is what turns a reading list into an actual roadmap — "build a webpage that fetches and displays data from a public API" is a checkpoint you either did or didn't complete, while "understand APIs" is a feeling with no objective resolution, and GPT-5.1 defaults to the latter kind of vague milestone unless explicitly told to make each one a concrete producible artifact. Naming the specific prerequisite dependency between consecutive stages forces genuine sequencing logic rather than an arbitrary conventional order — this matters because self-taught paths frequently waste time front-loading topics in the order textbooks present them rather than the order actual dependency requires, and a model asked to justify sequencing has to reason about what a later stage genuinely requires rather than default to convention. Requiring an honest time-realism check against {{end_goal}} and {{time_commitment}} counters a real tendency for AI-generated plans to be uniformly encouraging regardless of whether the timeline is plausible, which sets learners up for a demoralizing gap between the promised timeline and actual progress. Naming the common quit/plateau point for this specific skill area, rather than generic encouragement about persistence, gives the learner something concrete to watch for and a specific counter-strategy, which is far more actionable than being told to "stay motivated."`,
     exampleOutput: `Stage 2: Interactive front-end with JavaScript. What you'll be able to do: build a page where user actions (clicks, form input) change what's displayed without reloading the page. Prerequisite from Stage 1: comfortable writing and structuring HTML/CSS without a tutorial open. Checkpoint: build a working to-do list app (add, check off, delete items) with no framework, from a blank file. Realistic time estimate: 3-4 weeks at 6 hrs/week. Common quit point: this is where many self-taught learners hit their first real debugging wall (undefined is not a function-type errors) and conclude they're 'not cut out for programming' — the fix isn't more tutorials, it's deliberately practicing reading error messages and using console.log to inspect state rather than guessing at fixes...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -917,9 +951,7 @@ One guiding question at a time, narrowing progressively. No code fixes until I'v
     tags: [`coding-tutor`, `debugging`, `learn-to-code`, `python`, `computer-science`],
     whyItWorks: `GPT-5.1's default response to a bug report with code attached is to identify the bug and produce a corrected version immediately, since that's the most directly useful-looking output and matches the model's general helpfulness bias — but a student who receives a fixed version of their own code without doing the diagnostic work themselves doesn't build the debugging skill that will actually matter on the next bug, which won't come with a tutor attached. Forcing a step-by-step trace of the student's own code against the specific failing input, before any hint about where the bug lives, mirrors the actual skill professional developers use (mentally or literally stepping through execution) and surfaces the gap between the student's assumed behavior and actual behavior directly through their own reasoning rather than through being told — in the example, a student tracing max_val = 0 against an all-negative input list will themselves notice that 0 is larger than every number in the list, which is a far stickier realization than being told "you initialized max_val wrong." The rule against naming the bug even under direct pressure to just fix it is necessary because students under time pressure predictably ask for the answer, and without an explicit instruction to resist that ask while still being brief about why, the interaction collapses into a debugging service on the first frustrated request. Narrowing progressively through questions rather than one broad question addresses the reality that a totally open-ended "what do you think is wrong?" is often too unconstrained for a genuinely stuck beginner — each question needs to shrink the search space based on the previous answer, the same way a human tutor would follow up on what the student just said rather than repeating the same broad prompt. Limiting to one question per turn prevents the common failure where a multi-part question lets a student answer the easy part and skip the part that would have actually revealed the bug.`,
     exampleOutput: `Let's trace find_max([-5, -2, -8]) line by line. Before the loop starts, what value does max_val hold? Now, on the very first iteration, n is -5 — based on the code's condition (if n > max_val), does -5 > max_val evaluate to True or False given what max_val currently is?`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -973,12 +1005,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`math-solver`, `step-by-step-solutions`, `problem-solving`, `algebra`, `test-prep`],
+    tags: [
+      `math-solver`,
+      `step-by-step-solutions`,
+      `problem-solving`,
+      `algebra`,
+      `test-prep`,
+    ],
     whyItWorks: `A default "solve this step by step" request produces a clean forward derivation that reads as though each step was the only reasonable next move, which is precisely the opposite of what a struggling student needs to see — real problem-solving involves genuine decision points (which variable to substitute, which case to check first) that experienced solvers pick quickly because of pattern recognition built over many problems, and a clean derivation hides exactly the judgment call a student is actually trying to learn to make. Explicitly requiring the alternatives at each real choice point, and the reason one was picked over the others, surfaces the tacit expertise that a standard worked solution erases — a student practicing to recognize when to substitute versus factor first (the stated {{practice_goal}}) learns nothing from seeing only the winning path; they need to see what else was on the table and why it lost. Restricting flags to genuine decision points and explicitly excluding mechanical execution steps keeps the signal meaningful — GPT-5.1, if not told to distinguish these, tends toward over-explaining every line uniformly, which buries the two or three moments that actually matter for learning under a wall of commentary on routine arithmetic. Constraining the solution to only {{covered_methods}}, even when a shorter method exists outside that set, matters pedagogically because a technically valid but uncovered method is invisible knowledge to the student on an actual exam — a solution using matrix methods when the student has only learned substitution doesn't help them practice what they'll actually be tested on, it just demonstrates that the AI knows more math than the course has covered, which is irrelevant to the practice goal. The final flagged "most exam-relevant decision point" section translates the specific problem into a transferable pattern-recognition cue, which is the actual skill exam performance depends on — students who can execute algebra fine but consistently pick the slower approach under time pressure are failing at pattern recognition, not mechanics, and that's precisely what generic step-by-step solvers never address.`,
     exampleOutput: `[DECISION POINT] We have two equations: one is a circle (x^2+y^2=25), one is linear (y=x+1). Alternatives: substitute the linear equation into the circle equation, or try to manipulate both into a common form. Chosen: substitution, because one equation is already solved for y — this is the fastest path whenever one equation of a nonlinear system is already isolated for a variable, which is the signal to look for before trying anything else. Substituting: x^2 + (x+1)^2 = 25...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1049,12 +1085,17 @@ The full report broken into the required sections as headers, each with the actu
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`lab-report`, `science-writing`, `error-analysis`, `homework-help`, `chemistry`, `data-reporting`],
+    tags: [
+      `lab-report`,
+      `science-writing`,
+      `error-analysis`,
+      `homework-help`,
+      `chemistry`,
+      `data-reporting`,
+    ],
     whyItWorks: `GPT-5.1, left unconstrained, defaults toward a narratively satisfying writeup — it will smooth over a hypothesis that didn't pan out and generate a generic "human error, equipment limitations" error-analysis line because that phrasing appears constantly in training data as the template answer, not because it engaged with your specific run. Explicitly instructing it to flag missing data with a literal marker like [NEEDS DATA] rather than interpolating a plausible number matters because a specific-heat calculation, a titration endpoint, or a yield percentage is exactly the kind of number a language model can generate that looks internally consistent but is fabricated — and an instructor checking a lab report against a data sheet will catch a fabricated number immediately, which is a worse outcome than an honest gap. Forcing the Discussion section to reconcile the stated hypothesis against the actual data addresses a specific model tendency: without that instruction, GPT-5.1 tends to retroactively soften a wrong hypothesis into something that sounds like it was closer to right than it was, which undermines the entire pedagogical point of an error-analysis section — that section exists specifically to reward you for noticing when the prediction and the result diverged and explaining why, not for hiding the divergence. The explicit "what not to do" ban on generic error-source language forces the model to trace each claimed error back to something concretely listed in the anomalies field, which is the difference between a report that reads as authored by someone who was in the room for the experiment versus one that reads as templated filler bolted onto real numbers.`,
     exampleOutput: `Error Analysis: The calculated specific heat (0.61 J/g°C) is notably lower than the value predicted for aluminum (0.90 J/g°C), which is inconsistent with the original hypothesis. The 8-second delay in transferring the heated metal sample into the calorimeter likely allowed measurable heat loss to the air before data collection began, which would lower the apparent heat released and thus lower the calculated specific heat. The anomalous early thermometer reading suggests possible incomplete water-metal thermal equilibration at the start of timing, which should be verified against the raw temperature-time log if available.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1119,13 +1160,17 @@ Deliver the set as: (1) the explanation paragraph, (2) numbered practice items g
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`language-learning`, `grammar-practice`, `spanish`, `study-drill`, `second-language-acquisition`],
+    tags: [
+      `language-learning`,
+      `grammar-practice`,
+      `spanish`,
+      `study-drill`,
+      `second-language-acquisition`,
+    ],
     whyItWorks: `A prompt that just says "give me practice with preterite vs imperfect" gets GPT-5.1 to generate a broad, textbook-shaped set that samples across the whole grammar topic evenly, because without a stated error pattern the model has no signal for which sub-distinction actually matters to you and defaults to comprehensive coverage as the safest-seeming answer. Feeding it your actual wrong sentences changes the task from "teach this grammar point" to "resolve this specific confusion," which is a narrower and more useful target — the model can identify that your error is specifically about habitual/repeated past actions being marked with preterite instead of imperfect, and then construct every item to force exactly that choice, which drills the actual gap far faster than a set that also tests preterite-vs-imperfect distinctions you already have right. Asking the model to check whether your mistakes reveal one confusion or two matters because self-diagnosed grammar mistakes often bundle multiple issues that look similar on the surface (e.g., aspect confusion versus irregular-verb-conjugation errors) but need different drill types to fix; a model that silently picks one interpretation and builds a sanitized single-purpose set may drill the wrong thing entirely, while surfacing the ambiguity lets you correct it before generating twelve items that don't address your real problem. Tying each answer-key explanation back to the same opening rule, rather than a fresh ad hoc justification per item, keeps the whole set coherent as one lesson instead of twelve disconnected trivia facts, which is what actually gets a distinction to stick after repeated exposure.`,
     exampleOutput: `3. Fill in the blank: De niña, mi abuela ______ (ir) a la iglesia todos los domingos.
 Answer: iba — repeated/habitual past action ('every Sunday') takes imperfect, not preterite, matching the same pattern from your 'fui a la playa todos los veranos' mistake.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1184,13 +1229,18 @@ Output as a numbered flashcard list in the front/back format described, followed
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`vocabulary`, `spaced-repetition`, `flashcards`, `reading-study`, `language-arts`, `exam-prep`],
+    tags: [
+      `vocabulary`,
+      `spaced-repetition`,
+      `flashcards`,
+      `reading-study`,
+      `language-arts`,
+      `exam-prep`,
+    ],
     whyItWorks: `Asked to "pull vocabulary" from a text with no selection rule, GPT-5.1 tends to over-include: it flags every word above a certain register as noteworthy, which produces a list dominated by words you'll recognize by context and never see again versus the smaller set of words that actually recur across a subject area or genuinely block comprehension — the selection rule here gives the model an actual filter (recurs beyond this text, or blocks understanding) instead of a vague "advanced-sounding" threshold, which is the difference between a 40-word glossary dump and a 15-word list worth memorizing. Requiring a second, freshly generated example sentence in addition to the original source sentence directly targets a known weakness of rote vocabulary study: if you only ever see a word in the one sentence it was drilled from, recall becomes tied to that sentence's shape rather than the word's actual meaning, so a slightly reworded appearance on a real exam can fail to trigger recognition — a second context sentence forces the definition itself to do the work. Instructing the model to say when hitting your target count would force marginal inclusions matters because a target count is a proxy for "a useful amount," not a hard requirement, and a model that silently pads a 9-word natural list up to a requested 15 by including words you didn't need is optimizing for matching the number you asked for rather than the actual goal the number was standing in for.`,
     exampleOutput: `7. Front: languid
 Back: Moving or done in a slow, relaxed, low-energy way. Source: "She was languid in her chair, as if the heat had settled into her bones." New: The dog stretched into a languid pose on the porch, unbothered by the afternoon sun.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1240,13 +1290,17 @@ Output as three labeled sections (Literal, Inferential, Evaluative), each with n
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`reading-comprehension`, `study-questions`, `test-prep`, `critical-thinking`, `bloom-taxonomy`],
+    tags: [
+      `reading-comprehension`,
+      `study-questions`,
+      `test-prep`,
+      `critical-thinking`,
+      `bloom-taxonomy`,
+    ],
     whyItWorks: `Without an explicit level distinction, GPT-5.1's default question-generation behavior clusters heavily around literal recall, because recall questions are the easiest to generate reliably correct answer keys for and the model has no signal that you want the harder, more ambiguous inferential and evaluative categories represented — naming the three levels and forcing a labeled split makes the model allocate effort to the categories it would otherwise under-produce. The explicit ban on mislabeling a recall question as "evaluative" targets a specific and common failure mode in AI-generated study questions: a question that sounds analytical ("analyze why the author chose this structure") but is actually answerable by finding one sentence that states the reason directly is a fake-inference question, and self-testing against it teaches false confidence because getting it right doesn't confirm you can actually make inferences, only that you can locate text. Requiring the answer key to show the reasoning chain rather than just the final answer is what makes this usable for self-study specifically: a bare answer key lets you confirm you got a question right or wrong but not why, whereas naming both facts an inferential question connects and how they connect lets you diagnose whether a wrong answer came from missing a detail versus failing to connect two details you did notice — those are different remediation paths, and collapsing them into one letter grade of correct/incorrect wastes the diagnostic value the exercise could have had.`,
     exampleOutput: `Inferential Q2: Why might the article's structure devote more space to octopus cognition than to their lifespan, despite opening with the lifespan paradox?
 Answer: The article states octopuses live only 1-2 years (paragraph 1) and separately details extensive problem-solving research (paragraphs 3-5); connecting these suggests the author frames the short lifespan as the surprising contrast that motivates deeper explanation of the cognition research, using structure to build toward the paradox's resolution rather than treating both facts as equally weighted.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1305,14 +1359,18 @@ Output as: (1) slide-by-slide outline with time budgets, bullets, and speaker no
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`presentation-prep`, `public-speaking`, `slide-outline`, `time-management`, `classroom-assignment`],
+    tags: [
+      `presentation-prep`,
+      `public-speaking`,
+      `slide-outline`,
+      `time-management`,
+      `classroom-assignment`,
+    ],
     whyItWorks: `Asked for a presentation outline without a time budget, GPT-5.1 tends to produce a roughly even three-act structure regardless of your actual time limit, because "intro/body/conclusion" is the default presentation shape in its training distribution and it has no forcing function to size each section against a real constraint — assigning explicit per-slide time budgets that must sum to your stated limit turns an aesthetic structure into an arithmetic one the model has to satisfy, which is what actually prevents the common student failure of running eight minutes over on a six-minute slot. Explicitly separating slide bullets from speaker notes and requiring the notes to add something the bullets don't targets a specific, very common AI-generated-presentation failure: without that instruction, the model tends to write speaker notes that are just the bullet points rephrased into full sentences, which produces the exact "reading the slide out loud" delivery style that presentation rubrics penalize and that makes a talk boring to sit through regardless of content quality. The instruction to flag thin sections rather than pad them with filler matters because a model under an implicit "fill this time slot" pressure will generate plausible-sounding elaboration to hit a duration target even when your actual research doesn't support that much content, and presenting padded, low-density material for two extra minutes reads as worse to a grader than an honest, tighter presentation that ends slightly early — the model flagging the gap gives you the chance to actually research more or trim the ask, instead of unknowingly walking in with a presentation that thins out under audience questions.`,
     exampleOutput: `Slide 3 — Mortgage-Backed Securities (60 sec)
 Bullets: Bundled subprime loans sold as securities; rating agencies mislabeled risk; banks held concentrated exposure.
 Speaker notes: Here's the part that surprises people — these securities got top ratings from agencies who were paid by the same banks issuing them, which is a conflict of interest worth pointing out explicitly since it's a common follow-up question. Transition: that mislabeled risk is exactly what turned a housing problem into a banking-system problem, which is where Lehman comes in.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1362,14 +1420,18 @@ Output as a checklist: one line per comment with the likely meaning and the conc
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`teacher-feedback`, `essay-revision`, `writing-help`, `grading-comments`, `self-editing`],
+    tags: [
+      `teacher-feedback`,
+      `essay-revision`,
+      `writing-help`,
+      `grading-comments`,
+      `self-editing`,
+    ],
     whyItWorks: `A short margin comment like "unclear" or "weak" is compressed shorthand for a specific, teacher-legible problem, but handed to GPT-5.1 without the surrounding paper excerpt it produces generic writing advice about clarity in the abstract, because the model has no way to diagnose what specifically triggered that word without seeing the actual sentence it was attached to — pairing each comment with its exact excerpt lets the model reason about the concrete gap (a thesis stating both sides without taking a position reads as "weak" specifically because it isn't arguable, not because the prose is unclear) instead of guessing generically. Requiring the model to state two interpretations when a comment is genuinely ambiguous, rather than picking one silently, matters because acting confidently on the wrong interpretation of a vague comment wastes a whole revision cycle — a student who revises for "unclear phrasing" when the teacher actually meant "unclear argument structure" gets marked down again on the exact same comment, and surfacing the ambiguity lets the student make an informed guess or actually ask the teacher rather than getting a false sense of having addressed it. Asking the model to look for one recurring root cause across multiple comments targets a specific and common pattern in essay feedback: several surface-level comments (weak thesis, unclear topic sentence, 'so what' on the conclusion) frequently trace back to a single underlying issue — commonly a thesis that doesn't stake out an actual arguable position — and a student who patches each comment as an isolated fix without noticing the shared root often turns in a revision that still reads as unfocused, because the individual patches don't cohere around one clear argument the way an addressed root cause would.`,
     exampleOutput: `Thesis (circled 'weak'): Most likely meaning — the thesis states both sides ('has both good and bad effects') without taking an arguable position, which reads as weak because there's nothing here a reader could disagree with. Action: rewrite the thesis to commit to one side, e.g., 'Social media should be regulated for minors because its mental health risks outweigh its social benefits.'
 
 Recurring pattern: the 'weak' thesis and the 'so what?' on the conclusion are likely the same root issue — without a thesis that takes a real position, the conclusion has nothing specific to circle back to and reads as restating rather than resolving an argument. Fixing the thesis first should make the conclusion issue mostly resolve itself.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1419,12 +1481,16 @@ Output as a rubric table: criterion, what earns full marks, common ways to lose 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`rubric`, `grading-criteria`, `assignment-planning`, `study-strategy`, `essay-writing`],
+    tags: [
+      `rubric`,
+      `grading-criteria`,
+      `assignment-planning`,
+      `study-strategy`,
+      `essay-writing`,
+    ],
     whyItWorks: `When an assignment prompt has no attached rubric, GPT-5.1 asked to just "explain the assignment" tends to restate the prompt's stated tasks with roughly equal weight given to each, because without an explicit instruction to look for emphasis signals it treats the prompt as a flat list of instructions rather than as a document that itself encodes priority through how much space and specificity it gives each requirement — instructing the model to weight based on relative emphasis (three sentences on citation standards versus one on formatting) extracts a real, usable signal from a document that was never designed to be machine-read for grading weight, which is closer to how an experienced student actually reads an assignment sheet than a naive equal-weighting summary. Feeding in past graded feedback from the same teacher matters because a single assignment prompt is a weak predictor of actual grading behavior on its own — teachers routinely emphasize things in the prompt they don't end up weighting heavily in practice, and vice versa, so real historical evidence of what specifically cost or earned points from this teacher should override a first-pass reading of the prompt's own language when the two conflict, and the instruction explicitly tells the model to treat the historical pattern as stronger evidence rather than averaging it in as one more equal input. The required confidence flag per row exists because a guessed rubric presented with uniform authority is actively misleading — a student who treats every row as equally certain might spend their limited revision time on a low-confidence guess instead of the high-confidence, directly-stated-in-the-prompt requirement that's actually safest to prioritize, and marking the distinction lets the student decide where confirming with the teacher directly is worth the extra step before a deadline.`,
     exampleOutput: `Criterion: Source reliability evaluation | Full marks: Explicitly assesses bias, provenance, and limitations of the source, not just summarizing its content | Common point loss: Describing what the source says instead of evaluating how trustworthy or limited it is as evidence | Weight: Highest | Confidence: High (prompt explicitly separates 'evaluate reliability' from 'contextualize origin' as distinct tasks, and past feedback confirms this was penalized before).`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

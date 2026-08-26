@@ -1,8 +1,8 @@
 import type { MetadataRoute } from 'next'
+import { SKILLS_PER_SHARD } from '@/app/sitemap'
 import { absoluteUrl } from '@/lib/site'
 import { getSyncMeta } from '@/lib/skills/db'
 import { AI_BOTS } from '@/lib/tools/ai-visibility-checker/logic'
-import { SKILLS_PER_SHARD } from '@/app/sitemap'
 
 /**
  * `Allow: /` under `User-agent: *` already permits every crawler, AI or

@@ -2117,12 +2117,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT`],
-    tags: [`sql`, `postgresql`, `query-optimization`, `sql-injection`, `data-engineering`],
+    tags: [
+      `sql`,
+      `postgresql`,
+      `query-optimization`,
+      `sql-injection`,
+      `data-engineering`,
+    ],
     whyItWorks: `The instruction to name bind-parameter placeholders instead of accepting any query that "looks parameterized" closes the specific gap where a model asked generically for a "safe SQL query" will happily produce a parameterized WHERE clause but then interpolate a table or column name via an f-string elsewhere in the same query, because it's pattern-matching on the visible injection risk (a value in a WHERE clause) rather than reasoning about the underlying rule (never let user-influenced text reach the SQL string directly). Supplying row counts and asking the model to reason about which filter/join columns are likely unindexed works because GPT-5.1 has no access to your actual \`pg_indexes\` catalog and will otherwise default to writing a correct-looking query without ever surfacing that correctness and performance are different questions — giving it the row counts turns an invisible risk into something it can actually reason about and flag, rather than silently assuming an index exists because the schema snippet happens to look like a foreign key. Forcing a stated resolution for boundary ambiguities (inclusive date ranges, NULL handling in GROUP BY) matters because these are exactly the places where a wrong silent guess produces a plausible-looking wrong number rather than an obvious error — the query still runs and returns rows, so nobody notices the interpretation was wrong until a report doesn't reconcile. Requiring the EXPLAIN command as a deliverable rather than just the query converts the output from "a SQL answer" into an actual verification step the user is expected to run before trusting the query in production, which matches how a senior engineer actually ships analytics SQL rather than pasting it straight from a chat window.`,
     exampleOutput: `SELECT plan_id, COUNT(*) FILTER (WHERE canceled_at IS NULL OR canceled_at > started_at + interval '30 days') * 1.0 / COUNT(*) AS retention_30d FROM subscriptions s JOIN customers c ON c.id = s.customer_id WHERE s.started_at >= %(window_start)s GROUP BY plan_id; -- window_start is user-controlled (report date range), the interval literal is internal. Run EXPLAIN (ANALYZE, BUFFERS) first and check that started_at hits an index rather than a sequential scan across 14M rows.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -2202,9 +2206,7 @@ OUTPUT FORMAT
     tags: [`database-design`, `schema-migration`, `postgresql`, `normalization`, `sql`],
     whyItWorks: `Asking for a migration plan as ordered, individually-reversible steps rather than a single design deliverable forces the model out of academic schema design mode, where a textbook-correct 3NF layout is treated as the whole answer, and into the actual constraint that matters in a live system: an ALTER TABLE that looks trivial in DDL can take an ACCESS EXCLUSIVE lock and block every other query against that table for the duration of a full rewrite, which for a 40-million-row table is not a hypothetical, it's an outage. Requiring an explicit ON DELETE behavior on every foreign key instead of accepting the engine default closes a specific failure mode where a model asked for "a schema" writes syntactically correct DDL that compiles fine and then produces silent data-integrity drift in production months later, because the default cascade behavior was never a deliberate choice anyone reviewed. The Phase 3 requirement — naming the one existing table most likely to violate a new constraint — matters because the standard failure pattern with adding NOT NULL or UNIQUE to an already-populated table isn't a design flaw, it's a migration that runs fine in a schema-design review and then fails at 2am partway through backfilling real production rows that don't satisfy the new rule, which is exactly the class of failure a pre-migration validation query catches before the migration is ever run rather than after it's half-applied. Requiring a stated reason for any denormalization, rather than letting the model default to whichever shape looks cleaner, keeps a genuine access-pattern-driven trade-off distinguishable from an unexamined shortcut in the eventual code review.`,
     exampleOutput: `CREATE TABLE addresses (id BIGSERIAL PRIMARY KEY, customer_id BIGINT NOT NULL REFERENCES customers(id) ON DELETE CASCADE, line1 TEXT NOT NULL, city TEXT NOT NULL, is_default BOOLEAN NOT NULL DEFAULT false); Migration step 1: add addresses table (no lock impact, new table). Step 2: add nullable orders.address_id column via ALTER TABLE ... ADD COLUMN (fast, metadata-only in PG11+). Step 3: backfill address_id in batches of 5,000 rows to avoid long-running transactions. Step 4: only after backfill is verified complete, add the NOT NULL constraint using NOT VALID + VALIDATE CONSTRAINT to avoid a full table scan lock.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2272,9 +2274,7 @@ OUTPUT FORMAT
     tags: [`python`, `cli`, `click`, `developer-tools`, `automation`],
     whyItWorks: `Requiring one explicit, stated precedence order applied consistently across every configurable setting addresses a specific bug pattern in hand-rolled CLI tools: without an explicit rule, each setting tends to get its config-file/env-var/flag resolution logic written independently as the tool grows subcommand by subcommand, and inconsistent precedence between settings is invisible until a user's env var mysteriously overrides one flag but not another — asking for a single named rule up front, rather than letting each setting's precedence emerge from wherever the code happened to put it, is what actually prevents that drift. The exit-code table requirement matters specifically because the invocation context states this tool runs inside CI as well as interactively, and a CI pipeline can only make correct pass/fail decisions if "nothing to sync" and "the AWS credentials were invalid" produce genuinely different exit codes — a model asked generically to "build a CLI tool" defaults to exit 0 for success and exit 1 for everything else, which is exactly the collapse that makes automated pipelines either too permissive (masking real failures) or too strict (failing on a no-op run). Routing diagnostics to stderr via Click's \`err=True\` rather than plain \`print()\` is a mechanical requirement, not a style preference — a calling script that captures this tool's stdout to parse or log its actual output will silently ingest progress noise as data if diagnostics aren't kept off stdout, which is a common and hard-to-debug failure in composed shell pipelines specifically because it doesn't crash, it just corrupts the downstream data quietly.`,
     exampleOutput: `Exit codes: 0 = synced successfully or nothing to do; 2 = user error (bad config, invalid flag combination) — CI should treat as a build config problem; 1 = unexpected internal failure (network error, S3 auth failure) — CI should retry or alert. \`--help\` shows: Usage: filesync [OPTIONS] COMMAND [ARGS]... Commands: init, status, sync. Config precedence: CLI flag > FILESYNC_* env var > .syncrc > built-in default.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2341,9 +2341,7 @@ OUTPUT FORMAT
     tags: [`python`, `data-cleanup`, `scripting`, `idempotency`, `data-migration`],
     whyItWorks: `Requiring dry-run and real-run to share the same selection/transformation function and differ only at the final write step closes the most common failure mode in hand-written cleanup scripts: when dry-run logic is written as a separate code path (a duplicated function, or an if/else branching much earlier than the write itself), it drifts from the real path the very first time someone edits one branch without the other, and the dry-run output stops being a trustworthy preview of what will actually happen — which defeats the entire point of having one. Making every write idempotent matters specifically because the stated context is a one-off script touching production data exactly once or twice, and the realistic failure scenario isn't a clean single run, it's the script getting killed by a timeout or a network blip partway through 900,000 rows and someone needing to just run it again — without idempotency, a naive re-run either double-merges accounts that already got merged or throws unhandled uniqueness errors on rows already processed, and the fix under production pressure is worse than the original bug. The per-record audit log requirement, rather than a summary count, is what actually makes a cleanup reversible: a count of "12,003 records updated" gives no way to identify which twelve thousand or what their prior values were, whereas a log of record-id-to-before/after gives someone a concrete list to manually or programmatically reverse if the success criteria turn out to have been mis-specified after the fact. Catching only specific expected exceptions per record, instead of wrapping the whole loop in a broad except, prevents the script from silently skipping records it doesn't know how to handle and reporting false success.`,
     exampleOutput: `def find_candidates(conn): ... def apply_change(record, dry_run): logger.info(f'{record.id}: {record.email} -> {record.email.lower()}'); if not dry_run: cursor.execute(...). Running with --dry-run against the 900k rows logged 12,014 planned changes to cleanup_audit.log with old/new email pairs; review that file for any unexpected merges before re-running without the flag.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2412,9 +2410,7 @@ OUTPUT FORMAT
     tags: [`fastapi`, `python`, `api-design`, `pydantic`, `backend`],
     whyItWorks: `Requiring an explicit Pydantic response model rather than a bare dict return matters because FastAPI only validates and documents what you tell it to — a route that returns \`dict(...)\` still works and still renders in the interactive docs with an inferred shape, so the discipline gap is completely invisible in local testing and only surfaces as a silent contract break once a field gets renamed or dropped and the frontend that was relying on the old shape breaks without FastAPI ever raising an error, because there was no explicit contract to violate. Pulling the auth check into a dependency rather than inline route logic is what makes \`TestClient\` testing of the business rules actually tractable: FastAPI's \`app.dependency_overrides\` mechanism lets a test swap in a fake authenticated user without touching a real JWT or database, which is only possible if the auth logic is a dependency in the first place — inline auth logic forces every test of every business rule to also stand up real authentication, which is exactly the kind of friction that gets tests skipped under deadline pressure. Requiring a distinct status code and named-rule response body per business rule, rather than letting Pydantic's automatic 422 cover everything, addresses a real confusion GPT-5.1 defaults toward: it tends to treat "validation" as one bucket, so a request that's shaped correctly but violates a business invariant (inviting someone already invited) gets folded into the same 422 as a malformed field, and the calling frontend has no reliable way to distinguish "you sent bad JSON" from "this specific business rule was violated" without parsing error message text, which is fragile the moment the message wording changes.`,
     exampleOutput: `class InviteRequest(BaseModel): email: EmailStr; role: Literal['member','admin']. 409 Conflict -> {'error': 'already_invited', 'detail': 'user@example.com already has a pending invitation'}. 403 Forbidden -> {'error': 'insufficient_role', 'detail': 'members cannot invite admins'}. def test_invite_duplicate_returns_409(client, override_owner_user): ... assert response.status_code == 409 and response.json()['error'] == 'already_invited'`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2485,9 +2481,7 @@ OUTPUT FORMAT
 class RetryableUploadError(ReportUploadError): """Transient failure (throttling, dropped connection) - caller should retry with backoff."""
 class FatalUploadError(ReportUploadError): """Non-retryable failure (missing job, permission denied) - caller should not retry, needs investigation."""
 # S3 SlowDown -> RetryableUploadError(job_id=..., cause='s3_throttle'); Postgres OperationalError -> RetryableUploadError; upload for a deleted job_id -> FatalUploadError(job_id=..., cause='job_not_found')`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',

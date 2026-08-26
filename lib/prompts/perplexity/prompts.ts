@@ -1820,7 +1820,13 @@ If you cannot verify one of the four checks for a source (e.g. the author's trac
       },
     ],
     targetTools: [`Perplexity Comet`],
-    tags: [`source-evaluation`, `credibility-scoring`, `comet-browsing`, `due-diligence`, `research-analyst`],
+    tags: [
+      `source-evaluation`,
+      `credibility-scoring`,
+      `comet-browsing`,
+      `due-diligence`,
+      `research-analyst`,
+    ],
     whyItWorks: `Comet operates as a browser agent that actually opens and reads the tabs in front of you rather than only running a search-index query, which makes it possible to check independence and directness against the live page itself — including bylines, disclosure statements, and outbound citations a search snippet would never surface. The four-check structure exists because a language model's default failure mode on source evaluation is fluency bias: a well-organized, confidently written page scores as more credible than a messier one even when the messier one is closer to primary data, so forcing independence and directness to be scored as separate, named fields breaks the correlation between writing quality and evidentiary weight instead of letting one contaminate the other. Requiring the model to check whether every source traces back to the same original report matters specifically because repeated citation creates an illusion of corroboration — five articles citing one press release is one data point wearing five costumes, and a scorecard that scores each article independently without flagging shared ancestry would overstate confidence exactly where it shouldn't. The instruction to distinguish an unscoreable gap from an actual low score matters because a model under instruction to always produce a score will otherwise quietly convert 'I couldn't verify this' into a middling default score, which erases the single most useful signal in the whole exercise — that some claims simply cannot be checked with what's available, and a decision resting on them should carry more caveats, not fewer.`,
     exampleOutput: `Vendor case study page | Independence: Low | Directness: High | Disclosed Interest: Significant | Reason: directly addresses the claim but is the vendor's own marketing content. Trade-publication article | Independence: Med | Directness: Med | Disclosed Interest: None found | Reason: cites the vendor's stat without independent verification. Reddit thread | Independence: High | Directness: Low | Disclosed Interest: None | Reason: firsthand accounts but anecdotal, not the specific 98% figure. Verdict: none of the three sources independently verifies the 98% figure — treat it as vendor-claimed, not confirmed, before signing.`,
     verifiedAgainst: [
@@ -1881,7 +1887,13 @@ List the specific pages you checked, in the order you checked them, and what eac
       },
     ],
     targetTools: [`Perplexity Comet`],
-    tags: [`fact-checking`, `claim-verification`, `primary-source-tracing`, `comet-browsing`, `editorial-review`],
+    tags: [
+      `fact-checking`,
+      `claim-verification`,
+      `primary-source-tracing`,
+      `comet-browsing`,
+      `editorial-review`,
+    ],
     whyItWorks: `Asking for a flat true/false invites the single most common fact-checking failure: a claim that is technically accurate but stripped of the context that made it meaningful reads as 'true' under a binary system, when the honest and useful answer is that it's misleading. The five-option verdict scale exists specifically to make that distinction sayable instead of forcing it into a box it doesn't fit. The paraphrase-distance step matters because claims degrade predictably as they pass through summarization layers — a hedge in the original study becomes a flat statement two summaries later, and a model asked only 'is this true' has no structural reason to notice how many hops separate what it's checking from where the number actually came from; asking it to count the hops as a named step forces that degradation into view. Requiring Comet to check for retractions or corrections addresses a specific weakness of confident single-pass answers: a claim can have been accurate at publication and false now, and a check that only verifies the original claim's initial accuracy without checking what happened since will happily confirm something that's since been walked back. The 'show your trail' requirement is not cosmetic — a browser agent that can actually navigate to primary sources should be held to a different standard than a search-snippet summary, and forcing it to list the specific pages checked, in order, makes it possible to catch the difference between genuine verification and a plausible-sounding restatement of what search results already implied.`,
     exampleOutput: `Claim type: statistic. Traced to: a 2025 workplace-analytics firm report (not the HR newsletter or LinkedIn post, both of which paraphrased it). Paraphrase distance: 2 steps, and the LinkedIn post dropped the original's caveat that the sample was self-selected companies already committed to remote work. Since publication: no retraction found, but a 2026 follow-up from a different analytics firm found a smaller 22% gap using a broader sample. Verdict: Partially true, misleadingly framed — the 40% figure is real but comes from a non-representative sample and a more recent, broader study found a substantially smaller effect.`,
     verifiedAgainst: [
@@ -1947,7 +1959,13 @@ End with a short list of any claims you found compelling but could not locate a 
       },
     ],
     targetTools: [`Perplexity Comet`],
-    tags: [`citation-extraction`, `provenance-tracking`, `quote-verification`, `comet-browsing`, `document-sourcing`],
+    tags: [
+      `citation-extraction`,
+      `provenance-tracking`,
+      `quote-verification`,
+      `comet-browsing`,
+      `document-sourcing`,
+    ],
     whyItWorks: `The quote-versus-paraphrase distinction is the single highest-leverage rule in this prompt because a language model's default extraction behavior is to lightly rephrase everything into consistent prose, which quietly turns an exact quote into something that looks like one but isn't — a difference that matters enormously the moment a citation gets checked against its source. Requiring page- or section-level location rather than just the site name matters because Comet is browsing live pages, not summarizing an index entry, so it actually has access to where on the page a claim sits — asking for that level of detail uses the one capability a browsing agent has that a plain search-summary tool doesn't. The instruction to flag one-level-deeper attribution (a page citing another source) exists because extraction tools commonly collapse a chain of attribution into a single citation to the page in front of them, which silently misattributes a claim to whoever happened to repeat it rather than whoever originated it — flagging this explicitly keeps the citation trail honest instead of one hop short. The explicit ban on inventing missing details (a page number, an author, a date) addresses a known model failure mode under table-formatting pressure: an empty cell feels incomplete, and the path of least resistance is to fill it with something plausible rather than admit the source doesn't provide it — writing 'not stated on page' as the required fallback removes the incentive to guess. Keeping duplicate-seeming claims as separate rows rather than letting the model silently consolidate them preserves editorial control over a judgment call that belongs to the person assembling the document, not to the extraction step.`,
     exampleOutput: `Claim: "pricing starts at $49/seat/month for teams under 20" (direct quote) | Location: pricing page, second pricing tier card | Attributed origin: the page itself | Citation: [Competitor X pricing page, 2026-08-09]. Claim: over 10,000 companies use the product (paraphrased from "joins the 10k+ companies already...") | Location: homepage hero section | Attributed origin: page itself, no methodology given for the count | Citation: [Competitor X homepage, 2026-08-09]. Flagged for second look: a claim about "industry-leading uptime" with no specific figure or source named anywhere on the page.`,
     verifiedAgainst: [
@@ -2008,7 +2026,13 @@ A one-line statement of whether the sources are in strong overall agreement with
       },
     ],
     targetTools: [`Perplexity Comet`],
-    tags: [`contradiction-detection`, `cross-source-audit`, `source-triangulation`, `comet-browsing`, `conflict-resolution`],
+    tags: [
+      `contradiction-detection`,
+      `cross-source-audit`,
+      `source-triangulation`,
+      `comet-browsing`,
+      `conflict-resolution`,
+    ],
     whyItWorks: `A model asked to simply synthesize multiple sources will default to smoothing over disagreement into a single coherent-sounding narrative, because fluent synthesis is the path of least resistance and a paragraph that acknowledges no tension reads more confidently than one that surfaces it — this prompt exists specifically to counteract that pull by making contradiction-hunting the primary task instead of a byproduct of summarizing. The explicit list of contradiction types (numbers, dates, causal attribution, credit/blame, settled-versus-disputed framing) matters because an unguided search for 'disagreement' tends to catch only the most obvious cases and miss subtler ones, like one source treating something as established fact that another source explicitly flags as still under investigation — naming these categories forces a systematic pass rather than an impressionistic one. The instruction to check scope before flagging a false contradiction addresses a real failure mode: two sources covering different time windows or different sub-populations of the same broader topic will often look contradictory at a surface read when they're actually both accurate about different things, and treating every surface-level mismatch as a real conflict would flood the output with false positives that bury the genuine ones. Banning the average-the-numbers move matters because averaging two disagreeing figures manufactures a false sense of precision — the midpoint of two contested numbers has no evidentiary status of its own, and presenting it as a finding would be a worse outcome than honestly reporting the disagreement and letting the reader decide how to weigh it.`,
     exampleOutput: `Contradiction 1 (high stakes): Article A reports the recall affects 12,000 units; Article B and the regulatory filing report 45,000 units. Article A appears to cite only the initial press release before the scope was expanded — likely outdated rather than a genuine disagreement. Contradiction 2 (lower stakes): Two articles differ on whether the defect was a manufacturing error or a design flaw; this appears to be a genuine unresolved disagreement, since the regulatory filing itself states the cause is still under investigation. Overall: the units-affected number should be treated as unsettled until the regulatory filing's figure is confirmed as final, and any customer notice should use a range rather than a single figure.`,
     verifiedAgainst: [
@@ -2072,7 +2096,13 @@ One paragraph verdict: proceed, proceed with named conditions, or hold pending m
       },
     ],
     targetTools: [`Perplexity Comet`],
-    tags: [`due-diligence`, `vendor-vetting`, `background-check`, `comet-browsing`, `risk-assessment`],
+    tags: [
+      `due-diligence`,
+      `vendor-vetting`,
+      `background-check`,
+      `comet-browsing`,
+      `risk-assessment`,
+    ],
     whyItWorks: `Structuring this as four ordered phases rather than one open-ended 'research this company' instruction matters because unstructured due-diligence research tends to stop as soon as it finds something reassuring — a clean-looking marketing site or a few positive reviews satisfies the surface-level goal and the search stops before checking litigation records or financial-instability signals that don't show up on page one of a general search. Phasing forces those checks to happen regardless of what earlier phases found, which is exactly the discipline a real due-diligence process is supposed to enforce. Separating the legal-entity check into its own phase matters because a subsidiary or recently renamed entity can carry a clean record simply because the record is attached to the wrong name — checking registration and entity history first prevents every later phase from unknowingly searching for the wrong legal name. The instruction that absence of bad news isn't confirmed stability directly counters a model's tendency to report a null result ('no evidence of financial trouble found') in language that reads as reassurance rather than as the more accurate 'this wasn't checkable with public information' — the distinction matters enormously to whoever is relying on this brief to make a real decision. Requiring each disqualifying concern to be addressed by name in its own dedicated phase, rather than folded into a general narrative, exists because a long-form summary can technically mention a concern in passing while never actually stating whether evidence for or against it was found — named, itemized treatment closes that gap and makes the brief auditable against the specific concerns that were supposed to be checked.`,
     exampleOutput: `Phase 1: Legal entity registered under a slightly different name than shown on their marketing site; operating for 6 years, no subsidiary ties found. Phase 2: One small-claims dispute found from 2023, resolved; no pattern of complaints across review sites beyond normal variance. Phase 3: A senior operations executive departed in the past 4 months per LinkedIn; no public statement on the reason, no other instability signals found. Phase 4 (disqualifying concerns): no evidence of IP litigation found; no pattern of missed deadlines found in available reviews; no ownership ties to a named competitor found. Verdict: proceed with a condition — get a direct explanation for the recent executive departure before signing, since it's the one open item without a public answer.`,
     verifiedAgainst: [
@@ -2134,7 +2164,13 @@ Then answer {{comparison_purpose}} directly, stating which account your answer l
       },
     ],
     targetTools: [`Perplexity Comet`],
-    tags: [`source-comparison`, `competing-narratives`, `bias-detection`, `comet-browsing`, `evidence-weighing`],
+    tags: [
+      `source-comparison`,
+      `competing-narratives`,
+      `bias-detection`,
+      `comet-browsing`,
+      `evidence-weighing`,
+    ],
     whyItWorks: `The explicit instruction not to blend the two accounts matters because a language model's default behavior when comparing two versions of a story is to produce a synthesized middle account — a version that sounds balanced but that neither original source actually supports, which is a worse outcome than honestly reporting two accounts that disagree, since the synthesized middle can misrepresent both. Keeping the comparison in a strict two-column structure, rather than a flowing paragraph, prevents the model from silently resolving a divergence by choosing which detail to lead with — a structural constraint does work here that an instruction alone can't, because a table format makes an unaddressed cell visible in a way a paragraph doesn't. Asking specifically what evidence or sourcing each account offers — a named witness versus an anonymous source versus no sourcing at all — matters because the two accounts of a personal or reputational dispute often differ far more in evidentiary weight than they do in the plausibility of the story itself, and a plain narrative comparison tends to treat both accounts as equally weighted by default simply because both are being described in the same register. Requiring the final answer to name the specific missing piece of information that would flip the comparison is the mechanism that keeps the whole exercise honest about its own uncertainty — it's an explicit acknowledgment that the comparison, however careful, is being made with an incomplete picture, and states exactly what would close that gap rather than implying the comparison is more settled than it is.`,
     exampleOutput: `Agreement: both accounts agree the product idea was discussed at a specific meeting in early 2024. Divergence: Account A says the idea was fully specced by founder A before the meeting; Account B says it emerged collaboratively during the meeting itself. Sourcing: Account A offers a dated internal document; Account B offers no documentary evidence, only its own recollection. Given the documentary evidence gap, this leans toward Account A's version being more defensible for now — though the specific missing piece that would change this is whether founder B can produce any dated notes or messages predating the meeting.`,
     verifiedAgainst: [
@@ -2191,7 +2227,13 @@ End with a single line: publish as-is, publish after fixing the flagged items, o
       },
     ],
     targetTools: [`Perplexity Comet`],
-    tags: [`pre-publish-check`, `verification-checklist`, `fact-check`, `comet-browsing`, `editorial-qa`],
+    tags: [
+      `pre-publish-check`,
+      `verification-checklist`,
+      `fact-check`,
+      `comet-browsing`,
+      `editorial-qa`,
+    ],
     whyItWorks: `The instruction to treat every earlier fact-check as potentially stale exists because the single most common way a true claim becomes false in a published piece isn't sloppy original research — it's simply time passing between when a fact was checked and when the piece actually ships, and a verification pass that only re-reads the draft without re-checking against current sources will happily confirm a number that was accurate weeks ago and isn't anymore. Splitting the check into four distinct failure modes — outdated, misattributed, overstated, unsourced — matters because these are mechanistically different problems with different fixes, and collapsing them into one generic 'fact-check this' instruction tends to catch only the most obvious kind (outright wrong) while missing the subtler and arguably more common ones, like a source that hedges with 'likely' being flattened into a confident claim somewhere in the editing process. The overstatement check specifically matters for anything assembled from multiple drafts or contributors, since certainty tends to accumulate through revision even when the underlying evidence hasn't gotten any stronger — each pass smooths out a hedge that felt unnecessary in isolation, and only a check that compares the final wording back against the actual source will catch the cumulative drift. Limiting the output to only flagged claims, rather than a full annotated pass over every sentence, is a deliberate proportionality choice for a time-pressured final check — a long list of items that all checked out fine buries the one item that actually needs fixing, which is the opposite of what a pre-publish gate is for.`,
     exampleOutput: `3. Claim: "the executive said adoption would triple by year-end" | Status: Overstated | Fix: the source quote actually says adoption "could plausibly" triple, not that it will — soften the draft's wording to match. 5. Claim: "the platform serves 2 million users" | Status: Now outdated | Fix: the company's own site now states 2.4 million as of last week; update the figure or add an as-of date. Verdict: publish after fixing the two flagged items — neither requires new reporting, just a wording correction and a figure update.`,
     verifiedAgainst: [

@@ -2013,12 +2013,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`youtube-hooks`, `retention`, `video-scripting`, `content-strategy`, `youtube-seo`],
+    tags: [
+      `youtube-hooks`,
+      `retention`,
+      `video-scripting`,
+      `content-strategy`,
+      `youtube-seo`,
+    ],
     whyItWorks: `YouTube's own audience-retention graph shows the sharpest single drop happens in the first several seconds, before the algorithm even has a strong session-duration signal to work with — so a weak opening doesn't just lose a few viewers, it suppresses the early watch-time ratio that decides whether the video gets shown to more people at all. GPT-5.1 left unconstrained will default to a warm, presenter-style opening ('Hey everyone, welcome back') because that pattern is extremely common in its training data and reads as natural and friendly — exactly the pattern that causes the drop-off this prompt targets. Forcing a diagnosis phase before generation matters because it stops the model from pattern-matching straight to 'add more energy' or 'make it punchier,' generic fixes that don't address the actual structural problem, which is usually that the gap between what the viewer already knows and what the video promises hasn't been opened yet. Requiring three hooks built on different mechanisms — cold open, arguable claim, concrete cost — rather than three phrasing variants of one idea prevents the model from doing shallow rewording and forces it to actually reason about which psychological lever fits this specific video, since a claim-based hook works differently on a viewer's attention than a cold open does. The pressure-test phase catches the second most common failure: a hook that's punchy in isolation but that a viewer who's already seen three similar videos in the same scrolling session would immediately recognize and skip past, which only shows up when you explicitly ask the model to argue against its own output rather than accept it as finished.`,
     exampleOutput: `Diagnosis: the current opening front-loads channel welcome and topic announcement before any payoff, giving a skimming viewer nothing to stay for in the first three seconds. Hook A (cold open): 'This app just quietly capped your free account at three transactions a month.' Hook B (arguable claim): 'Everyone's still recommending this app for budgeting — it stopped being free two months ago.' Hook C (concrete cost): 'If you haven't checked your account limit this week, you've probably already lost a transaction to this.' Recommendation: lead with Hook A given the late-night scrolling context — it needs the least cognitive effort to land before the swipe reflex kicks in.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -2086,12 +2090,16 @@ Deliver the script broken into labeled sections with an approximate timestamp ra
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`youtube-script`, `long-form-video`, `retention`, `video-scripting`, `youtube-seo`],
+    tags: [
+      `youtube-script`,
+      `long-form-video`,
+      `retention`,
+      `video-scripting`,
+      `youtube-seo`,
+    ],
     whyItWorks: `Long-form YouTube retention graphs are rarely a smooth decline — they show a series of small cliffs at predictable moments: right after a dense explanation, right before a section that looks like a tangent, and anywhere the viewer briefly loses the thread of why they're still watching. Organizing a script purely by logical topic order, which is what GPT-5.1 defaults to when just asked to 'write a script about X,' ignores this entirely and produces something that reads well on the page but bleeds viewers on the timeline, because a logically-ordered explanation and a retention-ordered one are different structures solving different problems. Anchoring re-hooks to specific structural risk points rather than a fixed cadence forces the model to reason about where attention actually breaks rather than mechanically inserting a reminder every ninety seconds regardless of what's happening in the content at that moment. Holding the single best insight back to roughly the 60% mark works against the instinct to front-load value, but it mirrors what actually keeps session duration high: viewers who get everything valuable in the first two minutes have no reason to stay for the rest, which directly hurts average view duration, a signal YouTube weighs heavily in distribution. The single, precisely-placed call to action — right after value lands, not as a generic mid-roll interruption — avoids the common failure of asks that read as disconnected from the content, which viewers tune out or perceive as an ad break and use as their own exit point.`,
     exampleOutput: `[0:00-0:10] [HOOK]. Retention note: placeholder, hook written separately. [0:10-1:15] Quick framing of why grind consistency is the invisible variable most people blame the machine for instead. Retention note: re-hook at 1:10 ('and that's not even the expensive fix') to carry through the technical explanation that follows. [1:15-2:30] What grind consistency actually means, shown visually rather than explained abstractly...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2139,12 +2147,16 @@ Output the script as spoken lines only, each on its own line, with a bracketed v
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`youtube-shorts`, `vertical-video`, `video-scripting`, `loop-structure`, `short-form-content`],
+    tags: [
+      `youtube-shorts`,
+      `vertical-video`,
+      `video-scripting`,
+      `loop-structure`,
+      `short-form-content`,
+    ],
     whyItWorks: `The Shorts feed's recommendation system is built around a completion and replay signal that behaves differently from long-form watch time — a viewer who watches to the end and immediately watches again, even unconsciously because the ending flows back into the opening, produces a stronger positive signal than a viewer who watches once and scrolls away satisfied, because the platform reads replays as a proxy for the content being worth showing to more people. GPT-5.1's default instinct on a short script is to still write a miniature three-act structure — setup, point, conclusion — because that's the shape most 'script' requests in its training data take, but a 30-45 second Short doesn't have room for a conclusion that isn't also doing the work of the next loop's opening, so an explicit instruction against that shape is necessary to override the default. Capping word count at 90 words forces the same discipline a real Shorts editor applies: at typical spoken pace that's close to the physical ceiling of what fits before the video's own runtime ends, so any padding sentence directly steals time from the point itself rather than just making the script longer. Explicitly ruling out an overt 'like and subscribe' or hard stop matters because those lines create a clear endpoint that signals 'this is over' to the viewer's attention, which works against the loop; an ending that reconnects logically or phonetically to the opening line instead lets the replay happen before the viewer consciously registers the video ended.`,
     exampleOutput: `Cold eggs straight from the fridge hit a hot pan — [visual: cold-egg pan starts spitting and browning at the edges] — and that temperature shock cooks the outside before the inside's even started. Room-temp eggs, same pan, same heat — [visual: side-by-side room-temp pan cooking evenly] — cook through together, no rubbery spots. So the pan was never the problem. The eggs were cold before they ever hit it.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2198,12 +2210,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`tiktok-script`, `short-form-content`, `video-scripting`, `social-media`, `vertical-video`],
+    tags: [
+      `tiktok-script`,
+      `short-form-content`,
+      `video-scripting`,
+      `social-media`,
+      `vertical-video`,
+    ],
     whyItWorks: `TikTok's algorithm weighs completion rate and rewatch within a session shaped by a much shorter average scroll interval than YouTube's, and its audience has been trained by the platform's own dominant content style to expect an unproduced, direct-address delivery — a script that reads as polished narration, the default GPT-5.1 reaches for when asked for a generic 'short video script,' registers as subtly off to a TikTok-native viewer even if they couldn't articulate why, because it's optimized for a different platform's attention pattern. Explicitly listing the failure modes to avoid, rather than just describing what TikTok is, matters because GPT-5.1's training data almost certainly contains far more polished YouTube-style scripts than authentic TikTok transcripts, so without a specific negative instruction the model's statistical default pulls toward the more common, more 'produced' pattern regardless of which platform was named in the request. The instruction to assume the sound could be off addresses a real, measurable behavior — a large share of TikTok is watched muted in public or social settings — that a script optimized purely for spoken delivery ignores entirely, silently losing the point for a meaningful fraction of the actual audience. Naming the trending-audio-style opener as an available but not default choice prevents the model from reaching for a stylistic tic that was viral six months ago and now reads as dated or try-hard, a pattern-matching trap models fall into when they've absorbed a lot of a format's greatest hits without a sense of what's become stale.`,
     exampleOutput: `[on-screen text: stuck zipper? try this] Okay so — [close-up, holding a pencil to the zipper teeth] — you don't need a new zipper. Just rub a pencil right on the teeth. [on-screen text: graphite = lubricant] It's graphite, it's slick, it's basically what WD-40 wishes it was for fabric. [zip pulls smoothly] There. Free. Note: avoided a scene-setting establishing shot at the open — started already mid-action on the pencil, which is the TikTok-native habit versus a YouTube-style cold open with a wider shot first.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2262,12 +2278,16 @@ A table: Moment | Source location | Best-fit platform (or 'none') | What needs t
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`content-repurposing`, `multi-platform`, `content-strategy`, `video-scripting`, `workflow-automation`],
+    tags: [
+      `content-repurposing`,
+      `multi-platform`,
+      `content-strategy`,
+      `video-scripting`,
+      `workflow-automation`,
+    ],
     whyItWorks: `The default failure mode in repurposing — and the one GPT-5.1 falls into if just asked to 'suggest clips for social media' — is treating platforms as interchangeable output formats that differ only in aspect ratio and length, when in fact each platform's own recommendation system rewards a different kind of moment: a short-form vertical feed rewards a moment that lands its point in the first two seconds with no buildup dependency, while a text-based professional platform rewards a moment that can be argued or listed without needing tone or visual context at all. Forcing the model to find moments first and only then reason about platform fit, rather than starting from 'here's five clips for Instagram,' prevents it from bending a moment to fit a platform it doesn't actually suit, which is the exact 'resize and repost' pattern that produces content that technically exists everywhere but underperforms everywhere because it was optimized for none of them. Explicitly permitting 'none' as a valid platform fit matters because a model asked to fill a repurposing plan will, by default, try to make every extracted moment useful somewhere to seem maximally helpful, which produces forced, weak pairings; giving explicit permission to say a moment doesn't repurpose well removes the pressure to pad the output and keeps the recommendations honest. The final gap-diagnosis question — is a platform's weak showing a source problem or a fit problem — matters practically because the fix is different in each case: a source gap means the next long-form piece needs to be recorded with that platform's needs in mind, while a fit problem means stop trying to force that platform from this kind of source content at all.`,
     exampleOutput: `Moment: the specific 1.6g/kg protein figure and its study citation. Source: 8:40. Best-fit: LinkedIn (text-first). What needs adapting: strip the anecdote framing, open with the number as a claim, cite the study inline rather than verbally. Hook rewrite: 'Most people are eating 40% more protein than they need. Here's the study.' Weakest platform: the newsletter got only one strong moment — this source leans conversational and story-driven rather than reference-heavy, which is a source-content gap, not a fit issue with the newsletter format itself.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2338,12 +2358,16 @@ The four phases as labeled sections, each question followed by its follow-up bra
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`podcast-outline`, `interview-format`, `content-planning`, `audio-content`, `podcasting`],
+    tags: [
+      `podcast-outline`,
+      `interview-format`,
+      `content-planning`,
+      `audio-content`,
+      `podcasting`,
+    ],
     whyItWorks: `A guest who feels like they're being run through a checklist tends to give shorter, more rehearsed answers than one who feels like they're in an actual conversation, because a visible linear script signals to the guest exactly where the conversation is headed and invites a prepared, safer answer rather than the more revealing one that comes from feeling genuinely listened to — which is precisely the difference between an outline with follow-up branches and the flat numbered question list GPT-5.1 defaults to when simply asked for 'interview questions.' Structuring the middle phase to approach the key story through an easier adjacent question first, rather than asking for it directly and early, mirrors how skilled interviewers actually work: a guarded story told on demand reads as a rehearsed anecdote, while the same story reached through a natural conversational on-ramp tends to come out with more specific, unplanned detail, because the guest is answering the question actually in front of them rather than performing for an anticipated one. Requiring a fallback rephrasing for the direct question addresses a concrete, common failure in unscripted interviews — a guest deflecting or giving a short non-answer to the first phrasing — that a single-question outline leaves the host with no prepared way to handle, forcing an improvised follow-up in the moment that's often weaker than one planned in advance. The explicit instruction against a flat linear list matters because a numbered list is the model's statistical default for 'outline,' and using that shape here would produce something that looks organized but actively works against the goal, since a host trying to follow it verbatim ends up steering the guest back onto rails instead of following what's actually said.`,
     exampleOutput: `Phase 2 (excerpt): Q - 'What's the most common cause of a near-miss report, in your experience — not the dramatic version people imagine?' Follow-up branch if he gives a general/procedural answer: 'Was there a specific shift where you saw that play out?' Follow-up branch if he mentions time pressure specifically: 'You've mentioned before that time pressure got you into a tight spot once yourself — is that the kind of thing you mean?'`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2403,9 +2427,7 @@ OUTPUT FORMAT
     tags: [`show-notes`, `podcast-seo`, `podcasting`, `content-repurposing`, `seo`],
     whyItWorks: `Show notes function as a web page that search engines can actually index, unlike the audio itself, which means the specific words used in the summary directly determine whether the episode surfaces for a relevant search — a vague summary like 'we talk about sleep' shares almost no vocabulary overlap with an actual search query like 'why do I wake up tired after 8 hours,' while a summary written to include that specific phrasing has a real chance of matching it. GPT-5.1's default instinct on 'write show notes' is to produce a polished but generic recap, because that's the dominant shape of the training examples for the phrase 'show notes' — this prompt overrides that by explicitly requiring the summary to use searcher vocabulary rather than description, and by requiring named resources and direct quotes, which are the two elements most likely to contain the specific proper nouns and phrases a search engine can match against. The instruction to flag an uncertain resource as 'not found in transcript' rather than guess directly addresses a known model failure mode — filling a plausible-sounding gap with an invented but wrong detail — which is especially damaging in show notes because a wrong book title or study citation is exactly the kind of error a listener or the guest themselves is likely to notice and flag publicly. Requiring chapter titles that describe what's specifically discussed, rather than generic section labels, also serves a secondary function beyond search: podcast platforms increasingly surface chapter markers directly in the player UI, so a vague chapter title is a missed opportunity twice over, both for search indexing and for in-app navigation.`,
     exampleOutput: `Summary: Sleep researcher Dr. Elena Kowalski explains why waking up tired after a full 8 hours often comes down to inconsistent wake times rather than total sleep duration, and walks through a 2023 study showing circadian misalignment's effect on perceived rest. [12:40] The wake-time-versus-hours distinction, explained. [24:15] The 2023 study and what it actually measured. [38:02] Host's own two-week wake-time experiment and what changed. Quote: 'Your body doesn't care how many hours you got if it never knows what time morning is supposed to be.' — Dr. Elena Kowalski.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2479,12 +2501,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`content-series`, `youtube-strategy`, `content-planning`, `video-scripting`, `audience-retention`],
+    tags: [
+      `content-series`,
+      `youtube-strategy`,
+      `content-planning`,
+      `video-scripting`,
+      `audience-retention`,
+    ],
     whyItWorks: `A real series creates a specific incentive a standalone video collection never can: a viewer who watched episode 2 has a reason to seek out episode 3 that a viewer who's never seen the channel before doesn't share, and that dependency is what actually drives session-to-session return visits rather than one-off views — but that dependency only exists if later episodes genuinely require earlier ones, not if they're just thematically related. GPT-5.1 asked to 'plan a video series' will readily produce a clean-looking numbered list of episode topics, because that's an easy pattern to generate, but without an explicit test it won't verify that the list is actually sequential rather than just a categorized topic breakdown, which is why the necessity test step is the load-bearing part of this prompt — it forces the model to argue against its own default output rather than just present it as finished. Being willing to say 'no real arc exists, use standalone videos instead' matters because a model under instruction to plan a series will otherwise manufacture a thin justification for sequencing that doesn't actually hold, producing a series structure that looks organized in the outline but doesn't function as one once published, since viewers who skip an episode won't be lost the way a genuine dependency chain would lose them. The between-episode hook requirement addresses the actual mechanism that makes a series retain audience across episodes released days or weeks apart — a generic sign-off doesn't create anticipation, but a specific unresolved thread tied to a named next step does, which is also why it's written per-episode against what that episode specifically sets up rather than as one reusable closing line.`,
     exampleOutput: `Arc statement: the viewer goes from no building experience to having a functioning greenhouse with a first crop planted — each episode hands off a specific physical component (frame, glazing, ventilation, irrigation) that the next episode's install depends on already being in place. Necessity test: episode 4 (originally planned as 'finishing touches') doesn't survive the test — it doesn't depend on anything unique and can merge into episode 5 (irrigation), bringing the series to 5 episodes instead of the requested 6. Between-episode hook (ep. 2 to 3): 'The frame's up, but it's not weatherproof yet — next time we seal it, and I'll show you the one mistake that cost me a full week of glazing work.'`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

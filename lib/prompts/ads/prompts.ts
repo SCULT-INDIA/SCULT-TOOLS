@@ -598,9 +598,7 @@ For each of the 5 hooks: the hook text (1-2 sentences, under 125 characters wher
     tags: [`facebook-ads`, `ad-copy`, `hook-writing`, `meta-ads`, `conversion-copy`],
     whyItWorks: `GPT-5.1 defaults to generic marketing hype phrasing when a prompt just says "write ad hooks" because that pattern is overrepresented in ad-copy training examples relative to genuinely objection-specific copy, so forcing five distinct angles (pattern-interrupt, direct callout, proof-led, cost-of-inaction, curiosity gap) prevents the model from collapsing into five versions of the same generic template with swapped adjectives. Explicitly naming the core objection and requiring every hook to address it mechanically shifts the model's attention from "what sounds punchy" to "what actually removes the specific reason this buyer hesitates," which is the real determinant of Facebook ad click-through since feed scrollers are pattern-matching against their own skepticism in under a second, not evaluating writing quality. The instruction to write "[NEEDS: specific number]" instead of fabricating a statistic closes a well-documented failure mode where language models asked for punchy ad copy will invent a plausible-sounding percentage or claim to fill a gap, which is a real compliance and trust liability in paid ads specifically since Meta's ad review and FTC substantiation rules apply to exact wording, not intent. Ranking the five hooks by which objection is the real blocker rather than presenting them as equally-weighted options gives an actual next action instead of a menu, which matters because most people running this prompt will only have budget to test two or three variants, not five.`,
     exampleOutput: `Hook 3 (proof-led): "94% of freelance expenses categorized automatically — no manual fixing, verified across 12,000 users last quarter." Targets: the objection that prior tools still required manual cleanup, addressed head-on with the specific accuracy number rather than a vague "it just works" claim. Recommended to test first since the stated objection is specifically about broken promises from a prior tool, and this is the only hook that answers with a number instead of a reassurance.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -659,12 +657,16 @@ OUTPUT: three labeled frames (on-screen text / visual direction / reason to tap 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`instagram-ads`, `story-ads`, `social-ad-copy`, `meta-ads`, `creative-scripting`],
+    tags: [
+      `instagram-ads`,
+      `story-ads`,
+      `social-ad-copy`,
+      `meta-ads`,
+      `creative-scripting`,
+    ],
     whyItWorks: `Framing this as three individually-must-earn-the-tap frames rather than one continuous 15-second script matches how Instagram Stories actually behave mechanically — each frame is a separate autoplay unit with its own tap-away risk, so a model asked to just "write a Story ad" tends to produce a single narrative arc that assumes the viewer watches passively through all three frames, which is not how Stories are consumed. Requiring Frame 1 to show payoff or tension immediately rather than a logo or slow build directly counters GPT-5.1's default ad-script tendency to open with brand introduction, which is a leftover pattern from TV and pre-roll video conventions that actively fails in a tap-to-skip environment. Matching the CTA's size in Frame 3 to the actual offer commitment level prevents a common mismatch where the model defaults to "Shop Now" or "Learn More" regardless of context — a cold Story viewer being asked to swipe into a full checkout flow is a much bigger ask than a poll sticker or a swipe-up to a single simple offer page, and the drop-off cost of over-asking is highest at exactly this frame. Asking for the highest-risk drop-off frame as a separate output forces an honest read on where the sequence is weakest, which is more useful than a script that implicitly claims all three frames are equally strong.`,
     exampleOutput: `Frame 2: on-screen text "Not another scented serum." Visual: before/after photo held on screen for the full frame duration, no motion. Reason to tap forward: resolves Frame 1's implied tension (reactive skin + skincare ad) by naming the fragrance-free difference before the viewer has time to assume this is the same pitch as the last five beauty ads they saw today.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -733,9 +735,7 @@ OUTPUT FORMAT: a table with columns Headline, Character Count, Tier, Pin Recomme
     tags: [`google-ads`, `rsa`, `search-ads`, `ppc-copywriting`, `quality-score`],
     whyItWorks: `Google's RSA engine auto-rotates and combines headlines by predicted performance unless a headline is explicitly pinned to a position, which means a set of 15 headlines that are all roughly interchangeable in meaning gives the algorithm nothing to actually differentiate between combinations — the pinning-tier structure in this prompt gives the model a reason to write headlines with genuinely different jobs (keyword relevance for Quality Score, a differentiator claim, an objection-handler) rather than 15 rephrasings of the same value proposition, which is the default output when a prompt just asks for "RSA headlines." Tying every headline explicitly back to the stated landing page promise addresses a specific, real Google Ads risk: ad-to-landing-page message mismatch is something Google's Quality Score system and ad review both penalize, not a cosmetic concern, so a model that isn't constrained this way will happily write a more exciting headline than the landing page can back up. The instruction against fabricating numbers matters more in Search than in social ad copy because Search ads sit next to an explicit factual claim the user is actively fact-checking through intent (they typed "same day" or "24 hour" themselves), so an invented statistic is both a compliance risk and a credibility risk the moment the landing page doesn't match it. Requiring a rationale for the overall pinning strategy tied to the specific search intent forces the recommendation to be diagnostic rather than a generic best-practice restatement, since the right pinning approach for a high-urgency local-service search is different from an informational, comparison-shopping search.`,
     exampleOutput: `Headline: "Locked Out? 30-Min Help" | 22 chars | Tier 2 (differentiator) | Pin to Position 1 — carries the urgency+speed promise that matches the stated landing page response time and should not be displaced by a generic keyword-echo headline.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -799,12 +799,16 @@ OUTPUT: intro-text short variant, full intro text, headline, and one sentence ex
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`linkedin-ads`, `b2b-advertising`, `sponsored-content`, `stakeholder-messaging`, `ad-copy`],
+    tags: [
+      `linkedin-ads`,
+      `b2b-advertising`,
+      `sponsored-content`,
+      `stakeholder-messaging`,
+      `ad-copy`,
+    ],
     whyItWorks: `LinkedIn's Sponsored Content is served against a job-title and company-attribute targeting layer, which means the platform mechanically enables aiming one specific ad at one specific role inside a buying committee — but a prompt that just says "write a B2B LinkedIn ad for [product]" gives the model no reason to pick a stakeholder angle at all, so it defaults to a lowest-common-denominator pitch that name-checks ROI, efficiency, and ease of use in a way that technically applies to everyone and therefore lands specifically with no one. Forcing the first 150 characters (the only text visible before LinkedIn's "see more" truncation) to speak to one stated concern rather than the general value prop matters because that truncation point is the actual make-or-break moment for LinkedIn feed engagement, and generic copy that works for any stakeholder is precisely the copy that gets scrolled past by all of them. The instruction that this exact copy shouldn't be pasteable unchanged into an ad for a different stakeholder is a built-in check against the model's tendency to write broadly-applicable-sounding copy under the guise of specificity — it's a concrete test the output has to pass rather than a subjective quality bar. The caution against fabricated ROI or timeline figures is calibrated to LinkedIn's B2B audience specifically, since technical buyers on this platform are more likely than a general consumer audience to click through to a case-studies page and check a cited number, making an invented statistic a credibility risk that surfaces faster here than in most other ad channels.`,
     exampleOutput: `Headline: "6 Hours, Not 40, Per Audit" — Intro (short): "Still chasing screenshots for SOC 2 evidence? One customer cut it to 6 hours." This copy speaks to the engineer doing the manual work, not the CISO signing the check — retargeting to the CISO would need a risk-posture and audit-outcome angle instead of a time-saved angle.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -873,9 +877,7 @@ OUTPUT FORMAT: each section labeled, followed by a short rationale (1 sentence e
     tags: [`landing-pages`, `conversion-copywriting`, `cro`, `ad-copy`, `single-cta`],
     whyItWorks: `The single-conversion-action constraint directly counters GPT-5.1's default landing-page instinct, which — absent an explicit restriction — tends to build a comprehensive page with multiple CTAs (a primary button plus a newsletter signup plus a "learn more" link) because that pattern is common in generic landing-page templates the model has seen, even though it's a well-documented conversion-rate-optimization failure mode: every additional competing action on a page measurably splits attention and lowers completion on the primary goal. Requiring the headline to match the traffic source's specific promise rather than introduce a new angle addresses message-match, one of the most consistent findings in landing-page conversion research — a visitor who clicked a specific promise and lands on a page that opens with a different framing experiences a split-second trust gap that raises bounce rate even if the new framing is arguably better copy. Naming the top objection explicitly and requiring it be addressed by name rather than danced around forces the page to do the actual conversion work instead of hoping the objection resolves itself through good vibes and social proof alone — objection-handling copy that never states the objection reads as evasive to a skeptical visitor, particularly relevant here since the stated objection (fear of being flooded with sales calls) is exactly the kind of thing a visitor is silently checking for. The requirement to flag missing proof rather than invent it protects against a specific real risk: a landing page overstating a guarantee or rating that doesn't match reality is a conversion asset that actively damages trust the moment a visitor checks it against reviews elsewhere, which is more likely for anything phrased as a specific number.`,
     exampleOutput: `Headline: "See Your Quote in 60 Seconds — No Phone Call Required." Rationale: matches the exact promise from the Instagram ad word-for-word and preempts the top objection (fear of sales calls) in the same sentence, so the visitor's guard drops before they even reach the form.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -933,12 +935,16 @@ OUTPUT: one row per entry state (Entry State / Headline / Subheadline / One-sent
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`hero-section`, `landing-pages`, `ab-testing`, `conversion-copywriting`, `headline-writing`],
+    tags: [
+      `hero-section`,
+      `landing-pages`,
+      `ab-testing`,
+      `conversion-copywriting`,
+      `headline-writing`,
+    ],
     whyItWorks: `Most hero-headline generation prompts produce variants that differ only in phrasing because the model is optimizing for "different enough to be five distinct outputs" rather than "different enough to test a real hypothesis," which produces A/B tests that can't actually explain why one version won even when they do — this prompt forces each variant to be anchored to a distinct, real visitor entry state with a stated reason that state needs different information, which is the actual variable that should be driving headline differences in a real test plan. The instruction to explicitly flag when two entry states should share a variant rather than forcing artificial differentiation matters because a model asked for N variants will produce N distinct-sounding outputs even when the honest answer is that two segments don't actually need different treatment — surfacing that as an option prevents shipping a fake test design that dilutes traffic across variants that don't test anything meaningfully different. Grounding each hypothesis in what's mechanically true about that entry state (cold traffic has zero context and needs the value prop explained from scratch; warm retargeted traffic already has context and needs a reason to return now) gives GPT-5.1 a concrete decision rule instead of leaving it to guess generically at "personalization," which is how most default hero-copy output ends up interchangeable across segments. The ban on fabricated urgency claims like fake scarcity counters a specific known failure mode where models asked for conversion copy will reach for manufactured urgency language by default, which is both a trust risk and, for many ad platforms and jurisdictions, a compliance risk if the scarcity claim isn't real.`,
     exampleOutput: `Entry State: Retargeted trial-abandoners. Headline: "Still juggling three tools at invoice time?" Subheadline: "Pick up where you left off — one shared view of client work and billing, ready in the account you already started." Hypothesis: this segment already understood the value prop once; the test is whether naming the specific friction that likely stalled them gets them back into the funnel faster than a generic "welcome back."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1004,12 +1010,16 @@ OUTPUT: one section per channel (Channel name, then Attention/Interest/Desire/Ac
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`aida-framework`, `multi-channel-ads`, `campaign-copywriting`, `ad-copy`, `cross-channel-consistency`],
+    tags: [
+      `aida-framework`,
+      `multi-channel-ads`,
+      `campaign-copywriting`,
+      `ad-copy`,
+      `cross-channel-consistency`,
+    ],
     whyItWorks: `AIDA is a sequencing framework, not a length or format spec, so a prompt that just asks for "an AIDA ad for each channel" tends to produce three copy pieces that each individually follow the four beats internally but drift apart from each other in underlying argument, because the model treats each channel as a fresh writing task rather than a constrained restatement of one fixed thesis — explicitly stating the single core argument up front and requiring a consistency check at the end forces the model to treat channel variants as the same argument under different compression, which is what actually keeps a multi-channel campaign feeling coherent to someone who sees the Search ad, then gets retargeted with the Facebook ad, then receives the SMS. Requiring the model to acknowledge when a length-constrained channel (SMS, push notification) has to drop Interest or Desire entirely rather than forcing all four beats into a format with no room for them addresses a real structural mismatch: AIDA was designed for long-form print copy, and applying it uncritically to a 160-character SMS produces cramped, illegible copy where a model will otherwise try to hit all four beats regardless of whether the format supports it. The instruction against manufacturing urgency when none was given directly guards against a known default behavior — models asked for an Action/CTA beat under time pressure reach for countdown-timer and "ends soon" language by default, which becomes a false-urgency compliance issue in ad platforms that increasingly flag manufactured scarcity, and is also a trust cost the first time a repeat visitor notices the "ending soon" offer never actually ends.`,
     exampleOutput: `SMS variant (Attention/Action only, Interest/Desire dropped — no room in 160 characters): Attention+Action combined: "You've got 5 days left on your free trial of [App] — no card needed. Open the app and log today's habit: [link]" Consistency check: retains the core argument (removing tracking friction) implicitly through the CTA itself rather than restating it, which is the only viable compression given the channel's length limit.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1075,12 +1085,16 @@ OUTPUT: three labeled sections (Problem / Agitate / Solution) as ad copy ready t
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`pas-framework`, `ad-copywriting`, `problem-agitate-solution`, `copywriting-ethics`, `ad-copy`],
+    tags: [
+      `pas-framework`,
+      `ad-copywriting`,
+      `problem-agitate-solution`,
+      `copywriting-ethics`,
+      `ad-copy`,
+    ],
     whyItWorks: `The Problem-Agitate-Solution framework's Agitate step is the section most prone to overreach in AI-generated copy, because the pattern is well-represented in aggressive direct-response marketing training data where agitation routinely escalates into manufactured worst-case scenarios disconnected from the actual stated problem, and a model asked to "agitate" without a ceiling will often reach for that more dramatic register by default since it reads as more persuasive on its own terms. Explicitly capping the agitation section at the real, given consequence — and giving a concrete example of what escalation beyond it looks like (three hours lost per week becoming implied business failure) — gives GPT-5.1 a specific boundary to check its own output against rather than a vague instruction like "don't exaggerate," which is unenforceable because exaggeration is a matter of degree the model can't self-assess without a stated ceiling. The tone guardrail being applied specifically to the agitate section (rather than the whole ad generically) matters because that's structurally where an audience-alienating tone is most likely to leak in — a Problem section stated plainly and a Solution section pitching the offer are lower-risk than an Agitate section that, done carelessly, can read as insulting or manipulative to the exact audience it's trying to move, which is a real risk with framing that implies the reader is incompetent or falling behind. Ending with an explicit self-check that the agitation didn't escalate beyond the stated consequence turns an easy-to-skip quality bar into something the output has to affirmatively demonstrate before being considered done.`,
     exampleOutput: `Agitate: "Every Friday, that's another 3-4 hours you're not billing a client for — time spent matching line items by hand instead of doing the work your clients actually pay you for." Solution: "[Tool] reconciles bank statements against invoices automatically, so Friday afternoon goes back to billable work." Confirmation: agitation stays within the stated 3-4 hour/week cost and does not imply business failure or incompetence.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1138,12 +1152,16 @@ OUTPUT: one section per segment (segment name, then Day 1 / Day 3 / Day 7 ad cop
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`retargeting-ads`, `abandoned-cart`, `funnel-segmentation`, `ad-copy`, `remarketing`],
+    tags: [
+      `retargeting-ads`,
+      `abandoned-cart`,
+      `funnel-segmentation`,
+      `ad-copy`,
+      `remarketing`,
+    ],
     whyItWorks: `Retargeting platforms segment audiences by funnel stage specifically because each stage represents a different, mechanically distinct reason for non-conversion, but a prompt that just asks for "retargeting ad copy" tends to produce one templated "you left something behind" message applied uniformly across segments, wasting the exact behavioral signal the segmentation data provides — requiring separate copy keyed to each segment's likely stall reason forces the model to treat a browse-only visitor (who needs more information, since they haven't committed to intent yet) differently from a checkout-abandoner (who has already shown strong intent and likely hit a specific, addressable friction point like unexpected shipping cost), which is the actual determinant of what argument will move each group. The explicit instruction not to escalate discount percentage across touches or violate the stated incentive policy addresses a specific, real business risk: a model asked to write a persuasive 3-touch sequence will often default to escalating urgency and discount depth touch over touch because that reads as more compelling in isolation, but that pattern trains customers to wait out the sequence for the biggest discount, which is a documented and costly failure mode in real retargeting programs. Refusing to invent a specific psychological stall reason when none was given — and instead flagging that it should be confirmed with real data — matters because a plausible-sounding but fabricated explanation ("this segment is price-anxious" asserted with no evidence) can steer an actual ad budget toward the wrong lever, like adding a discount when the real issue was a confusing checkout form.`,
     exampleOutput: `Checkout abandoners, Day 1: "Your order's still saved — and shipping's on us if you finish today." No discount escalation Day 3 or 7 per stated policy; Day 3 copy instead re-surfaces the free-shipping offer with a product reassurance angle rather than a deeper discount, since the incentive policy caps this segment at free shipping only.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1201,12 +1219,16 @@ OUTPUT: a table (Segment Name / Qualifying Signal Combination / Messaging Angle 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`audience-segmentation`, `behavioral-targeting`, `ad-targeting`, `retention-marketing`, `data-driven-marketing`],
+    tags: [
+      `audience-segmentation`,
+      `behavioral-targeting`,
+      `ad-targeting`,
+      `retention-marketing`,
+      `data-driven-marketing`,
+    ],
     whyItWorks: `Asked generically to build audience segments, GPT-5.1 defaults to demographic-persona shorthand ("busy professionals," "budget-conscious shoppers") because that's the dominant pattern in marketing-strategy training content, even though real ad-platform targeting and most CRM segmentation in practice runs on behavioral and transactional signals, not assumed demographic traits — restricting the model to combinations of explicitly listed real signals forces it to produce segments that are actually buildable and actionable in an ad platform or CRM, rather than aspirational personas with no underlying data to target against. Requiring every segment to be named by the qualifying behavior rather than a persona nickname closes a specific gap where a demographic-sounding label can smuggle in an unstated assumption — "budget-conscious shopper" implies something about income or price sensitivity that isn't actually supported unless a signal like discount-code usage or average order value backs it up, and treating that as a hard rule keeps the output honest about what it can and can't infer from the data given. The instruction to name a genuinely useful segment even when the supporting signal isn't yet tracked, rather than quietly substituting an unreliable proxy, surfaces a real and common tension in segmentation work: a business often has to choose between building a slightly-worse segment now with existing data or investing in new tracking to build the ideal one, and that's a decision worth making visible rather than resolving silently inside the model's answer. Flagging overlap with existing segments matters practically because ad platforms charge for redundant audience overlap in wasted spend and diluted signal when the same person is targeted by two competing segments with conflicting messages.`,
     exampleOutput: `Segment: "Subscription paused, no cancellation, 14-30 days." Qualifying signal: subscription status = paused AND days since pause is 14-30. Messaging angle: address the specific friction that led to pausing (not a generic win-back discount) — reference resuming being one click, not a full re-signup. Overlap flag: does not overlap with existing "lapsed one-time buyers" segment since this is subscription-specific.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1264,12 +1286,16 @@ OUTPUT: Part 1 (confirmed, with citations to the data given), Part 2 (inferences
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`customer-persona`, `audience-research`, `ad-targeting`, `market-research`, `data-driven-marketing`],
+    tags: [
+      `customer-persona`,
+      `audience-research`,
+      `ad-targeting`,
+      `market-research`,
+      `data-driven-marketing`,
+    ],
     whyItWorks: `AI-generated customer personas have a well-known failure mode where the model fills gaps in sparse real data with plausible-sounding demographic and psychographic detail — a name, an age, a hobby, an income bracket — presented in the same confident narrative voice as the actual survey findings, which means anyone using the persona downstream has no way to distinguish an evidenced fact from a filled-in guess, and ad creative built on the invented parts is effectively targeting a person who doesn't exist. Structurally separating the persona into a cited "confirmed from data" section and an explicitly labeled "unverified inference" section forces GPT-5.1 to make that distinction visible rather than resolving the ambiguity silently in favor of a more complete-sounding narrative, since the model's default instinct when asked for a persona is to produce something that reads as a finished, confident character rather than an honest reflection of data quality. Requiring each confirmed detail to cite the specific piece of data supporting it (not just assert it) makes the claim checkable — a downstream reader can trace "price-sensitive" back to "40% of support tickets reference a competitor's price" and judge for themselves whether that's strong enough evidence to build a campaign angle on. The final prioritization step — which unverified inferences matter most to confirm given the stated use case — makes the persona actionable as a research tool rather than a static deliverable, since not every data gap is equally costly to leave unresolved; a gap that would change which pain point leads the next ad round is worth closing before launch, while a gap that wouldn't change any near-term decision isn't.`,
     exampleOutput: `Part 1: "Time scarcity is the primary stated motivator — supported by 65% of 200 survey respondents citing 'lack of time to plan meals' as the top subscription reason." Part 2: "Likely skews toward dual-income households, though this isn't confirmed by current data — inferred from the time-scarcity theme, not directly measured." Priority to verify: household size and income, since portion-size complaints suggest the ad angle may be targeting the wrong household size without this confirmed.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1326,12 +1352,16 @@ OUTPUT: Draft 1 (value prop), Step 2 (rebuttal), Final version (revised value pr
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`value-proposition`, `positioning`, `competitive-differentiation`, `ad-copy`, `messaging-strategy`],
+    tags: [
+      `value-proposition`,
+      `positioning`,
+      `competitive-differentiation`,
+      `ad-copy`,
+      `messaging-strategy`,
+    ],
     whyItWorks: `A value proposition written in a single pass, without a pressure test, tends to be whatever sounds most confident and complete on first draft, and confident-sounding claims are exactly the ones most vulnerable to an obvious rebuttal a real buyer would raise in the first thirty seconds of evaluating the product — building the rebuttal step into the same prompt forces GPT-5.1 to generate the skeptical buyer's actual objection rather than skip straight to a polished-sounding claim, which surfaces weaknesses in the value prop before it ever reaches an ad platform where the cost of a shaky claim is wasted spend and a bounced click. Explicitly distinguishing between narrowing scope (making a claim more specific and therefore more defensible) and softening it into vagueness (making it unfalsifiable to dodge the objection) matters because a model under pressure to "fix" a rebutted claim will often default to the easier move of vague hedging language, which produces a value prop that's technically unrebuttable only because it no longer says anything specific enough to be wrong — the instruction to distinguish these two responses keeps the revision honest rather than just evasive. Requiring the rebuttal to focus on what a buyer would question in the claim itself, rather than inventing a weakness in the named competitor, prevents the exercise from turning into unearned competitor disparagement based on assumptions the model wasn't given any actual evidence for, which is both an accuracy risk and, in some ad contexts, a comparative-advertising compliance risk if a claim about a competitor's product were ever surfaced in the ad copy itself.`,
     exampleOutput: `Draft 1: "The fastest way to catch security issues in your codebase." Rebuttal: "So does [dashboard competitor] — what does 'fastest' actually mean here, and is it just faster than a dashboard, or faster than doing nothing?" Final: "Catches security issues in the PR diff, before merge — not in a separate dashboard reviewed after the fact." Change: narrowed "fastest" (unfalsifiable, invites the obvious "compared to what" rebuttal) to the specific, provable workflow difference (inline in PR vs. separate dashboard) that the rebuttal couldn't touch.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1391,9 +1421,7 @@ OUTPUT: three candidates, each with its structural approach named, the anticipat
     tags: [`usp`, `positioning`, `differentiation`, `ad-copy`, `messaging-strategy`],
     whyItWorks: `The most common failure of AI-generated USPs is producing a sentence that sounds specific and confident but is actually a generic superlative wearing specific-sounding clothes — "the smartest way to manage passwords" has the cadence of a differentiated claim but collapses the instant a buyer asks the natural follow-up question any real prospect asks, which is exactly why building that follow-up question into the prompt itself is the mechanism that catches the failure before the copy ships. Requiring three structurally different candidates (explicit comparison, mechanism claim, fact-grounded claim) rather than one polished sentence prevents GPT-5.1 from defaulting to whichever phrasing sounds most persuasive in isolation, since the comparison-framed and mechanism-framed versions naturally resist vagueness in a way a single unconstrained attempt often doesn't — a sentence that has to literally contain "unlike X" or name the specific mechanism can't hide behind a superlative the way a free-form USP can. The instruction to treat a softened synonym of a banned cliche as the same violation ("industry-leading" for a banned "best-in-class") matters because models routinely satisfy a literal ban while reintroducing the same generic register through a near-synonym, technically complying with the instruction's letter while missing its actual point, which is to avoid sounding like every other ad in the category regardless of the specific words used. Requiring the exact supporting fact to be stated precisely rather than rounded or generalized protects against a subtle drift where a real, checkable number ("meets state bar audit-log requirements") gets rewritten into a vaguer, unfalsifiable superlative during the polish pass, which quietly converts a genuinely differentiated fact into exactly the kind of generic claim this exercise is trying to eliminate.`,
     exampleOutput: `Candidate 2 (mechanism claim): "Built with an audit log that meets state bar client-confidentiality requirements — something consumer password managers aren't built for." Compared to what: "Compared to consumer-grade password managers." Already answered in the same sentence — no second question needed, since the sentence names both the mechanism and the specific alternative it's better than.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1450,12 +1478,16 @@ OUTPUT: framing approach chosen with justification, the ad copy itself, and the 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`offer-positioning`, `pricing-strategy`, `ad-copy`, `price-framing`, `conversion-copywriting`],
+    tags: [
+      `offer-positioning`,
+      `pricing-strategy`,
+      `ad-copy`,
+      `price-framing`,
+      `conversion-copywriting`,
+    ],
     whyItWorks: `Price-anchoring and per-unit framing ("less than a cup of coffee a day") are common enough in ad copy that a model asked to position an offer will reach for one by default regardless of whether the underlying math is actually honest, and this is a specific, well-documented weak point in AI-generated pricing copy — the model is optimizing for a framing that sounds persuasive, not one that survives a skeptical buyer doing the arithmetic themselves, which is exactly the gap the explicit honesty-check step closes by forcing the model to state and verify the actual calculation rather than assert the comparison and move on. Requiring the framing choice itself to be justified against the buyer's stated price sensitivity, rather than picked because it's the most conventionally persuasive option, matters because the right framing genuinely differs by buyer: a price-sensitive buyer facing a large upfront annual charge benefits from a per-unit breakdown that makes the daily cost feel small, while a buyer who already trusts the value proposition may find an anchor comparison to an unrelated purchase (coffee, another subscription) feel like a manipulation tactic rather than useful information, and defaulting to one framing style regardless of context misses that distinction entirely. The instruction against inventing a comparison anchor addresses a concrete accuracy problem: an ad claiming a product costs "less than the average cost of X" is making an implicit statistical claim, and if that statistic wasn't actually provided or verified, the ad is asserting something as fact that the advertiser has no basis for defending if a regulator, competitor, or simply a skeptical customer ever asks for the source. Explicitly flagging when a comparison only works via generous rounding or an unstated assumption gives the person using this prompt a chance to either fix the framing or accept the risk deliberately, rather than discovering after the ad is live that a customer did the math publicly and the framing didn't hold up.`,
     exampleOutput: `Framing chosen: per-unit breakdown, justified by stated price sensitivity to the upfront $299 charge. Ad copy: "$299/year works out to about 82 cents a day — unlimited sessions, offline downloads, one family seat included." Honesty check: $299/365 = $0.819/day, rounds cleanly to "about 82 cents" without a stretch — math holds without generous rounding.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1513,12 +1545,16 @@ OUTPUT: a table (Variable / Hypothesis / Exact Change / Primary Metric / Signifi
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ab-testing`, `ad-optimization`, `test-design`, `conversion-rate-optimization`, `ppc-strategy`],
+    tags: [
+      `ab-testing`,
+      `ad-optimization`,
+      `test-design`,
+      `conversion-rate-optimization`,
+      `ppc-strategy`,
+    ],
     whyItWorks: `The most common real-world ad testing mistake is running variants that change multiple elements at once (a new headline and a new image and a new CTA in the same variant), which produces a result that says one version outperformed another with no way to attribute the lift to any specific cause — a prompt that just asks for "ad test ideas" doesn't prevent this because the model has no reason to enforce variable isolation unless explicitly instructed to, so this prompt makes isolating exactly one variable per test a hard structural rule rather than a best-practice suggestion easy to skip. Requiring an explicit, falsifiable hypothesis for each test (not just "test headline A vs B" but a stated reason A should outperform B for this specific audience) forces the plan to be diagnostic rather than exploratory — a test with a stated hypothesis produces a learning either way, while an unhypothesized test that just compares two options produces a result with no explanatory value even when it's statistically valid. The feasibility check against real stated traffic and budget numbers addresses a distinct, common failure where a technically well-designed test plan is impossible to actually run to conclusion given real budget constraints, and a model that isn't asked to check this will happily propose five simultaneous tests on an ad set that gets a few hundred clicks a month, producing directional noise mislabeled as a conclusive result. Capping simultaneous tests on the same ad set when traffic is limited protects against test contamination, a specific statistical risk where overlapping experiments on shared, scarce traffic make it impossible to cleanly attribute a result to either test — a risk that only matters when traffic is genuinely constrained, which is why the cap is conditioned on the stated constraint rather than applied as a universal rule regardless of scale.`,
     exampleOutput: `Variable: Headline framing. Hypothesis: "A benefit-led headline will outperform curiosity-led for this cold-traffic skincare audience because cold traffic hasn't built enough trust yet to click on ambiguity — they need the payoff stated plainly." Exact change: headline only, image and CTA held constant. Significance feasibility: at ~1.8% baseline CVR and $50/day spend, flag that reaching significance will likely take 3-4 weeks minimum — plan test duration accordingly rather than calling it early.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1592,12 +1628,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`cro-audit`, `landing-page`, `paid-traffic`, `conversion-optimization`, `ab-testing`],
+    tags: [
+      `cro-audit`,
+      `landing-page`,
+      `paid-traffic`,
+      `conversion-optimization`,
+      `ab-testing`,
+    ],
     whyItWorks: `Asked to "audit this landing page" without a numbers constraint, GPT-5.1 defaults to reciting the standard CRO literature — page speed, above-the-fold CTA, trust badges — because that is the highest-probability completion for the bare word "audit" and it has no data to anchor against, which produces a checklist that reads as competent but isn't actually diagnosing this page's specific leak. Forcing the funnel numbers into the prompt and instructing the model to diagnose the worst step first, then explicitly justify deprioritizing the rest, changes the task from pattern-matching against a known list to genuine triage against evidence — a structurally different and harder task the model won't do unless told to. The ad-message-mismatch versus page-execution split matters specifically for paid traffic because it is a failure mode organic-traffic CRO audits don't usually have to consider: a visitor who clicked a Google ad promising one thing and landed on a page emphasizing another will bounce for a reason no page-level fix addresses, and a generic audit tool has no way to know an ad even exists, let alone what it promised. The explicit confidence-calibration instruction and the required "not enough data to say" line counteract GPT-5.1's tendency to answer every prompt with uniform confidence regardless of sample size — a few hundred clicks is not enough to confidently diagnose ten separate issues, and naming the one thing you're declining to call is what keeps the output honest about what a thin dataset can and can't support.`,
     exampleOutput: `Highest-priority fix: the 14% landing-to-start rate against a 28% start-to-submit rate points to a page-level problem before the form, not a form-abandonment problem — likely the hero's pricing mention undercutting the ad's "free, no card" promise. [ad-message-mismatch] Rewrite the hero to lead with the free-trial terms verbatim from the ad copy before any pricing context appears. Not enough data to say: whether mobile layout is contributing, since bounce rate alone doesn't isolate device-specific friction at this sample size. Next test: hero headline swap (free-trial framing first vs. current), measured on landing-to-form-start rate only.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1664,12 +1704,16 @@ A numbered stage-by-stage table: Stage | Asset | Channel | Trigger to next stage
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`marketing-funnel`, `paid-acquisition`, `retargeting`, `b2b-marketing`, `funnel-mapping`],
+    tags: [
+      `marketing-funnel`,
+      `paid-acquisition`,
+      `retargeting`,
+      `b2b-marketing`,
+      `funnel-mapping`,
+    ],
     whyItWorks: `GPT-5.1's default response to "map a marketing funnel" is the textbook three- or four-stage diagram it was trained on thousands of times, because that shape is the highest-frequency pattern for the phrase — it is correct in the abstract and useless in practice because it names no actual asset, channel, or trigger a team could build against this week. Requiring a named asset, channel, and trigger event per stage forces the model out of that generic template and into a mode where it has to commit to specifics, which is where the actual value of a funnel map lives — an unbuildable funnel is not a funnel, it's a diagram. The instruction to add a mandatory retargeting stage whenever the sales cycle exceeds a single session directly counters a structural blind spot: language models asked for "a funnel" tend to default to the simplest possible path (ad click to purchase) unless explicitly told the offer's price point and consideration period make that path implausible, and for anything with a multi-stakeholder B2B sales cycle that default path is simply wrong. Concentrating detail on the stage immediately before and after the known drop-off point, rather than spreading equal attention across every stage, mirrors how a real growth analyst would spend their limited time — the rest of the funnel matters less than fixing the one leak that's actually costing pipeline, and asking the model to weight its output that way keeps the response focused on the decision that matters rather than exhaustively even-handed across a diagram nobody asked to have equally documented.`,
     exampleOutput: `Stage 3 — Whitepaper Download to Demo Request | Asset: 3-email nurture sequence (existing) + unused case study video | Channel: Email + LinkedIn retargeting | Trigger: video watch-through past 50% triggers a demo-request CTA email | Health metric: download-to-demo conversion rate. Diagnosis: high download volume with low demo bookings suggests the whitepaper is answering the prospect's question well enough that they don't feel an urgent need to talk to sales yet — inserting the case study video mid-nurture, timed to a stakeholder-relevant pain point, is the first thing to test rather than adding another generic "book a demo" email.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1743,12 +1787,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`campaign-brief`, `paid-media`, `media-buying`, `creative-direction`, `budget-allocation`],
+    tags: [
+      `campaign-brief`,
+      `paid-media`,
+      `media-buying`,
+      `creative-direction`,
+      `budget-allocation`,
+    ],
     whyItWorks: `A campaign brief fails silently, not loudly — the media buyer and the designer each fill any ambiguity in the document with their own private assumption, and the gap only surfaces at review, after money has already been spent and creative already built, which is the single most expensive place to discover a brief was underspecified. Forcing an explicit number and deadline into the objective line, and instructing the model to flag rather than invent one when the input lacks it, prevents GPT-5.1's default behavior of smoothing a vague goal like "drive awareness" into a plausible-sounding but fabricated target, which would let the brief look complete while actually deferring the hardest decision to whoever reads it last. Requiring a budget-split rationale rather than accepting an even division across channels matters because an even split is a real, common failure mode of both AI-generated and human-written briefs — it looks fair and defensible on paper while almost never matching the actual cost-efficiency differences between channels like LinkedIn and Google Search for the same audience. The instruction that every hard constraint must appear as a visible line in the document, not just be respected implicitly in the model's reasoning, addresses a specific and easy-to-miss failure: a constraint honored inside the model's generation but never surfaced as text is invisible to the human team executing the brief days later, who has no way to know it was ever considered unless it's written down as an explicit line they can check work against.`,
     exampleOutput: `Objective: Generate 150 qualified demo signups for the mid-market tier by Sept 30. Budget: LinkedIn $15,000 (70% — audience is only reliably addressable there via job-title targeting), Google Search $7,000 (30% — captures existing intent from competitor and category terms, lower expected volume this audience size). Open question: leadership hasn't confirmed whether "qualified" means BANT-qualified or just form-completed — this determines whether the campaign is actually hitting 150 or a smaller real number, and needs a decision before spend starts.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1810,12 +1858,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`brand-messaging`, `ad-copywriting`, `value-proposition`, `positioning`, `messaging-hierarchy`],
+    tags: [
+      `brand-messaging`,
+      `ad-copywriting`,
+      `value-proposition`,
+      `positioning`,
+      `messaging-hierarchy`,
+    ],
     whyItWorks: `A messaging hierarchy only earns its keep if a copywriter three months from now, working on a campaign nobody who wrote this document is involved in, can pull the primary claim and proof points directly rather than re-deriving them — which means the document has to force specificity GPT-5.1 won't volunteer unprompted, since asked generally for "brand messaging" it defaults to safely broad claims ("reliable," "easy to use") that sound plausible for almost any product and therefore commit the brand to nothing distinctive. Anchoring the primary claim explicitly to the stated main objection closes a common gap where a technically true claim (ease of use) gets promoted to primary status because it's the most flattering thing to say about the product, even when it doesn't address what's actually stopping the buyer — a mismatch that shows up as ads with a high click-through but poor down-funnel conversion, exactly the pattern named in the tested_messaging_history field. Requiring the model to name and diagnose a previously underperforming claim rather than quietly omit it prevents the common failure where an AI-assisted rewrite simply produces a fresh, positive-sounding hierarchy with no memory that something like this was already tried and didn't work, silently repeating the same mistake with slightly different words. The competitor-distinction check matters mechanically because language models trained on similar marketing copy across a category tend to converge toward the same handful of generic phrasings for a given product type unless explicitly told which exact phrase to differentiate from — without that instruction, two competitors' AI-assisted messaging documents can end up sounding nearly identical purely from shared training distribution, not because either brand chose to sound that way.`,
     exampleOutput: `Primary claim: "Switch payroll providers without missing a single filing — we handle the transition, you don't lift a finger." Verdict on "Save 10 hours a month": retire as primary, keep as a supporting proof point — it likely underperformed on conversion because it answers a time objection when the real blocker is switching-risk fear, not time. Competitor distinction: revised the primary claim away from "payroll made easy" territory by leading with switching-safety rather than general simplicity, since that's the specific fear this audience holds that Gusto's messaging doesn't address head-on.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1873,12 +1925,16 @@ For each persona: name, the objection that defines them (quoting or closely para
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`customer-research`, `audience-personas`, `ad-targeting`, `objection-handling`, `market-research`],
+    tags: [
+      `customer-research`,
+      `audience-personas`,
+      `ad-targeting`,
+      `objection-handling`,
+      `market-research`,
+    ],
     whyItWorks: `Asked to build "personas" in the abstract, GPT-5.1 reaches for the most common template in its training distribution — a name, an age range, a job title, and a few generic goals — because that format is heavily represented in marketing content regardless of whether it's actually useful for writing an ad, and it will happily fabricate a plausible-sounding age or company size even when no such detail exists anywhere in the source research. Anchoring each persona to a specific, quoted objection from the raw research forces the model to ground the persona in evidence that actually predicts ad response, since the entire reason personas exist for a paid-media team is to know what argument to lead with, and a demographic label alone doesn't answer that question no matter how precisely specified it is. The explicit instruction to mark unsupported demographic fields as "not established" rather than invent them addresses a specific and common failure mode: language models are fluent enough to generate a confident-sounding company size or income bracket that sounds like it came from data, and a reader has no way to distinguish a real research finding from a plausible fabrication unless the model is told to flag the difference itself. Requiring explicit reconciliation against any existing persona set prevents the common organizational problem where an AI-assisted research refresh quietly produces a second, incompatible persona framework that different team members start using inconsistently — one that maps clearly onto or supersedes the old set is far more likely to actually get adopted than one that requires the team to reconcile it by hand later.`,
     exampleOutput: `Persona: "Compliance-Cautious Owner" — objection: worried client financial data isn't secure enough for their compliance obligations (sourced from 12 support tickets on this theme). Demographics: not established by research beyond "small accounting firm owner"; do not assume firm size or age. Ad angle: lead with the specific compliance certification or encryption detail, not a general "secure backups" claim. Maps to existing "Busy Bookkeeper" persona: splits into this persona plus a second, "Migration-Wary Owner," since the current single persona conflated two distinct objections that need different proof points.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1937,12 +1993,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`competitor-analysis`, `ad-messaging`, `positioning`, `differentiation`, `ad-copy`],
+    tags: [
+      `competitor-analysis`,
+      `ad-messaging`,
+      `positioning`,
+      `differentiation`,
+      `ad-copy`,
+    ],
     whyItWorks: `GPT-5.1's default response to a competitor teardown request is a side-by-side comparison table — this one says X, that one says Y — which is descriptively accurate but doesn't actually answer the question a media team needs answered, which is what to say that nobody else is saying, not what everyone is already saying phrased slightly differently. Grouping competitor ads by claim cluster rather than by competitor name surfaces the real signal, which is how narrow the actual messaging crowd is: three competitors phrasing "easy to use" three different ways is one occupied position, not three, and a table organized by competitor name obscures that. The instruction to reject any gap a competitor could copy within a week by rewriting ad copy alone is the mechanism that keeps this from producing a superficial angle — language models left unconstrained will happily surface a phrasing difference as if it were a strategic gap, when the actual bar for a defensible ad angle is that it requires the competitor to be true of something, not merely to claim it. The self-critique step, where the model has to argue the most likely reason competitors aren't already using the angle it just proposed, directly counters the sycophantic bias models have toward validating whatever conclusion they just generated — forcing an explicit adversarial pass against your own top recommendation surfaces the realistic possibility that the gap exists because it's genuinely uncompelling to this audience, not because everyone else missed it, which is the more common explanation and one a model won't volunteer unless explicitly told to look for it.`,
     exampleOutput: `Claim clusters: all three observed competitors cluster around "ease of use" phrased three ways — this claim is saturated. Gap: none lead with what happens when payroll goes wrong, despite category research showing buyers rank this above ease-of-use. Self-critique: most likely reason competitors avoid this angle is it implicitly admits payroll errors happen at all, which feels risky to say out loud — but since this brand's differentiator (same-day live-chat correction) turns that admission into a strength rather than a liability, the angle should still be used, just framed as confidence rather than caveat. Sample headline: "When payroll goes wrong, we fix it same day — not in a week."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2000,12 +2060,16 @@ A week-by-week calendar table: Week | Campaign | Action (launch / refresh check 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`marketing-calendar`, `paid-campaign-planning`, `creative-fatigue`, `budget-pacing`, `media-planning`],
+    tags: [
+      `marketing-calendar`,
+      `paid-campaign-planning`,
+      `creative-fatigue`,
+      `budget-pacing`,
+      `media-planning`,
+    ],
     whyItWorks: `A calendar assembled by pattern-matching to "marketing calendar" templates in GPT-5.1's training data defaults to a fixed cadence — new post every Monday, refresh every two weeks — because that's the shape most calendar examples take online, and it has nothing to do with when this specific channel's creative actually stops working; a Meta ad set that fatigues at day 10 sitting untouched until a generic 2-week mark has already been bleeding efficiency for several days before the calendar even prompts a look. Requiring every scheduled action to cite the specific fatigue or timing signal that triggered it forces the model to actually use the creative_fatigue_history input rather than defaulting to round numbers, which is the entire value of giving it channel-specific decay data in the first place — a calendar that ignores that data isn't meaningfully different from one built with no input data at all. Separating budget review from creative refresh into distinct triggers matters because they're genuinely different decisions with different information needs — a budget reallocation call made in the same rushed slot as a creative swap tends to under-consider one or the other, and collapsing them onto the same day is a false efficiency that a naive calendar-generation pass won't flag on its own. Treating key business dates as hard anchors the schedule must move around, rather than optional context, addresses a common real failure where a campaign refresh lands during a week the team's attention is already consumed by an unrelated operational event like a product launch, and nobody actually executes the refresh on time because the calendar never accounted for competing bandwidth.`,
     exampleOutput: `Week of Sept 22: Meta fall product line — refresh check (trigger: approaching day-10 fatigue point based on history, want fresh creative in queue before CTR decline starts, not after). Week of Oct 1: no new campaign launches scheduled this week — moved the planned LinkedIn webinar campaign launch to Oct 8 to avoid competing with the Oct 1 product line ship date for internal attention. Flagged overlap: Meta fall campaign and the LinkedIn webinar campaign both target the same warm-audience segment in week of Oct 8 with no stated reason for the overlap — confirm this is intentional before both go live.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2066,12 +2130,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`referral-marketing`, `paid-social`, `advocate-content`, `incentive-design`, `budget-planning`],
+    tags: [
+      `referral-marketing`,
+      `paid-social`,
+      `advocate-content`,
+      `incentive-design`,
+      `budget-planning`,
+    ],
     whyItWorks: `Asked generally to design a referral campaign, GPT-5.1 tends to produce a plausible-sounding incentive structure and a generic "boost your best content" instruction for the paid team, because that's the shape most referral-marketing writeups take, without checking whether the incentive is actually balanced between both sides of the referral — a real and common design flaw where a generous referrer reward with a weak referee incentive produces lots of low-quality link-sharing and poor conversion on the receiving end, a failure mode that's invisible unless something explicitly prompts a check for it. Requiring a concrete handoff trigger tied to the organic_referral_signal data, rather than an instruction to "boost popular posts," is what actually makes the brief executable by a media buyer who wasn't part of the strategy conversation — "popular" is not a number a person can act on, while "a post crossing 4x baseline engagement in 48 hours" is a rule they can operationalize without further clarification. The content-format warning about reformatting advocate testimonials for paid distribution addresses a failure specific to referral marketing that doesn't apply to brand-made ads: authenticity is often the entire reason a referral post converts, and audiences are good at recognizing when organic-feeling content has been pushed through paid distribution, at which point the same words that worked organically can read as manipulative rather than genuine — a risk a generic "amplify what works" instruction has no mechanism to catch. Requiring an explicit stopping condition rather than a plan to fully spend the budget counters the default assumption, common in AI-generated media plans, that a budget exists to be spent in full regardless of whether performance holds up throughout the period.`,
     exampleOutput: `Incentive check: referrer gets $50 credit, referee gets 20% off — reasonably balanced, referee incentive is substantial enough to expect real conversion, not just link-sharing for the referrer's benefit. Handoff trigger: boost a referral post once it crosses 4x baseline engagement within 48 hours of posting, matching the organic top-5% pattern already observed. Content guidance: boost the post as-is if it's under 100 words and reads as a direct personal statement; do not reformat it into branded ad creative, since testimonial authenticity is the actual conversion driver here. Stopping condition: pause amplification spend on a given post if cost-per-referral-conversion exceeds 1.5x the organic average for two consecutive weeks.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2139,12 +2207,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ab-testing`, `growth-experiments`, `ad-testing`, `hypothesis-design`, `experiment-design`],
+    tags: [
+      `ab-testing`,
+      `growth-experiments`,
+      `ad-testing`,
+      `hypothesis-design`,
+      `experiment-design`,
+    ],
     whyItWorks: `The most common way ad experiments fail isn't a bad hypothesis, it's the absence of a decision rule set before the data starts arriving — without one, a team watching a test in progress tends to keep it running past the point of usefulness whenever the early numbers look mildly promising, and calls it inconclusive and quietly drops it whenever the numbers look mildly disappointing, which means the actual stopping decision is being made by hope rather than by a rule, and GPT-5.1 asked generally "how do I A/B test this" will explain the concept of statistical significance without ever forcing a team to commit to a specific win and kill threshold in advance. Rewriting an open question into a falsifiable numeric prediction matters because "which one works better" genuinely has no defined endpoint — there is always a plausible argument for letting it run one more day — while "variant B beats baseline by at least X" gives the test a condition that can actually be met or missed. The variable-isolation check catches a specific and common experiment design flaw where two creative changes are bundled into one test because it's more convenient to build one variant than two, producing a result that, even if positive, can't be attributed to either change individually — a flaw invisible unless something is explicitly checking for it rather than accepting the described variants at face value. Estimating sample size against the actual available traffic and being willing to say the answer is "this test can't reach a trustworthy result in a reasonable window" is the honesty check most self-directed ad testing skips entirely — teams routinely launch tests against traffic volumes too small to ever produce a statistically meaningful answer, and continuing anyway just produces a confident-sounding conclusion built on noise.`,
     exampleOutput: `Falsifiable hypothesis: dynamic-name-insertion headline will improve CTR to at least 1.5% (a relative lift over the 1.2% baseline), not merely "perform better." Variable isolation: confirmed single-variable — only the headline personalization differs, rest of the ad is identical. Sample estimate: at ~2,000 impressions/day per variant, reaching a trustworthy sample at this baseline CTR will take roughly 2-3 weeks; this is workable but tight, plan for the full window rather than checking early. Win threshold: roll out personalization if CTR clears 1.5% with the full sample reached. Kill threshold: stop the test at day 21 regardless of result if CTR hasn't cleared 1.35%, since a smaller lift than that isn't worth the added complexity of dynamic personalization at scale.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { AI_BOTS } from './tools/ai-visibility-checker/logic'
 import { isLikelyBotUserAgent } from './bot-detection'
+import { AI_BOTS } from './tools/ai-visibility-checker/logic'
 
 const REAL_BROWSER_UAS = [
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
@@ -45,9 +45,13 @@ describe('isLikelyBotUserAgent — GoogleOther (2026-08-22 confirmed gap)', () =
     }
   })
 
-  it('flags GoogleOther\'s sibling products the same way', () => {
-    expect(isLikelyBotUserAgent('Mozilla/5.0 (compatible; GoogleOther-Image/1.0)')).toBe(true)
-    expect(isLikelyBotUserAgent('Mozilla/5.0 (compatible; Google-Extended/1.0)')).toBe(true)
+  it("flags GoogleOther's sibling products the same way", () => {
+    expect(isLikelyBotUserAgent('Mozilla/5.0 (compatible; GoogleOther-Image/1.0)')).toBe(
+      true,
+    )
+    expect(isLikelyBotUserAgent('Mozilla/5.0 (compatible; Google-Extended/1.0)')).toBe(
+      true,
+    )
     expect(
       isLikelyBotUserAgent('Storebot-Google/1.0 (+http://www.google.com/bot.html)'),
     ).toBe(true)
@@ -88,11 +92,11 @@ describe('isLikelyBotUserAgent — headless/scripted clients', () => {
 
 describe('isLikelyBotUserAgent — generic fallback', () => {
   it('flags a self-identifying crawler not on the named list', () => {
-    expect(isLikelyBotUserAgent('SomeRandomNewCrawler/1.0 (+http://example.com/bot)')).toBe(
-      true,
-    )
-    expect(isLikelyBotUserAgent('ia_archiver (+http://www.alexa.com/site/help/webmasters)')).toBe(
-      true,
-    )
+    expect(
+      isLikelyBotUserAgent('SomeRandomNewCrawler/1.0 (+http://example.com/bot)'),
+    ).toBe(true)
+    expect(
+      isLikelyBotUserAgent('ia_archiver (+http://www.alexa.com/site/help/webmasters)'),
+    ).toBe(true)
   })
 })

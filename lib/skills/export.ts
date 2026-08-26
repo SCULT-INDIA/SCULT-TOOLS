@@ -8,7 +8,11 @@ import type { Skill } from './types'
  * Cursor, and Gemini CLI read natively as-is, and `AGENTS.md`/`.cursorrules`/
  * Copilot instructions are all plain Markdown with no required frontmatter.
  */
-export type SkillExportFormat = 'skill-md' | 'agents-md' | 'cursorrules' | 'copilot-instructions'
+export type SkillExportFormat =
+  | 'skill-md'
+  | 'agents-md'
+  | 'cursorrules'
+  | 'copilot-instructions'
 
 export const SKILL_EXPORT_FORMATS: readonly {
   readonly format: SkillExportFormat
@@ -18,7 +22,11 @@ export const SKILL_EXPORT_FORMATS: readonly {
   { format: 'skill-md', label: 'SKILL.md', filename: 'SKILL.md' },
   { format: 'agents-md', label: 'AGENTS.md', filename: 'AGENTS.md' },
   { format: 'cursorrules', label: '.cursorrules', filename: '.cursorrules' },
-  { format: 'copilot-instructions', label: 'Copilot instructions', filename: 'copilot-instructions.md' },
+  {
+    format: 'copilot-instructions',
+    label: 'Copilot instructions',
+    filename: 'copilot-instructions.md',
+  },
 ]
 
 function toSkillMd(skill: Skill): string {

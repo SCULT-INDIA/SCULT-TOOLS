@@ -64,12 +64,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`budgeting`, `personal-finance`, `zero-based-budget`, `money-management`, `financial-planning`],
+    tags: [
+      `budgeting`,
+      `personal-finance`,
+      `zero-based-budget`,
+      `money-management`,
+      `financial-planning`,
+    ],
     whyItWorks: `The instruction to assign every dollar to a category or an explicit "unassigned" line closes the single most common failure mode of AI-generated budgets: the model quietly reconciling income and expenses by adjusting a category total until the math looks clean, which produces a budget that balances on paper but no longer reflects what the requester actually listed. Forcing GPT-5.1 to flag estimated versus fixed figures matters because the model has no way to know a utility bill varies seasonally unless told, and left unprompted it will present a single guessed number with the same confidence as a fixed rent figure, which is exactly the kind of false precision that makes a budget look authoritative right up until it's wrong. Refusing to invent unlisted categories addresses a specific pattern where language models pattern-match to "what a typical budget looks like" and pad in categories like entertainment or subscriptions from training-data priors rather than sticking to what the requester actually described — a fabricated category is worse than a missing one because it looks like real input. The closing assumptions list exists because a budget is only as good as the numbers behind it, and naming every place the model had to infer or estimate turns the output into a checklist the requester can verify against a bank statement rather than a black box they have to trust wholesale.`,
     exampleOutput: `Category table: Rent $1,800 (fixed, 30%), Groceries $475 (estimated, midpoint of range), Car payment $310 (fixed)... Unassigned surplus: $312/month. Assumptions: assumed freelance income averages $600 based on a 3-month sample, not guaranteed each month; assumed groceries at range midpoint since no exact figure was given.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -137,12 +141,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`expense-analysis`, `expense-report`, `anomaly-detection`, `business-expenses`, `finance-ops`],
+    tags: [
+      `expense-analysis`,
+      `expense-report`,
+      `anomaly-detection`,
+      `business-expenses`,
+      `finance-ops`,
+    ],
     whyItWorks: `Requiring a specific one-line reason for every flag rather than allowing a general "this looks unusual" forces GPT-5.1 to commit to a checkable claim — a duplicate flag names the exact matching amount and date, a limit flag names the exact limit and overage — which means the approver can verify each flag in seconds instead of having to re-derive why the model thought something looked off, and it also prevents the model from padding the flagged list with low-confidence noise just to appear thorough. The explicit instruction not to label anything fraudulent or unauthorized addresses a real risk with expense-anomaly prompts specifically: a language model pattern-matching on "duplicate charge" or "over policy limit" will readily generate accusatory language, and that framing can do real reputational damage to an employee if a duplicate charge was actually a legitimate split payment or a pre-approved exception the model has no visibility into — "flagged for review" keeps the output as a triage aid rather than a verdict. The uncategorized bucket exists because forcing every ambiguous transaction into a specific category produces a summary that looks complete but silently buries misclassified spend inside the wrong line item, which is a worse outcome for a reviewer than an honest gap they can fill in ten seconds by reading the original description.`,
     exampleOutput: `Flagged items: (1) Two Marriott charges of $890.00 on 03/04 with identical descriptions — likely duplicate entry, review before reimbursing twice. (2) Staples $1,240 exceeds the $500 pre-approval threshold for office supplies by $740 — confirm pre-approval was obtained. Reviewed 47 transactions, 2 flagged.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -213,12 +221,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`cash-flow`, `runway`, `financial-forecasting`, `small-business-finance`, `startup-finance`],
+    tags: [
+      `cash-flow`,
+      `runway`,
+      `financial-forecasting`,
+      `small-business-finance`,
+      `startup-finance`,
+    ],
     whyItWorks: `Requiring the model to show the running balance after every period rather than just a final runway number matters because a single end-of-horizon figure hides the actual shape of the risk — a business can look fine on a 16-week average while dipping dangerously low in week 6 because payroll and rent land the same week an expected invoice slips, and that dip is invisible unless the trajectory is shown period by period. The conservative-versus-optimistic split for uncertain items exists specifically because GPT-5.1, like most language models, will otherwise average an uncertain 50/50 inflow into the main projection as a half-weighted number, which produces a balance figure that doesn't correspond to either real-world outcome — a deal either closes or it doesn't, and blending it produces a phantom middle scenario nobody should plan around. Refusing to recommend a specific action (cut costs, raise money, delay a hire) keeps the tool inside its actual competence: the model can compute what the numbers imply given the inputs, but which trade-off to make in response depends on context the model can't see — the founder's risk tolerance, what a lender or investor would think, what's contractually committed — so recommending a decision would be presenting a guess as advice. Naming the single most decision-relevant assumption last gives the requester one thing to sanity-check with their accountant instead of a wall of numbers with no sense of which one actually matters most.`,
     exampleOutput: `Week of Aug 15: inflow $22,000, outflow $38,000 (payroll), running balance $68,000. ... Week of Oct 3 (conservative case, second contract excluded): running balance dips to $6,200 before the next invoice lands. Optimistic case (second contract closes in Sept): balance stays above $40,000 throughout. Most decision-relevant assumption: whether the second contract closes before October payroll.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -280,12 +292,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`financial-statements`, `financial-analysis`, `balance-sheet`, `income-statement`, `due-diligence`],
+    tags: [
+      `financial-statements`,
+      `financial-analysis`,
+      `balance-sheet`,
+      `income-statement`,
+      `due-diligence`,
+    ],
     whyItWorks: `Anchoring the summary to a stated purpose rather than a generic line-by-line walkthrough is what keeps the output usable in a time-constrained meeting — GPT-5.1's default instinct on a bare "summarize these financials" request is to work top-to-bottom through the statement structure, which surfaces plenty of technically accurate numbers that have nothing to do with the actual decision at hand and buries the two or three that do. The instruction to distinguish one-time items from ongoing business performance addresses a specific way financial summaries mislead: a net income jump driven by a one-time asset sale looks identical to a genuine margin improvement in a plain summary, and treating them the same produces a completely wrong read on trend, so the prompt forces the model to check for a label suggesting a one-time item and to say plainly when it can't tell rather than assuming continuity. Refusing to state a settled conclusion about financial health matters because "this company is in trouble" or "this is healthy" is exactly the kind of confident-sounding claim a model can produce fluently without having anywhere near the full picture — access to only two of three core statements, no forward guidance, no context on industry norms — so keeping the framing at "here's what the numbers show, here's what would confirm it" stops the summary from overstating its own certainty. The explicit "not answerable from what's provided" path exists because silently answering around a data gap (e.g., assessing debt capacity without a cash flow statement) produces a plausible-sounding but ungrounded answer, and naming the missing input is more useful than a guess dressed as analysis.`,
     exampleOutput: `Revenue up 22.8% YoY ($10.1M to $12.4M). Net income up 117% ($410K to $890K) — check whether this reflects margin improvement or a one-time item; the statement doesn't label any gain/loss line so this needs a direct question. Not answerable from what's provided: net-60 receivables capacity requires a cash flow statement or AR aging schedule, neither of which was included.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -346,12 +362,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ratio-analysis`, `financial-ratios`, `benchmarking`, `financial-metrics`, `corporate-finance`],
+    tags: [
+      `ratio-analysis`,
+      `financial-ratios`,
+      `benchmarking`,
+      `financial-metrics`,
+      `corporate-finance`,
+    ],
     whyItWorks: `Requiring the formula and plugged-in inputs alongside every result, rather than just the final ratio, matters because a ratio calculation is exactly the kind of arithmetic where a language model can silently transpose a numerator and denominator or use the wrong period's figure, and showing the full calculation is what lets the requester catch that error against their own source numbers instead of trusting an opaque output. The instruction to flag industry-dependence explicitly rather than applying a universal rule of thumb addresses a specific and common misreading of ratio analysis: a current ratio of 1.3 reads as concerning by a generic "should be above 2.0" textbook rule, but is unremarkable for a grocery distributor with fast inventory turns and predictable receivables, so without the industry caveat the model would otherwise apply a one-size-fits-all threshold that actively misleads in exactly the cases where sector context matters most. Refusing to combine ratios into a composite score or letter grade is the most load-bearing rule in this prompt: a single "financial health score" is a lossy compression that hides which dimension — liquidity, leverage, or profitability — is actually driving a concern, and GPT-5.1 will readily generate a confident-sounding composite grade if asked to synthesize, which converts several honestly separate signals into one false sense of settled judgment. Keeping each ratio's explanation grounded in this company's actual numbers rather than a generic textbook definition also prevents the output from reading as filler copied from a finance glossary rather than analysis of the specific figures given.`,
     exampleOutput: `Current ratio: $2.1M / $1.4M = 1.50, versus industry average 1.8 (below) and last year's 1.3 (improved). This measures short-term ability to cover liabilities with liquid assets. For a grocery distributor with fast inventory turnover, 1.50 is likely adequate despite trailing the industry average — worth confirming against typical payment terms with suppliers.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -418,12 +438,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`company-analysis`, `competitive-analysis`, `business-research`, `market-positioning`, `due-diligence`],
+    tags: [
+      `company-analysis`,
+      `competitive-analysis`,
+      `business-research`,
+      `market-positioning`,
+      `due-diligence`,
+    ],
     whyItWorks: `Forcing a named, per-competitor comparison rather than a generic SWOT-style list is what makes the brief specific rather than interchangeable — a strengths/weaknesses list written without a named competitor in the sentence tends to read as boilerplate that could apply to any company in the category, while "here is exactly what this company does better and worse than competitor X specifically" forces a real comparison the model can't fake without engaging the actual details given. The source-tagging requirement (provided information vs. background knowledge vs. needs current data) is the most important mechanical safeguard here: GPT-5.1's training data has a cutoff, and financial or competitive positioning can shift meaningfully in months, so a company analysis that blends a possibly stale funding figure or headcount number in with fresh information the requester just supplied — without marking which is which — creates a false sense that everything in the brief is equally current when some of it may be a year or more out of date. Explicitly refusing to give investment advice keeps the brief in its actual lane: structuring and organizing a competitive picture is something the model can do well from provided and general knowledge, but recommending a financial action requires real-time data, risk tolerance, and legal considerations well outside what a training-data snapshot and a prompt can respons­ibly provide. The explicit data-gap section at the end converts "the model doesn't know" from a silent failure into a specific, actionable next step — a list of exactly what to go look up.`,
     exampleOutput: `Positioning: sells routing and dispatch software to mid-market trucking fleets, priced per-vehicle rather than per-seat. Versus Competitor A: edge — deeper integration with common ELD hardware; disadvantage — smaller customer base limits network-effect data for route optimization. Flag: 1,200 customer figure is as provided by requester, not independently verified or current.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -487,12 +511,16 @@ Follow the four sections above in order, each clearly labeled, ending with the d
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`investment-research`, `financial-analysis`, `due-diligence`, `risk-analysis`, `investing`],
+    tags: [
+      `investment-research`,
+      `financial-analysis`,
+      `due-diligence`,
+      `risk-analysis`,
+      `investing`,
+    ],
     whyItWorks: `The explicit instruction to build the bull case only from the requester's own provided reasoning, without adding new facts the model supplies from its own knowledge, is the key safeguard against a specific failure mode of investment-research prompts: a model asked to "strengthen my thesis" will readily generate supporting facts and figures that sound plausible but may be outdated, wrong, or simply invented, and presenting those as if they carry the same weight as the requester's actual research would quietly convert a research-organization aid into a source of fabricated financial claims. Requiring the bear case to address the specific mechanism of this thesis rather than generic market risk is what makes the counter-argument actually useful — GPT-5.1's default instinct on an open-ended "what could go wrong" prompt is to list universal disclaimers ("markets are volatile," "past performance doesn't guarantee future results") that are true of literally every investment and therefore inform the decision not at all; forcing engagement with the specific reasoning given (is the growth already priced in, is the policy timeline reliable) produces a counter-argument that could actually change the requester's mind. The hard refusal to name a price target, predict performance, or recommend an action isn't just a legal hedge — it reflects a real epistemic limit: the model has no live market data, no view of the requester's full portfolio or risk tolerance, and no way to verify whether its training-era information about the company is still accurate, so any specific buy/sell/hold recommendation would be a confident-sounding guess dressed as analysis. The final disclaimer line keeps that scope boundary visible in the actual output the requester reads, not just in the prompt they wrote.`,
     exampleOutput: `Bull case: revenue acceleration across three quarters combined with an anticipated policy tailwind suggests upside not yet reflected in price, per your research. Bear case: if the market has already priced in policy expectations via analyst forward estimates, the acceleration may already be reflected in current valuation, meaning the catalyst you're anticipating could be a 'sell the news' event rather than a re-rating. What would change the answer: confirmation of whether current valuation multiples already assume the policy change, and how firm the regulatory timeline actually is versus speculative. This is a research-organization tool, not investment advice; consult a licensed financial advisor before acting.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -552,12 +580,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`stock-research`, `due-diligence-checklist`, `investment-research`, `risk-assessment`, `equity-analysis`],
+    tags: [
+      `stock-research`,
+      `due-diligence-checklist`,
+      `investment-research`,
+      `risk-assessment`,
+      `equity-analysis`,
+    ],
     whyItWorks: `The rule against generating new financial figures or filling a gap with the model's own numbers is the load-bearing constraint in this prompt, because a gap-analysis tool that quietly writes in plausible-sounding figures to complete a thin checklist item stops being a gap analysis and becomes a fabricated research report the requester might mistake for verified information — the entire value of the exercise depends on the boundary between "here's what you found" and "here's what's still missing" staying visible rather than getting blurred. Requiring a specific next action for every "not researched" flag ("check the 10-K's risk factors section for supplier concentration" rather than "do more research") matters because GPT-5.1 defaults to vague encouragement when it doesn't have a concrete instruction to be specific, and a checklist that just says "needs more work" everywhere gives the requester no actual direction on where their next hour of research time should go. The three-tier status system (covered / partial gap / not researched) is more useful than a binary done/not-done because most real research lands in the partial category — a number mentioned without its trend, a competitor named without a direct comparison — and collapsing that into a binary would either overstate how complete the research is or understate genuine partial progress already made. Checking named risk factors separately from the general checklist areas ensures that specific concerns the requester cares about (customer concentration, debt maturity) don't get lost inside a generic due-diligence template that wasn't built around this particular company's actual risk profile.`,
     exampleOutput: `Competitive moat: partial gap — you've named the main competitor but haven't compared market share, pricing power, or switching costs between the two. Customer concentration risk: not addressed — check the 10-K's customer concentration disclosure or investor presentation for revenue-by-customer breakdown. Top 3 gaps to close: customer concentration data, debt maturity schedule, and a direct valuation comparison against the named competitor.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -623,12 +655,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`portfolio-review`, `concentration-risk`, `asset-allocation`, `portfolio-management`, `investing`],
+    tags: [
+      `portfolio-review`,
+      `concentration-risk`,
+      `asset-allocation`,
+      `portfolio-management`,
+      `investing`,
+    ],
     whyItWorks: `Separating the four concentration checks (single-position, sector/theme, fund overlap, currency/geography) into an explicit sequence matters because the most dangerous concentration in a portfolio is usually the kind that doesn't look like concentration on a simple list — a portfolio with five differently-named holdings can still be one large bet on a single sector, and a model asked generically to "review this portfolio" will often just restate the position list back with commentary rather than actively hunting for the shared underlying driver across positions that look diversified by name alone. Flagging fund-overlap estimates explicitly as estimates, with an instruction to name what would need checking against a live prospectus, is necessary because GPT-5.1 has no real-time access to a fund's current constituent list, which changes over time, so asserting a specific overlap percentage as fact would be presenting a training-data-era approximation with false precision — naming it as an estimate to be verified keeps the flag useful without overstating its certainty. Refusing to recommend a specific trim or rebalancing trade keeps the tool inside honest bounds: how to respond to a concentration risk depends on the requester's tax situation, risk tolerance, and time horizon, none of which a portfolio list alone reveals, and a specific trade recommendation would be advice the model isn't positioned to respons­ibly give. Requiring an approximate percentage for every flagged concentration, not just a qualitative "this looks heavy," is what turns the review into something actionable — a requester can decide for themselves whether 35% in one theme is acceptable, but only if the number is stated rather than implied.`,
     exampleOutput: `Sector concentration: the individual tech stock (15%), second tech stock (10%), and semiconductor ETF (12%) together represent roughly 37% of the portfolio with meaningful shared exposure to the same technology and chip-demand cycle, even though they're three separate line items. Estimate flag: exact overlap between the semiconductor ETF's holdings and the individual stocks would need checking against the ETF's current fact sheet to confirm the degree of double-counting.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -689,12 +725,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`scenario-analysis`, `financial-modeling`, `sensitivity-analysis`, `business-planning`, `decision-making`],
+    tags: [
+      `scenario-analysis`,
+      `financial-modeling`,
+      `sensitivity-analysis`,
+      `business-planning`,
+      `decision-making`,
+    ],
     whyItWorks: `The rule that only the stated key variables should change between cases, with everything else held constant, is what prevents scenario analysis from collapsing into three vaguely different narratives — a common failure mode where an "optimistic" case quietly assumes better foot traffic AND lower costs AND a shorter ramp-up period all at once, which makes it impossible to tell afterward which assumption actually drove the better outcome. Requiring a specific numeric value for the key variable in every case, not a label like "optimistic" or "pessimistic" on its own, forces GPT-5.1 past the point where it could otherwise produce three qualitatively different-sounding paragraphs without any of them being pinned to a number the requester could actually check their real-world outcome against later. The sensitivity note — how much the output moves per unit change in the key variable — exists because the real value of a three-case model isn't the three numbers themselves, it's understanding how fragile the base case is to being wrong about one assumption; a model that shows profit swinging wildly with a small change in foot traffic tells the requester this decision is far riskier than one that stays roughly profitable across a wide range, and that's a different piece of information than the three headline numbers alone convey. Refusing to present the base case as a forecast or promise matters because a three-case model built from the requester's own assumptions is only as good as those assumptions — the model has no independent way to verify that 4,000 monthly visitors is realistic for this specific location, so treating the base case as a confident prediction rather than one plausible path would overstate what the exercise actually establishes.`,
     exampleOutput: `Worst case: 2,500 monthly visitors -> net loss of roughly $1,900/month. Base case: 4,000 visitors -> net profit of roughly $1,700/month. Best case: 6,000 visitors -> net profit of roughly $6,900/month. Sensitivity: each additional 500 monthly visitors adds approximately $1,360 to monthly profit at the stated conversion rate and average sale — the model is highly sensitive to foot-traffic assumptions, which weren't independently verified.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -762,12 +802,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`break-even-analysis`, `unit-economics`, `pricing-strategy`, `financial-modeling`, `small-business-finance`],
+    tags: [
+      `break-even-analysis`,
+      `unit-economics`,
+      `pricing-strategy`,
+      `financial-modeling`,
+      `small-business-finance`,
+    ],
     whyItWorks: `Requiring the sensitivity table as a mandatory second step, not an optional add-on, is what stops the output from being a single static number that looks more certain than it is — a break-even figure on its own invites the reader to treat it as fixed, when in reality a 10% price cut (a common early-stage pricing adjustment) might move the break-even volume by a much larger percentage than 10%, and that nonlinearity is exactly the kind of thing that's invisible until it's shown side by side in a table. Holding one variable constant while varying the other in each sensitivity pass, rather than varying both simultaneously, is a deliberate simplification that keeps the table readable and interpretable — varying both price and cost together would produce a matrix of scenarios that's more mathematically complete but harder to read at a glance, and for a first-pass break-even sensitivity check, isolating one lever at a time is the more useful default. The refusal to state a break-even timeframe without a given sales rate addresses a specific pattern where GPT-5.1, asked for a break-even analysis, will often helpfully add "at this rate you should break even in about 6 months" by silently assuming a sales velocity that was never actually provided — that fabricated assumption can be more consequential to a business decision than the break-even unit count itself, since it implies a specific runway need, so refusing to guess it and instead flagging the missing input keeps the output honest about what it can and can't calculate from what was given.`,
     exampleOutput: `Contribution margin: $42 - $18 = $24/unit. Break-even units: $45,000 / $24 = 1,875 units. Break-even revenue: 1,875 x $42 = $78,750. Sensitivity: a 10% price cut to $37.80 raises break-even units to roughly 2,273 (+21%) — the break-even point is more sensitive to price than the percentage price change itself. Most consequential uncertain assumption: the per-unit cost holding at $18 if the supplier raises prices as hinted.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -834,12 +878,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`unit-economics`, `cost-analysis`, `financial-modeling`, `saas-metrics`, `profitability-analysis`],
+    tags: [
+      `unit-economics`,
+      `cost-analysis`,
+      `financial-modeling`,
+      `saas-metrics`,
+      `profitability-analysis`,
+    ],
     whyItWorks: `The distinction between genuinely variable and step-fixed costs is the entire point of this prompt and the thing most unit-economics summaries get wrong by default — a cost like customer support staffing doesn't smoothly increase with each new customer, it jumps in discrete chunks (one more hire per 250 customers), so treating it as a smooth per-unit cost either overstates margin at 249 customers or understates it right after the 251st hire, and neither treatment reflects what actually happens to cash flow at the margin. Requiring a one-line reasoning for every ambiguous cost classification, rather than letting the model quietly default one way, matters because GPT-5.1 will otherwise often just average an ambiguous cost into a per-unit figure without flagging that the underlying cost structure is lumpy, which produces a contribution margin that looks precise but hides a meaningfully different number depending on exactly how close the business is to its next staffing or infrastructure threshold. Separating the fully-variable margin from the volume-adjusted margin that includes step-fixed costs gives the requester two honestly different numbers instead of one blended figure that obscures which scenario they're actually in — near a threshold, the volume-adjusted number is the one that matters, and collapsing the two into one average would hide exactly the information a growth decision needs. The one-time-revenue flag exists because a business's own booked revenue figures often bundle a one-time onboarding or setup fee into what looks like a steady per-unit number, and that one-time boost makes month-one unit economics look meaningfully better than the ongoing, recurring reality — separating them keeps the growth decision honest about what repeats and what doesn't.`,
     exampleOutput: `Customer support: step-fixed — one additional rep needed per 250 customers, not a smooth per-customer cost; at current volume this adds roughly $0.85/customer/month averaged, but that jumps discontinuously at the next 250-customer threshold. Fully-variable contribution margin (hosting + processing only): $49 - $3.20 - $1.72 = $44.08/month. Volume-adjusted margin including averaged support cost: $43.23/month, worse as volume approaches the next hire threshold. One-time revenue flag: the $99 onboarding fee is not recurring and should be excluded from ongoing per-unit economics.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -910,12 +958,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ltv-cac`, `saas-metrics`, `unit-economics`, `growth-metrics`, `financial-analysis`],
+    tags: [
+      `ltv-cac`,
+      `saas-metrics`,
+      `unit-economics`,
+      `growth-metrics`,
+      `financial-analysis`,
+    ],
     whyItWorks: `The reason this prompt is built around interrogating the inputs rather than just computing the ratio is that LTV:CAC is one of the most commonly gamed metrics in business — not usually through outright fabrication, but through optimistic scoping decisions (a CAC that excludes sales salaries, a churn rate that's a blended average hiding a bad early-cohort problem) that are each individually defensible but compound into a ratio that looks much healthier than the real unit economics support. Flagging blended churn specifically is important because a blended average is mathematically identical whether it comes from a customer base that churns steadily or one that's bimodal — mostly gone in month one, with a smaller group that stays for years — and those two underlying realities imply very different true LTV even though they produce the same average churn number, which is exactly the kind of thing a single input figure can't reveal on its own. Requiring the model to state what a fully-loaded CAC should include, rather than accepting a narrowly-scoped figure silently, catches the single most common way this metric gets flattered: ad spend alone is usually a fraction of true acquisition cost once sales headcount, commissions, and tooling are counted, and a ratio built on ad-spend-only CAC systematically overstates how efficiently the business is actually acquiring customers. The instruction to describe the likely direction and rough magnitude of correction rather than inventing a specific corrected number is a deliberate honesty constraint — GPT-5.1 could easily generate a plausible-looking "corrected" ratio, but without the actual cohort churn data or fully-loaded cost figures, any specific number would be a fabrication dressed up as a more rigorous calculation, which is worse than clearly stating the direction of the likely correction and leaving the precise figure to be calculated once the real data is gathered.`,
     exampleOutput: `LTV = ($120 x 0.72) / 0.04 = $2,160. LTV:CAC = $2,160 / $340 = 6.35:1. Churn flag: 4% is stated as a blended average — if a large early-cohort churn spike exists and hasn't been checked, true LTV for the retained cohort could differ substantially from this blended figure. CAC flag: excludes sales salaries and marketing tooling — a fully-loaded CAC would likely be meaningfully higher, which would pull the ratio down from 6.35:1 toward a less favorable, though still uncalculated without the real cost data, number.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -982,12 +1034,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`pricing-analysis`, `pricing-strategy`, `margin-analysis`, `elasticity`, `financial-modeling`],
+    tags: [
+      `pricing-analysis`,
+      `pricing-strategy`,
+      `margin-analysis`,
+      `elasticity`,
+      `financial-modeling`,
+    ],
     whyItWorks: `The break-even volume tolerance calculation is the mechanism that makes this prompt useful rather than just a margin calculator, because it converts an abstract question ("is this price change a good idea?") into a concrete, checkable claim ("volume can drop by up to 18% before this becomes a worse deal than the status quo") that the requester can actually hold up against their own judgment of how customers are likely to react. Refusing to assert a specific price elasticity coefficient unless the requester supplied real data is an important honesty constraint, because price elasticity is genuinely hard to estimate without actual historical data on how volume responded to past price changes, and a model asked to analyze pricing will otherwise readily generate a plausible-sounding elasticity number that has no real basis — presenting a fabricated coefficient with false precision would make the analysis look more rigorous than it actually is. Explicitly tying the plain-language read on tolerance back to the stated reason for the change (rising input costs, competitor pricing) is what keeps the conclusion grounded in this specific decision rather than a generic pricing-strategy lecture — the same 18% volume tolerance is a comfortable bet in a market where competitors already charge more, and a much riskier one if the rationale given doesn't actually support customers tolerating a higher price. Separating the purely mechanical margin math (step 1) from the behavioral-assumption framing (step 3) matters because the two are genuinely different kinds of claims — the math is simply arithmetic that either party can verify, while the customer-response question is a judgment call that depends on market knowledge the model doesn't have, and conflating the two would make an uncertain judgment look as solid as verified arithmetic.`,
     exampleOutput: `Current contribution: ($29 - $11) x 2,400 = $43,200/month. New contribution at unchanged volume: ($34 - $11) x 2,400 = $55,200/month. Break-even volume tolerance: volume could fall to roughly 1,878 units (a 21.75% drop) before contribution falls back to the current $43,200 level. Given that competitors already price at $35-38, a 21.75% volume-drop tolerance looks like a reasonably safe bet rather than an aggressive one — the stated rationale supports this move.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1053,12 +1109,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`revenue-forecasting`, `financial-modeling`, `sales-forecasting`, `driver-based-planning`, `business-planning`],
+    tags: [
+      `revenue-forecasting`,
+      `financial-modeling`,
+      `sales-forecasting`,
+      `driver-based-planning`,
+      `business-planning`,
+    ],
     whyItWorks: `The core mechanical advantage of a driver-based buildup over a trend-line extrapolation is that every component is independently checkable against something real — a lead-volume assumption can be checked against the marketing team's own pipeline plan, a conversion-rate assumption can be checked against the sales team's recent close rates — whereas a single blended "revenue will grow 15% next year" number gives the requester nothing to push back on except a gut feeling about whether 15% sounds right. Requiring an explicit reason for any driver assumption that changes from its historical value, and an explicit "held flat" note for any that don't, closes a specific gap where GPT-5.1 might otherwise quietly assume improvement across every driver simultaneously (more leads, better conversion, higher deal size all at once) without ever being asked to justify why all three would improve together — stacking optimistic assumptions across multiple drivers compounds multiplicatively and can produce a wildly inflated forecast that no single assumption looks unreasonable in isolation. The instruction to preserve lumpiness rather than smoothing the forecast into an even trend line matters because real revenue often isn't even — a known batch of contract renewals landing in one specific quarter, or a seasonal conversion pattern, produces a forecast with real peaks and troughs, and a model that defaults to a smooth month-over-month growth curve for presentation tidiness would actively hide information the requester needs, like a cash crunch in the quarter before the big renewal batch lands. Naming the single most sensitive driver at the end gives the forecast an actual use during the period it covers — instead of just filing the forecast away, the requester knows which one number to track most closely as actuals come in, since that's the one whose error would move the whole forecast the most.`,
     exampleOutput: `Q1: 140 leads x 14% x $8,400 = $164,640 new business, plus renewals. Q2: 155 leads (ramping toward 180) x 14% x $8,400 = $182,280 new business, plus a named batch of 12 renewing contracts at 88% retention adding roughly $88,704. Most sensitive driver: the assumed conversion rate held flat at 14% — a 2-point miss on conversion moves new-business revenue by roughly 14%, more than an equivalent miss on lead volume alone.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1129,12 +1189,16 @@ A table with columns: Lever, Category, Estimated Annual Impact (one-time vs recu
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`cost-reduction`, `budget-planning`, `finance-ops`, `cost-analysis`, `leadership-brief`],
+    tags: [
+      `cost-reduction`,
+      `budget-planning`,
+      `finance-ops`,
+      `cost-analysis`,
+      `leadership-brief`,
+    ],
     whyItWorks: `The ordering instruction — four non-headcount categories before headcount is even allowed to appear — exploits a specific, predictable behavior in how GPT-5.1 responds to open-ended cost-reduction requests: when a model isn't given a forced sequence, it tends to reach for the single largest, most legible line item first, which in most org budgets is compensation, producing a headcount-cut recommendation by default rather than because it's actually the best option. Forcing the model to work through renegotiate, reduce usage, substitute, and eliminate before headcount can appear means those cheaper, lower-risk, non-people levers actually get evaluated on their own merits instead of being skipped past. Separating one-time from recurring savings addresses the most common way a cost-cutting plan looks good in the boardroom slide and then fails to hold: a one-time vendor credit or a deferred renewal gets summed into the same annual number as a genuinely recurring reduction, and three months later finance is asking why the run rate didn't actually move. Requiring "what has to be true for this to work" per lever forces the plan to surface its own hidden assumptions — a renegotiation lever that assumes the vendor has slack to give, a usage-reduction lever that assumes a team will actually change behavior — rather than presenting a savings number as if it were already secured. Instructing the model not to invent a specific negotiated discount percentage matters because a model asked to model savings will otherwise happily produce a plausible-sounding 15% vendor discount with no basis, which reads as confident but is fabricated, and someone building a real board slide off that number would be building on nothing.`,
     exampleOutput: `Lever: Consolidate 3 overlapping analytics tools into 1 | Category: Renegotiate/Consolidate | Impact: ~$28,000/yr, recurring | Requires: confirming feature parity with the support team before cancellation | Risk: migration effort in Q1. Lever: Downgrade seat tiers for inactive SaaS logins | Category: Reduce usage | Impact: ~$9,000/yr, recurring | Requires: an active-usage audit per tool | Risk: low.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1192,12 +1256,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`variance-analysis`, `budget-vs-actual`, `financial-reporting`, `fp&a`, `management-review`],
+    tags: [
+      `variance-analysis`,
+      `budget-vs-actual`,
+      `financial-reporting`,
+      `fp&a`,
+      `management-review`,
+    ],
     whyItWorks: `Splitting variances into timing, rate, and volume buckets mirrors the actual root-cause taxonomy FP&A teams use, and forcing GPT-5.1 to commit to exactly one bucket per line (rather than a paragraph that vaguely gestures at all three) is what makes the classification checkable — a reviewer can look at a line marked "rate" and immediately ask "did our unit cost change," instead of parsing a hedge-everything explanation that doesn't actually commit to a cause. Ranking by projected full-year impact rather than raw period-variance size is the mechanical fix for the most common failure of a variance review meeting: without that instruction, a model (and most humans building a first-pass report) will sort by the biggest number in the current period, which over-weights one-time timing blips and under-weights a small but compounding rate problem that will be five times larger by year-end if nobody looks at it now. The explicit instruction to say "needs input" rather than guess addresses a specific model behavior — asked to explain a variance from a bare number with no context, a language model will readily generate a plausible-sounding narrative ("likely due to seasonal demand") that sounds authoritative but has zero basis in the actual data provided, and a finance reviewer who doesn't know the explanation was invented will waste the meeting debating a cause that was never real. Requiring equal directness for favorable and unfavorable variances closes a subtler bias where models (like people) tend to write softer, more hedged language around bad news and crisper language around good news, which distorts which items a reader takes seriously.`,
     exampleOutput: `Marketing: +$36k / +42% vs budget | Bucket: Volume | Persists-if-unaddressed: +$430k full year if the current spend rate holds, since two campaigns were pulled forward from Q3 rather than being incremental. Needs input: Cloud hosting overage — could be a rate change (provider price increase) or volume (usage growth); ask infra owner which.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1258,12 +1326,16 @@ A one-page narrative: opening paragraph (the headline), a short section per key 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`management-accounts`, `financial-narrative`, `fp&a`, `leadership-communication`, `monthly-reporting`],
+    tags: [
+      `management-accounts`,
+      `financial-narrative`,
+      `fp&a`,
+      `leadership-communication`,
+      `monthly-reporting`,
+    ],
     whyItWorks: `The instruction to lead with the most important change rather than a bare top-line figure directly counters GPT-5.1's default drafting instinct for financial summaries, which is to open with the largest or first-listed metric in whatever order it was given rather than the one that actually matters to the reader — without an explicit override, the model treats input order as significance order. Requiring a stated comparison point for every figure (budget, prior period, or prior year, named explicitly) matters because a raw number like "$2.1M revenue" carries no information on its own; a reader has to know what it's being measured against to know whether it's good news, and forcing the model to name its comparison point rather than leaving it implicit prevents the common failure where a narrative technically states true numbers but leaves the reader unable to tell if they should be pleased or worried. Tying figures explicitly to named pending decisions is the mechanism that makes this document worth writing separately from the statements themselves — a management-accounts narrative that doesn't connect to an actual upcoming decision is just a shorter version of the same document, and naming the decision forces the model to write for the reader's actual next action rather than for completeness. The instruction to write "finance to confirm" instead of inventing a driver is a direct guard against a specific failure mode: language models asked to explain a financial movement from limited context will readily produce a fluent, specific-sounding cause ("driven by the enterprise renewal cycle") that has no actual basis in the data supplied, and because this document circulates to non-finance leaders who have no way to spot the fabrication, an invented driver here is more dangerous than the same fabrication in a document finance-literate readers would catch.`,
     exampleOutput: `This quarter, gross margin moved from 58% to 61% while revenue landed slightly ahead of budget — the main driver was the mix shift toward the higher-margin enterprise tier, not a pricing change (finance to confirm the exact split). For the two open sales hires under review: cash is running $40k better than planned, which gives some room, but headcount cost is already exactly at budget, so approving both hires would need an explicit reforecast rather than assuming the cash cushion covers it automatically.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1340,12 +1412,16 @@ Three sections, one per question, each with: Question, Direct Answer, Supporting
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`board-reporting`, `finance-brief`, `startup-finance`, `investor-communication`, `executive-summary`],
+    tags: [
+      `board-reporting`,
+      `finance-brief`,
+      `startup-finance`,
+      `investor-communication`,
+      `executive-summary`,
+    ],
     whyItWorks: `Anchoring the brief to three anticipated questions rather than a metric-by-metric readout is a direct fix for the most common failure of board materials: a comprehensive deck gives every reader an equal amount of everything, which means the board still has to do the work of finding the one or two things they actually care about, and a model asked to "summarize the finances" defaults to comprehensiveness because that reads as thorough. Forcing the direct answer into the first sentence of each section, before the supporting numbers, matters because GPT-5.1's default structure for a data-backed answer is context-then-conclusion — lead with the setup, land the point at the end — which works for an explainer but fails a board member skimming under time pressure who needs the verdict before deciding whether to read the supporting detail at all. The anticipated-follow-up step is what actually differentiates a brief that holds up in the room from one that doesn't: boards rarely stop at the first answer, and pre-building the second-order question (why did churn move, not just that it moved) means the presenter isn't caught reconstructing an answer live in front of investors. Requiring the runway figure to be stated as a projection under a named assumption rather than a bare fact addresses a specific and consequential failure mode — burn rate is not fixed, and presenting "19 months of runway" without qualifying it as "at current burn" implies a false precision that could shape a board's confidence about fundraising timing incorrectly if burn changes even modestly next quarter.`,
     exampleOutput: `Q1: Why did SMB churn jump from 2.1% to 3.4%? Direct answer: it's concentrated in one onboarding cohort from a channel partner test, not a broad product or pricing issue. Supporting numbers: 80% of the increase traces to accounts from that single channel; churn in all other acquisition channels held flat at 2.0%. Likely follow-up: is this partner channel being paused? Pre-answer: yes, new sign-ups from that channel paused pending a cohort review.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1406,12 +1482,16 @@ A table: Metric | Tier | Decision It Triggers | Threshold | Owner | Review Caden
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`cfo-dashboard`, `kpi-design`, `finance-ops`, `decision-support`, `reporting-cadence`],
+    tags: [
+      `cfo-dashboard`,
+      `kpi-design`,
+      `finance-ops`,
+      `decision-support`,
+      `reporting-cadence`,
+    ],
     whyItWorks: `Requiring a stated decision, threshold, owner, and cadence for every metric before it's allowed onto the dashboard is a forcing function against GPT-5.1's default tendency, when asked to "design a CFO dashboard," to produce a comprehensive best-practice metric list pulled from what's typically tracked in the stated business model — comprehensive and typical is exactly the failure mode described in the prompt, since a metric with no attached decision is dead weight that dilutes attention from the ones that matter. Tiering into weekly, monthly, and trigger-only forces an explicit judgment about volatility and review cost that a flat metric list never makes: a number that can swing meaningfully week to week genuinely needs different cadence than one that's structurally slow-moving, and collapsing everything into one "dashboard" without a cadence tier is how review meetings end up spending equal time on a number that hasn't moved in a quarter and one that just broke. The instruction to evaluate existing metrics against the same four-part bar and flag drop candidates matters because dashboards accrete metrics over time as different stakeholders request their pet number, and without an explicit instruction to prune, a model will simply add new metrics on top of the old list rather than doing the harder, more useful work of removing ones that no longer connect to a live decision. Directly addressing the named blind spot forces the model to reason backward from a real, admitted gap in visibility rather than only forward from generic best practice, which is what actually makes the output specific to this business instead of a template that would look the same for any SaaS company.`,
     exampleOutput: `Metric: Usage-based overage run-rate (trailing 7-day, projected to month-end) | Tier: Weekly | Decision: whether to flag an at-risk segment to sales before the invoice lands | Threshold: projected month-end overage revenue down >15% vs. same point last month | Owner: RevOps lead | Cadence: weekly, Monday. Drop candidate: NPS on the standing weekly dashboard — doesn't map to a weekly-cadence financial decision; recommend moving to the quarterly product review instead.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1481,12 +1561,16 @@ Three labeled email drafts (Stage 1, 2, 3) each with a subject line, and a one-l
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`invoice-follow-up`, `accounts-receivable`, `collections`, `client-communication`, `cash-flow`],
+    tags: [
+      `invoice-follow-up`,
+      `accounts-receivable`,
+      `collections`,
+      `client-communication`,
+      `cash-flow`,
+    ],
     whyItWorks: `Calibrating tone and stage-gap by account tier and payment history directly targets a real cost asymmetry that a generic follow-up template ignores: the business cost of over-escalating with a strategic account that simply had an internal process hiccup is much higher than the cost of moving faster to firmness with a small account that has a documented late-payment pattern, and a one-size-fits-all sequence optimizes for neither case well. Requiring a specific, checkable commitment in every stage — a date, not "at your earliest convenience" — matters mechanically because an open-ended ask gives the recipient nothing concrete to be held to next time, whereas a stated date creates an unambiguous trigger for whether stage two is warranted at all; this is the difference between a follow-up sequence that actually resolves and one that just repeats the same soft ask three times. Referencing the invoice number and amount in every single stage rather than only the first prevents a common real failure where a recipient who missed or deleted the first email has to reconstruct context from a later, firmer-toned message with no reference point, which reads as needlessly aggressive out of context. The explicit instruction not to threaten a consequence unless the user has confirmed it's actual policy is a guard against GPT-5.1's tendency to fill in a plausible-sounding standard business practice (late fees, a collections referral) when asked to write a "final notice" — that's a specific claim about consequences that could be untrue for this business and would misrepresent policy to a customer if sent as written.`,
     exampleOutput: `Stage 1 (send now, day 22): "Hi [contact] — hope the transition is going smoothly. Just flagging that Invoice #INV-4471 ($18,400, due July 15) hasn't come through yet — could you confirm a payment date on your end?" Stage 2 (send in 5 business days if no response): firmer, references Stage 1, asks for a specific date or explanation by end of week. Stage 3 (send in 5 more business days): states the next concrete step — to be confirmed with the business's actual overdue-account policy before finalizing.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1556,12 +1640,16 @@ One email draft with subject line, plus a one-paragraph note afterward on why th
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`collections`, `payment-plan`, `accounts-receivable`, `customer-communication`, `cash-recovery`],
+    tags: [
+      `collections`,
+      `payment-plan`,
+      `accounts-receivable`,
+      `customer-communication`,
+      `cash-recovery`,
+    ],
     whyItWorks: `The instruction not to presume a specific reason for the difficulty ("we understand times have been tough") rather than inviting the customer to explain matters because an assumed narrative that turns out to be wrong reads as presumptuous and can actually damage the relationship further — the safer and more accurate move is to leave space for the customer's own explanation rather than have the model author one on their behalf. Requiring concrete installment amounts and dates rather than "we can work something out" targets a specific, well-documented behavioral pattern in payment recovery: a struggling customer who is asked to propose their own repayment structure often does nothing at all, because proposing a number feels like an admission and carries its own friction, whereas a concrete offer they can simply say yes to (or counter) removes that barrier to response. The instruction to avoid collections-agency register unless that escalation is actually happening is a guard against a specific mismatch GPT-5.1 can default into: asked to write a "collections email," the model's training data skews toward formal demand-letter phrasing, and applying that register to what's meant to be an in-house, relationship-preserving message misrepresents how escalated the situation actually is, which can needlessly panic a customer who was still planning to pay. Keeping the door open for a counter-proposal at the close is the mechanism that actually maximizes recovery — a rigid two-option ultimatum will lose customers whose real capacity doesn't match either offered plan, while an explicit invitation to counter captures partial recovery that a stricter email would have forfeited entirely.`,
     exampleOutput: `"Hi [name] — following up on the outstanding balance of $6,200. Thanks for the heads-up a couple weeks back that things were tight this quarter. To make this easier, we can split the balance into 3 monthly payments of $2,070, or take 50% now with the rest in 30 days — whichever fits better. If neither works, just let us know what would, and we'll figure it out together. Could you confirm a path by [date]?"`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1632,12 +1720,16 @@ The structured SOP per Step 4, followed by an "Open Questions" list from Step 2,
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`finance-sop`, `process-documentation`, `knowledge-transfer`, `finance-ops`, `internal-controls`],
+    tags: [
+      `finance-sop`,
+      `process-documentation`,
+      `knowledge-transfer`,
+      `finance-ops`,
+      `internal-controls`,
+    ],
     whyItWorks: `The instruction to document workarounds as-is rather than cleaning them into an idealized version of the process is the single most important structural choice here, because the entire point of an SOP written from a tribal-knowledge interview is continuity — someone else needs to be able to do exactly what the current owner does, including the informal under-$25 shortcut and the Slack-instead-of-formal-dispute habit, or the document is describing a process that doesn't actually exist and will fail the first time a successor tries to follow it literally. Separating flagged ambiguity into an explicit "open questions" list rather than letting the model quietly resolve it addresses a specific and risky behavior: when a raw description is vague ("I just check it looks right"), a language model asked to produce a clean SOP will confidently fill that gap with a plausible definition of its own invention, and a reader of the finished SOP has no way to tell that step was fabricated rather than reported — surfacing it as a question the actual process owner must answer keeps the document honest about where real information ends. Requiring exception handling as a mandatory section, not an afterthought, matters specifically for finance processes because reconciliation, approvals, and expense processes deviate from the happy path constantly in practice, and a SOP that only documents the clean-run sequence becomes useless during the first real anomaly, which is exactly when a written procedure is needed most. Keeping "improvement ideas" in a strictly separate list from the documented current process prevents the common failure where a well-intentioned rewrite quietly upgrades an inefficient real practice into a better-sounding hypothetical one, producing a document that reads well but doesn't match what actually happens on the ground.`,
     exampleOutput: `Step 4 (Reconciliation): Pull the Amex statement from the portal (~10 min). Cross-check each line against the receipts folder; items under $25 are approved without individual receipt-matching as a time-saving practice (flagged below as an improvement candidate). Email finance the reconciled total. Open Question: what does "looks weird" specifically trigger checking for — a merchant category mismatch, an amount outlier, or something else? Improvement Idea (not yet implemented): the under-$25 auto-approval and the informal Slack-based dispute resolution bypass the formal dispute process — worth a controls review, but currently documented as-is above.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1701,12 +1793,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`month-end-close`, `close-checklist`, `finance-ops`, `process-design`, `accounting-workflow`],
+    tags: [
+      `month-end-close`,
+      `close-checklist`,
+      `finance-ops`,
+      `process-design`,
+      `accounting-workflow`,
+    ],
     whyItWorks: `Requiring an explicit upstream dependency and downstream blocked-list per task, rather than a flat sequential checklist, is what actually diagnoses why a close stalls — a flat list makes every task look equally sequential even when several could run in parallel, which either falsely compresses the timeline (nobody notices a real blocking dependency) or falsely extends it (tasks that could run simultaneously get scheduled one after another out of habit); making dependency explicit surfaces both problems in the same structure. Tracing each named past bottleneck to a specific task and classifying why it became one (blocked upstream, understaffed, or a task that structurally runs long) rather than accepting a generic "communicate better" fix forces a real diagnosis: the example given — trial balance review scheduled before AR close actually finishes — is a scheduling-order bug, not a communication problem, and only naming the actual mechanism produces a fix that would prevent recurrence rather than a platitude that changes nothing. The instruction against inventing false dependencies matters because a model asked to build a dependency chart has an incentive to make the chart look complete and interconnected, and a fabricated dependency between two genuinely independent tasks would wrongly serialize work that could run in parallel, directly working against the stated goal of compressing an 8-day close to 5. Refusing false-precision durations ("47 minutes") while still requiring a duration estimate keeps the checklist honest about what's a real, calibratable estimate versus what would be spurious specificity dressed up as data — a range invites the team to validate against their own historical timing, while a fake-precise single number invites false confidence in a number that was never measured.`,
     exampleOutput: `Task: Accrual review | Owner: Controller | Depends on: department heads confirming open POs (currently unscheduled as its own task — this is the bottleneck) | Blocks: trial balance run | Duration: 1-2 days once inputs arrive. Bottleneck fix: add a standing day-2 deadline for department heads to confirm open POs, owned by the controller chasing it directly rather than waiting passively, since the current stall is an upstream input problem, not a review-capacity problem.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1769,12 +1865,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`financial-modeling`, `assumptions-review`, `fundraising-prep`, `sensitivity-analysis`, `diligence-prep`],
+    tags: [
+      `financial-modeling`,
+      `assumptions-review`,
+      `fundraising-prep`,
+      `sensitivity-analysis`,
+      `diligence-prep`,
+    ],
     whyItWorks: `Separating hard inputs from judgment calls before ranking anything is the structural move that makes this stress test useful rather than performative — a reviewer scrutinizing a model is not going to spend time questioning a signed contract price, they're going to go straight for the projected growth rate and churn assumption, and pre-sorting the list into these two categories mirrors exactly where real diligence attention lands, rather than treating every line item as equally worth defending. Explicitly instructing the model to describe sensitivity qualitatively and directionally rather than generating a specific percentage swing is the most important guardrail in this prompt: GPT-5.1, asked for a sensitivity analysis, can produce a fluent, numerically specific-looking answer ("a 3-point swing in churn changes breakeven by 2.4 months") that sounds like it came from actually running the model, when in fact the model was never given the underlying formulas to compute that — presenting a fabricated precise number as if it were real modeling output is more dangerous than an honest qualitative flag, because it would be repeated in a pitch as if it had been verified. Producing the actual pointed questions a skeptical reviewer would ask, rather than generic advice to "be ready to defend your assumptions," is what makes this genuinely useful preparation — a founder walking into diligence needs the literal question stated ("does breakeven still hold if the biggest customer doesn't renew") so they can pre-build the answer, not a reminder that scrutiny is coming. The closing instruction that this doesn't replace someone with real modeling expertise rebuilding true sensitivity analysis inside the model is an honest scope limit: a language model reasoning over a list of stated assumptions cannot actually recompute the model's real mechanical sensitivity, only reason about which inputs are inherently more speculative than others.`,
     exampleOutput: `Assumption: 15% MoM revenue growth | Judgment call | Sensitivity: highest | Why: compounds over 18 months, so a modest miss early compounds into a large deviation in the breakeven month, and it's the single most speculative number in the set relative to the hard-input hiring costs. Prepared question: "What does breakeven look like if growth runs at 10% instead of 15% for the first two quarters, and does the current cash position still cover the gap?"`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1840,9 +1940,7 @@ OUTPUT FORMAT
     tags: [`valuation`, `financial-analysis`, `dcf`, `comparables`, `decision-framework`],
     whyItWorks: `Explicitly refusing to produce a single dollar figure or multiple, and instead structuring a comparison of what each method assumes, is the core design decision that keeps this prompt honest about what an AI model reasoning over incomplete inputs can actually contribute — a model asked directly "what is this worth" will produce a specific-sounding number by pattern-matching against typical multiples in its training data, and that number would carry an unearned appearance of rigor despite resting on no real comparable dataset, no derived discount rate, and no audited financials, which is precisely the kind of confident-but-baseless output this category exists to avoid. Requiring the model to name the concrete missing inputs for each method (an actual peer set with current multiples for comparables, a derived discount rate and terminal growth rate for DCF) rather than gesturing at methods abstractly is what makes this genuinely useful as a preparation exercise — it tells the user exactly what data they still need to gather before a real valuation could be responsibly attempted, which is actionable in a way a vague overview isn't. Explaining the actual mechanism behind why methods diverge (DCF's greater sensitivity to long-run growth assumptions versus comparables anchoring to current market sentiment) rather than a generic "different methods can give different answers" disclaimer gives the user a real intuition for which number to trust more in which market conditions, which is the actual reasoning skill this prompt is meant to build. The mandatory closing statement — that this organizes analysis but a real number needs a qualified valuation professional or actual verified inputs — keeps the tool correctly scoped as an explanation and structuring aid rather than something that could be mistaken for investment or valuation advice a reader might act on directly.`,
     exampleOutput: `Comparables approach assumes the market has already priced similar businesses correctly and that this company resembles that peer set closely enough to inherit its multiple — missing input: a real set of comparable transactions with disclosed terms, not a single rumored 4x figure from one competitor's raise. DCF assumes future cash flows can be reasonably projected and discounted at an appropriate rate reflecting risk — missing: an actual discount rate derivation and a defensible terminal growth assumption, which for a near-breakeven company is especially sensitive since small changes in the growth assumption swing the output disproportionately.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1903,12 +2001,16 @@ Sections by risk category, each with 3-6 pointed questions. A short "highest pri
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ma-diligence`, `due-diligence`, `deal-preparation`, `risk-assessment`, `acquisition`],
+    tags: [
+      `ma-diligence`,
+      `due-diligence`,
+      `deal-preparation`,
+      `risk-assessment`,
+      `acquisition`,
+    ],
     whyItWorks: `Instructing the model to build questions that probe what's unknown rather than re-deriving what's already in the target overview directly addresses the biggest practical waste in real diligence conversations: target management teams' time is limited and closely guarded, and a generic checklist that re-asks basic facts already disclosed burns that scarce time on questions that don't move the deal forward — anchoring the question generation to the known/unknown split given in the prompt keeps every question earning its place in the conversation. Requiring at least one pointed, hard-to-deflect question per named concern — rather than a softer, generically phrased version — matters because a vague question ("how do you think about customer concentration?") invites a reassuring, non-committal answer, while a specific one ("if your top customer left in the next twelve months, what would happen to the other 65% of revenue's growth trajectory") is much harder to answer evasively, and evasiveness itself is diagnostic information the acquirer needs to notice. The explicit instruction not to invent a specific red flag about the target is an important guard against a real risk with this kind of prompt: a language model generating a diligence list can slip from asking a probing question into stating a plausible-sounding concern as if it were an established fact about this particular target, and presenting a fabricated finding with the same confidence as a real one could misdirect the acquirer's actual diligence effort or even surface in a written memo as if it had evidentiary basis. The mandatory closing scope note — that this organizes preparation and doesn't substitute for qualified legal, accounting, or M&A advisory review — keeps the output correctly framed as a conversation-prep tool rather than something that could be mistaken for the actual diligence work itself, which requires real document review by qualified professionals.`,
     exampleOutput: `Highest priority: "Walk us through what happens to the top-3-customer relationships if there's a change of ownership — are any of those contracts personally tied to the founder's relationship rather than the product itself?" Financial category: "Beyond the informally cited 35% concentration figure, can we see actual customer-level revenue for the trailing 12 months to verify that split precisely?"`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1972,12 +2074,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`debt-schedule`, `covenant-compliance`, `credit-facility`, `financial-planning`, `risk-analysis`],
+    tags: [
+      `debt-schedule`,
+      `covenant-compliance`,
+      `credit-facility`,
+      `financial-planning`,
+      `risk-analysis`,
+    ],
     whyItWorks: `Keeping the amortization mechanics brief and putting the real analytical weight on covenant headroom reflects an actual asymmetry in what puts a borrower at risk: missing a scheduled payment is a highly visible, hard-to-miss event that a basic amortization table already tracks fine, while tripping a covenant is the more common and more consequential failure mode in practice, and it's silent until someone specifically checks headroom against the threshold — a schedule that only shows payment mechanics gives false comfort by omission. Requiring headroom stated in the covenant's own units (a ratio for a leverage covenant, a dollar figure for a minimum liquidity covenant) rather than a single normalized "risk score" keeps the analysis mechanically honest and directly comparable to how a lender actually measures compliance, rather than introducing an invented composite metric that obscures which specific covenant is actually tight. Ranking covenants from least to most headroom rather than listing them in the order they were given surfaces the one constraint that actually binds business decisions right now — a leverage covenant with wide headroom and a liquidity covenant with almost none are not equally important to watch, and an unordered list treats them as if they were. Applying the stress scenario and stating which covenant would trip first, using only the numbers supplied rather than inventing an unverified breaking point, is what turns this from a static compliance snapshot into a forward-looking risk tool, while the explicit refusal to recommend a specific refinancing or renegotiation action keeps the output correctly scoped as an internal planning aid rather than something that could be mistaken for actual credit-structuring advice, which needs a real advisor working from the actual credit agreement.`,
     exampleOutput: `Covenant: Minimum liquidity ($500k threshold) | Current: $720k | Headroom: $220k | Rank: tightest. Under the stress scenario (20% EBITDA decline), DSCR would tighten from 1.4x toward roughly 1.1x based on the inputs given, which would breach the 1.25x minimum before the leverage ratio covenant comes under comparable pressure — DSCR is the covenant most likely to trip first under this scenario, using the figures provided.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2038,12 +2144,16 @@ A table: Narrative Claim | Classification | Supporting/Contradicting Metric | No
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`fundraising`, `investor-metrics`, `pitch-prep`, `startup-finance`, `diligence-prep`],
+    tags: [
+      `fundraising`,
+      `investor-metrics`,
+      `pitch-prep`,
+      `startup-finance`,
+      `diligence-prep`,
+    ],
     whyItWorks: `The instruction to check the story against the numbers rather than polish the numbers to fit the story is the entire point of this prompt, and stating it explicitly matters because a model asked generically to "help with fundraising metrics" will often default to a persuasive-writing mode — making the existing story sound as compelling as possible — rather than the more adversarial, verification-oriented task actually being requested here; naming the distinction upfront redirects the model toward the harder, more useful job. The three-way classification (Supported, Partially Supported, Not Supported) rather than a binary yes/no is what makes this catch the failure mode that actually costs founders credibility with investors — the accelerating-growth example given is a real, common case: QoQ growth of 22%, 19%, 24%, 21% is not cleanly accelerating, it's noisy around a roughly flat rate, and a claim of "accelerating" would be the kind of overstatement a sophisticated investor catches within the first few minutes of looking at the raw quarterly numbers, doing real damage to trust in the rest of the deck. The explicit instruction not to soften a Not Supported finding into Partially Supported is a direct guard against a documented tendency in language models to hedge toward more agreeable, less confrontational conclusions when the honest answer is uncomfortable — the entire value of running this check before a pitch, rather than after an investor finds the gap, depends on the model actually being willing to say a claim doesn't hold up. Refusing to invent an external benchmark for what counts as "strong" retention or "capital efficient" keeps the tool honestly scoped to what it can actually verify — internal consistency between the stated story and the numbers given — rather than presenting a fabricated stage-appropriate benchmark as established fact, which the model has no real access to.`,
     exampleOutput: `Narrative claim: "Growth is accelerating quarter over quarter." Classification: Not Supported. Contradicting metric: QoQ growth of 22%, 19%, 24%, 21% over the last four quarters is noisy and roughly flat, not a clear accelerating trend. Note: a more accurate claim the metrics support is "we've sustained 20%+ QoQ growth for four consecutive quarters," which is a real and defensible claim without asserting an acceleration trend the data doesn't show.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2113,12 +2223,16 @@ A complete investor update email/memo: Bad News + Plan (opening), Period Metrics
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`investor-update`, `startup-communication`, `board-relations`, `transparency`, `fundraising-relationships`],
+    tags: [
+      `investor-update`,
+      `startup-communication`,
+      `board-relations`,
+      `transparency`,
+      `fundraising-relationships`,
+    ],
     whyItWorks: `Leading with bad news rather than burying it addresses a well-known pattern in how investors actually read updates: skimming readers, which most investors are for most updates, form their read of the month largely from the first paragraph, and a bad-news item discovered in paragraph four after several paragraphs of good news reads as if it was being minimized or hidden, which damages trust more than the underlying bad news typically does on its own — leading with it signals the founder isn't managing the narrative, which is itself a credibility-building move. Requiring the mitigation plan to appear immediately attached to the bad news, rather than as a separate later section, matters because bad news presented without a response reads to an investor as either not yet understood or not yet being acted on, and either read is worse than the actual problem in most cases — pairing them in the same breath signals the founder is already on it. Instructing the model to hold the same level of directness for good news and bad news counters a specific stylistic drift models default to: praise language tends to run more enthusiastic and confident than problem language runs plain, and that asymmetry itself is a subtle tell that erodes an investor's trust in the more positive parts of the update, since if the good news get the enthusiastic treatment and the bad news gets softened, a sophisticated reader discounts both. The explicit refusal to invent a specific root cause or recovery timeline beyond what was actually given is a guard against a real risk: a model asked to write confidently about a resolution plan will tend to supply a plausible-sounding timeline on its own, and stating an invented timeline as if it were the founder's actual plan could set an expectation with investors that the founder never actually committed to and may not be able to meet.`,
     exampleOutput: `"Bad news first: we lost our second-largest customer ($22k MRR) to a competitor's aggressive pricing offer, effective next month. We're reviewing pricing for the next three renewal-risk accounts this week and rolling out a 12-month lock-in discount option to reduce this kind of exposure going forward. On the numbers: MRR held flat at $410k this month (this loss takes effect next period), gross margin steady at 68%, cash at $2.9M with about 14 months of runway."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',

@@ -136,7 +136,11 @@ export function ToolShell({ tool, children }: { tool: Tool; children: React.Reac
           the centred header div above so neither inherits that div's
           text-align/flex context by accident. */}
       <BookmarkButton />
-      <FeedbackButton toolSlug={tool.slug} toolTitle={tool.h1} category={category?.name} />
+      <FeedbackButton
+        toolSlug={tool.slug}
+        toolTitle={tool.h1}
+        category={category?.name}
+      />
 
       {/* 3. THE TOOL — the page's centre of gravity, immediately after the
              header. Measured at 1366x768: the workspace now starts ~350px down

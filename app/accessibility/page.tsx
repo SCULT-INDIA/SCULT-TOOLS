@@ -121,9 +121,9 @@ export default function AccessibilityPage() {
             Accessibility as a legal requirement
           </h2>
           <p className="mt-3 text-[16px] text-ink-muted leading-7">
-            WCAG is also the standard referenced by accessibility law in a growing number of
-            places — the EU's European Accessibility Act and the ADA in the United States
-            among them. How that fits alongside this site's other data-protection
+            WCAG is also the standard referenced by accessibility law in a growing number
+            of places — the EU's European Accessibility Act and the ADA in the United
+            States among them. How that fits alongside this site's other data-protection
             commitments is on the{' '}
             <Link
               href="/compliance"

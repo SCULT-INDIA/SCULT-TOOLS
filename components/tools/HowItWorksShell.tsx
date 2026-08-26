@@ -263,7 +263,9 @@ export function HowItWorksShell({ tool }: { tool: Tool }) {
         </section>
       ) : null}
 
-      {relatedGuides.length > 0 || relatedPrompts.length > 0 || relatedPosts.length > 0 ? (
+      {relatedGuides.length > 0 ||
+      relatedPrompts.length > 0 ||
+      relatedPosts.length > 0 ? (
         <section aria-labelledby="how-reading" className="mt-12">
           <h2
             id="how-reading"

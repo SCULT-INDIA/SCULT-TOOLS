@@ -1,9 +1,9 @@
 import { ArrowUpRight, BadgeCheck, Download } from 'lucide-react'
 import Link from 'next/link'
-import { BrandIcon, brandForTag } from '@/components/ui/BrandIcon'
-import { Icon } from '@/components/ui/Icon'
 import { SkillCard } from '@/components/skills/SkillCard'
 import { SkillCopyBlock } from '@/components/skills/SkillCopyBlock'
+import { BrandIcon, brandForTag } from '@/components/ui/BrandIcon'
+import { Icon } from '@/components/ui/Icon'
 import type { Skill, SkillCategory } from '@/lib/skills/types'
 import { getTool } from '@/lib/tools/registry'
 
@@ -37,7 +37,9 @@ export function SkillDetailShell({
     .map((slug) => getTool(slug))
     .filter((tool): tool is NonNullable<typeof tool> => tool !== undefined)
 
-  const techBrands = [...new Set(skill.tags.map(brandForTag).filter((b): b is string => b !== null))]
+  const techBrands = [
+    ...new Set(skill.tags.map(brandForTag).filter((b): b is string => b !== null)),
+  ]
 
   return (
     <article className="container-site max-w-[50rem] pt-8 pb-24">
@@ -139,7 +141,10 @@ export function SkillDetailShell({
           </p>
           <div className="mt-3 flex flex-wrap gap-4">
             {COMPATIBLE_AGENTS.map((agent) => (
-              <span key={agent.brand} className="flex items-center gap-1.5 text-[13px] text-ink-muted">
+              <span
+                key={agent.brand}
+                className="flex items-center gap-1.5 text-[13px] text-ink-muted"
+              >
                 <span className="flex size-6 items-center justify-center rounded-full bg-white ring-1 ring-black/[0.06]">
                   <BrandIcon brand={agent.brand} size={14} />
                 </span>
@@ -167,7 +172,10 @@ export function SkillDetailShell({
                 className="card-modern flex items-center justify-between gap-3 p-5"
               >
                 <span className="text-[15px] text-ink-body">{tool.title}</span>
-                <ArrowUpRight className="size-4 shrink-0 text-ink-subtle" aria-hidden="true" />
+                <ArrowUpRight
+                  className="size-4 shrink-0 text-ink-subtle"
+                  aria-hidden="true"
+                />
               </Link>
             ))}
           </div>

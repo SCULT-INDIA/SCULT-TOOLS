@@ -2334,7 +2334,13 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`linkedin-post`, `personal-branding`, `storytelling`, `content-writing`, `b2b-marketing`],
+    tags: [
+      `linkedin-post`,
+      `personal-branding`,
+      `storytelling`,
+      `content-writing`,
+      `b2b-marketing`,
+    ],
     whyItWorks: `The instruction to lead with one specific, ungeneralized detail rather than a topic sentence works against a well-documented failure mode of instruction-tuned models: when asked to write a 'LinkedIn post' with no other constraint, GPT-5.1 defaults to a summarizing opening line because that's the statistically safest, most generically applicable structure across the training distribution of business-advice content — which is exactly why so many LinkedIn posts already sound alike. Forcing the model to use only a detail explicitly supplied, and prohibiting invented specifics, closes off the model's tendency to manufacture a more 'impressive' number or quote when the real one feels underwhelming, which is a subtle failure mode particularly likely for high-stakes personal narrative content where the model is otherwise inclined to embellish for effect. Explicitly banning the rhetorical-question opener and the listicle-unless-earned structure matters because both are extremely high-frequency patterns in the model's exposure to LinkedIn-style content specifically, meaning they are the default the model reaches for absent a countervailing instruction, not because they're a genuinely strong choice for every story shape. The final gut-check step exists because a model has no actual stake in the professional consequences of oversharing a specific client name or internal number publicly — asking it to flag exposure risk surfaces that judgment call for the human rather than assuming the model made it silently, since the model cannot know your actual risk tolerance or client relationship without being told.`,
     exampleOutput: `6 hours late. That's how long we missed a client deadline by last month.
 
@@ -2345,9 +2351,7 @@ Instead I picked up the phone.
 The client's first words weren't about the deadline — they were relief that someone actually called instead of hiding behind a template.
 
 The apology wasn't what saved the relationship. The medium was.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -2418,12 +2422,16 @@ A numbered list, one entry per slide: slide number, the exact text for that slid
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`linkedin-carousel`, `content-design`, `personal-branding`, `framework-teaching`, `b2b-marketing`],
+    tags: [
+      `linkedin-carousel`,
+      `content-design`,
+      `personal-branding`,
+      `framework-teaching`,
+      `b2b-marketing`,
+    ],
     whyItWorks: `The instruction to treat each slide as viewed alone for two seconds directly counters the default the model reaches for otherwise: because carousels are visually similar to slide decks in the model's training exposure, an unconstrained request tends to produce slides that read like bullet points from a presentation meant to be narrated, with connecting language ('as we discussed,' 'building on this') that only makes sense if slides are read in sequence with a speaker's context — which is not how a LinkedIn carousel is actually consumed. Requiring the model to flag a mismatch between slide count and how many discrete ideas the core idea actually contains addresses a specific failure mode of forced-length content generation: an LLM asked for exactly N slides will pad thin ideas into N slides rather than pushing back on the count, producing filler slides with no real content, so making the pushback an explicit instruction rather than hoping the model self-corrects meaningfully changes the output. The ordering rule about creating swipe tension is a structural technique specific to how carousels perform on the LinkedIn algorithm, which weights average time-on-post and swipe-through rate; a model with no visibility into that mechanic will default to logically ordering ideas by importance rather than by curiosity gap, so the instruction has to state the actual mechanism (why swipe-inducing order matters) rather than just saying 'make it engaging,' which is unfalsifiable and would be satisfied by any output.`,
     exampleOutput: `Slide 1: "The pricing mistake that cost me $30K before I fixed it." | Slide 2: "Hourly pricing punishes you for getting faster." (large contrast text) | ... | Slide 7: "The exact formula: (hours saved x hourly rate) x 1.5 = retainer floor." | Slide 8: "DM me 'retainer' for the calculator I use with every new client."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2496,12 +2504,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`personal-branding`, `content-strategy`, `linkedin-positioning`, `audience-building`, `thought-leadership`],
+    tags: [
+      `personal-branding`,
+      `content-strategy`,
+      `linkedin-positioning`,
+      `audience-building`,
+      `thought-leadership`,
+    ],
     whyItWorks: `Requiring the positioning statement to fit a single-audience, single-outcome sentence structure and instructing the model to push back rather than comply when the inputs are too broad works against a specific behavior: language models optimize for producing a usable-looking answer to whatever was asked, so when given a vague audience like 'professionals' or a vague outcome like 'grow their career,' the default behavior is to write a grammatically valid positioning statement that sounds specific through confident phrasing while remaining true of almost anyone — explicitly instructing the model to flag over-broad inputs rather than paper over them with confident language is what actually forces the narrowing, since without that instruction the model has no incentive to tell you your inputs were the problem. The requirement that each pillar produce a real, checkable post idea from your actual work — rather than a hypothetical — matters because an LLM asked only for 'content pillars' will produce abstract category labels that are easy to generate but don't reveal whether the pillar is actually postable; forcing a concrete example surfaces immediately whether a pillar is too thin to sustain repeated posting. The exclusion list with reasoning is the most load-bearing part structurally: most personal-brand exercises define what to post about and stop there, but positioning is actually defined as much by contrast as by inclusion, and a model asked only for pillars has no mechanism to surface the contrast unless the exclusion and its cost are explicitly requested as separate, reasoned output.`,
     exampleOutput: `Positioning: "I help B2B SaaS founders under $5M ARR find out why their paid ads aren't converting by killing underperforming campaigns fast and publishing the postmortems, unlike agencies that keep scaling spend to justify their retainer." Pillar 1: "Campaigns I killed and why" — post idea: the $40K ad set we shut down in week 2 and what the CTR data actually showed. Excluded: hustle-culture posts — a founder who trusts you for hard numbers on ad performance loses trust if your feed also reads like a motivational account.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2577,12 +2589,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`linkedin-headline`, `about-section`, `personal-branding`, `profile-optimization`, `career-jobsearch`],
+    tags: [
+      `linkedin-headline`,
+      `about-section`,
+      `personal-branding`,
+      `profile-optimization`,
+      `career-jobsearch`,
+    ],
     whyItWorks: `The instruction to lead the headline with outcome rather than title addresses a mechanical fact about where the headline text actually surfaces: LinkedIn renders it beside every comment and in every search-result snippet, contexts where a reader has no other information to interpret a bare title against, so 'Senior Product Manager' communicates almost nothing to a stranger scrolling a comment thread, while an outcome-first phrase is legible with zero prior context — a model given no constraint defaults to title-first because that mirrors the vast majority of existing LinkedIn headlines it was likely exposed to, meaning the unconstrained output would reproduce exactly the pattern this prompt is trying to escape. Requiring the About section's first line to stand alone addresses LinkedIn's actual truncation behavior (roughly 2-3 lines before 'see more'), a UI constraint the model has no way to model unless told explicitly, since without it the model treats the About section as one continuous block of prose where a strong opening sentence can safely set up a payoff two sentences later — which on the actual platform means most readers never see the payoff at all. Banning specific overused words ('passionate,' 'thought leader,' 'results-driven') is a targeted correction rather than a generic 'avoid buzzwords' instruction, because a vague ban leaves the model free to substitute an equally generic synonym; naming the exact phrases removes the model's easiest escape route back to boilerplate professional-bio language, which is its statistically dominant register for this genre of text absent a specific constraint.`,
     exampleOutput: `Headline: "Helping fintech product teams cut feature-launch time in half — Senior PM, ex-11-week to 6-week ship cycles." About (opening): "Two years ago it took my team 11 weeks to ship a single feature. Here's what actually changed that number to 6."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2653,12 +2669,16 @@ Up to 3 short reply options (or one, with a note explaining why fewer than 3 is 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`linkedin-engagement`, `comment-strategy`, `networking`, `personal-branding`, `community-building`],
+    tags: [
+      `linkedin-engagement`,
+      `comment-strategy`,
+      `networking`,
+      `personal-branding`,
+      `community-building`,
+    ],
     whyItWorks: `The explicit instruction to check whether genuine agreement with nothing to add is the actual honest state, and to permit a short authentic reply rather than force three distinct options, directly counters a structural bias in how language models respond to numbered-output requests: when asked for 'three reply options,' a model will generate three options even when the honest input only supports one, because satisfying the requested count is treated as part of the task unless explicitly told otherwise — this is the same failure mode that produces manufactured disagreement or forced questions in brainstorming tasks generally, and naming it directly is what actually gives the model permission to under-deliver on count when that's the more honest answer. Banning 'Great point' and similar openers by name, rather than a general 'be original' instruction, matters because those specific phrases are extremely high-frequency in professional social-media replies specifically, meaning they sit close to the top of the model's default distribution for this exact context, and only a named ban reliably routes around them rather than a synonym substitution that preserves the same content-free function. Tying tone explicitly to the relationship context prevents a second common failure: an unconstrained model tends to default to one uniformly polished, safe professional register for all replies regardless of audience, because that register is the lowest-risk choice absent other signal — providing the actual relationship forces a genuine register shift (more clipped and familiar for a colleague, more considered and credibility-building for a stranger whose attention you want) rather than one generic voice stretched across different social contexts.`,
     exampleOutput: `Add detail: "Fair concern — we actually did this with a brand-new 4-person team and it worked because we ran both formats in parallel for 2 weeks before fully dropping the weekly 1:1. The overlap period mattered more than team tenure did." Respectful pushback: "I'd push back slightly — trust was the outcome of overcommunicating early, not a precondition we had going in." Real question: "Curious what async check-in format you'd actually recommend for a team under 6 months old — same cadence, just written instead of live?"`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2741,12 +2761,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`case-study`, `linkedin-post`, `b2b-marketing`, `social-proof`, `content-writing`],
+    tags: [
+      `case-study`,
+      `linkedin-post`,
+      `b2b-marketing`,
+      `social-proof`,
+      `content-writing`,
+    ],
     whyItWorks: `The gating phase 1 check exists because a model asked to write a case-study post will draft something plausible-sounding even from a vague 'we helped them improve' input, since fluent prose generation doesn't require the underlying claim to be verifiable — building in an explicit checkpoint that refuses to proceed without a real before/after number forces the actual evidentiary gap to surface before word-smithing hides it, which matters specifically because a case study's entire persuasive value collapses if a reader can tell the numbers are vague or unverifiable. Requiring the timeframe to be stated explicitly, and flagging that an unstated timeframe makes a percentage meaningless, targets a specific reasoning gap general-purpose instruction following doesn't automatically fill: a percentage change is mathematically incomplete information without a denominator of time, but a model asked simply to 'write a case study post' has no built-in incentive to demand that context unless it's named as a requirement, since the sentence 'we improved response time by 40%' is fluent and complete-sounding on its own even though it's unverifiable as stated. The instruction against a hard sales CTA reflects an actual behavioral pattern rather than a stylistic preference: models tend to close persuasive or promotional content with an explicit call to action by default, because that's the standard shape of marketing copy in their training distribution, but a results-driven case study post specifically works through implicit credibility rather than direct pitching, so the close has to be deliberately overridden rather than left to the model's default marketing-copy instinct.`,
     exampleOutput: `Phase 1: passed — concrete before/after with timeframe. Post: "91% of inbound leads now get a same-day reply. Six weeks ago it was 12%. The fix wasn't a new CRM or a bigger sales team — it was killing the shared inbox one person was checking manually, and routing leads by territory automatically instead. If your team's average response time is still measured in hours, the bottleneck probably isn't effort. It's the routing."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2827,12 +2851,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`product-launch`, `linkedin-post`, `saas-marketing`, `announcement`, `b2b-marketing`],
+    tags: [
+      `product-launch`,
+      `linkedin-post`,
+      `saas-marketing`,
+      `announcement`,
+      `b2b-marketing`,
+    ],
     whyItWorks: `Banning 'Excited to announce' and capping exclamation marks targets a specific, high-frequency default: launch-announcement language is one of the most saturated genres of professional social content the model has been exposed to, so its unconstrained default reaches for the same handful of enthusiasm markers that have become so common they now function as a visual signal for readers to skip the post, meaning the ban is correcting for a learned pattern rather than imposing an arbitrary style rule. Requiring the old workaround to be named explicitly, rather than asserting the new product is simply 'better,' works because comparison-through-contrast is mechanically more persuasive than comparison-through-adjective — a reader evaluates 'screenshot each chart, paste into a slide, reformat weekly' against the new one-click flow themselves and draws their own conclusion, whereas the word 'better' asks the reader to trust a claim rather than observe a difference, and a model left unconstrained defaults to the adjective because it's shorter and equally fluent to produce. Limiting the post to exactly one how-it-works detail rather than a full feature rundown counters the model's tendency, when given multiple facts about a product, to include all of them for thoroughness — comprehensiveness reads as helpful in a spec sheet but as unfocused in a social post competing for two seconds of attention, so the cap forces a prioritization decision the model wouldn't otherwise make on its own. The instruction against fabricating a percentage addresses the same evidentiary-integrity risk as in case-study content: launch-post copy conventionally includes an impact metric, so absent an explicit prohibition, a model asked to make the post compelling may supply a plausible-sounding number to fill that conventional slot even when none was given.`,
     exampleOutput: `Every Monday, our analysts spent 20-30 minutes turning a dashboard into something a VP could actually read — screenshotting charts, pasting into slides, reformatting by hand. That workflow is gone. One-click export now turns your dashboard, with the exact filters and date range you're looking at, straight into a shareable PDF. Live now under Reports > Export for every existing user, no new signup required.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2904,12 +2932,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`founder-story`, `linkedin-post`, `personal-branding`, `storytelling`, `startup`],
+    tags: [
+      `founder-story`,
+      `linkedin-post`,
+      `personal-branding`,
+      `storytelling`,
+      `startup`,
+    ],
     whyItWorks: `Requiring the post to open with the low point rather than the origin idea works against the model's default narrative ordering: when asked for a 'founder story,' the most statistically common shape in the training data runs chronologically — idea, then journey, then result — because that's how founder stories are conventionally told in interviews and bios; forcing a non-chronological open (low point first, origin explained after) produces the specific structural tension that makes a reader keep reading, which a chronological retelling doesn't create because the ending is implicitly telegraphed by the post existing at all ('a company posting about its founding' already signals survival). The instruction to describe the turning point as a specific decision or event rather than a mindset shift targets a concrete failure mode: 'mindset shift' framing ('I realized I needed to trust myself') is the model's easiest fallback because it requires no factual specificity and is always available regardless of what real information was supplied, whereas a specific decision is falsifiable and has to come from the actual input, which is why the example given for what counts as too vague is included directly in the instruction rather than left to be inferred. The honesty-check final step exists because narrative-shaping instructions (build tension, keep the low point, create a turning point) inherently pull the model toward dramatizing a true story into a better-shaped one, and asking it to self-report where it may have inflated the account is the only mechanism available to catch that drift before a founder posts something that a former team member or investor could recognize as embellished beyond what actually happened.`,
     exampleOutput: `Six months into the business, I was cooking every single order myself at 4am before my day job, for 40 subscribers, and seriously weighing whether to shut it down. The idea had been simple: a meal-prep service for parents who couldn't find one that actually handled real dietary restrictions. What changed wasn't a burst of motivation — it was narrowing from trying to serve every restriction to just three we could do exceptionally well. We're at 1,200 subscribers now, profitable, still working out how to scale kitchen capacity without losing what made this work in the first place. If your business is stuck, the fix is often narrower, not broader.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2985,12 +3017,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`linkedin-audit`, `personal-branding`, `career-jobsearch`, `content-strategy`, `profile-optimization`],
+    tags: [
+      `linkedin-audit`,
+      `personal-branding`,
+      `career-jobsearch`,
+      `content-strategy`,
+      `profile-optimization`,
+    ],
     whyItWorks: `Reframing a vague goal into a checkable 30-second-scroll standard before doing any assessment is the load-bearing step, because an unconstrained audit request tends to default to a generic best-practices pass (headline length, keyword density, posting cadence) precisely because those checks are always applicable and don't require holding a specific goal in mind while evaluating each element — the reframe forces every subsequent judgment to be made against one stated standard rather than against LinkedIn conventions in general, which is the actual difference between a useful audit and a checklist that would read almost identically for any two different people. Instructing the model to assess recent posts as an aggregate pattern rather than post by post matters because a single post rarely damages a professional goal on its own, but a consistent pattern across ten posts (team celebrations, unremarked reposts, no original technical opinion) signals something cumulative that no individual post-level check would surface — this is analogous to why a single data point can't reveal a trend, and the instruction has to explicitly redirect the model's default unit of analysis from 'post' to 'pattern across posts' to get that read. Requiring exactly one named biggest gap, rather than a list, counters the model's tendency toward exhaustive feedback when asked to 'audit' something — thoroughness is the model's default because listing every possible issue is lower-risk than committing to a single priority judgment, but a person acting on this audit needs a ranked answer to 'what matters most,' not an undifferentiated list they still have to prioritize themselves.`,
     exampleOutput: `Reframed goal: a VP Engineering or CTO at a Series B-C startup needs to conclude within 30 seconds that you operate at Director level, not just manage a single team well. Headline: partially aligned — 'Building great teams' signals people-management but not scope or technical judgment at the Director level. Content pattern: misaligned — five of the last ten posts have no original point of view, mostly reposts and team celebrations; nothing signals independent technical or organizational judgment. Biggest gap: nothing in the recent post history demonstrates decision-making at the scope a Director role requires. Next actions: rewrite headline to name scope (team size, technical domain); rewrite About's second sentence to state a specific org-design decision you made; publish one post this week detailing an actual engineering-org tradeoff you navigated, not a hiring tip.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

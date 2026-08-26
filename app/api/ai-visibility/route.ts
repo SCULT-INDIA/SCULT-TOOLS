@@ -51,7 +51,13 @@ const MAX_BODY_BYTES = 2 * 1024 * 1024
  * well under the text/HTML cap above even though OG images can legally be
  * a few MB. */
 const MAX_IMAGE_BYTES = 1.5 * 1024 * 1024
-const ALLOWED_IMAGE_CONTENT_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/gif']
+const ALLOWED_IMAGE_CONTENT_TYPES = [
+  'image/png',
+  'image/jpeg',
+  'image/jpg',
+  'image/webp',
+  'image/gif',
+]
 const REVALIDATE_SECONDS = 21_600 // 6 hours
 
 /** Each check can fire up to 5 outbound fetches against a THIRD PARTY's
@@ -139,7 +145,10 @@ async function readCapped(
  * 3, 10s timeout, body capped at `capBytes` (defaults to the 2 MB text cap;
  * the hero-image fetch passes a tighter one).
  */
-async function safeFetch(startUrl: string, capBytes: number = MAX_BODY_BYTES): Promise<FetchOutcome> {
+async function safeFetch(
+  startUrl: string,
+  capBytes: number = MAX_BODY_BYTES,
+): Promise<FetchOutcome> {
   let current = startUrl
   for (let hop = 0; hop <= MAX_REDIRECTS; hop += 1) {
     const validation = validateTargetUrl(current)
@@ -234,7 +243,9 @@ function errorResponse(error: ApiError, httpStatus: number): NextResponse {
  * one implementation. Returns `ApiError` on any failure rather than
  * throwing, matching every other function in this file.
  */
-export async function runAiVisibilityCheck(rawUrl: string): Promise<VisibilityReport | ApiError> {
+export async function runAiVisibilityCheck(
+  rawUrl: string,
+): Promise<VisibilityReport | ApiError> {
   const validation = validateTargetUrl(rawUrl)
   if (validation.url === undefined || validation.hostname === undefined) {
     return { error: validation.error ?? 'Invalid URL.', code: 'invalid-url' }
@@ -252,13 +263,15 @@ export async function runAiVisibilityCheck(rawUrl: string): Promise<VisibilityRe
   }
   if (home.failure === 'private') {
     return {
-      error: 'That hostname resolves to a private or internal address, which cannot be checked.',
+      error:
+        'That hostname resolves to a private or internal address, which cannot be checked.',
       code: 'private-address',
     }
   }
   if (home.failure === 'unreachable') {
     return {
-      error: 'The site did not respond within 10 seconds (or redirected more than 3 times).',
+      error:
+        'The site did not respond within 10 seconds (or redirected more than 3 times).',
       code: 'unreachable',
     }
   }
@@ -280,7 +293,9 @@ export async function runAiVisibilityCheck(rawUrl: string): Promise<VisibilityRe
   const [robots, llms, heroImageDataUri] = await Promise.all([
     safeFetch(`${origin}/robots.txt`),
     safeFetch(`${origin}/llms.txt`),
-    heroImageUrl !== undefined ? fetchHeroImageDataUri(heroImageUrl) : Promise.resolve(undefined),
+    heroImageUrl !== undefined
+      ? fetchHeroImageDataUri(heroImageUrl)
+      : Promise.resolve(undefined),
   ])
 
   const robotsText = robots.failure === undefined && robots.ok ? robots.body : undefined

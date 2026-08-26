@@ -66,12 +66,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`instagram-captions`, `social-copywriting`, `hook-writing`, `engagement`, `content-creation`],
+    tags: [
+      `instagram-captions`,
+      `social-copywriting`,
+      `hook-writing`,
+      `engagement`,
+      `content-creation`,
+    ],
     whyItWorks: `The instruction to write the opening line as a complete, self-contained thought rather than a cliffhanger fragment directly counters GPT-5.1's default caption-writing habit of front-loading a scene-setting clause ('When you finally get the glaze just right...') that only resolves after the cutoff — a structure that reads as unfinished to the large share of viewers who never tap 'more', which the model has no visibility into unless told explicitly that the feed truncates at a fixed character count. Naming the exact ~125-character mechanic gives the model a concrete target to write against instead of a vague 'make it punchy' instruction, which tends to produce generically short openers rather than openers engineered to survive a specific cutoff point. The rule against describing what the visual already shows addresses a separate, very common failure mode: without it, GPT-5.1 defaults to captioning the image literally ('a mug being turned in the light'), which is redundant information a viewer already has and wastes the one line most likely to be read. Requiring exactly one call to action, stated as a specific low-friction ask rather than an open-ended 'thoughts?', works because a single unambiguous action is what actually gets a measurable response — stacking multiple asks (comment AND share AND save) is a pattern the model reaches for when trying to maximize engagement surface area, but it splits attention and typically depresses response to all three rather than lifting any of them.`,
     exampleOutput: `Hook: "This glaze took four ruined batches before it did this." [~125-char cutoff falls here] Body: the fifth batch is the one you're looking at — a warm oatmeal base with a break of blue wherever the light hits thick. Fifteen mugs, no two identical. Reply with which color you want to see in the next run; we're picking from the comments. Alt hooks: "We almost didn't ship this color." / "Four batches said no. This one said yes."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -148,12 +152,16 @@ A numbered list, one entry per slide, each with: the on-slide text (short enough
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`instagram-carousel`, `content-scripting`, `swipe-through`, `social-copywriting`, `engagement`],
+    tags: [
+      `instagram-carousel`,
+      `content-scripting`,
+      `swipe-through`,
+      `social-copywriting`,
+      `engagement`,
+    ],
     whyItWorks: `Requiring slide 1 to state an explicit, checkable promise gives every later phase of the prompt a concrete target to be graded against, which is what turns 'write a carousel' from an open-ended creative request GPT-5.1 will pad with generic advice into a structure it can actually verify slide-by-slide before returning an answer. Naming slide three or four specifically as the highest-risk drop-off point matters because, left unprompted, the model tends to spread its best material evenly or front-load it on slide two out of a generic instinct to 'hook early and often' — but real swipe-through data on carousels consistently shows the mid-carousel slides as where attention actually collapses once initial curiosity is spent, so telling the model where the real risk sits produces a script that spends its strongest concrete detail exactly where it's needed rather than where a generic best-practices template would put it. The one-idea-per-slide rule closes a specific failure mode where GPT-5.1, asked for a fixed slide count on a meaty topic, will compress two points onto one slide to hit the target number rather than cutting content — forcing the count explicit and pairing it with 'never combine two points' makes the model resolve that tension by cutting scope, which is the correct trade-off, instead of silently doubling up a slide. Asking for an explicit swipe-away risk flag at the end forces a self-check pass rather than treating the first draft as final, which is where most of the actual quality gap between a templated carousel and a considered one shows up.`,
     exampleOutput: `Slide 1: "Batching more content in one sitting isn't more efficient — it's slower work in disguise." (Design: bold text, no image yet) ... Slide 4: "By hour three of a batch session, caption quality measurably drops — not because you're tired, but because you've stopped reacting to each post individually." (Design: before/after caption example) ... Slide 7: "Split your next batch into two 90-minute sessions, a day apart. Save this and try it before your next content day."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -224,12 +232,16 @@ A table with columns: Post Date | Shoot Day | Content Pillar | Format | Working 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`content-calendar`, `instagram-planning`, `creator-workflow`, `batching`, `production-planning`],
+    tags: [
+      `content-calendar`,
+      `instagram-planning`,
+      `creator-workflow`,
+      `batching`,
+      `production-planning`,
+    ],
     whyItWorks: `Forcing an explicit capacity calculation before any post gets assigned addresses the most common failure mode in AI-generated content calendars: asked to 'build a month of content,' GPT-5.1 defaults to a clean, evenly-spaced grid (a post every day, or every other day) because that's the statistically dominant pattern in the content-calendar templates it has seen, regardless of whether the stated production constraints could actually support that cadence — the calendar comes out looking complete and professional while being quietly unbuildable. Requiring the model to state the capacity number out loud and check the requested output against it converts an invisible assumption into a checkable claim, which is what makes the difference between a calendar that looks right and one that a single creator with four Saturdays a month can actually execute. Tying each post to the specific shoot day its raw footage comes from, rather than only to a publish date, closes a second gap: a generic calendar treats 'when to post' and 'when to shoot' as the same question, but for a solo creator they're not, and conflating them produces a plan where the creator discovers on the 13th that the footage for the 14th's post was never captured. The instruction to flag overcommitment and propose cuts, rather than silently fitting everything in by assuming more output per shoot day than was stated, matters because a model asked to satisfy multiple constraints at once (pillars, formats, fixed dates, capacity) will tend to resolve the tension by quietly relaxing whichever constraint was stated least precisely, and capacity is usually the one given as a rough number rather than a hard rule — naming it as the binding constraint stops that silent drift.`,
     exampleOutput: `Realistic capacity: 4 shoot days x ~3 hours ≈ enough raw footage for roughly 10-12 finished posts this month, not the 20 a strict alternate-day cadence would need — this plan fits 11. Post Date: Aug 18 | Shoot Day: Aug 16 | Pillar: Finished-product reveal | Format: Reel | Hook: "The glaze we almost didn't ship" | Notes: must be edited and scheduled by morning of the 18th for the launch.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -301,12 +313,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`broadcast-channel`, `community-management`, `instagram-dm`, `subscriber-retention`, `social-copywriting`],
+    tags: [
+      `broadcast-channel`,
+      `community-management`,
+      `instagram-dm`,
+      `subscriber-retention`,
+      `social-copywriting`,
+    ],
     whyItWorks: `The explicit instruction to write in DM voice rather than caption voice targets a specific and predictable drift: without a strong steer, GPT-5.1 tends to default toward the more polished, slightly promotional register it associates with 'Instagram content' in general, because that's the dominant pattern in its training examples of Instagram copy — but a Broadcast Channel is structurally a direct message thread, and content written in feed register inside a DM thread reads as visibly mismatched to the format the reader is actually looking at, which is exactly the tell that makes a subscriber mute a channel. Requiring the exclusivity reason to be stated plainly rather than implied closes a second gap: an unprompted draft will often just repeat the update without ever explaining why the channel is the right place to hear it, leaving the reader to wonder whether this message is meaningfully different from the public post at all, which erodes the entire reason someone subscribed. The explicit 'what not to do' section banning hashtags and discovery-oriented elements matters because those are reflexive additions the model reaches for on any Instagram-labeled task by default pattern-matching to public-post conventions, and they are actively counterproductive here since a Broadcast Channel has no algorithmic discovery surface for a hashtag to serve — including one signals the message was written generically rather than for this specific, closed audience, which is the opposite of what a channel update is supposed to communicate.`,
     exampleOutput: `Ok so — remember the glaze that sold out in nine minutes yesterday? We're doing a second, smaller restock next Tuesday, and you're hearing it 24 hours before it goes on the grid because you're here. React with 1 if morning works better, 2 if evening does — picking the drop time off whichever wins.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -362,12 +378,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`instagram-stories`, `audience-polls`, `community-engagement`, `decision-making`, `social-copywriting`],
+    tags: [
+      `instagram-stories`,
+      `audience-polls`,
+      `community-engagement`,
+      `decision-making`,
+      `social-copywriting`,
+    ],
     whyItWorks: `Requiring the model to check whether both options are genuinely plausible, rather than accepting any two-option framing as valid, targets a specific and very common failure mode: asked to 'write an engaging poll,' GPT-5.1 defaults to whatever pairing sounds catchiest as a question (this-or-that framing, playful opposites) without checking whether the underlying choice is actually live — producing a poll that looks like audience research but functions as a popularity contest with a foregone conclusion, since one option is obviously going to win regardless of framing. Forcing an explicit statement of what happens for each possible result is the mechanism that keeps the poll honest: a model that has to write down 'if X wins, we do Y' before finalizing the question can't quietly ship a poll where the honest answer is 'nothing changes either way,' because that gap becomes visible in the output rather than staying an unexamined assumption. The rule against cramming three-plus real options into a two-option sticker addresses a structural mismatch the model won't flag on its own: a Stories poll sticker only supports two labels, so a model asked to poll a genuinely three-way decision will usually just pick the two most common options and silently drop the third, producing a poll that resolves a different, narrower question than the one actually being decided — naming this explicitly as something to flag rather than paper over keeps the tool from being used for a decision shape it structurally can't represent.`,
     exampleOutput: `Poll question: "Restock drops Thursday evening or Saturday morning?" Options: "Thurs 7pm" / "Sat 9am". Result plan: Thursday-evening win schedules the drop for 7pm that day; Saturday-morning win schedules it for 9am — no third option exists, so this fits the two-label format cleanly.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -443,12 +463,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`brand-partnerships`, `creator-outreach`, `pitch-writing`, `influencer-marketing`, `cold-outreach`],
+    tags: [
+      `brand-partnerships`,
+      `creator-outreach`,
+      `pitch-writing`,
+      `influencer-marketing`,
+      `cold-outreach`,
+    ],
     whyItWorks: `The rule against fabricating or rounding up proof points is the load-bearing safeguard in this prompt: GPT-5.1, asked to write a persuasive pitch with a proof-points field left thin or blank, will reliably fill the gap with a plausible-sounding placeholder number ('consistently strong engagement of around 8-10%') because a pitch with no numbers at all reads as weaker to the model's own sense of what a good pitch looks like — but a fabricated number in a real outreach message is a credibility risk the moment the brand asks for a screenshot, so the instruction to flag the gap explicitly instead of inventing a fix keeps the model honest about what it doesn't actually know. Requiring the opener to lead with the brand-specific fit reason rather than a creator self-introduction targets the single most common tell of a mass-sent pitch: a generic opener is the fastest signal a busy marketing inbox uses to triage a message into the 'form letter' pile within the first line, before the actual proof points or ask are ever read, so fixing the opening structure has outsized effect relative to polishing anything later in the message. Asking the model to separately judge whether the given fit reason is genuinely specific or generic-enough-to-weaken adds a check GPT-5.1 won't perform unprompted — left to its own judgment, the model tends to accept whatever fit reason it's given at face value and write confidently around it, rather than pushing back on a weak premise, so making that evaluation an explicit required output forces the self-critique that actually improves the pitch instead of just dressing up a shaky one.`,
     exampleOutput: `Pitch: "Your cast-iron content is built for people who already know what they're doing with it — my audience is 100% the opposite, and that gap is exactly why a beginner-friendly weeknight video with your pan could reach people your current content doesn't. I'd love to do one sponsored reel: a 20-minute weeknight dinner using the skillet, in exchange for a flat fee plus the pan. Open to a quick call this week?" Fit check: genuinely specific, not generic. Proof check: thin — add the average view number before sending.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -523,12 +547,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ugc-brief`, `creator-collaboration`, `content-brief`, `influencer-marketing`, `brand-guidelines`],
+    tags: [
+      `ugc-brief`,
+      `creator-collaboration`,
+      `content-brief`,
+      `influencer-marketing`,
+      `brand-guidelines`,
+    ],
     whyItWorks: `The explicit split between non-negotiables and creative direction, with a hard rule against writing verbatim dialogue unless asked, targets a specific default GPT-5.1 falls into when asked for a 'content brief': the model tends to over-specify by writing a full example script complete with dialogue and shot-by-shot direction, because a fully worked example feels more helpful and complete than open guidance — but for UGC specifically, an over-scripted brief sent to five creators produces five near-identical videos performed by different faces, which defeats the entire commercial reason a brand runs a multi-creator UGC campaign instead of just making one polished ad. Requiring prohibited claims to be stated as specific checkable rules rather than a vague 'be honest' or 'don't overclaim' matters because a creator improvising dialogue on camera needs a concrete boundary to self-check against in the moment, not a mood; a specific named prohibition ('never say this replaces a diagnosed treatment') is something a creator can catch themselves saying and cut, while a vague honesty instruction gives them nothing to actually catch. Requiring usage rights to be stated plainly and specifically addresses a known real-world failure point in UGC deals that has nothing to do with creative quality — vague usage terms are the single most common source of after-the-fact disputes between brands and creators, so making this a required, specific field rather than an afterthought closes the gap where a model asked for a 'brief' focuses entirely on the creative and treats the commercial terms as boilerplate to gesture at rather than spell out.`,
     exampleOutput: `Non-negotiables: show product packaging on camera; say brand name aloud once; 15-30 seconds; include #ad or paid-partnership label. Creative direction: film it like you're telling a friend about your actual nighttime routine — a stumble or unpolished retake is welcome, a scripted-sounding read is not. Prohibited claims: never imply this treats insomnia or any diagnosed condition; never say 'guaranteed'; never name a competitor. Usage rights: brand may repost and run as a paid ad for 6 months; creator retains rights to post on their own account indefinitely.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

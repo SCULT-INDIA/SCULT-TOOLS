@@ -61,12 +61,16 @@ A short paragraph stating the triage logic and which topics got cut or compresse
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`revision-plan`, `study-schedule`, `exam-strategy`, `weak-topic-analysis`, `board-exams`],
+    tags: [
+      `revision-plan`,
+      `study-schedule`,
+      `exam-strategy`,
+      `weak-topic-analysis`,
+      `board-exams`,
+    ],
     whyItWorks: `GPT-5.1 defaults to a well-meaning but structurally lazy move when asked for a "revision plan": it distributes days roughly evenly across whatever topic list it's given, because even coverage is the safest-looking answer and requires no judgment call about what to cut. Forcing it to combine two numbers per topic — weakness and mark-weighting — rather than one breaks that default, because there's no longer a single sortable list to spread evenly across; it has to actually multiply out which combination of low-score-and-high-weight topics deserves disproportionate time, which is a genuine reasoning step rather than a formatting one. The explicit instruction to name what's being triaged down or dropped matters because an unconstrained plan that's asked to cover everything in too few days will silently pad each topic's allotted time until the total adds up to the available hours, producing a schedule that looks complete on paper but was never checked against whether a real day's block is achievable — naming the triage forces the model to do that arithmetic check out loud instead of eliding it. The "done" criterion per day matters mechanically too: without a concrete exit condition, GPT-5.1's day-by-day plans tend to describe activities ("review electrostatics") rather than checkable outcomes, which means the plan can't tell you whether you're actually on schedule three days in, only whether you followed the itinerary.`,
     exampleOutput: `Triage note: Modern Physics (35% score, only 10% of paper) and Electrostatics (40% score, 16% of paper) get priority; Optics (85% score) drops to a single 90-minute refresh on Day 14 instead of a full day, since further gains there are marginal. Day 1 — Electrostatics: solve every past-paper question from 2022-2025 unaided, ~3 hrs. Day 2 — Electrostatics (cont.): redo only the ones missed yesterday plus Gauss's law edge cases, ~2 hrs...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -125,12 +129,16 @@ Section 1: numbered questions with mark value and suggested time per question. S
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`practice-questions`, `exam-preparation`, `targeted-practice`, `question-generation`, `difficulty-calibration`],
+    tags: [
+      `practice-questions`,
+      `exam-preparation`,
+      `targeted-practice`,
+      `question-generation`,
+      `difficulty-calibration`,
+    ],
     whyItWorks: `Naming the exact failure pattern rather than just the topic changes what GPT-5.1 optimizes the question set for: given only a topic name, it tends to generate the most common, textbook-representative examples of that topic, which is exactly the version of the question you've probably already seen and already know how to do — describing the specific confusion (e.g. mixing up graph intercepts for reaction order) forces it to construct scenarios engineered to trigger that exact misstep, which is a materially different and harder authoring task than generic topic coverage. Separating questions from solutions into two clearly headed sections matters because GPT-5.1, left to its own formatting instincts, will often interleave a worked answer directly under each question for helpfulness, which defeats the point of a cold-attempt practice set — an explicit structural instruction is needed because "don't show me the answer yet" is otherwise overridden by the model's default toward maximally helpful, immediately-complete responses. The instruction against reproducing recognized past-paper questions addresses a real and specific risk: exam board past papers are widely available training data, and a topic-and-style prompt without that guard can pull the model toward reconstructing a question it has effectively memorized rather than generating a new one, which is both a copyright concern and pedagogically useless since a memorized-and-regurgitated question isn't a genuine new rep.`,
     exampleOutput: `Q3 (4 marks, ~5 min): The graph shows concentration of X plotted against time, producing a straight line with a positive y-intercept that does not pass through the origin. State the order of reaction with respect to X and justify your answer using the shape of this specific graph... [Solutions section separately confirms: zero order, since a straight line on a concentration-time graph indicates a constant rate independent of concentration.]`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -192,12 +200,16 @@ Section 1: numbered questions, each with four lettered options, no answer indica
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`mcq-generator`, `multiple-choice`, `distractor-design`, `exam-preparation`, `diagnostic-practice`],
+    tags: [
+      `mcq-generator`,
+      `multiple-choice`,
+      `distractor-design`,
+      `exam-preparation`,
+      `diagnostic-practice`,
+    ],
     whyItWorks: `Left unguided, GPT-5.1's default distractor-writing habit is to generate one plausible near-miss and then pad the remaining two or three options with numerically or logically implausible filler, because a genuinely misconception-grounded distractor requires modeling a wrong mental process rather than just perturbing the right answer slightly — the explicit instruction to trace every option to a specific nameable error (sign flip, unit confusion, wrong formula step) forces the harder generative task instead of letting it default to the easier one. This matters diagnostically, not just for difficulty: an MCQ set built from real misconceptions turns a wrong answer into information about which specific error you're making, while an MCQ set with implausible filler distractors only tells you that you got it wrong, with no diagnostic value at all — which defeats the actual purpose of practicing with MCQs rather than open-response questions. Banning "all/none of the above" addresses a separate, well-documented pattern where these options let a test-taker (and the model) avoid fully committing to four independently-justified wrong answers, effectively reducing the question to three real options plus an escape hatch. The instruction to vary correct-answer position and avoid repeating the same misconception basis more than twice guards against a subtler failure mode: GPT-5.1 tends toward repetitive structural patterns across a batch of similar items unless explicitly told to vary them, which would otherwise let a test-taker pattern-match the answer key rather than the content.`,
     exampleOutput: `Q4: In acidic medium, which is the correctly balanced half-reaction for the reduction of MnO4- to Mn2+? ... Answer key Q4: Correct = C. Option A represents forgetting to balance oxygen atoms with water molecules before adding H+. Option B represents adding electrons to the reactant side instead of the product side. Option D represents a charge-balance error from miscounting the electrons needed.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -247,12 +259,16 @@ A numbered list of cards as "Front: ... / Back: ..." pairs, followed by a separa
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`flashcards`, `active-recall`, `study-tools`, `note-conversion`, `spaced-repetition`],
+    tags: [
+      `flashcards`,
+      `active-recall`,
+      `study-tools`,
+      `note-conversion`,
+      `spaced-repetition`,
+    ],
     whyItWorks: `GPT-5.1's default approach to "make flashcards from these notes" is to summarize the notes into digestible chunks and then reformat each chunk as a front/back pair, which produces cards that test whether you recognize a rephrased sentence, not whether you can independently retrieve the fact — the atomic, one-fact-per-card rule forces an actual decomposition step where a three-part note becomes three separate retrieval challenges instead of one recognition challenge dressed as a flashcard. The NEEDS SOURCE CHECK instruction targets a specific and consequential failure mode: language models are fluent enough to smoothly fill a gap in incomplete source material with a plausible-sounding invented detail, and because the output looks uniformly confident, a student has no way to tell which cards are grounded in their actual notes versus quietly fabricated — flagging gaps explicitly rather than filling them prevents a student from memorizing a hallucinated fact with the same confidence as a real one. The separate sequence-recall card for multi-step processes exists because testing individual steps in isolation doesn't verify that a student can reproduce the full order under exam conditions, which is specifically what free-response and long-answer exam formats actually demand — a deck built only from atomic single-fact cards can create false confidence in a student who knows each piece but can't reconstruct the whole sequence unprompted.`,
     exampleOutput: `Front: How many carbons does citrate have, and from combining which two molecules? / Back: 6 carbons, from acetyl-CoA (2C) and oxaloacetate (4C). Front: List the products released at the alpha-ketoglutarate to succinyl-CoA step. / Back: One CO2 and one NADH. NEEDS SOURCE CHECK: Your notes mention citrate converting 'through isocitrate' but don't state what enzyme catalyzes that step — verify before I make a card testing the enzyme name.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -314,12 +330,16 @@ Title and total/section timing block, then each section's questions in full, end
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`mock-test`, `timed-practice`, `full-length-exam`, `exam-simulation`, `test-conditions`],
+    tags: [
+      `mock-test`,
+      `timed-practice`,
+      `full-length-exam`,
+      `exam-simulation`,
+      `test-conditions`,
+    ],
     whyItWorks: `GPT-5.1's helpfulness training pushes it toward completeness by default, which for a request like "build me a mock test" usually means appending the answer key immediately after the questions so the response feels self-contained and useful in one shot — the explicit, repeated, hard-rule instruction to withhold answers and end on a single specific line is necessary because a softer phrasing like "don't show me the answers yet" is easy for the model to satisfy nominally while still leaking partial hints in surrounding commentary. Structuring the request as two phases, with Phase 2 defined entirely as a withholding action rather than a generation action, gives the model an explicit stopping point to execute rather than leaving "how much to hold back" as a judgment call it has to make mid-generation, which is where hint-leakage usually creeps in. The difficulty-calibration field matters because GPT-5.1, left to its own judgment about exam difficulty, tends to regress toward a moderate, broadly-accessible level that undershoots genuinely hard real exams — anchoring difficulty to a named reference (a specific official practice test) gives it a concrete target to match rather than an internal, uncalibrated sense of "hard enough," which is exactly the failure mode that produces a mock test easier than the real thing and the false confidence that comes with it.`,
     exampleOutput: `GRE Mock Test — Total time: 130 minutes. Section 1: Verbal Reasoning (30 min, 20 questions)... Section 4: Quantitative Reasoning (35 min, 20 questions)... [full questions follow for each section] ... Reply 'grade it' once you've finished and timed yourself, and I'll provide the full answer key and a section-by-section score breakdown.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -378,12 +398,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`answer-review`, `exam-marking`, `partial-credit`, `error-diagnosis`, `grading-feedback`],
+    tags: [
+      `answer-review`,
+      `exam-marking`,
+      `partial-credit`,
+      `error-diagnosis`,
+      `grading-feedback`,
+    ],
     whyItWorks: `When simply asked to check an answer, GPT-5.1 tends to solve the problem fresh and present the correct solution as the primary output, treating the student's actual attempt as an afterthought to compare against at the end — this is the opposite of what's diagnostically useful, since a student reviewing a wrong answer already knows what's ultimately correct in outline and specifically needs to know where their own reasoning diverged. Requiring the model to quote the specific step where the error starts forces it to actually trace through the given attempt line by line rather than pattern-matching "this final number doesn't match" and working backward from the correct answer, which is a meaningfully different and more careful diagnostic pass. The method-versus-execution distinction is mechanically important because it maps directly onto how real mark schemes allocate partial credit — in the worked example above, the student used the exact right SUVAT equation but substituted t=6 twice instead of squaring it (0.5(2.5)(6) instead of 0.5(2.5)(6^2)), an execution slip that a real grader would likely still award method marks for, whereas GPT-5.1's default "the answer is wrong, here's the right one" response would obscure that the underlying approach was actually sound. The explicit caveat requirement when no official mark scheme is supplied matters because a partial-credit estimate stated with unwarranted confidence could mislead a student about how lenient or strict their real exam's grading actually is, when the model is in fact guessing at typical conventions rather than citing a scheme it was actually given.`,
     exampleOutput: `1. Error starts at: '0.5(2.5)(6)' — the time value was substituted as t instead of t-squared. 2. This is an execution error, not a method error: the correct equation (s = ut + 0.5at^2) and the correct acceleration value were both used correctly up to that point. 3. Under GCSE-style method marking, this would likely earn 2 of 3 marks — one for the correct equation choice, one for correct substitution of u and a, with the final mark lost for the squaring slip. 4. Corrected from that point: 0.5(2.5)(6^2) = 0.5(2.5)(36) = 45, giving s = 30 + 45 = 75 m.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -436,12 +460,16 @@ Grouped by topic, one formula per entry with sub-bullets for: Formula, Trigger, 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`formula-sheet`, `quick-reference`, `exam-strategy`, `derivation-map`, `study-tools`],
+    tags: [
+      `formula-sheet`,
+      `quick-reference`,
+      `exam-strategy`,
+      `derivation-map`,
+      `study-tools`,
+    ],
     whyItWorks: `A bare "give me a formula sheet" prompt gets GPT-5.1 to produce what's effectively a textbook appendix — formulas with variables defined but no indication of when each one actually applies, because that's the version of a formula sheet most represented in its training data and requires no judgment about exam-specific traps. Requiring an explicit "trigger" phrase per formula forces a different and more useful kind of output: a mapping from the way a question is actually worded to the formula it implies, which is the real skill being tested under time pressure, since most exam failures on formula-based questions come from picking the wrong tool, not from forgetting how to use the right one once identified. The trap-variant requirement targets a specific, well-documented category of exam question design — testing whether a student notices a unit that needs converting, or a variable that looks like the one they expect but isn't (diameter given where radius is needed) — and naming this explicitly stops the model from defaulting to a generic, trap-free formula list that doesn't reflect how these formulas are actually examined. The given-on-paper flag has a concrete practical payoff: for exams that print certain formulas on the paper itself, spending memorization effort on the formula's exact form rather than on recognizing when to deploy it is wasted study time, and the model has no way to know this distinction matters unless told explicitly what the real exam actually provides.`,
     exampleOutput: `Reynolds Number — Formula: Re = (rho * v * D) / mu, all SI units. Trigger: any question asking whether flow is laminar or turbulent, or referencing a pipe/pump system. Trap: students often plug in diameter when the problem gives radius, halving or doubling Re incorrectly; also check whether velocity given is average or centerline. Given-on-paper: No — GATE requires full memorization for this exam.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -500,12 +528,16 @@ A table: Topic | Review dates (in order) | Notes on any interval compression app
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`spaced-repetition`, `review-schedule`, `retention-strategy`, `study-planning`, `exam-countdown`],
+    tags: [
+      `spaced-repetition`,
+      `review-schedule`,
+      `retention-strategy`,
+      `study-planning`,
+      `exam-countdown`,
+    ],
     whyItWorks: `A standard spaced-repetition interval sequence is designed for indefinite long-term retention and has no inherent awareness of a hard deadline, so GPT-5.1 asked to "apply spaced repetition" without an anchoring instruction will project intervals forward from the first-learned date and let them land wherever the arithmetic naturally puts them — which for a topic learned early enough can mean the last calculated review falls weeks after the exam has already happened, quietly wasting the schedule's most important review on the wrong side of test day. Requiring every topic's final review to land in the 1-2 days before the exam regardless of the natural progression forces the model to work the problem backward as well as forward, checking each topic's trajectory against the fixed endpoint and compressing intervals where needed, which is a different and more constrained calculation than simply iterating a formula forward. The daily-capacity cross-check exists because expanding-interval schedules across multiple topics started on different dates will mathematically cluster several topics' review dates onto the same day with some regularity — without an explicit instruction to check combined load against a stated capacity, the model has no reason to notice that a given day's schedule silently assumes more available time than the student actually has, since each topic's interval was calculated independently of the others. The refusal to invent missing first-learned dates matters because a fabricated starting date would silently corrupt every downstream interval calculated from it, producing a schedule that looks precise while being anchored to a made-up fact.`,
     exampleOutput: `Ecology | Reviews: 13 Aug, 16 Aug, 23 Aug, 8 Sep, 20 Sep | Note: natural next interval after 8 Sep would be ~35 days (13 Oct), well past the 22 Sep exam — compressed to 20 Sep so the final review lands 2 days before test day. Flag: 20 Sep has both Ecology and Genetics scheduled, totaling ~90 min against your 2-topic/day capacity — no fix needed, but Evolution's 21 Sep review should not be added to the same day.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',

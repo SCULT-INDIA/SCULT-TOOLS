@@ -2126,12 +2126,16 @@ A table with columns: Touch #, Channel, Day, One-line Angle, Draft Message. Belo
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`cold-outreach`, `sales-sequence`, `multi-channel`, `prospecting`, `b2b-sales`],
+    tags: [
+      `cold-outreach`,
+      `sales-sequence`,
+      `multi-channel`,
+      `prospecting`,
+      `b2b-sales`,
+    ],
     whyItWorks: `The core failure mode this avoids is the one every generic cold-outreach template produces: three messages that are really the same pitch restated, sent through different pipes, which a prospect who sees more than one of them recognizes instantly and discounts accordingly. Forcing a one-sentence angle statement before any drafting happens works because GPT-5.1 will happily generate fluent, well-formatted outreach copy for an angle that doesn't actually hold up, and the one-sentence gate is the only checkpoint that catches a weak or repeated angle before it gets dressed up in persuasive language. Assigning channel by what the message actually needs — rather than treating email/LinkedIn/phone as interchangeable slots to fill in a fixed template — matches how the messages are actually received: a channel choice that ignores this produces technically-complete plans that read as three redundant asks rather than a build. The explicit ban on fabricated statistics and case results matters because outreach copy is exactly the kind of low-stakes-sounding creative task where a language model will generate a specific, plausible-sounding number or client name to make a sentence land better, and that fabricated specificity is far more damaging in sales outreach than in most contexts because it becomes a claim made to a real prospect on your behalf. Requiring the day-gap to be justified by the stated timeline pressure, rather than a default cadence, prevents the common failure where a five-week deadline gets a leisurely two-week-per-touch plan because that's the generic pattern most templates default to regardless of context.`,
     exampleOutput: `Touch 1 (Day 0, Email): Angle — name the reconciliation pain from her own post before pitching anything. Touch 2 (Day 3, LinkedIn): Angle — a specific mechanism for how the reconciliation gap gets closed, framed as a reply to the unanswered email rather than a fresh pitch. Touch 3 (Day 8, Email): Angle — tie the ask directly to her fiscal year-end deadline, with a two-line close asking for 15 minutes before budget locks.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -2201,9 +2205,7 @@ Give me the subject line and the email body, then one line noting anything you f
     exampleOutput: `Subject: renewal ownership post
 
 Saw your take on CS owning renewal targets instead of sales — that's a structural shift most teams underestimate on the tooling side. If CS is about to inherit the number, you'll also inherit the guesswork on which accounts are actually at risk before they churn. Worth 15 minutes next week to see if that's a real gap for your team? Tuesday or Thursday afternoon both work on my end.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2269,14 +2271,18 @@ Output: subject line, email body, and one line stating which follow-up number th
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`follow-up-email`, `sales-cadence`, `email-copywriting`, `prospecting`, `b2b-sales`],
+    tags: [
+      `follow-up-email`,
+      `sales-cadence`,
+      `email-copywriting`,
+      `prospecting`,
+      `b2b-sales`,
+    ],
     whyItWorks: `The instruction to let the new information carry the email, rather than opening with a reference to the unanswered first message, corrects for GPT-5.1's default follow-up pattern: asked for a "follow-up email," it reliably opens with some variant of "just wanted to follow up on my previous email," which is the single most skippable sentence in cold sales email because it tells the reader nothing changed and gives them zero new reason to open past the preview line. Scaling the ask size down as the follow-up number increases models a real sales instinct that a naive prompt doesn't encode by default: a second follow-up asking for the exact same 20-minute demo as the first signals that nothing has been learned from the silence, whereas shrinking the ask (a quick reply instead of a call, a yes/no instead of a scheduling negotiation) matches the declining probability of a big commitment as silence stretches on. The explicit tone shift required at the third-plus follow-up — toward a genuine, pressure-free close, rather than escalating urgency — exists because escalating persistence past two silent attempts reliably reads as pressure rather than diligence to the recipient, and a model without this instruction will often default to intensifying urgency language the more follow-ups are requested, which is the opposite of what actually improves reply rates at that stage. Refusing to manufacture a new trigger event when none was supplied prevents the model from inventing a plausible-sounding product update or news hook to satisfy the "new information" requirement, which would put a fabricated claim into an email sent to a real prospect.`,
     exampleOutput: `Subject: re: onboarding automation
 
 Quick add — we just shipped a native Salesforce integration, so the manual export step I mentioned before is gone entirely on your end. If the timing's better now, happy to show it in 10 minutes flat, no deck. If not a fit right now, no worries at all — just let me know either way.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -2342,12 +2348,16 @@ Format as a numbered list within each section: Question, then "Likely surface an
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`discovery-call`, `sales-questions`, `qualification`, `b2b-sales`, `sales-process`],
+    tags: [
+      `discovery-call`,
+      `sales-questions`,
+      `qualification`,
+      `b2b-sales`,
+      `sales-process`,
+    ],
     whyItWorks: `The mechanism doing the real work here is the required "likely surface answer, then follow-up" pairing, because it forces the model to reason about the conversation as two layers instead of generating a flat list of nice-sounding open questions — a plain "give me discovery questions" prompt reliably produces questions like "what challenges are you facing?" that a prospect answers with whatever generic pain they'd tell anyone, and the conversation never gets past that first, socially-safe layer. Writing out the anticipated surface answer explicitly is what makes the follow-up land correctly, because a follow-up written without first predicting the likely first response tends to be generic ("can you tell me more?") rather than targeted at the specific gap between what a prospect usually says and what's actually driving the decision. Requiring the known-risk question to be phrased openly rather than leading it matters because a leading question ("you don't already have someone doing this in-house, right?") invites a defensive or performative answer, while an open version phrased around current process gets an honest description the rep can actually diagnose. Capping question count to the call length is a direct check against GPT-5.1's tendency, when asked for a "comprehensive" question bank, to produce an exhaustive list that would take three call lengths to actually ask — a list this long in practice gets skimmed rather than used, and the discipline of matching volume to available minutes is what makes the output something a rep could genuinely run from live on a call.`,
     exampleOutput: `Current state and pain — Q: "Walk me through what happens to a contract from the moment it lands on your desk to signature." Likely surface answer: "Legal reviews it, then it comes back to us for signature." Follow-up: "How long does that legal review step typically take, and has a deal ever slipped because of it?"`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2413,12 +2423,16 @@ Format as a labeled tree: Opening, then Branch A (positive) with its own sub-bra
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`sales-call-script`, `sales-conversation`, `discovery-call`, `b2b-sales`, `sales-enablement`],
+    tags: [
+      `sales-call-script`,
+      `sales-conversation`,
+      `discovery-call`,
+      `b2b-sales`,
+      `sales-enablement`,
+    ],
     whyItWorks: `A linear script is the default output shape a model reaches for when simply asked for a "call script," and it fails the moment a real prospect deviates from the assumed happy path — which is most of the time — leaving the rep either improvising with no support or awkwardly forcing the conversation back onto a script that no longer fits what was just said. Structuring the request as an explicit branch tree forces the model to reason about the two or three realistic ways the conversation actually forks, rather than writing one confident monologue and calling it done; this is the same reason real sales enablement teams build call guides as decision trees rather than scripts, and stating that structure explicitly in the prompt is what gets GPT-5.1 to produce it instead of defaulting to prose. Requiring every "must learn" item to be traceable to a specific point in every branch — with an explicit flag if a branch risks ending the call before it's covered — catches the common failure where a skeptical-response branch politely wraps up the call without ever getting to the qualifying questions, which in a real call means walking away without the information needed to know if the prospect is even worth pursuing further. Insisting on spoken, contraction-included phrasing rather than formal written prose matters because a script that reads like an internal memo produces exactly that stilted cadence when a rep tries to deliver it live, while phrasing modeled on actual speech is something a rep can internalize and adapt in real time rather than read verbatim.`,
     exampleOutput: `Opening: "Thanks for grabbing time — before I show anything, I'd love to hear what made you fill out that demo request. What's going on right now that made this worth looking into?" Branch A (engaged, describes pain): ask what they're using today and what's breaking about it, then move toward the must-learn items on team size and sign-off. Branch B ("just looking"): acknowledge that directly, ask what would need to be true for this to become a real priority, then pivot to a lighter version of the must-learn questions framed as "so I don't waste your time later."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2475,12 +2489,16 @@ Format as one block per objection: Objection, Acknowledge, Honest Assessment, Re
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`objection-handling`, `sales-conversation`, `sales-training`, `b2b-sales`, `sales-enablement`],
+    tags: [
+      `objection-handling`,
+      `sales-conversation`,
+      `sales-training`,
+      `b2b-sales`,
+      `sales-enablement`,
+    ],
     whyItWorks: `The instruction to rate each objection's validity honestly — fully valid, partially valid, or a misunderstanding — rather than defaulting to a universal pivot, exists because the single most common failure in AI-generated objection handling is treating every objection as equally dismissible, which produces responses that sound persuasive in isolation but collapse the moment a prospect who raised a genuinely valid concern realizes they're being argued past rather than heard; naming the honest truth first is what makes the eventual reframe credible instead of slippery. Requiring the acknowledgment to name the specific substance of the concern, not a generic "I hear you," matters because a vague acknowledgment is functionally indistinguishable from no acknowledgment at all to a prospect — it's a filler phrase that buys a beat before the pitch resumes, and prospects who've sat through enough sales calls recognize that pattern immediately. Explicitly allowing the model to say an objection is a valid reason not to buy, rather than forcing every objection into an overcome-and-pivot shape, is the most load-bearing rule in the prompt: without it, a model will reliably manufacture a reframe even for a disqualifying objection, which produces responses that oversell past a real mismatch and damages trust worse than losing the deal honestly would. Banning invented competitor comparisons, pricing specifics, or feature claims not supplied by the user closes off the model's tendency to fill in a persuasive-sounding but fabricated detail to make a reframe land harder — a fabricated claim used against a real prospect in a real objection-handling moment is a much higher-stakes error than the same fabrication in a first draft of ad copy.`,
     exampleOutput: `Objection: "We could just build this in-house." Acknowledge: "That's true, and if your team has the bandwidth, a custom pipeline is absolutely buildable." Honest Assessment: partially valid — building it is possible, but it typically runs 2-3 engineer-months plus ongoing maintenance that doesn't show up in the initial estimate. Reframe: "Is the real question whether it's buildable, or whether it's the best use of your team's next quarter — worth comparing what that maintenance load actually looks like six months in?"`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2540,9 +2558,7 @@ Output format: an ordered list of demo segments (Segment, Feature Shown, Connect
     tags: [`sales-demo`, `demo-script`, `product-demo`, `b2b-sales`, `sales-enablement`],
     whyItWorks: `The core mechanism here is inverting the model's default demo structure: asked for a generic "demo script," GPT-5.1 tends to organize output around the product's own feature architecture — the order features exist in a UI or a marketing one-pager — because that's the most available organizing structure in the absence of other instructions, and that order has no necessary relationship to what any specific prospect cares about. Forcing every included feature to map explicitly back to the prospect's own discovery language is what prevents the demo from drifting into a generic capability tour; a feature shown without that connecting sentence gets presented as inherently impressive, while the same feature introduced as a direct answer to something the prospect said unprompted carries far more weight because it demonstrates the rep was listening, not reciting. The explicit "cut from this demo" list matters more than it looks — it's a deliberate check against the instinct to include a feature the rep is personally proud of or that showcases technical depth, even when it wasn't asked for; naming and justifying every cut forces the discipline that a demo's value comes from relevance, not comprehensiveness, and most demos fail by trying to be comprehensive. Ordering by the prospect's highest-stated priority first, rather than saving the strongest material for a big finish, directly addresses the real risk of a demo running over time and never reaching the part that actually mattered — a risk a model won't account for unless explicitly told to front-load rather than build to a climax.`,
     exampleOutput: `Segment 1: Automated invoice matching. Connects to: "invoices sitting for two weeks with no visibility." Talking point: "You mentioned invoices getting stuck for two weeks with no clear owner — here's what happens the moment one lands in the system." Cut from this demo: multi-currency support — nothing in discovery indicated cross-border operations, so this would be a tangent rather than a relevant capability.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2608,12 +2624,16 @@ Output as a structured proposal document with clear section headers, written for
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`sales-proposal`, `business-case`, `discovery-notes`, `b2b-sales`, `sales-enablement`],
+    tags: [
+      `sales-proposal`,
+      `business-case`,
+      `discovery-notes`,
+      `b2b-sales`,
+      `sales-enablement`,
+    ],
     whyItWorks: `Sequencing pricing after the case for change, rather than allowing it near the top, corrects for the default structure most proposal templates and models alike gravitate toward — a summary, feature list, then pricing table — which frontloads the number before the reader has been given a reason to care what it costs relative to; a price without an established cost-of-status-quo has no anchor, so it reads as an isolated ask rather than a comparison against something worse. The instruction to restate the prospect's situation in language they'd recognize as their own, drawn directly from the discovery notes rather than paraphrased into generic pain-point language, is what makes a proposal feel bespoke instead of templated — a model given loose notes and told to "write a proposal" will smooth the specificity out into generic business prose unless explicitly told to preserve it, and that specificity is the single biggest signal to a prospect that this document was built for them rather than adapted from a boilerplate. The reader-orientation rule for stakeholders who weren't on the original call addresses a structural blind spot in most AI-drafted proposals: they're written as if every reader shares the context of whoever gave the discovery notes, but a VP seeing this cold needs a bridge sentence the original stakeholder doesn't, and without that instruction the document silently fails its secondary audience while looking complete to the primary one. Explicitly flagging fabricated-figure risk with a "[CONFIRM]" marker matters because a proposal is a document that gets sent to a real buyer as a basis for a real financial decision, making an invented statistic here materially riskier than in almost any other sales-copy context.`,
     exampleOutput: `The Situation: Your support team is manually tagging and routing tickets — roughly three hours a day across four reps — and the backlog compounds every Monday, pushing same-day resolution further out of reach as volume grows. The Cost of Continuing As-Is: at current pace, hitting your stated Q3 same-day-resolution goal would require either absorbing the growing backlog manually or adding headcount [CONFIRM: current backlog trend/volume] before the automation gap is addressed at all.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2679,12 +2699,16 @@ Output just the response text, formatted exactly to the constraint given, ready 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`rfp-response`, `proposal-writing`, `b2b-sales`, `enterprise-sales`, `procurement`],
+    tags: [
+      `rfp-response`,
+      `proposal-writing`,
+      `b2b-sales`,
+      `enterprise-sales`,
+      `procurement`,
+    ],
     whyItWorks: `Requiring the literal answer to appear in the first sentence, before any elaboration, directly counters how a language model defaults to answering yes/no questions in open-ended writing tasks — it tends to build up to the answer through context and qualification, which reads as evasive to an RFP evaluator who is often scoring dozens of responses against a checklist and needs the answer locatable in seconds, not inferable from a paragraph. The instruction to disclose a known limitation plainly rather than omit or bury it is the single highest-leverage rule in this prompt, because RFP responses are the rare sales document that gets checked against reality during implementation — an undisclosed gap discovered after signing damages trust and can trigger contractual disputes in a way a disclosed gap with a stated workaround never does, so the model needs to be explicitly told that honesty here is a competitive advantage, not a liability, or it will default to the confident, gap-free tone most persuasive writing defaults to. The strict format and length adherence matters because RFP scoring is frequently mechanical — many evaluators or their software literally check whether an answer fits the requested shape — and a model asked to "draft a strong response" without an explicit length constraint will reliably over-write, producing a technically excellent paragraph that fails the RFP's actual scoring rubric on format alone. Banning invented certifications or capabilities addresses the highest-stakes fabrication risk in this whole prompt set: an RFP response is frequently incorporated by reference into the eventual contract, so a confidently invented "yes" here is not just misleading copy, it can become a real, and false, contractual claim.`,
     exampleOutput: `Yes. Our platform has supported SAML 2.0 SSO in production for over 18 months and is currently used by 40+ enterprise accounts for authentication. SCIM-based auto-provisioning is not yet available; user provisioning is currently handled manually by our onboarding team as part of implementation, with automated provisioning on our public roadmap.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2741,12 +2765,16 @@ Output: a table (Factor, Evidence From My Deals, Weight, How To Assess Early, Sc
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`lead-qualification`, `sales-scorecard`, `sales-process`, `b2b-sales`, `pipeline-management`],
+    tags: [
+      `lead-qualification`,
+      `sales-scorecard`,
+      `sales-process`,
+      `b2b-sales`,
+      `pipeline-management`,
+    ],
     whyItWorks: `The instruction to derive factors from the actual won/lost patterns given, rather than defaulting to BANT or MEDDIC, matters because those frameworks are generic industry checklists that a model will reach for immediately if not explicitly redirected — they sound authoritative and complete, but a factor like "budget" being on a standard checklist says nothing about whether it actually predicted outcomes in this specific business's deal history, which is the only evidence that should determine what's on this particular scorecard. Requiring each factor to cite the specific evidence from the given patterns, and explicitly permitting the model to flag an intuitively-standard factor as unconfirmed rather than including it by default, is the check against a well-documented failure mode: language models asked to build a "qualification framework" tend to backfill in familiar categories (authority, timeline, competitive situation) that feel complete even when the actual data provided doesn't support them, because those categories are heavily represented in training data about sales generally. The requirement that every factor be assessable at the point it would actually be used — first call or intake form, not deep into the sales cycle — closes a subtler gap: a factor can be genuinely predictive of deal outcome while being useless for early qualification if it's only knowable after weeks of discovery, and a model not told to check for this will happily include lagging indicators as if they were usable filtering criteria on lead one. Weighting factors unequally rather than defaulting to a flat checklist reflects that real qualification signals aren't equally strong, and forcing the model to differentiate weight based on the given evidence produces a rubric that actually discriminates between good and bad leads instead of one where every box checked looks equally reassuring regardless of its real predictive value.`,
     exampleOutput: `Factor: Champion is personally frustrated with current process (vs. assigned to evaluate). Evidence: present in nearly all closed-won deals, largely absent in closed-lost. Weight: high (2 points). How to assess early: ask directly on the first call what specifically prompted them to look for a solution now, and listen for a personal pain statement vs. a generic mandate. Score range: 0 (assigned to evaluate, no personal stake) to 2 (unprompted, specific frustration stated).`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2803,12 +2831,16 @@ Output: a comparison table (Trait, Strong Accounts, Weak Accounts, Usable at Pro
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ideal-customer-profile`, `icp`, `sales-strategy`, `b2b-sales`, `go-to-market`],
+    tags: [
+      `ideal-customer-profile`,
+      `icp`,
+      `sales-strategy`,
+      `b2b-sales`,
+      `go-to-market`,
+    ],
     whyItWorks: `Comparing the strong and weak account groups against each other, rather than describing the strong accounts alone, is the single mechanism that keeps this from producing a generic "who are our best customers" description — an ICP built only by describing winners tends to just restate obvious firmographic facts (company size, industry) that may be shared equally by the accounts that churned, which makes the resulting profile look complete while filtering for nothing useful. Explicitly separating traits that are checkable at prospecting time from traits only visible in hindsight addresses a very common and costly gap in AI-generated ICP work: a model asked to build a customer profile will readily surface a genuinely differentiating trait like "adopted across the whole team within 60 days," which is a real and true pattern but completely useless to a rep trying to qualify a lead before a deal has even started, since that information doesn't exist yet at that point — without this instruction, the resulting document reads as insightful but can't actually be operationalized in prospecting. Requiring the model to say explicitly when two groups don't differ on some dimension, rather than manufacturing a distinction, guards against the tendency to produce an evenly-weighted list of differentiators regardless of whether the underlying data actually supports each one — a real ICP usually has a small number of traits that matter a lot and several that don't matter at all, and forcing the model to admit the latter is what keeps the final profile sharp instead of diluted with plausible-sounding but unsupported criteria. This structure specifically counters the common go-to-market mistake of an ICP built from an entire closed-won list, which quietly re-encodes and reinforces whatever the sales team has been closing regardless of whether those accounts actually stuck around and grew.`,
     exampleOutput: `Trait: presence of a specific named pain owner at time of purchase. Strong accounts: present in nearly every case — a specific manager drowning in manual reporting. Weak accounts: largely absent — purchase driven by a broad initiative with no individual pain owner. Usable at prospecting time: yes, checkable directly in discovery conversation. ICP statement: 50-200 person B2B services companies where a specific operations or reporting manager can name the exact manual task costing them time today, not a company undergoing a broad, ownerless digital transformation initiative.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2856,12 +2888,16 @@ Output: a "Check this before anything else" section (contradictions to my existi
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`account-research`, `sales-preparation`, `pre-call-briefing`, `b2b-sales`, `sales-enablement`],
+    tags: [
+      `account-research`,
+      `sales-preparation`,
+      `pre-call-briefing`,
+      `b2b-sales`,
+      `sales-enablement`,
+    ],
     whyItWorks: `The filter of "would this change something about how I run the call" is the mechanism that keeps this from turning into a research report, which is the default shape a model produces when simply asked to "summarize" account research — a summary organizes and compresses everything supplied, treating comprehensiveness as the goal, while a briefing has to actively discard most of what was gathered, and a model isn't naturally inclined to discard interesting-sounding material unless explicitly told that relevance to the specific call, not general interestingness, is the only criterion for inclusion. Requiring every kept fact to state explicitly what it changes about the existing plan turns the briefing from a list of trivia into a list of decisions — a fact stated alone ("they hired a new VP of Engineering from a competitor") is just information, but the same fact paired with its implication ("this person may already prefer a different vendor's approach — worth asking directly rather than assuming a blank slate") is something the rep can act on in the room. The instruction to surface plan-contradicting facts prominently near the top, rather than letting them sit in a bullet list, directly targets the most expensive failure mode a pre-call briefing can have: a rep who walks into a call still operating on an assumption the research has already disproven, and that failure is much more damaging than simply missing a nice-to-have detail, so it needs to be structurally impossible to bury. Requiring inferences to be explicitly labeled as such, rather than blended in with facts read directly from the notes, matters because a briefing consumed quickly right before a call gets treated at face value — an unlabeled inference presented with the same confidence as a sourced fact risks the rep repeating it back to the prospect as if it were established, which can be an awkward or even damaging assumption to voice out loud if it turns out to be wrong.`,
     exampleOutput: `Check this before anything else: their new VP of Engineering came directly from a competitor of ours — do not assume a neutral technical evaluation; ask directly early on whether that background is shaping their current vendor thinking, rather than pitching as if this is a blank-slate comparison. Kept fact: mentioned on a podcast they're 'evaluating vendor consolidation' this quarter. Changes: reframe the add-on pitch from your existing plan toward a consolidation angle instead, since 'another tool to add' may now work against you rather than for you.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2918,12 +2954,16 @@ Output: first, one line — "Real trigger" or "Weak link, here's why" — then, 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`trigger-event-outreach`, `personalized-outreach`, `cold-outreach`, `b2b-sales`, `prospecting`],
+    tags: [
+      `trigger-event-outreach`,
+      `personalized-outreach`,
+      `cold-outreach`,
+      `b2b-sales`,
+      `prospecting`,
+    ],
     whyItWorks: `Requiring an honest validity check on the trigger event before any drafting happens is the load-bearing rule in this prompt, because a model asked to "write outreach based on this trigger event" will draft persuasive-sounding copy regardless of whether the underlying causal link is real — fluency in language generation is not correlated with the strength of the argument being made, so without an explicit instruction to evaluate the link first, the model will happily produce a confident-sounding message built on a coincidental timing connection that a savvy recipient will see through immediately as a stretch. The instruction that the recipient should "finish the message unable to imagine it being sent without this event having happened" is a concrete, checkable bar that rules out the most common failure in trigger-based outreach: an opening line that name-drops the event ("Congrats on the new warehouse!") followed by a generic pitch that could have been sent regardless — that structure uses the trigger as decoration rather than as the actual reason for the message, and prospects register that gap even when they can't articulate it. Capping the message under 100 words and requiring a plain, non-hedged statement of why this moment specifically differs from any other time works against GPT-5.1's tendency to soften time-sensitive claims with qualifiers ("this might be a good time to consider...") that dilute exactly the urgency a trigger-event message is supposed to carry — a trigger that's genuinely real deserves to be stated with actual confidence, and hedged phrasing undercuts the one advantage this message type has over generic cold outreach. Banning invented details or statistics beyond what's supplied protects against the model manufacturing a specific-sounding but false elaboration on the trigger event itself, which would misrepresent something publicly checkable about the prospect's own company back to them.`,
     exampleOutput: `Real trigger. Message: "Saw the new warehouse announcement — most retailers hit inventory sync gaps in the first few months of running two locations, usually before anyone's looking for a fix. Worth a quick look at how that plays out for your setup before it becomes a real headache? Happy to send a two-minute walkthrough, no call needed."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2980,12 +3020,16 @@ Output: the note text with a character count shown, plus one line noting if the 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`linkedin-outreach`, `connection-request`, `social-selling`, `b2b-sales`, `prospecting`],
+    tags: [
+      `linkedin-outreach`,
+      `connection-request`,
+      `social-selling`,
+      `b2b-sales`,
+      `prospecting`,
+    ],
     whyItWorks: `The instruction to be honest about pitch intent rather than promising "no pitch" if a pitch is actually planned is the mechanism that keeps this prompt from producing the single most common form of LinkedIn spam: a connection note that explicitly disclaims sales intent, immediately followed by a pitch, which is a pattern experienced LinkedIn users recognize instantly and which damages trust more than an honest, upfront reason ever would — a model asked simply to write a "friendly, non-salesy" connection note will often default to exactly that false disclaimer because it's a common, socially safe-sounding phrase in its training data for this context, regardless of whether it's actually true for this specific outreach. Requiring the shared context to be specific enough that the recipient would recognize it themselves, rather than a generic "we're in the same industry" line, targets the second most common failure: connection notes that gesture at commonality without establishing anything concrete, which reads as templated regardless of how warmly it's phrased, because there's no way to verify the claim is really about this specific person. The hard 300-character constraint matters mechanically because LinkedIn's connection note field actually enforces that limit — a model not explicitly told the constraint will draft a warm, well-reasoned message well over the limit that would get silently truncated or rejected, so the length rule isn't a stylistic preference here, it's a platform mechanical requirement. Flagging a mismatch between the stated real reason and the stated pitch intent gives the user an explicit checkpoint to catch their own inconsistency before sending — if the honest reason given doesn't actually match what's about to happen next, that's worth surfacing before the note goes out, not after the relationship starts on a note that won't hold up.`,
     exampleOutput: `"Hi Maria — saw your question in the RevOps Slack about attribution gaps in multi-touch pipelines, and it's close to a problem I spend a lot of time on. Would like to connect and stay in each other's orbit — I do also work in this space commercially, so full disclosure there, but no pitch in this note." (287 characters) — Consistent: your stated intent to pitch within a few weeks is disclosed honestly rather than denied, so this note should hold up when that follow-up arrives.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -3042,12 +3086,16 @@ Output: a table (Step, Day, Angle, Gap Justification) for the whole sequence, fo
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`sales-sequence`, `email-cadence`, `sales-automation`, `b2b-sales`, `prospecting`],
+    tags: [
+      `sales-sequence`,
+      `email-cadence`,
+      `sales-automation`,
+      `b2b-sales`,
+      `prospecting`,
+    ],
     whyItWorks: `The instruction to justify each gap by the buyer's actual decision cycle, rather than accepting a default rhythm, targets a specific and common failure in AI-generated sales sequences: asked for a "sales cadence," a model will very reliably reproduce the generic 3-5-7-14 day pattern that appears constantly in sales enablement content it was trained on, regardless of whether that spacing has any relationship to how the target buyer actually moves through a decision — a fast, low-commitment consumer-style ask and a slow, multi-stakeholder enterprise evaluation should never share the same cadence, and only an explicit instruction to reason from the given decision context, rather than pattern-match to the most common template, produces spacing that's actually appropriate. Requiring a one-sentence angle per step before drafting the message is the same mechanism used elsewhere to prevent repeated pitches, applied here specifically to cadence: a sequence with justified timing but repeated content still fails, because the buyer notices the same idea restated with different framing regardless of how well-spaced the sends are. The explicit reply-handling instruction addresses a real operational failure mode that has nothing to do with message quality and everything to do with automation: most sequence tools will keep firing scheduled steps to a contact who already replied unless a stop condition is explicitly configured, and a sequence design that only covers message content without addressing this leaves a gap that produces the single most reputation-damaging outcome in sales automation — continuing to send a scripted pitch to someone who already responded, which reads as impersonal at exactly the moment a real reply deserves a real response.`,
     exampleOutput: `Step 1, Day 0: initial pitch tied to Q3 budget timing. Step 2, Day 4: new angle — a specific evaluation criterion other marketing directors used when comparing vendors. Gap justification: short gap appropriate early since attention is highest right after first contact and nothing yet requires internal deliberation. Step 4, Day 18: gap justification — internal sign-off from a director above them typically takes 2-3 weeks, so this step is timed to land as their internal comparison phase is likely concluding, not before it.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -3121,12 +3169,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`deal-review`, `forecast-accuracy`, `sales-management`, `meddic`, `pipeline-hygiene`],
+    tags: [
+      `deal-review`,
+      `forecast-accuracy`,
+      `sales-management`,
+      `meddic`,
+      `pipeline-hygiene`,
+    ],
     whyItWorks: `The prompt works by forcing a structural separation between evidenced and assumed facts, which directly counters a known failure mode of asking a model to just 'review this deal': left unconstrained, GPT-5.1 tends to mirror the tone and confidence level of the input text back to the user, so an optimistic rep narrative produces an optimistic-sounding review even when the underlying facts don't support it. Anchoring the audit to MEDDIC-style checkpoints but explicitly banning a bare checklist print-out forces the model to do the harder cross-referencing work of matching each checkpoint against a specific piece of evidence in the deal summary rather than accepting the rep's framing at face value — this is the same discipline a skeptical sales manager applies in a live deal review, and it's the part that generic 'summarize this deal' prompts skip. Explicitly instructing the model not to downgrade the deal's stage itself matters because a model given open latitude will sometimes overstep into a recommendation that isn't its call to make — a deal desk audit's value is in surfacing risk clearly enough for a human to decide, and blurring that boundary makes the tool feel like it's making calls above its authority, which erodes trust in the output faster than an incomplete audit would. Requiring the single biggest risk and its mechanism, rather than a flat list of risks, forces prioritization instead of hedge-everything output, which is what actually gets acted on in a five-minute forecast conversation.`,
     exampleOutput: `Verdict: At risk — economic buyer has never engaged directly. MEDDIC table: Economic Buyer marked 'Assumed' (VP of ops only on email CC, no direct confirmation of support). Biggest risk: if finance sign-off surfaces a budget gap the champion hasn't verified, the deal could slip past close date with no fallback plan in motion. Next actions: (1) get VP of ops on a call this week, (2) have champion confirm budget line item in writing, (3) ask directly whether the competing eval has formally closed.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -3187,12 +3239,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`pipeline-analysis`, `sales-ops`, `conversion-rate`, `funnel-diagnosis`, `revenue-operations`],
+    tags: [
+      `pipeline-analysis`,
+      `sales-ops`,
+      `conversion-rate`,
+      `funnel-diagnosis`,
+      `revenue-operations`,
+    ],
     whyItWorks: `The core mechanism here is forcing value-weighted rather than count-weighted analysis: without that instruction, a model summarizing pipeline data defaults to the most visible pattern in the numbers, which is usually the stage with the largest deal-count drop, even when that stage represents comparatively little revenue at risk — this is the same mistake a rushed human analyst makes when eyeballing a funnel chart. Explicitly requiring a baseline comparison before any 'worse than normal' claim, and requiring an honest 'no baseline available' fallback, closes a specific hallucination risk: GPT-5.1 will otherwise sometimes imply a trend or decline exists because the prompt's framing (asking to diagnose a 'leak') primes it toward finding a problem, even from a single snapshot of data with nothing to compare against. Labeling the operational cause explicitly as a hypothesis rather than a finding matters because correlation between 'two new reps ramped' and 'conversion dropped' is not causation, and a model that states this connection with unwarranted confidence produces a report that gets treated as diagnosed when it's actually just plausible — the hypothesis label keeps a sales leader from over-rotating on an unverified explanation. Finally, requiring a named list of what additional data would resolve ambiguity turns a dead-end 'I don't know' into an actionable next step for whoever runs sales ops, which is what separates a useful diagnostic from a shrug.`,
     exampleOutput: `Weakest transition: Demo to Proposal, down from a historical 72% to roughly 64% this quarter, representing an estimated $290K in deal value that stalled before reaching Proposal. Hypothesis (unconfirmed): the two newly ramped reps may be struggling to translate demo interest into a scoped proposal, though the competitor's new lower-priced tier launching mid-quarter is an equally plausible cause. To confirm: a rep-level breakdown of Demo-to-Proposal conversion, and win-loss notes from deals that stalled at Demo this quarter.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -3251,12 +3307,16 @@ Open with one sentence on the headline direction (up, down, flat) versus last we
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`forecast-commentary`, `revenue-forecasting`, `sales-leadership`, `commit-review`, `pipeline-narrative`],
+    tags: [
+      `forecast-commentary`,
+      `revenue-forecasting`,
+      `sales-leadership`,
+      `commit-review`,
+      `pipeline-narrative`,
+    ],
     whyItWorks: `Forecast commentary fails most often by becoming a prose mirror of the spreadsheet the reader already has open, and the explicit 'what not to do' instruction against restating totals is what breaks GPT-5.1 out of its default summarization behavior, which is to compress the input data back into sentence form when given a structured dataset and asked to 'write commentary' without a sharper constraint. Requiring every hedge word to be paired with the specific condition it depends on closes a subtler failure mode: without that rule, a model asked to sound appropriately cautious will often generate generic hedges ('this deal should close soon') that read as commentary but carry zero new information a CRO could act on — tying the hedge to a named condition and a date converts vague caution into something the reader can actually follow up on. The instruction not to describe a Best Case deal in Commit-level language matters because sales forecasting has a well-known bias where reps and even AI-generated summaries drift optimistic language onto uncertain deals simply because positive framing reads better in a narrative — explicitly anchoring the language register to the deal's actual commit category prevents the commentary from quietly inflating confidence beyond what the categorization already represents. Ending on a single largest swing risk, rather than a list, mirrors how an actual forecast call works: leadership has time for one clear risk and one action, not an exhaustive risk register.`,
     exampleOutput: `Forecast is up $120K week-over-week, driven primarily by Beacon Retail moving into Commit after verbal CFO approval. Acme Corp ($95K) slipped from Commit to Best Case — legal review is the open item, and it needs to clear by Thursday to have any chance of closing this month. Biggest swing risk next week: if Acme's legal review slips past Thursday, expect it to move to next quarter's pipeline rather than staying in this month's Best Case.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -3324,12 +3384,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`win-loss-analysis`, `competitive-intelligence`, `sales-messaging`, `customer-research`, `revenue-strategy`],
+    tags: [
+      `win-loss-analysis`,
+      `competitive-intelligence`,
+      `sales-messaging`,
+      `customer-research`,
+      `revenue-strategy`,
+    ],
     whyItWorks: `The two-half extraction rule in Phase 1 targets a specific, well-documented behavior in win-loss interviews: buyers routinely lead with a socially comfortable reason (price, timing) and only reveal the real driver as a secondary aside, because naming the real reason directly can feel like a criticism of a relationship with the vendor they're declining. A model asked to just 'summarize the reason for the loss' without this instruction will typically extract the first, more prominent sentence, because that's structurally where a stated reason usually lives in a sentence — explicitly directing it to weigh the softer aside as the real signal corrects for this positional bias. Requiring an explicit count and win/loss skew per theme, and refusing to promote a single mention into a 'pattern,' addresses the tendency of language models to smooth interview data into confident-sounding generalizations regardless of how many data points actually support them — without this constraint, one vivid quote can end up driving an entire recommendation, which is exactly how bad product and messaging decisions get made off thin qualitative data. The hypothesis-testing phase is deliberately placed after the theme extraction rather than before, and the instruction to not let it bias quote emphasis exists because stating a hypothesis upfront is a well-known way to induce confirmation bias in an LLM's synthesis — it will otherwise selectively surface supporting quotes once it 'knows' what answer is expected, which defeats the actual purpose of testing a hypothesis against evidence rather than confirming it.`,
     exampleOutput: `Top theme: implementation support depth, supported by 4 of 6 interviews, skewing heavily toward losses (3 losses, 1 win mentioning it positively). Anecdote (single mention, not a pattern): one buyer cited a specific integration with a niche tool as decisive — worth tracking, not yet actionable. Hypothesis verdict: supported — the batch backs the suspicion that implementation support, not price, is the recurring loss driver in mid-market deals. Recommendation for sales: lead mid-market pitches with the onboarding model explicitly, before pricing comes up.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -3397,12 +3461,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`competitive-battlecard`, `competitive-intelligence`, `sales-enablement`, `objection-handling`, `positioning`],
+    tags: [
+      `competitive-battlecard`,
+      `competitive-intelligence`,
+      `sales-enablement`,
+      `objection-handling`,
+      `positioning`,
+    ],
     whyItWorks: `Organizing around moments instead of features directly targets why most battlecards go unused: a side-by-side feature table requires the rep to do the translation work live, mapping a static document to whatever the prospect just said, under time pressure on a call — moment-based structure does that mapping in advance, so the rep is pattern-matching a trigger phrase to a ready response instead of improvising from a reference sheet, which is a fundamentally easier cognitive task mid-call. Requiring an honest acknowledgment of real weaknesses rather than a denial or deflection reflects a specific finding in competitive sales conversations: a prospect who has already done their own research and hears a rep flatly deny a known gap discounts everything else that rep says afterward, so the battlecard's value comes from giving the rep language that concedes the specific point while redirecting to what still matters, not from pretending the weakness doesn't exist. The landmine-questions section exists because a rep stating a competitor's weakness directly reads as biased sales talk, while the same weakness surfacing through the prospect's own answer to a well-placed question is self-persuasion, which is far more durable than being told something by the person trying to win their business. The staleness flag matters mechanically because competitor intel embedded in a prompt has no way to self-verify against current reality — GPT-5.1 will confidently repeat whatever intel it's given as current fact unless explicitly instructed to flag its age, and stale pricing or feature claims stated with false confidence is a more damaging failure than an acknowledged gap in the battlecard's freshness.`,
     exampleOutput: `When this comes up: prospect says 'we're also looking at Northbeam' -> 'A lot of teams compare us on implementation speed specifically — we're typically live in under a week versus their six-week onboarding.' Where we honestly lose: their reporting customization is genuinely deeper for complex finance use cases -> acknowledge it, then pivot to how fast the team can start using what we do have. Landmine question: 'How long did their team say implementation would take before you'd see full reporting live?'`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -3469,12 +3537,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`negotiation-prep`, `procurement`, `deal-terms`, `sales-strategy`, `objection-handling`],
+    tags: [
+      `negotiation-prep`,
+      `procurement`,
+      `deal-terms`,
+      `sales-strategy`,
+      `objection-handling`,
+    ],
     whyItWorks: `Requiring the actual words to say, rather than a strategy summary, matters because the gap in most negotiation prep isn't knowing the right approach in the abstract, it's having the specific sentence ready under real-time pressure on a call — a rep who understands 'anchor high and concede slowly' in theory still freezes if they haven't rehearsed the literal phrasing, so the prompt is deliberately built to produce script, not theory. Ranking flexibility items and pairing each with a required reciprocal ask directly encodes a core negotiation principle that's easy to state and easy to forget live: an unreciprocated concession costs you the item and signals to the other side that pressure alone moves your position, training them to keep pushing on every remaining point with no cost to doing so — writing the reciprocal ask into the brief in advance means it's said in the moment rather than remembered after the call is over. The de-bundling instruction addresses a specific procurement tactic where several asks presented as one request create pressure to concede across the board rather than negotiate each on its own merits; a model without this instruction will typically just answer the bundled ask as posed, missing the tactical framing entirely. Wording the walk-away line for calm delivery rather than as an ultimatum, and naming the one condition that would move it, matters because a walk-away line delivered as a threat invites the other side to test it, while the same line delivered as a stated fact with a named condition for reconsideration reads as confidence rather than posturing — and having the condition named in advance prevents the rep from either caving too easily or refusing to move even when the actual situation has genuinely changed.`,
     exampleOutput: `Pushback: 'need 15% off to match a competitor quote' -> 'I hear that, and I'd want to see that quote to compare line items directly — in my experience those numbers often aren't apples to apples once implementation and support are factored in. What I can do is extend payment terms to net-45, which changes your cash position without cutting the contract value.' Walk-away line: 'I can't go below $76K annual regardless of term length — if budget is the hard constraint, the honest move is to talk about scope, not price.'`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -3539,12 +3611,16 @@ Write it in the voice I'd actually use, in whichever format ({{delivery_format}}
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`pricing-objection`, `discount-strategy`, `sales-negotiation`, `value-selling`, `deal-closing`],
+    tags: [
+      `pricing-objection`,
+      `discount-strategy`,
+      `sales-negotiation`,
+      `value-selling`,
+      `deal-closing`,
+    ],
     whyItWorks: `The instruction against opening with a feature-justification list corrects a very common default pattern: when a model is given a price objection and asked to help respond, it tends toward defending the price's worth first, because that's the most obvious surface-level interpretation of 'they think it costs too much' — but a prospect who explicitly asked for a discount already accepts the value proposition and is negotiating terms, not asking to be resold, so a features-first response answers the wrong question and reads as not having listened. Banning 'let me see what I can do' as a placeholder targets a specific weak habit in sales language: it's filler that sounds like movement without committing to anything, and prospects recognize it as such, which either invites them to push harder for specifics or reads as evasive — forcing a concrete answer, positive or negative, is more respected than a vague non-answer either way. The rule against presenting a discount and a value-add together as a bundle protects the entire strategic point of the exercise: the alternative value lever exists specifically to avoid discounting, so if the model blends the two into one offer, it accidentally produces the outcome the prompt was trying to prevent — a full price cut with something extra piled on top, costing more than the discount alone would have. Gating any real discount number behind an explicit statement of actual flexibility prevents the model from inventing a plausible-sounding number when none was given, which matters because a fabricated discount figure delivered confidently in a drafted response could get sent to a real prospect as if it were an authorized offer.`,
     exampleOutput: `Thanks for being direct about the budget number — I want to find a way to make this work without just cutting the price, since I think it undersells what you're getting. What I can do is include the premium support tier free for the first year, which is worth roughly what the 20% would have cost us, and keeps the full platform intact rather than trimming anything. If that works, I can get the paperwork updated and back to you by end of day tomorrow.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -3618,12 +3694,16 @@ A single outreach message (email or in-app message, matching {{delivery_channel}
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`upsell`, `usage-based-selling`, `customer-success`, `account-growth`, `expansion-revenue`],
+    tags: [
+      `upsell`,
+      `usage-based-selling`,
+      `customer-success`,
+      `account-growth`,
+      `expansion-revenue`,
+    ],
     whyItWorks: `Framing the usage ceiling as the customer's own signal rather than an account limit being imposed is the mechanism that keeps this from reading as a disguised sales pitch: a model asked to 'write an upsell message' without this framing instruction defaults to product-benefit language centered on what the vendor offers, when the actually persuasive angle here is what the trigger says about the customer's own success, which they experience as being seen rather than sold to. Tying the next tier's benefits specifically to the usage pattern they're already exhibiting, instead of listing the full feature set of the higher plan, matters because a generic upgrade pitch forces the reader to do the work of figuring out which of five listed benefits actually applies to them — leading with the one thing directly tied to what triggered the message removes that translation work and makes the relevance immediately obvious. The explicit ban on manufactured urgency addresses a known weak spot in AI-generated sales copy: models trained on marketing text default toward scarcity language ('upgrade now') because it's a common persuasive pattern in the training distribution, but applying it to a soft, consequence-free usage ceiling creates false pressure that a technically sophisticated buyer (the kind hitting API limits) will notice and discount, damaging trust in every future outreach from the same sender. Ending on a low-friction next step rather than a meeting request reflects that this conversation is already warm and expected given the trigger — asking for more commitment than the moment calls for is a common upsell mistake that turns a natural next step into something that feels like a bigger ask than it needs to be.`,
     exampleOutput: `Subject: You're close to your API limit again this month — noticed the pattern. Hi Jordan, I saw your team's hit about 95% of the monthly API call limit for three months running now, which tracks with rolling the integration out to two more teams. That's a good problem to have. The Scale plan raises that ceiling to 500K calls and adds priority rate limiting, so you wouldn't need to think about this again for a while. Want me to send over what that would look like, or happy to hop on a quick call if easier?`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -3690,12 +3770,16 @@ One outreach message, {{length_target}} words, plus a one-line internal note on 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`cross-sell`, `account-growth`, `existing-customer-outreach`, `product-adoption`, `relationship-selling`],
+    tags: [
+      `cross-sell`,
+      `account-growth`,
+      `existing-customer-outreach`,
+      `product-adoption`,
+      `relationship-selling`,
+    ],
     whyItWorks: `Requiring the problem to be stated in the customer's own likely language before the product is named addresses a structural weakness in AI-generated cross-sell copy: models will readily produce grammatically fluent product-benefit sentences, but a pitch that leads with the product name and works backward to a justification reads as exactly what it is — a pitch looking for a reason, rather than a reason that happens to have a pitch attached — and buyers who've seen enough vendor outreach can tell the difference on a skim. Requiring a specific, concrete detail about tenure or usage rather than a generic 'valued customer' line matters because that generic phrase is a well-known marker of mail-merge automation, and using it (or letting a model default to it, which it will if not told otherwise) signals to the reader that this wasn't actually written with their account in mind, undermining the entire premise of relationship-based cross-selling. The instruction to spell out an implied two-step logical connection rather than leaving it implicit exists because models tend to compress reasoning chains when writing persuasive copy — they'll happily state a conclusion ('this add-on would help you') without showing the connecting logic, but a reader who has to reconstruct that connection themselves is a reader who disengages before reaching the ask, since making an unstated inferential leap is real cognitive work that most recipients skimming an email won't do. The internal-note request at the end is a deliberate quality check: forcing the model to state its single strongest reasoning for fit, separate from the customer-facing copy, surfaces whether the pitch is actually grounded in something specific or whether it's dressed-up generic reasoning, before the message goes out.`,
     exampleOutput: `Hi Priya, I remember your ops lead asking on our last call whether there was a way to automate the manual data exports your team pulls together for board reporting each month. Our analytics add-on does exactly that — it would plug directly into the scheduling data you're already using and generate that board-ready report automatically, no manual export needed. Want me to put together a quick walkthrough of what it would look like with your actual data? Internal note: strongest fit reason — this directly answers a specific, recent, unprompted question from their own team, not an inferred need.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -3769,12 +3853,16 @@ One outreach message ({{delivery_channel}}), plus a separate one-line internal n
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`renewal-outreach`, `churn-prevention`, `customer-success`, `account-management`, `retention`],
+    tags: [
+      `renewal-outreach`,
+      `churn-prevention`,
+      `customer-success`,
+      `account-management`,
+      `retention`,
+    ],
     whyItWorks: `The instruction to acknowledge a real risk signal rather than open with contract logistics addresses a common failure of AI-generated renewal templates: asked to write 'renewal outreach' without more context, a model defaults to the generic register of a renewal reminder, because that's the more common pattern in its training data, even when the actual account context describes clear churn risk — the explicit acknowledgment requirement forces the output to match the real situation rather than the generic template shape the request superficially resembles. The instruction to ask rather than assume the cause matters because a model given a risk signal (dropped usage, a departed champion) will often jump straight to proposing a plausible-sounding fix, which risks solving the wrong problem entirely — usage dropping after a champion leaves could mean the replacement hasn't been onboarded, or it could mean the whole account is deprioritizing the tool internally, and these call for completely different responses, so the outreach needs to surface which one it actually is before offering a remedy. Making the renewal date secondary to the relationship question is a deliberate sequencing choice that changes how the message reads: leading with 'your contract renews in six weeks' to an account with visible risk signals reads as the vendor's self-interest driving the timing of the outreach, while leading with a genuine question about what changed and mentioning the date afterward reads as actually caring about the relationship independent of the contract clock — the same information in a different order produces a materially different impression on the reader. Requiring an internal note naming the specific risk signal needing an answer, separate from the customer-facing message, keeps the account owner honest about whether this renewal is actually safe rather than treating the act of sending outreach as having resolved the risk.`,
     exampleOutput: `Hi Marcus, I noticed things have looked a bit different on your end the past couple months — usage has dropped off some since Dana moved on, and I wanted to check in directly rather than assume what's going on. Is the team still finding the platform useful day-to-day, or has something shifted on your side? Once I understand where things stand, we can figure out the renewal together — no rush on that part yet. Internal note: the open risk signal that needs an answer before this renewal is safe is whether a successor to the departed champion has actually been assigned.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -3848,12 +3936,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`account-expansion`, `whitespace-mapping`, `account-planning`, `land-and-expand`, `enterprise-sales`],
+    tags: [
+      `account-expansion`,
+      `whitespace-mapping`,
+      `account-planning`,
+      `land-and-expand`,
+      `enterprise-sales`,
+    ],
     whyItWorks: `Distinguishing reachable from theoretical whitespace targets a specific weakness in AI-generated account plans: without that constraint, a model given an org chart and a list of unused departments will happily generate an expansion idea for every department, because more coverage looks more thorough, but a plan that treats an unreachable department (no champion, no adjacent use case, no known entry point) with the same weight as a genuinely reachable one produces a list of ideas rather than a plan anyone can actually execute against this quarter. Sequencing by dependency rather than listing targets in isolation reflects how account expansion actually works in practice: an internal referral from an existing champion fundamentally changes the sales motion needed compared to a cold approach into a department with no advocate, so treating both as equivalent next steps ignores the single biggest lever available in expansion selling, which is that an existing relationship inside the account is worth more than any external pitch. The explicit instruction to name the risk of moving on too many fronts at once counters a bias toward generating maximally ambitious plans: a model asked to build an 'expansion plan' will often produce an energetic, parallel-track plan because it reads as more valuable output, but overwhelming a single point of contact with multiple simultaneous asks is a known way to create internal confusion about deal ownership and actually slow expansion down rather than speed it up — naming this tradeoff explicitly keeps the plan honest about pace rather than optimizing for the appearance of ambition.`,
     exampleOutput: `Reachable whitespace: Clinical Ops — the scheduling team lead has a standing relationship with their director and has already mentioned interest informally; this is reachable now via warm introduction. Theoretical whitespace: Billing — no known contact, no clear adjacent use case yet; revisit once a use case or contact emerges. Sequenced plan: first, get the warm introduction to Clinical Ops's director before their fiscal planning window opens in ten weeks; only pursue Billing after Clinical Ops shows initial traction, to avoid running two unproven pitches into the same account simultaneously.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -3917,12 +4009,16 @@ One outreach email, under 150 words, with a subject line that references the spe
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`channel-partnerships`, `partner-recruitment`, `b2b-outreach`, `co-selling`, `partnership-strategy`],
+    tags: [
+      `channel-partnerships`,
+      `partner-recruitment`,
+      `b2b-outreach`,
+      `co-selling`,
+      `partnership-strategy`,
+    ],
     whyItWorks: `Leading with the specific customer-base overlap rather than the partnership program itself corrects the most common failure mode in AI-generated partner outreach: asked to write a 'partner recruitment email,' a model will default to describing the partner program's structure and benefits, because that's the most literal reading of the request, but the recipient of a cold partnership pitch is evaluating one thing first — does this sender actually understand my business — and a message that opens with the sender's program rather than the recipient's specific customer overlap fails that test in the first sentence. Requiring the upside stated concretely rather than as 'mutually beneficial partnership' targets a specific weakness where language models reach for exactly that phrase as a safe, generic placeholder when a request involves partnership framing — it sounds appropriately professional while committing to nothing specific, and a recipient who has seen dozens of partner pitches recognizes it instantly as boilerplate, whereas a concretely stated benefit ('a new margin line without building it yourselves') is specific enough to be evaluated and acted on. The instruction to name a real timing trigger, when one exists, matters because a partnership pitch that could plausibly have been sent on any random day reads as mass outreach even when it isn't, while a timing hook tied to something the recipient just did (announcing a new practice area) signals genuine attention and research. Keeping the first-touch ask deliberately small reflects how channel partnership decisions actually get made — they require internal evaluation on the partner's side that a single email cannot shortcut, so asking for a signed agreement or major commitment in a first touch is a mismatch between what's being asked and what's realistic to grant this early, and it's a mismatch that reads as either naive or presumptuous.`,
     exampleOutput: `Subject: Your manufacturing clients probably need this after ERP go-live. Hi Sam, congrats on the new manufacturing vertical practice — that's exactly the client base where we keep seeing a specific gap after ERP implementation: inventory forecasting that the ERP itself doesn't really handle well. A few consultancies we work with now offer our tool as a natural add-on to their implementation packages, picking up a new margin line without building anything themselves. Worth a short call to see if it's a fit for your practice?`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -3987,12 +4083,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`channel-conflict`, `deal-registration`, `partner-strategy`, `territory-management`, `sales-operations`],
+    tags: [
+      `channel-conflict`,
+      `deal-registration`,
+      `partner-strategy`,
+      `territory-management`,
+      `sales-operations`,
+    ],
     whyItWorks: `Constraining the model to work within stated political limits rather than proposing an ideal-world redesign addresses a common gap between what a model generates and what an organization can actually implement: asked open-endedly to 'fix channel conflict,' a model will often produce the theoretically cleanest answer (a full territory re-carve), but that answer is worthless if leadership has already ruled it out, and presenting it anyway wastes the reader's evaluation time on something dead on arrival — explicitly anchoring to the stated constraint forces a genuinely usable answer instead of a textbook one. The instruction against a registration rule loose enough for both sides to plausibly claim priority targets a specific, real weakness in how these rules get drafted: a rule like 'first to register wins' sounds decisive but is only as good as the tiebreaker for what counts as 'first' and what happens when both sides say they were first — a model asked to write a rule will often produce the surface-level version without the tiebreaker mechanics that make it actually enforceable, so the prompt forces the harder, more specific version. Requiring a worked numerical example for any margin-sharing formula matters because an abstract formula ('partners receive X% based on deal influence') is exactly the kind of language that different parties will each interpret in their own favor during an actual dispute — a concrete example applied to a real deal size exposes ambiguity in the formula before it becomes a live conflict, which is the whole point of designing the rule in the first place. Requiring one honestly-named edge case the rules still won't resolve prevents the output from reading as a complete solution when channel conflict is rarely fully solvable with policy alone — overstating completeness here just relocates the next dispute to a place nobody prepared for it.`,
     exampleOutput: `Rule: a partner-registered deal is protected only if registered before any direct rep has logged a first outbound touch to that account in the CRM, verified by timestamp, not by either side's recollection. Worked example: on a $120K deal where the partner sourced and ran the full sales cycle, the partner retains 100% margin credit; if direct sales assisted post-registration (e.g., an executive intro), a 15% credit split applies, worked out to $18K attributed to direct on that deal size. Edge case not cleanly resolved: a prospect who independently contacts direct sales after already being in a partner's registered pipeline, with no timestamp trail proving prior partner contact — this will still require manual adjudication.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -4054,12 +4154,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`sales-kpi`, `revenue-reporting`, `sales-leadership`, `board-reporting`, `performance-metrics`],
+    tags: [
+      `sales-kpi`,
+      `revenue-reporting`,
+      `sales-leadership`,
+      `board-reporting`,
+      `performance-metrics`,
+    ],
     whyItWorks: `Forcing a single lead metric rather than an even-handed tour through the dashboard corrects the default behavior of a model asked to 'summarize these KPIs': without a prioritization instruction, it will typically address each number roughly in the order given, giving the impression that everything matters equally, when the actual value of a KPI narrative is telling a busy reader what to focus on first — a report that treats a 6% win-rate miss with the same weight as an on-target deal size fails at its one real job. Requiring the driver explanation to be tied to something concrete, and explicitly banning vague catch-all explanations like 'market conditions,' targets a specific weak habit in AI-generated business writing: those phrases are grammatically safe and universally applicable, which is exactly why models default to them when asked to explain a number's movement without being given (or without being pushed to use) a specific causal hook — forcing a concrete tie prevents the narrative from sounding analytical while actually saying nothing. Checking whether an issue is already being addressed before writing about it as unaddressed matters because a KPI narrative that implies a known problem has no response in motion reads as either an oversight or a criticism of leadership's inaction, when the truth might be that a fix already shipped two weeks ago and just hasn't shown up in the lagging metric yet — getting this wrong changes how the whole report is received by the audience it's written for. Grouping on-target metrics into a single confirmation line, rather than narrating each individually, mirrors how the target audience actually wants to consume this: confirmation that nothing else needs their attention right now, stated once, not repeated per metric.`,
     exampleOutput: `Win rate is the metric most needing attention this period, at 24% against a 30% target, alongside sales cycle length stretching to 68 days from 52 last quarter. The likely driver is the extended negotiation stage specifically, where deals are stalling on proposal turnaround. Sales ops rolled out a new proposal template two weeks ago targeting exactly this stage; expect early impact visible in next month's cycle-length numbers. All other metrics — average deal size and quota attainment — are on or near target this period.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -4112,12 +4216,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`crm-hygiene`, `account-handoff`, `sales-operations`, `account-management`, `customer-context`],
+    tags: [
+      `crm-hygiene`,
+      `account-handoff`,
+      `sales-operations`,
+      `account-management`,
+      `customer-context`,
+    ],
     whyItWorks: `The explicit separation of durable relationship facts from stale one-off notes targets the core reason CRM handoffs fail: a multi-year activity log mixes permanently useful context (who the real decision-maker is) with time-bound noise (a scheduling note about a call that already happened), and a model asked to just 'summarize this CRM record' without that distinction will compress everything with roughly equal weight, producing a brief that's shorter than the original log but no more useful, because the new owner still can't tell what's still true from what expired months ago. The instruction to resolve contradictions by trusting the more recent note, while flagging the contradiction rather than silently picking a side, matters because CRM histories genuinely do contain outdated information alongside current information with no built-in way to tell which is which — a model that silently picks whichever note it processes as more prominent (often earlier, more detailed notes) risks handing the new owner a stale, contradicted fact stated with full confidence, which is worse than an acknowledged gap because it produces false confidence going into a first call. Requiring the handoff reason to be surfaced when materially relevant, rather than omitted for discretion, corrects a tendency for models to default toward blandly professional omissions when a topic seems sensitive (a rep leaving under complaint) — but a new account owner walking into a first call with an angry customer without knowing the previous rep departure was related to a complaint is set up to be blindsided, which is a real cost that outweighs the mild awkwardness of stating the context plainly. Excluding raw contact information keeps the brief focused on judgment and context, which is the part that actually requires synthesis, rather than padding it with data that's one click away in the CRM record itself.`,
     exampleOutput: `Who's who: Priya Shah, VP Operations, primary decision-maker, cares most about response time on support tickets. Account status: $65K ACV, renews in 4 months, no upsell motion in the past year. Relationship context: early relationship was strong, but a complaint was filed last month about a support delay — this is the more recent and more reliable signal, contradicting an earlier note calling the relationship 'very enthusiastic.' Handoff reason: relevant — the account sat unassigned for three weeks after the previous owner left, which likely contributed to the support complaint going unaddressed. Most important thing before the first call: acknowledge the recent support delay directly rather than opening with a generic introduction, since it's the freshest and most negative thing in their recent experience.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -4191,12 +4299,17 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT`],
-    tags: [`proposal-follow-up`, `sales-outreach`, `email-sequence`, `deal-stalled`, `b2b-sales`, `closing`],
+    tags: [
+      `proposal-follow-up`,
+      `sales-outreach`,
+      `email-sequence`,
+      `deal-stalled`,
+      `b2b-sales`,
+      `closing`,
+    ],
     whyItWorks: `Most proposal follow-ups fail for a structural reason that has nothing to do with wording: they carry zero new information, so a busy buyer correctly infers that ignoring it costs nothing. Forcing every message to reference a specific proposal detail, stakeholder concern, or prior answer removes the option to write a content-free nudge, which is the actual mechanism that gets a message read instead of archived — a model asked to be "polite but persistent" without that constraint will default to exactly the templated opener the rules explicitly ban, because that phrasing is statistically the most common pattern in its training data for this exact scenario. Naming the possibility that the real blocker is a second stakeholder (a CFO sign-off, a committee) rather than the original recipient matters because a follow-up sequence that only ever escalates pressure on the same person silently assumes single-threaded buying, and in the B2B context this template targets, deals stall at exactly this multi-stakeholder friction point far more often than at simple disinterest — addressing it directly gives the seller a second lever the sequence would otherwise miss entirely. The requirement to end with a genuine low-pressure exit is a deliberate counterweight to a model's tendency to keep escalating urgency across a sequence when asked for one; a dead deal that gets a clean "no" in message three is more valuable to a real pipeline than a fourth unanswered message, and stating this explicitly stops the AI from writing a slightly-more-desperate version of message two by default. Finally, banning invented urgency (fake deadlines, fabricated scarcity) keeps the output usable as-is rather than something the seller has to first strip of claims that aren't true, which is the difference between a draft and a liability.`,
     exampleOutput: `Message 1 — Subject: "Quick one on the BI export question" — Hi [Name], you'd asked whether the analytics plan exports cleanly to your BI tool during our call — wanted to confirm it does, via a direct connector, no manual CSV step. Figured that might be sitting as an open question while you're reviewing internally. Happy to send a two-line technical confirmation if that's useful for whoever needs to sign off. — Message 2 references the CFO approval threshold directly and offers a 15-minute call. — Message 3 closes with: "If now isn't the right time, no worries at all — just let me know and I'll close this out on my end so I'm not cluttering your inbox."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',

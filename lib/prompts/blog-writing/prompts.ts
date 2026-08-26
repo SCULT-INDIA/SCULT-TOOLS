@@ -1495,12 +1495,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`blog-outline`, `seo-content`, `content-strategy`, `competitive-analysis`, `content-planning`],
+    tags: [
+      `blog-outline`,
+      `seo-content`,
+      `content-strategy`,
+      `competitive-analysis`,
+      `content-planning`,
+    ],
     whyItWorks: `Most outline prompts ask the model to structure a topic in the abstract, which produces a generically competent skeleton because the model has no signal about what would actually beat the pages currently occupying the result — this prompt instead forces a two-pass structure: first infer the shared coverage baseline from the described competitors, then treat the unique angle as a deliberate addition against that baseline rather than the whole premise of the post. That ordering matters because GPT-5.1 left to its own devices will often lead with whatever angle feels most interesting rather than what's structurally required to be competitive, and a post that's creative but missing a subtopic every ranking page covers will underperform regardless of how good the unique section is. Naming the reader's intent stage explicitly changes section ordering rather than just tone — a comparison-stage reader abandons a post that opens with generic definitional framing, so forcing the model to sequence by intent stage rather than by natural writing order (background, then detail, then comparison) closes a common structural failure mode. The length-risk flag exists because outline generation and length estimation are two different judgments the model tends to conflate — asking for the flag as a separate, explicit step prevents an outline that looks complete on paper from silently implying a 4,000-word draft when the target was 2,000, which only surfaces once someone starts writing against it.`,
     exampleOutput: `Coverage gap closed: none of the ranking listicles address *why* async standups get abandoned, only which tool to pick. H1: Async Standup Tools for Remote Teams (And Why Most Teams Stop Using Them). H2: What actually breaks after week 3 — not a tool problem, a habit problem (H3: the three abandonment patterns from our 40-team study). H2: How to evaluate a tool against those failure modes, not just a features table...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1563,12 +1567,16 @@ Produce a week-by-week table: Week | Date | Topic | Type (launch/evergreen) | Ta
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`content-calendar`, `editorial-planning`, `content-strategy`, `team-workflow`, `product-launch`],
+    tags: [
+      `content-calendar`,
+      `editorial-planning`,
+      `content-strategy`,
+      `team-workflow`,
+      `product-launch`,
+    ],
     whyItWorks: `A generic content calendar prompt treats every slot as interchangeable and lets the model spread topics evenly across the month, which looks tidy but ignores the actual failure pattern teams hit around a launch: launch content is high-visibility and gets protected, so evergreen posts quietly slide and never get rescheduled because no one owns the decision to move them. Fixing the launch block's size first, before allocating evergreen slots, mirrors how a real editorial calendar has to be built under a hard constraint rather than optimized top-down — GPT-5.1 tends to distribute topics evenly by default unless explicitly told a subset of the calendar is fixed and non-negotiable, so naming that block explicitly prevents it from treating a launch follow-up post as just one more flexible item. Forcing a named owner per slot, checked against stated bandwidth rather than assigned mechanically, catches the common scheduling error of loading two demanding pieces onto the person who's already stretched thin because of the launch itself — a plan that's mathematically balanced across the team but ignores who's actually available that week isn't a usable calendar, it's a spreadsheet exercise. The Phase 3 risk check exists because asking a model to output a plan without asking it to also name what breaks first under pressure produces a calendar that looks complete but has no answer for the near-certain case where the launch runs long — naming the specific post likely to get bumped and its replacement slot in advance is the difference between a contingency and a post that silently disappears from the pipeline.`,
     exampleOutput: `Week 2 | Tue 8/11 | Launch announcement: Integrations Marketplace is live | Launch | — | Dev | — || Week 2 | Thu 8/13 | Migrating from spreadsheets to a PM tool | Evergreen | spreadsheet to project management migration | Priya | — || Week 3 | Tue 8/18 | Launch follow-up: answering the 5 questions we got most | Launch | — | Dev | at risk if launch support volume is high...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1639,12 +1647,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`editorial-brief`, `freelance-writing`, `content-ops`, `brand-voice`, `editorial-workflow`],
+    tags: [
+      `editorial-brief`,
+      `freelance-writing`,
+      `content-ops`,
+      `brand-voice`,
+      `editorial-workflow`,
+    ],
     whyItWorks: `A brief written for someone who already knows the brand can lean on shorthand — "keep it on-brand," "usual structure" — that a first-time freelancer has no way to decode, so the core mechanism here is forcing every instruction to be checkable by someone with zero prior context, which is a materially higher bar than writing a brief for an internal writer. Describing voice through concrete comparison points against a named reference post, rather than adjectives, matters because GPT-5.1 (and any writer, human or model) treats "conversational but professional" as satisfiable in dozens of contradictory ways, while "opens each section with a concrete scenario before the explanation" is a specific, matchable pattern that produces a draft closer to the reference on the first pass instead of the third revision. Naming approved sources explicitly and requiring flagged claims rather than silent substitutions closes a specific risk in freelance content ops: a writer working from a generic web search will often reach for the most SEO-visible source rather than the most accurate one, and a brand can end up publishing an outdated or simply wrong claim that a source the brand actually trusts would never have supported. The dedicated "what not to do" section exists because brief-writing has a known failure mode where the brief-writer assumes shared context that was never actually written down — asking the model to actively hunt for and resolve exactly that kind of ambiguity, rather than just format the fields it was given, is what prevents an internally coherent-looking brief from still landing ambiguously in the hands of someone outside the building.`,
     exampleOutput: `Topic & Angle: Reassure existing customers that our move to usage-based pricing is fair and easy to check, not a stealth price hike. Voice: Match 'Why we killed seat-based pricing' — short paragraphs (2-3 sentences), each section opens with a concrete customer scenario before the explanation, no exclamation points... Ambiguity resolved: your structure didn't specify whether 'how to check your bill' means a formula or a link to a calculator — I've assumed a link to the existing calculator tool, flag if that's wrong.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

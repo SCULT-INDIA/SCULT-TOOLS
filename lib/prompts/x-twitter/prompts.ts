@@ -64,7 +64,13 @@ Numbered tweets (1/, 2/, 3/...), each under 280 characters, with a one-line note
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`x-threads`, `twitter-growth`, `content-writing`, `hook-writing`, `social-media`],
+    tags: [
+      `x-threads`,
+      `twitter-growth`,
+      `content-writing`,
+      `hook-writing`,
+      `social-media`,
+    ],
     whyItWorks: `X's own engagement curve for threads drops off sharply after the first couple of tweets — most of the audience that will ever see tweet 4 already decided whether to keep reading by tweet 2, which is why the prompt forces the strongest proof point into tweets 3-4 instead of holding it for a big finish nobody reaches. Requiring the hook to state the specific contradicted belief rather than a vague teaser matters mechanically because GPT-5.1, left unconstrained, defaults to curiosity-gap openers ("here's what nobody tells you") that read as generic pattern-matches on viral-thread structure rather than a claim with actual content — a reader can't evaluate whether to care about an empty tease, but a specific contradicted-belief-plus-result hook gives them something to agree or disagree with immediately, which is what drives the tap to expand. The explicit instruction to flag unverifiable claims rather than invent supporting numbers exists because the model's fluent default is to generate a plausible-sounding statistic to make a weak beat feel stronger, and a fabricated number in a thread that gets any traction is the single fastest way to get quote-tweeted with a correction. Capping each tweet to one job (advance, evidence, or objection-handling) prevents the common failure mode of a thread that restates its own hook three different ways to hit a target length — which reads as padding to anyone scrolling and kills the reshare rate long before it kills the read-through rate.`,
     exampleOutput: `1/ We cut our onboarding sequence from 9 emails to 3. Activation went UP, not down.
 
@@ -73,9 +79,7 @@ Numbered tweets (1/, 2/, 3/...), each under 280 characters, with a one-line note
 3/ Same cohort size, 6 weeks, no other changes shipped: 34% -> 41% activation after the cut.
 
 [Note: verified against the 6-week cohort numbers given; no claim beyond that was invented.]`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -140,13 +144,17 @@ Main post (no link), then the reply (with a placeholder [LINK] where the URL goe
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`twitter-cta`, `link-strategy`, `x-algorithm`, `social-copywriting`, `engagement`],
+    tags: [
+      `twitter-cta`,
+      `link-strategy`,
+      `x-algorithm`,
+      `social-copywriting`,
+      `engagement`,
+    ],
     whyItWorks: `X's ranking system has consistently deprioritized posts carrying an external link in the body relative to link-free posts, because the platform is optimized to keep attention inside the app rather than route it out — putting the link in the first reply instead sidesteps that penalty while keeping the URL one tap away for anyone who reads the thread. The instruction to make the main post stand alone as complete content matters because GPT-5.1's default instinct for a "post plus reply" CTA structure is to write the main post as a bare teaser ("here's something you need to see"), which technically follows the link-placement rule but produces a post with nothing for the algorithm or a human reader to engage with on its own merits — a post that only works as bait for its reply gets neither the standalone engagement nor, often, the click, since readers who don't expand replies see nothing of value. Forcing the reply to state the concrete benefit rather than generic CTA phrasing addresses the specific pattern where "check it out here" reads as low-effort promotional copy that gets scrolled past even when the link cost nothing to click — a reader deciding whether to tap a link in a reply is making a much colder decision than one already reading an expanded thread, so the benefit has to be legible in that one line without any of the main post's context carrying over.`,
     exampleOutput: `Main: "Every founder I talk to guesses their churn cost instead of calculating it. The guess is almost always wrong, and usually wrong in the expensive direction."
 Reply: "Built a one-page calculator for this — plan tier + cancellation reason in, real dollar number out, no signup. [LINK]"`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -198,14 +206,18 @@ A numbered list of up to 10 hooks, each followed by its mechanism tag and one-li
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`viral-hooks`, `twitter-copywriting`, `x-growth`, `hook-writing`, `attention-design`],
+    tags: [
+      `viral-hooks`,
+      `twitter-copywriting`,
+      `x-growth`,
+      `hook-writing`,
+      `attention-design`,
+    ],
     whyItWorks: `Requiring at least six distinct hook mechanisms rather than letting the model free-associate ten openers matters because GPT-5.1's unconstrained default, when asked for hook variations, tends to converge on one or two high-frequency patterns from its training distribution (contrarian-claim framing and curiosity-gap framing especially) and produce nine reshuffles of those rather than genuinely different attention mechanisms — naming the mechanisms explicitly and requiring a minimum spread forces actual variety instead of superficial wording changes around the same idea. Tying every hook back to content that's actually in the drafted post closes the most damaging failure mode in hook-writing: a hook so much stronger than the payoff that the reader feels baited, which on X specifically tends to produce a reply calling out the mismatch rather than silent scrolling past, since the platform's reply-first culture actively rewards catching an overpromise. The mechanism tag with reasoning is not decoration — it forces the model to justify why a given hook fits the stated target reader rather than a generic audience, which surfaces the difference between a hook that's clever in the abstract and one that would actually make the specific person named in target_reader stop on their specific timeline, where a founder deciding on pricing page design reacts to a different signal than a general marketing audience would.`,
     exampleOutput: `1. "We removed 60% of our pricing page's feature list. Conversion went up 22%." — Mechanism: surprising number from the post's own content. Stops founders currently weighing feature-density decisions because the number contradicts the default instinct to list more, not less.
 2. "I used to think a pricing page's job was to prove we had every feature. It isn't." — Mechanism: confession of a former wrong belief. Lands with founders who currently hold that same belief right now.
 Top picks: #1 for its directness with a founder audience that responds to numbers over narrative; #2 for founders earlier in their own pricing-page debate who haven't seen a result yet.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -267,12 +279,16 @@ One draft post under 280 characters. If the honest version doesn't fit in one po
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`build-in-public`, `startup-updates`, `twitter-copywriting`, `founder-content`, `transparency`],
+    tags: [
+      `build-in-public`,
+      `startup-updates`,
+      `twitter-copywriting`,
+      `founder-content`,
+      `transparency`,
+    ],
     whyItWorks: `The build-in-public genre on X has become saturated with interchangeable momentum language precisely because most founders write the update from the vague feeling of the week rather than the specific fact of it, and GPT-5.1 asked for a generic "progress update" will default to that same register ("excited to share", "the journey continues") since it's the highest-frequency pattern for the genre in its training data — anchoring the prompt on a real number and requiring it to lead the post is what actually differentiates the output, because a concrete fact can't be interchanged with any other startup's update the way a mood statement can. The instruction to include a genuine setback in the same tone as the win, without spinning it into disguised positivity, targets a specific credibility problem: readers on X have seen enough "failing forward" framing to recognize it as a dodge, and a post that names a real loss (a churned customer, a missed number) plainly reads as more trustworthy than one that reflexively reframes every setback as growth, which paradoxically makes the wins in the same account's other posts more believable too. Capping the post to one beat (what happened, the number, what's next) rather than looping back to the broader mission statement matters because that reflexive vision-reminder is exactly the kind of padding that makes build-in-public updates blur together — a reader following an account across many weeks already knows the mission; what they're evaluating week to week is whether this specific update contains anything real, which is the one thing generic momentum language can never supply.`,
     exampleOutput: `"Shipped CSV export this week after it sat in the backlog two months. 12 of our 40 active users used it within 48 hours. Also lost our biggest customer — 18% of MRR — because we didn't have this sooner. Auditing every other churn-linked feature request now."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

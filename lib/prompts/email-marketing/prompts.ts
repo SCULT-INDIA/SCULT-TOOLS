@@ -60,12 +60,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`newsletter`, `email-copywriting`, `content-planning`, `editorial-voice`, `subject-lines`],
+    tags: [
+      `newsletter`,
+      `email-copywriting`,
+      `content-planning`,
+      `editorial-voice`,
+      `subject-lines`,
+    ],
     whyItWorks: `GPT-5.1 defaults to filling every named slot in a structure you give it, because a recurring template reads as an implicit demand for completeness — without an explicit instruction to cut a section, it will manufacture plausible-sounding content for "Community shoutout" or "One thing we're working on" even when your raw updates contain nothing for that slot, which is exactly how newsletters drift into feeling padded and interchangeable week over week. Naming the lead-story decision as a judgment call based on audience relevance, rather than defaulting to list order, matters because the model otherwise treats the first bullet you typed as the most important one by position alone, which is an accident of how you happened to jot notes down, not a reflection of what the audience cares about. Requiring one concrete detail per section closes GPT-5.1's tendency to smooth a vague input into confident, general-sounding prose — when a raw update is thin, the model's fluency will paper over that thinness with generic phrasing unless it's told that flagging the gap back to you is the correct move, not writing around it. The voice-sample matching works because without a concrete style anchor, GPT-5.1 reverts to a mid-register, slightly promotional newsletter voice that is recognizable across thousands of AI-drafted newsletters; pointing it at your own actual sentence rhythm forces it to pattern-match against your specific cadence instead of its own default. Finally, tying subject lines to what's actually inside this issue rather than a generic teaser formula prevents the common failure where the subject line could be reused verbatim on any week's issue, which is a sign it was generated from the newsletter's category rather than its content.`,
     exampleOutput: `Subject line options: "Bulk export is live (you asked in March)" / "This week: exports, a timezone fix, and a support update" / "Shipped: the export feature you've been waiting on". Lead story: Bulk export ships... Cut section: Community shoutout — no submissions came in this week, cutting rather than reusing an old one.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -132,12 +136,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`welcome-series`, `onboarding-email`, `lifecycle-marketing`, `email-sequence`, `customer-activation`],
+    tags: [
+      `welcome-series`,
+      `onboarding-email`,
+      `lifecycle-marketing`,
+      `email-sequence`,
+      `customer-activation`,
+    ],
     whyItWorks: `Separating the planning phase from the drafting phase forces GPT-5.1 to commit to a jobs-to-be-done map before it starts generating persuasive copy, which matters because the model's default behavior when asked directly for "welcome emails" is to reach for a generic five-email arc — welcome, feature highlight, social proof, urgency, discount — regardless of what the actual new user needs to do first; making it plan the sequence of real jobs first, in a separate step it has to commit to in writing, anchors the later copy to your actual product's activation path instead of a template it has seen thousands of times in training data. Flagging the drop-off point as load-bearing changes what the model optimizes for in that specific email — without that instruction it treats every email in the sequence with roughly equal weight, when in reality one email is doing the real work of preventing the churn you actually measured. The rule against mentioning the eventual ask in email one addresses GPT-5.1's tendency to front-load a call to action because it was told there's an eventual ask at all — language models weight information given anywhere in a prompt as relevant to the immediate output unless explicitly told to withhold it until a condition (delivering value first) has been met in the sequence itself. Banning repeated identical CTAs in consecutive emails counters a specific failure mode where the model treats "remind them again" as sufficient sequencing logic, rather than treating an unclicked link as a signal that the previous ask's framing didn't land and needs to change, not just repeat.`,
     exampleOutput: `Email 1 (Day 0): "Here's what your first project should look like" — orientation only, no ask. Email 3 (Day 4, flagged as load-bearing, sits right at the drop-off point): "The teams that stick around all did this one thing by day 4" — invites creating a second project, still no upgrade ask. Email 5 (Day 12): first mention of upgrading, framed against the two wins already delivered.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -198,12 +206,16 @@ For each email: send timing relative to the last email, subject line, body copy,
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`nurture-sequence`, `lead-reengagement`, `b2b-email`, `sales-follow-up`, `email-cadence`],
+    tags: [
+      `nurture-sequence`,
+      `lead-reengagement`,
+      `b2b-email`,
+      `sales-follow-up`,
+      `email-cadence`,
+    ],
     whyItWorks: `GPT-5.1 tends to treat a stated business goal (getting a reply, closing a deal) as the organizing principle of everything it writes toward that goal, which is why nurture sequences generated without explicit constraints escalate in pushiness by the third email even when told to be soft-touch — the model reads persistence as helpfulness toward your stated objective. Requiring standalone value before the ask, in that order, structurally limits how much of each email can be pitch, because the model has to produce something substantive first and is then instructed to keep the ask to a single low-effort line, which prevents the gradual reversion toward a harder sell that happens when the value and the ask are left to blend together across a sequence. Naming a distinct reason for each email and requiring the model to admit when it can't find one addresses a specific pattern-completion failure: without that check, GPT-5.1 will generate four emails that differ in surface wording but repeat the same underlying pitch, because it's pattern-matching to "nurture sequence" as a genre with a known shape rather than reasoning about whether this specific lead actually has four distinct reasons to hear from you again. The break-up email instruction — that it must be honestly final, not a hidden sequence extension — counters the model's tendency to hedge every closing statement, since GPT-5.1 will otherwise soften "this is my last email" with language that keeps the door ajar in a way that undermines the whole point of a genuine break-up email, which only works as a re-engagement tactic if the recipient believes it's actually final.`,
     exampleOutput: `Email 2 (Day 10): leads with a short case study from a similar-sized logistics client who consolidated three spreadsheets into one weekly report, one line acknowledging the pricing email went unanswered, ends with "happy to send the template we built for them if useful — no need to reply otherwise."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -264,12 +276,16 @@ For each email: send timing after abandonment, subject line, body copy referenci
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`abandoned-cart`, `ecommerce-email`, `cart-recovery`, `discount-strategy`, `objection-handling`],
+    tags: [
+      `abandoned-cart`,
+      `ecommerce-email`,
+      `cart-recovery`,
+      `discount-strategy`,
+      `objection-handling`,
+    ],
     whyItWorks: `GPT-5.1's training data for abandoned cart emails is dominated by examples that lead with a discount, because that's the most common pattern across public ecommerce email templates — left unconstrained, the model reaches for "here's 10% off to come back" as the default opener even when no discount policy has been given, simply because that's the statistically dominant shape of the genre it's pattern-matching against. Forcing it to check the discount policy before writing anything, and explicitly forbidding invented discount tiers, closes that gap by making policy compliance a precondition of drafting rather than something checked after the fact, when the model has already anchored on a discount-first structure that's harder to walk back cleanly. Keying the first email to the specific stated objection rather than a generic reminder matters because a real abandonment reason (visible shipping cost, sizing doubt, simple distraction) calls for a genuinely different first move, and GPT-5.1 defaults to a one-size-fits-all "you left something in your cart!" template unless it's given a specific mechanism of abandonment to write against — showing shipping cost transparently is a structurally different email than reassuring about sizing, and collapsing both into the same template wastes the one email most likely to still catch someone before they've fully moved on. Requiring actual cart contents in every email, not a vague gesture at "your items," counters the model's tendency to write generically reusable copy that could apply to any cart, which is measurably less effective at prompting the specific memory of what someone was about to buy. The scarcity-fabrication ban addresses a compliance-relevant failure mode: GPT-5.1 will readily generate "only 2 left" language as a stock urgency device unless told plainly that it must be factually grounded in what was actually provided.`,
     exampleOutput: `Email 1 (2hrs): "Your size 10s are still here" — shows shoes + insoles with images, no discount, no urgency, just a clear "complete your order" link plus a one-line note that shipping is a flat $14, addressing the objection directly.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -333,12 +349,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`product-launch`, `launch-email`, `email-copywriting`, `feature-announcement`, `saas-marketing`],
+    tags: [
+      `product-launch`,
+      `launch-email`,
+      `email-copywriting`,
+      `feature-announcement`,
+      `saas-marketing`,
+    ],
     whyItWorks: `GPT-5.1's default register for "write a launch email" pulls heavily from a training-data cluster of generic SaaS launch copy — "We're thrilled to announce," "game-changing," "the wait is over" — because that phrasing appears across thousands of real launch emails regardless of what actually launched, making it the model's path of least resistance unless explicitly blocked. Forcing the one-sentence "what changed yesterday versus today" statement as a mandatory first step, with permission to ask for a missing specific rather than writing around the gap, prevents the model from doing what it does by default when given thin launch details: smoothing an underspecified feature description into confident, generic excitement that describes the launch category rather than this specific launch. That one sentence, required to lead the email, structurally displaces the stock opener because there's no room left for both. Requiring the known limitation to appear plainly, not hedged or omitted, counters GPT-5.1's tendency toward maximally positive framing in promotional copy — left to its own judgment about tone, the model treats omitting a limitation as consistent with an upbeat launch voice, when in practice silently omitting it just moves the disappointment to the moment a customer discovers the gap themselves, at a worse time than in the announcement. Naming the recipient segment's distinguishing trait and requiring the copy to reflect it addresses the model's default fallback to "valued customer" framing whenever a segment is named generically — the specific trait (existing feature usage, prior request) is exactly the detail that makes a launch email read as relevant rather than mass-blasted, and GPT-5.1 will not surface that distinction on its own unless told the trait exists and must show up in the copy.`,
     exampleOutput: `What changed: "Teams on this plan can now edit the same report together in real time instead of emailing screenshots back and forth." Subject: "No more screenshot-emailing your report edits". Limitation line: "Heads up — this needs an active connection for now; offline editing isn't supported yet."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -401,12 +421,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`promo-email`, `discount-email`, `email-copywriting`, `urgency-messaging`, `ecommerce-marketing`],
+    tags: [
+      `promo-email`,
+      `discount-email`,
+      `email-copywriting`,
+      `urgency-messaging`,
+      `ecommerce-marketing`,
+    ],
     whyItWorks: `GPT-5.1 treats a promotional email prompt as license to reach for its full default toolkit of urgency devices — countdown framing, implied scarcity, social-proof numbers — because those are the dominant surface features of promotional copy in its training distribution, and the model has no independent way to know which of those devices are actually true for your offer unless told explicitly which ones are and aren't. The instruction to check whether the stated rationale actually justifies the offer, and to fall back to neutral framing when it doesn't, matters because the model will otherwise happily manufacture a plausible-sounding reason ("we're so excited to offer you this deal") that reads as marketing filler with no real justification behind it, which is a distinct problem from lying about numbers but still degrades trust the same way generic hype does. Matching urgency intensity to actual time remaining directly counters a specific miscalibration: GPT-5.1's default promotional register is uniformly urgent regardless of whether the deal closes in six hours or two weeks, because "promo email" as a genre pulls toward maximum urgency by default rather than urgency proportional to the real deadline, and only an explicit instruction to calibrate against the stated expiry corrects that. The ban on fabricated countdowns and redemption counts addresses a compliance-relevant failure mode — GPT-5.1 will generate a specific-sounding number ("127 people have already claimed this") as a stock social-proof device even with no such number provided, because specific numbers read as more persuasive than vague ones and the model optimizes toward persuasiveness unless explicitly blocked from inventing the specificity itself. Requiring the margin/stacking constraint to be stated plainly in the copy also does real operational work: it's the difference between an email that generates support tickets from confused customers and one that heads the question off before it's asked.`,
     exampleOutput: `Subject: "20% off outdoor gear through Sunday". Body opens: "You picked up a tent from us this year — here's 20% off anything in outdoor gear through Sunday at midnight (code CAMP20). Note: this can't be combined with your loyalty discount, so it's one or the other, whichever saves you more."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

@@ -279,6 +279,7 @@ export function FeedbackButton({
                   className="mt-3.5 flex items-center gap-1"
                 >
                   {([1, 2, 3, 4, 5] as const).map((n) => (
+                    // biome-ignore lint/a11y/useSemanticElements: the WAI-ARIA radiogroup pattern on buttons is deliberate — a native <input type="radio"> can't be deselected by re-clicking, which this star rating supports (click the same star to clear it).
                     <button
                       key={n}
                       type="button"

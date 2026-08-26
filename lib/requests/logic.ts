@@ -77,9 +77,12 @@ export function validateRequest(
   if (title.length < REQUEST_TITLE_MIN) return { error: 'title-too-short' }
   if (title.length > REQUEST_TITLE_MAX) return { error: 'title-too-long' }
 
-  const description = typeof input.description === 'string' ? input.description.trim() : ''
-  if (description.length < REQUEST_DESCRIPTION_MIN) return { error: 'description-too-short' }
-  if (description.length > REQUEST_DESCRIPTION_MAX) return { error: 'description-too-long' }
+  const description =
+    typeof input.description === 'string' ? input.description.trim() : ''
+  if (description.length < REQUEST_DESCRIPTION_MIN)
+    return { error: 'description-too-short' }
+  if (description.length > REQUEST_DESCRIPTION_MAX)
+    return { error: 'description-too-long' }
 
   let email: string | undefined
   if (typeof input.email === 'string' && input.email.trim() !== '') {
@@ -98,7 +101,8 @@ export function validateRequest(
       ? input.name.trim().slice(0, 200)
       : undefined
 
-  const pageUrl = typeof input.pageUrl === 'string' ? input.pageUrl.trim().slice(0, 500) : ''
+  const pageUrl =
+    typeof input.pageUrl === 'string' ? input.pageUrl.trim().slice(0, 500) : ''
 
   const visitorId =
     typeof input.visitorId === 'string' && input.visitorId.trim() !== ''

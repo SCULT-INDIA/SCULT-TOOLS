@@ -64,9 +64,7 @@ A table: Screen | Issue | Why it plausibly causes drop-off | Estimated impact | 
     tags: [`ux-audit`, `conversion-optimization`, `user-flow`, `saas`, `prioritization`],
     whyItWorks: `GPT-5.1's default behavior when asked to "audit a UX flow" without constraints is to reach for a stock heuristics list (Nielsen's ten, or a generic accessibility-and-clarity checklist) and apply it uniformly to every screen, because that's the highest-probability completion for the bare instruction and it doesn't require the model to reason about what's actually causing abandonment on this specific flow. Anchoring Phase 2 to real drop-off data forces a different mode: instead of pattern-matching to generic best practices, the model has to work backward from an observed number and generate causal hypotheses that specifically explain that number, which produces genuinely diagnostic reasoning rather than a checklist recitation. Explicitly permitting "no data given, flag it" matters because otherwise the model will confidently rank issues by impact using invented percentages, which reads as authoritative but is fabricated; naming the absence of data is more useful than a confident-sounding guess dressed up as analysis. The impact-times-effort prioritization instruction counters a specific failure mode where visually obvious issues (spacing, color contrast, copy tone) get ranked above invisible ones (a validation rule that silently rejects valid input) simply because they're easier for a language model to describe vividly — forcing an explicit effort/impact axis breaks that bias toward describability over actual severity. The table-plus-two-sentence-summary format also matters practically: a bare table lets a stakeholder skim priorities, while the forced two-sentence takeaway prevents the audit from ending as an undifferentiated list where every row reads as equally urgent.`,
     exampleOutput: `Screen 3 | All 6 fields marked required, including 'company size' and 'phone number' | Users evaluating the tool solo have no company-size answer ready and abandon rather than guess | High (62% drop from data) | Low (make 4 of 6 fields optional) | P1. Screen 4 | Empty workspace, no first action suggested | User doesn't know what to do next and closes the tab | Medium | Low | P2. Summary: making the four non-essential fields on screen 3 optional is the single highest-leverage fix — it directly targets the only screen with measured drop-off data and requires no new design work.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -125,12 +123,16 @@ Functional risks (numbered, each with: what's confusing, why, and one fix that r
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ui-critique`, `design-review`, `dev-handoff`, `usability`, `screenshot-analysis`],
+    tags: [
+      `ui-critique`,
+      `design-review`,
+      `dev-handoff`,
+      `usability`,
+      `screenshot-analysis`,
+    ],
     whyItWorks: `A design critique that doesn't explicitly separate functional risk from preference tends to produce a wall of undifferentiated feedback where a genuine usability bug (a disabled-looking button that's actually clickable) sits next to a subjective opinion (this shade of blue feels cold) with equal apparent weight — this is the single most common reason design reviews stall handoff, because engineers can't tell which items are blocking and which are optional. Forcing the model to name the bucket for every item, and to justify functional-risk claims with a specific mechanism (what the user would think versus what's true, and why the gap exists) rather than an assertion, closes off the failure mode where GPT-5.1 dresses up a stylistic preference as a usability finding by attaching plausible-sounding jargon like "cognitive load" or "visual hierarchy" to what is actually just taste — the mechanism requirement makes that dressing-up visible because a real functional claim has to specify what gets misread and why, while a fake one has nowhere to go beyond the label. Explicitly respecting stated constraints, and requiring the model to say so when a good fix would violate one rather than silently proposing it anyway, matters because unconstrained redesign suggestions are the most common way a critique becomes unusable to the team receiving it — a suggestion that ignores a hard legal or technical constraint has to be re-filtered by a human before anything in the critique is actionable, defeating the point of asking for a scoped review in the first place.`,
     exampleOutput: `Functional risks: 1. The 'Edit address' link uses the same gray as disabled text, so a first-time user may believe it's inactive and not attempt to change a wrong address before paying — increase contrast to match the other tappable links, no layout change needed. Preference notes (skippable): item thumbnails could be slightly larger; total price uses a different font weight than the rest of the summary.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -198,12 +200,16 @@ A short reach-zone map (natural / stretch / unreachable, with elements listed un
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`mobile-ux`, `thumb-zone`, `touch-targets`, `responsive-design`, `usability-review`],
+    tags: [
+      `mobile-ux`,
+      `thumb-zone`,
+      `touch-targets`,
+      `responsive-design`,
+      `usability-review`,
+    ],
     whyItWorks: `GPT-5.1, asked for a generic "mobile UX review," defaults to a well-worn list of font-size and tap-target advice because that's the most statistically common completion for the phrase "mobile UX" in its training distribution — it's not wrong, but it's also not specific to the actual failure mode of one-handed use, which is about geometric reach, not element size alone. Forcing an explicit reach-zone map before any critique changes the reasoning order: the model has to first commit to a spatial model of where a thumb can and can't comfortably go on the smallest device in scope, and only then evaluate the given layout against that model, which produces genuinely spatial reasoning instead of a recycled checklist. Prioritizing the two specific reach conflicts — primary action out of reach, destructive action in easy reach — matters because these are the two mobile ergonomics failures with the highest real-world cost (a stretch-zone primary action increases task abandonment and one-handed drop errors, while an easy-reach destructive action increases accidental-tap incidents) and a model given an open-ended "what's wrong" prompt will often bury these under less consequential spacing notes. Explicitly stating the right-handed assumption and offering the left-handed mirror as a one-line addendum rather than silently picking one handedness matters because roughly a tenth of users are left-handed and a review that quietly assumes right-handed use without saying so produces recommendations that are wrong for those users without anyone noticing the review made that assumption at all.`,
     exampleOutput: `Reach zones (right-handed, iPhone SE): Natural — bottom third of screen, floating '+ Add card' button. Stretch — middle list area. Unreachable — top nav bar, both icons. Reach conflict #1: the swipe-to-delete icon appears in the natural zone on the left edge of a list row, meaning an accidental one-handed swipe during scrolling could trigger a destructive action; add a confirmation step or move delete behind an explicit menu instead of a swipe gesture.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -256,9 +262,7 @@ A table: Severity (Critical / Serious / Moderate / Low) | Issue | Affected users
     tags: [`accessibility`, `wcag`, `a11y-audit`, `screen-reader`, `engineering-triage`],
     whyItWorks: `A WCAG audit prompt without a severity framework tends to produce a flat list of citation numbers ordered by whichever success criteria the model happens to recall first, which reads as thorough but gives an engineering team no way to decide what to fix this sprint versus next quarter — severity has to be forced explicitly because the WCAG spec itself doesn't rank criteria by real-world user impact, it organizes them by conformance level (A/AA/AAA), which is a compliance concept, not a triage concept, and the two frequently diverge (a Level A keyboard-trap issue that blocks an entire flow is far more severe in practice than a Level AA contrast nuance on secondary text). Requiring the model to distinguish "can't confirm from this description" from a stated finding directly counters GPT-5.1's tendency to assert a specific violation (like a contrast ratio) with false precision when given only a text description and no actual computed color values or rendered DOM — asking for that explicit uncertainty flag produces a genuinely more trustworthy audit than one that states every finding with equal unwarranted confidence. The instruction to frame findings as a technical audit rather than compliance sign-off matters because a WCAG success-criterion citation is a technical fact, but whether a product satisfies a specific accessibility law (ADA, EN 301 549, or otherwise) is a legal determination outside what any text-based review can establish, and conflating the two would misrepresent an engineering triage document as something with legal weight it doesn't have.`,
     exampleOutput: `Critical | Date cells are non-focusable spans with only onClick handlers, no keyboard access at all | Keyboard-only and screen-reader users cannot select any date | WCAG 2.1.1 (Keyboard) | Convert cells to native <button> elements or add tabindex and key handlers for Enter/Space/arrow-key navigation. Can't confirm from this description: actual rendered contrast ratio of the selected-date highlight color — check with a contrast-checking tool against the real hex values.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -326,12 +330,16 @@ Section list with one-line justification for inclusion, then the full section-by
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`landing-page`, `wireframe`, `conversion-design`, `cta-placement`, `information-architecture`],
+    tags: [
+      `landing-page`,
+      `wireframe`,
+      `conversion-design`,
+      `cta-placement`,
+      `information-architecture`,
+    ],
     whyItWorks: `GPT-5.1's default completion for "wireframe a landing page" is a memorized template shape (hero, three feature cards, testimonials, pricing, final CTA, footer) because that structure appears constantly in its training data as the canonical landing-page pattern — it will fill that template in competently regardless of whether every section is actually earning its place for this specific visitor, which is why forcing a Phase 1 decision about the section list before any layout work is the load-bearing instruction here: it makes the model justify inclusion against the traffic source and objections rather than defaulting to the template's full section count. Requiring each section to resolve a named objection or move toward the target action, and explicitly permitting a section to be cut if it doesn't, breaks the bias toward padding a landing page with conventional sections (testimonials, social proof) that exist because they're common, not because they're needed for this particular cold-versus-warm traffic scenario. Using bracketed placeholder descriptions instead of real headline copy keeps the wireframe honest about what it's actually specifying — structure and information sequencing — rather than letting persuasive copywriting substitute for a genuine structural decision, which is a common failure mode where a wireframe prompt drifts into producing finished marketing copy that looks impressive but hasn't actually reasoned about layout. The CTA placement audit as a separate final phase matters because CTA repetition down a long page is only effective when each instance is justified by what's just been resolved above it — auditing placements after the fact catches a CTA repeated out of habit rather than because the visitor has just been given a new reason to act.`,
     exampleOutput: `Section list: Hero (justify: visitor already searched the exact need, so hero can name the ADHD-specific angle immediately) / How it adapts to ADHD (justify: addresses the 'just generic habit tracking' objection) / What happens after day 14 (justify: addresses the abandonment fear directly) / CTA. No testimonials section — search-ad traffic with high intent doesn't need social proof before the first CTA, only after the second objection is resolved.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -399,12 +407,16 @@ The three-tier ranked list with justifications, then the text wireframe, then th
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`dashboard-design`, `wireframe`, `information-hierarchy`, `data-visualization`, `ux-strategy`],
+    tags: [
+      `dashboard-design`,
+      `wireframe`,
+      `information-hierarchy`,
+      `data-visualization`,
+      `ux-strategy`,
+    ],
     whyItWorks: `Asked to wireframe a dashboard without a hierarchy constraint, GPT-5.1 tends to produce a uniform grid where every available data point gets roughly equal visual weight, because a flat list of metrics has no inherent ranking signal in the prompt and the model has no reason to privilege one box over another — the three-tier sort is the mechanism that forces an actual prioritization decision, and capping the Glance tier at two or three items is what prevents the model from simply relabeling most of the grid as "glance" and reproducing the same undifferentiated layout under a new name. Anchoring every tier placement to the specific user and trigger, rather than to which data point is most visually interesting to chart, counters a real bias in language models toward foregrounding whatever data is easiest to render attractively (a pie chart, a trend line) even when it isn't what the stated user actually needs first — a ticket-backlog lead opening the dashboard to catch an SLA breach doesn't need agent workload displayed as prominently as the count of tickets past SLA, even though a workload breakdown might make for a more visually rich widget. The follow-up-action validation step exists because a dashboard's job doesn't end at display — it's supposed to lead into an action — and a wireframe that nails information hierarchy but leaves the most common next action two clicks deep has still failed at its actual purpose; checking for this explicitly, as a distinct final step rather than hoping it falls out naturally from the layout, is what catches the gap before it reaches a designer.`,
     exampleOutput: `Glance tier: Tickets past SLA (this is the number that determines whether reassignment is needed today), Open ticket count. Scan tier: agent-by-agent load, average response time. Click-through: weekly trend chart, satisfaction score, tag breakdown. Layout: top row is one large SLA-breach counter with a red/green state indicator, next to open-ticket total; second row shows a compact per-agent load bar; a 'View trends' tab sits in the top-right for click-through items. Follow-up validation: reassigning an overloaded agent's tickets isn't reachable from the main view — add a one-click 'Reassign' action directly on each row of the per-agent load bar.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -456,12 +468,16 @@ A numbered step list for the happy path first, then for each step, an indented l
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`user-flow`, `flow-mapping`, `edge-cases`, `mobile-app-design`, `error-states`],
+    tags: [
+      `user-flow`,
+      `flow-mapping`,
+      `edge-cases`,
+      `mobile-app-design`,
+      `error-states`,
+    ],
     whyItWorks: `When asked to map a flow without a forcing function, GPT-5.1 defaults to narrating the happy path in prose because that's the shortest, most coherent completion of "describe this flow" — error and denial states get mentioned in passing, if at all, since nothing in an open-ended request obligates the model to enumerate them systematically. Requiring at least one plausible failure per step, tied specifically to the listed system dependencies, converts this from a narrative task into an enumeration task, which changes the completion strategy entirely: the model now has to check each step against the dependency list rather than just continuing the story forward, which is what actually surfaces the permission-denial and timeout branches that a prose description would skip past. The three-terminal-state requirement, and specifically the instruction to flag genuine dead ends rather than resolve everything into a recovery path, matters because models under an implicit pressure to produce a "complete-looking" diagram will tend to invent a plausible-sounding recovery for every branch even when a real dead end exists in the underlying system — asking explicitly for honesty about dead ends removes the incentive to paper over an actual design gap, which is exactly the kind of gap that ships silently in a real app because no one ever forced it into a diagram where its absence would be visible. The per-entry-point differencing step exists because flow diagrams are frequently drawn once for the most common entry point and then silently assumed to generalize, when a deep-link entry with no established session is a materially different flow than one reached from inside an already-authenticated app, and that difference has real consequences (a login-wall interruption mid-flow) that only surface if asked for directly.`,
     exampleOutput: `Step 3: Take/select photo. Branch — camera permission denied: recovery, route to a screen explaining why the permission is needed with a 'try again' or 'choose from library instead' option. Branch — photo library empty: graceful exit, let the user skip photo upload and return to onboarding without a photo, flagged for later. Design gaps found: if upload succeeds but the crop-confirm screen crashes before saving, there's currently no path back to the photo — this is a dead end and needs a retry mechanism.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -514,12 +530,16 @@ A short persona with: a one-line summary of who this is and their core goal, the
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`user-persona`, `ux-research`, `research-synthesis`, `design-decisions`, `user-centered-design`],
+    tags: [
+      `user-persona`,
+      `ux-research`,
+      `research-synthesis`,
+      `design-decisions`,
+      `user-centered-design`,
+    ],
     whyItWorks: `Persona-generation prompts without a research-grounding constraint reliably produce GPT-5.1's most-memorized version of the artifact type — a name, an age, a stock-photo description, a quote, and a bulleted list of goals and frustrations that read as complete because they match the shape of a thousand persona templates in its training data, regardless of whether any of it is actually supported by real research; the model isn't lying so much as defaulting to the template's expected fields when the real notes don't cover them. Requiring an evidence citation for every trait and an explicit design-implication statement forces the model to check each candidate trait against two things it would otherwise skip: does the source material actually support this, and does it matter for the decision at hand — a trait that fails either check gets dropped, which is what prevents the persona from filling in with plausible-but-fabricated demographic filler. The strong-versus-inferred confidence labeling matters because research synthesis genuinely does contain a mix of well-triangulated findings (three of five interviewees said the same thing) and thin signals (one offhand comment), and collapsing both into equally confident-sounding bullet points misrepresents the actual state of the evidence to whoever uses the persona downstream to justify a decision. The instruction to flag a small sample size and the possibility of multiple distinct personas addresses a structural risk in persona synthesis specifically: averaging two genuinely different user types into one blended description produces a persona that doesn't actually describe anyone, which is a more damaging output than admitting the research points to a segment split that needs a second persona or more data before either can be trusted.`,
     exampleOutput: `Core goal: get monthly expense reconciliation done quickly without giving up a manual check on accuracy. Trait: distrusts full automation for categorization | Evidence: 1 of 5 interviewees stated this explicitly | Confidence: inferred | Implication: a one-tap auto-approve feature should default to a review step visible before submission, not silent auto-approval. Sample-size note: based on 5 interviews only — treat this as a hypothesis to validate with a larger survey before committing to the auto-approve default.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -578,12 +598,16 @@ The script in the four sections above, each question numbered, with a one-line n
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`jtbd`, `user-interviews`, `research-methodology`, `switching-behavior`, `qualitative-research`],
+    tags: [
+      `jtbd`,
+      `user-interviews`,
+      `research-methodology`,
+      `switching-behavior`,
+      `qualitative-research`,
+    ],
     whyItWorks: `A JTBD interview script written without an explicit leading-language check tends to smuggle the interviewer's own hypothesis into the question wording — GPT-5.1 given only "write a JTBD script about why customers switched" will often produce questions shaped by whatever context clues it's given about the product, phrasing options as a menu ("was it price or features") that limits the interviewee to categories the researcher already had in mind, which defeats the entire premise of JTBD interviewing: finding the causal story the researcher didn't already assume. Building the script around timeline reconstruction rather than opening with "why did you switch" matters mechanically because a direct why-question invites a post-hoc, socially acceptable justification ("it had better features") rather than the actual messy sequence of events, while reconstructing the timeline forward from before the person even considered switching surfaces the real struggle moment, which is frequently different from the tidy reason a person would give if asked directly. Splitting the four forces of progress (push, pull, anxiety, habit) into separate questions rather than one blended question matters because these are genuinely distinct psychological forces in switching behavior, and a blended question lets an interviewee answer with whichever force is easiest to articulate, silently dropping the other three from the data entirely. The disconfirming-evidence question specifically counters confirmation bias in the researcher, not just the interviewee — a script built entirely from someone's existing hypothesis, however well-intentioned, will structurally tend to surface answers that confirm that hypothesis unless at least one question is deliberately built to have a real chance of contradicting it.`,
     exampleOutput: `Section 1, Q2: 'Take me back to a normal week before you started looking at other options — what did tracking inventory across locations actually look like day to day?' (Rewritten: original draft asked 'wasn't it hard to keep the spreadsheet updated across locations,' which presupposed the difficulty; the neutral version lets the interviewee describe the actual workflow without confirming a specific pain point in advance.)`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -637,12 +661,16 @@ For each story: the story text, then a short INVEST check as a bullet under each
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`user-stories`, `agile`, `invest-criteria`, `backlog-grooming`, `product-management`],
+    tags: [
+      `user-stories`,
+      `agile`,
+      `invest-criteria`,
+      `backlog-grooming`,
+      `product-management`,
+    ],
     whyItWorks: `GPT-5.1 asked to "write user stories" without a scoping framework will reliably produce grammatically correct As-a/I-want/So-that sentences that restate the feature description almost verbatim, because the template itself doesn't force any decomposition — the model completes the sentence structure without needing to actually reason about size, dependency, or whether the story bundles multiple pieces of value, which is exactly the gap that makes so many real backlogs full of stories that are really epics wearing a story's format. Forcing an explicit per-letter INVEST check changes this because each letter asks a genuinely different structural question the model has to answer against the actual content, not just the template shape — checking "Small" specifically requires the model to notice that "export, notify, and schedule recurring" is three distinct pieces of value bundled into one ask, which a bare story-writing instruction would happily leave merged since nothing in the request format objects to size. The instruction to actually perform the split rather than just flag a failure matters because a flagged-but-unresolved INVEST failure just relocates the scoping work to whoever reads the output next — the value of running this check at authoring time is catching and fixing the problem before it enters a sprint-planning conversation, not producing a report of problems still waiting to be fixed. Explicitly separating story-scoping from acceptance-criteria-writing as two different steps matters because conflating them tends to produce stories that are either underspecified (no criteria at all) or overloaded with implementation detail baked into the story text itself, which then also fails the Negotiable check — keeping the two passes distinct lets each be checked on its own terms.`,
     exampleOutput: `Original: 'As a shopper, I want to export my order history, get notified when it's ready, and schedule recurring exports.' INVEST check — Small: FAIL, bundles three distinct pieces of value. Split into: Story 1 — 'As a shopper, I want to request an export of my order history so I can keep records outside the app' (Independent: yes, standalone). Story 2 — 'As a shopper, I want to be notified when my requested export is ready so I don't have to keep checking' (Independent: FAIL, depends on Story 1 shipping and on notification infrastructure not yet built — name this as a sequencing dependency, build after Story 1 and the notification system). Story 3 — recurring export scheduling, deferred as its own story pending the first two.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -697,9 +725,7 @@ A numbered list of Given/When/Then scenarios, happy path first, then boundary/er
     tags: [`acceptance-criteria`, `gherkin`, `edge-cases`, `qa`, `user-stories`],
     whyItWorks: `Given/When/Then output without an explicit boundary-enumeration instruction tends to stop at the single happy-path scenario because that's the shortest complete-looking answer to "write acceptance criteria for this story," and GPT-5.1 has no built-in obligation to enumerate every input's edge cases unless the prompt makes that enumeration the actual deliverable rather than an optional nicety. Explicitly requiring a scenario for empty, boundary, past-boundary, and malformed values per listed input converts the task from narrating one scenario into systematically walking a checklist per field, which is what actually produces the missing-code, expired-code, and used-code scenarios that a bare "write acceptance criteria" request would likely skip in favor of just the successful-discount-applied case. The instruction against inventing scenarios for physically impossible conditions matters because an unconstrained edge-case generator will happily produce scenarios for inputs the actual field constraints already rule out, padding the list with noise that a reviewer then has to filter out manually — tying scenario generation to the actual stated constraints keeps the output proportional to genuine risk rather than to how many permutations are mathematically possible. The TBD-marking instruction for undecided behavior is the most consequential rule in the prompt: without it, a model asked to write a Then clause for every scenario will produce a plausible-sounding specific behavior even where the story as given genuinely hasn't settled what should happen, and that fabricated behavior can silently become the de facto requirement once it's in a ticket — marking it TBD instead routes the actual decision back to a human rather than letting an invented answer pass as one that was actually agreed to.`,
     exampleOutput: `Scenario — code already used by this account: Given a customer has previously redeemed discount code SAVE20 on their account, When they attempt to apply SAVE20 again at checkout, Then the system rejects the code and displays 'This code has already been used.' Scenario — code valid but for a different product category: TBD — needs a decision on whether the system should reject the code outright or apply it partially to eligible items in the cart.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -761,12 +787,16 @@ A numbered list of themes ranked by prevalence, each with: theme name, participa
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ux-research`, `research-synthesis`, `affinity-mapping`, `usability-testing`, `qualitative-analysis`],
+    tags: [
+      `ux-research`,
+      `research-synthesis`,
+      `affinity-mapping`,
+      `usability-testing`,
+      `qualitative-analysis`,
+    ],
     whyItWorks: `Research synthesis prompted without an explicit prevalence count tends to produce GPT-5.1's most narratively satisfying summary — themes built around the most vivid or quotable observations in the notes, since a compelling quote is easier to foreground than a dry tally, which systematically overweights whichever participant happened to phrase their frustration most memorably regardless of how many other participants actually shared the underlying problem. Forcing a discrete, participant-tagged extraction as a separate first step before any grouping happens is what keeps the later count honest: if grouping and counting happen in the same pass, it's easy for the model to silently merge two similar-sounding but distinct participant observations into one theme and then report a prevalence number that's actually an artifact of how the grouping was done rather than a real count of who said what. Explicitly separating prevalence-ranking from severity-flagging addresses a real and common analytical error in research synthesis — a genuinely dangerous or trust-breaking finding (like a user accidentally granting a permission they didn't intend to) can come from just one participant out of seven, and a synthesis that ranks purely by count would bury it below three people casually mentioning unclear terminology, when the accidental-permission issue is very plausibly the more consequential finding regardless of how many people hit it. Tying every theme back explicitly to the original research question, and naming when a finding is adjacent to but not actually answering that question, prevents scope creep in the synthesis where interesting-but-tangential observations get treated as if they answer the question that was actually asked, which is a common way research readouts end up misdirecting a design decision toward a problem the study wasn't actually measuring.`,
     exampleOutput: `Theme 1 — Confusion at the permissions screen (4 of 7 participants: P1, P2, P4, and indirectly P6). Representative observation: P2 said 'I didn't understand what I was being asked to allow, so I just gave up.' Relation to research question: directly contradicts the assumption that onboarding is completable unassisted — this is the primary blocker to the 3-minute goal. Severity flags: P6's accidental permission grant (1 of 7) is low-prevalence but represents a trust/safety risk distinct from the completion-time question and should be escalated separately regardless of its low count.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -832,12 +862,16 @@ The full script in the order above: think-aloud instruction, pre-task expectatio
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`usability-testing`, `unmoderated-testing`, `test-script`, `ux-research`, `task-design`],
+    tags: [
+      `usability-testing`,
+      `unmoderated-testing`,
+      `test-script`,
+      `ux-research`,
+      `task-design`,
+    ],
     whyItWorks: `A usability test script written without this constraint tends to default to instruction-style task prompts ("click the settings icon, then toggle SMS notifications on") because that reads as a clear, unambiguous test step — but a prompt that names the exact UI element being tested doesn't actually test whether a participant can find it themselves, it just checks whether they can follow directions, which is a fundamentally different and far less useful signal; describing the goal in the participant's own terms instead is what forces the interface's actual discoverability to be the thing under test. The specific risk named in the prompt — that unmoderated tests have no facilitator to catch a silent struggle — is real and well-documented in usability research: task completion rate alone conflates a participant who breezed through with one who hesitated, backtracked twice, and got there by trial and error, and both look identical in a binary completion metric. Requiring a pre-task expectation question and a post-task set specifically aimed at the moment of the key action (what did you expect, was there a point you weren't sure) gives the researcher a way to detect that gap after the fact using only self-report, which is the only signal available once there's no live observer — a generic satisfaction rating doesn't do this because a participant can rate a confusing-but-eventually-successful task highly out of relief at having finished it, masking exactly the friction the test was meant to catch. Explicitly requiring the concern-related task to be included even if it's the hardest, and phrasing its follow-up to allow disconfirming evidence, guards against the same confirmation-bias risk present in interview scripts: a test designed only to validate an existing worry will tend to produce data that validates it, unless at least one question is built with a genuine chance to show the worry is unfounded.`,
     exampleOutput: `Task 2 scenario: 'You just missed an important text alert from a friend and want to make sure you get text alerts for messages like that going forward. Show me how you'd set that up.' Follow-up: 'What did you expect to happen when you turned on notifications earlier in this task — did you think that already covered text messages, or did you know it was separate?' This is phrased to surface whether the participant assumed push and SMS were bundled, without stating that assumption as the expected answer.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -890,12 +924,16 @@ A table: Location in flow | String | Purpose (button / empty state / confirmatio
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`microcopy`, `ux-writing`, `voice-and-tone`, `empty-states`, `confirmation-dialogs`],
+    tags: [
+      `microcopy`,
+      `ux-writing`,
+      `voice-and-tone`,
+      `empty-states`,
+      `confirmation-dialogs`,
+    ],
     whyItWorks: `Microcopy generated string-by-string, in separate requests or separate design sessions, is the actual root cause of the terminology drift real products ship with — one screen calling an action "Remove" and another calling the same underlying action "Delete" isn't usually a deliberate choice, it's what happens when no single pass ever compared the two strings against each other. Generating the entire flow's copy in one batch, with an explicit cross-string consistency check as its own instruction, is what catches this, because the model is holding every string in context simultaneously and can be made to compare them directly rather than writing each one fresh without memory of the others. The voice-versus-tone distinction — consistent word choice and formality throughout, but tone that shifts to match the emotional weight of the specific moment — matters because a brand voice applied uniformly without this distinction produces a genuinely bad result in high-stakes moments: an upbeat, playful voice used verbatim on a destructive-action confirmation reads as tone-deaf regardless of how well it fits the brand everywhere else, and GPT-5.1 asked only for "copy in this brand voice" with no tone-modulation instruction will tend to apply the voice sample's surface style uniformly rather than recognizing that restraint is itself sometimes the on-brand choice for a specific moment. Requiring confirmation copy to state the specific consequence and reversibility rather than a bare "Are you sure?" addresses a well-documented UX writing failure where the most common confirmation dialog in software gives the user no actual information to decide with — "are you sure" answers nothing about what happens if they say yes, and a user who doesn't know whether an action is reversible has to guess, which is precisely the moment microcopy exists to prevent.`,
     exampleOutput: `Location: Remove-collaborator confirmation | String: 'Remove Jamie from this document? They'll lose access immediately, but any comments they've already left will stay.' | Purpose: confirmation. Consistency check: original draft used 'Remove' on this screen and 'Delete' on the collaborator-list row menu for the same action — standardized on 'Remove' throughout since 'Delete' implies destroying the person's account access history, which isn't what happens here.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -947,12 +985,16 @@ A table: Raw error | Where it appears | User-facing rewrite (what happened / why
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`error-messages`, `ux-writing`, `microcopy`, `error-handling`, `user-facing-copy`],
+    tags: [
+      `error-messages`,
+      `ux-writing`,
+      `microcopy`,
+      `error-handling`,
+      `user-facing-copy`,
+    ],
     whyItWorks: `Raw error strings handed to GPT-5.1 with a bare "make this user-friendly" instruction get a surface-level rewrite — friendlier words wrapped around the same underlying vagueness — because nothing in that instruction forces the model to check whether it actually knows the cause before stating one; the model will happily produce a specific-sounding explanation ("this happened because your session expired") that sounds like a real diagnosis but is actually invented, since a plausible guess is a perfectly good completion of "explain this error nicely" even when it isn't grounded in what the system actually reported. Explicitly restricting the "why" to only the information given in the available-error-info field, and requiring an honest generic fallback when the true cause isn't exposed, is what prevents this fabrication — it forces the model to treat the stated system knowledge as a hard boundary rather than a starting point to extrapolate plausibly from. The three-part structure (what / why / next step) matters because most bad error messages fail specifically at the third part — they describe a problem without ever telling the user what to actually do about it right now, leaving "try again later" as a non-answer that doesn't say when later is or what would be different — forcing a single concrete action per error closes that gap directly. Matching tone to severity, and the explicit instruction never to downplay a data-loss or security-relevant error, addresses a real and consequential failure mode in error copywriting: an error message trying too hard to sound reassuring can actively mislead a user into believing nothing serious happened when their work was in fact lost, which is a worse outcome than a blunter message that correctly conveys the actual severity of what occurred.`,
     exampleOutput: `Raw: 'Error 500: Internal Server Error - upstream timeout at payment-gateway-service' | Where: mid-checkout after clicking Pay | Rewrite: 'What happened: the payment step timed out before completing. Why: this is usually a brief connection issue on our end, not something wrong with your card. Next step: no charge was made — wait a few seconds and click Pay again.' | Flag: cause is knowable here (transient timeout, no charge), no generic fallback needed.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1023,12 +1065,16 @@ A table with one row per empty reason: State name | Headline | Supporting copy |
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`empty-states`, `ux-writing`, `dashboard-design`, `onboarding`, `product-design`],
+    tags: [
+      `empty-states`,
+      `ux-writing`,
+      `dashboard-design`,
+      `onboarding`,
+      `product-design`,
+    ],
     whyItWorks: `The prompt forces the model to treat empty-reason enumeration as the actual design problem rather than letting it default to writing one polished "empty state card" and calling the job done, which is what GPT-5.1 tends to produce when asked generically for "an empty state" — it reaches for a single tidy illustration-plus-message pattern because that's the most common training-data shape for the term, even though real products need at least three behaviorally distinct versions. Naming the first-use case separately matters because a new account's zero-state and an existing account's filtered-to-zero state look identical in the database (both are just an empty list) but require opposite framing: one needs to teach unfamiliar vocabulary and invite creation, the other needs to acknowledge an existing collection exists and help the user get back to it, and a model without this split reliably writes copy generic enough to technically fit both, which is the same as fitting neither well. The single-CTA constraint closes a specific failure mode where models asked for "an empty state with actions" list two or three buttons because more options feels more helpful, when in practice a user looking at nothing is in a low-confidence moment and a forced single next step reduces the decision instead of adding to it. The rule against inventing a diagnosis in the error state addresses a subtler drift: without an explicit constraint, models often write reassuring but false specifics like "check your connection," which is a guess dressed as information, and stating only the confirmed fact (the load failed) keeps the copy honest about what the system actually knows.`,
     exampleOutput: `First-use: Headline "No reports yet" / copy "Reports are built from saved views — create your first one from a template." / CTA "Create report from template" / layout: icon + text, no illustration. Filtered-to-zero: Headline "No reports match these filters" / copy "Try widening the date range or clearing a filter." / CTA "Clear filters" / layout: inline, no illustration. Load failed: Headline "Reports didn't load" / copy "Something went wrong on our end." / CTA "Retry" / layout: inline.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1106,12 +1152,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`onboarding`, `activation`, `user-retention`, `product-design`, `first-session-ux`],
+    tags: [
+      `onboarding`,
+      `activation`,
+      `user-retention`,
+      `product-design`,
+      `first-session-ux`,
+    ],
     whyItWorks: `Anchoring every phase to one named activation milestone stops the model from doing what it does by default when asked to "design an onboarding flow" generically: producing a well-rounded tour that introduces every feature roughly equally, because without an explicit success metric it has no basis to prioritize one path over another and treats comprehensiveness as the safest answer. Making Phase 1 an audit of existing steps against that single milestone, with explicit permission to recommend cutting things, counteracts sunk-cost thinking that shows up in how these models handle "current state" inputs — when given a list of existing steps, the default behavior is to keep all of them and improve their copy, because that reads as the conservative, low-risk suggestion, when the actually correct move is often deletion. Requiring the model to classify each step as advancing, scaffolding, or deferrable forces a real judgment call instead of a soft edit, and it's a distinction humans doing this exercise also frequently skip, which is why onboarding flows accumulate steps over time without anyone deciding any single one was worth its cost. The explicit ban on treating a feature tour as a required gate addresses a specific, common failure: tours read as thorough and safe to suggest, but they add real friction before the one thing that predicts retention, and a model that isn't told this will default to including one because tours are the most heavily represented onboarding pattern in general product-design writing it has seen. The stall-point phase is scoped to cause, not symptom, so the output is a targeted intervention rather than a reflexive "add a help tooltip."`,
     exampleOutput: `Phase 1: Feature tour -> defer (doesn't advance milestone, adds friction). Connect calendar integration -> defer (not required to publish first roster). Invite team members -> scaffolding (needed so there's someone to publish to, but can be simplified to one invite). Phase 2, 3 screens: (1) set availability for one week, prefilled with sensible defaults; (2) auto-generate a draft roster from that availability; (3) publish to the one invited teammate. Stall intervention at 'after inviting, before rostering': triggered after 24 hours of inactivity, an email with a one-click 'generate your draft roster now' link pre-filled from whatever availability was entered.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1186,12 +1236,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`checkout-ux`, `conversion-optimization`, `ecommerce`, `cart-abandonment`, `ux-audit`],
+    tags: [
+      `checkout-ux`,
+      `conversion-optimization`,
+      `ecommerce`,
+      `cart-abandonment`,
+      `ux-audit`,
+    ],
     whyItWorks: `Requiring the model to check each step against three named failure patterns instead of asking it to "review the checkout for UX issues" prevents the single most common output shape for that generic prompt: a restated best-practices list (add guest checkout, show trust badges, add a progress bar) that sounds authoritative but isn't actually derived from the specific flow provided, since GPT-5.1 has seen thousands of near-identical checkout-optimization listicles and will reach for that pattern by default when given room to. Making abandonment data the deciding factor when present, with an explicit instruction to concentrate on the sharpest drop rather than spreading recommendations evenly, corrects for the model's tendency toward diplomatic completeness — an unconstrained review will typically flag something at every step so no part of the audit reads as "fine," which produces a report that looks thorough but gives the reader no actual priority order to act on. Forcing an explicit priority call even without data ("say so explicitly") stops the model from hedging behind "it depends on your specific data" as an exit ramp, which is a common way models avoid committing to a specific, checkable claim when the input is incomplete. The fixed-constraints field matters because checkout audits routinely get thrown out by implementation teams when the top recommendation requires rebuilding infrastructure that was never on the table — anchoring the fix to what can't change forces a genuinely actionable answer instead of an ideal-world one nobody can ship this quarter.`,
     exampleOutput: `Priority step: shipping method (71% -> 40% drop). Failure pattern: cost surprise — flat shipping fee is not shown until this step even though it was calculable from the cart contents at step one. Fix within platform template constraints: surface an estimated shipping cost directly on the cart review screen using the same rate table, before the customer has invested two more steps of effort. Risk: doing only this without also revisiting the address-to-shipping-method drop may leave a smaller but real second leak unaddressed.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1268,12 +1322,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`navigation-design`, `information-architecture`, `saas-ux`, `design-systems`, `product-design`],
+    tags: [
+      `navigation-design`,
+      `information-architecture`,
+      `saas-ux`,
+      `design-systems`,
+      `product-design`,
+    ],
     whyItWorks: `Grounding the decision in usage frequency rather than asking the model to judge "what's important" in the abstract removes the main way GPT-5.1 goes wrong on nav redesigns without data: it defaults to preserving items that sound consequential (Billing, Settings, Integrations) over items that are actually opened constantly (Tasks, Projects), because importance-by-connotation is what it reaches for absent a real usage signal, and that produces a nav optimized for how the product looks in a sales demo rather than how it's actually used day to day. Forcing an explicit choice between a single shared nav and a role-adaptive one, with the real cost of role-adaptive nav stated up front, stops the model from recommending role-based personalization as a free win — it's the kind of suggestion that sounds sophisticated and tends to get proposed reflexively, but it has a genuine downstream cost in support complexity and inconsistent onboarding that a model won't surface unless explicitly asked to weigh it. The instruction to name a destination for anything demoted, and to check that a user would still find it there, targets a specific way navigation redesigns quietly become deletions: an item moved into a three-levels-deep settings submenu is, in practical terms, gone, even though it technically still exists in the product, and without this check a model will happily reorganize items into locations that are correct on paper but undiscoverable in practice. Banning the alphabetize-or-evenly-distribute move addresses a real evasion: given a request to reduce the item count, models often default to a structural trick (grouping into folders of similar size) rather than doing the harder work of an actual organizing principle grounded in how users think about the product.`,
     exampleOutput: `Tasks, Projects -> stay primary (daily use, all roles). Automations, Templates -> move to a secondary 'Workflow tools' menu reachable from the Projects area, not buried in Settings, since usage is low but concentrated among power users who look for it near where they build workflows. Billing -> stays primary per compliance constraint despite low general usage; noted as a tension with the frequency data. Organizing logic: grouped by user goal (Do the work / Manage the team / Configure the account) rather than by object type, since roles map cleanly onto those three goals.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1343,12 +1401,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`information-architecture`, `sitemap`, `content-strategy`, `site-search`, `ux-research`],
+    tags: [
+      `information-architecture`,
+      `sitemap`,
+      `content-strategy`,
+      `site-search`,
+      `ux-research`,
+    ],
     whyItWorks: `Requiring content to be matched against real search terms rather than sorted by topic in the abstract prevents the model's default behavior when asked to "organize this content": grouping by surface-level semantic similarity (all billing-sounding pages together), which produces a tidy-looking structure that can still bury the actual highest-demand page under a generic category label a user would never guess to click. The three-way classification (matched, orphaned, gap) matters because a model asked simply to build a sitemap will place every input item somewhere without ever flagging that some of it may not deserve a place at all, since silently organizing everything it's given feels more complete than questioning the inventory's contents — naming orphaned content explicitly is what actually surfaces the pruning opportunity a content audit exists to find. The merge-by-frequency-not-by-seniority rule targets a specific bias: when two similar items are found, a model will often default to keeping the one that reads as more "official" or complete rather than the one that matches the language users actually type, which quietly perpetuates internal jargon in the final IA. Requiring user-language category names instead of internal department names addresses the single most common real-world IA failure — organizations restructure content around how it's produced (which team owns "Enterprise") rather than how it's searched for, and a model mirroring EXISTING_CATEGORIZATION without being told to check it against search language will reproduce that same mistake rather than fix it.`,
     exampleOutput: `Cancel Subscription -> matched to "how do I cancel my subscription" -> keep as standalone top-level item under Billing. Plans & Billing FAQ and How Billing Cycles Work -> overlapping content, merge under "Billing Cycles & Payments" since that phrasing better matches "change billing date". Enterprise Pricing -> matched, but currently siloed in a separate section maintained by another team -> recommend surfacing it under the same top-level Billing category users actually search within, not a separate Enterprise menu.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1421,12 +1483,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`feature-prioritization`, `product-roadmap`, `prioritization-framework`, `product-strategy`, `impact-effort`],
+    tags: [
+      `feature-prioritization`,
+      `product-roadmap`,
+      `prioritization-framework`,
+      `product-strategy`,
+      `impact-effort`,
+    ],
     whyItWorks: `Tying the impact score specifically to a named business goal rather than asking for impact in general terms is what stops the exercise from collapsing into everything-is-important, which is the default failure mode when a model is asked to prioritize a features list without a fixed target — every feature on a real candidate list has some plausible story for why it matters generally, and only anchoring against one specific quarterly goal forces genuinely different scores across the list instead of a cluster of 4s. Requiring the confidence score to state what evidence it's actually based on, rather than asserting a number, closes a gap models otherwise exploit: it's easy to assign a confident-sounding score to a feature backed by a single anecdote, and forcing the evidence to be named alongside the number lets a human reviewer catch when "confidence: 4" is actually resting on one enthusiastic Slack message. Requiring a capacity sanity-check after the ranking, rather than trusting the arithmetic alone, addresses a structural limitation of any weighted-scoring approach: a ranked list is not automatically a feasible plan, and a model that stops at producing scores will hand back a wish list dressed up as a roadmap unless explicitly told to check the top of that list against what the team can actually build. Forcing a named tiebreaker instead of allowing ties matters because a real roadmap decision has to pick an order, and a model permitted to present two features as equally ranked is quietly pushing the actual decision back onto the human without having done the analytical work it was asked for.`,
     exampleOutput: `SSO login: Impact 5 (directly named by 4 of 6 churned enterprise accounts, matches this quarter's churn-reduction goal), Effort 3 (3 weeks, two engineers), Confidence 4 (multiple independent account requests, not anecdotal) -> rank 1, fits capacity. Dark mode: Impact 1 (no link to churn goal), Effort 4 (low effort), Confidence 2 (informal social requests only) -> ranks low despite ease of build; flagged as the feature most likely to get pushed up the list on 'quick win' instinct despite weak evidence.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1501,12 +1567,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`design-handoff`, `dev-ready-spec`, `design-systems`, `design-engineering-collab`, `component-states`],
+    tags: [
+      `design-handoff`,
+      `dev-ready-spec`,
+      `design-systems`,
+      `design-engineering-collab`,
+      `component-states`,
+    ],
     whyItWorks: `Explicitly requiring every non-default state to be resolved rather than left as "same as default" targets the most common real handoff failure, which isn't a missing measurement — it's an unstated assumption that a state was intentionally left unstyled when it was actually just never designed, and a model asked generically to "write a spec" will describe the default state in loving detail while gliding past hover/error/empty states with vague reassurance, because those are exactly the states least represented in whatever mockup or summary it was given to work from. Requiring token names instead of visual descriptions forces traceability that closes the gap where a spec technically exists but an engineer still has to eyeball a screenshot for the actual pixel value — this is a known failure mode of design handoff broadly, and a model not explicitly told to reference tokens will default to descriptive language ("a bit of padding", "the usual blue") because that's how humans naturally describe designs conversationally, even though it fails as an implementable spec. The instruction to flag genuine unknowns as open questions rather than inventing plausible answers is the single most load-bearing rule here, because models under-instructed on this point will confidently fill an edge-case gap with a reasonable-sounding guess, and that guess silently becomes the shipped behavior the moment an engineer without access to the original designer codes exactly what the document says — flagging uncertainty explicitly is what keeps a fabricated answer from masquerading as a decision. Calibrating explanation depth to engineer context prevents two different failure directions: over-explaining wastes a familiar engineer's time and buries the actual decisions in filler, while under-explaining to an unfamiliar contractor assumes context that was never actually shared.`,
     exampleOutput: `State: no options available -> visual: dropdown shows text-body-sm gray message 'No matching filters' inside the closed control, spacing-sm padding, no chip row. State: all options selected (10+ chips) -> flagged as open question — no maximum chip-wrap behavior was specified in the source design; recommend the designer confirm whether chips wrap to a second row or collapse into a '+7 more' summary chip before implementation begins.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1570,12 +1640,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`responsive-design`, `breakpoints`, `design-spec`, `css-layout`, `design-handoff`],
+    tags: [
+      `responsive-design`,
+      `breakpoints`,
+      `design-spec`,
+      `css-layout`,
+      `design-handoff`,
+    ],
     whyItWorks: `Explicitly asking what happens between the named breakpoints, not just at them, corrects for the most common gap in responsive specs: a design file naturally only ever shows discrete artboards at fixed widths, so a model asked to "write the responsive spec" from that source material will describe those exact widths thoroughly and implicitly treat everything else as smoothly interpolated, when in reality most real device widths fall in the gaps and the actual behavior there depends entirely on which CSS layout technique is used underneath — a detail the source design never captures. Forcing a per-element step-function-vs-continuous distinction rather than one blanket answer for the whole layout addresses a specific over-simplification: different elements in the same layout very often need genuinely different transition behavior (a sidebar that snaps between two fixed states versus body text that should reflow continuously), and a model given room to answer at the whole-layout level will pick one behavior and apply it everywhere, silently getting some elements wrong. The variable-content instruction matters because breakpoint specs are built and visually checked against one sample of content, and asking what happens with genuinely long or short content forces the model to reason about a case the source design never actually showed, rather than quietly assuming the one example content length is representative. The explicit min/max guarantee section stops the model from implying infinite scalability, which is a subtle default failure — without a stated upper bound, output tends to describe "desktop" behavior as if it holds indefinitely as width increases, when real design intent almost always caps a reading column or content width well before an ultrawide monitor's actual pixel count.`,
     exampleOutput: `Between 480px and 1024px (tablet range): sidebar as horizontal strip is treated as a step function, not a continuous scale-down of the desktop sidebar — it fully restructures at the 480px boundary rather than gradually narrowing. Main text column reflows continuously across the same range. Variable content: sidebar with only 2 related articles at desktop width still reserves the full sidebar column rather than collapsing narrower, to avoid a layout that visibly shifts width based on content count. Maximum width: text column caps at 720px regardless of monitor width; sidebar and surrounding whitespace absorb any width beyond that.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1641,12 +1715,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`competitive-analysis`, `ux-research`, `conversion-optimization`, `signup-flow`, `product-strategy`],
+    tags: [
+      `competitive-analysis`,
+      `ux-research`,
+      `conversion-optimization`,
+      `signup-flow`,
+      `product-strategy`,
+    ],
     whyItWorks: `Scoping the analysis to one named flow rather than "the competitor's product" prevents the default shape a broader prompt produces — a wide-ranging, feature-by-feature comparison that reads as thorough but has no single actionable thread running through it, because a model given room to compare whole products will treat every difference as equally worth mentioning rather than concentrating on the one flow that actually matters to the business question at hand. Requiring the suspected weakness to be genuinely checked rather than confirmed by default counters a specific and common drift: when a prompt states an assumption ("we suspect the credit-card step is the problem"), a model without an explicit instruction to test rather than validate it will tend to find supporting evidence for the stated hypothesis, because agreeing with a stated premise reads as more helpful and coherent than contradicting the user's own framing — an instruction to say plainly if the suspicion doesn't hold up is what keeps the analysis honest rather than confirmatory. Distinguishing a pattern that repeats across multiple competitors from a single competitor's idiosyncratic choice matters because not every observed difference is a lesson — a change that only one competitor happens to have made could easily be a mistake or an artifact of their specific business model rather than a validated best practice, and treating every observation as equally instructive is how competitive analyses end up recommending changes that don't actually transfer. The explicit warning against copying an approach without checking whether surrounding context transfers addresses the single most common way competitive UX recommendations fail in practice: a structural choice that works for a company with a different user base, sales motion, or price point can make a real product worse if adopted without that context, and a model isn't naturally inclined to flag that mismatch unless told to check for it.`,
     exampleOutput: `Suspected weakness check: partially held up. Competitor A does defer credit-card entry to end of a 14-day trial (matches the suspicion); Competitor B still asks for a card upfront but only after showing a personalized setup step first, suggesting the actual lever may be sequencing/perceived value rather than the card requirement itself. Pattern across both competitors: both defer plan selection until after the user has seen the product working with their own data, which our flow asks for before any product interaction — flagged as the stronger, repeated signal worth acting on first.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1713,12 +1791,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`conversion-ux`, `landing-page-review`, `cta-optimization`, `growth-design`, `ux-audit`],
+    tags: [
+      `conversion-ux`,
+      `landing-page-review`,
+      `cta-optimization`,
+      `growth-design`,
+      `ux-audit`,
+    ],
     whyItWorks: `Naming the single decision the page is asking for before reviewing anything else prevents the model's default posture toward landing-page reviews, which is a general aesthetic and best-practices critique (contrast, whitespace, font choices) — that's the most heavily represented pattern in generic "review this landing page" material it has seen, and it produces a report full of true but low-leverage observations unless the review is explicitly anchored to what the page is actually trying to get someone to do. Framing internal navigation and unrelated content as forms of competition with the CTA, not just a second visible call-to-action, catches a real and common miss — a model asked generically to check for "competing CTAs" will look for a second button, but a nav bar that lets a first-time cold visitor click away to four other pages is functionally the same failure even though it doesn't look like a rival ask, and it takes an explicit instruction to get the model to name that as competition rather than treating navigation as structurally exempt from the analysis. Checking information order against how the visitor actually arrives (cold ad traffic versus a warm, already-informed visitor) targets a mismatch that's invisible if you only look at the page in isolation — the same page can be correctly sequenced for one traffic source and badly sequenced for another, and a model reviewing the page without being told who's actually looking at it will judge the sequencing against an assumed generic visitor rather than the real one. The explicit ban on defaulting to "add more reassurance content" as a fix matters because that's the single most common generic landing-page recommendation, and it's frequently wrong for a conversion problem, since more sections between the visitor and the ask is itself often the mechanism suppressing conversion, not a fix for it.`,
     exampleOutput: `The one decision: whether to hand over an email address to start a 14-day trial. FAQ accordion section: verdict — competes; for cold ad traffic with no prior product context, an FAQ this early reads as a reason to hesitate rather than reassurance, and it sits above the pricing table a warm, cold visitor hasn't earned context for yet. CTA evaluation: 'Get started' used in hero and footer is ambiguous about what happens next; recommend 'Start your 14-day trial' to make the actual commitment explicit and reduce the anxiety of an unstated next step for a visitor who has never heard of the product before this page.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1784,12 +1866,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`design-qa`, `visual-regression`, `release-checklist`, `frontend-testing`, `design-systems`],
+    tags: [
+      `design-qa`,
+      `visual-regression`,
+      `release-checklist`,
+      `frontend-testing`,
+      `design-systems`,
+    ],
     whyItWorks: `Weighting the checklist toward what actually changed rather than producing a full-app pixel-perfect list corrects for the default shape a generic QA-checklist prompt produces — an exhaustive, evenly-distributed list that looks thorough but spreads limited QA time evenly across low-risk and high-risk areas alike, when in a real release the risk is heavily concentrated in what changed and what's shared with it. Requiring the blast-radius step — explicitly naming screens affected indirectly through a shared component or token, not just the screens directly edited — targets a specific and common release-QA gap: a shared Button-component change is technically a one-line diff in one file, but its actual risk surface spans every screen using that component, and a model asked simply to "list what to check" based on the edited files will miss everything not directly touched, since that's the literal scope of the input unless explicitly told to reason about shared dependencies. Turning regression history into specific re-tests of the exact prior failure, rather than a generic "watch for regressions" reminder, reflects a real pattern in software defects: the same component tends to break the same way again under the same conditions (a focus-ring contrast issue recurring after subsequent token changes), so re-testing the exact prior failure is a better use of QA time than treating every past incident as fully resolved and moving on. Requiring each item to be a falsifiable pass/fail statement rather than a vague reminder addresses the practical reason checklists fail in real teams — an item like "check dropdown looks okay" gets a quick glance and a checkmark under release-day time pressure, while a specific, checkable condition is much harder to mark done without actually having looked.`,
     exampleOutput: `Regression re-check: 'Focus ring visibility on dark-mode backgrounds has broken twice before after button changes' -> specific re-test: verify the primary Button's focus ring maintains a 3:1 contrast ratio against the dark-mode checkout background specifically, on iOS Safari and desktop Chrome, since prior regressions occurred after border-radius/token changes exactly like this release's. Blast-radius item: the app-wide Button token change affects the pricing page's upgrade CTA, which wasn't directly edited this release but shares the same component — added as a specific checklist item despite not appearing in TOUCHED_COMPONENTS.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

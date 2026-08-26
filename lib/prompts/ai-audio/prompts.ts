@@ -243,7 +243,14 @@ export const prompts: readonly Prompt[] = [
       },
     ],
     targetTools: [`ElevenLabs Voice Design`],
-    tags: [`audio`, `voiceover`, `elevenlabs`, `explainer-video`, `narration`, `product-demo`],
+    tags: [
+      `audio`,
+      `voiceover`,
+      `elevenlabs`,
+      `explainer-video`,
+      `narration`,
+      `product-demo`,
+    ],
     whyItWorks: `Most voiceover prompts fail because they describe a voice in the abstract ("professional, friendly") without tying it to the actual pacing constraints of the video it sits under, so Voice Design defaults to an even, generic narrator cadence that doesn't match where a viewer's attention actually needs to land. Naming a specific word or phrase for emphasis works because it gives the model a concrete acoustic target — a stressed syllable and a slight pitch rise on one word — rather than a vague instruction like "emphasize the important parts," which Voice Design has no way to act on since it doesn't know which parts you consider important. The explicit pause-point field matters even more for UI walkthroughs specifically: a beat of silence right before an instruction like "click Save" gives the viewer's eyes time to find the button on screen, and that timing gap is exactly the kind of structural cue Voice Design will reliably insert when told where to put it but will never invent unprompted. Tying the pacing note to the edit itself ("slightly slower... so viewers can follow along with each screen change") rather than a generic speed adjective is what keeps the narration in sync with a video that has hard cuts on specific actions.`,
     exampleOutput: `A warm, unhurried female voice in her mid-30s with a neutral American accent, speaking at a measured pace that leaves clear space around each instruction — a light stress lands on 'automatically' to reassure the listener it needs no extra steps, and a half-second pause sits right before 'click Save' so the direction lands cleanly against the on-screen action.`,
     verifiedAgainst: [
@@ -305,9 +312,7 @@ Instrumental only, no vocals. {{genre}} with a {{signature_sound}} as the recurr
     tags: [`audio`, `music`, `podcast`, `suno`, `intro`, `branding`],
     whyItWorks: `A podcast intro's whole job is instant recognition, which is a completely different design brief than a full song — asking for "a signature sound" as a named, repeatable hook element (a specific riff, not just a genre) is what gives Suno v5 something concrete to build the entire 10-15 second clip around, rather than generating a miniature song with an intro/build/drop structure that never repeats anything long enough to become recognizable. Specifying the runtime in seconds up front matters because Suno's default generation length is tuned for full tracks; without an explicit short runtime target, the model tends to treat a 12-second request as an intro to a longer piece and the trimmed result loses its punch. The structural note about a strong opening hit addresses a real distribution constraint most people don't think to prompt for — podcast apps auto-preview show art and audio on tap, and a track that fades in from silence sounds broken or low-energy in that half-second preview window, while one that hits immediately reads as produced and intentional. Naming the energy arc (sparse to fuller) also gives the mix engineer's ear something to do across a very short clip instead of a static loop, which is what makes a 12-second sting still feel like a complete musical idea.`,
     exampleOutput: `A 12-second synthwave sting: a single arpeggiated synth riff hits hard on beat one, joined within four seconds by a soft bassline and light percussion, building to a fuller three-layer mix by the final bars before settling to a lower level in the last two seconds, ready for a host's voice to open on top of it.`,
-    verifiedAgainst: [
-      { tool: 'Suno v5', version: 'v5', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'Suno v5', version: 'v5', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -370,9 +375,7 @@ Instrumental only, no vocals. Same {{genre}} family as the show's intro theme bu
     tags: [`audio`, `music`, `podcast`, `suno`, `outro`, `call-to-action`],
     whyItWorks: `An outro has an opposite job from an intro — it needs to recede rather than announce itself, because a host is usually talking over the back half of it saying "subscribe, leave a review, see you next week," and a track that stays full-mix the whole way through will fight that voiceover for attention. Giving Suno v5 an explicit timing cue for when to thin out ("starting around the 5-second mark") is what actually produces that dynamic drop at a usable, predictable point, rather than a track that either stays busy throughout or drops out randomly wherever the model felt like resolving a phrase. Naming the exact sparse instrumentation left behind ("just a soft piano and a light pad") matters because it constrains frequency range too — a thinned-out track that still has a busy bassline or percussion hits will still mask a spoken voice even at lower volume, while two or three sustained, non-percussive elements sit underneath speech cleanly. Asking for the same genre family as the show's intro, just calmer, is a branding move as much as a musical one: it reinforces the show's sonic identity at the close of every episode instead of introducing a second, unrelated theme that dilutes recognition.`,
     exampleOutput: `A 20-second outro that opens with the full synthwave-jazz palette from the show's intro, then thins to just a soft piano and a warm pad by the five-second mark, holding steady and unobtrusive under a host's sign-off before fading out gently over the final three seconds.`,
-    verifiedAgainst: [
-      { tool: 'Suno v5', version: 'v5', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'Suno v5', version: 'v5', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -547,9 +550,7 @@ Instrumental, textural, non-melodic-forward ambient sound design — not a song 
     tags: [`audio`, `sound-design`, `ambient`, `suno`, `scene-setting`, `game-audio`],
     whyItWorks: `Sound design prompts fail most often when they're written like music prompts — asking for a genre and mood produces a melodic ambient track with a recognizable musical shape, which is the wrong output entirely for a scene bed that needs to feel like environment rather than composition, so explicitly ruling out verse/chorus structure and naming this as "textural, non-melodic-forward" redirects Suno v5 away from its song-generation defaults toward something closer to a field-recording-plus-drone hybrid. Listing specific sound layers individually (the train rumble, the fluorescent hum, the metallic drips, the synth drone) rather than a single mood adjective works because each named element gives the model a distinct textural layer to generate and blend, which is how real sound designers build a scene bed — layer by layer, not as one homogenous pad. Asking for an emotional undercurrent "without being on-the-nose or dramatic about it" is a deliberate constraint against Suno's tendency to resolve ambiguous mood prompts into more conventional, obviously emotional cues (swelling strings, minor-key stabs) that would announce the mood instead of letting it sit underneath a scene quietly. The explicit looping requirement in the runtime note matters practically for game audio and installations specifically, where a bed that builds to an ending and stops is unusable — a mostly static loop with one subtle swell gives just enough movement to avoid sounding robotic on repeat without breaking the seamless-loop requirement.`,
     exampleOutput: `A 90-second ambient bed: a low, distant rumble pulses irregularly beneath a thin electrical hum, occasional sparse metallic drips panned around the stereo field, and a barely-there sustained drone underpinning all of it, holding mostly still until a subtle, brief swell around the 45-second mark before settling back down — engineered to loop without an audible seam.`,
-    verifiedAgainst: [
-      { tool: 'Suno v5', version: 'v5', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'Suno v5', version: 'v5', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -656,9 +657,7 @@ Visual pacing notes for the treatment: the Intro should correspond to an establi
     tags: [`audio`, `music`, `music-video`, `suno`, `songwriting`, `visual-concept`],
     whyItWorks: `A song written purely for listening and a song written to become a music video need different internal structures, because a video treatment has to hang visual beats on musical ones, and if the chorus doesn't land at a clear, repeatable high-energy point, there's nothing for a fast-cut visual sequence to sync against. Writing the visual pacing notes directly into the same prompt as the lyrics — rather than as a separate creative brief — keeps Suno v5's generation of the actual musical dynamics (energy build into the chorus, a genuine tonal pivot at the bridge) aligned with what a director would need frame-accurate cues for, since the model responds to the tagged song sections as functional markers, not just lyric dividers. Naming a concrete production detail tied to the visual concept ("gated reverb on the snare... for a neon-lit night-drive visual") does double duty: it's a real production choice that shapes the mix, and it also seeds a consistent visual palette the treatment can be built around later, so the music and the imagery come from the same creative decision instead of being bolted together after the fact. Reusing the identical chorus lyric for both the Chorus and Final Chorus sections (rather than writing a slightly different one) matters structurally too — music videos rely on visual motifs repeating at the chorus specifically, and a mismatched final chorus lyric breaks the visual rhyme a treatment is counting on.`,
     exampleOutput: `A 3-minute indie-pop track with a gated-reverb snare and bright synth lead: a two-bar instrumental build opens over a slow pan, verse one sits low and intimate, the pre-chorus rises into a full-band chorus built for fast cuts and a neon color palette, verse two settles back down, and the bridge shifts into a stripped-back, more vulnerable arrangement before the final chorus returns at full energy to close the video on its visual peak.`,
-    verifiedAgainst: [
-      { tool: 'Suno v5', version: 'v5', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'Suno v5', version: 'v5', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

@@ -2228,7 +2228,14 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`react`, `typescript`, `component-design`, `accessibility`, `code-generation`, `design-system`],
+    tags: [
+      `react`,
+      `typescript`,
+      `component-design`,
+      `accessibility`,
+      `code-generation`,
+      `design-system`,
+    ],
     whyItWorks: `GPT-5.1's default failure mode on an open-ended "build me a React component" request is to produce something that compiles and looks plausible in a demo but silently skips the parts that don't show up in a five-second glance — loading states, empty-list states, cleanup functions, and ARIA behavior all get dropped first because none of them are visible in a rendered screenshot the model is implicitly optimizing toward. Splitting the request into named sections (prop API, state ownership, accessibility, edge cases) forces the model to treat each of those as a requirement it must satisfy individually rather than an implicit quality bar it can round down when generating in one pass, because each section becomes something the final checklist output can be checked against line by line. The explicit state-ownership rule targets a specific, well-documented React bug pattern: models asked to build "flexible" components default to adding a \`useEffect\` that mirrors an external prop into local state "just in case," which is exactly the pattern that produces stale-selection bugs during fast re-renders or rapid prop changes — naming this failure mode directly in the prompt measurably reduces its occurrence because the model has to actively contradict an instruction to produce it, rather than just following its default instinct. Requiring the model to output which line of code handles which edge case creates a self-check step inside the same response: a model that wrote no virtualization logic cannot honestly write "handles 200+ options" next to a line reference, so the mismatch becomes visible in the output itself rather than silently shipped. Explicitly forbidding unrequested props and configuration options counters GPT-5.1's tendency to over-scope shared/reusable components with speculative flexibility, which is the more common way these components become unmaintainable later.`,
     exampleOutput: `\`\`\`tsx
 export function MultiSelectFilter({ options, value, onChange, isLoading, placeholder = 'Filter...' }: MultiSelectFilterProps) {
@@ -2241,9 +2248,7 @@ export function MultiSelectFilter({ options, value, onChange, isLoading, placeho
 Prop table: \`options\` (Option[], required, no default) — the full selectable list. \`value\` (string[], required) — controlled selected ids...
 Edge cases handled: empty options list -> renders "No matches" row (line 42); loading -> disables input and shows spinner (line 18); stale selected id -> filtered out of the rendered chips but preserved in \`value\` until parent updates (line 51).
 Ambiguity resolved: requirements didn't state Home/End key behavior, so Home/End were left unbound rather than guessed.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',

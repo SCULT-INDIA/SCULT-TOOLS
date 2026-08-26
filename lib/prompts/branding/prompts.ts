@@ -491,12 +491,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`design-system`, `design-tokens`, `component-library`, `ui-consistency`, `figma-workflow`],
+    tags: [
+      `design-system`,
+      `design-tokens`,
+      `component-library`,
+      `ui-consistency`,
+      `figma-workflow`,
+    ],
     whyItWorks: `The instruction to name which token layer (primitive, semantic, component) is actually needed rather than defaulting to the full three-tier structure directly counters GPT-5.1's tendency to reach for the most complete, textbook-looking answer regardless of team size — a two-designer team with no component library yet gains nothing from component-level tokens and actually loses time maintaining a layer with no consumer, but a model asked generically to "propose a token structure" will reliably produce the full stack because that's the modal pattern in its training data on design systems content, most of which comes from large companies like Google or IBM writing about systems built for hundreds of contributors. Requiring each recommendation to trace back to a specific listed inconsistency forces the token proposal to stay diagnostic rather than aspirational — it's a structural check against the common failure mode where a systems proposal reads as generically correct but doesn't actually address the specific mess described, because nothing in the prompt held the model accountable to using the input data rather than pattern-matching to "what design systems usually contain." Naming the prioritization logic explicitly (reuse frequency vs. inconsistency severity vs. deadline-blocking) surfaces a real trade-off that's usually made silently and inconsistently by whoever's writing the plan; making the model commit to and state one logic means a reviewer can actually disagree with the ordering on its stated merits rather than accept an unexplained list. The tooling-gap flag matters because a proposal that's internally coherent as design theory can still be operationally impossible — recommending component tokens with no shared component library to attach them to is the kind of gap a model won't self-catch unless explicitly told to check for it, since nothing about the recommendation looks wrong in isolation.`,
     exampleOutput: `Token structure: build primitive + semantic layers now (color-primitive-blue-500, color-role-action-primary); defer component-level tokens until a shared React component library exists. Top components to fix first (ranked by inconsistency severity, since three colliding blues is actively confusing users): 1. Primary button, 2. Card container, 3. Body text scale... Naming convention: role-based, not value-based (color-role-action-primary, not color-blue-1). Defer: full component token layer — building it now with no shared component library means maintaining tokens nothing consumes yet.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -562,12 +566,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`color-palette`, `brand-identity`, `accessibility`, `wcag-contrast`, `ui-color-system`],
+    tags: [
+      `color-palette`,
+      `brand-identity`,
+      `accessibility`,
+      `wcag-contrast`,
+      `ui-color-system`,
+    ],
     whyItWorks: `Forcing the anchor-color diagnosis as an explicit first step before any palette proposal counters a specific failure mode in how language models handle color: without being told to reason about the anchor's own HSL character first, GPT-5.1 tends to generate palettes by free-associating adjacent hues that look plausible in isolation but drift the brand's actual hue family, producing a palette that reads as generically "blue-ish tech company" rather than as recognizably this brand's blue. Requiring a stated contrast ratio for every text/button color, rather than a swatch grid, matters because contrast ratio is a real calculable number (relative luminance of foreground versus background) and a model asked only to "make an accessible palette" will describe colors as accessible in prose without the arithmetic actually working out — stating the ratio forces the kind of reasoning where a wrong claim is falsifiable by anyone who runs the same two hex codes through a contrast checker afterward, which keeps the answer honest in a way vague accessibility language doesn't. The instruction to justify rather than default to a complementary accent color addresses the reflexive habit (both in human design tutorials and in what the model has absorbed from them) of reaching for color-wheel complements as an unexamined default; naming a realistic failure scenario like a disabled-versus-enabled button collision forces consideration of state variations that a static five-swatch palette never has to confront, since palettes are usually evaluated as pretty grids rather than as systems that have to survive real interactive states like hover, disabled, and error simultaneously present on one screen.`,
     exampleOutput: `Anchor diagnosis: #2F6FED is a mid-saturation, mid-lightness blue — it has room to go two steps lighter before losing blue identity, but only one step darker before reading as navy/black. Palette: Primary-600 #2F6FED (4.6:1 on white, pass), Primary-100 #E8F0FE (background only, do not use for text)... Failure scenario: the proposed success-green and the primary blue both sit at similar lightness, which would read as near-identical for a deuteranopia user — fix: shift success green darker by one step to widen the perceptual gap.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -635,9 +643,7 @@ OUTPUT FORMAT
     tags: [`typography`, `font-pairing`, `brand-voice`, `type-scale`, `design-system`],
     whyItWorks: `Anchoring the typeface reasoning in an actual content excerpt rather than an abstract voice description matters because adjectives like "modern" or "approachable" are exactly the vocabulary GPT-5.1 defaults to when asked to reason about fonts in the abstract, and that vocabulary doesn't actually constrain which typeface gets picked — dozens of typefaces could plausibly be called modern. Giving it a real sentence of brand writing to analyze first forces the reasoning chain through something concrete and checkable: a terse, declarative sentence with specific numbers in it ("exactly which node, at exactly which second") points toward a typeface with higher legibility at small sizes and less decorative contrast than one would pick for a brand whose real writing is long and warm, and that connection is something a reader can actually verify against the sample rather than take on faith. Requiring exactly one recommendation per role rather than a shortlist closes off the model's tendency to hedge by presenting three options "to choose from" — a shortlist looks thorough but actually defers the decision back to the person who asked for it made, defeating the point of asking in the first place. The explicit licensing check matters because a font recommendation that sounds authoritative can still be commercially unusable, and a model asked generically about typefaces has no built-in incentive to flag licensing unless told to, since the aesthetic recommendation and the legal usability of a font are two entirely separate facts it isn't otherwise prompted to reconcile. The usage-rules section addresses a specific, common real-world failure — a striking display headline font that was never designed for body sizes ending up applied to UI buttons or dense paragraph text where its low x-height or heavy stroke contrast actively hurts readability — a failure that only gets caught if the prompt explicitly asks where the font should NOT go, since "where to use it" alone leaves the boundary undefined.`,
     exampleOutput: `Voice-to-letterform: the sample is terse, numeric, and declarative — this points toward a typeface with a large x-height and low stroke contrast for legibility at small dashboard sizes, not a high-contrast editorial serif. Pairing: heading — Inter Tight (Bold); body — Inter (Regular)... Licensing: both free for commercial use via Google Fonts, confirmed for all three listed platforms. Usage rule: heading font never appears below 16px or inside UI buttons — use body font at all UI control sizes.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

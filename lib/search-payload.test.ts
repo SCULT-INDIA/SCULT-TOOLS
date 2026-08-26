@@ -1,8 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { PROMPT_COUNT, PROMPT_INDEX, TOOL_COUNT, TOOL_ENTRIES, searchSite } from './search'
-import { decodeSearchPayload } from './search-payload-client'
-import { buildSearchPayload } from './search-payload'
+import {
+  PROMPT_COUNT,
+  PROMPT_INDEX,
+  searchSite,
+  TOOL_COUNT,
+  TOOL_ENTRIES,
+} from './search'
 import { rankSearch } from './search-client'
+import { buildSearchPayload } from './search-payload'
+import { decodeSearchPayload } from './search-payload-client'
 
 /**
  * The compact wire encoding in `lib/search-payload.ts` drops `href` entirely,

@@ -66,12 +66,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`product-description`, `ecommerce-copywriting`, `conversion-copy`, `benefit-driven`, `listing-optimization`],
+    tags: [
+      `product-description`,
+      `ecommerce-copywriting`,
+      `conversion-copy`,
+      `benefit-driven`,
+      `listing-optimization`,
+    ],
     whyItWorks: `GPT-5.1 defaults to a feature-forward register when it's handed a spec sheet, because specs are the most information-dense part of the input and the model naturally optimizes for including everything it was given rather than deciding what a buyer actually needs to hear — the explicit "which means" laddering instruction forces a second inference pass per spec instead of a single restatement pass, which is the mechanical difference between a spec sheet with better adjectives and copy that argues a case. Requiring the model to stop only when it reaches something the buyer would actually notice, rather than an intermediate abstraction like "more durable," closes the most common failure mode of AI-generated product copy: benefits that are technically true but still too abstract to move anyone, because the model stopped laddering one step too early. Banning specific words like "premium quality" and "game-changing" matters because these are exactly the phrases GPT-5.1 reaches for as a default intensifier when it doesn't have a concrete outcome to state instead — removing the escape hatch forces the substantive answer. The output table forcing a visible spec-to-outcome mapping exists because it's the only way to audit whether a claimed benefit is actually supportable by the given spec or whether the model quietly stretched — a failure mode transformer language models are especially prone to when asked to sound persuasive under a word-count constraint.`,
     exampleOutput: `Most kettles pour in one uncontrollable rush, which is why your first thirty seconds of blooming coffee grounds never come out even. The Aria's gooseneck spout narrows that rush into a thin, steady stream you can actually aim — so the water hits the grounds in the slow spiral your recipe actually calls for, instead of flooding one side of the filter...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -148,12 +152,16 @@ Title / five bullets / backend terms, each in its own labeled section, followed 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`amazon-listing`, `amazon-seo`, `a9-algorithm`, `ecommerce-copywriting`, `marketplace-optimization`],
+    tags: [
+      `amazon-listing`,
+      `amazon-seo`,
+      `a9-algorithm`,
+      `ecommerce-copywriting`,
+      `marketplace-optimization`,
+    ],
     whyItWorks: `Amazon's A9 ranking system and its separate style-compliance review are two different systems with different failure modes, and most AI-generated listings fail the second one even when they'd rank fine on the first — a title or bullet that reads as a comma-stacked keyword list gets caught by Amazon's automated style scanners regardless of relevance, which is why the instruction to keep every keyword inside a real sentence matters mechanically more than keyword density does. Splitting keyword distribution explicitly across the title, five separate bullets, and backend terms, with an instruction never to repeat a keyword already spent, addresses GPT-5.1's default behavior of front-loading every important term into the title because it reads as the highest-value real estate — which is exactly the pattern that gets a listing suppressed for stuffing, since backend search term space exists precisely so visible copy doesn't have to carry that burden. Requiring the differentiator bullet to argue the claim specifically rather than assert it addresses a separate, common weakness: GPT-5.1 will happily write "unmatched quality" as a bullet if not constrained, which is both a compliance risk (unsubstantiated superlative) and commercially useless against a shopper comparing two similar-looking ASINs. The explicit character/byte counting step at the end matters because Amazon enforces hard limits that vary by category and are easy for a model to miscalculate when generating text to a target length rather than measuring it after the fact.`,
     exampleOutput: `Title: Kettlebright Adjustable Dumbbell Set, Home Gym Dumbbells 5-25 lbs, Single-Dial Quick Change... Bullet 1: QUICK-CHANGE DIAL — Switch weights in under 3 seconds with one turn, no loose plates or pins to sort through mid-set...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -229,13 +237,17 @@ Five labeled sections in the order above, each ready to paste into its correspon
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`shopify-copywriting`, `product-page-cro`, `ecommerce-copywriting`, `conversion-optimization`, `page-structure`],
+    tags: [
+      `shopify-copywriting`,
+      `product-page-cro`,
+      `ecommerce-copywriting`,
+      `conversion-optimization`,
+      `page-structure`,
+    ],
     whyItWorks: `Shopify themes render a product page as discrete, independently-scrolling sections rather than one flowing document, so copy that reads well as continuous prose often fails on the actual page because each section gets seen in isolation, sometimes out of order on mobile depending on theme layout — instructing GPT-5.1 to treat each block as a separate brief with its own single job prevents the common failure of one long description that has to be manually chopped up after the fact and loses its logical flow in the process. Anchoring "the case" section directly to the named drop-off point, rather than a generic mid-page pitch, matters because GPT-5.1 without that constraint will write a balanced, general persuasion paragraph that doesn't specifically address why real shoppers on this exact page are leaving — the model has no way to prioritize the price objection over five other plausible objections unless told which one the data actually shows. The explicit ban on fabricating a testimonial or review count addresses a specific and well-documented failure mode: generative models asked for "social proof" copy will produce plausible-sounding but entirely invented quotes and numbers if not told to flag the absence of real data, which on a real commerce page is both a trust risk and, in several jurisdictions, a deceptive-advertising risk the merchant would be legally exposed to, not the model.`,
     exampleOutput: `HERO: Sleep under real weight, not a marketing claim. At $129, it costs more than the blanket next to it in your search results — because that one won't still be evenly weighted in six months. [Try It For 100 Nights]
 TRUST BAR: Free shipping over $75 · 100-night trial · Free returns · Machine washable...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -309,13 +321,17 @@ A table: variant letter, trigger name, the title text, character count, and one 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`product-title`, `ab-testing`, `ecommerce-copywriting`, `conversion-optimization`, `google-shopping`],
+    tags: [
+      `product-title`,
+      `ab-testing`,
+      `ecommerce-copywriting`,
+      `conversion-optimization`,
+      `google-shopping`,
+    ],
     whyItWorks: `Asked for "five title options" without structural constraints, GPT-5.1 tends to produce five paraphrases clustered around the same underlying idea, because the model is sampling from the same region of its output distribution each time rather than being pointed at genuinely different strategies — naming five distinct psychological triggers up front forces the sampling into different regions and produces variants that are actually informative to test against each other, rather than five near-duplicates that would just split traffic without teaching you anything. Requiring each variant to name what winning would prove is what turns this from a copywriting exercise into an actual experiment design — without that line, a merchant running an A/B test on five similar-looking titles has no way to interpret a result beyond "this one word choice happened to work," which doesn't generalize to the next product. The explicit instruction against dumping every attribute into each variant addresses GPT-5.1's tendency, under a hard character limit, to try to maximize information density rather than commit to one clear angle — a title that tries to be concrete, use-case-driven, and outcome-focused simultaneously within 70 characters usually ends up saying nothing clearly, which defeats the point of testing hypotheses in isolation.`,
     exampleOutput: `A (Specificity): Hyprflow 32oz Steel Bottle, Cold 24 Hrs, Leak-Proof Straw — 54 chars — tests whether the cold-retention number alone drives clicks.
 B (Use Case): Hyprflow Bottle for Commutes — Fits Any Car Cup Holder — 58 chars — tests whether context beats spec...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -375,13 +391,17 @@ One line naming the core skeptical objection, followed by the five bullets, foll
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`feature-bullets`, `ecommerce-copywriting`, `objection-handling`, `trust-building`, `listing-optimization`],
+    tags: [
+      `feature-bullets`,
+      `ecommerce-copywriting`,
+      `objection-handling`,
+      `trust-building`,
+      `listing-optimization`,
+    ],
     whyItWorks: `GPT-5.1's default mode for a bullet list is enumerative and additive — restate the feature, attach a positive adjective, move to the next one — which produces bullets that sound fine to a neutral reader but do nothing for the specific reader who has already been disappointed by similar claims before; naming the category-level skepticism explicitly and requiring each bullet to answer the silent doubt behind it forces the model to write toward a specific reader's mental objection instead of toward the feature itself. The instruction to soften a claim rather than invent a proof point when none was given directly counters a well-documented tendency of language models under a persuasive-writing brief to manufacture specificity (a percentage, a lab name, a certification) because specific-sounding claims score as more convincing in the model's training signal, even when nothing in the prompt supports them — for ecommerce copy this isn't just a style problem, it's a claim a merchant could be held legally accountable for making. Banning unverifiable superlatives matters mechanically for the stated skeptical reader specifically: a shopper primed to distrust the listing reads "the best" as evidence the seller has nothing more specific to say, which makes the superlative actively counterproductive rather than neutral filler, unlike with a more credulous reader where it might pass unnoticed.`,
     exampleOutput: `Core objection: that 'adjustable ergonomic' features are cosmetic and don't actually move once you sit down.
 **Lumbar support that actually slides** — the pad moves up to 3 inches on a separate track from the recline mechanism, so it stays where you set it instead of resetting when you lean back...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -455,12 +475,16 @@ Table, then the four labeled paragraphs in order.`,
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`product-comparison`, `competitive-positioning`, `ecommerce-copywriting`, `trust-building`, `conversion-copy`],
+    tags: [
+      `product-comparison`,
+      `competitive-positioning`,
+      `ecommerce-copywriting`,
+      `trust-building`,
+      `conversion-copy`,
+    ],
     whyItWorks: `GPT-5.1 given a comparison brief without explicit instruction defaults to a subtly one-sided output, because the framing of "comparison for our product's page" reads as an implicit goal to make our product win, and the model satisfies that goal by hedging the competitor's real advantages into weaker language even when told to state them — which is precisely the pattern that makes AI-written comparison pages read as untrustworthy marketing rather than genuine buying guidance to a discerning shopper. Explicitly instructing the concession paragraph to be written with equal confidence and specificity as the rest of the copy is the mechanism that actually prevents this, because it removes the model's default escape hatch of technically including the concession while still tonally undermining it through hedged phrasing ("admittedly, some users might find..."). Telling the model to actively send certain readers to the alternative is the strongest form of this correction — a comparison confident enough to redirect some of its own traffic reads as credible specifically because self-interested copy never does that, and shoppers researching a considered purchase have generally seen enough comparison pages to recognize the ones that never admit a real downside. The instruction to flag unconfirmed comparison points as assumptions addresses the separate risk of the model padding out the alternative's weaknesses beyond what was actually provided, which would just recreate the dishonesty problem from the opposite direction.`,
     exampleOutput: `Where the frame desk wins: at full standing height with two 27-inch monitors and a laptop stand, a dedicated frame desk is measurably more stable — the Corvo converter can show slight flex under that exact load, which a full frame doesn't. If that's your setup, the frame desk is the better buy...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -528,13 +552,17 @@ Three labeled sections as specified above.`,
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`category-page-copy`, `ecommerce-copywriting`, `site-merchandising`, `shopper-navigation`, `seo-content`],
+    tags: [
+      `category-page-copy`,
+      `ecommerce-copywriting`,
+      `site-merchandising`,
+      `shopper-navigation`,
+      `seo-content`,
+    ],
     whyItWorks: `A category page and a product page have structurally different jobs, and GPT-5.1 asked for "category copy" without that distinction drawn explicitly tends to write a compressed, generic version of product-page copy — a warm overview paragraph followed by vague praise — because that's the more common pattern in its training data for the phrase "category description," which is usually SEO boilerplate rather than genuine navigation help. Naming the actual shopper confusion up front and requiring the intro to resolve it directly forces the model to write toward the page's real job — reducing the search space for an undecided shopper — rather than toward generically describing the category, which a shopper who's already on the page doesn't need explained to them. Requiring filter explanations in the shopper's language rather than the internal attribute name matters because merchandising filters are usually named for the database schema ("resistance level: medium") rather than for what a shopper experiences, and GPT-5.1 left to its own devices will often just restate the filter label with slightly more words rather than translating it into a felt difference. The quick-sort table is the section that actually earns the page's existence — it's the concrete output a shopper scans for before doing any manual comparison work themselves, and without explicitly requesting it the model tends to leave this kind of page as pure atmosphere copy with no actionable payoff.`,
     exampleOutput: `Most first-time buyers grab a loop band expecting it to work like the tube bands with handles they've seen in workout videos — it won't. Loop bands are for warmups and lower-body activation; tube bands with handles are what you want for upper-body strength work.
 Resistance level: how much effort the exercise takes, not how 'advanced' you are — most people use medium for warmups regardless of fitness level...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -599,14 +627,18 @@ Collection intro, then a labeled one-liner per product, then (if applicable) a f
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`collection-copy`, `ecommerce-merchandising`, `seasonal-marketing`, `site-content`, `curation`],
+    tags: [
+      `collection-copy`,
+      `ecommerce-merchandising`,
+      `seasonal-marketing`,
+      `site-content`,
+      `curation`,
+    ],
     whyItWorks: `A themed collection page is only doing real merchandising work if it can answer "why are these specific items grouped, and not those other ones" — and GPT-5.1 asked to write generic "collection copy" reliably falls back on mood-based seasonal language ("cozy," "perfect for," "vibes") precisely because that's the dominant register for this content type in its training data, even when the actual curation logic given to it is concrete and specific, like a shared footprint constraint. Requiring the intro to state the real logic directly closes that gap by giving the model a specific fact to lead with instead of a mood to evoke. The instruction that no two products can get a functionally identical one-liner is what prevents the most common lazy pattern in AI-written collection copy — five products each described as "a great choice for anyone who loves X" — by forcing the model to actually differentiate each item's role within the specific grouping, which also surfaces a genuinely useful signal: if the model can't find a distinct role for a product, that's often a real sign the product doesn't belong in the collection and the merchant should reconsider it, not just a prompting failure. The time-sensitivity handling matters commercially because evergreen collection pages that read as urgent, dated seasonal copy erode trust the moment they're seen a second time in an unrelated month — a specific and common failure of templated seasonal-sounding copy applied to a page meant to last.`,
     exampleOutput: `Everything here is chosen for one constraint: under 14 inches deep, or it folds flat when you're not using it. This isn't a 'small space aesthetic' collection — every piece in it was picked because it gives back its footprint the moment you don't need it.
 Slim console table — the one you put against the wall you thought had no room for furniture at all.
 Folding accent chair — the one you buy if you only ever need extra seating twice a month...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -669,13 +701,17 @@ A Q&A list, each question bolded, each answer directly below it. Flag with a not
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`product-faq`, `customer-support`, `ecommerce-copywriting`, `conversion-optimization`, `returns-reduction`],
+    tags: [
+      `product-faq`,
+      `customer-support`,
+      `ecommerce-copywriting`,
+      `conversion-optimization`,
+      `returns-reduction`,
+    ],
     whyItWorks: `A product FAQ only reduces pre-purchase hesitation and post-purchase returns if it answers what people are actually confused or worried about, and GPT-5.1 asked to "write an FAQ" for a product with no real question data supplied will reliably generate marketing questions in Q&A clothing — "What makes this product unique?" — because it has no genuine question bank to draw from and defaults to restructuring the product description as a false dialogue, which is why sourcing the actual recurring questions from support and reviews is the load-bearing part of this prompt, not a nice-to-have. Instructing the model to state a real limitation plainly before offering any mitigation matters because the default persuasive-writing instinct is to answer around a downside with a positive reframe, and a shopper reading a product FAQ specifically because they're worried about that downside will notice the evasion immediately — an FAQ that dodges its own hard questions is worse than not having one, because it signals the seller is hiding something the reviews already made obvious. The explicit unanswerable-questions handling addresses the single most damaging failure mode for FAQ content specifically: a model filling a knowledge gap with a fabricated specific number (a decibel rating, a coverage area) reads as authoritative to a shopper but creates a real support liability the moment a buyer holds the seller to a number that was never actually tested.`,
     exampleOutput: `**How loud is it on the highest setting?** About 54dB — roughly the volume of a quiet conversation. It's not silent, but most customers run it on medium overnight and save the highest setting for a quick clean-air boost during the day.
 **Will it work in a room with high ceilings?** It's rated for 500 sq ft at 8ft ceiling height. Above that, coverage may drop off since air volume increases faster than floor area — if your ceilings are notably taller, size up to the next model rather than assuming this one will keep pace...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -734,12 +770,16 @@ Themes table (theme, approximate frequency, sample quotes), hypothesis check par
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`review-analysis`, `customer-insights`, `voice-of-customer`, `product-feedback`, `qualitative-analysis`],
+    tags: [
+      `review-analysis`,
+      `customer-insights`,
+      `voice-of-customer`,
+      `product-feedback`,
+      `qualitative-analysis`,
+    ],
     whyItWorks: `Asked to "summarize customer sentiment" without further constraint, GPT-5.1 tends to produce a high-level, evenly-hedged paragraph ("customers generally appreciate the quality, though a few had concerns") because that's the safest, most broadly-true statement it can make across a mixed batch of reviews — which is exactly the output that gives a merchant nothing actionable, since it could describe almost any product's reviews. Requiring specific themes with a frequency estimate and supporting quotes forces the model to actually cluster the review text by topic rather than by sentiment polarity, which is the structural difference between a summary and an analysis — sentiment polarity (positive/negative) is nearly always available from any review batch, but topic clustering (which specific feature or use case is driving that sentiment) requires the model to do real categorization work it will skip unless explicitly told the output has to be organized that way. The instruction to check a stated hypothesis rather than confirm it addresses a real and common failure mode: a model given a leading suggestion in the prompt ("I suspect X is the problem") will often bias its summary toward confirming X even when the evidence is mixed, simply because the hypothesis primed what the model looks for first — explicitly telling it to potentially contradict the hypothesis counteracts that anchoring. The ban on collapsing complaints into one generic bucket matters operationally because a shipping complaint and a manufacturing defect complaint point a business toward completely different fixes, and losing that distinction in an AI-generated summary directly costs the merchant time diagnosing the wrong problem.`,
     exampleOutput: `Theme: Hip belt padding compresses after ~2 months of regular use — mentioned in roughly 9 of 62 reviews, concentrated in 3-star and below. Quote: 'Loved it for the first month, then the padding went flat on long days.' Hypothesis check: Partially confirmed — hip belt padding is a real recurring theme, but it's the third most common complaint, not the first; strap adjustment difficulty is mentioned more often...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -814,13 +854,17 @@ Classification line, then the drafted response (60-120 words), ready to post as-
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`review-response`, `customer-service`, `reputation-management`, `ecommerce-copywriting`, `brand-voice`],
+    tags: [
+      `review-response`,
+      `customer-service`,
+      `reputation-management`,
+      `ecommerce-copywriting`,
+      `brand-voice`,
+    ],
     whyItWorks: `GPT-5.1's default register for "respond to this negative review" is uniformly apologetic and conciliatory regardless of what actually happened, because that's the safest tone across the enormous range of review-response examples in its training distribution — which is exactly why AI-drafted review responses often read as interchangeable corporate boilerplate that doesn't actually engage with what the specific customer said, whether the review describes a shipping delay or a genuine safety defect. Requiring an explicit severity classification before drafting forces the model to actually read and categorize the review rather than pattern-match to a generic apology template, and produces a structurally different response for a five-star review than a two-star one instead of the same warm tone stretched or compressed to fit. The instruction never to offer an unconfirmed discount or replacement is the single highest-stakes rule in this prompt: a public review response is a public commitment, and a model optimizing for "sounds appropriately resolving" will readily generate a specific offer ("we'd like to send you a replacement") that the business never authorized, creating a real obligation the merchant now has to either honor at cost or walk back publicly, which is worse than the original review. Handling the inaccurate-claim case with an instruction to acknowledge understandable confusion rather than defend the brand addresses the second most common failure — an AI-drafted correction that reads as defensive or condescending toward the reviewer typically does more reputational damage in front of other readers than the original negative review did.`,
     exampleOutput: `Classification: (a) legitimate product/service failure.
 We're sorry the umbrella arrived with a bent rib and a crank that won't tilt — that shouldn't have made it through our packaging, and we know it's frustrating on something you were excited to use. We'd like to send a free replacement along with a prepaid return label for the damaged unit; you should have an email from our team shortly to arrange it.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -887,14 +931,18 @@ Three labeled sections (one per bucket), each as a list of issue, supporting quo
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`review-mining`, `product-development`, `voice-of-customer`, `listing-optimization`, `qualitative-analysis`],
+    tags: [
+      `review-mining`,
+      `product-development`,
+      `voice-of-customer`,
+      `listing-optimization`,
+      `qualitative-analysis`,
+    ],
     whyItWorks: `The single most common failure in AI-assisted review mining is producing one flat list of complaints with no distinction between a genuine design flaw and a customer expectation the listing itself set up wrongly, because both surface as similarly-worded negative sentiment in the raw text — a complaint about weight and a complaint about seasoning maintenance can read almost identically in tone even though one is an unfixable material property and the other might be solved entirely by changing a product photo. Forcing a three-way sort with an explicit rule that a complaint conflicting with a stated fixed constraint gets routed away from the product-fix bucket is what prevents a roadmap document from filling up with "fix" items the product team can't actually act on, which is exactly the kind of low-credibility deliverable that gets a review-mining exercise ignored by a busy product team the next time it's handed to them. Requiring the expectation-mismatch bucket to trace back to a specific line in the current listing (or explicitly note when it can't) turns a vague "customers were confused" complaint into an assignable task for whoever owns the listing copy, which is the actual mechanism by which this kind of analysis produces a fix rather than just documenting a problem. The explicit ban on inflating a single mention into a trend addresses GPT-5.1's tendency, when summarizing qualitative text, to generalize from a vivid single example because a strongly-worded individual complaint is more salient in the text than a duller pattern repeated across many milder mentions — requiring an actual count per item forces the model to check its own generalization before presenting it as a pattern.`,
     exampleOutput: `BUCKET 1 — Actual product issue: Handle heat retention — 11 reviews mention the handle staying hot long after cooking, several noting they were surprised since 'cast iron handles are supposed to cool faster.' Recommended: evaluate a handle material or design change in next revision.
 BUCKET 2 — Expectation mismatch: Perceived weight — 14 reviews call it 'way heavier than expected'; listing photos show it on a large range with no scale reference and the description says 'lightweight enough to handle daily' with no actual weight stated. Recommended: add exact weight to listing and a photo showing it held one-handed for scale.
 BUCKET 3 — Not actionable: 3 reviews mention a damaged box on arrival, tied to one specific shipping carrier route, not the product itself...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -968,13 +1016,17 @@ Four labeled sections as above.`,
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`product-positioning`, `competitive-strategy`, `messaging`, `b2b-ecommerce`, `go-to-market`],
+    tags: [
+      `product-positioning`,
+      `competitive-strategy`,
+      `messaging`,
+      `b2b-ecommerce`,
+      `go-to-market`,
+    ],
     whyItWorks: `Positioning work asked for in the abstract ("position our product against the market") gets GPT-5.1 to produce a statement that's true but generic enough to apply to almost any competitor in the category, because without a named, specific alternative the model has nothing concrete to differentiate against and defaults to category-level claims like "the most powerful solution" — naming the actual thing you're losing to, and specifically an informal alternative like a spreadsheet rather than a named competitor product, forces every clause of the positioning statement to be checked against a real, specific comparison rather than a hypothetical one. The diagnose-the-real-gap step matters because positioning exercises reflexively assume the fix is always a messaging problem, when the loss pattern given here (inertia, not a features gap) actually calls for a completely different intervention than sharper copy would provide — instructing the model to be willing to conclude the gap isn't solvable by positioning at all prevents it from forcing an artificial messaging angle onto what might really be a pricing, distribution, or switching-cost problem. Requiring the deprioritization step for an explicitly named unwinnable segment addresses a real strategic cost that's easy to overlook: sharper positioning applied uniformly to every prospect, including ones who were never going to switch regardless of message quality, burns sales and marketing effort on the lowest-probability conversions instead of concentrating it where the diagnosed gap is actually persuadable.`,
     exampleOutput: `Diagnosed gap: this isn't a features loss, it's inertia — teams already have a working-enough system and the switching cost of moving off it feels higher than the pain it solves.
 Positioning: For small teams who've outgrown tracking work in Slack threads, Basecamp is the project tool that shows task status without anyone having to ask, unlike a spreadsheet-and-Slack setup where status only exists if someone remembers to update it manually...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1051,12 +1103,16 @@ Four labeled sections above, plus a one-line flag if you don't have enough volum
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`pricing-strategy`, `ab-testing`, `conversion-optimization`, `ecommerce-analytics`, `experiment-design`],
+    tags: [
+      `pricing-strategy`,
+      `ab-testing`,
+      `conversion-optimization`,
+      `ecommerce-analytics`,
+      `experiment-design`,
+    ],
     whyItWorks: `Asked for "pricing test ideas," GPT-5.1 tends to produce a plausible-sounding list of price points to try without addressing the actual reason most merchant-run pricing tests fail to produce a usable answer — not picking the wrong price, but running a test whose result can't be cleanly attributed to the price change because something else moved at the same time, or deciding what counts as a win only after seeing a number that's convenient to rationalize. Requiring the hypothesis to be restated as a specific, falsifiable statement rather than a vague "see if it works" question forces a decision about what result the test is actually trying to produce before any price point is chosen, which is the same discipline a real experimentation team applies and that ad hoc merchant price changes almost always skip. The confound-check step, built around whatever concurrent change was actually named (a new ad campaign in this example), directly targets the single most common reason merchants misread their own pricing tests: attributing a conversion change to the price when a simultaneous traffic-quality or channel-mix shift was the real driver — without explicitly naming and checking for that overlap, GPT-5.1 has no way to know a concurrent change exists at all, since it isn't implied by the pricing question alone. Setting read-out criteria in advance, before the test data exists, is a deliberate defense against a well-documented human bias (not a model failure) — deciding after the fact what counts as "good enough" tends to fit whatever number came back, and locking the bar in beforehand, in the AI-assisted design document itself, gives the merchant something concrete to hold themselves to later.`,
     exampleOutput: `Hypothesis: Raising price from $38 to $42 will not reduce conversion rate by more than 8% (the margin gain at $42 breaks even against an 8% conversion drop; anything worse than that is a net loss). Confound check: the new ad campaign launching in the same window will shift traffic mix toward a colder audience regardless of price, which could depress conversion independent of the price change — recommend holding the ad campaign to existing geos only during the test window, or explicitly noting in the read-out that a conversion drop can't be fully attributed to price alone otherwise...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1127,12 +1183,16 @@ Five bundles with the checks above, then a final ranked list with one-line reaso
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`product-bundling`, `merchandising-strategy`, `margin-analysis`, `inventory-management`, `ecommerce-strategy`],
+    tags: [
+      `product-bundling`,
+      `merchandising-strategy`,
+      `margin-analysis`,
+      `inventory-management`,
+      `ecommerce-strategy`,
+    ],
     whyItWorks: `Asked generically for "bundle ideas," GPT-5.1 reliably produces plausible-sounding category pairings (mug and coffee, phone and case) because that's the pattern-matching task the request implies, without any mechanism to check whether the pairing is actually financially or operationally sound — bundle ideation and bundle viability are two different problems, and a prompt that only asks for the first will get confident-sounding recommendations that ignore the second entirely. Requiring the margin check to run against the actual numbers provided, rather than trusting the model's sense of what discount "sounds reasonable," matters because GPT-5.1 has no way to know a bundle's real cost structure unless the margins are given explicitly, and left unconstrained it will happily suggest an attractive-sounding 20-25% discount without any awareness that this could make a bundle unprofitable per unit — a mistake that looks like a promotion but functions as a pricing error once it ships. The inventory check step surfaces a failure mode specific to bundling that a purely creative brainstorm would never catch: pairing a healthy-stock item with a constrained one accelerates demand on exactly the component the merchant can least afford to run out of, potentially creating stockouts that then force the entire bundle offline mid-promotion. Prioritizing purchase-pattern data over category logic in the ranking step matters because two products can sound complementary by category (a mug and a dripper) while actual order data shows customers don't buy them together at any meaningful rate — the model has no way to know this unless told to weight real behavioral evidence over its own plausible-sounding inference.`,
     exampleOutput: `Bundle: Pour-Over Starter Set (dripper + coffee beans) — supported by real data (40% co-purchase rate). Margin check: combined price $44, blended margin roughly 41% before discount; at 15% off ($37.40), blended margin holds around 30% — still healthy, proceed. Inventory check: caution — dripper has only 3 weeks of stock at a 6-week reorder lead time; a successful bundle promotion could sell through remaining dripper stock before restock arrives. Recommend capping bundle promotion to available dripper units or expediting the reorder before launch...`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1205,12 +1265,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`cross-sell`, `post-purchase`, `product-copy`, `merchandising`, `conversion-copy`],
+    tags: [
+      `cross-sell`,
+      `post-purchase`,
+      `product-copy`,
+      `merchandising`,
+      `conversion-copy`,
+    ],
     whyItWorks: `The instruction to name the specific unsolved gap rather than lean on "frequently bought together" forces the model out of its default pattern-matching mode, where GPT-5.1 will happily generate plausible-sounding companion-product copy purely from category co-occurrence (tents pair with camping chairs, camping chairs pair with coolers) without ever checking whether the pairing addresses an actual functional hole in the first purchase — that co-occurrence reasoning produces technically true but persuasively empty copy, since "other campers also bought this" gives the buyer no new reason to add it to this specific order. Requiring the model to explicitly drop a candidate that doesn't close the stated gap counters a related failure mode: left unconstrained, GPT-5.1 tends to keep every item offered in the prompt because removing one feels like discarding user-supplied information, even when a candidate is actually irrelevant or competitive with the original purchase; stating the drop rule upfront gives it permission to prune instead of rationalizing inclusion. Capping the list at three and ranking by gap-closure rather than margin also blocks a subtler bias — language models trained on marketing copy tend to over-index on whichever product in a list has the strongest sales-adjective density (bundle deals, premium tiers), which silently promotes margin-heavy items over the pairing a buyer would actually recognize as necessary. Framing the copy as "complete what you started" rather than a fresh pitch matters because a buyer who just converted is in a different psychological state than a cold browser, and generic upsell phrasing written for browsing-stage shoppers reads as tone-deaf immediately after checkout.`,
     exampleOutput: `1. Footprint ($24) — protects the tent floor from the exact ground damage that voids its waterproof warranty; ranked first, it's the only item that prevents an outright product failure. 2. Sleeping pad ($59) — the tent keeps you dry, not comfortable; ranked second as the next most direct gap. Lantern dropped — a nice-to-have, not a gap this purchase actually left open. Copy: "Your tent's floor isn't warrantied against rocky or wet ground on its own — add the matching footprint before your first trip out."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1285,12 +1349,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`upsell`, `checkout-copy`, `tier-comparison`, `conversion-copy`, `cart-optimization`],
+    tags: [
+      `upsell`,
+      `checkout-copy`,
+      `tier-comparison`,
+      `conversion-copy`,
+      `cart-optimization`,
+    ],
     whyItWorks: `The relevance-check step exists because GPT-5.1, asked directly for upsell copy, will produce persuasive comparison text regardless of whether the underlying pairing makes sense for the specific buyer — it optimizes for the shape of a convincing upsell rather than for whether an upsell should be shown at all, since nothing in a bare "write upsell copy" instruction gives it permission to conclude the answer is no. Forcing the model to check the buyer signal against the stated limitation before writing anything reframes the task from copywriting to a gated decision, which changes what the model actually produces: a suppression recommendation is now a valid, in-scope output rather than an implicit failure to complete the task. Requiring the base-tier limitation to be phrased as something the buyer would personally recognize, rather than a spec-sheet delta, matters because upsell copy that lists technical differences (wattage, jar volume) forces the buyer to do the translation work themselves, and most buyers won't bother mid-checkout — translating the spec into the exact failure scenario ('can't batch a week of smoothies at once') does that work for them and is the actual mechanism by which relevant upsells convert while irrelevant ones get dismissed as noise. The instruction against artificial urgency addresses a known pattern where language models default to scarcity language whenever the word 'upsell' appears in context, even when no real constraint exists — for a use-case-fit pitch, manufactured urgency actively undermines the credibility of the reasoning just given, since a genuinely relevant recommendation doesn't need a countdown timer to be compelling.`,
     exampleOutput: `Relevance check: show — the cart contains a frozen fruit variety pack and a 'meal prep smoothie' search, both consistent with the base tier's limitation. Copy: "The standard cup holds one smoothie at a time, so a week of frozen-fruit prep means blending daily. $45 more gets you the 64oz vacuum jar built for batching a week at once." Decline path: "Keep the standard blender — you can always add the jar separately later."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1367,12 +1435,16 @@ Three complete emails, each labeled with its send timing, subject line, and body
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`abandoned-cart`, `email-marketing`, `lifecycle-email`, `conversion-copy`, `ecommerce-email`],
+    tags: [
+      `abandoned-cart`,
+      `email-marketing`,
+      `lifecycle-email`,
+      `conversion-copy`,
+      `ecommerce-email`,
+    ],
     whyItWorks: `Assigning each email in the sequence a distinct job counters the single most common failure in AI-generated cart-recovery sequences: without an explicit constraint, GPT-5.1 will produce three emails that are structurally identical — reminder plus escalating discount — because that's the dominant pattern in the training data for 'abandoned cart email sequence,' and it's also the laziest way to satisfy a three-email request without doing the harder work of differentiating intent per email. Requiring the second email to match its lever to the actual stated abandonment reason, rather than defaulting to a discount, addresses a specific and costly mistake: offering a discount to someone who abandoned over shipping cost or fit uncertainty (not price) trains that segment to expect discounts on future purchases while never actually addressing why they left, which depresses full-price conversion over time even as the immediate recovery email 'works.' Delaying the discount to only the final email, and gating it on the stated discount policy rather than assuming one exists, prevents the model from inventing a markdown lever that may not reflect real margin constraints — a common failure when a model is asked to write persuasive copy without an explicit boundary on what levers are actually available. The instruction against a templated opening line addresses a surface-level tell that undermines trust in the whole sequence: if all three emails visibly share the same generator, the brand-voice work in the rest of the copy is wasted, since recipients pattern-match templated bulk email at the subject-line and opening-line level before reading further.`,
     exampleOutput: `Email 1 subject: "Still deciding on the cognac boots?" — no discount, no urgency, just the fact of what's saved. Email 2 subject: "About that $12.99 shipping" — addresses the actual likely objection with the real shipping policy, no discount. Email 3 subject: "Last call — 10% off before these go back to stock" — states the discount plainly with a real expiry.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1443,12 +1515,16 @@ Subject line, then the full email body, under 150 words — this email should be
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`post-purchase-email`, `customer-onboarding`, `retention`, `returns-reduction`, `lifecycle-email`],
+    tags: [
+      `post-purchase-email`,
+      `customer-onboarding`,
+      `retention`,
+      `returns-reduction`,
+      `lifecycle-email`,
+    ],
     whyItWorks: `Explicitly banning the review or referral ask forces a separation that GPT-5.1 doesn't make on its own: asked generically for a 'post-purchase email,' it defaults to a template that thanks the buyer, nudges a review, and suggests related products all in one message, because that's the most common shape of post-purchase email in its training distribution, and that shape treats the purchase itself as the success event rather than actual product use — for anything with a real first-use learning curve, that conflation is the direct cause of both bad early reviews (written before the buyer figured out the coarse-grind requirement) and unnecessary returns (from buyers who never got a good result and assumed the product was defective rather than misused). Requiring the common mistake to be addressed as a positive instruction rather than a warning matters mechanically: warnings phrased as 'don't do X' get skimmed and ignored at a higher rate in transactional email, whereas 'use a coarse grind, roughly the texture of raw sugar' gives the buyer something concrete to act on during the moment they're actually unboxing and about to make the mistake. Restricting the email to a single support channel, rather than the multi-channel list a model defaults to when asked to be 'helpful,' removes the decision-paralysis cost of a confused new buyer having to guess which of three listed channels actually gets a fast response — a single clear path converts a would-be return into a resolved support ticket instead.`,
     exampleOutput: `Subject: "Before your first cold brew: one grind size makes all the difference" — body opens on the grind tip, states what a good 12-18 hour result should taste and look like, and closes with a single reply-to line for help, no review ask.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1525,12 +1601,16 @@ Three phased checklists as specified, then the risk section as a short standalon
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`product-launch`, `launch-plan`, `project-checklist`, `ecommerce-ops`, `risk-planning`],
+    tags: [
+      `product-launch`,
+      `launch-plan`,
+      `project-checklist`,
+      `ecommerce-ops`,
+      `risk-planning`,
+    ],
     whyItWorks: `The mandatory risk section, scoped to name the single most likely failure rather than a generic list, counters GPT-5.1's default behavior on planning tasks, which is to produce an exhaustive, hedge-everything risk list ('supply chain issues, weather delays, platform outages, negative reviews') that reads as thorough but gives the operator no actual prioritization — a launch plan with twelve equally-weighted risks is functionally identical to one with none, because nobody can act on all twelve simultaneously with finite launch-week attention. Forcing the model to reason from the specific inventory constraint and unconfirmed dependency stated in the prompt, rather than general e-commerce launch risks, produces a genuinely different answer for a 400-unit limited run than it would for an unlimited-stock SKU — the former's dominant risk is selling out and disappointing the announcement audience, which is a different problem requiring a different mitigation (a waitlist mechanism) than a generic 'launch could underperform' risk. Flagging pre-launch tasks that depend on the unconfirmed dependencies, with an explicit 'what happens if it slips' consequence, prevents the common planning failure where a dependency risk is noted once at the top of a document and then silently ignored in every subsequent phase that actually depends on it — tying the consequence directly to the task in Phase 1 keeps the risk live in the plan rather than treated as boilerplate.`,
     exampleOutput: `Risk section: "With only 400 units and a 6-week restock lag, the most likely failure is selling out within hours of the email send and disappointing the Instagram audience who see it later — mitigate by loading a waitlist form on the PDP the moment stock hits zero, framed as 'notify me for restock' rather than a dead sold-out page."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1610,12 +1690,16 @@ The four steps as labeled sections, in order.`,
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ecommerce-seo`, `category-page`, `content-brief`, `on-page-seo`, `internal-linking`],
+    tags: [
+      `ecommerce-seo`,
+      `category-page`,
+      `content-brief`,
+      `on-page-seo`,
+      `internal-linking`,
+    ],
     whyItWorks: `The query-intent check as a gated first step matters because GPT-5.1, given a target query and asked directly for a category-page brief, will write the brief regardless of whether the query actually matches category-level intent — a query like 'best running shoes for overpronation' carries comparison-and-advice intent that a thin category page structurally cannot satisfy as well as an article can, and no amount of on-page copywriting closes that gap, so surfacing the mismatch before writing the rest of the brief prevents wasted effort optimizing the wrong page type. The explicit cap on the category description length, and the instruction to place it above the grid rather than let it expand, counters a strong default tendency: language models treat 'thin content' as a word-count problem and respond by generating long descriptive blocks, when the actual SEO and UX fix for a shopping page is a tight, differentiating description plus better structured signals (filters, internal links), not more prose competing with the product grid for attention. Scoping filter-facet recommendations to the actual product count prevents a generic answer that lists every conceivable running-shoe facet (color, brand, price, width, drop, terrain) regardless of whether 34 SKUs actually split meaningfully across all of them — recommending facets that don't create meaningfully different result sets adds sidebar clutter without helping either users or crawlers. The explicit ban on defaulting to a buying-guide block addresses the single most common SEO-tool suggestion for thin category pages, which is often applied reflexively without checking whether the actual ranking gap is content depth versus something structural like internal link equity.`,
     exampleOutput: `Step 1: query fit confirmed — 'best running shoes for overpronation' has comparison intent that a filterable category page can serve if overpronation-support is a real, filterable attribute. Step 2: H1 "Men's Running Shoes for Overpronation", meta title/description with the query, 2-sentence category blurb distinguishing stability shoes from neutral-cushion shoes in the adjacent category.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1692,12 +1776,16 @@ The four steps as labeled sections in order, with the final title and bullets sh
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`marketplace-seo`, `amazon-listing`, `keyword-mapping`, `product-listing`, `search-optimization`],
+    tags: [
+      `marketplace-seo`,
+      `amazon-listing`,
+      `keyword-mapping`,
+      `product-listing`,
+      `search-optimization`,
+    ],
     whyItWorks: `Sorting keywords into title/bullet/backend buckets before writing anything counters GPT-5.1's default behavior when asked to 'optimize a listing title with these keywords,' which is to chain every given keyword into the title regardless of whether the result reads as a sentence — that produces the exact keyword-stuffed, comma-free title strings that dominate marketplace listings and that marketplace ranking algorithms increasingly discount relative to natural-language titles with strong click-through, since a title nobody can parse at a glance suppresses the click-through signal the algorithm also weighs. Explicitly permitting the model to say the current title is already fine, rather than always producing a rewrite, matters because a model asked to 'improve' something will almost always generate a changed version even when the original was adequate, since producing no change can read as an incomplete response — stating this permission upfront removes that pressure and lets a genuinely fine title stay as is. Requiring duplicate word stems to be stripped from the backend terms once they're covered by the title or bullets addresses a specific and well-documented Amazon indexing rule: backend search term fields have a hard byte limit, and most marketplace search algorithms already index visible on-page text (title, bullets) separately from backend terms, so repeating an already-covered word there is a pure waste of a scarce, non-renewable character budget that could otherwise hold a genuinely new search term the listing isn't yet indexed for.`,
     exampleOutput: `Step 2 title: "32oz Insulated Water Bottle with Straw Lid – Leak-Proof Stainless Steel, Gym & Sports" (98 chars, within limit, reads as a sentence). Step 4 backend terms: "tumbler 32 oz sports outdoor hydration flask" — duplicate stems like 'water bottle' and 'insulated' dropped since they're already indexed via the title.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1774,12 +1862,16 @@ A numbered shot list with angle/background/focus notes, a technical specs table 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`product-photography`, `shot-list`, `creative-brief`, `visual-merchandising`, `marketplace-images`],
+    tags: [
+      `product-photography`,
+      `shot-list`,
+      `creative-brief`,
+      `visual-merchandising`,
+      `marketplace-images`,
+    ],
     whyItWorks: `Deriving the shot list from the actual usage destinations, rather than a generic 'lifestyle plus studio shots' list, matters because GPT-5.1's default photography brief output pulls from the most common pattern in its training data — a roughly uniform 5-7 shot set regardless of where the images end up — which misses that a marketplace main image has a hard white-background requirement most lifestyle shots can't satisfy, and a 16:9 homepage hero has framing constraints a square PDP thumbnail doesn't share; treating destination as an input the shot list must derive from, rather than an afterthought mentioned once, forces the model to actually cross-reference platform requirements against the shot list it produces. The requirement to turn the past-shoot problem into an explicit photographer-facing directive, rather than leaving it as background context, addresses a common failure where a model acknowledges a stated constraint in its reasoning but doesn't translate it into an actionable instruction in the final brief — a photographer reading the brief cold has no way to infer 'avoid the clasp-shadow problem from last time' unless it's written as a direct lighting or angle instruction they can act on without knowing the shoot's history. Scoping props to only those supporting the key features or brand style, with an explicit instruction to flag anything visually competing with a key feature, counters the tendency of styled product photography briefs to add decorative props by default for visual interest — appropriate for a lifestyle hero shot, actively harmful for a detail shot whose entire purpose is making a specific mechanical feature legible in a marketplace thumbnail.`,
     exampleOutput: `Shot 1: main marketplace image, pure white background (255,255,255), sleeve closed, 3/4 angle, clasp visible with even diffused lighting to avoid shadow across the clasp (directly addressing the prior shoot's shadow issue). Shot 4: detail shot, clasp open, macro focus on the magnetic mechanism, no props in frame.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1856,12 +1948,16 @@ Beat-by-beat structure with intent notes, the do-not-say list with reasons, and 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ugc-brief`, `creator-brief`, `social-video`, `product-marketing`, `compliance`],
+    tags: [
+      `ugc-brief`,
+      `creator-brief`,
+      `social-video`,
+      `product-marketing`,
+      `compliance`,
+    ],
     whyItWorks: `The explicit prohibition on writing dialogue counters GPT-5.1's strong default when asked for a 'video brief' — without that constraint, it tends to produce a beat structure that's actually a disguised script, complete with specific sentences meant to be delivered close to verbatim, because that's the easiest way to guarantee the must-hit points get said and it mirrors the shape of most ad-script examples in its training data; the problem is that a UGC creator reading assigned lines produces the flat, over-articulated delivery audiences have learned to recognize and scroll past, which is precisely the outcome paying for 'user-generated' content is meant to avoid. Requiring the creator's own stated context to be worked into a specific beat, rather than left as unused background, forces the brief to actually be creator-specific rather than a generic template that happens to name this creator in the header — a brief that would read identically for any creator given the same product has failed at the one thing that makes UGC different from a script read by an actor. Pairing the do-not-say list with the reason behind each restriction, rather than a bare rule list, matters because a creator who understands that 'reverses aging' is a legally risky claim (not just an arbitrary brand preference) is far less likely to accidentally say something equally non-compliant in their own words during an ad-libbed take — a bare prohibition list only blocks the exact phrase given, while an understood reason generalizes to phrasing the brief-writer never anticipated.`,
     exampleOutput: `Hook beat: open on the creator's own documented sensitive-skin story — "you've talked about your skin freaking out before, start there and show why you were nervous to try retinol at all." Example phrasing (optional, say it your way): "I was so scared retinol would wreck my skin like everything else has."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1941,12 +2037,16 @@ Four labeled sections, each with the actual copy (headline, subheadline, and any
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`homepage-copy`, `shopify`, `landing-page`, `conversion-copy`, `brand-positioning`],
+    tags: [
+      `homepage-copy`,
+      `shopify`,
+      `landing-page`,
+      `conversion-copy`,
+      `brand-positioning`,
+    ],
     whyItWorks: `Anchoring the hero section to the specific stated knowledge gap, rather than asking for a generic hero headline, counters the strongest default in GPT-5.1's homepage-copy output — a broad, benefit-forward tagline ('Clean smarter, live better') that sounds finished but doesn't actually address what's stopping a specific first-time visitor from understanding the offer, since generic taglines are trained to sound good across every brand simultaneously and therefore say nothing brand-specific. Making the competitor-confusion point implicit within the first screen, rather than a named comparison, matters because directly naming a competitor on a homepage creates legal and brand-tone risk and also does the competitor's marketing work by putting their name on your own page — describing the actual mechanical difference (refillable model versus single-use) lets the visitor draw the comparison themselves without the store ever needing to name who they mean. Requiring a stated rationale for where the trust signal is placed, tied to a specific hesitation it addresses, prevents the common pattern of dropping a review-stars widget reflexively near the top of the page regardless of what's actually causing purchase hesitation at that story's specific stage — a B-corp badge addresses an ethical-brand-fit hesitation, not a product-efficacy hesitation, and placing it without that reasoning is decoration rather than persuasion. The explicit ban on padding with unrelated generic sections (press logos, newsletter signup) addresses a language-model tendency to round out any list-shaped output to a 'standard' length or section count regardless of whether every section earns its place for this specific brand.`,
     exampleOutput: `Hero: "One bottle. Refill forever." / subheadline: "Skip buying a new spray bottle every month — just drop in a $4 concentrate pod and refill with water." Rationale: directly closes the 'is this a one-time novelty' knowledge gap in the first line, without naming any single-use competitor.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -2017,12 +2117,16 @@ Four labeled steps as specified, ending with the top 2 prioritized fixes.`,
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`conversion-audit`, `product-page`, `cro`, `funnel-analysis`, `ecommerce-optimization`],
+    tags: [
+      `conversion-audit`,
+      `product-page`,
+      `cro`,
+      `funnel-analysis`,
+      `ecommerce-optimization`,
+    ],
     whyItWorks: `Requiring the audit to locate the specific drop-off stage before diagnosing anything counters GPT-5.1's default behavior on CRO requests, which is to return a comprehensive best-practices checklist spanning the entire page (photos, trust signals, urgency, shipping) regardless of where the actual leak is — that checklist is defensible in the abstract since every item is plausibly good practice, but it wastes testing effort on stages that aren't actually the problem, and a 19% add-to-cart-to-purchase rate against a 34% site average is specifically a checkout-stage or price-surprise problem, not a browse-stage photo problem, which the funnel data makes diagnosable if the model is forced to actually use it rather than treat it as color commentary. Cross-checking against what's already been tried, with the requirement to explain why a repeated fix might now work differently rather than just re-suggesting it, prevents the model from recommending the free-shipping banner again in slightly different words — a generic CRO checklist has no memory of what's already failed, so without this explicit instruction the model will happily re-suggest an already-disproven fix because it's a category-correct suggestion, even though it's specifically known not to work here. Factoring in the traffic source addresses a real and specific CRO pattern: a page underperforming specifically for cold paid-social traffic is frequently an expectation-mismatch problem between what the ad promised and what the PDP delivers, which is a different root cause than the same conversion metrics would suggest for warm, already-familiar traffic, and conflating the two produces a diagnosis that only fits one segment.`,
     exampleOutput: `Step 1: the leak is add-to-cart-to-purchase (19% vs 34% average), not view-to-cart. Step 2: most likely cause is the shipping cost surprise at checkout — the free-shipping banner change didn't address it because shipping cost isn't disclosed until the final step regardless of the banner's presence elsewhere on the site. Top fix: surface actual shipping cost or free-shipping threshold directly on the PDP near the price, not just in a site-wide banner.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -2093,12 +2197,16 @@ The four steps as labeled sections, ending with a simple ordered list of the fin
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`merchandising`, `collection-page`, `product-sort`, `inventory-strategy`, `ecommerce-strategy`],
+    tags: [
+      `merchandising`,
+      `collection-page`,
+      `product-sort`,
+      `inventory-strategy`,
+      `ecommerce-strategy`,
+    ],
     whyItWorks: `Requiring an explicit tension check before assigning any featured slot counters a default failure mode: GPT-5.1 asked to 'merchandise this collection to prioritize margin' will happily rearrange every product by margin alone, without noticing that a high-margin item with only 6 units in stock is a bad candidate for a featured slot regardless of margin, because running out of stock on a prominently featured position produces a broken-looking grid (a 'sold out' badge in the most visible spot) that actively hurts conversion for everyone who sees that page while it's out — margin and prominence pull in the same direction only when stock supports the exposure, and a model not explicitly told to check stock against featured-slot risk will optimize margin in isolation. Allowing the model to conclude there's no real tension and recommend the plain best-seller sort matters because collection merchandising requests almost always get an elaborate manual-override answer whether or not the underlying data actually calls for one — a model asked to build a merchandising plan treats 'just use the default sort' as an unsatisfying non-answer, so without explicit permission to reach that conclusion it will invent minor justifications for reordering products that didn't need to move. The seasonal-clearance factor changes the correct answer in a specific, checkable way: a puffer coat needing to clear before markdown season is a legitimate reason to keep it prominent even at a thinner margin than the wool coat, since the cost of unsold late-season inventory (forced markdown, storage) outweighs the margin difference the business priority would otherwise favor — the plan has to weigh these two competing signals against each other rather than mechanically applying just one.`,
     exampleOutput: `Step 1: real tension — Wool Coat B (#2 rank, 55% margin) fits the margin priority but only has 6 units, risking a stockout in a featured slot; Puffer Coat A (#1 rank, thinner margin) needs to clear before markdown season. Step 2: feature Puffer Coat A first (clearance priority overrides margin here), Wool Coat B second but flagged to auto-demote once stock drops below 3 units.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -2169,12 +2277,16 @@ One message per surface listed, each labeled, plus one line addressing the exist
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`inventory-messaging`, `backorder`, `customer-communication`, `stock-alerts`, `trust-and-transparency`],
+    tags: [
+      `inventory-messaging`,
+      `backorder`,
+      `customer-communication`,
+      `stock-alerts`,
+      `trust-and-transparency`,
+    ],
     whyItWorks: `The explicit ban on defaulting to vague phrasing when a real date exists counters GPT-5.1's strong default register for stock messaging, which leans toward safe, hedged language ('back in stock soon,' 'check back for updates') even when given a specific date in the prompt — that hedging instinct comes from training on marketing copy where vagueness is usually the safer choice, but it actively discards information the business already has and is willing to share, producing a support burden of customers asking a question the brand could have answered proactively. Tying message specificity to actual timeline confidence, rather than always defaulting to either maximum precision or maximum vagueness, matters because a fake-precise date stated with unwarranted confidence creates a specific trust cost when it's missed (a customer who was told 'March 14' and doesn't get the product until April has a legitimate grievance in a way someone told 'within a few weeks' does not), while an unnecessarily vague message when the date is actually solid wastes real information the business has and gives customers no reason to trust future restock claims. The explicit instruction to state backorder terms as a preorder against future stock, with what happens if the timeline slips, addresses a genuine dispute-and-chargeback risk: a customer who paid believing they were buying an in-stock item and then waits three weeks with no proactive communication has real grounds to dispute the charge, and stating the wait-and-slip terms upfront is what legally and practically distinguishes a preorder from a delayed normal order.`,
     exampleOutput: `PDP: "Sold out — back in stock around March 10-14, confirmed shipping from our supplier now." Waitlist email: "You're one of 2,400 people we'll notify the moment this is back — expect an email the week of March 10." DM template: "Yes, it's coming back the week of March 10-14, already in transit — want me to add you to the restock list?"`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2239,12 +2351,16 @@ A short intro line, then the common questions each as its own short-answer secti
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`returns-policy`, `customer-support`, `plain-language`, `faq`, `policy-communication`],
+    tags: [
+      `returns-policy`,
+      `customer-support`,
+      `plain-language`,
+      `faq`,
+      `policy-communication`,
+    ],
     whyItWorks: `Organizing the rewrite around the actual common support questions, rather than the policy document's original legal structure, matters because a customer searching a help center is trying to answer one specific question ('do I pay for return shipping') and the original definitions-then-conditions structure buries that answer inside a paragraph written to be legally complete, not fast to scan — restructuring around real questions is the actual mechanism by which a self-service page reduces support volume, since it shortens the path between the question in someone's head and the sentence that answers it. The instruction requiring every factual claim to match the given terms exactly, with no softening of specific numbers or conditions, addresses a real risk in how GPT-5.1 handles 'make this more plain-language' requests: simplifying legal text for readability commonly drifts a hard boundary condition into a softer, friendlier-sounding approximation ('within about a month' for a hard 30-day cutoff, or 'lightly used is usually fine' for a strict unworn requirement), and that drift creates a genuine discrepancy between the customer-facing page and the actual enforceable policy — a discrepancy that produces exactly the disputed-return support tickets the rewrite was meant to prevent. Requiring each exception to get its own explicit callout, rather than a blanket 'see terms for exceptions' line, matters because the person most likely to read a returns FAQ carefully is someone in a genuinely ambiguous situation (a final-sale item, a worn-once swimsuit) — folding the one thing they actually need into a vague pointer back to the legal document defeats the purpose of writing a plain-language page for them in the first place.`,
     exampleOutput: `"Do I have to pay for return shipping? Yes, unless the item arrived defective or we shipped you the wrong thing — in either of those cases we'll send you a prepaid label. Can I return something I wore once to try it? Only if it's still unworn in the sense of being unwashed with tags attached — a quick try-on at home is fine, wearing it out isn't."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2324,12 +2440,16 @@ Four labeled steps as specified, ending with the verdict stated in one clear sen
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`product-research`, `new-product-development`, `demand-validation`, `opportunity-assessment`, `ecommerce-strategy`],
+    tags: [
+      `product-research`,
+      `new-product-development`,
+      `demand-validation`,
+      `opportunity-assessment`,
+      `ecommerce-strategy`,
+    ],
     whyItWorks: `The explicit instruction not to treat a proposed idea as inherently good counters a strong default bias in how GPT-5.1 handles evaluation requests framed around someone's existing idea — asked to 'evaluate this product idea,' it tends toward a structurally polite, mostly affirming analysis that surfaces a token risk or two but ultimately validates the premise, because the prompt's framing implicitly signals that a positive answer is expected, and disagreeing with the premise of a request reads as an unhelpful response unless explicitly invited. Requiring the demand-signal step to distinguish types of evidence (a recurring documented pattern versus a single anecdote) rather than accept any stated demand signal at face value addresses a real failure mode in product decisions: 30 unprompted mentions across four months is meaningfully different evidence than one enthusiastic customer email, and a brief that doesn't force this distinction will happily build a confident-sounding case on thin evidence because the prompt handed it a 'demand signal' without qualifying its strength. The catalog-overlap check exists because new-SKU proposals are almost always pitched and evaluated as incremental revenue, when a travel-size version of an existing bestseller is a textbook cannibalization risk — the same repeat customers buying a smaller size instead of the full size, not new customers being reached — and a brief that skips this check will overstate the idea's actual revenue impact by counting cannibalized sales as new sales. Forcing a specific verdict rather than allowing an 'it depends' non-answer matters because product development discussions frequently stall in exactly this kind of unresolved ambiguity, and a brief that names precisely what evidence would resolve the dependency turns a vague hedge into an actionable next step.`,
     exampleOutput: `Verdict: proceed with modification — demand signal is genuinely strong (recurring documented pattern, not anecdote), but the 5,000-unit minimum order and cannibalization risk mean this should launch as a value-add with a full-size purchase (travel size as a paid add-on or gift-with-purchase) rather than a standalone SKU competing with the 16oz bestseller.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',

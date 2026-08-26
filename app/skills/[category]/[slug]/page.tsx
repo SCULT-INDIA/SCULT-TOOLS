@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SkillDetailShell } from '@/components/skills/SkillDetailShell'
-import { getSkillCategory, SKILL_CATEGORIES } from '@/lib/skills/categories'
-import { getSkill, getSiblingSkills, getTopSkillsByCategory } from '@/lib/skills/db'
 import { breadcrumbJsonLd, JsonLd, skillJsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
+import { getSkillCategory, SKILL_CATEGORIES } from '@/lib/skills/categories'
+import { getSiblingSkills, getSkill, getTopSkillsByCategory } from '@/lib/skills/db'
 
 type Params = { category: string; slug: string }
 

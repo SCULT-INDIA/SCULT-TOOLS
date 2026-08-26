@@ -78,25 +78,25 @@ export default function CompliancePage() {
             about what an organisation may do with personal data it collects. The single
             biggest thing this site does about all of them at once is architectural, not
             legal: {clientSideCount} of {TOOLS.length} tools process your files, text and
-            numbers entirely inside your own browser tab. That data is never transmitted to
-            us, so there is nothing for a data-protection law to regulate on our end — we
-            simply never receive it. The full, tool-by-tool breakdown of what does and does
-            not touch a network is on the{' '}
+            numbers entirely inside your own browser tab. That data is never transmitted
+            to us, so there is nothing for a data-protection law to regulate on our end —
+            we simply never receive it. The full, tool-by-tool breakdown of what does and
+            does not touch a network is on the{' '}
             <Link href="/privacy" className={LINK_CLASS}>
               privacy page
             </Link>
-            . There are no accounts, no passwords and no payment details collected anywhere
-            on the site, which removes an entire category of obligation (breach notification
-            for stored credentials, for example) that most of these laws spend significant
-            text on.
+            . There are no accounts, no passwords and no payment details collected
+            anywhere on the site, which removes an entire category of obligation (breach
+            notification for stored credentials, for example) that most of these laws
+            spend significant text on.
           </p>
           <p className="mt-4 text-[16px] text-ink-muted leading-7">
             What is left, after that: anonymous analytics (Google Analytics 4) and masked
             session replay (Microsoft Clarity), both of which load only after you interact
             with the page and are described in full — including Clarity's strict masking
-            mode, which replaces on-page text and anything you type with placeholder blocks
-            before it is ever sent — on the privacy page. Every section below is about that
-            remaining, genuinely small surface.
+            mode, which replaces on-page text and anything you type with placeholder
+            blocks before it is ever sent — on the privacy page. Every section below is
+            about that remaining, genuinely small surface.
           </p>
         </section>
 
@@ -130,10 +130,10 @@ export default function CompliancePage() {
             procedural provisions took effect immediately in November 2025, and the
             substantive obligations on data fiduciaries — consent, notice, and the data
             principal rights described below — are scheduled to be fully in force by{' '}
-            <strong className="text-ink">13 May 2027</strong>. We are stating that timeline
-            plainly rather than implying the Act is already fully in force, because it is
-            not — but the practices below are ones we already follow, ahead of that
-            deadline rather than because of it.
+            <strong className="text-ink">13 May 2027</strong>. We are stating that
+            timeline plainly rather than implying the Act is already fully in force,
+            because it is not — but the practices below are ones we already follow, ahead
+            of that deadline rather than because of it.
           </p>
 
           <h3 className="mt-6 text-[19px] font-semibold text-ink">
@@ -141,10 +141,16 @@ export default function CompliancePage() {
           </h3>
           <ul className="mt-4 space-y-3 text-[16px] text-ink-muted leading-7">
             <li>
-              <strong className="text-ink">Clear notice of what is collected and why.</strong>{' '}
-              The <Link href="/privacy" className={LINK_CLASS}>privacy page</Link> lists
-              exactly what is collected — analytics, masked session replay, one
-              localStorage flag — and why, in plain language rather than legal boilerplate.
+              <strong className="text-ink">
+                Clear notice of what is collected and why.
+              </strong>{' '}
+              The{' '}
+              <Link href="/privacy" className={LINK_CLASS}>
+                privacy page
+              </Link>{' '}
+              lists exactly what is collected — analytics, masked session replay, one
+              localStorage flag — and why, in plain language rather than legal
+              boilerplate.
             </li>
             <li>
               <strong className="text-ink">Data minimisation.</strong> We do not ask for
@@ -158,9 +164,9 @@ export default function CompliancePage() {
               <a href={`mailto:${CONTACT_EMAIL}`} className={LINK_CLASS}>
                 {CONTACT_EMAIL}
               </a>
-              , the same address used for security and accessibility reports on this site —
-              see "Contact for a data protection concern" below for our specific commitment
-              on response time.
+              , the same address used for security and accessibility reports on this site
+              — see "Contact for a data protection concern" below for our specific
+              commitment on response time.
             </li>
             <li>
               <strong className="text-ink">No sale of personal data.</strong> We do not
@@ -168,10 +174,13 @@ export default function CompliancePage() {
               under any circumstance.
             </li>
             <li>
-              <strong className="text-ink">Reasonable security safeguards.</strong> Detailed
-              on the <Link href="/security" className={LINK_CLASS}>security page</Link> —
-              SSRF protection on the two tools that call a server, rate limiting on every
-              API route, and the response headers set on every page.
+              <strong className="text-ink">Reasonable security safeguards.</strong>{' '}
+              Detailed on the{' '}
+              <Link href="/security" className={LINK_CLASS}>
+                security page
+              </Link>{' '}
+              — SSRF protection on the two tools that call a server, rate limiting on
+              every API route, and the response headers set on every page.
             </li>
           </ul>
         </section>
@@ -189,16 +198,16 @@ export default function CompliancePage() {
             >
               Information Technology Act, 2000
             </a>{' '}
-            and the Reasonable Security Practices and Sensitive Personal Data or Information
-            Rules, 2011 ("SPDI Rules") made under it. Those SPDI Rules remain technically in
-            force today and are due to be repealed and folded into the DPDP Act on the same
-            13 May 2027 date above — so, for now, both frameworks apply in parallel. The
-            SPDI Rules' definition of "sensitive personal data" — passwords, financial
-            information, health records, biometrics — is a useful checklist in its own
-            right: this site collects none of it. There are no passwords because there are
-            no accounts, no financial information is collected (the invoice generator
-            computes entirely in your browser and nothing you type in it is ever sent to
-            us), and no health or biometric data is requested by any tool.
+            and the Reasonable Security Practices and Sensitive Personal Data or
+            Information Rules, 2011 ("SPDI Rules") made under it. Those SPDI Rules remain
+            technically in force today and are due to be repealed and folded into the DPDP
+            Act on the same 13 May 2027 date above — so, for now, both frameworks apply in
+            parallel. The SPDI Rules' definition of "sensitive personal data" — passwords,
+            financial information, health records, biometrics — is a useful checklist in
+            its own right: this site collects none of it. There are no passwords because
+            there are no accounts, no financial information is collected (the invoice
+            generator computes entirely in your browser and nothing you type in it is ever
+            sent to us), and no health or biometric data is requested by any tool.
           </p>
         </section>
 
@@ -208,24 +217,22 @@ export default function CompliancePage() {
           </h2>
           <p className="mt-3 text-[16px] text-ink-muted leading-7">
             The{' '}
-            <a
-              href="https://gdpr-info.eu/art-3-gdpr/"
-              className={EXTERNAL_LINK_CLASS}
-            >
+            <a href="https://gdpr-info.eu/art-3-gdpr/" className={EXTERNAL_LINK_CLASS}>
               GDPR's territorial-scope rule (Article 3)
             </a>{' '}
             applies to an organisation outside the EU only if it specifically targets EU
-            users — offering goods or services to them, or monitoring their behaviour — not
-            merely because a website happens to be reachable from Europe. We do not price in
-            euros, do not run EU-specific marketing, and do not operate any feature aimed at
-            EU visitors in particular, so we are not asserting GDPR controller status here.
+            users — offering goods or services to them, or monitoring their behaviour —
+            not merely because a website happens to be reachable from Europe. We do not
+            price in euros, do not run EU-specific marketing, and do not operate any
+            feature aimed at EU visitors in particular, so we are not asserting GDPR
+            controller status here.
           </p>
           <p className="mt-4 text-[16px] text-ink-muted leading-7">
             That said, an EU visitor can and does use this site, and the practices that
             matter to GDPR are the same ones described above regardless of who is asking:
             data minimisation by default, masked session replay, no sale of personal data,
-            and a clear, working contact point for a data concern. If you are visiting from
-            the EU or UK and have a specific concern, the same{' '}
+            and a clear, working contact point for a data concern. If you are visiting
+            from the EU or UK and have a specific concern, the same{' '}
             <a href={`mailto:${CONTACT_EMAIL}`} className={LINK_CLASS}>
               {CONTACT_EMAIL}
             </a>{' '}
@@ -243,19 +250,16 @@ export default function CompliancePage() {
             annual gross revenue, or deriving over half of annual revenue from selling
             personal information, or processing 100,000 or more California residents'
             records a year — see the{' '}
-            <a
-              href="https://oag.ca.gov/privacy/ccpa"
-              className={EXTERNAL_LINK_CLASS}
-            >
+            <a href="https://oag.ca.gov/privacy/ccpa" className={EXTERNAL_LINK_CLASS}>
               California Attorney General's CCPA page
             </a>{' '}
             for the current figures. Stated plainly: a free tools site of this size and
-            reach is very unlikely to meet any of those thresholds, and we are not claiming
-            to be a "business" as CCPA specifically defines the term.
+            reach is very unlikely to meet any of those thresholds, and we are not
+            claiming to be a "business" as CCPA specifically defines the term.
           </p>
           <p className="mt-4 text-[16px] text-ink-muted leading-7">
-            Threshold aside, the one commitment CCPA visitors most often look for is easy to
-            make honestly, because it is already true: we do not sell or share personal
+            Threshold aside, the one commitment CCPA visitors most often look for is easy
+            to make honestly, because it is already true: we do not sell or share personal
             information with any third party, so there is nothing to opt out of.
           </p>
         </section>
@@ -275,9 +279,9 @@ export default function CompliancePage() {
             </a>{' '}
             and the ADA in the United States both point to the same underlying standard,
             the Web Content Accessibility Guidelines. We build every page and every tool
-            against WCAG 2.2 Level AA, and unlike most of this page, that one is not a legal
-            test with an exemption threshold — it is a specific, checkable engineering
-            target, detailed in full on the{' '}
+            against WCAG 2.2 Level AA, and unlike most of this page, that one is not a
+            legal test with an exemption threshold — it is a specific, checkable
+            engineering target, detailed in full on the{' '}
             <Link href="/accessibility" className={LINK_CLASS}>
               accessibility page
             </Link>
@@ -292,14 +296,17 @@ export default function CompliancePage() {
           </h2>
           <p className="mt-3 text-[16px] text-ink-muted leading-7">
             Every framework above eventually asks the same underlying question — are
-            "reasonable security safeguards" in place. The specific, checkable answer is on
-            the <Link href="/security" className={LINK_CLASS}>security page</Link>: SSRF
-            protection on the two tools that call a server, rate limiting on every API
-            route, and the four response headers set site-wide in{' '}
+            "reasonable security safeguards" in place. The specific, checkable answer is
+            on the{' '}
+            <Link href="/security" className={LINK_CLASS}>
+              security page
+            </Link>
+            : SSRF protection on the two tools that call a server, rate limiting on every
+            API route, and the four response headers set site-wide in{' '}
             <code>next.config.ts</code>. It also states clearly what we do not have — no
             SOC 2 or ISO 27001 certification, no penetration testing, no bug bounty — for
-            the same reason this page does: an unverified certification claim is worse than
-            an honest gap.
+            the same reason this page does: an unverified certification claim is worse
+            than an honest gap.
           </p>
         </section>
 
@@ -313,9 +320,10 @@ export default function CompliancePage() {
               {CONTACT_EMAIL}
             </a>{' '}
             with what data you are asking about and what you would like done — accessed,
-            corrected, or deleted from wherever it might be held (in practice: an analytics
-            record, since there is rarely anything else to find). We aim to acknowledge and
-            resolve a genuine data protection request within 7 days of receiving it.
+            corrected, or deleted from wherever it might be held (in practice: an
+            analytics record, since there is rarely anything else to find). We aim to
+            acknowledge and resolve a genuine data protection request within 7 days of
+            receiving it.
           </p>
           <div className="mt-6">
             <a href={`mailto:${CONTACT_EMAIL}`} className="btn-brutal btn-brutal-sm">

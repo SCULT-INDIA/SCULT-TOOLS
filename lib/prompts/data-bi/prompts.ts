@@ -63,12 +63,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`data-quality`, `dataset-audit`, `data-analysis`, `bi-workflow`, `data-cleaning`],
+    tags: [
+      `data-quality`,
+      `dataset-audit`,
+      `data-analysis`,
+      `bi-workflow`,
+      `data-cleaning`,
+    ],
     whyItWorks: `The prompt deliberately reframes the task away from "summarize this dataset," which pulls GPT-5.1 toward a neutral, descriptive column dictionary that restates the obvious and gives false confidence, and toward "judge whether this is trustworthy," which activates a more skeptical evaluation frame where the model is rewarded for flagging problems rather than describing structure politely. Forcing an explicit grain statement with a confidence flag matters because grain ambiguity is the single most common silent cause of wrong aggregate numbers in BI work — a model asked to summarize data will often just assume a grain and move on, while one asked to state it with a confidence flag has to notice and admit when the columns given don't actually establish it. Requiring the downstream risk for each suspicious column, rather than a generic "needs cleaning" flag, forces specificity that prevents the model from padding the list with cosmetic nitpicks (a lowercase status value) that don't actually threaten the intended use, while missing a genuinely dangerous one (a status value like "void" that should be excluded from revenue but might not be). The explicit ban on inventing row counts or extrapolating from a small sample addresses a real failure mode: language models asked to analyze data they were only given a few sample rows of will often speak confidently about patterns across the whole dataset, and naming this restriction upfront produces appropriately hedged answers instead of fabricated precision.`,
     exampleOutput: `Grain: one row per invoice issued (probable — confirm invoice_id is truly unique, since duplicates from payment retries were mentioned as a known risk). Suspicious columns: customer_name (case/spacing inconsistency, e.g. 'Acme Corp' vs 'ACME CORPORATION' — will fragment a customer-segment rollup unless normalized); amount_due (contains a negative value and a value near 99999.99 that looks like a placeholder, not a real charge — both would distort a revenue sum). Missing: no explicit invoice date column was shown — confirm one exists before building a monthly view. Questions: (1) Does a duplicate invoice_id always mean a payment retry, or can it also mean a genuine duplicate charge? (2) Should void-status rows be excluded from revenue recognition entirely? (3) Is amount_due always in the same currency across all rows?`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -137,12 +141,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`data-cleaning`, `data-quality`, `spreadsheet-workflow`, `data-analysis`, `reproducibility`],
+    tags: [
+      `data-cleaning`,
+      `data-quality`,
+      `spreadsheet-workflow`,
+      `data-analysis`,
+      `reproducibility`,
+    ],
     whyItWorks: `Asking for a cleaning plan rather than cleaned output matters because GPT-5.1 cannot see your actual full dataset — if you ask it to just clean the column, it will either fabricate cleaned rows that look plausible but aren't real, or hedge everything into vagueness; asking for an explicit, ordered rule set instead produces something you can mechanically apply to the real data yourself, in a spreadsheet formula, a script, or a find-and-replace pass, and something a colleague can audit later without re-deriving the logic. The ordering requirement (trim whitespace before checking duplicates) exists because cleaning rules genuinely do interact, and a model asked for an unordered list of fixes will frequently produce a set that's individually correct but wrong in combination when applied in the wrong sequence, e.g. checking for exact duplicates before normalizing case, which would miss matches. Requiring an "uncertain" flag on the canonical mapping table specifically counters a known model tendency to complete pattern-matching tasks with unwarranted confidence — without being told explicitly that guessing is worse than flagging uncertainty, the model will resolve every ambiguous abbreviation into a guessed canonical form rather than admitting two variants might refer to different real-world things. The do-not-touch input is the safeguard against the most damaging cleaning failure mode: a model, seeing an odd-looking value like "N/A," will often want to normalize it away entirely, silently destroying a meaningful distinction (missing vs. assigned) that the person building the dashboard actually needs preserved.`,
     exampleOutput: `Step 1 — Casing/whitespace: rule = trim leading/trailing whitespace, then title-case all region values. Example: 'west coast' -> 'West Coast'. Step 2 — Canonical mapping: APAC/Apac/Asia Pacific -> 'APAC' (confident); EMEA/emea -> 'EMEA' (confident); West-Coast/west coast -> 'West Coast' (confident). Rows to flag: blank and 'N/A' values should NOT be merged into any region per your do-not-touch instruction — flag as 'Unassigned' distinct from the four real regions. Audit note: 4 canonical regions established from 9 observed variants; blanks and N/A preserved as a separate Unassigned bucket per instruction; no uncertain mappings required a human decision in this pass.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -207,12 +215,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`sql`, `data-analysis`, `analytics-engineering`, `bi-workflow`, `query-writing`],
+    tags: [
+      `sql`,
+      `data-analysis`,
+      `analytics-engineering`,
+      `bi-workflow`,
+      `query-writing`,
+    ],
     whyItWorks: `Requiring a plain-English walkthrough alongside the query forces the model to actually justify each join and filter rather than produce syntactically valid SQL that silently encodes a wrong assumption — GPT-5.1, like most models, can write a query that runs and returns a number without ever surfacing that it treated a NULL join key in a way that dropped 8% of rows, and the walkthrough requirement makes that behavior visible instead of hidden inside working syntax. Explicitly requiring NULL handling and boundary-condition assumptions to be stated addresses the most common way an analytics query is technically correct but practically wrong: SQL's default NULL semantics (a NULL never equals anything, including another NULL, and is silently excluded from most aggregates) are a frequent, invisible source of undercounting, and a model not told to check for this will happily generate a query that runs cleanly while quietly excluding real rows. The instruction to say what's missing rather than invent a plausible table name matters because a model given a partial schema and no permission to say "I don't have enough" will fabricate a column name that fits the pattern of the ones it was given — which looks completely legitimate in a code block and fails only when someone actually runs it against the real database. The CTE-staging requirement is a readability choice with a real payoff: a dense single query is much harder for a reviewer to audit for the exact assumption that made the query wrong, while a staged CTE query makes each transformation checkable against the plain-English explanation next to it.`,
     exampleOutput: `WITH first_purchases AS (SELECT customer_id, MIN(order_date) AS first_order_date FROM orders WHERE status != 'refunded' GROUP BY customer_id), repeat_purchases AS (SELECT o.customer_id FROM orders o JOIN first_purchases fp ON o.customer_id = fp.customer_id WHERE o.order_date > fp.first_order_date AND o.order_date <= fp.first_order_date + INTERVAL '60 days' AND o.status != 'refunded') SELECT ROUND(100.0 * COUNT(DISTINCT rp.customer_id) / COUNT(DISTINCT fp.customer_id), 1) AS repeat_purchase_pct FROM first_purchases fp LEFT JOIN repeat_purchases rp ON fp.customer_id = rp.customer_id; Assumption stated: refunded orders were excluded from both the first-purchase and repeat-purchase counts, and the 60-day window was treated as inclusive of day 60.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -280,12 +292,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`excel`, `spreadsheet-formulas`, `data-analysis`, `bi-workflow`, `office-productivity`],
+    tags: [
+      `excel`,
+      `spreadsheet-formulas`,
+      `data-analysis`,
+      `bi-workflow`,
+      `office-productivity`,
+    ],
     whyItWorks: `The explicit stress-test step matters because a model asked to just "write a formula" optimizes for the shortest formula that satisfies the stated goal on the assumption of clean input, since that's the pattern most represented in generic examples it's drawing on — nothing about a bare request signals that the sheet is messy, so nothing pushes the model to defensively handle blanks or stray text. Naming the specific failure modes (blank cells, text-in-numeric-column, propagated errors, array/spill behavior) rather than saying "make it robust" matters because "robust" is exactly the kind of unfalsifiable instruction that gets nominally satisfied without changing the actual formula — a model can claim a formula is robust while it still divides by a blank cell and returns #DIV/0!. Requiring the version-specific check on spill behavior versus array formulas addresses a genuine compatibility trap: a formula written assuming Microsoft 365's dynamic arrays will look identical in syntax but behave completely differently (or error outright) in an older desktop version or when the workbook is opened in Google Sheets, and this is exactly the kind of environment detail a model won't proactively flag unless the version is both requested and used as a checkpoint. Offering both a simple and a more defensive version when they diverge meaningfully respects a real trade-off — sometimes a three-nested-function robust formula is genuinely worse for a spreadsheet three other people will edit by hand, and the choice of which to keep belongs to the person who knows their team, not to the model defaulting silently to whichever it finds more impressive.`,
     exampleOutput: `=IFERROR(AVERAGEIFS(F2:F3000,B2:B3000,"Region A",D2:D3000,"<>*refund*",F2:F3000,"<>"),"No data") — this excludes blanks in the amount column, matches 'Refunded' case-insensitively via a wildcard-style filter approach, and returns a clear 'No data' label instead of a #DIV/0! error if a region has zero qualifying rows. Stress test: blanks in F handled via the exclusion condition; mixed-case 'refunded'/'Refunded' handled since AVERAGEIFS criteria matching is case-insensitive by default; propagated #N/A from upstream would still break this — recommend wrapping upstream lookup cells in their own IFERROR first.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -354,12 +370,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`google-sheets`, `spreadsheet-formulas`, `collaboration`, `bi-workflow`, `data-analysis`],
+    tags: [
+      `google-sheets`,
+      `spreadsheet-formulas`,
+      `collaboration`,
+      `bi-workflow`,
+      `data-analysis`,
+    ],
     whyItWorks: `Framing the risks specifically around a shared, live-edited sheet — rather than asking generically for a good formula — targets a category of failure that only exists because other people are editing the file, which a model has no reason to consider unless the collaborative context is stated: a formula that's perfectly correct in isolation can still break the moment a non-technical collaborator inserts a row above the referenced range, since a fixed range reference doesn't always auto-adjust the same way a whole-column or named range does. Asking explicitly whether a hardcoded value sits in a cell a collaborator might type over addresses a very common, very quiet failure in shared sheets: someone updates what they think is just a number and doesn't realize it was actually a threshold the whole calculation depended on, and the sheet keeps producing numbers that look plausible but are now wrong. Requiring the propagation check on IMPORTRANGE and downstream pivots or charts matters because Google Sheets error propagation is not always obvious to the person actually looking at the summary tab — a #REF! error two tabs upstream can resolve into a chart that just quietly shows a shorter data range or a stale cached value instead of an obvious red error cell, which is far more dangerous than a loud failure because nobody investigates a chart that still looks fine. Tying every structural recommendation to a specific named risk, rather than allowing generic "best practice" advice, keeps the model from padding the answer with boilerplate like "consider using named ranges" without ever connecting that suggestion to an actual failure mode present in this specific sheet.`,
     exampleOutput: `=IF(D3:D="","",IF(D3:D>C3:C*1.1,"Over budget","OK")) using a whole-column ARRAYFORMULA reference rather than D3:D200, so a row inserted anywhere below row 3 is automatically included. Risk check: row-insertion risk closed by using whole-column references; the 1.1 threshold is currently hardcoded in the formula rather than a labeled cell — recommend moving it to a named cell 'Budget_Threshold' on an Inputs tab so a PM adjusting it doesn't need to edit the formula directly; IMPORTRANGE propagation risk is low here since nothing downstream currently pulls from this column via IMPORTRANGE.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -430,9 +450,7 @@ OUTPUT FORMAT
     tags: [`power-bi`, `dax`, `data-modeling`, `bi-workflow`, `data-analysis`],
     whyItWorks: `DAX's central difficulty — that a measure's result depends on the filter context it's evaluated inside, and that iterator functions and CALCULATE trigger context transition from row context to filter context — is precisely the kind of subtlety a model will state correctly if asked to explain DAX in the abstract, but will still get wrong in a generated measure if it isn't forced to actually trace through the specific usage scenario, because writing syntactically valid DAX and reasoning correctly about context transition are different skills that don't always co-occur in a single generation pass. Explicitly requiring the filter-context walkthrough against the real report layout (matrix with these specific rows, columns, and totals) rather than accepting the measure once it looks plausible catches the most common real-world DAX bug: a ratio-style measure (average revenue per active customer) that computes correctly for each individual cell in the matrix but produces a mathematically wrong number in the grand total row, because a total row's filter context is a UNION of everything below it, not a scaled version of one cell — a model not specifically checked against this will present the naive version as done, since it looks completely correct until someone notices the total row doesn't match a manual sanity check. Requiring related existing measures to be named forces internal consistency — a new measure reinventing a different definition of "active customer" than one that already exists elsewhere in the model is a very common source of two report pages disagreeing with each other, and stating the related measures upfront lets the model flag that divergence rather than silently duplicating logic with a subtly different filter condition.`,
     exampleOutput: `Avg Revenue per Active Customer := DIVIDE([Total Revenue], [Active Customer Count]) — reusing your existing measures rather than redefining 'active' independently. Filter-context walkthrough: in the matrix cells, both measures are correctly filtered by the row's segment and column's month via the model relationships; in the grand total row, DIVIDE still correctly recomputes total revenue over total active customers for that full context rather than summing the per-cell ratios, so the total row is mathematically valid, not just visually present.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -499,12 +517,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`power-bi`, `data-storytelling`, `executive-reporting`, `bi-workflow`, `data-analysis`],
+    tags: [
+      `power-bi`,
+      `data-storytelling`,
+      `executive-reporting`,
+      `bi-workflow`,
+      `data-analysis`,
+    ],
     whyItWorks: `Ranking insights by decision impact rather than by magnitude of change directly counters the most common failure mode of AI-generated report summaries: without this instruction, a model defaults to surfacing whatever number moved the most in percentage terms, because that's the most salient signal in the raw data, even when a small move in the metric that actually matters to the decision at hand is far more important — this is exactly the kind of judgment call that requires the decision context to be given explicitly, since the model has no way to know which metric the room actually cares about otherwise. Requiring hypotheses about causation to be explicitly flagged as hypotheses, with a note on what would confirm them, prevents the single most damaging thing an AI-written executive summary can do: stating a plausible-sounding causal story (the SMB churn spike was caused by the pricing change) as settled fact when the business context given doesn't actually establish that link, which can send a room into a decision based on a coincidence the model dressed up as an explanation. The "looks alarming but probably isn't" section exists because executive audiences skimming a dashboard tend to overreact to whatever visual looks most dramatic regardless of whether it's actually meaningful, and having the model proactively name and defuse a scary-looking-but-likely-noise metric does real work that a purely additive insight list can't do — it requires actively arguing against attention rather than just directing it. Capping this at three ranked insights plus one closing sentence is a deliberate constraint against the model's tendency to be comprehensive when asked to summarize a report, since a report that mentions every visual is functionally useless to an audience trying to act in 90 seconds.`,
     exampleOutput: `Insight 1: SMB churn spiked to 9% from a 5% average this month, most likely explanation is the 15% pricing increase that took effect the same month (hypothesis — confirm by checking whether churned accounts skew toward customers near the price-sensitivity threshold before the increase). Recommended action: pull a cohort of churned SMB accounts and check their prior spend tier before deciding on the enterprise rollout. Looks alarming but probably isn't: the regional sales map shows an unchanged distribution, which might look like stagnation but is actually consistent with normal seasonal flatness at this point in the quarter.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -573,12 +595,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`dashboard-design`, `requirements-gathering`, `bi-workflow`, `stakeholder-management`, `data-analysis`],
+    tags: [
+      `dashboard-design`,
+      `requirements-gathering`,
+      `bi-workflow`,
+      `stakeholder-management`,
+      `data-analysis`,
+    ],
     whyItWorks: `Forcing the translation from a vague request into named decisions is the single highest-leverage move in this prompt, because "I want to see our sales numbers" genuinely contains no information about what should be built — a model asked to just design a dashboard from that sentence will invent a plausible generic sales dashboard (funnel, pipeline value, win rate) that may have nothing to do with what the VP actually needs to decide, and will do so confidently rather than flagging the ambiguity, since nothing in the prompt otherwise tells it that guessing is worse than asking. Requiring the grain and refresh cadence to be justified against the named decisions, not against ease of build, prevents the common default where a model (or a builder under time pressure) picks whatever granularity the source data happens to already be in, producing a dashboard that's technically accurate but wrong-grained for the actual use — a weekly leadership review doesn't need a daily-grain view, and building one anyway just adds noise the audience has to mentally filter out every time. The explicit phase-two list, rather than silent omission of nice-to-have visuals, matters politically as much as technically: stakeholders who asked for something and don't see it anywhere in the output tend to assume it was forgotten rather than deliberately deferred, and a visible phase-two list turns a scope cut into a stated plan rather than a perceived gap. Naming the single metric definition most likely to cause future disagreement front-loads the fight that would otherwise happen three months later when the sales team's "win rate" and finance's "win rate" turn out to be computed differently — catching this before the build means one definition gets built in from the start instead of two dashboards quietly disagreeing with each other.`,
     exampleOutput: `Decisions this dashboard must support: whether a regional manager needs to intervene on a rep's pipeline this week; whether the VP should flag a regional shortfall before the Monday leadership meeting. Grain: one row per open deal, rolled up to weekly snapshots by rep and region — daily is unnecessary since the only recurring decision cadence identified is the weekly manager check-in and Monday meeting. Metric to lock in now: define 'active pipeline' as deals not in Closed-Won or Closed-Lost stage with a close date in the current or next quarter, since 'active' is the term most likely to get redefined differently by different regional managers later.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -646,12 +672,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`kpi-design`, `performance-metrics`, `bi-workflow`, `goal-setting`, `data-analysis`],
+    tags: [
+      `kpi-design`,
+      `performance-metrics`,
+      `bi-workflow`,
+      `goal-setting`,
+      `data-analysis`,
+    ],
     whyItWorks: `Asking specifically what behavior a metric rewards if optimized in isolation, rather than asking whether it's a "good metric," reframes the task around Goodhart's-law-style failure, which is the actual mechanism by which KPIs go wrong in practice — a model asked generically to evaluate metrics will list textbook pros and cons (easy to measure, industry standard) without ever simulating what a person under pressure to hit the number would actually do, while asking it to state the rewarded behavior explicitly forces that simulation, surfacing gaming vectors like an agent closing tickets fast without actually resolving the issue, since "tickets closed per day" rewards speed of closure, not quality of resolution. Requiring the recommendation to be specifically keep/drop/pair-with-a-counterbalance, rather than an open-ended discussion, matters because pointing out a gaming risk without prescribing a structural fix just produces an anxious list of caveats attached to a scorecard that still ships unchanged — pairing forces a concrete answer (if ticket-closure speed is kept, it must ship next to a reopen-rate or CSAT metric that would catch the gaming) rather than a vague warning that gets ignored under deadline pressure. The leading-versus-lagging classification exists because a scorecard built entirely from lagging indicators (CSAT, reopen rate, all of which report on tickets already closed) tells a manager what already went wrong without pointing at anything actionable this week, and naming this split forces at least a conversation about whether a leading indicator (like first-response time, if it isn't dropped for gaming reasons) belongs in the set. The closing paragraph on what's deliberately not measured matters because every KPI set is an implicit statement of what doesn't count, and making that explicit prevents the team from assuming an unlisted dimension (like ticket complexity) was overlooked rather than deliberately excluded.`,
     exampleOutput: `Average first response time: rewards fast acknowledgment; gaming risk is an agent firing an instant canned non-answer to stop the clock without addressing the issue — recommend pairing with reopen rate to catch that. Tickets closed per agent per day: rewards raw closure volume; gaming risk is closing complex tickets prematurely — recommend dropping in favor of a weighted resolution-quality metric instead. Final set: CSAT (lagging), reopen rate within 7 days (lagging), first response time paired with reopen rate as its counterbalance (leading + lagging pair). Deliberately not measured: ticket complexity or issue category mix, since normalizing for that would require a taxonomy that doesn't exist yet — acceptable trade-off for a first version.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -719,12 +749,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`data-visualization`, `chart-design`, `bi-workflow`, `dashboard-design`, `data-storytelling`],
+    tags: [
+      `data-visualization`,
+      `chart-design`,
+      `bi-workflow`,
+      `dashboard-design`,
+      `data-storytelling`,
+    ],
     whyItWorks: `Anchoring the recommendation to a specific stated claim rather than the data in the abstract matters because the same dataset genuinely supports different correct chart choices depending on what point is being made — six features' usage over time could be shown as a stacked bar, a small-multiples set of line charts, or a pie chart of current share, and only one of those actually makes "two features are declining while four are stable" visible at a glance; a model asked only "what chart should I use for this data" has no way to know which of those equally valid-looking options actually serves the point, so it defaults to whichever chart type is statistically most common for that data shape, not the one that proves the claim. Explicitly requiring a verdict on chart types already under consideration, rather than only proposing an alternative from scratch, forces confrontation with the actual failure mode at hand — a pie chart with six unevenly-changing slices over time doesn't even show change, it shows a single snapshot, and if this gap isn't named explicitly the recommendation reads as a preference rather than a correction of a real mismatch between the chart chosen and the point being made. Requiring one specific execution risk for the recommended chart type (rather than presenting the recommendation as risk-free) matters because chart-type selection is necessary but not sufficient — a line chart is the right structural choice for a declining-trend claim, but a truncated y-axis or an unlabeled inflection point can still make that correct chart type fail to land the claim in the ten seconds a real executive audience will spend on it, and naming the specific risk up front is what turns a correct chart type recommendation into one that will actually survive being put on a slide.`,
     exampleOutput: `What the viewer needs to see: two lines trending down against four that are flat or rising, over 12 months. Verdict: the pie chart doesn't show change over time at all, it's a single-moment snapshot, so it can't support this claim regardless of how it's built; the stacked bar chart could work but risks burying the two declining features' trend inside stacked segments that shift relative size for reasons unrelated to their own trend. Recommendation: a small-multiples line chart, one small panel per feature, all sharing the same y-axis scale, so the two declining lines are visually obvious without requiring the viewer to mentally subtract stacked segments. Execution risk: if each panel gets its own independent y-axis scale instead of a shared one, a small feature's modest decline could look visually identical to a large feature's steep one — fix by locking all six panels to the same y-axis range.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -794,12 +828,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`trend-analysis`, `statistical-reasoning`, `bi-workflow`, `data-analysis`, `data-storytelling`],
+    tags: [
+      `trend-analysis`,
+      `statistical-reasoning`,
+      `bi-workflow`,
+      `data-analysis`,
+      `data-storytelling`,
+    ],
     whyItWorks: `Explicitly instructing the model to default to skepticism and require the data to convince it, rather than accepting the trend as described, directly counters a well-documented conversational tendency: a model handed a confident narrative ("seems like the new blog strategy is working") will, by default, tend to agree with and elaborate on the framing it was given rather than independently interrogate it, since agreeing with a plausible-sounding premise is the lower-friction continuation; stating the skeptical prior upfront overrides that default and forces the analysis to start from the null hypothesis that this is noise. Requiring the trend to be restated as a specific falsifiable claim before anything else matters because vague narrative framing ("traffic has been climbing") smuggles in a direction and a cause simultaneously, while a restated claim (sessions moved from A to B over three weeks) can actually be checked against normal volatility for that metric, separating the measurement from the story being told about it. The explicit instruction to check data volume and volatility against this specific metric, rather than trends in general, matters because three weeks of an inherently noisy metric like weekly web traffic is a very different evidentiary bar than three weeks of a naturally stable metric like headcount — a model not pushed to make this comparison metric-specific will apply a generic "three data points isn't much" caveat without actually engaging with whether three weeks is enough for this particular metric's normal swing range. Naming the decision stakes explicitly (a budget doubling riding on this) raises the bar the analysis is implicitly being held to, and permitting "insufficient data to say" as a legitimate final verdict — rather than forcing a binary real/fake conclusion — is what allows the model to actually land there instead of defaulting to whichever answer sounds more decisive.`,
     exampleOutput: `Restated claim: weekly sessions rose from 12,400 to 13,600 (about 9.7%) over three consecutive weeks. Seasonal check: this window overlaps with the known late-summer-into-September traffic climb, which is a strong alternative explanation independent of any blog strategy change — moderate-to-high confidence this pattern alone could account for most of the movement. Signal-vs-noise: 13,600 sits within the prior 6-month normal range (11,000-14,500), so this move has not yet exceeded typical volatility for this metric. Verdict: insufficient data to attribute this to the blog strategy specifically — recommend comparing this year's late-summer climb rate against last year's same-period climb rate before committing to a budget decision based on this trend.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -869,12 +907,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`anomaly-detection`, `incident-triage`, `bi-workflow`, `data-analysis`, `operational-monitoring`],
+    tags: [
+      `anomaly-detection`,
+      `incident-triage`,
+      `bi-workflow`,
+      `data-analysis`,
+      `operational-monitoring`,
+    ],
     whyItWorks: `Ordering the checks with pipeline-artifact elimination first, and permitting an early stop rather than requiring the full sequence every time, mirrors how an experienced on-call analyst actually triages, and matters here because a model asked open-endedly to "analyze this anomaly" has no default preference for checking the boring, unglamorous explanation (broken pipeline) before the interesting one (a real business event), and will often jump straight to narrative explanations that make for a better-sounding answer even when a hard cliff to exactly zero is a textbook pipeline symptom that a real business event essentially never produces on its own. Requiring the recent-change correlation to be scored by directness (an hour-old deploy to this exact system versus a three-day-old unrelated change) rather than just listed as "could be related" prevents the common failure where a model surfaces every plausible-sounding recent change with equal weight, which is functionally useless to someone trying to decide what to actually investigate first — the payment-provider deploy fifteen minutes before the drop should visibly outrank a marketing change that didn't even happen. The explicit ban on escalating just because something "looks unusual" targets alert fatigue directly: an on-call system or analyst that escalates every anomaly regardless of severity trains the receiving team to deprioritize or ignore future alerts, so the model needs to be told explicitly that recommending escalation is a cost with its own downside, not a free default safe choice. Requiring the exact escalation message to be drafted, not just a recommendation to escalate, matters because the person being paged needs to understand severity and likely cause in the first sentence without a back-and-forth, and a vague "something's wrong with checkout, can you look" message wastes the exact response time the escalation was meant to protect.`,
     exampleOutput: `Pipeline-artifact check: the drop is a step change to a new sustained level (68% to 41%), not a cliff to zero and not a stopped-updating symptom, which looks more consistent with a real behavioral change than a pipeline break. Recent-change correlation: the payment provider integration update at 2:00pm is a very strong candidate — it started roughly 15 minutes before the anomaly and touches the exact system involved. Severity: this looks like an active, ongoing issue that gets worse the longer it runs, since every additional minute means more lost completions. Recommendation: escalate now to the on-call engineering lead. Escalation message: "Checkout completion rate dropped from ~68% to 41% starting ~2:15pm today and hasn't recovered — timing lines up closely with the 2:00pm payment provider integration update, which is the leading suspect. Recommend checking that integration first."`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -943,12 +985,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`cohort-analysis`, `retention-analysis`, `bi-workflow`, `data-analysis`, `product-analytics`],
+    tags: [
+      `cohort-analysis`,
+      `retention-analysis`,
+      `bi-workflow`,
+      `data-analysis`,
+      `product-analytics`,
+    ],
     whyItWorks: `Splitting this into a design phase before a read phase matters because cohort analysis has more failure modes in its setup than in its interpretation — the wrong cohort grouping (by signup week when the real driver is acquisition channel) or the wrong retention event (counting any login when the real question is about paid renewal) will produce a technically correct-looking heatmap that answers a different question than the one being asked, and a model asked only to "analyze this cohort data" has no way to catch a mis-specified design after the fact. Requiring the plateau read specifically, rather than accepting a generic "retention declines over time" observation, targets the actual information content in a retention curve: every cohort curve declines by construction, so noting the decline is content-free, while where it plateaus (or whether it plateaus at all) is the one number that distinguishes a healthy sticky product from one slowly bleeding its entire user base, and a model not explicitly told this will default to describing the curve's shape rather than extracting its single most decision-relevant feature. Explicitly requiring the deviating-cohort check to be tied to something that actually changed around that cohort's join date, flagged as hypothesis rather than fact, prevents the model from noting a deviation and stopping there — an unexplained deviation is much less useful than one connected to a plausible cause, even a tentative one, since it gives whoever owns retention somewhere concrete to look next. The survivorship-bias check exists because comparing an old cohort that's had a year to mature against a three-week-old cohort is a very common way to draw a false conclusion about improvement or decline — older cohorts always look more "resolved" than younger ones purely due to more elapsed time, and a model not instructed to check for this will sometimes read a maturity artifact as a real trend.`,
     exampleOutput: `Cohort definition: group by signup week, retention event defined as any login within the 30-day window (matches your stated question about the onboarding flow specifically). Plateau read: neither curve has clearly plateaued through week 10 yet, both are still declining slightly, so it's premature to call a stable floor for either group. Deviating cohorts: post-change cohorts sit consistently above pre-change ones (31% vs 22% at week 4), but the 3-week pricing promotion overlapping the same new-signup window is a plausible confound — recommend isolating cohorts that signed up after the promotion ended before crediting the full lift to onboarding alone.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1016,12 +1062,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`funnel-analysis`, `conversion-optimization`, `bi-workflow`, `data-analysis`, `product-analytics`],
+    tags: [
+      `funnel-analysis`,
+      `conversion-optimization`,
+      `bi-workflow`,
+      `data-analysis`,
+      `product-analytics`,
+    ],
     whyItWorks: `Requiring the "worst step" to be identified relative to a stated business goal rather than by raw percentage drop directly addresses a common analytical mistake: the step with the largest percentage drop is not automatically the one most worth fixing, since a huge percentage loss at a step with very few remaining users can matter less in absolute terms than a smaller percentage loss earlier in the funnel where volume is much higher, and a model not pushed to justify against the actual goal will default to reporting whichever single number looks most dramatic rather than the one that would move the outcome that matters most. Grounding each hypothesis in what the specific step actually requires of the user, rather than accepting generic funnel-drop explanations ("users lose interest," "friction"), forces the kind of specificity that's actually actionable — a hypothesis has to name a concrete mechanism (a newly-required phone number field, an unexpected price reveal) that someone could go check, rather than restating that a drop-off happened in vaguer language. Requiring each hypothesis to predict a specific, checkable pattern in the segment data, and then checking whether that pattern actually shows up, converts unfalsifiable speculation into something closer to an actual test — a technical mobile-friction hypothesis should predict mobile underperforming desktop at that exact step, and when the segment data instead shows mobile converting better, that hypothesis should be demoted rather than left standing alongside every other guess with equal weight. The instruction against stopping at description exists because summarizing a funnel chart in words is a task with almost no added value when the person asking already has the chart in front of them — the entire reason to bring in a model here is to generate and rank testable causal hypotheses, not to restate visible numbers as a sentence.`,
     exampleOutput: `Worst step (by goal-weighted impact): form-completed to payment-info-entered, since it loses the largest absolute number of users despite not having the single worst percentage drop. Hypotheses: (1) the newly-required phone number field added friction — predicts this drop should have worsened specifically after the 3-weeks-ago change, worth checking against a before/after comparison; (2) the price reveal at this step surprises users who didn't expect the annual commitment — predicts users who saw pricing earlier (e.g., via a pricing-page referral) should convert better here than those who didn't; (3) mobile-specific technical friction — this is contradicted by the segment data showing mobile actually converting better (12% drop) than desktop (41% drop) at this step, so demote this hypothesis. Fastest test: compare this step's conversion rate for the 3 weeks before versus after the phone number field became required, since that data likely already exists and requires no new instrumentation.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1089,12 +1139,16 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`customer-segmentation`, `retention-strategy`, `bi-workflow`, `data-analysis`, `customer-success`],
+    tags: [
+      `customer-segmentation`,
+      `retention-strategy`,
+      `bi-workflow`,
+      `data-analysis`,
+      `customer-success`,
+    ],
     whyItWorks: `Holding every candidate segment to an explicit different-action test is the load-bearing instruction here, because segmentation is one of the analytics tasks most prone to producing output that looks sophisticated and complete while being entirely inert — a model asked simply to "segment these customers" will happily produce a clean, well-labeled scheme (power users, casual users, at-risk users) that reads as thorough analysis but that no one downstream actually changes their behavior based on, since nothing in a generic request forces the connection back to a concrete action; requiring that connection explicitly, and requiring segments that fail the test to be cut rather than kept for descriptive completeness, is what turns a taxonomy exercise into an operational tool. Requiring precise, threshold-based segment definitions rather than descriptive labels addresses a related failure: "high-value customer" sounds like a segment but isn't actually usable until someone defines the exact spend or usage threshold that puts a customer in it, and without being pushed for precision a model will happily generate segment names that sound rigorous while leaving the actual boundary fuzzy, which means two different people applying the scheme would sort customers differently. The overlap check specifically targets a subtle but common segmentation failure: a business's data often has enough natural correlation between different-sounding dimensions (long-tenure customers often are high-spend customers) that two segments proposed independently turn out to describe almost the same population, adding apparent granularity without adding real distinctions, and this only gets caught by explicitly checking correlation against the actual available data rather than assuming distinct-sounding labels imply distinct populations. Requiring an honest comparison against an existing segmentation, including the option to conclude the existing one is fine, keeps the model from defaulting to always recommending a change just because it was asked to design something — genuine analytical honesty here includes the possibility that no change is warranted.`,
     exampleOutput: `Segment: 'At-risk mid-market' = plan tier Pro or Enterprise, login frequency down more than 40% versus their own 90-day average, tenure over 6 months. Action: CS assigns a dedicated CSM outreach within 5 business days, versus no proactive outreach for stable accounts. Overlap check: a proposed 'low engagement' segment based purely on login frequency alone overlapped roughly 85% with this at-risk segment once tenure and tier were factored in — recommend merging rather than keeping both. Verdict on existing plan-tier-only segmentation: worth replacing, since plan tier alone doesn't capture the usage-decline signal the CS team says actually predicts churn.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -1169,7 +1223,13 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`revenue-analysis`, `financial-reporting`, `data-analysis`, `variance-analysis`, `business-intelligence`],
+    tags: [
+      `revenue-analysis`,
+      `financial-reporting`,
+      `data-analysis`,
+      `variance-analysis`,
+      `business-intelligence`,
+    ],
     whyItWorks: `GPT-5.1's default behavior on a vague ask like "explain this revenue change" is to produce a fluent narrative first, because narrative is the path of least resistance for a language model and there's no structural gate forcing it to quantify before it writes prose — this prompt closes that gap by mandating the ranked driver table as output step one and prose only as step four, so the model has to do the decomposition arithmetic before it's allowed to write the sentence that sounds convincing. The instruction to name a residual rather than force a reconciliation matters because language models have a strong tendency toward false precision: asked to make components sum to a total, the default move is to quietly adjust one number until it fits, which manufactures a number that wasn't actually in the data. Requiring an explicit confidence tag per driver (data-supported vs. estimated) directly targets the most common failure mode in AI-generated revenue analysis — presenting an inferred split (e.g., assuming price vs. volume based on typical patterns) with the same confident tone as a split that's actually derivable from the line items provided, which misleads a reader who can't tell the difference from the prose alone. Separating one-off events into their own line rather than absorbing them into "volume" prevents the classic mistake of a single large deal inflating an apparent trend, which matters specifically because the next reader of this analysis (finance leadership, per the audience field) will extrapolate whatever trend they're shown into a forecast.`,
     exampleOutput: `Headline: Revenue up $500K (+12.2%) QoQ.
 Driver | $ | % of movement | Confidence
@@ -1178,9 +1238,7 @@ Unit volume growth (recurring SKUs) | $210K | 42% | Data-supported
 Price increase (mid-tier plan) | $75K | 15% | Data-supported
 Mix shift toward premium SKU | $35K | 7% | Estimated — needs SKU-level margin data to confirm
 Residual: none, components reconcile to reported total.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1255,15 +1313,19 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`sales-forecast`, `pipeline-analysis`, `revenue-operations`, `data-analysis`, `forecasting`],
+    tags: [
+      `sales-forecast`,
+      `pipeline-analysis`,
+      `revenue-operations`,
+      `data-analysis`,
+      `forecasting`,
+    ],
     whyItWorks: `Sales forecasting has a well-known failure mode where the sales-stated commit number and the statistically weighted number diverge, and a model asked to just "forecast the quarter" will tend to anchor on whatever number was given the most prominence in the prompt rather than independently recomputing it — structuring the task as two explicit, separately labeled calculations (commit vs. stage-weighted) forces GPT-5.1 to actually run the probability-weighting arithmetic instead of defaulting to restating the input. Requiring the benchmark coverage ratio to be stated as an external reference rather than an assumed fact matters because a 3x-4x rule of thumb is a generic sales-ops heuristic, not a verified fact about any specific company's historical conversion behavior, and presenting it with unearned specificity would violate the basic rule that a model shouldn't assert a business-specific fact it can't actually verify from the data given — the prompt instead treats it as a labeled benchmark and pushes back to the user to confirm what's actually worked for this team. The "what would have to be true" framing exploits a specific strength of instructing the model to state a conditional rather than a prediction: it produces the same useful information (the gap between confidence levels) without the model overstepping into asserting deals will close, which it has no basis to assert. Flagging concentration risk separately from the raw gap number matters because a $400K shortfall spread across forty deals and a $400K shortfall concentrated in three deals are operationally very different problems requiring different interventions, and a blended forecast number alone erases that distinction entirely.`,
     exampleOutput: `Coverage ratio: 3.9x remaining gap ($900K) — within the healthy 3-4x range, but concentrated late-stage.
 Commit forecast: $2.85M | Stage-weighted forecast: $2.41M | Gap: $440K
 Condition for commit to hold: all 4 Stage 3 deals close on schedule at above-average value.
 Concentration risk: 2 of those 4 deals represent 61% of the gap between commit and weighted forecast.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1335,16 +1397,20 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`ab-testing`, `experimentation`, `statistical-analysis`, `product-analytics`, `data-analysis`],
+    tags: [
+      `ab-testing`,
+      `experimentation`,
+      `statistical-analysis`,
+      `product-analytics`,
+      `data-analysis`,
+    ],
     whyItWorks: `Asked to summarize an A/B test without a forced-choice constraint, GPT-5.1 tends to produce hedged, non-committal language because a confident wrong call feels riskier to generate than a vague one that can't be pinned down later — restricting the output to exactly three named verdicts removes that escape hatch and forces the model to actually commit to a position based on the numbers given, the same discipline a rigorous human analyst would apply. Separating statistical from practical significance targets a specific and common misreading of experiment results: a genuinely significant p-value on a 0.5-percentage-point lift can still not be worth the engineering cost to ship, and collapsing both into one "it worked" statement is exactly the kind of oversimplification that gets a team to ship low-value changes because the test was "significant." The explicit duration/cycle-coverage check exists because a 9-day test spans less than two full weekly cycles, which is a known source of misleading results if weekday and weekend behavior differ, and a model summarizing only the topline percentages has no structural reason to flag that unless explicitly told to check for it. Requiring the single biggest trust risk to be named, rather than leaving the analysis as a clean number, mirrors what a skeptical stakeholder would ask in the room anyway — surfacing it in advance means the person presenting this readout isn't caught flat-footed defending a result they haven't actually stress-tested themselves.`,
     exampleOutput: `Verdict: HOLD FOR MORE DATA
 Statistical significance: p ≈ 0.09, does not clear the 95% threshold.
 Practical significance: +0.5pp lift would be worth shipping if confirmed, but isn't confirmed yet.
 Duration check: 9 days covers barely one full cycle — recommend extending to 14.
 Biggest risk: sample size is borderline for a lift this small; could be noise.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1409,13 +1475,17 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`survey-analysis`, `qualitative-coding`, `customer-feedback`, `data-analysis`, `research`],
+    tags: [
+      `survey-analysis`,
+      `qualitative-coding`,
+      `customer-feedback`,
+      `data-analysis`,
+      `research`,
+    ],
     whyItWorks: `A model summarizing open-text survey data by default tends to produce a smooth, averaged narrative that reads well but quietly discards the low-frequency signal, because frequent phrases dominate what gets synthesized into prose — explicitly requiring a separate outlier section reverses that default by giving rare responses a protected place in the output regardless of how the frequency ranking shakes out, which matters because in product and safety-adjacent feedback the single respondent describing a blocking bug is often more actionable than the twenty saying "good overall." Requiring verbatim, unedited quotes as evidence for every theme forces the model to ground its categorization in something checkable rather than asserting a theme exists on its own authority — a reader can immediately verify "price complaints, 22%" against the actual three quotes shown, which a paraphrased summary would make impossible to audit. Instructing the model to derive themes bottom-up from the actual text, instead of starting from an expected list, addresses a specific failure mode where a model primed with domain expectations (checkout surveys "usually" surface price, speed, and trust issues) pattern-matches responses into those familiar buckets even when the actual text is describing something different, silently forcing new signal into old categories. Allowing multi-theme tagging rather than a forced single bucket per response reflects how people actually write open-text feedback — a single sentence complaining about both price and a confusing checkout flow is two data points, and forcing it into one bucket understates both themes' true frequency.`,
     exampleOutput: `Theme: Confusing shipping cost timing — 31 responses (22%) — "i didnt see the shipping fee until the very last step and almost left"; "shipping cost popped up out of nowhere".
 Outlier flag: One response described being unable to complete checkout on a screen reader — only 1 mention, but represents a distinct accessibility blocker worth flagging regardless of frequency.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-08' }],
     changelog: [
       {
         date: '2026-08-08',
@@ -1488,14 +1558,18 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`data-storytelling`, `presentation-design`, `executive-communication`, `data-analysis`, `narrative-structure`],
+    tags: [
+      `data-storytelling`,
+      `presentation-design`,
+      `executive-communication`,
+      `data-analysis`,
+      `narrative-structure`,
+    ],
     whyItWorks: `A model asked to "turn these metrics into a story" will default to a chronological recap — metric one went up, metric two went down, metric three stayed flat — because that's the least interpretive path through a list of numbers, and it produces a deck that reads as a wall of charts precisely because no beat was ever designated as more important than another. Forcing a three-pass structure (tension, turning point, arc) makes the model do the actual analytical work of ranking which metrics matter to the story before any visual gets planned, which mirrors how experienced data storytellers actually work backward from the point they need to land rather than forward from whatever data happens to exist. The explicit permission to say "there's no real tension here" is a deliberate guard against a known model behavior: asked to build a compelling narrative, a language model will often manufacture drama in flat data because dramatic language is what "storytelling" tends to pattern-match to, and a false turning point in a business context actively misleads the audience about what actually happened. Tying the resolution beat directly to the named desired_action addresses the actual purpose of a data story in a business setting — it's not entertainment, it's a persuasion structure meant to produce a specific decision, so a story that resolves into vague inspiration rather than the concrete ask fails at its actual job even if every chart in it is accurate. Naming which metric carries which beat before the deck exists prevents the common failure where slide order gets decided by chart aesthetics rather than by what the narrative actually needs at that moment.`,
     exampleOutput: `Tension: signups grew 40% while activation fell from 62% to 48% — growth and quality moved in opposite directions.
 Turning point: the support-ticket spike (3x) traces to the same cohort driving signup growth, suggesting the new acquisition channel is bringing in users who need more help, not fewer.
 Arc: Setup (signup growth looked like a win) → Tension (activation dropped as growth rose) → Turning point (ticket data ties it to one channel) → Resolution (reallocate two engineers to onboarding for that cohort in Q3).`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1562,16 +1636,20 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`executive-communication`, `data-brief`, `business-intelligence`, `reporting`, `decision-support`],
+    tags: [
+      `executive-communication`,
+      `data-brief`,
+      `business-intelligence`,
+      `reporting`,
+      `decision-support`,
+    ],
     whyItWorks: `Language models asked to "summarize" a longer document tend to compress proportionally — keeping roughly the same structure at a smaller scale, background first, conclusion last — which is exactly backward for an executive brief, where the entire value of the one-pager is that the decision comes first so a reader who only has thirty seconds still gets the point; explicitly mandating that ordering overrides the model's default compression instinct rather than relying on it to reorder on its own. Requiring every supporting fact to be a specific number rather than a qualitative claim closes a common failure in AI-written business summaries, where "engagement improved significantly" sounds confident but is actually less informative than the underlying number, and an executive reading multiple such briefs a week can tell the difference between analysis and padding. Naming a confidence level per finding matters mechanically because a model with no explicit instruction to distinguish data maturity will present a two-week early read and a three-month trend with identical confident phrasing, and an executive making a resourcing decision needs to know which one they're actually looking at. Forcing the single biggest risk into the brief directly counters a real tendency toward one-sided positivity in AI-generated business writing — a brief that only presents supporting evidence for the ask reads as advocacy rather than analysis, and a sharp executive will ask about the downside anyway, so surfacing it preemptively is what makes the brief trustworthy rather than something to be second-guessed in the room.`,
     exampleOutput: `Ask: Approve a dedicated SMB retention specialist role for Q4.
 Facts: SMB churn rose from 4.1% to 6.3% monthly over the last two quarters; accounts with zero support contact in month one churn at 2.4x the rate of those with contact; the cohort represents $340K in at-risk ARR.
 Confidence: well-supported — three-quarter cohort trend, not a single-month blip.
 Biggest risk: we haven't isolated whether it's a product gap or a support-coverage gap — this role addresses the second, not necessarily the first.
 Next step: approve the role now; commission a parallel product-gap review in parallel.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1633,13 +1711,17 @@ Followed by: a short list of the columns most in need of a follow-up conversatio
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`data-dictionary`, `data-documentation`, `schema-design`, `data-governance`, `business-intelligence`],
+    tags: [
+      `data-dictionary`,
+      `data-documentation`,
+      `schema-design`,
+      `data-governance`,
+      `business-intelligence`,
+    ],
     whyItWorks: `A language model handed an ambiguous column name will, by default, produce a plausible guess rather than an admission of uncertainty, because a confident-sounding answer is the statistically likely completion and there's no built-in penalty for being specifically wrong versus vaguely right — this prompt breaks that default by giving "needs confirmation" equal standing as a valid, complete answer in the output format, so the model isn't implicitly rewarded for filling every cell with something. This matters disproportionately for data dictionaries specifically because, unlike a one-off analysis a human immediately sanity-checks, a data dictionary is exactly the kind of artifact that gets treated as settled reference material by people who never see the original ambiguous schema and have no way to independently notice a wrong guess — an incorrect entry here propagates silently into every downstream query someone writes based on trusting the definition. Requiring the specific disambiguating question, not just a flag, is what makes the "needs confirmation" entries actually actionable rather than just a shrug — "amount: needs confirmation" tells the reader nothing useful, while "amount: needs confirmation — is this pre-tax or post-tax, and can it be negative for refunds?" is something a data owner can answer in one sentence. Flagging likely sensitive-data columns during the documentation pass, rather than leaving that to a separate security review, matters because a data dictionary is often the first structured artifact anyone produces about a table, and it's the cheapest possible point to raise an access-control question, before the field has been copied into five downstream reports that would each need auditing later.`,
     exampleOutput: `status | varchar | Likely subscription state (active/cancelled/etc.) | needs confirmation | No visible value list — confirm the full set of possible values and whether "paused" exists as a distinct state from "cancelled."
 amount | decimal | Billing amount for the event | needs confirmation | Currency and sign convention unclear — confirm whether refunds are represented as negative values in this same column.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-09' }],
     changelog: [
       {
         date: '2026-08-09',
@@ -1701,13 +1783,17 @@ Followed by: a short list of fields that need a business-rule decision before th
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`etl`, `data-mapping`, `data-engineering`, `schema-migration`, `data-integration`],
+    tags: [
+      `etl`,
+      `data-mapping`,
+      `data-engineering`,
+      `schema-migration`,
+      `data-integration`,
+    ],
     whyItWorks: `The most common way an ETL mapping document fails in practice isn't a wrong mapping, it's an implicit one — a field labeled "direct mapping" that turns out to hide a type mismatch or a nullability conflict that only surfaces as a production error weeks later, and a model asked generically to "map these fields" has no structural reason to check type, nullability, and value-set alignment unless told to check exactly those three things for every field, which is why the prompt names them explicitly rather than leaving "check for edge cases" as a vague instruction the model could satisfy superficially. Requiring the transformation logic to be stated as actual executable logic (a cast, a lookup, a conditional) rather than the word "maps to" forces GPT-5.1 to think through what the transformation function would actually need to do, which surfaces gaps — like a free-text country field needing a lookup table to become an ISO country code — that a vaguer instruction would let slide past as an assumed detail. The instruction to flag rather than silently invent a default for fields with no clear source is a direct application of the general rule that a model shouldn't assert an unverifiable business decision as fact — a default value for a required field is a business decision, not a technical one, and treating it as a technical detail the model can just fill in is how ETL jobs end up encoding an accidental policy nobody actually approved. Separating the load-pattern-specific logic (how upserts versus initial loads treat the same field differently) matters because the same transformation can be correct on day one and wrong on every incremental run after it if, for instance, a field should only be set on insert and never overwritten on update — a mapping that doesn't distinguish the two will get implemented as one static rule that's actually two different rules pretending to be one.`,
     exampleOutput: `account_status | status_code | Lookup: 1→active, 2→trial (per updated rule, previously bundled into active), 3→paused, 4→cancelled | Business rule change flagged: confirm whether historical rows with status_code=2 should be backfilled as "trial" or left as "active" for continuity | Needs sign-off
 country_code | country | Requires lookup against ISO 3166-1 reference table; free-text source values ("USA", "United States", "U.S.") will need fuzzy-matching or a manual mapping table before load | Edge case: unmapped free-text values need a fallback rule | Needs sign-off`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -1765,14 +1851,18 @@ John Smith,03/04/2026,1204.50,United States`,
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`csv-cleaning`, `data-transformation`, `data-cleaning`, `etl`, `spreadsheet-automation`],
+    tags: [
+      `csv-cleaning`,
+      `data-transformation`,
+      `data-cleaning`,
+      `etl`,
+      `spreadsheet-automation`,
+    ],
     whyItWorks: `Asked to "clean this CSV," a model will often just clean the sample rows shown and hand back tidied data, which solves the wrong problem entirely for anyone dealing with a recurring export — the actual need is a reusable rule set, not a one-time fix, so this prompt explicitly redirects the output away from cleaned data and toward a spec, which forces the model to generalize each observed problem into a rule rather than a patch applied to the specific rows in front of it. Requiring the exact target format and an explicit ambiguous-case rule (rather than "standardize dates") matters because date ambiguity — is 03/04/2026 March 4th or April 3rd — is precisely the kind of judgment call a model will silently resolve one way if not told to flag it, and a script built from a spec that quietly picked a guess will misparse a meaningful fraction of ambiguous dates without anyone noticing until a downstream aggregate looks wrong. Ordering the operations rather than listing them as an unordered set addresses a real dependency in data cleaning that's easy to overlook — deduplication run before whitespace trimming will miss the exact duplicates that trimming would have revealed, since " JOHN SMITH " and "John Smith" won't be recognized as the same key until normalization happens first — and a model asked only for a list of fixes has no reason to surface that ordering constraint unless the prompt asks for a sequence specifically. Flagging null-handling as an assumption to confirm rather than silently picking one (drop vs. impute vs. keep) matters because whether "N/A" revenue should become $0, a blank, or an excluded row changes the actual aggregate numbers in the downstream dashboard, making it a business decision disguised as a technical cleanup step.`,
     exampleOutput: `Column: signup_date — Problem: two formats present (MM/DD/YYYY and YYYY-MM-DD). Fix: parse both to ISO YYYY-MM-DD; where a date like 03/04/2026 is ambiguous (both day and month ≤12), flag row for manual review rather than guessing.
 Column: revenue — Problem: currency symbol, thousands separator, and "N/A" as null all present. Fix: strip "$" and ",", cast to decimal; treat "N/A" as null, not zero — confirm with downstream dashboard owner before deciding whether nulls should be excluded from the revenue aggregate or shown as $0.
 Order: 1) trim whitespace/normalize case, 2) parse dates, 3) parse currency, 4) deduplicate on normalized name+date+region.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-10' }],
     changelog: [
       {
         date: '2026-08-10',
@@ -1833,9 +1923,7 @@ OUTPUT FORMAT
 customer.email → customer_email | flatten | required, no missing-value case observed in sample.
 items[].qty → item_qty | explode (one row per item) | type-inconsistency flag: cast to integer, treating string "1" and numeric 2 identically; log any non-numeric value rather than silently coercing to 0.
 discount → discount_amount, discount_reason | flatten with null-safe defaults (0, null) | known variability flag: object shape sometimes differs from sample — confirm both shapes before finalizing.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-11' }],
     changelog: [
       {
         date: '2026-08-11',
@@ -1897,13 +1985,17 @@ Followed by: any ambiguous scenario in the business description that needs a dec
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`data-validation`, `data-quality`, `business-rules`, `data-governance`, `business-intelligence`],
+    tags: [
+      `data-validation`,
+      `data-quality`,
+      `business-rules`,
+      `data-governance`,
+      `business-intelligence`,
+    ],
     whyItWorks: `Business logic as described in plain language is almost never a complete specification — it states the intended happy path and leaves the edge cases and boundary conditions implicit, and a model asked to "write validation rules from this" will, by default, restate the explicit sentence as a rule without doing the harder work of surfacing what the sentence assumes but doesn't say, which is exactly the gap this prompt closes by explicitly instructing extraction of implicit rules, not just stated ones. Requiring every rule to specify concretely what a violation looks like, rather than a restated business sentence, is what actually makes a rule testable — "refunds should be reasonable" cannot be checked by any query, while "refund_amount > order_amount" can be run against the table today, and the difference between those two forms is the entire value of turning business logic into validation logic in the first place. Forcing an explicit hard-block versus soft-warning classification addresses a specific and costly failure mode in real data pipelines: a validation layer that treats every rule as equally blocking will eventually halt a legitimate load over a rule that was only ever meant to flag something for human review, and that classification is a business risk-tolerance decision that the model has no basis to make silently — surfacing it as a decision to confirm, tied to the stated severity context, keeps that judgment with the person who actually owns the consequences. Handling the known edge case explicitly (two partial refunds that together approach the order total) rather than leaving the rule naive prevents the common operational annoyance of a validation system that cries wolf on legitimate transactions constantly, which is how teams end up ignoring their own validation alerts entirely after enough false positives erode trust in them.`,
     exampleOutput: `Rule 3 | refund_amount, order_amount, order_id | Sum of all refund_amounts for a given order_id should never exceed that order's order_amount | Violation: SUM(refund_amount) GROUP BY order_id > order_amount | Hard block (finance reconciliation integrity) | Edge case handled: rule sums across multiple partial refunds per order rather than checking each refund row independently, so two legitimate partial refunds don't falsely trigger.
 Ambiguity flagged: description doesn't say what "original order amount" means if the order was edited after purchase — confirm whether refund rules should check against the current order_amount or the amount at time of purchase.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-12' }],
     changelog: [
       {
         date: '2026-08-12',
@@ -1969,14 +2061,18 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`kpi-definition`, `metric-design`, `data-governance`, `business-intelligence`, `reporting`],
+    tags: [
+      `kpi-definition`,
+      `metric-design`,
+      `data-governance`,
+      `business-intelligence`,
+      `reporting`,
+    ],
     whyItWorks: `The single most common way KPI definitions cause organizational confusion isn't a wrong formula, it's an underspecified one that two teams each interpret slightly differently and calculate consistently within their own dashboard but inconsistently against each other's — a model asked to "define this metric" will happily produce fluent prose that sounds precise ("active users are customers who engaged with the product") while leaving every actual edge case (test accounts, churned-and-returned users, timezone of day boundaries) unresolved, which is why this prompt requires the formula to be a literal expression against named fields rather than a description, since prose can be reread two different ways but an actual SQL-shaped expression cannot. Requiring explicit inclusion/exclusion rules for test accounts, tier segmentation, and re-engaged users targets the exact list of decisions that silently vary between two teams' independently-built dashboards of the "same" metric, and none of those decisions have an objectively correct default — they're business choices that need to be made once, explicitly, and then referenced consistently rather than re-decided ad hoc by whoever happens to be writing the next query. The explicit handling of recalculation behavior (does a trailing-30-day metric's historical value shift as new data lands) matters because this is the single most common source of a metric appearing to "change" after the fact with no code change to explain it, confusing anyone who pulled the number on two different days and got two different answers for what they assumed was a fixed historical fact. Requiring an explicit conflict-resolution statement when a competing definition already exists, rather than silently producing a third version, directly prevents KPI proliferation — the well-known organizational failure mode where five teams each have their own "official" definition of the same-named metric and no single spec is treated as authoritative, because no one ever explicitly reconciled the differences when the second definition was written.`,
     exampleOutput: `Formula: COUNT(DISTINCT e.user_id) WHERE e.event_type IN ('core_action_types') AND e.event_timestamp >= DATE_TRUNC('month', CURRENT_DATE) AND u.is_internal_test_account = FALSE, joined events to users on user_id.
 Inclusion/exclusion: excludes internal test accounts; includes both free and paid tiers unless a tier-specific cut is requested separately; a churned-and-returned user within the same calendar month counts once, not twice.
 Conflict flagged: product dashboard counts passive page-views as "active"; this spec requires a core action event instead, producing a materially lower number — recommend product dashboard be updated to match this definition rather than maintaining two MAU figures.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-13' }],
     changelog: [
       {
         date: '2026-08-13',
@@ -2052,16 +2148,20 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`root-cause-analysis`, `data-analysis`, `metric-investigation`, `incident-analysis`, `business-intelligence`],
+    tags: [
+      `root-cause-analysis`,
+      `data-analysis`,
+      `metric-investigation`,
+      `incident-analysis`,
+      `business-intelligence`,
+    ],
     whyItWorks: `Given both a metric drop and a list of things that changed at the same time, a model will naturally gravitate toward pairing them into a causal story, because a specific, named cause makes for a more satisfying and complete-sounding answer than "we're not sure yet" — this prompt counters that pull by hard-sequencing the investigation so that data-artifact and seasonality checks must be addressed and explicitly ruled out before the model is even allowed to evaluate the causal candidates, which mirrors the actual discipline good analysts apply and prevents the single most common root-cause mistake: confidently blaming a shipped feature for a drop that was actually a reporting lag or an ordinary weekly pattern. The segment-concentration check (Check 3) placed before the causal evaluation (Check 4) matters mechanically because it changes what evidence is even admissible for the later step — a company-wide login flow change cannot explain a drop that later analysis shows is isolated to one country, and running the segmentation check first means that finding actively filters which causal candidates get taken seriously, rather than the model evaluating each candidate in isolation and picking whichever fits the surface-level correlation best. Explicitly requiring the model to state what additional evidence would confirm the leading candidate — rather than stopping at a plausible-sounding story — reflects the actual epistemic status of a same-day root-cause analysis: correlation in timing is a hypothesis, not a conclusion, and treating it as settled before that confirming evidence exists is how organizations end up reverting a shipped feature that had nothing to do with the actual drop. The urgency-aware caveat at the end exists because time-pressured stakeholders often act on the first plausible story regardless of how it's hedged in the prose above it, so putting the "don't act on this yet" line as its own explicit, unmissable output item is what actually gets read under pressure.`,
     exampleOutput: `Check 1 (data artifact): Ruled out — pipeline shows consistent volume, no reporting lag pattern in the trailing 3 days.
 Check 2 (seasonality): Ruled out — same week last year shows no comparable dip.
 Check 3 (segment concentration): Drop is concentrated in Android, down 34%, while iOS and web are flat — this rules out the competitor campaign (which would hit all platforms) as the primary driver.
 Leading candidate: the new login flow, shipped Monday night, appears to have an Android-specific bug. Confirming evidence needed: Android crash logs or funnel drop-off data for the new login screen specifically.
 Caveat: do not attribute this to the competitor campaign in the stakeholder update — the segment data doesn't support that explanation.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2127,7 +2227,13 @@ OUTPUT FORMAT
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`scenario-analysis`, `forecasting`, `financial-modeling`, `decision-support`, `data-analysis`],
+    tags: [
+      `scenario-analysis`,
+      `forecasting`,
+      `financial-modeling`,
+      `decision-support`,
+      `data-analysis`,
+    ],
     whyItWorks: `A model asked to "model this decision" will often produce a single confident number, because a point estimate reads as more decisive and complete than a range with visible assumptions, even though the single number is actually less honest about what's genuinely known versus assumed — requiring three named scenarios with explicit, numbered assumption values forces the model to expose exactly what it's assuming rather than let those assumptions disappear into an opaque calculation, which is the entire point of a scenario analysis as a decision tool rather than a forecast. Requiring the sensitivity identification — which single assumption moves the outcome most — targets a specific and valuable piece of information that a flat three-scenario table doesn't automatically surface: knowing that the warehouse decision is mostly sensitive to ramp-up time, and much less sensitive to the shipping-cost assumption, tells the decision-maker exactly which number is worth spending more effort de-risking or verifying before committing, versus which ones can be left as reasonable estimates. Anchoring the scenarios explicitly to which one the current baseline data most resembles prevents the common failure of a scenario analysis floating as three disconnected hypotheticals with no bridge back to where things actually stand today — without that anchor, a reader has no way to judge whether the "optimistic" scenario is a stretch or already roughly on track, which is precisely the judgment the analysis exists to support. Limiting scenario axes to the two or three variables that actually matter, rather than varying every input, reflects a deliberate anti-complexity choice: a model given free rein will often vary every listed variable simultaneously to seem thorough, producing a combinatorial mess of scenarios that obscures rather than clarifies which few things the outcome is actually riding on.`,
     exampleOutput: `Scenario axes chosen: order volume growth rate and ramp-up time to efficiency — setup/lease cost held fixed since it varies little in practice.
 Conservative: 8% growth, 8-month ramp → 24-month net savings: $410K.
@@ -2135,9 +2241,7 @@ Base case: 12% growth, 5-month ramp → 24-month net savings: $780K.
 Optimistic: 16% growth, 3-month ramp → 24-month net savings: $1.15M.
 Current trajectory most resembles: base case, given the 12% YoY growth already observed.
 Most sensitive assumption: ramp-up time — a 2-month delay beyond the base case erases roughly 35% of projected savings, more than an equivalent swing in growth rate would.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',
@@ -2205,15 +2309,19 @@ Followed by: overall risk level given {{audience_and_stakes}}, and whether this 
       },
     ],
     targetTools: [`ChatGPT (GPT-5.1)`],
-    tags: [`analytics-qa`, `dashboard-audit`, `data-quality`, `business-intelligence`, `data-validation`],
+    tags: [
+      `analytics-qa`,
+      `dashboard-audit`,
+      `data-quality`,
+      `business-intelligence`,
+      `data-validation`,
+    ],
     whyItWorks: `The dangerous class of dashboard bug is never the one that produces an obviously wrong number — those get caught immediately — it's the one that produces a plausible-looking number that's subtly wrong for a structural reason like a join fan-out or a mismatched denominator, and a model asked generically to "check this dashboard for errors" has no reliable way to surface those without being pointed at the specific mechanical patterns that cause them, which is why this prompt names five concrete failure categories rather than leaving the audit open-ended. Requiring an explicit verdict for every category, including "no issue found," rather than only reporting problems, matters because a report that only lists findings gives no way to distinguish "this category was checked and is clean" from "this category was never actually examined" — and for an audit specifically, that distinction is the entire deliverable, since the value of a QA pass is knowing what was actually verified, not just what happened to look wrong. The join-fan-out and denominator-mismatch checks target the two most common and most silent classes of dashboard error in practice — a one-to-many join silently multiplying an order-level total by the number of line items, or a percentage computed from a numerator and denominator drawn from subtly different filtered populations — both of which produce numbers that pass every casual sanity check because they're the right order of magnitude and move in believable directions, and neither is visible without someone specifically checking the join and filter logic, not just eyeballing the chart. The instruction to state what to check in the real data to confirm any suspected issue, rather than asserting it as confirmed, respects the actual limit of what's verifiable from a described metric definition versus an actual query result — the model can spot the structural risk pattern from the description given, but confirming it as an actual bug requires running the real numbers, and conflating those two would overstate the audit's certainty.`,
     exampleOutput: `1. Double-counting: Issue found — joining orders to shipments (likely one-to-many if an order ships in multiple packages) before summing orders.amount would inflate total revenue. Check: compare SUM(orders.amount) pre-join vs. post-join for a sample of multi-shipment orders. Fix: sum revenue from the orders table directly, join to shipments only for delivery-rate metrics.
 3. Denominator mismatch: Issue found — on-time rate's denominator (all shipment rows) doesn't specify the same date filter as revenue charts. Check: confirm the date range filter applies identically to both the numerator and denominator query.
 4. Timezone drift: Issue found — orders logged in UTC, shipments in local warehouse time; daily buckets could misalign by hours near midnight. Fix: standardize both to one timezone before bucketing.
 Overall risk: high, given this feeds bonus calculations — recommend holding pending fixes to items 1, 3, and 4.`,
-    verifiedAgainst: [
-      { tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' },
-    ],
+    verifiedAgainst: [{ tool: 'ChatGPT', version: 'GPT-5.1', date: '2026-08-14' }],
     changelog: [
       {
         date: '2026-08-14',

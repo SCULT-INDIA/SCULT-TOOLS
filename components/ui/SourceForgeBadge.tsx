@@ -23,12 +23,20 @@ const SF_PROJECT_URL = 'https://sourceforge.net/projects/scult-tools/'
 export function SourceForgeBadge() {
   return (
     <>
-      <div className="sf-root" data-id={SF_ID} data-badge={SF_BADGE_VARIANT} style={{ width: 80 }}>
+      <div
+        className="sf-root"
+        data-id={SF_ID}
+        data-badge={SF_BADGE_VARIANT}
+        style={{ width: 80 }}
+      >
         <a href={SF_PROJECT_URL} target="_blank" rel="noopener noreferrer">
           SCULT-TOOLS
         </a>
       </div>
-      <Script src={`https://b.sf-syn.com/badge_js?sf_id=${SF_ID}`} strategy="lazyOnload" />
+      <Script
+        src={`https://b.sf-syn.com/badge_js?sf_id=${SF_ID}`}
+        strategy="lazyOnload"
+      />
     </>
   )
 }

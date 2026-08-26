@@ -4,13 +4,13 @@ import {
   PROMPT_GROUPS,
   PROMPTS,
 } from './prompts/registry'
-import { rankSearch } from './search-client'
 import type {
   PromptSearchEntry,
   SearchEntry,
   SearchHit,
   ToolSearchEntry,
 } from './search-client'
+import { rankSearch } from './search-client'
 import { CATEGORIES } from './tools/categories'
 import { TOOLS } from './tools/registry'
 
