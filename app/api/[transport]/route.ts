@@ -27,8 +27,10 @@
  */
 
 import { createMcpHandler } from 'mcp-handler'
+import { instrumentMcpServer } from '@/lib/mcp/instrument'
 import { registerTools } from '@/lib/mcp/register'
-import { mcpRequestContext } from '@/lib/mcp/request-context'
+import { clientNameFromUserAgent, mcpRequestContext } from '@/lib/mcp/request-context'
+import { flushMcpEvents } from '@/lib/mcp/studio-report'
 import { checkRateLimit, clientIpFromHeaders } from '@/lib/rate-limit'
 
 /** Matches website-speed-test's own PSI budget — test_website_speed can take 15-40s. */
@@ -46,11 +48,14 @@ const ROUTE_WINDOW_MS = 60_000
 const MAX_BODY_BYTES = 4 * 1024 * 1024
 
 const baseHandler = createMcpHandler(
-  registerTools,
+  // instrumentMcpServer wraps registerTool so every tool call, error and
+  // rate-limit block is timed and reported to Studio by construction — see
+  // lib/mcp/instrument.ts. It changes nothing a tool returns.
+  (server) => registerTools(instrumentMcpServer(server)),
   {
     serverInfo: { name: 'scult-tools', version: '1.1.0' },
     instructions: [
-      'Every free tool on tools.scult.in, callable directly: SEO utilities (schema markup, FAQ schema, UTM builder), business tools (invoice totals, marketing ROI, name/slogan generators), developer utilities (JSON formatter, word counter, QR codes, favicons, colour palettes), live site audits (check_ai_visibility, test_website_speed), and keyword search over the 1,170-prompt Prompt Library, the 18,000+ skill Skills Library, the blog, and the guides.',
+      'Every free tool on tools.scult.in, callable directly: SEO utilities (schema markup, FAQ schema, UTM builder), business tools (invoice totals, marketing ROI, name/slogan generators), developer utilities (JSON formatter, word counter, QR codes, favicons, colour palettes), live site audits (check_ai_visibility, test_website_speed), and keyword search over the 1,170-prompt Prompt Library, the 50,000-skill Skills Library, the blog, and the guides.',
       'Start with list_site_tools to see the full catalogue. Search tools return compact results — follow up with the matching get_* tool for full content.',
       'Rate limits per client: 30 calls/min for lookups and pure computation, 6/min for favicon rendering, 3/min for the two live-audit tools (they hit external APIs). Rate-limit errors state the bucket and when to retry.',
     ].join('\n'),
@@ -101,7 +106,15 @@ async function handler(request: Request): Promise<Response> {
     }
   }
 
-  return mcpRequestContext.run({ clientIp }, () => baseHandler(request))
+  const clientName = clientNameFromUserAgent(request.headers.get('user-agent'))
+  const response = await mcpRequestContext.run({ clientIp, clientName }, () =>
+    baseHandler(request),
+  )
+  // Flush after the response is built so buffered MCP events actually leave
+  // before a serverless instance can freeze. Awaited (its own 3s timeout
+  // caps the wait) and never throws.
+  await flushMcpEvents()
+  return response
 }
 
 export { handler as GET, handler as POST }
