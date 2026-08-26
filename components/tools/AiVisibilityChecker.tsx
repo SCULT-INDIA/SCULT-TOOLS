@@ -45,7 +45,7 @@ import {
 import { BrandIcon, brandForCompany } from '@/components/ui/BrandIcon'
 import { trackToolEvent } from '@/lib/analytics'
 import { downloadTextFile, slugifyUrlForFilename } from '@/lib/download-file'
-import { SITE } from '@/lib/site'
+import { parentLink, SITE } from '@/lib/site'
 import {
   AI_BOTS,
   type ApiError,
@@ -1051,7 +1051,12 @@ function CopyLinkButton({ copied, onCopy }: { copied: boolean; onCopy: () => voi
   )
 }
 
-const SCULT_BOOKING_URL = 'https://scult.in/#book-meeting'
+// Built through parentLink() so it carries the utm_source/campaign that
+// CtaClickTracker keys on — that ONE delegated listener then records the
+// cta_click (to GA4 and, via the multi-sink, to Studio) for every booking
+// link here. No per-link onClick tracking, so a click can never be
+// mis-recorded as a dismissal (the bug this replaced).
+const SCULT_BOOKING_URL = parentLink('/#book-meeting', 'ai-visibility-checker')
 const SCULT_PHONE = '7007288376'
 const SCULT_EMAIL = 'connect@scult.in'
 
@@ -1097,7 +1102,13 @@ const CTA_DISMISSED_KEY = 'scult-tools:aiv-cta-dismissed:v1'
  * `triggerRef` stays unattached — focus simply doesn't move on close, which
  * is no worse than before this modal existed.
  */
-function ScultCtaModal({ onDismiss }: { onDismiss: () => void }) {
+function ScultCtaModal({
+  onDismiss,
+  onConvert,
+}: {
+  onDismiss: () => void
+  onConvert: () => void
+}) {
   const panelRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLElement | null>(null)
   useDialogBehavior(true, () => onDismiss(), panelRef, triggerRef)
@@ -1140,7 +1151,7 @@ function ScultCtaModal({ onDismiss }: { onDismiss: () => void }) {
             target="_blank"
             rel="noopener noreferrer"
             className="btn-brutal btn-violet btn-brutal-sm mt-5 w-full text-center"
-            onClick={onDismiss}
+            onClick={onConvert}
           >
             <Calendar className="size-4" aria-hidden="true" />
             Book a free AI readiness call →
@@ -1487,9 +1498,19 @@ export function AiVisibilityChecker() {
     }
   }
 
-  function dismissCta(): void {
+  // Housekeeping only — closes the modal, records nothing. Used when the
+  // booking link is followed (that click is a conversion, tracked by
+  // CtaClickTracker via the parentLink href, NOT a dismissal).
+  function closeCta(): void {
     setCtaVisible(false)
     setCtaDismissed(true)
+  }
+
+  // A real dismissal — the ✕, backdrop, Close button, Escape. This is the
+  // only path that records cta_dismiss, so "walked away" and "booked a
+  // call" can never be confused again.
+  function dismissCta(): void {
+    closeCta()
     trackToolEvent('ai-visibility-checker', 'cta_dismiss')
   }
 
@@ -1544,7 +1565,9 @@ export function AiVisibilityChecker() {
 
   return (
     <div className="flex flex-col gap-6 rounded-panel border border-ink bg-cream p-5 shadow-brutal md:p-6">
-      {ctaVisible && !ctaDismissed ? <ScultCtaModal onDismiss={dismissCta} /> : null}
+      {ctaVisible && !ctaDismissed ? (
+        <ScultCtaModal onDismiss={dismissCta} onConvert={closeCta} />
+      ) : null}
 
       <ToolToolbar
         actions={
@@ -1966,16 +1989,15 @@ export function AiVisibilityChecker() {
                   Claude — typically in one sprint.
                 </p>
                 <div className="mt-4 flex flex-wrap items-center gap-4">
+                  {/* No onClick tracker: the parentLink href carries the
+                      UTMs CtaClickTracker keys on, so it records this
+                      cta_click once (GA4 + Studio). A manual call here would
+                      double-count. */}
                   <a
                     href={SCULT_BOOKING_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-pill border-2 border-white px-4 py-2 font-semibold text-[14px] text-white transition-colors hover:bg-white hover:text-violet-900"
-                    onClick={() =>
-                      trackToolEvent('ai-visibility-checker', 'cta_click', {
-                        source: 'inline',
-                      })
-                    }
                   >
                     <Calendar className="size-4" aria-hidden="true" />
                     Book a free AI readiness call →

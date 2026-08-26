@@ -72,9 +72,26 @@ export function trackEvent(
   params?: Record<string, string | number | boolean>,
 ): void {
   if (typeof window === 'undefined') return
-  const w = window as Window & { dataLayer?: unknown[] }
+  const w = window as Window & {
+    dataLayer?: unknown[]
+    scult?: (name: string, props?: Record<string, unknown>) => void
+  }
   w.dataLayer = w.dataLayer || []
   queueGtagCommand(w.dataLayer)('event', name, params)
+
+  // Second sink: SCULT Studio. track.js v2 (loaded from studio.scult.in in
+  // DeferredAnalyticsScripts) exposes window.scult(name, props) and owns the
+  // batching, session id, visitor id, geo and transport — so mirroring every
+  // GA4 event into Studio is one call here, and every existing AND future
+  // call site feeds both systems with no per-site-code change. Deliberately
+  // fire-and-forget and guarded: if track.js hasn't loaded yet (it's
+  // deferred) the event still reaches GA4 above; Studio just misses that one
+  // early event, never the site.
+  try {
+    w.scult?.(name, params as Record<string, unknown> | undefined)
+  } catch {
+    /* never let a tracking sink break the page */
+  }
 }
 
 /**

@@ -2,6 +2,7 @@
 
 import { Check, Copy } from 'lucide-react'
 import { useState } from 'react'
+import { trackEvent } from '@/lib/analytics'
 
 /**
  * A copyable code snippet, styled as the same dark "editor card" used by
@@ -18,6 +19,11 @@ export function McpCodeBlock({ label, code }: { label: string; code: string }) {
       await navigator.clipboard.writeText(code)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
+      // Was the one copy affordance on the whole site with no tracking.
+      // Now the "did anyone actually take the MCP config" signal — GA4 +
+      // Studio via the multi-sink. `method` is the snippet's own label
+      // (Endpoint / Terminal / mcp.json).
+      trackEvent('mcp_config_copied', { method: label })
     } catch {
       // Clipboard API can fail (permissions, insecure context) — the code stays selectable either way.
     }

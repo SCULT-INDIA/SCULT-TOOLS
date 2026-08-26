@@ -1,4 +1,3 @@
-import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cabin, Fraunces, Permanent_Marker } from 'next/font/google'
 import { CtaClickTracker } from '@/components/layout/CtaClickTracker'
@@ -253,12 +252,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           clarityId={SITE.clarityId}
           studioSiteId={SITE.studioSiteId}
         />
-
-        {/* Vercel Analytics — a no-op off Vercel's own infrastructure (it
-            posts to /_vercel/insights, which only exists on a Vercel
-            deployment), so this is safe to render unconditionally in every
-            environment, including local dev and any other host. */}
-        <Analytics />
       </body>
     </html>
   )

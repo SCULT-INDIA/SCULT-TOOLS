@@ -24,6 +24,7 @@
  */
 
 import { Document, Image, Link, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
+import { parentLink } from '@/lib/site'
 import {
   CHECK_WEIGHT,
   type CheckResult,
@@ -33,7 +34,11 @@ import {
   type VisibilityReport,
 } from './logic'
 
-const SCULT_BOOKING_URL = 'https://scult.in/#book-meeting'
+// Through parentLink() so the report's booking link carries the same
+// utm_source/campaign attribution as every other parent-site CTA — a PDF
+// link is clicked outside the browser, so nothing tracks the click itself,
+// but the UTMs still attribute the visit when they land on scult.in.
+const SCULT_BOOKING_URL = parentLink('/#book-meeting', 'ai-visibility-checker-pdf')
 const SCULT_PHONE = '7007288376'
 const SCULT_EMAIL = 'connect@scult.in'
 const SCULT_MARK_SRC = '/brand/scult-mark.png'
