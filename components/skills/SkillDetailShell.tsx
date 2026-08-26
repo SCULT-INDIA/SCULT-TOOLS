@@ -1,4 +1,5 @@
 import { ArrowUpRight, BadgeCheck, Download } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { SkillCard } from '@/components/skills/SkillCard'
 import { SkillCopyBlock } from '@/components/skills/SkillCopyBlock'
@@ -72,13 +73,27 @@ export function SkillDetailShell({
       {/* Hero — soft card, not a bordered/shadowed panel: the calm-directory
           register this whole redesign is aiming for. */}
       <header className="rounded-3xl border border-line-grey bg-white p-7 shadow-xs md:p-10">
-        <Link
-          href={`/skills/${category.slug}`}
-          className="inline-flex items-center gap-2 rounded-full bg-offwhite px-3 py-1.5 font-medium text-[12.5px] text-ink-muted transition-colors hover:text-violet-700"
-        >
-          <Icon name={category.icon} className="size-3.5 text-violet-700" />
-          {category.name}
-        </Link>
+        <div className="flex items-start justify-between gap-4">
+          <Link
+            href={`/skills/${category.slug}`}
+            className="inline-flex items-center gap-2 rounded-full bg-offwhite px-3 py-1.5 font-medium text-[12.5px] text-ink-muted transition-colors hover:text-violet-700"
+          >
+            <Icon name={category.icon} className="size-3.5 text-violet-700" />
+            {category.name}
+          </Link>
+          {/* Publisher's real GitHub avatar — same source of truth as
+              SkillCard's logo, larger here. GitHub serves an identicon for
+              any login, so no fallback needed; unoptimized for the same
+              thousands-of-distinct-owners reason as the card. */}
+          <Image
+            src={`https://avatars.githubusercontent.com/${skill.sourceOwner}?s=128`}
+            alt={`${skill.sourceOwner} logo`}
+            width={56}
+            height={56}
+            unoptimized
+            className="size-14 shrink-0 rounded-2xl border border-line-grey object-cover"
+          />
+        </div>
 
         <h1 className="mt-4 text-[30px] leading-[1.15] tracking-[-0.5px] md:text-[38px]">
           {skill.name}

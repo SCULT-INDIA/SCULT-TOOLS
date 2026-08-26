@@ -1,4 +1,5 @@
 import { Download } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { BrandIcon, brandForTag } from '@/components/ui/BrandIcon'
 import { Icon } from '@/components/ui/Icon'
@@ -45,10 +46,30 @@ export function SkillCard({
       className="card-modern group flex flex-col gap-3 p-5"
     >
       <div className="flex items-start gap-3">
+        {/* The publisher's real GitHub avatar — every skill's true "logo",
+            since a skill IS a file in that owner's repo. GitHub serves a
+            default identicon for any login (even deleted ones return 200,
+            verified), so no fallback branch is needed; the category tile
+            behind it keeps the card's colour-coding role. unoptimized: these
+            are already tiny (~2-4KB at s=80), pre-resized by GitHub's own
+            CDN, and there are thousands of DISTINCT owners — piping each
+            through the image optimizer would just fill its cache with
+            one-off entries for zero byte savings. */}
         <span
-          className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${TILE_BG[category.tile]}`}
+          className={`relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl ${TILE_BG[category.tile]}`}
         >
-          <Icon name={category.icon} className="size-4.5 text-violet-700" />
+          <Image
+            src={`https://avatars.githubusercontent.com/${skill.sourceOwner}?s=80`}
+            alt=""
+            width={40}
+            height={40}
+            unoptimized
+            className="size-full object-cover"
+          />
+          <Icon
+            name={category.icon}
+            className="-z-10 absolute size-4.5 text-violet-700"
+          />
         </span>
         <div className="min-w-0 flex-1">
           <p className="truncate font-semibold text-[15.5px] text-ink leading-[1.3] transition-colors group-hover:text-violet-700">

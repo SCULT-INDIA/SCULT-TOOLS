@@ -756,6 +756,133 @@ function isAuthorized(header) {
   return timingSafeEqual(expected, provided)
 }
 
+/**
+ * Harvest mode (`POST /api/sync?mode=harvest`) — frontier-crawls the search
+ * API to grow the registry far past what the leaderboard (~9.6k) and
+ * curated (~5.5k) feeds expose, toward the long tail only search reaches.
+ *
+ * The frontier lives in skills_sync_meta.harvest_queue (jsonb array of
+ * strings): a plain entry is a keyword search; an `owner:<login>` entry is
+ * an owner-scoped search that returns that owner's skills across ALL of
+ * its repos. Every result batch can discover new owners, which are pushed
+ * onto the queue — the frontier feeds itself. An entry is only dequeued
+ * once every result was genuinely attempted (rate-limit exhaustion retries
+ * the same entry next invocation), same completion discipline as the
+ * leaderboard pass.
+ *
+ * This runs on the worker rather than a dev machine for one hard-learned
+ * reason: skills.sh suppresses API traffic per IP (stalled connections,
+ * not 429s) once a single address pulls tens of thousands of requests —
+ * exactly what happened to the first, local harvest run.
+ */
+async function runHarvest(supabase, token, meta, deadlineAt, timeLeft) {
+  const queue = Array.isArray(meta?.harvest_queue) ? [...meta.harvest_queue] : []
+  const owners = new Set(Array.isArray(meta?.harvest_owners) ? meta.harvest_owners : [])
+  const tombstones = new Set(
+    Array.isArray(meta?.tombstoned_ids) ? meta.tombstoned_ids : [],
+  )
+  let processed = 0
+  let failed = 0
+  let entriesDone = 0
+  const errors = []
+
+  while (queue.length > 0 && timeLeft() > 12_000) {
+    const entry = queue[0]
+    const isOwner = entry.startsWith('owner:')
+    const q = isOwner ? entry.slice('owner:'.length) : entry
+    const url = isOwner
+      ? `/skills/search?q=${encodeURIComponent(q.slice(0, 30).padEnd(2, 'x'))}&owner=${encodeURIComponent(q)}&limit=200`
+      : `/skills/search?q=${encodeURIComponent(q)}&limit=200`
+
+    let listing
+    try {
+      listing = await fetchV1(token, url, deadlineAt)
+    } catch (err) {
+      errors.push(`search "${entry}": ${err.message}`)
+      break // retry this entry next invocation
+    }
+    const items = (listing.data ?? []).filter(
+      (it) => it?.id && !it.isDuplicate && !tombstones.has(it.id),
+    )
+
+    // Frontier self-feeding: enqueue owners we have never queried.
+    for (const it of items) {
+      const owner = String(it.source ?? '').split('/')[0]
+      if (owner && !owners.has(owner)) {
+        owners.add(owner)
+        queue.push(`owner:${owner}`)
+      }
+    }
+
+    let newItems
+    try {
+      const split = await splitExistingNew(supabase, items, deadlineAt)
+      newItems = split.newItems
+    } catch (err) {
+      errors.push(`split "${entry}": ${err.message}`)
+      break
+    }
+
+    let rateLimitedInBatch = 0
+    const { completed } = await mapConcurrent(
+      newItems,
+      DETAIL_CONCURRENCY,
+      async (item) => {
+        let result
+        try {
+          result = await upsertSkillFromListing(supabase, token, item, deadlineAt)
+        } catch (err) {
+          result = {
+            ok: false,
+            error: err.message,
+            rateLimited: isRateLimitExhaustion(err),
+          }
+        }
+        if (result.ok) processed++
+        else {
+          failed++
+          if (result.rateLimited) rateLimitedInBatch++
+          if (result.notFound) tombstones.add(item.id)
+          if (result.error && errors.length < 10) errors.push(String(result.error))
+        }
+      },
+      timeLeft,
+    )
+
+    if (!completed || rateLimitedInBatch > 0) break // same entry retries next call
+    queue.shift()
+    entriesDone++
+  }
+
+  const { count } = await supabase
+    .from('skills')
+    .select('id', { count: 'exact', head: true })
+  // UPDATE of only harvest-owned fields (plus the shared counters) — never
+  // the cursor/curated flags, and deliberately NOT last_synced_at either:
+  // that timestamp gates the daily pass's 16h rescan trigger, and a
+  // multi-hour harvest stamping it every slice would silently postpone the
+  // nightly refresh for as long as the harvest runs.
+  await supabase
+    .from('skills_sync_meta')
+    .update({
+      harvest_queue: queue,
+      harvest_owners: [...owners],
+      tombstoned_ids: [...tombstones],
+      total_skills: count ?? 0,
+    })
+    .eq('id', true)
+
+  return {
+    mode: 'harvest',
+    processed,
+    failed,
+    entriesDone,
+    queueRemaining: queue.length,
+    totalSkills: count ?? 0,
+    errors,
+  }
+}
+
 export default async function handler(req, res) {
   if (!isAuthorized(req.headers.authorization)) {
     res.status(401).json({ error: 'unauthorized' })
@@ -770,6 +897,12 @@ export default async function handler(req, res) {
   const token = await getVercelOidcToken()
 
   const { data: meta } = await supabase.from('skills_sync_meta').select('*').maybeSingle()
+
+  if (String(req.url ?? '').includes('mode=harvest')) {
+    const result = await runHarvest(supabase, token, meta, deadlineAt, timeLeft)
+    res.status(200).json({ ...result, elapsedMs: Date.now() - startedAt })
+    return
+  }
   let cursorPage = meta?.cursor_page ?? 0
   let cursorDone = meta?.cursor_done ?? false
   let curatedDone = meta?.curated_done ?? false

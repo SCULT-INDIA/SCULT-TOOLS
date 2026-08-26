@@ -97,7 +97,9 @@ const nextConfig: NextConfig = {
       "default-src 'self'",
       `script-src 'self' 'unsafe-inline'${scriptEval} https://www.googletagmanager.com https://www.clarity.ms https://scripts.clarity.ms https://studio.scult.in https://b.sf-syn.com https://va.vercel-scripts.com`,
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://www.uneed.best https://cdn-b.saashub.com https://*.clarity.ms https://*.google-analytics.com https://www.googletagmanager.com https://a.fsdn.com https://sourceforge.net https://b.sf-syn.com",
+      // avatars.githubusercontent.com: every Skills Library card/detail
+      // shows the publishing GitHub owner's real avatar as the skill's logo.
+      "img-src 'self' data: blob: https://www.uneed.best https://cdn-b.saashub.com https://avatars.githubusercontent.com https://*.clarity.ms https://*.google-analytics.com https://www.googletagmanager.com https://a.fsdn.com https://sourceforge.net https://b.sf-syn.com",
       "font-src 'self'",
       "connect-src 'self' https://*.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.clarity.ms https://studio.scult.in https://api.github.com",
       'frame-src https://sourceforge.net https://b.sf-syn.com',
