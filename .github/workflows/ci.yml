@@ -34,6 +34,14 @@ jobs:
       - name: Lint + format check
         run: npx biome ci .
 
+      # next-env.d.ts and .next/types are GENERATED, gitignored artifacts —
+      # without them a bare tsc can't resolve static-image imports (every
+      # `import logo from '@/public/...png'` fails TS2307) or typed routes.
+      # Locally they exist because `next dev` has run; `next typegen`
+      # produces them without a full build.
+      - name: Generate Next.js types
+        run: npx next typegen
+
       - name: Type check
         run: npx tsc --noEmit
 
