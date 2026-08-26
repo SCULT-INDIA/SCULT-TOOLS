@@ -91,7 +91,9 @@ export async function getSkillsPage(
   return data.map(rowToSkill)
 }
 
-export async function getSkillCountByCategory(category: SkillCategorySlug): Promise<number> {
+export async function getSkillCountByCategory(
+  category: SkillCategorySlug,
+): Promise<number> {
   'use cache'
   cacheLife('hours')
   const { count, error } = await supabaseSkills
@@ -155,7 +157,20 @@ export async function searchSkills(
   category: SkillCategorySlug | undefined,
   limit: number,
 ): Promise<readonly Skill[]> {
-  const trimmed = query.trim()
+  // Sanitised, not interpolated raw: `.or()` takes a PostgREST filter
+  // STRING whose grammar is comma/paren/dot-delimited, so a query
+  // containing `,` `(` `)` restructures the filter itself — filter
+  // injection, the PostgREST equivalent of SQL injection. Stripping the
+  // grammar characters (plus the LIKE wildcards `%` and `_`, which would
+  // let a caller turn one scan into a pathological pattern) keeps every
+  // remaining character a literal. Length-capped as a second line even
+  // though the MCP schema already caps it — this function is exported and
+  // callable from anywhere.
+  const trimmed = query
+    .trim()
+    .replace(/[,()%_\\"]/g, ' ')
+    .slice(0, 100)
+    .trim()
   if (trimmed === '') return []
   let builder = supabaseSkills
     .from('skills')
@@ -224,7 +239,10 @@ export async function getTotalSkillCount(): Promise<number> {
 /** Backs the hub page's real "last synced" timestamp and the sitemap's
  * `lastModified` for /skills — read from `skills_sync_meta`, written by the
  * sync-worker after each run, not guessed from the most recent row. */
-export async function getSyncMeta(): Promise<{ lastSyncedAt: string | null; totalSkills: number }> {
+export async function getSyncMeta(): Promise<{
+  lastSyncedAt: string | null
+  totalSkills: number
+}> {
   'use cache'
   cacheLife('hours')
   const { data, error } = await supabaseSkills
@@ -256,5 +274,9 @@ export async function getAllSkillRefs(
     console.error('getAllSkillRefs failed', error)
     return []
   }
-  return data.map((r) => ({ slug: r.slug, category: r.category, lastSyncedAt: r.last_synced_at }))
+  return data.map((r) => ({
+    slug: r.slug,
+    category: r.category,
+    lastSyncedAt: r.last_synced_at,
+  }))
 }

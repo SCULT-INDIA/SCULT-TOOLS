@@ -29,7 +29,9 @@ async function postToStudio(
 ): Promise<StudioResult> {
   const apiKey = process.env.SCULT_STUDIO_API_KEY
   if (!apiKey) {
-    console.error(`postToStudio: SCULT_STUDIO_API_KEY is not configured — ${path} dropped.`)
+    console.error(
+      `postToStudio: SCULT_STUDIO_API_KEY is not configured — ${path} dropped.`,
+    )
     return { ok: false, status: 502, message: 'Not accepting submissions right now.' }
   }
 
@@ -60,13 +62,20 @@ async function postToStudio(
       // `{errors:{title:[...]}}`), falling back to `rawBody` would render
       // literal JSON as the visitor-facing error text.
       const detail = parsed?.message ?? parsed?.error ?? rawBody
-      console.error(`postToStudio: Studio rejected ${path} (${upstream.status}): ${detail}`)
-      const cleanMessage =
+      console.error(
+        `postToStudio: Studio rejected ${path} (${upstream.status}): ${detail}`,
+      )
+      // Length-capped even though Studio is first-party: this string is
+      // reflected verbatim into OUR response body, so it should never be
+      // able to carry more than one short human sentence, whatever the
+      // upstream sends.
+      const cleanMessage = (
         typeof parsed?.message === 'string'
           ? parsed.message
           : typeof parsed?.error === 'string'
             ? parsed.error
             : undefined
+      )?.slice(0, 300)
 
       // 401/403 are a misconfigured key on our end — never worth surfacing
       // to the visitor as their fault. 429 is Studio's own rate limit
@@ -87,9 +96,17 @@ async function postToStudio(
         }
       }
       if (upstream.status >= 400 && upstream.status < 500) {
-        return { ok: false, status: 400, message: cleanMessage ?? 'Could not submit that.' }
+        return {
+          ok: false,
+          status: 400,
+          message: cleanMessage ?? 'Could not submit that.',
+        }
       }
-      return { ok: false, status: 502, message: 'Could not submit that. Try again in a moment.' }
+      return {
+        ok: false,
+        status: 502,
+        message: 'Could not submit that. Try again in a moment.',
+      }
     }
 
     const id = typeof parsed?.id === 'string' ? parsed.id : ''
@@ -100,7 +117,11 @@ async function postToStudio(
     return { ok: true, id }
   } catch (err) {
     console.error(`postToStudio: request to Studio failed for ${path}:`, err)
-    return { ok: false, status: 502, message: 'Could not submit that. Try again in a moment.' }
+    return {
+      ok: false,
+      status: 502,
+      message: 'Could not submit that. Try again in a moment.',
+    }
   }
 }
 

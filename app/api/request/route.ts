@@ -21,7 +21,7 @@
  */
 
 import { NextResponse } from 'next/server'
-import { isLikelyBotUserAgent } from '@/lib/bot-detection'
+import { isAutomatedClientUserAgent } from '@/lib/bot-detection'
 import { checkRateLimit, clientIpFromHeaders } from '@/lib/rate-limit'
 import { requestErrorMessage, validateRequest } from '@/lib/requests/logic'
 import { submitToolRequest } from '@/lib/studio'
@@ -30,17 +30,32 @@ import { submitToolRequest } from '@/lib/studio'
 const RATE_LIMIT_MAX = 5
 const RATE_LIMIT_WINDOW_MS = 10 * 60_000
 
+/** Far above any legitimate submission (description caps at 8,000 chars) —
+ * this bounds what request.json() will materialise, nothing more. */
+const MAX_BODY_BYTES = 64 * 1024
+
 function errorJson(error: string, status: number): NextResponse {
   return NextResponse.json({ error }, { status })
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
-  // Same generic 400 the honeypot below returns — a known crawler/monitor
-  // User-Agent posting here is either a scripted-form-spam bot or an
-  // automated test, never a real visitor's request; either way it should
-  // never reach Studio. See lib/bot-detection.ts for scope/limitations.
-  if (isLikelyBotUserAgent(request.headers.get('user-agent'))) {
+  // Same generic 400 the honeypot below returns — a scripted HTTP client or
+  // headless browser posting here is form spam or an automated test, never
+  // a real visitor's request. The NARROW automated-client check, not the
+  // analytics-grade isLikelyBotUserAgent — see app/api/feedback/route.ts
+  // for why the broader list silently ate submissions from chat-app
+  // in-app browsers.
+  if (isAutomatedClientUserAgent(request.headers.get('user-agent'))) {
     return errorJson('Could not submit that.', 400)
+  }
+
+  const declaredBytes = Number(request.headers.get('content-length'))
+  if (
+    !Number.isFinite(declaredBytes) ||
+    declaredBytes <= 0 ||
+    declaredBytes > MAX_BODY_BYTES
+  ) {
+    return errorJson('Could not read that submission.', 413)
   }
 
   const clientIp = clientIpFromHeaders(request.headers)

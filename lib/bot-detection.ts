@@ -101,6 +101,50 @@ export function isLikelyBotUserAgent(userAgent: string | null | undefined): bool
   return BOT_UA_PATTERN.test(userAgent)
 }
 
+/**
+ * The narrower check the FORM routes use. `isLikelyBotUserAgent` above is
+ * tuned for analytics ("don't count this visit"), where over-matching is
+ * cheap — but as a submit-blocker its link-unfurl group backfires: those
+ * substrings appear in real humans' in-app browsers (a WhatsApp-opened link
+ * carries "WhatsApp" in some Android WebView UAs), and preview bots only
+ * ever GET a page to unfurl it — they never POST a form — so blocking them
+ * from POST routes bought nothing and silently ate real feedback. This
+ * pattern keeps the groups that genuinely POST when they hit forms
+ * (headless browsers, scripted HTTP clients, monitors, and anything
+ * self-identifying via the generic bot pattern) and drops the unfurlers.
+ */
+const AUTOMATED_CLIENT_PATTERN = new RegExp(
+  `${[
+    'HeadlessChrome',
+    'PhantomJS',
+    'Puppeteer',
+    'Playwright',
+    'Selenium',
+    'python-requests',
+    'axios/',
+    'node-fetch',
+    'curl/',
+    'Wget',
+    'UptimeRobot',
+    'Pingdom',
+    'StatusCake',
+    'Site24x7',
+  ]
+    .map(escapeForRegExp)
+    .join('|')}|${GENERIC_BOT_PATTERN}`,
+  'i',
+)
+
+/** True for a User-Agent that identifies a scripted/automated HTTP client —
+ * the thing worth rejecting from a form POST. Never matches in-app browsers
+ * or link-preview bots (see above). */
+export function isAutomatedClientUserAgent(
+  userAgent: string | null | undefined,
+): boolean {
+  if (!userAgent) return false
+  return AUTOMATED_CLIENT_PATTERN.test(userAgent)
+}
+
 /** `navigator.webdriver` is set by every mainstream browser-automation
  * framework (Selenium, Puppeteer, Playwright) unless a script goes out of
  * its way to clear it — catches automated sessions a User-Agent string

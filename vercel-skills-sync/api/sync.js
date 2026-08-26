@@ -1,3 +1,4 @@
+import { timingSafeEqual } from 'node:crypto'
 import { getVercelOidcToken } from '@vercel/oidc'
 import { createClient } from '@supabase/supabase-js'
 
@@ -504,8 +505,21 @@ async function upsertSkillFromListing(supabase, token, item, deadlineAt) {
 
 export const config = { maxDuration: 60 }
 
+/** Constant-time bearer check — a plain !== short-circuits at the first
+ * differing byte, which leaks prefix-match length as a timing signal. Buffer
+ * lengths are compared first (timingSafeEqual throws on mismatch), and the
+ * length itself is the only thing that leaks — acceptable for a 64-char
+ * random secret. */
+function isAuthorized(header) {
+  if (typeof header !== 'string' || !CRON_SECRET) return false
+  const expected = Buffer.from(`Bearer ${CRON_SECRET}`)
+  const provided = Buffer.from(header)
+  if (expected.length !== provided.length) return false
+  return timingSafeEqual(expected, provided)
+}
+
 export default async function handler(req, res) {
-  if (req.headers.authorization !== `Bearer ${CRON_SECRET}`) {
+  if (!isAuthorized(req.headers.authorization)) {
     res.status(401).json({ error: 'unauthorized' })
     return
   }

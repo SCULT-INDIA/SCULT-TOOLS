@@ -77,14 +77,18 @@ export function validateFeedback(
     rating = n
   }
 
-  const toolTitle =
+  // .slice caps on the identity fields too: these three were the only
+  // uncapped strings in the whole submission (every other field already had
+  // one) and are forwarded verbatim to Studio.
+  const toolTitle = (
     typeof input.toolTitle === 'string' && input.toolTitle.trim() !== ''
       ? input.toolTitle.trim()
       : input.toolSlug
+  ).slice(0, 200)
 
   const category =
     typeof input.category === 'string' && input.category.trim() !== ''
-      ? input.category.trim()
+      ? input.category.trim().slice(0, 100)
       : undefined
 
   const pageUrl =
@@ -97,7 +101,7 @@ export function validateFeedback(
 
   return {
     data: {
-      toolSlug: input.toolSlug.trim(),
+      toolSlug: input.toolSlug.trim().slice(0, 100),
       toolTitle,
       category,
       pageUrl,

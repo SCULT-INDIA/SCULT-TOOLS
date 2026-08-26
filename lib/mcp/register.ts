@@ -3,8 +3,8 @@ import QRCode from 'qrcode'
 import { z } from 'zod'
 import { runAiVisibilityCheck } from '@/app/api/ai-visibility/route'
 import { isSpeedTestApiError, runSpeedTest } from '@/app/api/speed-test/route'
-import { BLOG_POSTS, getBlogPost, getBlogPostsByPillar } from '@/lib/blog/registry'
-import type { BlogPost, Inline } from '@/lib/blog/types'
+import { BLOG_POSTS, getBlogPost } from '@/lib/blog/registry'
+import type { Inline } from '@/lib/blog/types'
 import { GUIDES, getGuide } from '@/lib/guides/registry'
 import {
   getPromptCategory,
@@ -64,6 +64,7 @@ import {
   formatPercent,
 } from '@/lib/tools/marketing-roi-calculator/logic'
 import { buildQrPayload, type QrPayloadInput } from '@/lib/tools/qr-code-generator/logic'
+import { TOOLS } from '@/lib/tools/registry'
 import {
   buildSchema,
   getSchemaType,
@@ -87,6 +88,7 @@ import { currentClientIp } from './request-context'
 
 const MCP_WINDOW_MS = 60_000
 const MCP_GENERAL_MAX = 30
+const MCP_HEAVY_MAX = 6
 const MCP_EXTERNAL_MAX = 3
 
 type ToolResult = {
@@ -95,6 +97,17 @@ type ToolResult = {
   >
   isError?: boolean
 }
+
+/**
+ * Standard MCP tool annotations, shared by every registration below. All of
+ * this server's tools are read-only (none mutates anything a caller could
+ * observe later) and non-destructive; the split that matters to a client is
+ * whether the tool reaches out to the open web on the caller's behalf.
+ * Deliberately NOT claiming idempotentHint globally: the generator tools
+ * seed their RNG from the clock when no seed is given.
+ */
+const PURE = { readOnlyHint: true, destructiveHint: false, openWorldHint: false }
+const OPEN_WORLD = { readOnlyHint: true, destructiveHint: false, openWorldHint: true }
 
 function text(value: unknown): ToolResult {
   return {
@@ -111,8 +124,17 @@ function errorText(message: string): ToolResult {
   return { content: [{ type: 'text', text: message }], isError: true }
 }
 
-function rateLimited(retryAfterSeconds: number): ToolResult {
-  return errorText(`Rate limited — retry in ${retryAfterSeconds}s.`)
+/** Names the tripped bucket and its limit, not just "rate limited" — the
+ * caller is an agent that can actually act on "which budget, how big, how
+ * long", e.g. by batching lookups or switching tools. */
+function rateLimited(
+  bucket: 'general' | 'heavy' | 'external',
+  max: number,
+  retryAfterSeconds: number,
+): ToolResult {
+  return errorText(
+    `Rate limited (${bucket} bucket: ${max} calls/min per client) — retry in ${retryAfterSeconds}s.`,
+  )
 }
 
 /** Gate for every pure-compute/lookup tool — generous, just stops a runaway loop. */
@@ -122,7 +144,25 @@ function checkGeneral(): ToolResult | undefined {
     MCP_GENERAL_MAX,
     MCP_WINDOW_MS,
   )
-  return rl.allowed ? undefined : rateLimited(rl.retryAfterSeconds)
+  return rl.allowed
+    ? undefined
+    : rateLimited('general', MCP_GENERAL_MAX, rl.retryAfterSeconds)
+}
+
+/** Gate for the heaviest pure-compute tool (favicon rendering: a multi-size
+ * raster pipeline over a caller-supplied image). Cheaper than the external
+ * APIs but ~100x the CPU of any lookup tool — it gets its own, tighter
+ * budget so a favicon loop can't monopolise the instance while staying
+ * inside the general bucket. */
+function checkHeavy(): ToolResult | undefined {
+  const rl = checkRateLimit(
+    `mcp:heavy:${currentClientIp()}`,
+    MCP_HEAVY_MAX,
+    MCP_WINDOW_MS,
+  )
+  return rl.allowed
+    ? undefined
+    : rateLimited('heavy', MCP_HEAVY_MAX, rl.retryAfterSeconds)
 }
 
 /** Gate for the 2 tools that call a paid/rate-limited third-party API — stricter
@@ -133,8 +173,16 @@ function checkExternal(): ToolResult | undefined {
     MCP_EXTERNAL_MAX,
     MCP_WINDOW_MS,
   )
-  return rl.allowed ? undefined : rateLimited(rl.retryAfterSeconds)
+  return rl.allowed
+    ? undefined
+    : rateLimited('external', MCP_EXTERNAL_MAX, rl.retryAfterSeconds)
 }
+
+/** Hex colour string for schema-level validation — the QR/favicon renderers
+ * receive these verbatim as library options, so the schema is where a junk
+ * value gets stopped. */
+const hexColor = () =>
+  z.string().regex(/^#[0-9a-fA-F]{3,8}$/, 'Expected a hex colour like #4B20DE')
 
 const SCHEMA_TYPE_IDS: readonly SchemaTypeId[] = [
   'Article',
@@ -154,6 +202,32 @@ const SCHEMA_TYPE_IDS: readonly SchemaTypeId[] = [
  * Passed to `createMcpHandler` in `app/api/[transport]/route.ts`.
  */
 export function registerTools(server: McpServer): void {
+  // ── Discovery ────────────────────────────────────────────────────────────
+
+  server.registerTool(
+    'list_site_tools',
+    {
+      title: 'List Site Tools',
+      description:
+        "Catalogue of every tool on tools.scult.in — slug, title, one-line description, category, and the tool's page URL. The MCP tools here mirror a subset of these; this list is the map of everything the site itself offers.",
+      annotations: PURE,
+      inputSchema: {},
+    },
+    async () => {
+      const limited = checkGeneral()
+      if (limited) return limited
+      return text(
+        TOOLS.map((t) => ({
+          slug: t.slug,
+          title: t.title,
+          description: t.description,
+          category: t.category,
+          url: `https://tools.scult.in/${t.category}/${t.slug}`,
+        })),
+      )
+    },
+  )
+
   // ── Wave 1 — pure-compute tools, zero new I/O ──────────────────────────
 
   server.registerTool(
@@ -162,15 +236,20 @@ export function registerTools(server: McpServer): void {
       title: 'Generate Schema Markup',
       description:
         "Build JSON-LD structured data for one of nine schema.org types (Article, Organization, LocalBusiness, Product, Person, Event, WebSite, BreadcrumbList, HowTo). Returns the JSON-LD object plus advisory warnings for missing/malformed fields Google's rich results require.",
+      annotations: PURE,
       inputSchema: {
         schemaType: z
           .enum(SCHEMA_TYPE_IDS as [SchemaTypeId, ...SchemaTypeId[]])
           .describe('Which schema.org type to build'),
         values: z
           .record(
-            z.string(),
-            z.union([z.string(), z.array(z.record(z.string(), z.string()))]),
+            z.string().max(64),
+            z.union([
+              z.string().max(4000),
+              z.array(z.record(z.string().max(64), z.string().max(2000))).max(50),
+            ]),
           )
+          .refine((v) => Object.keys(v).length <= 40, 'At most 40 fields')
           .describe(
             "Field values keyed by field id (see the type's fields). Scalar fields are strings; repeatable fields (e.g. sameAs, steps, crumbs) are arrays of row objects.",
           ),
@@ -192,10 +271,14 @@ export function registerTools(server: McpServer): void {
       title: 'Generate FAQ Schema',
       description:
         'Build a FAQPage JSON-LD block plus a visible HTML details/summary block from question/answer pairs (Google requires the marked-up Q&A to also appear on the page, not just in schema).',
+      annotations: PURE,
       inputSchema: {
         pairs: z
-          .array(z.object({ question: z.string(), answer: z.string() }))
+          .array(
+            z.object({ question: z.string().max(500), answer: z.string().max(4000) }),
+          )
           .min(1)
+          .max(50)
           .describe('Ordered Q&A pairs'),
       },
     },
@@ -213,14 +296,15 @@ export function registerTools(server: McpServer): void {
       title: 'Build UTM Campaign URL',
       description:
         'Attach utm_source/medium/campaign/id/term/content parameters to a destination URL the way GA4 expects to read them, flagging casing/whitespace mistakes that fragment a campaign across report rows.',
+      annotations: PURE,
       inputSchema: {
-        url: z.string().describe('Destination URL to tag'),
-        source: z.string().optional(),
-        medium: z.string().optional(),
-        campaign: z.string().optional(),
-        campaignId: z.string().optional(),
-        term: z.string().optional(),
-        content: z.string().optional(),
+        url: z.string().max(2000).describe('Destination URL to tag'),
+        source: z.string().max(200).optional(),
+        medium: z.string().max(200).optional(),
+        campaign: z.string().max(200).optional(),
+        campaignId: z.string().max(200).optional(),
+        term: z.string().max(200).optional(),
+        content: z.string().max(200).optional(),
         lowercase: z
           .boolean()
           .optional()
@@ -241,14 +325,33 @@ export function registerTools(server: McpServer): void {
       title: 'Calculate Marketing ROI',
       description:
         'Compute campaign ROI and ROAS side by side from spend, attributed revenue and gross margin — surfaces campaigns with a healthy-looking ROAS that are actually losing money once margin is applied.',
+      annotations: PURE,
       inputSchema: {
-        spend: z.number().describe('Campaign ad spend in rupees'),
-        revenue: z.number().describe('Revenue attributed to the campaign, in rupees'),
+        // .finite(): plain z.number() admits Infinity, which sails through
+        // arithmetic into "Infinity%" strings in the formatted output.
+        spend: z
+          .number()
+          .finite()
+          .min(0)
+          .max(1e15)
+          .describe('Campaign ad spend in rupees'),
+        revenue: z
+          .number()
+          .finite()
+          .min(0)
+          .max(1e15)
+          .describe('Revenue attributed to the campaign, in rupees'),
         marginPercent: z
           .number()
+          .finite()
+          .min(0)
+          .max(100)
           .describe('Gross margin as a percentage of revenue, 0-100'),
         otherCosts: z
           .number()
+          .finite()
+          .min(0)
+          .max(1e15)
           .optional()
           .describe('Tools/agency/creative costs in rupees, default 0'),
       },
@@ -273,14 +376,30 @@ export function registerTools(server: McpServer): void {
       title: 'Compute Invoice Totals',
       description:
         'Compute invoice subtotal, discount, tax and total from line items (quantity x rate), a tax percentage, and a percent-or-flat discount — every figure reconciles to the minor unit.',
+      annotations: PURE,
       inputSchema: {
-        lines: z.array(z.object({ quantity: z.number(), rate: z.number() })).min(1),
-        taxPercent: z.number().describe('e.g. 18 for 18%'),
+        lines: z
+          .array(
+            z.object({
+              quantity: z.number().finite().min(0).max(1e9),
+              rate: z.number().finite().min(0).max(1e12),
+            }),
+          )
+          .min(1)
+          .max(100),
+        taxPercent: z.number().finite().min(0).max(100).describe('e.g. 18 for 18%'),
         discount: z
           .number()
+          .finite()
+          .min(0)
+          .max(1e15)
           .describe('A percentage of subtotal, or a flat amount in major units'),
         discountKind: z.enum(['percent', 'flat']),
-        currency: z.string().optional().describe('ISO currency code, default INR'),
+        currency: z
+          .string()
+          .max(10)
+          .optional()
+          .describe('ISO currency code, default INR'),
       },
     },
     async ({ lines, taxPercent, discount, discountKind, currency }) => {
@@ -304,13 +423,15 @@ export function registerTools(server: McpServer): void {
       title: 'Generate Business Names',
       description:
         'Generate a batch of candidate business names from one or two keywords using a deterministic strategy (brandable, compound, modern suffix, portmanteau, or alliteration) — no AI, purely combinatorial word-bank generation.',
+      annotations: PURE,
       inputSchema: {
-        keywords: z.array(z.string()).min(1).max(2),
+        keywords: z.array(z.string().max(40)).min(1).max(2),
         style: z.enum(['brandable', 'compound', 'suffix', 'portmanteau', 'alliteration']),
         count: z.number().int().min(1).max(40).optional(),
         seed: z
           .number()
           .int()
+          .safe()
           .optional()
           .describe('For reproducible output; omit for a fresh batch each call'),
       },
@@ -331,13 +452,14 @@ export function registerTools(server: McpServer): void {
       title: 'Generate Slogans',
       description:
         'Generate a batch of slogans/taglines for a brand keyword (and optional "what you do" noun) in one of five tones (bold, friendly, premium, playful, minimal), from a curated template bank — flags which lines fit a Google Ads headline/description.',
+      annotations: PURE,
       inputSchema: {
-        keyword: z.string(),
-        noun: z.string().optional(),
+        keyword: z.string().max(60),
+        noun: z.string().max(60).optional(),
         tone: z.enum(['bold', 'friendly', 'premium', 'playful', 'minimal']),
         count: z.number().int().min(1).max(20).optional(),
-        exclude: z.array(z.string()).optional(),
-        seed: z.number().int().optional(),
+        exclude: z.array(z.string().max(200)).max(50).optional(),
+        seed: z.number().int().safe().optional(),
       },
     },
     async ({ keyword, noun, tone, count, exclude, seed }) => {
@@ -363,20 +485,21 @@ export function registerTools(server: McpServer): void {
       title: 'Generate Email Signature',
       description:
         'Build an email-safe HTML signature (nested tables, inline styles — the only markup that survives Outlook/Gmail) from name, title, company, contact fields and social links, in one of three layouts.',
+      annotations: PURE,
       inputSchema: {
-        fullName: z.string().optional().default(''),
-        jobTitle: z.string().optional().default(''),
-        company: z.string().optional().default(''),
-        phone: z.string().optional().default(''),
-        email: z.string().optional().default(''),
-        website: z.string().optional().default(''),
-        linkedin: z.string().optional().default(''),
-        twitter: z.string().optional().default(''),
-        instagram: z.string().optional().default(''),
-        github: z.string().optional().default(''),
-        photoUrl: z.string().optional().default(''),
+        fullName: z.string().max(120).optional().default(''),
+        jobTitle: z.string().max(120).optional().default(''),
+        company: z.string().max(120).optional().default(''),
+        phone: z.string().max(40).optional().default(''),
+        email: z.string().max(254).optional().default(''),
+        website: z.string().max(500).optional().default(''),
+        linkedin: z.string().max(500).optional().default(''),
+        twitter: z.string().max(500).optional().default(''),
+        instagram: z.string().max(500).optional().default(''),
+        github: z.string().max(500).optional().default(''),
+        photoUrl: z.string().max(500).optional().default(''),
         template: z.enum(['classic', 'stacked', 'corporate']),
-        accentColor: z.string().optional().default('#4B20DE'),
+        accentColor: hexColor().optional().default('#4B20DE'),
       },
     },
     async ({ template, accentColor, ...fields }) => {
@@ -401,8 +524,12 @@ export function registerTools(server: McpServer): void {
       title: 'Format / Minify / Repair JSON',
       description:
         'Pretty-print, minify, or best-effort-repair JSON text. Repair handles the common "valid JS, not valid JSON" mistakes: comments, single quotes, unquoted keys, trailing commas. On a parse failure, reports the exact line/column/snippet.',
+      annotations: PURE,
       inputSchema: {
-        input: z.string(),
+        // Mirrors the logic module's own MAX_INPUT_CHARS, but enforced here
+        // where oversized input is rejected before it is even materialised
+        // into the handler.
+        input: z.string().max(2_000_000),
         mode: z.enum(['format', 'minify', 'repair']).default('format'),
         indent: z.union([z.literal(2), z.literal(4), z.literal('tab')]).optional(),
         sort: z.boolean().optional().describe('Recursively sort object keys'),
@@ -437,7 +564,15 @@ export function registerTools(server: McpServer): void {
       title: 'Analyze Text',
       description:
         'Word/character/sentence/paragraph counts using real Unicode segmentation (not split(" ")), reading time, and keyword + two-word-phrase density — the same analysis behind the Word Counter tool.',
-      inputSchema: { text: z.string() },
+      annotations: PURE,
+      inputSchema: {
+        // The analyzer runs Intl.Segmenter grapheme/word/sentence passes
+        // plus an unbounded bigram map over the whole input — expensive per
+        // byte, and analyzeText has no internal cap of its own, so this
+        // schema bound is the only thing standing between an arbitrary-size
+        // payload and a CPU burn. 200k chars is a ~40k-word document.
+        text: z.string().max(200_000),
+      },
     },
     async ({ text: input }) => {
       const limited = checkGeneral()
@@ -453,8 +588,9 @@ export function registerTools(server: McpServer): void {
       title: 'Generate Colour Palette',
       description:
         'Turn one hex colour into a harmony (complementary, analogous, triadic, or monochrome) in OKLCH, each swatch carrying its WCAG contrast ratio against black/white — plus CSS custom properties, a Tailwind v4 @theme block, or plain hex list.',
+      annotations: PURE,
       inputSchema: {
-        hex: z.string().describe('#rgb or #rrggbb, # optional'),
+        hex: z.string().max(10).describe('#rgb or #rrggbb, # optional'),
         harmony: z.enum(['complementary', 'analogous', 'triadic', 'monochrome']),
         format: z
           .enum(['css', 'tailwind', 'json', 'hex'])
@@ -481,23 +617,26 @@ export function registerTools(server: McpServer): void {
       title: 'Generate QR Code',
       description:
         'Generate a scannable QR code PNG for a URL, free text, a WiFi network, or a UPI payment request. Validates the payload (URL scheme, WiFi SSID/password bounds, UPI VPA format, byte capacity) before encoding.',
+      annotations: PURE,
       inputSchema: {
         mode: z.enum(['url', 'text', 'wifi', 'upi']),
-        url: z.string().optional(),
-        text: z.string().optional(),
-        ssid: z.string().optional(),
-        password: z.string().optional(),
+        url: z.string().max(2100).optional(),
+        text: z.string().max(2100).optional(),
+        ssid: z.string().max(64).optional(),
+        password: z.string().max(128).optional(),
         security: z.enum(['WPA', 'WEP', 'nopass']).optional(),
         hidden: z.boolean().optional(),
-        vpa: z.string().optional(),
-        payeeName: z.string().optional(),
-        amount: z.string().optional(),
+        vpa: z.string().max(100).optional(),
+        payeeName: z.string().max(100).optional(),
+        amount: z.string().max(20).optional(),
         size: z
           .union([z.literal(256), z.literal(512), z.literal(1024), z.literal(2048)])
           .optional()
           .default(512),
-        darkColor: z.string().optional().default('#000000'),
-        lightColor: z.string().optional().default('#ffffff'),
+        // Validated at the schema, not just defaulted: these two pass
+        // verbatim into the QR library's colour options.
+        darkColor: hexColor().optional().default('#000000'),
+        lightColor: hexColor().optional().default('#ffffff'),
       },
     },
     async ({ size, darkColor, lightColor, ...input }) => {
@@ -531,12 +670,18 @@ export function registerTools(server: McpServer): void {
     {
       title: 'Generate Favicon Set',
       description:
-        'Turn a logo/image into a full favicon set: favicon.ico (16/32/48px), icon-192.png, icon-512.png, an apple-touch-icon, plus the <head> snippet and site.webmanifest to install them. Image mode only — text/letter/emoji favicons need font rendering this server cannot guarantee, so use an actual image.',
+        'Turn a logo/image into a full favicon set: favicon.ico (16/32/48px), icon-192.png, icon-512.png, an apple-touch-icon, plus the <head> snippet and site.webmanifest to install them. Image mode only — text/letter/emoji favicons need font rendering this server cannot guarantee, so use an actual image. Source image max 2MB.',
+      annotations: PURE,
       inputSchema: {
+        // ~2MB decoded (base64 is 4/3 overhead). Tighter than the website's
+        // own 10MB cap on purpose: over MCP the image rides inside a JSON
+        // body that is fully parsed before any size check can run, so the
+        // schema cap is what actually bounds transport + decode cost.
         imageBase64: z
           .string()
+          .max(2_800_000)
           .describe(
-            'Base64-encoded source image (PNG/JPEG/WebP/GIF/AVIF), no data: URI prefix.',
+            'Base64-encoded source image (PNG/JPEG/WebP/GIF/AVIF), no data: URI prefix. Max ~2MB decoded.',
           ),
         shape: z.enum(['square', 'rounded', 'circle']).optional().default('rounded'),
         radiusPct: z
@@ -553,20 +698,23 @@ export function registerTools(server: McpServer): void {
           .optional()
           .default(0)
           .describe('Inset padding around the image, as a fraction of the tile (0-0.4).'),
-        appleBackground: z
-          .string()
+        appleBackground: hexColor()
           .optional()
           .default('#ffffff')
           .describe('Hex colour used to flatten transparency for the apple-touch-icon.'),
         appName: z
           .string()
+          .max(60)
           .optional()
           .default('My site')
           .describe('App name written into the generated web manifest.'),
       },
     },
     async ({ imageBase64, shape, radiusPct, pad, appleBackground, appName }) => {
-      const limited = checkGeneral()
+      // The heavy bucket, not the general one: rendering six raster sizes
+      // from a caller-supplied image is the most expensive pure-compute
+      // call this server offers.
+      const limited = checkHeavy()
       if (limited) return limited
       let imageBytes: Uint8Array
       try {
@@ -647,7 +795,8 @@ export function registerTools(server: McpServer): void {
       title: 'Check AI Visibility',
       description:
         "Audit a website's visibility to AI crawlers and answer engines: per-crawler robots.txt verdicts (with the exact rule that decided), structured data, on-page basics, llms.txt, sitemap, HTTPS, and social/citation signals, scored 0-100. Fetches the live site server-side — same tool as tools.scult.in's AI Visibility Checker.",
-      inputSchema: { url: z.string().describe('The URL to check') },
+      annotations: OPEN_WORLD,
+      inputSchema: { url: z.string().max(2000).describe('The URL to check') },
     },
     async ({ url }) => {
       const limited = checkExternal()
@@ -664,8 +813,9 @@ export function registerTools(server: McpServer): void {
       title: 'Test Website Speed',
       description:
         "Run a real Google PageSpeed Insights / Lighthouse test against a URL (mobile or desktop) and return Core Web Vitals, the performance score, and top optimisation opportunities. Same tool as tools.scult.in's Website Speed Test — a real Lighthouse run, 15-40s.",
+      annotations: OPEN_WORLD,
       inputSchema: {
-        url: z.string(),
+        url: z.string().max(2000),
         strategy: z.enum(['mobile', 'desktop']).optional().default('mobile'),
       },
     },
@@ -690,9 +840,10 @@ export function registerTools(server: McpServer): void {
       title: 'Search Prompt Library',
       description:
         'Search the 1,170-prompt library by keyword across title, description, tags and the prompt template body itself. Returns compact matches (slug, title, description, category) — call get_prompt for the full template.',
+      annotations: PURE,
       inputSchema: {
-        query: z.string(),
-        category: z.string().optional(),
+        query: z.string().max(200),
+        category: z.string().max(100).optional(),
         limit: z.number().int().min(1).max(50).optional().default(10),
       },
     },
@@ -702,26 +853,21 @@ export function registerTools(server: McpServer): void {
       if (category !== undefined && getPromptCategory(category) === undefined) {
         return errorText(`Unknown prompt category "${category}".`)
       }
-      const terms = query
-        .toLowerCase()
-        .split(/\s+/)
-        .filter((t) => t.length > 0)
+      const terms = searchTerms(query)
       if (terms.length === 0) return text([])
-      const pool =
-        category !== undefined ? PROMPTS.filter((p) => p.category === category) : PROMPTS
-      const scored = pool
-        .map((p) => {
-          const haystack =
-            `${p.title} ${p.description} ${p.tags.join(' ')} ${p.promptText}`.toLowerCase()
-          const titleHay = p.title.toLowerCase()
-          let score = 0
-          for (const term of terms) {
-            if (titleHay.includes(term)) score += 10
-            else if (haystack.includes(term)) score += 1
-            else return { p, score: -1 }
-          }
-          return { p, score }
-        })
+      const haystacks = promptHaystacks()
+      const scored = PROMPTS.map((p, i) => {
+        if (category !== undefined && p.category !== category) return { p, score: -1 }
+        const hay = haystacks[i]
+        if (hay === undefined) return { p, score: -1 }
+        let score = 0
+        for (const term of terms) {
+          if (hay.title.includes(term)) score += 10
+          else if (hay.full.includes(term)) score += 1
+          else return { p, score: -1 }
+        }
+        return { p, score }
+      })
         .filter((r) => r.score > 0)
         .sort((a, b) => b.score - a.score)
         .slice(0, limit)
@@ -743,7 +889,8 @@ export function registerTools(server: McpServer): void {
       title: 'Get Prompt',
       description:
         'Fetch one prompt in full, including its template text, variables, and why it works.',
-      inputSchema: { slug: z.string() },
+      annotations: PURE,
+      inputSchema: { slug: z.string().max(200) },
     },
     async ({ slug }) => {
       const limited = checkGeneral()
@@ -760,6 +907,7 @@ export function registerTools(server: McpServer): void {
       title: 'List Prompt Categories',
       description:
         'List every Prompt Library category (grouped under 9 top-level groups) with its slug and blurb.',
+      annotations: PURE,
       inputSchema: {},
     },
     async () => {
@@ -785,9 +933,10 @@ export function registerTools(server: McpServer): void {
       title: 'Search Skills Library',
       description:
         'Search the Skills Library (real AI agent skills synced from skills.sh) by keyword across name and description, optionally scoped to a category. Returns compact matches — call get_skill for the full skill body.',
+      annotations: PURE,
       inputSchema: {
-        query: z.string(),
-        category: z.string().optional(),
+        query: z.string().max(100),
+        category: z.string().max(100).optional(),
         limit: z.number().int().min(1).max(50).optional().default(20),
       },
     },
@@ -821,7 +970,8 @@ export function registerTools(server: McpServer): void {
       title: 'Get Skill',
       description:
         'Fetch one skill in full. When its source license is not confirmed to permit redistribution, the body is withheld and a GitHub source link is returned instead — same rule the website itself enforces before showing a skill body.',
-      inputSchema: { category: z.string(), slug: z.string() },
+      annotations: PURE,
+      inputSchema: { category: z.string().max(100), slug: z.string().max(200) },
     },
     async ({ category, slug }) => {
       const limited = checkGeneral()
@@ -853,6 +1003,7 @@ export function registerTools(server: McpServer): void {
       title: 'List Skill Categories',
       description:
         'List every Skills Library category with its slug, blurb, and live skill count.',
+      annotations: PURE,
       inputSchema: {},
     },
     async () => {
@@ -878,6 +1029,7 @@ export function registerTools(server: McpServer): void {
       title: 'List Guides',
       description:
         "This site's small set of evergreen how-to guides (distinct from the blog) — title, description and reading time for each.",
+      annotations: PURE,
       inputSchema: {},
     },
     async () => {
@@ -899,7 +1051,8 @@ export function registerTools(server: McpServer): void {
     {
       title: 'Get Guide',
       description: 'Fetch one guide in full: every section, and the tools it links to.',
-      inputSchema: { slug: z.string() },
+      annotations: PURE,
+      inputSchema: { slug: z.string().max(200) },
     },
     async ({ slug }) => {
       const limited = checkGeneral()
@@ -916,8 +1069,9 @@ export function registerTools(server: McpServer): void {
       title: 'Search Blog',
       description:
         'Keyword search across 200+ long-form blog posts (tool deep-dives, prompt roundups, service guides, competitor playbooks) by title, description and full body text. Returns compact matches — call get_blog_post for the full post.',
+      annotations: PURE,
       inputSchema: {
-        query: z.string(),
+        query: z.string().max(200),
         pillar: z
           .enum(['tool', 'prompt', 'service', 'roundup', 'playbook'])
           .optional()
@@ -928,32 +1082,21 @@ export function registerTools(server: McpServer): void {
     async ({ query, pillar, limit }) => {
       const limited = checkGeneral()
       if (limited) return limited
-      const terms = query
-        .toLowerCase()
-        .split(/\s+/)
-        .filter((t) => t.length > 0)
+      const terms = searchTerms(query)
       if (terms.length === 0) return text([])
-      const pool: readonly BlogPost[] =
-        pillar !== undefined ? getBlogPostsByPillar(pillar) : BLOG_POSTS
-      const scored = pool
-        .map((p) => {
-          const bodyText = p.sections
-            .flatMap((s) => [s.heading, ...s.body.map(flattenInline)])
-            .join(' ')
-          const faqText = (p.faq ?? [])
-            .flatMap((f) => [f.question, flattenInline(f.answer)])
-            .join(' ')
-          const haystack =
-            `${p.title} ${p.description} ${p.dek} ${p.targetKeyword} ${bodyText} ${faqText}`.toLowerCase()
-          const titleHay = p.title.toLowerCase()
-          let score = 0
-          for (const term of terms) {
-            if (titleHay.includes(term)) score += 10
-            else if (haystack.includes(term)) score += 1
-            else return { p, score: -1 }
-          }
-          return { p, score }
-        })
+      const haystacks = blogHaystacks()
+      const scored = BLOG_POSTS.map((p, i) => {
+        if (pillar !== undefined && p.pillar !== pillar) return { p, score: -1 }
+        const hay = haystacks[i]
+        if (hay === undefined) return { p, score: -1 }
+        let score = 0
+        for (const term of terms) {
+          if (hay.title.includes(term)) score += 10
+          else if (hay.full.includes(term)) score += 1
+          else return { p, score: -1 }
+        }
+        return { p, score }
+      })
         .filter((r) => r.score > 0)
         .sort((a, b) => b.score - a.score)
         .slice(0, limit)
@@ -975,7 +1118,8 @@ export function registerTools(server: McpServer): void {
       title: 'Get Blog Post',
       description:
         'Fetch one blog post in full: every section, FAQ, sources, and related tools/prompts.',
-      inputSchema: { slug: z.string() },
+      annotations: PURE,
+      inputSchema: { slug: z.string().max(200) },
     },
     async ({ slug }) => {
       const limited = checkGeneral()
@@ -1011,4 +1155,57 @@ export function registerTools(server: McpServer): void {
  * consuming this over MCP wants plain paragraphs, not the site's inline-markup AST. */
 function flattenInline(segments: readonly Inline[]): string {
   return segments.map((s) => (typeof s === 'string' ? s : s.text)).join('')
+}
+
+/** Lowercased whitespace terms, capped at 8: scoring cost is O(terms x
+ * corpus), and the corpus half is fixed, so the term count is the only
+ * knob a caller could still turn into a CPU lever after the query-length
+ * cap. Eight distinct AND-ed terms is already a stricter query than any
+ * real search. */
+function searchTerms(query: string): string[] {
+  return query
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((t) => t.length > 0)
+    .slice(0, 8)
+}
+
+interface Haystack {
+  readonly title: string
+  readonly full: string
+}
+
+/**
+ * Memoized search corpora, built once per process on first search and
+ * index-aligned with their registries. The originals rebuilt (and
+ * re-lowercased) the ENTIRE corpus on every call — for the blog that meant
+ * flattening every section of 200+ long-form posts per search, the single
+ * most expensive code path on the MCP surface, paid before a single term
+ * was matched. The registries are immutable module constants, so caching
+ * is safe for the life of the process.
+ */
+let promptHaystacksCache: Haystack[] | undefined
+function promptHaystacks(): Haystack[] {
+  promptHaystacksCache ??= PROMPTS.map((p) => ({
+    title: p.title.toLowerCase(),
+    full: `${p.title} ${p.description} ${p.tags.join(' ')} ${p.promptText}`.toLowerCase(),
+  }))
+  return promptHaystacksCache
+}
+
+let blogHaystacksCache: Haystack[] | undefined
+function blogHaystacks(): Haystack[] {
+  blogHaystacksCache ??= BLOG_POSTS.map((p) => {
+    const bodyText = p.sections
+      .flatMap((s) => [s.heading, ...s.body.map(flattenInline)])
+      .join(' ')
+    const faqText = (p.faq ?? [])
+      .flatMap((f) => [f.question, flattenInline(f.answer)])
+      .join(' ')
+    return {
+      title: p.title.toLowerCase(),
+      full: `${p.title} ${p.description} ${p.dek} ${p.targetKeyword} ${bodyText} ${faqText}`.toLowerCase(),
+    }
+  })
+  return blogHaystacksCache
 }

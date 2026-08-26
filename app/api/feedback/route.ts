@@ -23,7 +23,7 @@
  */
 
 import { NextResponse } from 'next/server'
-import { isLikelyBotUserAgent } from '@/lib/bot-detection'
+import { isAutomatedClientUserAgent } from '@/lib/bot-detection'
 import { checkRateLimit, clientIpFromHeaders } from '@/lib/rate-limit'
 import { submitToolFeedback } from '@/lib/studio'
 import { feedbackErrorMessage, validateFeedback } from '@/lib/tools/feedback/logic'
@@ -32,17 +32,33 @@ import { feedbackErrorMessage, validateFeedback } from '@/lib/tools/feedback/log
 const RATE_LIMIT_MAX = 5
 const RATE_LIMIT_WINDOW_MS = 10 * 60_000
 
+/** Far above any legitimate submission (message caps at 2,000 chars) —
+ * this bounds what request.json() will materialise, nothing more. */
+const MAX_BODY_BYTES = 64 * 1024
+
 function errorJson(error: string, status: number): NextResponse {
   return NextResponse.json({ error }, { status })
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
-  // Same generic 400 the honeypot below returns — a known crawler/monitor
-  // User-Agent posting here is either a scripted-form-spam bot or an
-  // automated test, never a real visitor's feedback; either way it should
-  // never reach Studio. See lib/bot-detection.ts for scope/limitations.
-  if (isLikelyBotUserAgent(request.headers.get('user-agent'))) {
+  // Same generic 400 the honeypot below returns — a scripted HTTP client or
+  // headless browser posting here is form spam or an automated test, never
+  // a real visitor's feedback. Deliberately the NARROW automated-client
+  // check, not the analytics-grade isLikelyBotUserAgent: that broader list
+  // includes link-preview substrings ("WhatsApp") that also appear in real
+  // humans' in-app browser UAs, and preview bots never POST anyway — using
+  // it here silently ate feedback from anyone arriving via a chat app.
+  if (isAutomatedClientUserAgent(request.headers.get('user-agent'))) {
     return errorJson('Could not submit that.', 400)
+  }
+
+  const declaredBytes = Number(request.headers.get('content-length'))
+  if (
+    !Number.isFinite(declaredBytes) ||
+    declaredBytes <= 0 ||
+    declaredBytes > MAX_BODY_BYTES
+  ) {
+    return errorJson('Could not read that submission.', 413)
   }
 
   const clientIp = clientIpFromHeaders(request.headers)
