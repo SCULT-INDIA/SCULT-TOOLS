@@ -42,29 +42,66 @@ export function enqueueMcpEvent(ev: McpEvent): void {
  * with a hard timeout so it can't add meaningful latency, and it never
  * throws.
  */
+/** Cap on retained events. A Studio outage must not grow this buffer
+ * without bound in a long-lived instance; past the cap the OLDEST events
+ * are dropped, since recent activity is the more useful signal. */
+const MAX_BUFFERED = 500
+
 export async function flushMcpEvents(): Promise<void> {
   const apiKey = process.env.SCULT_STUDIO_API_KEY
   if (!apiKey || buffer.length === 0) {
-    buffer = []
+    if (!apiKey) buffer = [] // nothing can ever send these; don't leak memory
     return
   }
   const events = buffer
   buffer = []
-  // One IP per batch (single client per request) — used server-side for geo.
-  const ip = events.find((e) => e.ip)?.ip
-  try {
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), FLUSH_TIMEOUT_MS)
-    await fetch(STUDIO_ENDPOINT, {
-      method: 'POST',
-      signal: controller.signal,
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({ events, ip }),
-    }).finally(() => clearTimeout(timeout))
-  } catch {
-    // Analytics must never break the MCP server. Dropped on any error.
+
+  // Group by caller IP and send one batch per distinct IP.
+  //
+  // Studio resolves geo ONCE per batch from a single `ip` field. This
+  // buffer is module-scoped, so on a warm serverless instance two
+  // different MCP clients' events interleave in it — previously the whole
+  // mixed batch was stamped with whichever IP happened to appear first,
+  // silently attributing one client's calls to another client's city and
+  // country. Splitting per IP makes the per-batch geo assumption true
+  // instead of merely usually-true.
+  const byIp = new Map<string, McpEvent[]>()
+  for (const ev of events) {
+    const k = ev.ip ?? ''
+    const list = byIp.get(k)
+    if (list) list.push(ev)
+    else byIp.set(k, [ev])
+  }
+
+  const failed: McpEvent[] = []
+  await Promise.all(
+    [...byIp.entries()].map(async ([ip, group]) => {
+      try {
+        const controller = new AbortController()
+        const timeout = setTimeout(() => controller.abort(), FLUSH_TIMEOUT_MS)
+        const res = await fetch(STUDIO_ENDPOINT, {
+          method: 'POST',
+          signal: controller.signal,
+          headers: {
+            'content-type': 'application/json',
+            authorization: `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({ events: group, ip: ip || undefined }),
+        }).finally(() => clearTimeout(timeout))
+
+        // A 4xx means Studio will never accept this payload — retrying it
+        // forever would block the buffer behind a poison batch. Only
+        // transient failures (5xx, timeout, network) are worth keeping.
+        if (!res.ok && res.status >= 500) failed.push(...group)
+      } catch {
+        failed.push(...group)
+      }
+    }),
+  )
+
+  // Put transient failures back so the next request retries them, rather
+  // than discarding data the moment Studio blips.
+  if (failed.length > 0) {
+    buffer = [...failed, ...buffer].slice(-MAX_BUFFERED)
   }
 }

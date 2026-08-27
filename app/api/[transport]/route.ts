@@ -110,10 +110,19 @@ async function handler(request: Request): Promise<Response> {
   const response = await mcpRequestContext.run({ clientIp, clientName }, () =>
     baseHandler(request),
   )
-  // Flush after the response is built so buffered MCP events actually leave
-  // before a serverless instance can freeze. Awaited (its own 3s timeout
-  // caps the wait) and never throws.
-  await flushMcpEvents()
+
+  // Deliberately NOT awaited. Awaiting put Studio's whole round trip
+  // (network + geo lookup + insert) in front of the AI client's response,
+  // so analytics latency became tool latency — the opposite of the point.
+  // `waitUntil` hands the flush to the platform, which keeps the instance
+  // alive until it finishes without holding up the reply; where it is
+  // unavailable we fall back to fire-and-forget, and anything still
+  // buffered is retried on the next request (see studio-report.ts).
+  const ctx = (globalThis as { waitUntil?: (p: Promise<unknown>) => void }).waitUntil
+  const flush = flushMcpEvents()
+  if (typeof ctx === 'function') ctx(flush)
+  else void flush
+
   return response
 }
 
