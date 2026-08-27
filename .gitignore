@@ -12,3 +12,6 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# scult-cli build output (built on publish via prepublishOnly)
+cli/dist/

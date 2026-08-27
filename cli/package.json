@@ -1,0 +1,41 @@
+{
+  "name": "scult-cli",
+  "version": "0.1.0",
+  "description": "Search and use tools.scult.in's 1,170+ verified AI prompts and 14,000+ real agent skills from your terminal. Free, no signup.",
+  "license": "SEE LICENSE IN https://github.com/SCULT-INDIA/SCULT-TOOLS/blob/main/LICENSE.md",
+  "type": "module",
+  "bin": {
+    "scult": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.17"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "ai",
+    "prompts",
+    "skills",
+    "claude",
+    "chatgpt",
+    "cursor",
+    "cli",
+    "scult"
+  ],
+  "homepage": "https://tools.scult.in/prompts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SCULT-INDIA/SCULT-TOOLS.git",
+    "directory": "cli"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}

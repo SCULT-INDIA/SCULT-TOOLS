@@ -292,6 +292,28 @@ Every tool below is production-live at `tools.scult.in/<category>/<slug>`. **�
 </tr>
 </table>
 
+## The CLI
+
+The whole catalogue is also usable from a terminal — **`scult-cli`** (bin
+`scult`), a zero-dependency npm package living in [`cli/`](cli/):
+
+```bash
+npx scult-cli prompts search "cold email"
+npx scult-cli skills get deploy-checklist --format cursorrules --save .
+```
+
+Search and fetch prompts and skills, export skills as `SKILL.md` /
+`AGENTS.md` / `.cursorrules` / Copilot instructions, copy to the clipboard,
+or emit `--json` for scripts. It talks to the public, rate-limited
+[`/api/cli/v1`](app/api/cli/v1) endpoints — no account, no API key.
+
+Usage telemetry is **anonymous with a real off switch** (`scult telemetry
+off`): command names, version, OS family and a server-derived country — never
+query text, file contents, or identity. Full details in
+[`cli/README.md`](cli/README.md) and the architecture in
+[`docs/CLI_PLAN.md`](docs/CLI_PLAN.md). The same catalogue is exposed to AI
+agents over MCP at `/api/mcp`.
+
 ## Tech Stack
 
 <p>

@@ -142,6 +142,26 @@ export async function getSkill(
   return data ? rowToSkill(data) : undefined
 }
 
+/**
+ * Slug-only lookup for the CLI API, where a user types just the slug from a
+ * search result. Safe because slugs are de-duplicated site-wide at sync
+ * time (see the Skill type's `slug` doc) — a slug never maps to two rows.
+ * Uncached on purpose: the CLI route is rate-limited and this avoids a
+ * second cache surface for one extra lookup path.
+ */
+export async function getSkillBySlug(slug: string): Promise<Skill | undefined> {
+  const { data, error } = await supabaseSkills
+    .from('skills')
+    .select(SKILL_COLUMNS)
+    .eq('slug', slug)
+    .maybeSingle()
+  if (error) {
+    console.error('getSkillBySlug failed', error)
+    return undefined
+  }
+  return data ? rowToSkill(data) : undefined
+}
+
 /** A few other skills in the same category, for the detail page's "more
  * like this" section — excludes the current skill. */
 /**
