@@ -1,20 +1,26 @@
 'use client'
 
 // TriangleAlert, not AlertTriangle — this lucide version dropped the old alias.
+import type { LucideIcon } from 'lucide-react'
 import {
+  Braces,
   Building2,
   Calendar,
   CircleCheck,
   CircleX,
+  Compass,
   Download,
   FileJson,
   FileText,
+  Gauge,
+  Globe,
   HardDrive,
   Heading1,
   Heading2,
   Image as ImageIcon,
   Link2,
   ListChecks,
+  LoaderCircle,
   Mail,
   Minus,
   Phone,
@@ -28,15 +34,12 @@ import {
   TriangleAlert,
 } from 'lucide-react'
 import Image from 'next/image'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { CopyButton } from '@/components/tools/ResultPanel'
 import {
   ErrorDetail,
   SegmentButton,
-  StatCard,
   StatusBar,
-  StepTimeline,
-  type TimelineStep,
   ToolbarAction,
   ToolbarGroup,
   ToolToolbar,
@@ -44,7 +47,7 @@ import {
 } from '@/components/tools/workspace'
 import { BrandIcon, brandForCompany } from '@/components/ui/BrandIcon'
 import { trackToolEvent } from '@/lib/analytics'
-import { downloadTextFile, slugifyUrlForFilename } from '@/lib/download-file'
+import { slugifyUrlForFilename } from '@/lib/download-file'
 import { parentLink, SITE } from '@/lib/site'
 import {
   AI_BOTS,
@@ -56,7 +59,6 @@ import {
   type CheckResult,
   type CheckStatus,
   formatBytes,
-  formatReportMarkdown,
   formatReportText,
   isApiError,
   isVisibilityReport,
@@ -96,7 +98,7 @@ import scultMark from '@/public/brand/scult-mark.png'
  * lets a long report be skimmed instead of scrolled end to end. Two deliberate
  * departures from a literal "AI visibility" wireframe remain, because the
  * underlying tool checks robots.txt crawl access, not live answer-engine
- * mentions: the loading `StepTimeline` names the five real fetch/scoring
+ * mentions: the loading scan console names the five real fetch/scoring
  * stages rather than named answer engines like "Gemini" or "Grok" (this tool
  * never queries those products), and every data point rendered is this
  * report's own — per-crawler robots.txt access, JSON-LD types actually found —
@@ -182,21 +184,35 @@ function formatCheckedDate(iso: string): string {
  * impression is a self-audit rather than a check of a different host. */
 const SAMPLE_URL = SITE.url
 
-const LOADING_STAGES = [
-  'Fetching the homepage…',
-  'Fetching robots.txt…',
-  'Checking /llms.txt and the sitemap…',
-  'Reading structured data and headings…',
-  'Applying robots precedence and scoring…',
-] as const
-
-/** Short labels for the step timeline dots — the same five stages, condensed to fit. */
-const STAGE_STEP_LABELS = [
-  'Homepage',
-  'robots.txt',
-  'llms.txt & sitemap',
-  'Structured data',
-  'Scoring',
+/** The five real pipeline stages the scan console walks through while a
+ * check runs — each one names work the API route actually does, never a
+ * product this tool doesn't query. */
+const SCAN_STAGES = [
+  {
+    icon: Globe,
+    label: 'Fetching homepage',
+    sub: 'Downloading your live HTML',
+  },
+  {
+    icon: FileText,
+    label: 'Fetching robots.txt',
+    sub: 'Reading per-crawler access rules',
+  },
+  {
+    icon: Compass,
+    label: 'Checking discovery files',
+    sub: '/llms.txt and your XML sitemap',
+  },
+  {
+    icon: Braces,
+    label: 'Reading structured data',
+    sub: 'JSON-LD, headings, meta and social tags',
+  },
+  {
+    icon: Gauge,
+    label: 'Scoring the report',
+    sub: 'Applying robots precedence across 12 checks',
+  },
 ] as const
 
 const STATUS_LABEL: Record<CheckStatus, string> = {
@@ -230,11 +246,313 @@ const BAND_BADGE_BORDER: Record<BandLabel, string> = {
   'Mostly invisible to AI': 'border-violet-700',
 }
 
-/** Hero progress-bar fill — bright enough to read on the violet-900 panel. */
-const HERO_BAR_TONE: Record<BandLabel, string> = {
-  'AI-visible': 'bg-green',
-  'Partially visible': 'bg-cta-pure',
-  'Mostly invisible to AI': 'bg-white/70',
+/* ========================== report UI primitives ==========================
+   The premium layer, distilled from a five-platform research pass (Dribbble,
+   Behance, Aceternity, 21st.dev, React Bits): count-up numerals, an animated
+   ring gauge, once-only scroll reveals, and joined instrument panels. All
+   motion is JS-gated on prefers-reduced-motion (final state renders
+   immediately), so none of it needs the CSS reduced-motion block. */
+
+/** Animates a whole number 0 → `value` with an ease-out-expo curve on mount.
+ * Writes via textContent inside rAF so no re-render happens per frame; the
+ * real value lives in an sr-only span so assistive tech never hears the
+ * intermediate frames. */
+function CountUp({
+  value,
+  durationMs = 1100,
+  className,
+}: {
+  value: number
+  durationMs?: number
+  className?: string
+}) {
+  const ref = useRef<HTMLSpanElement>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (el === null) return
+    if (value === 0 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.textContent = String(value)
+      return
+    }
+    let raf = 0
+    const start = performance.now()
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / durationMs)
+      const eased = 1 - 2 ** (-10 * t)
+      el.textContent = String(t >= 1 ? value : Math.round(value * eased))
+      if (t < 1) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [value, durationMs])
+  return (
+    <span className={className}>
+      <span className="sr-only">{value}</span>
+      <span ref={ref} aria-hidden="true">
+        0
+      </span>
+    </span>
+  )
+}
+
+/** Slides a block up into place the first time it scrolls into view — the
+ * standard premium-report section reveal, `once` semantics, one observer per
+ * block. Reduced-motion renders visible immediately. */
+function Reveal({
+  children,
+  delayMs = 0,
+  className = '',
+}: {
+  children: ReactNode
+  delayMs?: number
+  className?: string
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [shown, setShown] = useState(false)
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setShown(true)
+      return
+    }
+    const el = ref.current
+    if (el === null) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setShown(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.12 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+  return (
+    <div
+      ref={ref}
+      style={delayMs > 0 ? { transitionDelay: `${delayMs}ms` } : undefined}
+      className={`transition-[opacity,transform] duration-500 ease-out ${
+        shown ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'
+      } ${className}`}
+    >
+      {children}
+    </div>
+  )
+}
+
+const GAUGE_SIZE = 200
+const GAUGE_STROKE = 14
+const GAUGE_R = (GAUGE_SIZE - GAUGE_STROKE) / 2
+const GAUGE_C = 2 * Math.PI * GAUGE_R
+
+/** The Lighthouse-style score object: an SVG ring whose arc fills 0 → score
+ * over ~1.2s in sync with the CountUp inside it. Gradient stroke runs the
+ * brand ramp (violet-400 → cta-pure) so the gauge reads as this site's, not
+ * a stock chart. Reduced-motion renders the final arc immediately. */
+function ScoreGauge({ score }: { score: number }) {
+  const [filled, setFilled] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  )
+  useEffect(() => {
+    if (filled) return
+    // Double-rAF so the empty ring commits a frame before the transition runs.
+    const raf = requestAnimationFrame(() => requestAnimationFrame(() => setFilled(true)))
+    return () => cancelAnimationFrame(raf)
+  }, [filled])
+  const offset = GAUGE_C * (1 - (filled ? score : 0) / 100)
+  return (
+    <div
+      className="relative shrink-0"
+      role="img"
+      aria-label={`Visibility score: ${score} out of 100`}
+    >
+      <svg
+        width={GAUGE_SIZE}
+        height={GAUGE_SIZE}
+        viewBox={`0 0 ${GAUGE_SIZE} ${GAUGE_SIZE}`}
+        className="-rotate-90"
+        aria-hidden="true"
+      >
+        <title>Visibility score gauge</title>
+        <circle
+          cx={GAUGE_SIZE / 2}
+          cy={GAUGE_SIZE / 2}
+          r={GAUGE_R}
+          fill="none"
+          stroke="rgb(255 255 255 / 0.14)"
+          strokeWidth={GAUGE_STROKE}
+        />
+        <defs>
+          <linearGradient id="aiv-gauge-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#7959e7" />
+            <stop offset="100%" stopColor="#ffd800" />
+          </linearGradient>
+        </defs>
+        <circle
+          cx={GAUGE_SIZE / 2}
+          cy={GAUGE_SIZE / 2}
+          r={GAUGE_R}
+          fill="none"
+          stroke="url(#aiv-gauge-grad)"
+          strokeWidth={GAUGE_STROKE}
+          strokeLinecap="round"
+          strokeDasharray={GAUGE_C}
+          strokeDashoffset={offset}
+          style={{ transition: 'stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1)' }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <CountUp
+          value={score}
+          className="font-display font-bold text-[52px] text-white leading-none tabular-nums"
+        />
+        <span className="mt-1 font-semibold text-[14px] text-white/50">/100</span>
+      </div>
+    </div>
+  )
+}
+
+type MetricChip = { readonly label: string; readonly tone: 'good' | 'warn' | 'neutral' }
+type MetricItem = {
+  readonly icon: LucideIcon
+  readonly label: string
+  readonly value: string | number
+  readonly sub?: string
+  readonly chip?: MetricChip
+}
+
+const METRIC_CHIP_TONE: Record<MetricChip['tone'], string> = {
+  good: 'bg-tile-green',
+  warn: 'bg-tile-yellow',
+  neutral: 'bg-tile-lavender',
+}
+
+/** One joined instrument panel — a single framed unit with hairline dividers
+ * (the gap-px trick) instead of N separate cards, so a band of numbers reads
+ * as one composed instrument rather than competing tiles. Numeric values
+ * count up; the qualifier chip does the interpretation a raw number can't. */
+function MetricPanel({
+  items,
+  columns,
+}: {
+  items: readonly MetricItem[]
+  columns: string
+}) {
+  return (
+    <div
+      className={`grid ${columns} gap-px overflow-hidden rounded-card border border-line-grey bg-line-grey`}
+    >
+      {items.map((item) => (
+        <div key={item.label} className="flex flex-col gap-1.5 bg-white p-4">
+          <div className="flex items-center justify-between gap-2">
+            <span className="font-bold text-[11px] text-ink-subtle uppercase tracking-wider">
+              {item.label}
+            </span>
+            <item.icon className="size-4 shrink-0 text-violet-500" aria-hidden="true" />
+          </div>
+          <div className="flex flex-wrap items-baseline gap-2">
+            {typeof item.value === 'number' ? (
+              <CountUp
+                value={item.value}
+                durationMs={900}
+                className="font-display font-bold text-[26px] text-ink leading-tight tabular-nums"
+              />
+            ) : (
+              <span className="font-display font-bold text-[26px] text-ink leading-tight tabular-nums">
+                {item.value}
+              </span>
+            )}
+            {item.chip ? (
+              // Theme-fixed pastel fills — literal black text/border, never
+              // adaptive ink, same rule as every other pastel in this file.
+              <span
+                className={`rounded-pill border border-black px-2 py-0.5 font-semibold text-[11px] text-black ${METRIC_CHIP_TONE[item.chip.tone]}`}
+              >
+                {item.chip.label}
+              </span>
+            ) : null}
+          </div>
+          {item.sub ? <p className="text-[12px] text-ink-subtle">{item.sub}</p> : null}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/** Status colours for the check-meter blocks — pass/warn/fail as fills the
+ * eye can count (green for pass, violet for anything needing attention,
+ * yellow as the in-between). */
+const METER_BLOCK_TONE: Record<CheckStatus, string> = {
+  pass: 'bg-green',
+  warn: 'bg-cta-pure',
+  fail: 'bg-violet-700',
+}
+
+/** One glyph per report category, so each section header leads with a
+ * visual anchor instead of bare text. Keyed by category id with a safe
+ * fallback — a new category renders with the generic checklist mark. */
+const CATEGORY_ICON: Record<string, LucideIcon> = {
+  'crawler-access': ShieldCheck,
+  'structured-data': Braces,
+  discovery: Compass,
+  'technical-social': Globe,
+}
+
+/** The countable-checks strip: pass/check/fix tallies plus a one-block-per-
+ * check meter, in a single joined frame directly under the hero. Discrete
+ * blocks say "countable checks" where a smooth bar would say "percentage" —
+ * the reader can literally count what needs work. */
+function CheckTally({ checks }: { checks: readonly CheckResult[] }) {
+  const passCount = checks.filter((c) => c.status === 'pass').length
+  const warnCount = checks.filter((c) => c.status === 'warn').length
+  const failCount = checks.filter((c) => c.status === 'fail').length
+  const cells = [
+    { label: 'Passed', count: passCount, Glyph: CircleCheck, glyphClass: 'text-green' },
+    {
+      label: 'To check',
+      count: warnCount,
+      Glyph: TriangleAlert,
+      glyphClass: 'text-violet-700',
+    },
+    { label: 'To fix', count: failCount, Glyph: CircleX, glyphClass: 'text-violet-700' },
+  ]
+  return (
+    <div className="grid grid-cols-3 gap-px overflow-hidden rounded-card border border-line-grey bg-line-grey sm:grid-cols-[1fr_1fr_1fr_2fr]">
+      {cells.map((cell) => (
+        <div key={cell.label} className="flex flex-col gap-1 bg-white p-4">
+          <span className="flex items-center gap-1.5 font-bold text-[11px] text-ink-subtle uppercase tracking-wider">
+            <cell.Glyph className={`size-3.5 ${cell.glyphClass}`} aria-hidden="true" />
+            {cell.label}
+          </span>
+          <CountUp
+            value={cell.count}
+            durationMs={800}
+            className="font-display font-bold text-[26px] text-ink leading-tight tabular-nums"
+          />
+        </div>
+      ))}
+      <div className="col-span-3 flex flex-col justify-center gap-2 bg-white p-4 sm:col-span-1">
+        <span className="font-bold text-[11px] text-ink-subtle uppercase tracking-wider">
+          All {checks.length} checks
+        </span>
+        <div className="flex gap-1" aria-hidden="true">
+          {checks.map((check) => (
+            <span
+              key={check.id}
+              title={`${check.label}: ${STATUS_LABEL[check.status]}`}
+              className={`h-5 min-w-0 flex-1 rounded-[3px] border border-black/60 ${METER_BLOCK_TONE[check.status]}`}
+            />
+          ))}
+        </div>
+        <p className="text-[12px] text-ink-subtle">
+          {passCount} of {checks.length} passing
+        </p>
+      </div>
+    </div>
+  )
 }
 
 /**
@@ -399,29 +717,34 @@ function clampRule(rule: string): { text: string; full?: string } {
   return { text: `${rule.slice(0, MAX_RULE_CHARS)}…`, full: rule.slice(0, 400) }
 }
 
-/** Pass / Check / Fix — icon shape plus a word, never colour on its own. */
-function StatusBadge({ status }: { status: CheckStatus }) {
-  const Glyph =
-    status === 'pass' ? CircleCheck : status === 'warn' ? TriangleAlert : CircleX
-  return (
-    <span className="flex shrink-0 items-center gap-1.5 font-semibold text-[13px] text-ink uppercase tracking-wide">
-      <Glyph
-        className={`size-4 ${status === 'pass' ? 'text-green' : 'text-violet-700'}`}
-        aria-hidden="true"
-      />
-      {STATUS_LABEL[status]}
-    </span>
-  )
+/** Theme-fixed pastel fills per status — always paired with literal black
+ * text/border (the pastel-tile rule), and always alongside a word or glyph
+ * so colour never carries the verdict alone. */
+const STATUS_FILL: Record<CheckStatus, string> = {
+  pass: 'bg-tile-green',
+  warn: 'bg-tile-yellow',
+  fail: 'bg-peach',
 }
 
-/** The reading for one bot, so it carries a word AND a distinct shape. */
+const STATUS_GLYPH: Record<CheckStatus, typeof CircleCheck> = {
+  pass: CircleCheck,
+  warn: TriangleAlert,
+  fail: CircleX,
+}
+
+/** Allowed/Blocked as a filled pastel pill — glyph, word and fill together,
+ * so the verdict is a visual object rather than a sentence. */
 function AccessCell({ allowed }: { allowed: boolean }) {
   return (
-    <span className="flex items-center gap-1.5 font-semibold text-[14px] text-ink">
+    <span
+      className={`flex shrink-0 items-center gap-1.5 rounded-pill border border-black px-2.5 py-1 font-semibold text-[12px] text-black ${
+        allowed ? 'bg-tile-green' : 'bg-peach'
+      }`}
+    >
       {allowed ? (
-        <CircleCheck className="size-4 shrink-0 text-green" aria-hidden="true" />
+        <CircleCheck className="size-3.5 shrink-0" aria-hidden="true" />
       ) : (
-        <CircleX className="size-4 shrink-0 text-violet-700" aria-hidden="true" />
+        <CircleX className="size-3.5 shrink-0" aria-hidden="true" />
       )}
       {allowed ? 'Allowed' : 'Blocked'}
     </span>
@@ -429,45 +752,37 @@ function AccessCell({ allowed }: { allowed: boolean }) {
 }
 
 /**
- * The detail nobody else ships: the rule that decided, quoted, and the group it
- * came from. `source` distinguishes a bot-specific group (which beats `*`
- * outright) from the wildcard group from robots.txt saying nothing at all.
+ * The detail nobody else ships — the rule that decided, quoted verbatim —
+ * compressed to a code chip plus a four-word source tag instead of two prose
+ * lines, so ten bot cards stay scannable. `source` distinguishes a
+ * bot-specific group (which beats `*` outright) from the wildcard group and
+ * from robots.txt saying nothing at all.
  */
 function RuleCell({ bot }: { bot: BotAccess }) {
   if (bot.matchedRule === undefined) {
     return (
-      <>
-        <span className="block text-[13px] text-ink-muted">
-          {bot.source === 'default' ? 'No group names this bot' : 'No rule covers “/”'}
-        </span>
-        <span className="mt-0.5 block text-[12px] text-ink-subtle leading-4">
-          {bot.source === 'default'
-            ? 'robots.txt is silent about it, so it is allowed by default'
-            : bot.source === 'wildcard'
-              ? 'the User-agent: * group matched, but none of its rules apply'
-              : 'a group names it, but none of its rules apply'}
-        </span>
-      </>
+      <span className="inline-flex max-w-full items-center rounded-[6px] border border-line-grey bg-offwhite px-2 py-0.5 font-mono text-[11.5px] text-ink-subtle">
+        {bot.source === 'default'
+          ? 'not named — allowed by default'
+          : 'no rule covers “/”'}
+      </span>
     )
   }
 
   const { text, full } = clampRule(bot.matchedRule)
   return (
-    <>
+    <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
       {/* Untrusted text from the target's robots.txt — rendered as text only. */}
       <code
-        className="block break-all font-mono text-[12px] text-ink"
+        className="break-all rounded-[6px] border border-line-grey bg-offwhite px-2 py-0.5 font-mono text-[12px] text-ink"
         {...(full !== undefined ? { title: full } : {})}
       >
         {text}
       </code>
-      <span className="mt-0.5 block text-[12px] text-ink-subtle leading-4">
-        from{' '}
-        {bot.source === 'specific'
-          ? 'a group naming this bot — it beats User-agent: *'
-          : 'the User-agent: * group'}
+      <span className="text-[11px] text-ink-subtle">
+        {bot.source === 'specific' ? 'bot-specific · beats *' : 'from User-agent: *'}
       </span>
-    </>
+    </span>
   )
 }
 
@@ -552,30 +867,58 @@ function CompanyBotGroup({
 }
 
 /**
- * Pure reference row, no card — used inside each category section's check
- * list, the single most passive content on the page (everything actionable
- * already surfaced in "What to fix").
+ * One check as a status-first accordion row: a filled status chip, the check
+ * name, a verdict pill, a chevron — one visual line. The finding sentence
+ * and the fix live inside the native `<details>` expansion, so the category
+ * lists read as scannable objects instead of twelve three-sentence
+ * paragraphs, while the pedagogy stays one click away.
  */
-function CheckCard({ check }: { check: CheckResult }) {
+function CheckRow({ check }: { check: CheckResult }) {
+  const Glyph = STATUS_GLYPH[check.status]
   return (
-    <div className="flex flex-col gap-1.5 py-3">
-      <div className="flex items-start justify-between gap-3">
-        <h5 className="font-display font-semibold text-[14px] text-ink">
-          {check.label}
+    <details className="group rounded-card border border-line-grey bg-white transition-colors duration-150 hover:border-ink">
+      <summary className="flex cursor-pointer list-none items-center gap-3 p-3.5 marker:content-none [&::-webkit-details-marker]:hidden">
+        {/* Pastel fill + black glyph — the pastel-tile contrast rule. */}
+        <span
+          className={`flex size-8 shrink-0 items-center justify-center rounded-full border border-black ${STATUS_FILL[check.status]}`}
+        >
+          <Glyph className="size-4 text-black" aria-hidden="true" />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block truncate font-display font-semibold text-[15px] text-ink">
+            {check.label}
+          </span>
           {check.scored ? null : (
-            <span className="ml-2 font-sans font-normal text-[12px] text-ink-subtle">
+            <span className="block text-[11px] text-ink-subtle">
               informational — not scored
             </span>
           )}
-        </h5>
-        <StatusBadge status={check.status} />
+        </span>
+        <span
+          className={`shrink-0 rounded-pill border border-black px-2.5 py-0.5 font-semibold text-[12px] text-black ${STATUS_FILL[check.status]}`}
+        >
+          {STATUS_LABEL[check.status]}
+        </span>
+        <span
+          aria-hidden="true"
+          className="shrink-0 text-[13px] text-ink-subtle transition-transform group-open:rotate-180"
+        >
+          ▾
+        </span>
+      </summary>
+      <div className="border-line-grey border-t px-4 py-3.5">
+        <p className="text-[13px] text-ink-muted leading-5">{check.finding}</p>
+        <div className="mt-2.5 flex items-start gap-2 rounded-card bg-violet-50 p-3">
+          <Sparkles
+            className="mt-0.5 size-4 shrink-0 text-violet-700"
+            aria-hidden="true"
+          />
+          {/* bg-violet-50 is theme-fixed light — literal black text, same
+              rule as FixCard's fix box. */}
+          <p className="text-[13px] text-black leading-5">{check.fix}</p>
+        </div>
       </div>
-      <p className="text-[13px] text-ink-muted leading-5">{check.finding}</p>
-      <p className="text-[13px] text-ink leading-5">
-        <span className="font-semibold">Fix: </span>
-        {check.fix}
-      </p>
-    </div>
+    </details>
   )
 }
 
@@ -587,9 +930,12 @@ function CheckCard({ check }: { check: CheckResult }) {
 function FixCard({ check, rank }: { check: CheckResult; rank: number }) {
   const weight = CHECK_WEIGHT[check.id]
   return (
-    <div className="card-flat flex gap-3.5 p-4 transition-colors duration-150 hover:border-ink">
+    <div className="card-flat flex gap-4 border-l-[3px] border-l-violet-500 p-4 transition-colors duration-150 hover:border-ink">
+      {/* The rank as a rotated yellow stamp — priority made physical: the
+          numeral is the loudest thing on the card because "do this first"
+          is the card's whole message. */}
       <span
-        className="flex size-7 shrink-0 items-center justify-center rounded-full border border-ink bg-cta font-bold text-[13px] text-ink"
+        className="-rotate-2 flex size-9 shrink-0 items-center justify-center rounded-[8px] border-2 border-ink bg-cta font-display font-bold text-[17px] text-ink shadow-brutal-sm"
         aria-hidden="true"
       >
         {rank}
@@ -623,13 +969,6 @@ function FixCard({ check, rank }: { check: CheckResult; rank: number }) {
     </div>
   )
 }
-
-const JUMP_SECTIONS: readonly { id: string; label: string }[] = [
-  { id: 'report-overview', label: 'Overview' },
-  { id: 'what-to-fix', label: 'What to fix' },
-  { id: 'insights', label: 'Website insights' },
-  ...REPORT_CATEGORIES.map((c) => ({ id: c.id, label: c.label })),
-]
 
 /** One text field (title or meta description) shown verbatim with its exact
  * character count against the length search/AI engines typically don't
@@ -681,22 +1020,22 @@ function TextPreviewCard({
  * below are for.
  */
 function WebsiteInsightsSection({ insights }: { insights: PageInsights }) {
-  const responseTone =
+  const responseChip: MetricChip | undefined =
     insights.homepageResponseMs === undefined
-      ? 'lavender'
+      ? undefined
       : insights.homepageResponseMs < 1000
-        ? 'green'
+        ? { label: 'fast', tone: 'good' }
         : insights.homepageResponseMs < 3000
-          ? 'yellow'
-          : 'lavender'
-  const sizeTone =
+          ? { label: 'okay', tone: 'warn' }
+          : { label: 'slow', tone: 'warn' }
+  const sizeChip: MetricChip | undefined =
     insights.homepageSizeBytes === undefined
-      ? 'lavender'
+      ? undefined
       : insights.homepageSizeBytes < 500_000
-        ? 'green'
+        ? { label: 'lean', tone: 'good' }
         : insights.homepageSizeBytes < 2_000_000
-          ? 'yellow'
-          : 'lavender'
+          ? { label: 'okay', tone: 'warn' }
+          : { label: 'heavy', tone: 'warn' }
 
   return (
     <section id="insights" aria-labelledby="insights-heading" className="scroll-mt-32">
@@ -735,56 +1074,65 @@ function WebsiteInsightsSection({ insights }: { insights: PageInsights }) {
         />
       </div>
 
-      <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        <StatCard
-          compact
-          icon={FileText}
-          label="Visible words"
-          value={insights.wordCount}
-          tone={insights.wordCount >= 150 ? 'green' : 'yellow'}
-        />
-        <StatCard
-          compact
-          icon={Heading1}
-          label="H1 headings"
-          value={insights.h1Count}
-          tone={insights.h1Count === 1 ? 'green' : 'yellow'}
-        />
-        <StatCard
-          compact
-          icon={Heading2}
-          label="H2 headings"
-          value={insights.h2Count}
-          tone={insights.h2Count >= 2 ? 'green' : 'yellow'}
-        />
-        <StatCard
-          compact
-          icon={ImageIcon}
-          label="Alt-text coverage"
-          value={`${insights.altTextCoveragePct}%`}
-          tone={insights.altTextCoveragePct >= 80 ? 'green' : 'yellow'}
-        />
-        <StatCard
-          compact
-          icon={Timer}
-          label="Response time"
-          value={
-            insights.homepageResponseMs !== undefined
-              ? `${insights.homepageResponseMs}ms`
-              : '—'
-          }
-          tone={responseTone}
-        />
-        <StatCard
-          compact
-          icon={HardDrive}
-          label="Page size"
-          value={
-            insights.homepageSizeBytes !== undefined
-              ? formatBytes(insights.homepageSizeBytes)
-              : '—'
-          }
-          tone={sizeTone}
+      <div className="mt-3">
+        <MetricPanel
+          columns="grid-cols-2 sm:grid-cols-3 lg:grid-cols-6"
+          items={[
+            {
+              icon: FileText,
+              label: 'Visible words',
+              value: insights.wordCount,
+              chip:
+                insights.wordCount >= 150
+                  ? { label: 'solid', tone: 'good' }
+                  : { label: 'thin', tone: 'warn' },
+            },
+            {
+              icon: Heading1,
+              label: 'H1 headings',
+              value: insights.h1Count,
+              chip:
+                insights.h1Count === 1
+                  ? { label: 'ideal', tone: 'good' }
+                  : { label: 'check', tone: 'warn' },
+            },
+            {
+              icon: Heading2,
+              label: 'H2 headings',
+              value: insights.h2Count,
+              chip:
+                insights.h2Count >= 2
+                  ? { label: 'good', tone: 'good' }
+                  : { label: 'add more', tone: 'warn' },
+            },
+            {
+              icon: ImageIcon,
+              label: 'Alt-text coverage',
+              value: `${insights.altTextCoveragePct}%`,
+              chip:
+                insights.altTextCoveragePct >= 80
+                  ? { label: 'good', tone: 'good' }
+                  : { label: 'low', tone: 'warn' },
+            },
+            {
+              icon: Timer,
+              label: 'Response time',
+              value:
+                insights.homepageResponseMs !== undefined
+                  ? `${insights.homepageResponseMs}ms`
+                  : '—',
+              chip: responseChip,
+            },
+            {
+              icon: HardDrive,
+              label: 'Page size',
+              value:
+                insights.homepageSizeBytes !== undefined
+                  ? formatBytes(insights.homepageSizeBytes)
+                  : '—',
+              chip: sizeChip,
+            },
+          ]}
         />
       </div>
     </section>
@@ -821,6 +1169,7 @@ function CategorySection({
     .filter((c): c is CheckResult => c !== undefined)
   const passed = catChecks.filter((c) => c.status === 'pass').length
   const weight = category.checkIds.reduce((sum, id) => sum + CHECK_WEIGHT[id], 0)
+  const CategoryGlyph = CATEGORY_ICON[category.id] ?? ListChecks
 
   return (
     <section
@@ -828,13 +1177,31 @@ function CategorySection({
       aria-labelledby={`${category.id}-heading`}
       className="scroll-mt-32"
     >
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h4
-          id={`${category.id}-heading`}
-          className="font-display font-semibold text-[19px] text-ink"
-        >
-          {category.label}
-        </h4>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-card border border-black bg-tile-lavender">
+            <CategoryGlyph className="size-5 text-violet-700" aria-hidden="true" />
+          </span>
+          <div>
+            <h4
+              id={`${category.id}-heading`}
+              className="font-display font-semibold text-[19px] text-ink"
+            >
+              {category.label}
+            </h4>
+            {/* Mini block-meter — the section's verdict as countable fills,
+                echoing the hero tally strip. Decorative; the pill beside it
+                carries the numbers. */}
+            <div className="mt-1.5 flex w-36 gap-1" aria-hidden="true">
+              {catChecks.map((c) => (
+                <span
+                  key={c.id}
+                  className={`h-2 min-w-0 flex-1 rounded-[2px] border border-black/50 ${METER_BLOCK_TONE[c.status]}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
         <span className="shrink-0 rounded-pill border border-[var(--color-violet-accent-text,var(--color-violet-700))] bg-cream px-2.5 py-0.5 font-semibold text-[12px] text-[var(--color-violet-accent-text,var(--color-violet-700))]">
           {passed}/{catChecks.length} pass{weight > 0 ? ` · ${weight} pts` : ''}
         </span>
@@ -882,9 +1249,9 @@ function CategorySection({
       ) : null}
 
       {category.id !== 'crawler-access' ? (
-        <div className="mt-3 divide-y divide-line border-line border-t">
+        <div className="mt-4 flex flex-col gap-2">
           {catChecks.map((check) => (
-            <CheckCard key={check.id} check={check} />
+            <CheckRow key={check.id} check={check} />
           ))}
         </div>
       ) : null}
@@ -941,44 +1308,6 @@ function ScoreSparkline({ history }: { history: readonly HistoryEntry[] }) {
 }
 
 /**
- * The Markdown download action, styled as `CopyButton`'s sibling (same
- * shell, same 44px/36px touch-target step-down, same idle-border-deepens-
- * on-hover language) rather than reusing that component directly — the
- * shared `CopyButton` owns clipboard-specific copied/failed state that a
- * file download has no equivalent for, so a lookalike button with its own
- * `onClick` is less code than bending a shared component to a second job.
- *
- * `Date.now()` here runs inside the click handler, not at render — the
- * project-wide ban on `Date`/`Date.now()` in render-time code (it breaks
- * static generation) does not reach an event handler that only runs when a
- * visitor clicks. `formatReportMarkdown` itself still takes the timestamp as
- * a plain string argument and calls `Date` nowhere, so the pure function
- * stays exactly reproducible in a test.
- */
-function DownloadMarkdownButton({ report }: { report: VisibilityReport }) {
-  return (
-    <button
-      type="button"
-      onClick={() => {
-        trackToolEvent('ai-visibility-checker', 'download_report', { format: 'markdown' })
-        const generatedAt = new Date().toLocaleString('en-US', {
-          dateStyle: 'medium',
-          timeStyle: 'short',
-        })
-        downloadTextFile(
-          `${slugifyUrlForFilename(report.url)}-ai-visibility-report.md`,
-          formatReportMarkdown(report, generatedAt),
-        )
-      }}
-      className="flex min-h-11 items-center gap-1.5 rounded-sm border border-line-grey bg-cream px-3 py-1.5 font-medium text-[14px] transition-colors hover:border-ink sm:min-h-9"
-    >
-      <Download className="size-4" aria-hidden="true" />
-      Download Markdown
-    </button>
-  )
-}
-
-/**
  * Renders the report as a real PDF client-side (`@react-pdf/renderer`) and
  * saves it directly — one click, no new tab, no manual Ctrl+P. Both
  * react-pdf and the document tree in `pdf-document.tsx` are dynamically
@@ -1027,12 +1356,6 @@ function DownloadPdfButton({ report }: { report: VisibilityReport }) {
       {generating ? 'Generating PDF…' : 'Download PDF'}
     </button>
   )
-}
-
-/** A small shareable Markdown snippet — real shareability for near-zero
- * cost, via the same `CopyButton` already used for "Copy report". */
-function buildScoreBadgeMarkdown(report: VisibilityReport): string {
-  return `**AI Visibility Score: ${report.score}/100** — ${report.band} · checked with [Scult Tools](${SITE.url}/geo/ai-visibility-checker)`
 }
 
 /** `Copy shareable link`, restyled to match its new home in the report's
@@ -1274,11 +1597,220 @@ function PreRunLegend() {
  * rather than on every render of the pre-run legend and loading state. */
 const SPEC_GROUPS = groupByCompany(AI_BOTS)
 
+/**
+ * The loading state — a dark violet-900 "scan console" using the same
+ * theme-invariant dark-block idiom as the report hero, so the wait and the
+ * result read as one continuous surface. Left: an animated radar sweep and
+ * the crawler companies being contacted. Right: the five real pipeline
+ * stages as a live checklist, plus a determinate progress bar.
+ *
+ * Accessibility contract: the only ARIA surface is the single progressbar —
+ * every piece of visual theatre (sweep, ping, shimmer, logo pulse) is
+ * `aria-hidden` and attribute-gated with `data-decorative-motion`, which the
+ * prefers-reduced-motion block in globals.css kills in one place.
+ */
+function ScanningConsole({ targetUrl, stage }: { targetUrl: string; stage: number }) {
+  const hostname = (() => {
+    try {
+      return new URL(targetUrl).hostname
+    } catch {
+      return targetUrl
+    }
+  })()
+  /* Capped below 100 — the bar must never claim "done" while the fetch is
+     still in flight; the report replacing this panel is what says done. */
+  const percent = Math.min(92, Math.round(((stage + 1) / SCAN_STAGES.length) * 100))
+
+  return (
+    <div className="relative overflow-hidden rounded-panel border border-ink bg-violet-900 text-white shadow-brutal">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(600px 260px at 18% 0%, rgb(112 48 248 / 0.35), transparent 70%), radial-gradient(420px 220px at 90% 110%, rgb(255 216 0 / 0.08), transparent 70%)',
+        }}
+      />
+      <div className="relative p-6 sm:p-8">
+        <div className="min-w-0">
+          <p className="flex items-center gap-2 font-bold text-[11px] text-cta-pure uppercase tracking-widest">
+            <span className="relative flex size-2" aria-hidden="true">
+              <span
+                data-decorative-motion
+                className="absolute inline-flex size-full rounded-full bg-cta-pure opacity-75"
+                style={{
+                  animation: 'radar-ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite',
+                }}
+              />
+              <span className="relative inline-flex size-2 rounded-full bg-cta-pure" />
+            </span>
+            Live scan
+          </p>
+          <h3 className="mt-2 truncate font-display font-bold text-[24px] text-white sm:text-[28px]">
+            Checking {hostname}
+          </h3>
+          <p className="mt-0.5 truncate font-mono text-[12px] text-white/50">
+            {targetUrl}
+          </p>
+        </div>
+
+        <div className="mt-7 grid grid-cols-1 gap-8 lg:grid-cols-[auto_1fr] lg:gap-12">
+          <div className="flex flex-col items-center gap-5 lg:items-start">
+            <div className="relative size-40" aria-hidden="true">
+              <div className="absolute inset-0 rounded-full border border-white/15" />
+              <div className="absolute inset-[16%] rounded-full border border-white/[0.12]" />
+              <div className="absolute inset-[32%] rounded-full border border-white/10" />
+              <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
+              <div className="absolute inset-y-0 left-1/2 w-px bg-white/10" />
+              <div
+                data-decorative-motion
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background:
+                    'conic-gradient(from 0deg, transparent 0deg, transparent 260deg, rgb(121 89 231 / 0.5) 320deg, rgb(255 216 0 / 0.85) 358deg, transparent 360deg)',
+                  animation: 'radar-sweep 2.6s linear infinite',
+                }}
+              />
+              <div
+                data-decorative-motion
+                className="absolute inset-0 m-auto size-3 rounded-full bg-cta-pure/50"
+                style={{ animation: 'radar-ping 2s ease-out infinite' }}
+              />
+              <div className="absolute inset-0 m-auto size-1.5 rounded-full bg-cta-pure" />
+            </div>
+            <div>
+              <p className="text-center text-[12px] text-white/60 lg:text-left">
+                Contacting {AI_BOTS.length} AI crawlers from {SPEC_GROUPS.length}{' '}
+                companies
+              </p>
+              <div className="mt-2.5 flex flex-wrap justify-center gap-2 lg:justify-start">
+                {SPEC_GROUPS.map((group, i) => (
+                  <span
+                    key={group.company}
+                    data-decorative-motion
+                    title={group.company}
+                    style={{
+                      animation: `scan-pulse 2s ease-in-out ${i * 0.22}s infinite`,
+                    }}
+                  >
+                    <CompanyLogo company={group.company} size={16} />
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="min-w-0">
+            <ol className="flex flex-col gap-1">
+              {SCAN_STAGES.map((s, i) => {
+                const status = i < stage ? 'done' : i === stage ? 'active' : 'pending'
+                const Icon = s.icon
+                return (
+                  <li
+                    key={s.label}
+                    aria-current={status === 'active' ? 'step' : undefined}
+                    className={`flex items-center gap-3.5 rounded-card px-3 py-2.5 transition-colors duration-300 ${
+                      status === 'active' ? 'bg-white/10' : ''
+                    }`}
+                  >
+                    <span
+                      className={`flex size-8 shrink-0 items-center justify-center rounded-full border transition-colors duration-300 ${
+                        status === 'done'
+                          ? 'border-green/60 bg-green/20 text-green'
+                          : status === 'active'
+                            ? 'border-cta-pure/70 bg-cta-pure/15 text-cta-pure'
+                            : 'border-white/15 bg-white/5 text-white/35'
+                      }`}
+                    >
+                      {status === 'done' ? (
+                        <CircleCheck className="size-4" aria-hidden="true" />
+                      ) : status === 'active' ? (
+                        <LoaderCircle
+                          data-decorative-motion
+                          className="size-4 animate-spin"
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <Icon className="size-4" aria-hidden="true" />
+                      )}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p
+                        className={`text-[14px] leading-5 transition-colors duration-300 ${
+                          status === 'pending'
+                            ? 'text-white/40'
+                            : status === 'active'
+                              ? 'font-semibold text-white'
+                              : 'text-white/75'
+                        }`}
+                      >
+                        {s.label}
+                        {status === 'active' ? '…' : ''}
+                      </p>
+                      <p
+                        className={`text-[12px] leading-4 ${
+                          status === 'pending' ? 'text-white/25' : 'text-white/45'
+                        }`}
+                      >
+                        {s.sub}
+                      </p>
+                    </div>
+                    {status === 'done' ? (
+                      <span className="ml-auto shrink-0 font-semibold text-[11px] text-green uppercase tracking-wide">
+                        Done
+                      </span>
+                    ) : null}
+                  </li>
+                )
+              })}
+            </ol>
+
+            <div className="mt-5">
+              <div className="flex items-baseline justify-between">
+                <span className="text-[12px] text-white/60">
+                  Step {Math.min(stage + 1, SCAN_STAGES.length)} of {SCAN_STAGES.length}
+                </span>
+                <span className="font-semibold text-[13px] text-white tabular-nums">
+                  {percent}%
+                </span>
+              </div>
+              <div
+                role="progressbar"
+                aria-label="Visibility check in progress"
+                aria-valuenow={percent}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                className="relative mt-1.5 h-2 w-full overflow-hidden rounded-pill bg-white/15"
+              >
+                <div
+                  className="h-full rounded-pill bg-gradient-to-r from-violet-400 to-cta-pure transition-[width] duration-500"
+                  style={{ width: `${percent}%` }}
+                />
+                <div
+                  data-decorative-motion
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1/3"
+                  style={{
+                    background:
+                      'linear-gradient(90deg, transparent, rgb(255 255 255 / 0.35), transparent)',
+                    animation: 'scan-shimmer 1.8s ease-in-out infinite',
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function AiVisibilityChecker() {
   const [url, setUrl] = useState(SAMPLE_URL)
   const [inputError, setInputError] = useState<string | undefined>(undefined)
   const [loading, setLoading] = useState(false)
   const [stage, setStage] = useState(0)
+  const [scanTarget, setScanTarget] = useState('')
   const [report, setReport] = useState<VisibilityReport | undefined>(undefined)
   const [scoreDelta, setScoreDelta] = useState<ScoreDelta | undefined>(undefined)
   const [scoreHistory, setScoreHistory] = useState<readonly HistoryEntry[]>([])
@@ -1308,6 +1840,7 @@ export function AiVisibilityChecker() {
     setScoreDelta(undefined)
     setScoreHistory([])
     setStage(0)
+    setScanTarget(target)
     setLoading(true)
 
     try {
@@ -1439,7 +1972,7 @@ export function AiVisibilityChecker() {
   useEffect(() => {
     if (!loading) return
     const timer = setInterval(() => {
-      setStage((s) => Math.min(s + 1, LOADING_STAGES.length - 1))
+      setStage((s) => Math.min(s + 1, SCAN_STAGES.length - 1))
     }, 1400)
     return () => clearInterval(timer)
   }, [loading])
@@ -1514,8 +2047,7 @@ export function AiVisibilityChecker() {
     trackToolEvent('ai-visibility-checker', 'cta_dismiss')
   }
 
-  const stageLabel =
-    LOADING_STAGES[Math.min(stage, LOADING_STAGES.length - 1)] ?? 'Checking…'
+  const stageLabel = `${SCAN_STAGES[Math.min(stage, SCAN_STAGES.length - 1)]?.label ?? 'Checking'}…`
   const blockedCount =
     report === undefined ? 0 : report.bots.length - report.allowedBotCount
   const crawlerFinding = report?.checks.find((c) => c.id === 'crawlers')?.finding
@@ -1556,12 +2088,6 @@ export function AiVisibilityChecker() {
     .slice()
     .sort((a, b) => CHECK_WEIGHT[b.id] - CHECK_WEIGHT[a.id])
   const pointsAvailable = outstandingFixes.reduce((sum, c) => sum + CHECK_WEIGHT[c.id], 0)
-
-  const timelineSteps: TimelineStep[] = STAGE_STEP_LABELS.map((label, i) => ({
-    label,
-    status: i < stage ? 'done' : i === stage ? 'active' : 'pending',
-  }))
-  const progressPercent = Math.round(((stage + 1) / LOADING_STAGES.length) * 100)
 
   return (
     <div className="flex flex-col gap-6 rounded-panel border border-ink bg-cream p-5 shadow-brutal md:p-6">
@@ -1624,22 +2150,34 @@ export function AiVisibilityChecker() {
           <label className="label" htmlFor="aiv-url">
             Website URL
           </label>
-          <input
-            id="aiv-url"
-            className="field"
-            type="text"
-            inputMode="url"
-            autoComplete="off"
-            spellCheck={false}
-            placeholder="https://yourdomain.com"
-            value={url}
-            onChange={(e) => {
-              setUrl(e.target.value)
-              if (inputError !== undefined) setInputError(undefined)
-            }}
-            aria-describedby={inputError !== undefined ? 'aiv-url-error' : 'aiv-url-hint'}
-            aria-invalid={inputError !== undefined}
-          />
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <input
+              id="aiv-url"
+              className="field sm:flex-1"
+              type="text"
+              inputMode="url"
+              autoComplete="off"
+              spellCheck={false}
+              placeholder="https://yourdomain.com"
+              value={url}
+              onChange={(e) => {
+                setUrl(e.target.value)
+                if (inputError !== undefined) setInputError(undefined)
+              }}
+              aria-describedby={
+                inputError !== undefined ? 'aiv-url-error' : 'aiv-url-hint'
+              }
+              aria-invalid={inputError !== undefined}
+            />
+            <button
+              type="submit"
+              className="btn-brutal btn-violet btn-brutal-sm shrink-0"
+              disabled={loading}
+            >
+              <Radar className="size-4" aria-hidden="true" />
+              {loading ? 'Checking…' : 'Check visibility'}
+            </button>
+          </div>
           {inputError !== undefined ? (
             <p
               className="mt-1.5 font-medium text-[14px] text-violet-700"
@@ -1649,85 +2187,18 @@ export function AiVisibilityChecker() {
             </p>
           ) : (
             <p className="hint mt-1.5" id="aiv-url-hint">
-              Any http or https address. Private and internal hosts are refused.
+              Any public http or https address. Our server makes four requests to your
+              domain, once each, as{' '}
+              <span className="font-mono text-[12px]">ScultToolsBot/1.0</span> — no
+              account, nothing stored.
             </p>
           )}
-          <button
-            type="submit"
-            className="btn-brutal btn-violet btn-brutal-sm mt-4 w-full sm:w-auto"
-            disabled={loading}
-          >
-            <Radar className="size-4" aria-hidden="true" />
-            {loading ? 'Checking…' : 'Check visibility'}
-          </button>
         </div>
-
-        {/* Collapsed by default — the transparency commitment (what leaves our
-            server, no signup, nothing stored) stays available on demand
-            instead of permanently occupying space every visitor pays for. */}
-        <details className="group">
-          <summary className="flex cursor-pointer list-none items-center justify-between font-display font-medium text-[15px] text-ink-muted transition-colors duration-150 marker:content-none hover:text-[var(--color-violet-accent-text,var(--color-violet-700))] [&::-webkit-details-marker]:hidden">
-            Exactly what happens when you click Check visibility
-            <span
-              aria-hidden="true"
-              className="text-[13px] text-ink-subtle transition-transform group-open:rotate-180"
-            >
-              ▾
-            </span>
-          </summary>
-          <div className="mt-2 rounded-card border border-line-grey bg-offwhite p-4">
-            <p className="text-[14px] text-ink-muted leading-5">
-              Our server makes four requests to your domain, once each — no account, no
-              email:
-            </p>
-            <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[13px] text-ink">
-              <li>/</li>
-              <li>/robots.txt</li>
-              <li>/llms.txt</li>
-              <li>/sitemap.xml</li>
-            </ul>
-            <p className="mt-3 text-[14px] text-ink-muted leading-5">
-              It identifies itself as{' '}
-              <span className="font-mono text-[13px] text-ink">ScultToolsBot/1.0</span>,
-              gives up after 10 seconds, and follows at most three redirects. If your WAF
-              blocks unfamiliar crawlers, allow that user-agent before you run this —
-              otherwise you are measuring your firewall, not your robots.txt.
-            </p>
-          </div>
-        </details>
       </form>
 
       <div className="border-line border-t pt-6">
         {loading ? (
-          <div className="flex flex-col gap-6">
-            <div>
-              <div
-                role="progressbar"
-                aria-label="Visibility check in progress"
-                aria-valuenow={progressPercent}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                className="h-2 w-full overflow-hidden rounded-pill border border-line-grey bg-cream"
-              >
-                <div
-                  data-decorative-motion
-                  className="h-full rounded-pill bg-violet-500 transition-[width] duration-300"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-              <div className="mt-4">
-                <StepTimeline steps={timelineSteps} />
-              </div>
-              <p className="mt-2 text-[13px] text-ink-subtle">
-                {stageLabel} Step {Math.min(stage + 1, LOADING_STAGES.length)} of{' '}
-                {LOADING_STAGES.length}.
-              </p>
-            </div>
-
-            <div className="border-line border-t pt-5">
-              <PreRunLegend />
-            </div>
-          </div>
+          <ScanningConsole targetUrl={scanTarget} stage={stage} />
         ) : apiError !== undefined ? (
           <div className="flex flex-col gap-3">
             <ErrorDetail
@@ -1741,8 +2212,9 @@ export function AiVisibilityChecker() {
               <p className="text-[14px] text-ink-muted leading-5">
                 To be fair to your site: blocking ScultToolsBot does not mean AI bots are
                 blocked. Plenty of firewalls reject unfamiliar crawlers while letting
-                GPTBot or ClaudeBot through. Allow the user-agent listed above, or read
-                your robots.txt and WAF allowlist directly.
+                GPTBot or ClaudeBot through. Allow the{' '}
+                <span className="font-mono text-[13px]">ScultToolsBot/1.0</span>{' '}
+                user-agent, or read your robots.txt and WAF allowlist directly.
               </p>
             ) : null}
             {apiError.code === 'unreachable' ? (
@@ -1763,38 +2235,18 @@ export function AiVisibilityChecker() {
           </div>
         ) : report !== undefined ? (
           <div className="flex flex-col gap-10">
-            {/* Jump nav + export row — same chip-tool/scroll-mt-32 anchor-nav
-                convention as /sitemap, so a long report is skimmable. */}
-            <div id="report-overview" className="scroll-mt-32 flex flex-col gap-4">
-              <nav aria-label="Jump to section" className="flex flex-wrap gap-2">
-                {JUMP_SECTIONS.map((section) => (
-                  <a
-                    key={section.id}
-                    href={`#${section.id}`}
-                    className="chip-tool px-4 py-2 text-[14px]"
-                  >
-                    {section.label}
-                  </a>
-                ))}
-              </nav>
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <span className="eyebrow">Your report</span>
-                <div className="flex flex-wrap items-center gap-2">
-                  <CopyButton
-                    text={formatReportText(report)}
-                    label="Copy report"
-                    onCopy={() => trackToolEvent('ai-visibility-checker', 'copy_report')}
-                  />
-                  <CopyButton
-                    text={buildScoreBadgeMarkdown(report)}
-                    label="Copy score badge"
-                    ariaLabel='Copy "Score badge" as Markdown'
-                    onCopy={() => trackToolEvent('ai-visibility-checker', 'copy_badge')}
-                  />
-                  <DownloadMarkdownButton report={report} />
-                  <DownloadPdfButton report={report} />
-                  <CopyLinkButton copied={linkCopied} onCopy={() => void copyLink()} />
-                </div>
+            {/* Export row — the three actions people actually reach for:
+                copy the whole report, save it as a PDF, or share the link. */}
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <span className="eyebrow">Your report</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <CopyButton
+                  text={formatReportText(report)}
+                  label="Copy report"
+                  onCopy={() => trackToolEvent('ai-visibility-checker', 'copy_report')}
+                />
+                <DownloadPdfButton report={report} />
+                <CopyLinkButton copied={linkCopied} onCopy={() => void copyLink()} />
               </div>
             </div>
 
@@ -1805,8 +2257,18 @@ export function AiVisibilityChecker() {
                 bigger one. The score is set far larger than any other
                 number on the page on purpose — this is the only place that
                 gets to be this big. */}
-            <div className="overflow-hidden rounded-panel border border-ink bg-violet-900 text-white shadow-brutal">
-              <div className="p-6 sm:p-9">
+            <div className="relative overflow-hidden rounded-panel border border-ink bg-violet-900 text-white shadow-brutal">
+              {/* Same ambient glow as the scan console, so the wait state and
+                  the result read as one continuous surface. */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    'radial-gradient(600px 260px at 18% 0%, rgb(112 48 248 / 0.35), transparent 70%), radial-gradient(420px 220px at 90% 110%, rgb(255 216 0 / 0.08), transparent 70%)',
+                }}
+              />
+              <div className="relative p-6 sm:p-9">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex items-center gap-2">
                     <span className="block size-6 shrink-0 overflow-hidden rounded-full border border-white/40">
@@ -1837,95 +2299,88 @@ export function AiVisibilityChecker() {
                   </span>
                 </div>
 
-                {/* Identity row — who this report is about. The checked
-                    site's own og:image as a small, contained circular
-                    avatar (never stretched to fill/cover the panel — that
-                    read as a smeared watermark once a site's og:image
-                    turned out to just be their own logo blown up) plus its
-                    hostname and full URL. Falls back to a plain globe-style
-                    initial when no og:image was fetched, so the row's
-                    layout never shifts based on whether one exists. */}
-                <div className="mt-4 flex items-center gap-3">
-                  <span className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white/50 bg-violet-700">
-                    {report.pageInsights.heroImageUrl !== undefined ? (
-                      // biome-ignore lint/performance/noImgElement: a runtime data: URI from the just-fetched report, not a static/optimizable asset next/image can handle.
-                      <img
-                        src={report.pageInsights.heroImageUrl}
-                        alt=""
-                        className="size-full object-cover"
-                      />
-                    ) : (
-                      <span className="font-display font-bold text-[16px] text-white">
-                        {(reportHostname ?? '?').charAt(0).toUpperCase()}
-                      </span>
-                    )}
-                  </span>
+                {/* Split band — identity left, score object right. The 60/40
+                    asymmetry makes the gauge read as the payoff of the row,
+                    not just another tile. */}
+                <div className="mt-6 grid grid-cols-1 items-center gap-8 lg:grid-cols-[1fr_auto] lg:gap-12">
                   <div className="min-w-0">
-                    <p className="truncate font-display font-semibold text-[16px] text-white">
-                      {reportHostname}
+                    {/* Identity row — who this report is about. The checked
+                        site's own og:image as a small, contained circular
+                        avatar plus its hostname and full URL. Falls back to
+                        an initial so the layout never shifts. */}
+                    <div className="flex items-center gap-3">
+                      <span className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white/50 bg-violet-700">
+                        {report.pageInsights.heroImageUrl !== undefined ? (
+                          // biome-ignore lint/performance/noImgElement: a runtime data: URI from the just-fetched report, not a static/optimizable asset next/image can handle.
+                          <img
+                            src={report.pageInsights.heroImageUrl}
+                            alt=""
+                            className="size-full object-cover"
+                          />
+                        ) : (
+                          <span className="font-display font-bold text-[16px] text-white">
+                            {(reportHostname ?? '?').charAt(0).toUpperCase()}
+                          </span>
+                        )}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate font-display font-bold text-[24px] text-white sm:text-[28px]">
+                          {reportHostname}
+                        </p>
+                        <p className="truncate font-mono text-[12px] text-white/60">
+                          {report.url}
+                        </p>
+                      </div>
+                    </div>
+
+                    <p className="mt-6 text-[15px] text-white/85 leading-6">
+                      <strong className="text-white">
+                        {report.allowedBotCount} of {report.bots.length}
+                      </strong>{' '}
+                      AI crawlers can fetch this page
                     </p>
-                    <p className="truncate font-mono text-[12px] text-white/60">
-                      {report.url}
-                    </p>
+
+                    {/* Honest, not a hype metric: this is the visitor's own
+                        device remembering their own past runs of this same
+                        origin — no account, no server storage. Absence of
+                        this line means there was no prior check. */}
+                    {scoreDelta !== undefined ? (
+                      <p className="mt-2 flex items-center gap-1.5 text-[13px] text-white/70">
+                        {scoreDelta.deltaPoints > 0 ? (
+                          <TrendingUp className="size-3.5 shrink-0" aria-hidden="true" />
+                        ) : scoreDelta.deltaPoints < 0 ? (
+                          <TrendingDown
+                            className="size-3.5 shrink-0"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <Minus className="size-3.5 shrink-0" aria-hidden="true" />
+                        )}
+                        {scoreDelta.deltaPoints === 0
+                          ? `Same score as your last check on ${formatCheckedDate(scoreDelta.previousCheckedAt)}`
+                          : `${scoreDelta.deltaPoints > 0 ? '+' : ''}${scoreDelta.deltaPoints} pts since your last check on ${formatCheckedDate(scoreDelta.previousCheckedAt)}`}
+                      </p>
+                    ) : null}
+
+                    {scoreHistory.length >= 2 ? (
+                      <div className="mt-4 flex justify-start">
+                        <ScoreSparkline history={scoreHistory} />
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className="justify-self-center lg:justify-self-end">
+                    <ScoreGauge score={report.score} />
                   </div>
                 </div>
-
-                <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
-                  <div className="flex flex-wrap items-end gap-3">
-                    <span className="font-display font-bold text-[92px] text-white leading-[0.85] tabular-nums sm:text-[128px]">
-                      {report.score}
-                    </span>
-                    <span className="pb-2 font-display font-semibold text-[24px] text-white/50 sm:pb-4 sm:text-[30px]">
-                      /100
-                    </span>
-                  </div>
-                  {scoreHistory.length >= 2 ? (
-                    <ScoreSparkline history={scoreHistory} />
-                  ) : null}
-                </div>
-
-                <div
-                  role="progressbar"
-                  aria-label="Visibility score"
-                  aria-valuenow={report.score}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  className="mt-4 h-2.5 w-full max-w-md overflow-hidden rounded-pill bg-white/15"
-                >
-                  <div
-                    className={`h-full rounded-pill ${HERO_BAR_TONE[report.band]}`}
-                    style={{ width: `${report.score}%` }}
-                  />
-                </div>
-
-                <p className="mt-5 text-[15px] text-white/85 leading-6">
-                  <strong className="text-white">
-                    {report.allowedBotCount} of {report.bots.length}
-                  </strong>{' '}
-                  AI crawlers can fetch this page
-                </p>
-
-                {/* Honest, not a hype metric: this is the visitor's own
-                    device remembering their own past runs of this same
-                    origin — no account, no server storage. Absence of this
-                    line means there was no prior check, which needs no
-                    separate "first time!" message to say so. */}
-                {scoreDelta !== undefined ? (
-                  <p className="mt-2 flex items-center gap-1.5 text-[13px] text-white/70">
-                    {scoreDelta.deltaPoints > 0 ? (
-                      <TrendingUp className="size-3.5 shrink-0" aria-hidden="true" />
-                    ) : scoreDelta.deltaPoints < 0 ? (
-                      <TrendingDown className="size-3.5 shrink-0" aria-hidden="true" />
-                    ) : (
-                      <Minus className="size-3.5 shrink-0" aria-hidden="true" />
-                    )}
-                    {scoreDelta.deltaPoints === 0
-                      ? `Same score as your last check on ${formatCheckedDate(scoreDelta.previousCheckedAt)}`
-                      : `${scoreDelta.deltaPoints > 0 ? '+' : ''}${scoreDelta.deltaPoints} pts since your last check on ${formatCheckedDate(scoreDelta.previousCheckedAt)}`}
-                  </p>
-                ) : null}
               </div>
             </div>
+
+            {/* The countable-checks strip — pass/check/fix tallies plus one
+                block per check, the fastest possible triage read. */}
+            <Reveal>
+              <CheckTally checks={report.checks} />
+            </Reveal>
 
             {/* What to fix — moved directly under the hero (it used to sit
                 third, after a full recap of the same stats). This is the
@@ -1966,7 +2421,9 @@ export function AiVisibilityChecker() {
               ) : (
                 <div className="mt-4 flex flex-col gap-3">
                   {outstandingFixes.map((check, i) => (
-                    <FixCard key={check.id} check={check} rank={i + 1} />
+                    <Reveal key={check.id} delayMs={Math.min(i * 70, 350)}>
+                      <FixCard check={check} rank={i + 1} />
+                    </Reveal>
                   ))}
                 </div>
               )}
@@ -2013,54 +2470,70 @@ export function AiVisibilityChecker() {
                 not a third headline competing with them. Two tones only
                 (green/yellow/lavender), each earned: green for a genuinely
                 good count, yellow only when a crawler is actually blocked. */}
-            <div>
+            <Reveal>
               <span className="eyebrow">At a glance</span>
-              <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                <StatCard
-                  icon={ShieldCheck}
-                  label="Crawlers allowed"
-                  value={report.allowedBotCount}
-                  sublabel={`of ${report.bots.length}`}
-                  tone="green"
-                />
-                <StatCard
-                  icon={ShieldAlert}
-                  label="Crawlers blocked"
-                  value={blockedCount}
-                  sublabel={`of ${report.bots.length}`}
-                  tone={blockedCount > 0 ? 'yellow' : 'lavender'}
-                />
-                <StatCard
-                  icon={FileJson}
-                  label="Schema types found"
-                  value={report.jsonLdTypes.length}
-                  sublabel="JSON-LD @type values"
-                  tone="lavender"
-                />
-                <StatCard
-                  icon={ListChecks}
-                  label="Checks passed"
-                  value={`${checksPassed}/${scoredChecks.length}`}
-                  sublabel="scored checks"
-                  tone={checksPassed === scoredChecks.length ? 'green' : 'lavender'}
+              <div className="mt-3">
+                <MetricPanel
+                  columns="grid-cols-2 sm:grid-cols-4"
+                  items={[
+                    {
+                      icon: ShieldCheck,
+                      label: 'Crawlers allowed',
+                      value: report.allowedBotCount,
+                      sub: `of ${report.bots.length}`,
+                      chip:
+                        report.allowedBotCount === report.bots.length
+                          ? { label: 'all clear', tone: 'good' }
+                          : undefined,
+                    },
+                    {
+                      icon: ShieldAlert,
+                      label: 'Crawlers blocked',
+                      value: blockedCount,
+                      sub: `of ${report.bots.length}`,
+                      chip:
+                        blockedCount > 0
+                          ? { label: 'fix below', tone: 'warn' }
+                          : { label: 'none', tone: 'good' },
+                    },
+                    {
+                      icon: FileJson,
+                      label: 'Schema types',
+                      value: report.jsonLdTypes.length,
+                      sub: 'JSON-LD @type values',
+                    },
+                    {
+                      icon: ListChecks,
+                      label: 'Checks passed',
+                      value: `${checksPassed}/${scoredChecks.length}`,
+                      sub: 'scored checks',
+                      chip:
+                        checksPassed === scoredChecks.length
+                          ? { label: 'perfect', tone: 'good' }
+                          : undefined,
+                    },
+                  ]}
                 />
               </div>
-            </div>
+            </Reveal>
 
-            <WebsiteInsightsSection insights={report.pageInsights} />
+            <Reveal>
+              <WebsiteInsightsSection insights={report.pageInsights} />
+            </Reveal>
 
             {/* The 12 checks, grouped into 4 categories that mean something
                 on their own — replaces the old flat "All checks" dump. */}
             {REPORT_CATEGORIES.map((category) => (
-              <CategorySection
-                key={category.id}
-                category={category}
-                checks={report.checks}
-                botGroups={botGroups}
-                crawlerFinding={crawlerFinding}
-                jsonLdTypes={report.jsonLdTypes}
-                totalBots={report.bots.length}
-              />
+              <Reveal key={category.id}>
+                <CategorySection
+                  category={category}
+                  checks={report.checks}
+                  botGroups={botGroups}
+                  crawlerFinding={crawlerFinding}
+                  jsonLdTypes={report.jsonLdTypes}
+                  totalBots={report.bots.length}
+                />
+              </Reveal>
             ))}
           </div>
         ) : (

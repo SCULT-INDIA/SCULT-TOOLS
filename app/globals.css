@@ -474,6 +474,42 @@
     }
   }
 
+  /* AI visibility checker — loading scan console. All four are decorative
+     and applied only on data-decorative-motion elements, so the
+     prefers-reduced-motion block below kills them wholesale. */
+  @keyframes radar-sweep {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes radar-ping {
+    0% {
+      transform: scale(0.5);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(2.2);
+      opacity: 0;
+    }
+  }
+  @keyframes scan-shimmer {
+    0% {
+      transform: translateX(-120%);
+    }
+    100% {
+      transform: translateX(420%);
+    }
+  }
+  @keyframes scan-pulse {
+    0%,
+    100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
   .eyebrow {
     font-size: 14px;
     line-height: 18px;
