@@ -28,21 +28,16 @@ import heroSky from '@/public/backgrounds/hero-sky.jpg'
  *     search is hidden below `lg`, so without this the phone — most of this
  *     site's traffic — would have no search surface at all. From `lg` up the
  *     hero matches the mockup exactly, because the header search is visible.
- *   - A real sky photograph fills the top of the section, fading to the
- *     page's own cream by mid-height — replacing an earlier CSS
- *     radial-gradient approximation of the same "blue dome receding to
- *     white" look with the actual photo the user supplied. The photo's own
- *     vertical order (saturated blue at its top, clouds/haze toward its
- *     bottom) runs the same direction the tuned gradient did, so the box's
- *     geometry — height, top offset, and the 40%-down safety line below —
- *     carries over unchanged. A bottom-anchored
- *     `linear-gradient(to bottom, transparent, cream)` overlay sits on top
- *     of the `<Image>` and reaches full cream by the box's own
- *     40%-of-height mark, the same point the old gradient guaranteed white
- *     by — so the reassurance row's black text (no background box of its
- *     own) keeps the exact contrast margin verified live at
- *     375/1024/1440/1920 before this change, regardless of how the photo's
- *     own clouds happen to fall at a given viewport width.
+ *   - A real sky photograph fills the whole section, shown at full,
+ *     unwashed saturation — NO overlay, wash, or fade of any kind, by
+ *     explicit request (two earlier passes layered cream washes over it
+ *     for text contrast and were both rejected; the approved reference
+ *     mockup shows the site's normal ink/violet text sitting directly on
+ *     the photo). The box spans `-top-[90px]` (bleeding up behind the
+ *     transparent header, same technique as the old gradient) to
+ *     `bottom-0`, so the photo ends exactly where the section does and
+ *     the page's cream resumes below; the photo's own bottom edge is
+ *     near-white cloud, so that seam needs no blending layer either.
  */
 export function Hero() {
   return (
@@ -50,9 +45,14 @@ export function Hero() {
     // eyebrow and the constellation was already compacted, so the biggest
     // remaining lever was the hero's own distance from the sticky header,
     // not one more internal gap. This moves the whole block up at once.
+    // Deep bottom padding (`pb-40`+) is what makes the sky photo read as a
+    // full backdrop: the photo box is pinned to this section's own bottom
+    // edge, so without it the section ended right under the reassurance row
+    // and cropped the sky to a sliver. The padding gives the photo's cloud
+    // band room to breathe before the next section starts.
     <section
       aria-labelledby="hero-heading"
-      className="relative pt-6 pb-8 text-center md:pt-8"
+      className="relative pt-6 pb-40 text-center md:pt-8 md:pb-56 lg:pb-64"
     >
       {/* No `overflow-hidden` on the section (there was one; removed): the
           glow is now meant to bleed upward into the sticky header above,
@@ -77,7 +77,7 @@ export function Hero() {
           through beside the pill, see Header.tsx. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 -top-[90px] -z-10 h-[890px] overflow-hidden"
+        className="pointer-events-none absolute inset-x-0 -top-[90px] bottom-0 -z-10 overflow-hidden"
       >
         <Image
           src={heroSky}
@@ -86,25 +86,6 @@ export function Hero() {
           priority
           sizes="100vw"
           className="object-cover"
-        />
-        {/* Cream-tinted wash, reaching solid cream by 40% down the box — see
-            the docblock's contrast contract. The raw photo's blue is deep
-            and uniform (unlike the old radial gradient, which was already
-            near-white behind the headline column and only went fully blue
-            at the box's far corners), so a flat 0.84 base opacity was tuned
-            by sampling the actual rendered pixel colour behind each text
-            element against its own colour: the eyebrow (violet-500, the
-            smallest/lowest-contrast text in the zone, sitting at ~20% down)
-            lands at 4.55:1, at parity with the old design's own ~4.47:1
-            there; the H1 (large text, needs only 3:1) clears 15:1. Below
-            that measured floor the photo reads as a faint wash, not a
-            visible sky — this is the least washing that still holds AA. */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(to bottom, rgb(252 251 243 / 0.84) 0%, rgb(252 251 243 / 0.84) 22%, var(--color-cream) 40%)',
-          }}
         />
       </div>
 
@@ -119,7 +100,12 @@ export function Hero() {
           <SaashubBadge className="h-8 w-auto" heightPx={32} />
         </div>
 
-        <p className="eyebrow">
+        {/* All hero text colours are FIXED (white/violet-900/yellow), never
+            adaptive ink — they sit on the fixed light-blue photo, the same
+            rule as text on pastel tiles. White here: the eyebrow renders on
+            the photo's deepest blue, where violet-500 disappears (measured
+            ~6.8:1 for white). */}
+        <p className="eyebrow text-white">
           {TOOLS.length} tools · {PROMPTS.length} prompts · zero signups
         </p>
 
@@ -132,7 +118,7 @@ export function Hero() {
             names all three instead of picking one. */}
         <h1
           id="hero-heading"
-          className="mx-auto mt-4 max-w-[20ch] text-[40px] leading-[42px] tracking-[-1px] sm:text-[48px] sm:leading-[50px] md:text-[64px] md:leading-[66px] lg:text-[72px] lg:leading-[74px]"
+          className="mx-auto mt-4 max-w-[20ch] text-[40px] text-white leading-[42px] tracking-[-1px] sm:text-[48px] sm:leading-[50px] md:text-[64px] md:leading-[66px] lg:text-[72px] lg:leading-[74px]"
         >
           <em className="text-accent-gradient font-semibold not-italic">Free</em> tools,
           prompts and skills for real work
@@ -143,7 +129,10 @@ export function Hero() {
             funnel" differentiator) said something true but read as an extra
             paragraph a minimal hero doesn't need — that positioning point
             still lives in the trust strip immediately below this section. */}
-        <p className="mx-auto mt-4 max-w-[42ch] text-[17px] text-ink-muted leading-7 md:text-lead">
+        {/* violet-900, not white: the tagline sits in the photo's LIGHTER
+            mid-sky band, where white drops under AA for 17px text but a
+            deep navy holds ~5:1 and harmonises with the sky. */}
+        <p className="mx-auto mt-4 max-w-[42ch] text-[17px] text-violet-900 leading-7 md:text-lead">
           SEO, business, design and AI visibility — all running in your browser.
         </p>
 

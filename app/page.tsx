@@ -8,7 +8,6 @@ import { McpSpotlight } from '@/components/sections/McpSpotlight'
 import { PromptLibrarySpotlight } from '@/components/sections/PromptLibrarySpotlight'
 import { ResourcesStrip } from '@/components/sections/ResourcesStrip'
 import { SkillLibrarySpotlight } from '@/components/sections/SkillLibrarySpotlight'
-import { TrustStrip } from '@/components/sections/TrustStrip'
 import { UniversalIncludes } from '@/components/sections/UniversalIncludes'
 import { Icon } from '@/components/ui/Icon'
 import { JsonLd } from '@/lib/seo/jsonld'
@@ -109,11 +108,11 @@ export default async function Home() {
           LOCKED section — see the redesign notes in the file docblock. */}
       <Hero />
 
-      {/* ==================================================== 2. TRUST STRIP
-          Receipts band: the verifiable numbers, at display weight. */}
-      <TrustStrip />
+      {/* TrustStrip (the "No made-up numbers" receipts band) was removed by
+          request — the hero's sky photo now flows straight into the
+          category explorer. The component file stays for other uses. */}
 
-      {/* ============================================== 3. CATEGORY EXPLORER
+      {/* ============================================== 2. CATEGORY EXPLORER
           The one and only "here are the tools" section — violet band,
           pill tabs with live counts, arrow-key navigable. */}
       <CategoryTabs toolsByCategory={toolsByCategory} />

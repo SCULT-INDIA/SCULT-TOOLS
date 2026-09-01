@@ -719,12 +719,16 @@
   }
 
   /* Gradient accent word for headlines — used sparingly, one word per page. */
+  /* Single caller: the hero H1's "Free". Warm yellow ramp — yellow is
+     blue's complement, so it pops against the hero's sky photo where the
+     old violet ramp blended into it. Passes AA large-text (≥3:1) against
+     the deep-blue zone it renders over. */
   .text-accent-gradient {
     background: linear-gradient(
       100deg,
-      var(--color-violet-600) 10%,
-      var(--color-violet-500) 50%,
-      var(--color-violet-400) 90%
+      var(--color-cta) 10%,
+      var(--color-cta-pure) 50%,
+      var(--color-cta) 90%
     );
     background-clip: text;
     -webkit-background-clip: text;
