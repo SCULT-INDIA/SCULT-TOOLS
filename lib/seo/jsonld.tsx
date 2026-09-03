@@ -20,6 +20,15 @@ const PUBLISHER = {
   '@id': `${SITE.parentUrl}/#organization`,
   name: SITE.parentName,
   url: SITE.parentUrl,
+  telephone: SITE.phone,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: SITE.address.street,
+    addressLocality: SITE.address.locality,
+    addressRegion: SITE.address.region,
+    postalCode: SITE.address.postalCode,
+    addressCountry: SITE.address.country,
+  },
 } as const
 
 export function breadcrumbJsonLd(

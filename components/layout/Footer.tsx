@@ -1,4 +1,4 @@
-import { ArrowUpRight, Heart, Mail, ShieldCheck, Sparkles } from 'lucide-react'
+import { ArrowUpRight, Heart, Mail, MapPin, Phone } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { BrandIcon } from '@/components/ui/BrandIcon'
@@ -52,15 +52,6 @@ import { LiveUptime } from './LiveUptime'
  * renders their own embed artwork rather than being reshaped into our chip
  * style — it's their badge, not a claim we're making about ourselves.
  */
-
-/** Verifiable claims, standing in for the reference's third-party badges. */
-const BADGES = [
-  { Icon: ShieldCheck, title: 'WCAG 2.2 AA', sub: 'contrast verified' },
-  // Count verified by `npx vitest run` after the 2026-08 trust/GEO-AEO page
-  // build-out (26 files, 781 tests). Update it when the suite grows — a
-  // stale number here is a checkable claim that has quietly become false.
-  { Icon: Sparkles, title: '781 tests', sub: 'passing in CI' },
-]
 
 const CONTACT_EMAIL = 'connect@scult.in'
 
@@ -351,22 +342,10 @@ export function Footer() {
 
           <LiveUptime />
 
+          {/* Only the three real third-party directory listings live here —
+              the self-issued claim chips (WCAG / test count) that used to
+              sit beside them were removed by request. */}
           <div className="flex flex-wrap items-center justify-center gap-3 md:justify-end">
-            {BADGES.map(({ Icon, title, sub }) => (
-              // Literal black text: the badge chip is fixed white in both
-              // themes, so adaptive ink (near-white in dark mode) vanishes
-              // against it.
-              <div
-                key={title}
-                className="flex items-center gap-2 rounded-sm bg-white px-3.5 py-2.5 text-black"
-              >
-                <Icon className="size-5 shrink-0 text-violet-700" aria-hidden="true" />
-                <span className="leading-tight">
-                  <span className="block font-bold text-[12px]">{title}</span>
-                  <span className="block text-[11px] text-black/60">{sub}</span>
-                </span>
-              </div>
-            ))}
             <UneedBadge />
             <SaashubBadge />
             <SourceForgeBadge />
@@ -472,6 +451,35 @@ export function Footer() {
                         </span>
                         {CONTACT_EMAIL}
                       </a>
+                    </li>
+                    <li>
+                      <a
+                        href={`tel:${SITE.phoneTel}`}
+                        className="inline-flex items-center gap-2.5 text-[14px] text-white/70 transition-colors hover:text-white"
+                      >
+                        <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-white">
+                          <Phone
+                            className="size-3.5 text-violet-700"
+                            aria-hidden="true"
+                          />
+                        </span>
+                        {SITE.phone}
+                      </a>
+                    </li>
+                    <li>
+                      <span className="inline-flex items-start gap-2.5 text-[14px] text-white/70">
+                        <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-white">
+                          <MapPin
+                            className="size-3.5 text-violet-700"
+                            aria-hidden="true"
+                          />
+                        </span>
+                        <span className="leading-5">
+                          {SITE.address.street}
+                          <br />
+                          {SITE.address.locality} {SITE.address.postalCode}, India
+                        </span>
+                      </span>
                     </li>
                     {SOCIALS.map(({ brand, label, href }) => (
                       <li key={label}>

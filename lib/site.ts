@@ -13,6 +13,24 @@ export const SITE = {
   description:
     'Free online tools plus a verified AI prompt library — SEO, business, developer and design utilities, and copy-paste prompts for ChatGPT, Claude, Cursor, Midjourney and more. Built by Scult, an AI-first digital agency.',
   locale: 'en-IN',
+  /**
+   * Scult's real contact details — the single source every phone/address
+   * mention on the site (footer, contact page, brand page, AI-visibility
+   * CTAs and PDF, Organization JSON-LD) reads from, so a new number or an
+   * office move is one edit here.
+   */
+  phone: '+91 92506 80738',
+  /** Dialable form of `phone` for tel: hrefs — digits and `+` only. */
+  phoneTel: '+919250680738',
+  address: {
+    street: 'Paras Tierea, Building 18, Sector 137',
+    locality: 'Noida',
+    region: 'Uttar Pradesh',
+    postalCode: '201305',
+    country: 'IN',
+  },
+  /** One-line rendering of `address` for visible text. */
+  addressLine: 'Paras Tierea, Building 18, Sector 137, Noida, Uttar Pradesh 201305',
   gaId: process.env.NEXT_PUBLIC_GA_ID ?? '',
   /**
    * Microsoft Clarity project ID — heatmaps and session replay, answering the

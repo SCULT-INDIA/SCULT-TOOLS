@@ -1380,7 +1380,6 @@ function CopyLinkButton({ copied, onCopy }: { copied: boolean; onCopy: () => voi
 // link here. No per-link onClick tracking, so a click can never be
 // mis-recorded as a dismissal (the bug this replaced).
 const SCULT_BOOKING_URL = parentLink('/#book-meeting', 'ai-visibility-checker')
-const SCULT_PHONE = '7007288376'
 const SCULT_EMAIL = 'connect@scult.in'
 
 /** Phone + email, shared between the CTA modal and the inline CTA banner —
@@ -1392,11 +1391,11 @@ function ScultContactLines({ tone }: { tone: 'dark' | 'light' }) {
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[13px]">
       <a
-        href={`tel:${SCULT_PHONE}`}
+        href={`tel:${SITE.phoneTel}`}
         className={`flex items-center gap-1.5 font-medium ${linkClass}`}
       >
         <Phone className="size-3.5 shrink-0" aria-hidden="true" />
-        {SCULT_PHONE}
+        {SITE.phone}
       </a>
       <a
         href={`mailto:${SCULT_EMAIL}`}

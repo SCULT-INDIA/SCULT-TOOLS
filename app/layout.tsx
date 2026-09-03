@@ -175,6 +175,15 @@ function OrganizationJsonLd() {
       name: SITE.parentName,
       url: SITE.parentUrl,
       sameAs: [SITE.parentUrl],
+      telephone: SITE.phone,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: SITE.address.street,
+        addressLocality: SITE.address.locality,
+        addressRegion: SITE.address.region,
+        postalCode: SITE.address.postalCode,
+        addressCountry: SITE.address.country,
+      },
     },
     potentialAction: {
       '@type': 'SearchAction',

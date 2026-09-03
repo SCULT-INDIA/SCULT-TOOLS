@@ -102,6 +102,26 @@ export default function ContactPage() {
         </section>
 
         <section className="mt-12">
+          <h2 className="text-[26px] tracking-[-0.5px] md:text-[30px]">Call or visit</h2>
+          <p className="mt-3 text-[16px] text-ink-muted leading-7">
+            {SITE.parentName} is a real office, not a mailbox. Phone{' '}
+            <a href={`tel:${SITE.phoneTel}`} className={LINK_CLASS}>
+              {SITE.phone}
+            </a>{' '}
+            during Indian business hours, or write to us at:
+          </p>
+          <address className="mt-3 text-[16px] text-ink not-italic leading-7">
+            {SITE.parentName}
+            <br />
+            {SITE.address.street}
+            <br />
+            {SITE.address.locality}, {SITE.address.region} {SITE.address.postalCode}
+            <br />
+            India
+          </address>
+        </section>
+
+        <section className="mt-12">
           <h2 className="text-[26px] tracking-[-0.5px] md:text-[30px]">
             Elsewhere online
           </h2>

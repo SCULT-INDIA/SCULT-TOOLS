@@ -24,7 +24,7 @@
  */
 
 import { Document, Image, Link, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
-import { parentLink } from '@/lib/site'
+import { parentLink, SITE } from '@/lib/site'
 import {
   CHECK_WEIGHT,
   type CheckResult,
@@ -39,7 +39,6 @@ import {
 // link is clicked outside the browser, so nothing tracks the click itself,
 // but the UTMs still attribute the visit when they land on scult.in.
 const SCULT_BOOKING_URL = parentLink('/#book-meeting', 'ai-visibility-checker-pdf')
-const SCULT_PHONE = '7007288376'
 const SCULT_EMAIL = 'connect@scult.in'
 const SCULT_MARK_SRC = '/brand/scult-mark.png'
 
@@ -536,7 +535,7 @@ function OverviewSection({
           </View>
           <View style={[styles.cell, { flex: 1 }]}>
             <Text style={styles.cellText}>
-              {SCULT_PHONE} · {SCULT_EMAIL}
+              {SITE.phone} · {SCULT_EMAIL}
             </Text>
             <Link src={SCULT_BOOKING_URL} style={{ marginTop: 3 }}>
               <Text
@@ -673,8 +672,8 @@ function ClosingCtaPage({ report }: { report: VisibilityReport }) {
         <Text style={styles.ctaButtonText}>Book a free AI readiness call</Text>
       </Link>
       <View style={styles.ctaContactRow}>
-        <Link src={`tel:${SCULT_PHONE}`}>
-          <Text style={styles.ctaContactText}>{SCULT_PHONE}</Text>
+        <Link src={`tel:${SITE.phoneTel}`}>
+          <Text style={styles.ctaContactText}>{SITE.phone}</Text>
         </Link>
         <Link src={`mailto:${SCULT_EMAIL}`}>
           <Text style={styles.ctaContactText}>{SCULT_EMAIL}</Text>
@@ -703,7 +702,8 @@ function FooterStrip() {
       <View>
         <Text style={styles.footerStripName}>Scult India</Text>
         <Text style={styles.footerStripSub}>
-          AI-first digital agency - Noida, Delhi NCR
+          AI-first digital agency - {SITE.address.street}, {SITE.address.locality}{' '}
+          {SITE.address.postalCode}
         </Text>
       </View>
       <View style={{ alignItems: 'flex-end' }}>

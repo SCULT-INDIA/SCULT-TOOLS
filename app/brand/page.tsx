@@ -143,8 +143,19 @@ export default function BrandPage() {
               </dd>
             </div>
             <div className="flex flex-wrap gap-x-2">
-              <dt className="font-medium text-ink">Location</dt>
-              <dd className="text-ink-muted">Noida, Delhi NCR, India</dd>
+              <dt className="font-medium text-ink">Address</dt>
+              <dd className="text-ink-muted">{SITE.addressLine}, India</dd>
+            </div>
+            <div className="flex flex-wrap gap-x-2">
+              <dt className="font-medium text-ink">Phone</dt>
+              <dd className="text-ink-muted">
+                <a
+                  href={`tel:${SITE.phoneTel}`}
+                  className="text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4 hover:text-violet-600"
+                >
+                  {SITE.phone}
+                </a>
+              </dd>
             </div>
             <div className="flex flex-wrap gap-x-2">
               <dt className="font-medium text-ink">Tools published</dt>
