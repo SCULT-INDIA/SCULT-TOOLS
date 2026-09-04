@@ -195,6 +195,70 @@ export function parseParentCtaHref(href: string, base: string): ParentCtaLink | 
   }
 }
 
+type Oaiq = { (...args: unknown[]): void; q?: unknown[] }
+
+/**
+ * Installs OpenAI's own Ads Measurement Pixel queueing shim and fires `init`
+ * the first time a conversion needs recording — byte-for-byte their vendor
+ * snippet (from Saksham Gupta's 2026-09-03 onboarding email), not a
+ * reimplementation, since a subtly different queue shape could silently
+ * drop every event the way `trackEvent` above documents for gtag.js.
+ *
+ * Deliberately NOT dependent on `DeferredAnalyticsScripts` having mounted
+ * yet, for the same reason `trackEvent` creates `dataLayer` itself rather
+ * than checking `window.gtag`: a conversion click that happens before the
+ * visitor has scrolled must not be lost just because the deferred
+ * `oaiq.min.js` script hasn't loaded. Once it does load, it drains
+ * `window.oaiq.q` itself — this only has to get the queue and the `init`
+ * call in place before that happens.
+ */
+function ensureOaiq(): void {
+  if (typeof window === 'undefined' || !SITE.openaiAdsPixelId) return
+  const w = window as unknown as { oaiq?: Oaiq }
+  if (w.oaiq) return
+  // Anonymous, not a named function expression: naming it `oaiq` would shadow
+  // the outer `const oaiq: Oaiq` with an inner binding typed only `() =>
+  // void`, losing the `.q` property TS needs to see below. The closure over
+  // the outer `oaiq` still works — it is only ever called after this
+  // assignment completes.
+  const oaiq: Oaiq = function () {
+    oaiq.q = oaiq.q || []
+    // biome-ignore lint/complexity/noArguments: OpenAI's own pixel shim queues Arguments objects verbatim — mirrored exactly from their onboarding snippet, not reimplemented.
+    oaiq.q.push(arguments)
+  }
+  w.oaiq = oaiq
+  oaiq('init', { pixelId: SITE.openaiAdsPixelId })
+}
+
+/**
+ * Reports the "book a meeting" click as a lead conversion to OpenAI Ads —
+ * the actual business goal Saksham's ad account needs to optimise toward.
+ * Scoped to that one destination (see `trackCtaClick` below) rather than
+ * every `parentLink()` click: firing this for plain scult.in navigation
+ * links too would inflate reported conversions and corrupt ad-spend
+ * optimisation toward an action nobody actually took.
+ *
+ * `event_id` is unique per click so a later server-side Conversions API
+ * event (recommended by OpenAI for the same conversion, not yet wired up —
+ * it needs a Conversions API key generated in Ads Manager first) can
+ * dedupe against this one instead of double-counting.
+ */
+function trackAdsConversion(campaign: string): void {
+  if (typeof window === 'undefined' || !SITE.openaiAdsPixelId) return
+  ensureOaiq()
+  const w = window as unknown as { oaiq?: Oaiq }
+  try {
+    w.oaiq?.(
+      'measure',
+      'lead',
+      { type: 'contents' },
+      { event_id: `${campaign}-${Date.now()}` },
+    )
+  } catch {
+    /* never let a tracking sink break the page */
+  }
+}
+
 /**
  * The conversion event. `parentLink()` in lib/site.ts exists so the CRM can
  * answer "which tool produced this client" — but UTM tags alone only tell
@@ -214,6 +278,11 @@ export function trackCtaClick(
   extra?: Record<string, string | number | boolean>,
 ): void {
   trackEvent('cta_click', { cta_location: campaign, ...extra })
+
+  const destination = extra?.destination
+  if (typeof destination === 'string' && destination.includes('#book-meeting')) {
+    trackAdsConversion(campaign)
+  }
 }
 
 /**

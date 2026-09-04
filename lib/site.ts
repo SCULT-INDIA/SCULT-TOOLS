@@ -47,6 +47,14 @@ export const SITE = {
    * sessions would pollute it.
    */
   studioSiteId: process.env.NEXT_PUBLIC_STUDIO_SITE ?? '',
+  /**
+   * OpenAI Ads (ChatGPT Ads) Measurement Pixel id — requested by Saksham
+   * Gupta (saksham@scult.in) on 2026-09-03 to measure ad-driven "book a
+   * meeting" conversions. Same env-gated pattern as `clarityId`/
+   * `studioSiteId`: empty outside production, so dev/preview traffic never
+   * reports fake conversions into a live ad account.
+   */
+  openaiAdsPixelId: process.env.NEXT_PUBLIC_OPENAI_ADS_PIXEL_ID ?? '',
   /** Injected at build time by next.config.ts — see the note there. */
   buildYear: process.env.NEXT_PUBLIC_BUILD_YEAR ?? '2026',
 } as const

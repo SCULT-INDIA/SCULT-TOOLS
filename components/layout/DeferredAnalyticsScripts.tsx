@@ -43,6 +43,13 @@ const FALLBACK_DELAY_MS = 4000
  * load and on every client-side route change internally; nothing else in
  * this app has to drive that.
  *
+ * OpenAI's Ads Measurement Pixel SDK (`oaiq.min.js`) is loaded here too,
+ * same deferred trigger — but unlike the three above it does nothing on its
+ * own until a conversion happens. `lib/analytics.ts`'s `trackCtaClick`
+ * queues the `init`/`measure` calls itself (defensively, without waiting
+ * for this component to mount), so this script tag's only job is to
+ * eventually drain that queue.
+ *
  * `isBot` gates ONLY the Studio script, never GA4/Clarity: both of those
  * already run their own always-on bot filtering server-side (Google's
  * "known bots and spiders" exclusion for GA4, Clarity's own equivalent) —
@@ -58,10 +65,12 @@ export function DeferredAnalyticsScripts({
   gaId,
   clarityId,
   studioSiteId,
+  openaiAdsPixelId,
 }: {
   gaId: string
   clarityId: string
   studioSiteId: string
+  openaiAdsPixelId: string
 }) {
   const [active, setActive] = useState(false)
   // Lazy initializer, not a bare call: this component still renders during
@@ -75,7 +84,7 @@ export function DeferredAnalyticsScripts({
   })
 
   useEffect(() => {
-    if (active || (!gaId && !clarityId && !studioSiteId)) return
+    if (active || (!gaId && !clarityId && !studioSiteId && !openaiAdsPixelId)) return
 
     function trigger() {
       setActive(true)
@@ -93,7 +102,7 @@ export function DeferredAnalyticsScripts({
       }
       window.clearTimeout(timer)
     }
-  }, [active, gaId, clarityId, studioSiteId])
+  }, [active, gaId, clarityId, studioSiteId, openaiAdsPixelId])
 
   if (!active) return null
 
@@ -123,6 +132,13 @@ gtag('js',new Date());gtag('config','${gaId}',{cookie_domain:'.scult.in'});`}
         <Script
           src="https://studio.scult.in/track.js"
           data-site={studioSiteId}
+          strategy="afterInteractive"
+        />
+      ) : null}
+
+      {openaiAdsPixelId ? (
+        <Script
+          src="https://bzrcdn.openai.com/sdk/oaiq.min.js"
           strategy="afterInteractive"
         />
       ) : null}

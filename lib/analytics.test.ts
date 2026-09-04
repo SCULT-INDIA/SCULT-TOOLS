@@ -1,5 +1,11 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { parseParentCtaHref, trackEvent, trackToolEvent } from './analytics'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import {
+  parseParentCtaHref,
+  trackCtaClick,
+  trackEvent,
+  trackToolEvent,
+} from './analytics'
+import { SITE } from './site'
 
 const BASE = 'https://tools.scult.in/dev/qr-code-generator'
 
@@ -199,5 +205,60 @@ describe('parseParentCtaHref', () => {
         BASE,
       )?.campaign,
     ).toBe('pricing')
+  })
+})
+
+type OaiqWin = Window & {
+  oaiq?: { (...args: unknown[]): void; q?: unknown[] }
+  dataLayer?: unknown[]
+}
+
+function oaiqWin(): OaiqWin {
+  return window as OaiqWin
+}
+
+describe('trackCtaClick — OpenAI Ads conversion mirror', () => {
+  // SITE is a plain object, not frozen at runtime (only `as const` at the
+  // type level), so tests can flip the pixel id the same way production
+  // flips it via the env var — on, then always restored to unset.
+  const original = SITE.openaiAdsPixelId
+
+  beforeEach(() => {
+    ;(SITE as { openaiAdsPixelId: string }).openaiAdsPixelId = 'test-pixel-id'
+    delete oaiqWin().oaiq
+    oaiqWin().dataLayer = []
+  })
+
+  afterEach(() => {
+    ;(SITE as { openaiAdsPixelId: string }).openaiAdsPixelId = original
+    delete oaiqWin().oaiq
+  })
+
+  it('reports a lead conversion when the destination is the booking CTA', () => {
+    trackCtaClick('qr-code-generator', { destination: '/#book-meeting' })
+
+    const queue = oaiqWin().oaiq?.q
+    expect(queue).toHaveLength(2) // init, then measure
+    const [initCall, measureCall] = queue as IArguments[]
+    expect(initCall?.[0]).toBe('init')
+    expect(initCall?.[1]).toEqual({ pixelId: 'test-pixel-id' })
+    expect(measureCall?.[0]).toBe('measure')
+    expect(measureCall?.[1]).toBe('lead')
+  })
+
+  it('does not report a conversion for a non-booking parentLink click', () => {
+    // Plain navigation to the parent homepage, or a footer service link —
+    // real trackCtaClick calls that are not the actual conversion action.
+    trackCtaClick('brand', { destination: '/' })
+
+    expect(oaiqWin().oaiq).toBeUndefined()
+  })
+
+  it('stays a no-op with no pixel id configured (dev/preview)', () => {
+    ;(SITE as { openaiAdsPixelId: string }).openaiAdsPixelId = ''
+
+    trackCtaClick('qr-code-generator', { destination: '/#book-meeting' })
+
+    expect(oaiqWin().oaiq).toBeUndefined()
   })
 })

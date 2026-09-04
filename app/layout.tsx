@@ -260,6 +260,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           gaId={SITE.gaId}
           clarityId={SITE.clarityId}
           studioSiteId={SITE.studioSiteId}
+          openaiAdsPixelId={SITE.openaiAdsPixelId}
         />
       </body>
     </html>

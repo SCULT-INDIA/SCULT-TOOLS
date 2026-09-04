@@ -86,6 +86,13 @@ const nextConfig: NextConfig = {
      *   va.vercel-scripts.com — @vercel/analytics dev/preview script
      *   uneed.best / cdn-b.saashub.com — directory badges (next/image remotes)
      *   api.github.com — the header's star-count fetch
+     *   bzrcdn.openai.com / bzr.openai.com — OpenAI Ads Measurement Pixel
+     *     (DeferredAnalyticsScripts + lib/analytics.ts's trackCtaClick).
+     *     bzrcdn hosts the SDK script; bzr is inferred as the client-side
+     *     event-beacon host from the same domain pair OpenAI's own
+     *     onboarding email uses for its server-side Conversions API
+     *     (bzr.openai.com/v1/events) — verify against OpenAI's docs if a
+     *     conversion silently fails to register.
      * Adding a new third-party script means adding its origin here, or the
      * browser will (correctly) refuse to load it.
      */
@@ -95,13 +102,13 @@ const nextConfig: NextConfig = {
     const scriptEval = process.env.NODE_ENV === 'development' ? " 'unsafe-eval'" : ''
     const csp = [
       "default-src 'self'",
-      `script-src 'self' 'unsafe-inline'${scriptEval} https://www.googletagmanager.com https://www.clarity.ms https://scripts.clarity.ms https://studio.scult.in https://b.sf-syn.com https://va.vercel-scripts.com`,
+      `script-src 'self' 'unsafe-inline'${scriptEval} https://www.googletagmanager.com https://www.clarity.ms https://scripts.clarity.ms https://studio.scult.in https://b.sf-syn.com https://va.vercel-scripts.com https://bzrcdn.openai.com`,
       "style-src 'self' 'unsafe-inline'",
       // avatars.githubusercontent.com: every Skills Library card/detail
       // shows the publishing GitHub owner's real avatar as the skill's logo.
       "img-src 'self' data: blob: https://www.uneed.best https://cdn-b.saashub.com https://avatars.githubusercontent.com https://*.clarity.ms https://*.google-analytics.com https://www.googletagmanager.com https://a.fsdn.com https://sourceforge.net https://b.sf-syn.com",
       "font-src 'self'",
-      "connect-src 'self' https://*.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.clarity.ms https://studio.scult.in https://api.github.com",
+      "connect-src 'self' https://*.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.clarity.ms https://studio.scult.in https://api.github.com https://bzrcdn.openai.com https://bzr.openai.com",
       'frame-src https://sourceforge.net https://b.sf-syn.com',
       "object-src 'none'",
       "base-uri 'self'",
