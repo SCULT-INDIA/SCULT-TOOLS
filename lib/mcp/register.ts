@@ -839,7 +839,7 @@ export function registerTools(server: McpServer): void {
     {
       title: 'Search Prompt Library',
       description:
-        'Search the 1,170-prompt library by keyword across title, description, tags and the prompt template body itself. Returns compact matches (slug, title, description, category) — call get_prompt for the full template.',
+        'Search the 1,170-prompt library by keyword across title, description, tags and the prompt template body itself. Returns compact matches (slug, title, description, category) — call get_prompt for the full template. The `category` filter only accepts real category slugs (e.g. "development", "marketing", "claude-code") — call list_prompt_categories first rather than guessing one; an invalid value errors instead of silently matching nothing.',
       annotations: PURE,
       inputSchema: {
         query: z.string().max(200),
@@ -888,7 +888,7 @@ export function registerTools(server: McpServer): void {
     {
       title: 'Get Prompt',
       description:
-        'Fetch one prompt in full, including its template text, variables, and why it works.',
+        'Fetch one prompt in full, including its template text, variables, and why it works. Slugs come from search_prompts — do not guess one.',
       annotations: PURE,
       inputSchema: { slug: z.string().max(200) },
     },
@@ -932,7 +932,7 @@ export function registerTools(server: McpServer): void {
     {
       title: 'Search Skills Library',
       description:
-        'Search the Skills Library (real AI agent skills synced from skills.sh) by keyword across name and description, optionally scoped to a category. Returns compact matches — call get_skill for the full skill body.',
+        'Search the Skills Library (real AI agent skills synced from skills.sh) by keyword across name and description, optionally scoped to a category. Returns compact matches — call get_skill for the full skill body. The `category` filter only accepts real category slugs (e.g. "testing", "security", "frontend-frameworks") — call list_skill_categories first rather than guessing one; an invalid value errors instead of silently matching nothing.',
       annotations: PURE,
       inputSchema: {
         query: z.string().max(100),
@@ -969,7 +969,7 @@ export function registerTools(server: McpServer): void {
     {
       title: 'Get Skill',
       description:
-        'Fetch one skill in full. When its source license is not confirmed to permit redistribution, the body is withheld and a GitHub source link is returned instead — same rule the website itself enforces before showing a skill body.',
+        'Fetch one skill in full. When its source license is not confirmed to permit redistribution, the body is withheld and a GitHub source link is returned instead — same rule the website itself enforces before showing a skill body. Both `category` and `slug` come from search_skills or list_skill_categories — do not guess either.',
       annotations: PURE,
       inputSchema: { category: z.string().max(100), slug: z.string().max(200) },
     },
@@ -1050,7 +1050,8 @@ export function registerTools(server: McpServer): void {
     'get_guide',
     {
       title: 'Get Guide',
-      description: 'Fetch one guide in full: every section, and the tools it links to.',
+      description:
+        'Fetch one guide in full: every section, and the tools it links to. There are only a few guides today — call list_guides first for the real slugs rather than guessing a topic that may not have one.',
       annotations: PURE,
       inputSchema: { slug: z.string().max(200) },
     },
@@ -1117,7 +1118,7 @@ export function registerTools(server: McpServer): void {
     {
       title: 'Get Blog Post',
       description:
-        'Fetch one blog post in full: every section, FAQ, sources, and related tools/prompts.',
+        'Fetch one blog post in full: every section, FAQ, sources, and related tools/prompts. Slugs come from search_blog — do not guess one.',
       annotations: PURE,
       inputSchema: { slug: z.string().max(200) },
     },

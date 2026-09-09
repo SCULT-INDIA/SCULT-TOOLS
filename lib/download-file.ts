@@ -12,8 +12,22 @@ export function downloadTextFile(
   content: string,
   mimeType = 'text/markdown;charset=utf-8',
 ): void {
+  downloadBlob(filename, new Blob([content], { type: mimeType }))
+}
+
+/** Same mechanism as `downloadTextFile`, for binary content (a generated
+ * .zip) — the Blob constructor accepts a `BlobPart`, so a `Uint8Array` works
+ * identically to a string, just with a binary MIME type. */
+export function downloadBinaryFile(
+  filename: string,
+  bytes: Uint8Array<ArrayBuffer>,
+  mimeType: string,
+): void {
+  downloadBlob(filename, new Blob([bytes], { type: mimeType }))
+}
+
+function downloadBlob(filename: string, blob: Blob): void {
   try {
-    const blob = new Blob([content], { type: mimeType })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url

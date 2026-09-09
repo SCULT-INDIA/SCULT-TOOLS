@@ -1,14 +1,18 @@
 'use client'
 
-import { Check, Copy } from 'lucide-react'
+import { Check, Copy, Download } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { TrackedLink } from '@/components/ui/TrackedLink'
 import { trackSkillEvent } from '@/lib/analytics'
+import { downloadBinaryFile } from '@/lib/download-file'
 import {
+  buildInstallMd,
   exportSkillAs,
   SKILL_EXPORT_FORMATS,
   type SkillExportFormat,
 } from '@/lib/skills/export'
 import type { Skill } from '@/lib/skills/types'
+import { createZip } from '@/lib/skills/zip'
 
 /**
  * The skill's real content, styled as the same dark editor card
@@ -43,6 +47,24 @@ export function SkillCopyBlock({
     }
   }
 
+  /**
+   * The real "Skill Page → Download ZIP → Install/Use" flow. The skill's
+   * own sync only ever stores one file (SKILL.md's body — see the `Skill`
+   * type's docblock), so a multi-file package would have to invent
+   * structure that doesn't exist; instead the ZIP bundles the real
+   * `SKILL.md` alongside a genuinely useful `INSTALL.md` this site
+   * generates (real installation mechanics, not fabricated per-skill
+   * content — see `buildInstallMd`'s own docblock).
+   */
+  function handleDownloadZip() {
+    const zip = createZip([
+      { name: 'SKILL.md', content: exportSkillAs(skill, 'skill-md') },
+      { name: 'INSTALL.md', content: buildInstallMd(skill) },
+    ])
+    downloadBinaryFile(`${skill.slug}.zip`, zip, 'application/zip')
+    trackSkillEvent(skill.category, skill.slug, 'download_zip')
+  }
+
   if (licenseGated) {
     return (
       <div className="rounded-panel border border-ink bg-offwhite p-6 text-center">
@@ -50,14 +72,20 @@ export function SkillCopyBlock({
           This skill's source license couldn't be confirmed as safe to mirror here, so it
           isn't inlined. View the full skill directly on its source repository.
         </p>
-        <a
+        <TrackedLink
           href={skill.sourceUrl}
-          target="_blank"
-          rel="noopener noreferrer"
+          external
+          event="skill_action"
+          params={{
+            category: skill.category,
+            skill: skill.slug,
+            action: 'open_repository',
+            context: 'license-gated',
+          }}
           className="mt-4 inline-flex items-center gap-1.5 rounded-pill border border-ink bg-cta px-5 py-2 font-medium text-[14px] text-black shadow-[3px_3px_0_0_#000] transition-all duration-150 hover:translate-x-[3px] hover:translate-y-[3px] hover:bg-white hover:shadow-none"
         >
           View on GitHub
-        </a>
+        </TrackedLink>
       </div>
     )
   }
@@ -88,7 +116,7 @@ export function SkillCopyBlock({
       </div>
 
       <div className="overflow-hidden rounded-panel border border-ink shadow-brutal-sm">
-        <div className="flex items-center justify-between gap-3 border-[#2c2743] border-b bg-[#191527] px-4 py-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-[#2c2743] border-b bg-[#191527] px-4 py-2.5">
           <span className="flex items-center gap-2" aria-hidden="true">
             <span className="size-2.5 rounded-full bg-[#ff5f57]" />
             <span className="size-2.5 rounded-full bg-cta" />
@@ -97,18 +125,32 @@ export function SkillCopyBlock({
               {activeFormat?.filename}
             </span>
           </span>
-          <button
-            type="button"
-            onClick={handleCopy}
-            className="flex min-h-[36px] items-center gap-1.5 rounded-pill border border-ink bg-cta px-4 py-1 font-medium text-[13px] text-black shadow-[3px_3px_0_0_#000] transition-all duration-150 hover:translate-x-[3px] hover:translate-y-[3px] hover:bg-white hover:shadow-none"
-          >
-            {copied ? (
-              <Check className="size-3.5" aria-hidden="true" />
-            ) : (
-              <Copy className="size-3.5" aria-hidden="true" />
-            )}
-            {copied ? 'Copied!' : `Copy ${activeFormat?.label}`}
-          </button>
+          <div className="flex items-center gap-2">
+            {/* Real "Skill Page → Download ZIP → Install/Use" flow — a
+                genuine .zip (SKILL.md + a generated INSTALL.md), not a
+                relabelled copy button. Quiet outline so Copy stays the
+                primary action for the common case. */}
+            <button
+              type="button"
+              onClick={handleDownloadZip}
+              className="flex min-h-[36px] items-center gap-1.5 rounded-pill border border-white/25 px-3.5 py-1 font-medium text-[13px] text-white/80 transition-colors hover:border-white/50 hover:text-white"
+            >
+              <Download className="size-3.5" aria-hidden="true" />
+              Download ZIP
+            </button>
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="flex min-h-[36px] items-center gap-1.5 rounded-pill border border-ink bg-cta px-4 py-1 font-medium text-[13px] text-black shadow-[3px_3px_0_0_#000] transition-all duration-150 hover:translate-x-[3px] hover:translate-y-[3px] hover:bg-white hover:shadow-none"
+            >
+              {copied ? (
+                <Check className="size-3.5" aria-hidden="true" />
+              ) : (
+                <Copy className="size-3.5" aria-hidden="true" />
+              )}
+              {copied ? 'Copied!' : `Copy ${activeFormat?.label}`}
+            </button>
+          </div>
         </div>
 
         <pre className="max-h-[34rem] overflow-auto whitespace-pre-wrap bg-[#131020] p-6 font-mono text-[14px] text-[#e8e5f5] leading-[1.8]">

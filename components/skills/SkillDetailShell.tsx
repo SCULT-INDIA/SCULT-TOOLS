@@ -3,8 +3,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { SkillCard } from '@/components/skills/SkillCard'
 import { SkillCopyBlock } from '@/components/skills/SkillCopyBlock'
+import { SkillViewTracker } from '@/components/skills/SkillViewTracker'
 import { BrandIcon, brandForTag } from '@/components/ui/BrandIcon'
 import { Icon } from '@/components/ui/Icon'
+import { TrackedLink } from '@/components/ui/TrackedLink'
 import type { Skill, SkillCategory } from '@/lib/skills/types'
 import { getTool } from '@/lib/tools/registry'
 
@@ -44,6 +46,7 @@ export function SkillDetailShell({
 
   return (
     <article className="container-site max-w-[50rem] pt-8 pb-24">
+      <SkillViewTracker category={skill.category} slug={skill.slug} />
       <nav aria-label="Breadcrumb" className="mb-8">
         <ol className="flex flex-wrap items-center gap-2 text-[13px] text-ink-subtle">
           <li>
@@ -103,16 +106,21 @@ export function SkillDetailShell({
         </p>
 
         <div className="mt-6 flex flex-wrap items-center gap-2">
-          <a
+          <TrackedLink
             href={skill.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+            external
+            event="skill_action"
+            params={{
+              category: skill.category,
+              skill: skill.slug,
+              action: 'open_repository',
+            }}
             className="flex items-center gap-1.5 rounded-full border border-line-grey bg-white px-3 py-1.5 font-medium text-[13px] text-ink-body transition-colors hover:border-violet-300 hover:text-violet-700"
           >
             <BrandIcon brand="github" size={13} />
             {skill.sourceOwner}/{skill.sourceRepo}
             <ArrowUpRight className="size-3" aria-hidden="true" />
-          </a>
+          </TrackedLink>
           <span className="flex items-center gap-1.5 rounded-full bg-offwhite px-3 py-1.5 font-medium text-[13px] text-ink-muted">
             <Download className="size-3.5" aria-hidden="true" />
             {formatInstalls(skill.installs)} installs

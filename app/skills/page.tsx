@@ -1,8 +1,8 @@
 import { ArrowUpRight, RefreshCw } from 'lucide-react'
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { SkillCard } from '@/components/skills/SkillCard'
 import { Icon } from '@/components/ui/Icon'
+import { TrackedLink } from '@/components/ui/TrackedLink'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { SKILL_CATEGORIES } from '@/lib/skills/categories'
 import {
@@ -143,13 +143,15 @@ export default async function SkillsPage() {
                 {count.toLocaleString()} skills
               </span>
             </h2>
-            <Link
+            <TrackedLink
               href={`/skills/${category.slug}`}
+              event="category_selected"
+              params={{ section: 'skills', category: category.slug }}
               className="flex items-center gap-1 font-medium text-[15px] text-violet-700 underline decoration-1 underline-offset-4 hover:text-violet-600"
             >
               All {category.name} skills
               <ArrowUpRight className="size-4" aria-hidden="true" />
-            </Link>
+            </TrackedLink>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {previewByCategory[i]?.map((skill) => (
