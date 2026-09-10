@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { FeedbackButton } from '@/components/tools/FeedbackButton'
 import { BookmarkButton } from '@/components/ui/BookmarkButton'
 import { RequestButton } from '@/components/ui/RequestButton'
+import { TrackedLink } from '@/components/ui/TrackedLink'
+import { ViewTracker } from '@/components/ui/ViewTracker'
 import { formatUpdatedDate } from '@/lib/site'
 import { getCategory } from '@/lib/tools/categories'
 import type { Tool } from '@/lib/tools/types'
@@ -29,6 +31,10 @@ export function ToolShell({ tool, children }: { tool: Tool; children: React.Reac
 
   return (
     <article className="container-site pt-5 pb-16">
+      <ViewTracker
+        event="tool_action"
+        params={{ tool_name: tool.slug, action: 'view' }}
+      />
       <div className="mx-auto max-w-[60rem] text-center">
         {/* 1. Breadcrumb — kept for orientation and its BreadcrumbList
                JSON-LD. */}
@@ -100,13 +106,15 @@ export function ToolShell({ tool, children }: { tool: Tool; children: React.Reac
             {tool.tagline}
           </p>
           <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
-            <Link
+            <TrackedLink
               href={`/${tool.category}/${tool.slug}/how-it-works`}
+              event="tool_action"
+              params={{ tool_name: tool.slug, action: 'documentation_opened' }}
               className="inline-flex items-center gap-1 font-medium text-[14px] text-violet-700 hover:underline"
             >
               How it works
               <ArrowRight className="size-3.5" aria-hidden="true" />
-            </Link>
+            </TrackedLink>
             {/* Same small text-link treatment as "How it works" beside it —
                 a secondary path, not a second CTA competing with the tool
                 itself below. Defaults to a tool request (this page's own

@@ -13,6 +13,7 @@ import { BrandIcon, brandForTool, categoryBrand } from '@/components/ui/BrandIco
 import { Icon } from '@/components/ui/Icon'
 import { PromptCard } from '@/components/ui/PromptCard'
 import { RequestButton } from '@/components/ui/RequestButton'
+import { ViewTracker } from '@/components/ui/ViewTracker'
 import { getPromptsByCategory } from '@/lib/prompts/registry'
 import type { Prompt, PromptCategory } from '@/lib/prompts/types'
 import { getTool } from '@/lib/tools/registry'
@@ -76,6 +77,10 @@ export function PromptDetailShell({
     // (verified previously) and below the "How to use" / "Request a prompt"
     // dialogs' z-70.
     <article className="container-site relative z-[45] max-w-[50rem] pt-8 pb-20">
+      <ViewTracker
+        event="prompt_action"
+        params={{ category: prompt.category, prompt: prompt.slug, action: 'view' }}
+      />
       <nav aria-label="Breadcrumb" className="mb-5">
         <ol className="flex flex-wrap items-center gap-2 text-[13px] text-ink-subtle">
           <li>
