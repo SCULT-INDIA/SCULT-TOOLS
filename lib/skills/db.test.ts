@@ -24,6 +24,11 @@ let table: { slug: string; category: string; last_synced_at: string }[] = []
 let requestedRanges: [number, number][] = []
 /** Set to a row index to make the page starting there fail. */
 let failFrom: number | null = null
+/** How many times the page at `failFrom` fails before succeeding.
+ * `Infinity` means it never recovers. */
+let failTimes = Number.POSITIVE_INFINITY
+/** Attempts actually made against `failFrom`, to prove retries happened. */
+let failAttempts = 0
 
 const POSTGREST_CAP = 1_000
 
@@ -35,10 +40,13 @@ vi.mock('./supabase', () => ({
           range: (from: number, to: number) => {
             requestedRanges.push([from, to])
             if (failFrom !== null && from === failFrom) {
-              return Promise.resolve({
-                data: null,
-                error: { message: 'simulated PostgREST failure' },
-              })
+              failAttempts++
+              if (failAttempts <= failTimes) {
+                return Promise.resolve({
+                  data: null,
+                  error: { message: 'simulated PostgREST failure' },
+                })
+              }
             }
             // The cap: never return more than 1,000 rows, whatever was asked.
             const end = Math.min(to + 1, from + POSTGREST_CAP)
@@ -64,6 +72,8 @@ beforeEach(() => {
   table = []
   requestedRanges = []
   failFrom = null
+  failTimes = Number.POSITIVE_INFINITY
+  failAttempts = 0
 })
 
 describe('getAllSkillRefs', () => {
@@ -116,12 +126,33 @@ describe('getAllSkillRefs', () => {
     ])
   })
 
-  it('keeps the rows it already gathered when a later page errors', async () => {
+  /**
+   * These three encode the lesson from the production incident: shard 2's
+   * only page came back empty during the build, the old code returned the
+   * 0 rows it had gathered, and that empty `<urlset>` was prerendered into a
+   * static file — dropping 456 skills from the live sitemap for the whole
+   * deploy, with a 200 and no error to notice. A prerendered partial read is
+   * permanent, so it must fail loudly instead.
+   */
+  it('retries a transient page failure instead of truncating', async () => {
+    table = rows(3_000)
+    failFrom = 1_000
+    failTimes = 2 // fails twice, succeeds on the third attempt
+    const refs = await getAllSkillRefs(0, 3_000)
+    expect(refs.length).toBe(3_000)
+    expect(failAttempts).toBe(3)
+  })
+
+  it('throws rather than returning a partial list when a page keeps failing', async () => {
+    table = rows(5_000)
+    failFrom = 2_000 // never recovers
+    await expect(getAllSkillRefs(0, 5_000)).rejects.toThrow(/rows 2000-2999 failed/)
+  })
+
+  it('names the shortfall in the error, so a failed build says what was lost', async () => {
     table = rows(5_000)
     failFrom = 2_000
-    // Partial beats empty for a sitemap: a missing tail is picked up on the
-    // next crawl, an empty <urlset> de-lists the whole library.
-    expect((await getAllSkillRefs(0, 5_000)).length).toBe(2_000)
+    await expect(getAllSkillRefs(0, 5_000)).rejects.toThrow(/2000 of 5000 gathered/)
   })
 
   it('issues no query at all for an empty request', async () => {

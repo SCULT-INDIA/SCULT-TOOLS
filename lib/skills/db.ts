@@ -305,7 +305,26 @@ const POSTGREST_MAX_ROWS = 1_000
  * the row count is deliberately not read from `skills_sync_meta` first,
  * since that would trust a cached counter to decide when to stop reading
  * the rows themselves.
+ *
+ * THROWS rather than returning what it managed to gather, and that is the
+ * important part. The first version of this logged the error and returned
+ * the partial list, reasoning that a sitemap missing its tail beats an empty
+ * one. That reasoning is wrong here: these shards are PRERENDERED, so a
+ * partial read is frozen into a static file and served for the entire life
+ * of the deploy, undetectably. Production shipped exactly that — shard 2's
+ * single page came back empty during the build and 456 skills silently
+ * vanished from the live sitemap while every other shard looked perfect.
+ * A throw fails the build, which is loud, immediate and recoverable; a
+ * quietly truncated sitemap is none of those. Same lesson as the bug this
+ * whole function was rewritten for.
  */
+
+/** Per-page attempts before `getAllSkillRefs` gives up and fails the build.
+ * A build issues thousands of Supabase requests, so a single transient
+ * refusal is realistic — and with prerendering, one unretried failure is
+ * permanent for the deploy. */
+const PAGE_ATTEMPTS = 3
+
 export async function getAllSkillRefs(
   offset: number,
   limit: number,
@@ -316,26 +335,41 @@ export async function getAllSkillRefs(
   while (refs.length < limit) {
     const from = offset + refs.length
     const pageSize = Math.min(POSTGREST_MAX_ROWS, limit - refs.length)
-    const { data, error } = await supabaseSkills
-      .from('skills')
-      .select('slug, category, last_synced_at')
-      .order('id', { ascending: true })
-      .range(from, from + pageSize - 1)
-    if (error) {
-      // Unlike the rest of this file, return the rows already gathered
-      // rather than []: a sitemap missing its tail is recoverable on the
-      // next crawl, an empty one de-lists everything. The count is logged
-      // so a partial run is still diagnosable.
-      console.error(
-        `getAllSkillRefs failed at row ${from} (${refs.length} gathered)`,
-        error,
-      )
-      break
+    let page: { slug: string; category: string; last_synced_at: string }[] | null = null
+    let lastError: unknown = null
+
+    for (let attempt = 1; attempt <= PAGE_ATTEMPTS && page === null; attempt++) {
+      const { data, error } = await supabaseSkills
+        .from('skills')
+        .select('slug, category, last_synced_at')
+        .order('id', { ascending: true })
+        .range(from, from + pageSize - 1)
+      if (error) {
+        lastError = error
+        console.error(
+          `getAllSkillRefs: rows ${from}-${from + pageSize - 1} failed (attempt ${attempt}/${PAGE_ATTEMPTS})`,
+          error,
+        )
+        // Linear backoff — no jitter, because Math.random() is banned in
+        // this codebase's render path and a fixed delay is enough here.
+        if (attempt < PAGE_ATTEMPTS) {
+          await new Promise((resolve) => setTimeout(resolve, attempt * 500))
+        }
+        continue
+      }
+      page = data
     }
-    for (const r of data) {
+
+    if (page === null) {
+      throw new Error(
+        `getAllSkillRefs: rows ${from}-${from + pageSize - 1} failed after ${PAGE_ATTEMPTS} attempts (${refs.length} of ${limit} gathered): ${String(lastError)}`,
+      )
+    }
+
+    for (const r of page) {
       refs.push({ slug: r.slug, category: r.category, lastSyncedAt: r.last_synced_at })
     }
-    if (data.length < pageSize) break
+    if (page.length < pageSize) break
   }
   return refs
 }

@@ -313,8 +313,36 @@ async function siteSitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 }
 
+/**
+ * One skills shard, with a completeness guard.
+ *
+ * `generateSitemaps()` only creates a shard because the sync counter says
+ * there are rows for it to hold, so a shard that comes back with NO rows is
+ * a contradiction, not a legitimate empty result — and because these shards
+ * are prerendered, an empty one is frozen into a static file for the whole
+ * deploy. That is not hypothetical: production served `/sitemap/2.xml` as an
+ * empty `<urlset>` while shards 0 and 1 were perfect, quietly dropping the
+ * last 456 skills from the live sitemap with a 200 and no error anywhere.
+ *
+ * Throwing here fails the build instead, which is loud and recoverable.
+ * The check is deliberately narrow — zero rows where the counter implies
+ * some — so that a `skills_sync_meta` counter that is merely a little stale
+ * (456 expected, 400 returned, because the sync worker is mid-run) does not
+ * fail a deploy. Only the unambiguous case does.
+ */
 async function skillsShardSitemap(shardIndex: number): Promise<MetadataRoute.Sitemap> {
-  const refs = await getAllSkillRefs(shardIndex * SKILLS_PER_SHARD, SKILLS_PER_SHARD)
+  const offset = shardIndex * SKILLS_PER_SHARD
+  const refs = await getAllSkillRefs(offset, SKILLS_PER_SHARD)
+
+  const { totalSkills } = await getSyncMeta()
+  if (refs.length === 0 && totalSkills > offset) {
+    throw new Error(
+      `sitemap shard ${shardIndex + 1} (skills from row ${offset}) returned no rows, ` +
+        `but skills_sync_meta reports ${totalSkills} skills — refusing to prerender an ` +
+        `empty urlset that would silently drop ${totalSkills - offset} URLs.`,
+    )
+  }
+
   return refs.map((ref) => ({
     url: absoluteUrl(`/skills/${ref.category}/${ref.slug}`),
     lastModified: ref.lastSyncedAt,

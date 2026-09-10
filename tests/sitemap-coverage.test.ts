@@ -1,5 +1,5 @@
 import { readdirSync } from 'node:fs'
-import { join, sep } from 'node:path'
+import { join } from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
 
 /**
@@ -48,7 +48,9 @@ vi.mock('@/lib/skills/db', async () => {
     getAllCategoryCounts: async () =>
       Object.fromEntries(SKILL_CATEGORIES.map((c) => [c.slug, 1])),
     getAllSkillRefs: async () => [],
-    getSyncMeta: async () => ({ totalSkills: 0, lastSyncedAt: '2026-09-01' }),
+    // A spy, so the empty-shard guard test can make the counter disagree
+    // with the (empty) rows for one call.
+    getSyncMeta: vi.fn(async () => ({ totalSkills: 0, lastSyncedAt: '2026-09-01' })),
     getTotalSkillCount: async () => 0,
   }
 })
@@ -101,7 +103,19 @@ describe('sitemap route coverage', () => {
     expect(routes).toContain('/')
     expect(routes).toContain('/mcp')
     expect(routes).toContain('/skills')
-    expect(routes.every((r) => !r.includes(sep))).toBe(true)
+    // Every entry must be a URL pathname, not a filesystem path: the walker
+    // gets its directories from `join()` but builds prefixes by string
+    // concatenation, and a refactor that used `join()` for the prefix too
+    // would leak Windows backslashes into these URLs.
+    //
+    // Tested as a literal backslash rather than `path.sep`, which is what
+    // this line used to do and why it passed on Windows and failed on Linux
+    // CI: `sep` is '\\' on Windows (absent from every URL, so vacuously
+    // true) but '/' on POSIX — where every route legitimately contains one,
+    // so the assertion inverted itself by platform. A backslash is never
+    // valid in a URL path on either OS.
+    expect(routes.filter((r) => r.includes('\\'))).toEqual([])
+    expect(routes.every((r) => r.startsWith('/'))).toBe(true)
     expect(routes.length).toBeGreaterThan(15)
   })
 
@@ -126,10 +140,32 @@ describe('sitemap route coverage', () => {
   })
 
   it('routes a promised string shard id to skills, not the site sitemap', async () => {
-    // Shard 1 is the first skills shard. With skills mocked empty it must
-    // come back empty — crucially NOT the site sitemap, which would mean
-    // every skills shard duplicated all the site URLs.
+    // Shard 1 is the first skills shard. With skills mocked empty (and
+    // `totalSkills` 0, so no rows are expected) it must come back empty —
+    // crucially NOT the site sitemap, which would mean every skills shard
+    // duplicated all the site URLs.
     expect(await sitemap({ id: Promise.resolve('1') })).toEqual([])
+  })
+
+  /**
+   * The production incident: `/sitemap/2.xml` prerendered as an empty
+   * `<urlset>` while shards 0 and 1 were perfect, silently dropping the last
+   * 456 skills for the life of the deploy. A shard only exists because the
+   * sync counter says it has rows, so zero rows is a contradiction — and a
+   * prerendered contradiction is permanent. It must fail the build instead.
+   */
+  it('refuses to prerender a skills shard that came back empty but should not have', async () => {
+    const { getSyncMeta } = await import('@/lib/skills/db')
+    // Counter says 50,456 skills, so shard 2 (rows from 50,000) must hold
+    // 456 — but getAllSkillRefs is mocked empty: exactly the shape of the
+    // production failure. `Once` so every other test keeps the 0 default.
+    vi.mocked(getSyncMeta).mockResolvedValueOnce({
+      totalSkills: 50_456,
+      lastSyncedAt: '2026-09-03',
+    })
+    await expect(sitemap({ id: Promise.resolve('2') })).rejects.toThrow(
+      /returned no rows.*refusing to prerender an empty urlset/s,
+    )
   })
 
   it('falls back to the site sitemap for a nonsense shard id', async () => {
