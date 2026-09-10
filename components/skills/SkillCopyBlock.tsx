@@ -115,6 +115,13 @@ export function SkillCopyBlock({
         ))}
       </div>
 
+      {/* What the selected shape is actually for. The picker used to offer
+          four tabs whose output was near-identical, so naming each one's
+          purpose is half of what stops them reading as duplicates. */}
+      {activeFormat ? (
+        <p className="mb-3 text-[13px] text-ink-muted">{activeFormat.note}</p>
+      ) : null}
+
       <div className="overflow-hidden rounded-panel border border-ink shadow-brutal-sm">
         <div className="flex flex-wrap items-center justify-between gap-3 border-[#2c2743] border-b bg-[#191527] px-4 py-2.5">
           <span className="flex items-center gap-2" aria-hidden="true">

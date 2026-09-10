@@ -1,4 +1,5 @@
 import { cacheLife } from 'next/cache'
+import { resolveSkillDescription } from './description'
 import { supabaseSkills } from './supabase'
 import type { Skill, SkillCategorySlug } from './types'
 
@@ -24,7 +25,20 @@ function rowToSkill(row: any): Skill {
     slug: row.slug,
     category: row.category,
     name: row.name,
-    description: row.description,
+    // Repaired here, at the single boundary every consumer reads through,
+    // because 19.9% of rows store only a YAML block-scalar indicator (`>`,
+    // `|`, `>-`) where the description should be — see ./description.ts.
+    // Doing it here is what fixes the detail page, every listing card, the
+    // meta tags, the CLI and MCP payloads and all four Markdown exports at
+    // once; the rows themselves are only writable by the sync worker, which
+    // is a separate project holding the sole service-role key.
+    description: resolveSkillDescription(
+      row.description ?? '',
+      row.body ?? '',
+      row.name,
+      row.source_owner,
+      row.source_repo,
+    ),
     body: row.body,
     tags: row.tags ?? [],
     license: row.license ?? undefined,
