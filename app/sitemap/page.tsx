@@ -33,20 +33,29 @@ export const metadata: Metadata = {
 const LINK_CLASS =
   'text-[var(--color-violet-accent-text,var(--color-violet-700))] underline decoration-1 underline-offset-4 hover:text-violet-600'
 
-/** Static trust/reference pages — the same list `lib/seo/llms.ts` and Footer.tsx maintain by hand. */
+/** Static trust/reference pages — the same list `lib/seo/llms.ts` and
+ * Footer.tsx maintain by hand. All four hand-maintained copies (those two,
+ * this one, and `app/sitemap.ts`'s STATIC_PAGES) had silently drifted apart:
+ * `/mcp`, `/pricing` and `/compliance` each existed in some lists and not
+ * others. `tests/sitemap-coverage.test.ts` now asserts the XML sitemap
+ * covers every real route — static and registry-driven, in both directions —
+ * which is what stops that drift recurring unnoticed. */
 const TRUST_PAGES: readonly { href: string; label: string }[] = [
   { href: '/about', label: 'About' },
   { href: '/privacy', label: 'Privacy' },
   { href: '/terms', label: 'Terms of Service' },
   { href: '/faq', label: 'FAQ' },
+  { href: '/pricing', label: 'Pricing' },
   { href: '/contact', label: 'Contact' },
   { href: '/security', label: 'Security' },
+  { href: '/compliance', label: 'Compliance' },
   { href: '/accessibility', label: 'Accessibility' },
   { href: '/changelog', label: 'Changelog' },
   { href: '/roadmap', label: 'Roadmap' },
   { href: '/brand', label: 'Brand & Press Kit' },
   { href: '/glossary', label: 'SEO, GEO & AEO Glossary' },
   { href: '/collections', label: 'Tool Collections' },
+  { href: '/mcp', label: 'MCP Server' },
 ]
 
 const STATIC_MACHINE_PAGES: readonly { href: string; label: string; note: string }[] = [

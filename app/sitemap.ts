@@ -41,6 +41,12 @@ const STATIC_PAGES: readonly {
     changeFrequency: 'monthly',
     priority: 0.7,
   },
+  // The MCP server's own landing page. A real product surface (it documents
+  // the public Streamable HTTP endpoint every agent connects to), so it
+  // carries a catalogue-level priority rather than a trust-page one — it was
+  // missing from this list entirely until the route-coverage test below
+  // caught it, despite already being linked from the footer and llms.txt.
+  { path: '/mcp', lastModified: '2026-08-24', changeFrequency: 'monthly', priority: 0.8 },
   {
     path: '/glossary',
     lastModified: '2026-08-09',
@@ -150,10 +156,55 @@ function promptLastModified(prompt: Prompt): string {
  * else on the site fits one (id 0) many times over. */
 export const SKILLS_PER_SHARD = 50_000
 
-export async function generateSitemaps() {
-  const { totalSkills } = await getSyncMeta()
+/**
+ * Every shard this sitemap serves, with the newest `lastModified` each one
+ * contains. The single source of truth for "how many sitemap files exist":
+ * `generateSitemaps()` below, `app/sitemap-index.xml/route.ts`'s index, and
+ * `app/robots.ts` all derive from this, because the shard count used to be
+ * recomputed from `totalSkills` in each of those places independently — and
+ * three copies of `Math.ceil(totalSkills / SKILLS_PER_SHARD)` is three
+ * chances for robots.txt to advertise a shard that isn't served, or to miss
+ * one that is.
+ *
+ * `lastModified` is real in both cases, never `new Date()`: the skills
+ * shards carry the sync-worker's recorded `last_synced_at`, and shard 0
+ * carries the newest date across the registries and static pages it lists.
+ * Mixed `YYYY-MM-DD` dates and full ISO timestamps compare correctly here
+ * for the reason `newest()` relies on — lexical order is date order.
+ */
+export async function sitemapShards(): Promise<
+  readonly { id: number; lastModified: string }[]
+> {
+  const { totalSkills, lastSyncedAt } = await getSyncMeta()
+  const skillsLastModified = lastSyncedAt ?? '2026-08-23'
   const skillShardCount = Math.max(1, Math.ceil(totalSkills / SKILLS_PER_SHARD))
-  return Array.from({ length: 1 + skillShardCount }, (_, id) => ({ id }))
+  return [
+    {
+      id: 0,
+      lastModified: newest(
+        [
+          ...TOOLS.map((t) => t.updatedAt),
+          ...PROMPTS.map(promptLastModified),
+          ...STATIC_PAGES.map((p) => p.lastModified),
+          ...GUIDES.map((g) => g.updatedAt),
+          ...BLOG_POSTS.map((p) => p.updatedAt),
+          // Shard 0 lists /skills and every /skills/<category>, so a sync
+          // moves it too.
+          skillsLastModified,
+        ],
+        skillsLastModified,
+      ),
+    },
+    ...Array.from({ length: skillShardCount }, (_, i) => ({
+      id: i + 1,
+      lastModified: skillsLastModified,
+    })),
+  ]
+}
+
+export async function generateSitemaps() {
+  // Next only wants the ids; the lastModified goes to the index route.
+  return (await sitemapShards()).map(({ id }) => ({ id }))
 }
 
 async function siteSitemap(): Promise<MetadataRoute.Sitemap> {
@@ -272,11 +323,32 @@ async function skillsShardSitemap(shardIndex: number): Promise<MetadataRoute.Sit
   }))
 }
 
+/**
+ * `id` is NOT the `number` this signature claimed for as long as sharding
+ * has existed here. Next 16 hands it over the same async-params channel every
+ * dynamic route uses (see any dynamic-segment page in this app: `params:
+ * Promise<...>` + `await params`), so what actually arrives is a Promise
+ * resolving to a string — verified live against the dev server, which
+ * logged `typeof id === 'object'` before the await and `"0"` (string) after.
+ *
+ * The consequence was silent and total: `id === 0` compared a Promise to a
+ * number, never matched, so EVERY shard fell through to
+ * `skillsShardSitemap(id - 1)`, where `Promise - 1` is `NaN` and the range
+ * query returned nothing. Both `/sitemap/0.xml` and `/sitemap/1.xml` served
+ * a valid-but-empty `<urlset>` — the whole site absent from its own sitemap,
+ * with a 200 and no error anywhere to notice.
+ *
+ * Hence `Number(await id)`: await for the async-params contract, `Number()`
+ * because the resolved value is a string. Anything that isn't a positive
+ * shard index (bogus `/sitemap/abc.xml`, a negative, a non-integer) serves
+ * the site sitemap rather than issuing a malformed `.range()` query.
+ */
 export default async function sitemap({
   id,
 }: {
-  id: number
+  id: Promise<string> | string | number
 }): Promise<MetadataRoute.Sitemap> {
-  if (id === 0) return siteSitemap()
-  return skillsShardSitemap(id - 1)
+  const shard = Number(await id)
+  if (!Number.isInteger(shard) || shard <= 0) return siteSitemap()
+  return skillsShardSitemap(shard - 1)
 }

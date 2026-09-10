@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next'
-import { SKILLS_PER_SHARD } from '@/app/sitemap'
+import { sitemapShards } from '@/app/sitemap'
 import { absoluteUrl } from '@/lib/site'
-import { getSyncMeta } from '@/lib/skills/db'
 import { AI_BOTS } from '@/lib/tools/ai-visibility-checker/logic'
 
 /**
@@ -26,16 +25,21 @@ import { AI_BOTS } from '@/lib/tools/ai-visibility-checker/logic'
  */
 export default async function robots(): Promise<MetadataRoute.Robots> {
   // `generateSitemaps()` in app/sitemap.ts shards the sitemap once the
-  // Skills Library needs more than one file (50,000 URLs each) — that
-  // changes the real served URLs to /sitemap/0.xml, /sitemap/1.xml, … with
-  // no bare /sitemap.xml at all, so every shard has to be listed here
-  // explicitly rather than pointing at a single hardcoded path that 404s
-  // the moment sharding kicks in.
-  const { totalSkills } = await getSyncMeta()
-  const skillShardCount = Math.max(1, Math.ceil(totalSkills / SKILLS_PER_SHARD))
-  const sitemapUrls = Array.from({ length: 1 + skillShardCount }, (_, id) =>
-    absoluteUrl(`/sitemap/${id}.xml`),
-  )
+  // Skills Library needs more than one file (50,000 URLs each), which makes
+  // the real served URLs /sitemap/0.xml, /sitemap/1.xml, … — so a single
+  // hardcoded path here would advertise a file that doesn't exist.
+  //
+  // The index at /sitemap.xml (app/sitemap-index.xml/route.ts, rewritten
+  // there) goes first as the conventional entry point, then every shard
+  // individually: a
+  // crawler that follows the index and one that only reads robots.txt both
+  // end up with the complete set, and neither depends on the other route.
+  // The shard list comes from `sitemapShards()` rather than being recomputed
+  // here, so robots.txt cannot advertise a shard that isn't served.
+  const sitemapUrls = [
+    absoluteUrl('/sitemap.xml'),
+    ...(await sitemapShards()).map(({ id }) => absoluteUrl(`/sitemap/${id}.xml`)),
+  ]
 
   return {
     rules: [

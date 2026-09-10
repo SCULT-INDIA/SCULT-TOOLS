@@ -276,27 +276,66 @@ export async function getSyncMeta(): Promise<{
   return { lastSyncedAt: data.last_synced_at, totalSkills: data.total_skills }
 }
 
-/** All (id, slug, category, lastSyncedAt) pairs — used only by the sitemap
- * builder, which pages through this itself rather than loading full skill
- * bodies for a URL list. */
+/**
+ * PostgREST's server-side row cap, which Supabase applies to *every*
+ * response regardless of the range asked for. It is enforced silently:
+ * a `.range(0, 49_999)` returns HTTP 200, `error === null`, and exactly
+ * 1,000 rows — the truncation is disclosed only in a `Content-Range`
+ * response header (`0-999/*`) that supabase-js does not surface. Verified
+ * against the live table at 50,456 rows.
+ *
+ * So any query here that wants more than this must page for it. Every
+ * other function in this file stays under the cap by construction
+ * (`SKILLS_PAGE_SIZE` is 60, the rest take small top-N limits); only
+ * `getAllSkillRefs` asks for more, and it pages below.
+ */
+const POSTGREST_MAX_ROWS = 1_000
+
+/**
+ * All (slug, category, lastSyncedAt) triples in a range — used only by the
+ * sitemap builder, which wants a URL list rather than full skill bodies.
+ *
+ * Pages internally at `POSTGREST_MAX_ROWS` so that the `limit` argument
+ * means what it says. It previously issued one `.range(offset, offset +
+ * limit - 1)` call, which for the sitemap's 50,000-row shard returned 1,000
+ * rows and no error: the XML listed the first 1,000 skills and silently
+ * omitted the other ~49,000, with nothing anywhere to notice.
+ *
+ * A short page means the table is exhausted, which is the loop's exit —
+ * the row count is deliberately not read from `skills_sync_meta` first,
+ * since that would trust a cached counter to decide when to stop reading
+ * the rows themselves.
+ */
 export async function getAllSkillRefs(
   offset: number,
   limit: number,
 ): Promise<readonly { slug: string; category: string; lastSyncedAt: string }[]> {
   'use cache'
   cacheLife('hours')
-  const { data, error } = await supabaseSkills
-    .from('skills')
-    .select('slug, category, last_synced_at')
-    .order('id', { ascending: true })
-    .range(offset, offset + limit - 1)
-  if (error) {
-    console.error('getAllSkillRefs failed', error)
-    return []
+  const refs: { slug: string; category: string; lastSyncedAt: string }[] = []
+  while (refs.length < limit) {
+    const from = offset + refs.length
+    const pageSize = Math.min(POSTGREST_MAX_ROWS, limit - refs.length)
+    const { data, error } = await supabaseSkills
+      .from('skills')
+      .select('slug, category, last_synced_at')
+      .order('id', { ascending: true })
+      .range(from, from + pageSize - 1)
+    if (error) {
+      // Unlike the rest of this file, return the rows already gathered
+      // rather than []: a sitemap missing its tail is recoverable on the
+      // next crawl, an empty one de-lists everything. The count is logged
+      // so a partial run is still diagnosable.
+      console.error(
+        `getAllSkillRefs failed at row ${from} (${refs.length} gathered)`,
+        error,
+      )
+      break
+    }
+    for (const r of data) {
+      refs.push({ slug: r.slug, category: r.category, lastSyncedAt: r.last_synced_at })
+    }
+    if (data.length < pageSize) break
   }
-  return data.map((r) => ({
-    slug: r.slug,
-    category: r.category,
-    lastSyncedAt: r.last_synced_at,
-  }))
+  return refs
 }

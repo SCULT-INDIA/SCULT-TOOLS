@@ -50,6 +50,12 @@ const TRUST_PAGES: readonly { path: string; title: string; description: string }
       'Straight answers about Scult Tools: whether it is really free, which tools run in your browser, how AI assistants may use this site, and where to send requests.',
   },
   {
+    path: '/pricing',
+    title: 'Pricing',
+    description:
+      'Every tool and every prompt on this site is free, forever, with no signup. If you want a team to actually build the software, here is exactly what that costs.',
+  },
+  {
     path: '/contact',
     title: 'Contact',
     description:
@@ -60,6 +66,12 @@ const TRUST_PAGES: readonly { path: string; title: string; description: string }
     title: 'Security',
     description:
       'What this site actually does for security: client-side tools that transmit nothing, SSRF-blocked server tools, the real response headers, and how to report a vulnerability.',
+  },
+  {
+    path: '/compliance',
+    title: 'Compliance',
+    description:
+      "How Scult Tools maps to India's DPDP Act, the IT Rules, GDPR and CCPA — grounded in what the site actually collects, not a boilerplate compliance template.",
   },
   {
     path: '/accessibility',

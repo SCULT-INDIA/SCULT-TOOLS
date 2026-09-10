@@ -51,6 +51,27 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 2678400, // 31 days
   },
 
+  async rewrites() {
+    return {
+      /**
+       * `/sitemap.xml` is where every crawler, Search Console and SEO tool
+       * looks first, but `app/sitemap.ts` uses `generateSitemaps()`, so Next
+       * serves only the numbered shards (`/sitemap/0.xml`, …) and that path
+       * 404s. `app/sitemap-index.xml/route.ts` serves the real
+       * `<sitemapindex>`; this rewrite puts it at the conventional URL.
+       *
+       * `beforeFiles` because the metadata convention reserves
+       * `/sitemap.xml` as a filesystem route — a normal (afterFiles) rewrite
+       * would lose to that reservation and keep 404ing. A rewrite rather
+       * than a redirect so the index is served at the canonical path itself,
+       * with no hop for a crawler to follow.
+       */
+      beforeFiles: [{ source: '/sitemap.xml', destination: '/sitemap-index.xml' }],
+      afterFiles: [],
+      fallback: [],
+    }
+  },
+
   async redirects() {
     return [
       {
