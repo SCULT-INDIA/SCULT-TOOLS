@@ -291,85 +291,150 @@ export async function getSyncMeta(): Promise<{
  */
 const POSTGREST_MAX_ROWS = 1_000
 
-/**
- * All (slug, category, lastSyncedAt) triples in a range — used only by the
- * sitemap builder, which wants a URL list rather than full skill bodies.
- *
- * Pages internally at `POSTGREST_MAX_ROWS` so that the `limit` argument
- * means what it says. It previously issued one `.range(offset, offset +
- * limit - 1)` call, which for the sitemap's 50,000-row shard returned 1,000
- * rows and no error: the XML listed the first 1,000 skills and silently
- * omitted the other ~49,000, with nothing anywhere to notice.
- *
- * A short page means the table is exhausted, which is the loop's exit —
- * the row count is deliberately not read from `skills_sync_meta` first,
- * since that would trust a cached counter to decide when to stop reading
- * the rows themselves.
- *
- * THROWS rather than returning what it managed to gather, and that is the
- * important part. The first version of this logged the error and returned
- * the partial list, reasoning that a sitemap missing its tail beats an empty
- * one. That reasoning is wrong here: these shards are PRERENDERED, so a
- * partial read is frozen into a static file and served for the entire life
- * of the deploy, undetectably. Production shipped exactly that — shard 2's
- * single page came back empty during the build and 456 skills silently
- * vanished from the live sitemap while every other shard looked perfect.
- * A throw fails the build, which is loud, immediate and recoverable; a
- * quietly truncated sitemap is none of those. Same lesson as the bug this
- * whole function was rewritten for.
- */
-
-/** Per-page attempts before `getAllSkillRefs` gives up and fails the build.
- * A build issues thousands of Supabase requests, so a single transient
- * refusal is realistic — and with prerendering, one unretried failure is
- * permanent for the deploy. */
+/** Per-page attempts before giving up and failing the build. Covers a
+ * genuinely transient refusal; it deliberately cannot paper over a slow
+ * query, since re-running one of those just times out again. */
 const PAGE_ATTEMPTS = 3
 
+/**
+ * A Supabase error rendered readable. `String(error)` on a PostgrestError
+ * gives "[object Object]" — which is exactly what the first version of the
+ * throw below logged, hiding a `57014 canceling statement due to statement
+ * timeout` behind a useless message for a whole debugging cycle.
+ */
+function describeError(error: unknown): string {
+  if (error !== null && typeof error === 'object') {
+    const e = error as { code?: string; message?: string; details?: string }
+    const parts = [e.code && `[${e.code}]`, e.message, e.details].filter(Boolean)
+    if (parts.length > 0) return parts.join(' ')
+  }
+  return String(error)
+}
+
+/** One page, retried, or a throw naming what actually went wrong. */
+async function fetchPage<T>(
+  label: string,
+  run: () => PromiseLike<{ data: T[] | null; error: unknown }>,
+): Promise<T[]> {
+  let lastError: unknown = null
+  for (let attempt = 1; attempt <= PAGE_ATTEMPTS; attempt++) {
+    const { data, error } = await run()
+    if (!error && data) return data
+    lastError = error
+    console.error(
+      `${label} failed (attempt ${attempt}/${PAGE_ATTEMPTS}): ${describeError(error)}`,
+    )
+    if (attempt < PAGE_ATTEMPTS) {
+      // Linear backoff, no jitter: Math.random() is banned in this
+      // codebase's render path and a fixed delay is enough here.
+      await new Promise((resolve) => setTimeout(resolve, attempt * 500))
+    }
+  }
+  throw new Error(
+    `${label} failed after ${PAGE_ATTEMPTS} attempts: ${describeError(lastError)}`,
+  )
+}
+
+/**
+ * The `id` of the row immediately before `offset`, so a shard can start
+ * reading with `.gt('id', …)` instead of an OFFSET.
+ *
+ * Selects only `id`, which Postgres can satisfy from the primary-key index
+ * without touching the heap — measured at ~490ms against the live table at
+ * offset 50,000, versus ~1,230ms for the equivalent full-column OFFSET read.
+ * Returns null when the offset is past the end of the table.
+ */
+async function idBeforeOffset(offset: number): Promise<string | null> {
+  const rows = await fetchPage(`skills id probe at offset ${offset}`, () =>
+    supabaseSkills
+      .from('skills')
+      .select('id')
+      .order('id', { ascending: true })
+      .range(offset - 1, offset - 1),
+  )
+  return rows[0]?.id ?? null
+}
+
+/**
+ * All (slug, category, lastSyncedAt) triples for one sitemap shard — used
+ * only by the sitemap builder, which wants a URL list rather than full skill
+ * bodies. `offset`/`limit` keep an offset-shaped contract, but nothing here
+ * issues a deep OFFSET any more; see below.
+ *
+ * Three bugs have lived in this function, and the comments are the record of
+ * them because each one shipped silently:
+ *
+ *  1. It issued a single `.range(offset, offset + limit - 1)` for 50,000
+ *     rows. PostgREST caps every response at `POSTGREST_MAX_ROWS` and
+ *     reports the truncation only in a header supabase-js discards, so it
+ *     returned 1,000 rows with `error === null`. Fixed by paging.
+ *
+ *  2. On error it logged and returned the rows gathered so far, reasoning
+ *     that a sitemap missing its tail beats an empty one. Wrong for a
+ *     PRERENDERED route: the partial read is frozen into a static file and
+ *     served for the life of the deploy. Production shipped an empty
+ *     `/sitemap/2.xml`, dropping 456 skills, while every other shard looked
+ *     perfect. Fixed by throwing — a failed build is loud and recoverable.
+ *
+ *  3. The throw then revealed the actual cause, which retries could never
+ *     fix: `57014 canceling statement due to statement timeout`. An
+ *     `ORDER BY id OFFSET 50000` has to walk 50,000 rows before returning
+ *     any, and under build load that exceeded Supabase's statement timeout.
+ *     Deep OFFSET is inherently fragile — the deepest offset always tracks
+ *     the table size, so it gets worse as the registry grows toward the full
+ *     ~600k. Fixed by keyset pagination: one cheap index-only probe finds
+ *     the shard's starting `id`, then every page is
+ *     `WHERE id > <last> ORDER BY id LIMIT n`, an index range scan whose
+ *     cost does not depend on how deep into the table the shard sits
+ *     (~244ms measured, versus ~1,230ms for the OFFSET form it replaced).
+ *
+ * `id` is the table's text primary key, so the ordering is total and stable
+ * and keyset paging cannot skip or duplicate a row.
+ */
 export async function getAllSkillRefs(
   offset: number,
   limit: number,
 ): Promise<readonly { slug: string; category: string; lastSyncedAt: string }[]> {
   'use cache'
   cacheLife('hours')
+  if (limit <= 0) return []
+
+  // Shard 1 starts at the beginning and needs no probe at all.
+  let after: string | null = null
+  if (offset > 0) {
+    after = await idBeforeOffset(offset)
+    // Offset past the end of the table: no rows to serve. The sitemap's own
+    // guard decides whether that is legitimate or a failure worth shouting
+    // about, since only it knows how many skills there are supposed to be.
+    if (after === null) return []
+  }
+
   const refs: { slug: string; category: string; lastSyncedAt: string }[] = []
   while (refs.length < limit) {
-    const from = offset + refs.length
     const pageSize = Math.min(POSTGREST_MAX_ROWS, limit - refs.length)
-    let page: { slug: string; category: string; last_synced_at: string }[] | null = null
-    let lastError: unknown = null
-
-    for (let attempt = 1; attempt <= PAGE_ATTEMPTS && page === null; attempt++) {
-      const { data, error } = await supabaseSkills
-        .from('skills')
-        .select('slug, category, last_synced_at')
-        .order('id', { ascending: true })
-        .range(from, from + pageSize - 1)
-      if (error) {
-        lastError = error
-        console.error(
-          `getAllSkillRefs: rows ${from}-${from + pageSize - 1} failed (attempt ${attempt}/${PAGE_ATTEMPTS})`,
-          error,
-        )
-        // Linear backoff — no jitter, because Math.random() is banned in
-        // this codebase's render path and a fixed delay is enough here.
-        if (attempt < PAGE_ATTEMPTS) {
-          await new Promise((resolve) => setTimeout(resolve, attempt * 500))
-        }
-        continue
-      }
-      page = data
-    }
-
-    if (page === null) {
-      throw new Error(
-        `getAllSkillRefs: rows ${from}-${from + pageSize - 1} failed after ${PAGE_ATTEMPTS} attempts (${refs.length} of ${limit} gathered): ${String(lastError)}`,
-      )
-    }
+    const cursor = after
+    const page = await fetchPage(
+      `skills refs page after id ${cursor ?? '(start)'} (${refs.length} of ${limit} gathered)`,
+      () => {
+        const query = supabaseSkills
+          .from('skills')
+          .select('id, slug, category, last_synced_at')
+          .order('id', { ascending: true })
+          .limit(pageSize)
+        return cursor === null ? query : query.gt('id', cursor)
+      },
+    )
 
     for (const r of page) {
       refs.push({ slug: r.slug, category: r.category, lastSyncedAt: r.last_synced_at })
     }
+    // Advance the cursor to the last id read; a short page means the table
+    // is exhausted. The row count is deliberately never read from
+    // `skills_sync_meta` to decide when to stop, since that would trust a
+    // cached counter over the rows themselves.
     if (page.length < pageSize) break
+    after = page[page.length - 1]?.id ?? null
+    if (after === null) break
   }
   return refs
 }
