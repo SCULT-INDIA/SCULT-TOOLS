@@ -60,7 +60,37 @@ const baseHandler = createMcpHandler(
       'Rate limits per client: 30 calls/min for lookups and pure computation, 6/min for favicon rendering, 3/min for the two live-audit tools (they hit external APIs). Rate-limit errors state the bucket and when to retry.',
     ].join('\n'),
   },
-  { basePath: '/api', maxDuration: 60 },
+  {
+    basePath: '/api',
+    maxDuration: 60,
+    // The legacy SSE transport (`/api/sse`, `/api/message`) is off — this
+    // deployment sets no REDIS_URL/KV_URL, and `mcp-handler`'s SSE path
+    // unconditionally requires one for session resumability. Every hit to
+    // `/api/sse` threw `Error: redisUrl is required` from inside an
+    // un-awaited async call the library never attaches a `.catch()` to
+    // (`void fn(fakeServerResponse)` in its `createServerResponseAdapter`),
+    // so the failure surfaced as an **unhandled promise rejection** on
+    // every single request — reproduced locally as `⨯ unhandledRejection:
+    // Error: redisUrl is required` on every `GET /api/sse`, each hanging
+    // for ~20s before resolving. The throw happens after the SSE session
+    // bookkeeping starts but before the `McpServer`/transport are built or
+    // `cleanup()` is wired up, so nothing born on that path is ever
+    // released cleanly — a standing liability on `next start`'s single
+    // long-lived process that this app has no way to observe once
+    // deployed, since Studio only records MCP tool calls, not raw HTTP
+    // hits to a broken sub-path.
+    //
+    // Disabling it is a pure subtraction, not a workaround: this app never
+    // advertised SSE — `/mcp`'s own copy already says "Streamable HTTP,
+    // the current MCP transport — one URL, no separate SSE endpoint" — and
+    // no client of this server (`MCP_URL` in app/mcp/page.tsx, this repo's
+    // only reference to a connection URL) has ever pointed at `/api/sse`.
+    // `disableSse: true` makes both `/api/sse` and `/api/message` 404
+    // before the library reaches its Redis dependency at all, and does not
+    // touch `/api/mcp` (Streamable HTTP), which needs no Redis and is the
+    // only transport this server has ever actually served.
+    disableSse: true,
+  },
 )
 
 function jsonRpcError(
