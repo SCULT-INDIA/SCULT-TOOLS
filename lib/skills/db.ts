@@ -121,17 +121,46 @@ export async function getSkillCountByCategory(
   return count ?? 0
 }
 
-/** category -> count, for the hub page's tiles — one query, not one per category. */
+/**
+ * category -> count, for the hub page's tiles — one query, not one per
+ * category.
+ *
+ * Retried like `getAllSkillRefs`'s pages, for the identical reason: this ran
+ * during `next build`'s page-data collection, which fans out across many
+ * concurrent workers all hitting Supabase at once, and a single unretried
+ * `57014 canceling statement due to statement timeout` here was enough to
+ * fail an entire production build — not just this page, every one of it,
+ * because `app/skills/[category]/page.tsx`'s `generateStaticParams` reads
+ * this result and (before that function's own fix, see its docblock) turned
+ * "the query failed" into "every category has zero skills", which Next's
+ * Cache Components then rejected outright: "all `generateStaticParams`
+ * functions must return at least one result." A transient DB hiccup should
+ * cost a retry, not the deploy.
+ *
+ * Still resolves to `{}` after exhausting retries rather than throwing —
+ * unlike `getAllSkillRefs`, this function is read by live page renders
+ * (the skills hub, `/sitemap`) as well as build-time static params, and a
+ * cache-friendly, gracefully-degrading `{}` is the right contract for those.
+ * `generateStaticParams` callers are the ones that must not trust an empty
+ * result as "confirmed zero" — see that function's own fallback.
+ */
 export async function getAllCategoryCounts(): Promise<Readonly<Record<string, number>>> {
   'use cache'
   cacheLife('hours')
-  const { data, error } = await supabaseSkills.rpc('skills_category_counts')
-  if (error) {
-    console.error('getAllCategoryCounts failed', error)
+  let rows: { category: string; count: number }[]
+  try {
+    rows = await fetchPage('getAllCategoryCounts', () =>
+      supabaseSkills.rpc('skills_category_counts'),
+    )
+  } catch (error) {
+    // `fetchPage` already logged each retry attempt with the real Postgres
+    // error; this is just the final "gave up" line, in the same
+    // `console.error('label', error)` shape every other function here uses.
+    console.error('getAllCategoryCounts failed after retries', error)
     return {}
   }
   const counts: Record<string, number> = {}
-  for (const row of data as { category: string; count: number }[]) {
+  for (const row of rows) {
     counts[row.category] = row.count
   }
   return counts

@@ -444,3 +444,37 @@ export const SKILL_CATEGORY_BY_SLUG: ReadonlyMap<SkillCategorySlug, SkillCategor
 export function getSkillCategory(slug: string): SkillCategory | undefined {
   return SKILL_CATEGORY_BY_SLUG.get(slug as SkillCategorySlug)
 }
+
+/**
+ * Which categories currently have skills, per a `getAllCategoryCounts()`
+ * result — with a fallback for the one shape that result cannot mean
+ * literally: every category showing zero.
+ *
+ * `getAllCategoryCounts()` degrades to `{}` after retrying a failed
+ * database call (see its own docblock in lib/skills/db.ts) — a real,
+ * observed failure, not a hypothetical one: a `57014` statement timeout
+ * during `next build`'s concurrent page-data collection surfaced here as
+ * `counts[slug] ?? 0` resolving to 0 for all 24 categories, which
+ * `app/skills/[category]/page.tsx`'s `generateStaticParams` then returned
+ * as zero static params — and Next's Cache Components hard-rejects that
+ * shape ("all `generateStaticParams` functions must return at least one
+ * result"), turning one transient query hiccup into a failed production
+ * deploy for the entire site.
+ *
+ * This is deliberately an ALL-empty check, not "trust counts less in
+ * general": a real, successful query legitimately excluding a handful of
+ * categories is this site's actual current state and must keep behaving
+ * exactly as it does today. Every category reporting zero is not a
+ * plausible state for a library holding 50,000+ skills — it is the specific
+ * signature of a failed count query — and only that shape falls back to
+ * returning every category. A category that turns out to genuinely hold no
+ * skills still resolves correctly at request time via that page's own
+ * runtime `notFound()` check, so the fallback is safe either way.
+ */
+export function liveSkillCategories(
+  counts: Readonly<Record<string, number>>,
+  categories: readonly SkillCategory[] = SKILL_CATEGORIES,
+): readonly SkillCategory[] {
+  const live = categories.filter((c) => (counts[c.slug] ?? 0) > 0)
+  return live.length > 0 ? live : categories
+}

@@ -44,6 +44,15 @@ let failAttempts = 0
  * reason the boundary probe selects `id` alone. */
 let timeoutWideOffsetsPast = Number.POSITIVE_INFINITY
 
+/** Rows `skills_category_counts` (the `getAllCategoryCounts` RPC) resolves
+ * with once it stops failing. */
+let categoryCountRows: { category: string; count: number }[] = []
+/** How many times the RPC call fails before succeeding — the production
+ * incident this guards: a `57014` on this exact call, under the concurrent
+ * load of `next build`'s page-data collection. */
+let categoryCountFailTimes = 0
+let categoryCountAttempts = 0
+
 const POSTGREST_CAP = 1_000
 const TIMEOUT_ERROR = {
   code: '57014',
@@ -100,11 +109,18 @@ vi.mock('./supabase', () => {
           order: () => builder({ limit: POSTGREST_CAP, after: null, cols }),
         }),
       }),
+      rpc: (_name: string) => {
+        categoryCountAttempts++
+        if (categoryCountAttempts <= categoryCountFailTimes) {
+          return Promise.resolve({ data: null, error: TIMEOUT_ERROR })
+        }
+        return Promise.resolve({ data: categoryCountRows, error: null })
+      },
     },
   }
 })
 
-const { getAllSkillRefs } = await import('./db')
+const { getAllSkillRefs, getAllCategoryCounts } = await import('./db')
 
 function rows(count: number, startId = 0): Row[] {
   return Array.from({ length: count }, (_, i) => {
@@ -127,6 +143,9 @@ beforeEach(() => {
   failTimes = Number.POSITIVE_INFINITY
   failAttempts = 0
   timeoutWideOffsetsPast = Number.POSITIVE_INFINITY
+  categoryCountRows = []
+  categoryCountFailTimes = 0
+  categoryCountAttempts = 0
 })
 
 describe('getAllSkillRefs', () => {
@@ -245,5 +264,42 @@ describe('getAllSkillRefs', () => {
     expect(await getAllSkillRefs(0, 1)).toEqual([
       { slug: 'skill-0', category: 'general', lastSyncedAt: '2026-09-03' },
     ])
+  })
+})
+
+/**
+ * The production incident this file's own header didn't yet cover: a single
+ * unretried `57014` on the `skills_category_counts` RPC — under the exact
+ * same kind of concurrent build-time load as the sitemap incidents above —
+ * degraded `getAllCategoryCounts()` to `{}`, which
+ * `app/skills/[category]/page.tsx`'s `generateStaticParams` then filtered
+ * every category out against, returning zero static params. Next's Cache
+ * Components hard-rejects that shape, failing the entire production build
+ * over one transient query.
+ */
+describe('getAllCategoryCounts', () => {
+  it('returns the real counts on a normal, successful call', async () => {
+    categoryCountRows = [
+      { category: 'testing', count: 40 },
+      { category: 'debugging', count: 12 },
+    ]
+    expect(await getAllCategoryCounts()).toEqual({ testing: 40, debugging: 12 })
+  })
+
+  it('retries a transient RPC failure instead of degrading to empty', async () => {
+    categoryCountRows = [{ category: 'testing', count: 40 }]
+    categoryCountFailTimes = 2 // fails twice, succeeds on the third attempt
+    expect(await getAllCategoryCounts()).toEqual({ testing: 40 })
+    expect(categoryCountAttempts).toBe(3)
+  })
+
+  it('degrades to {} — never throws — once retries are exhausted', async () => {
+    categoryCountFailTimes = Number.POSITIVE_INFINITY
+    // Unlike getAllSkillRefs, this function is read by live page renders
+    // (the skills hub, /sitemap) as well as build-time static params, so it
+    // must keep its graceful-degradation contract — callers that must not
+    // trust an empty result as "confirmed zero" guard for that themselves
+    // (see liveSkillCategories in lib/skills/categories.ts).
+    await expect(getAllCategoryCounts()).resolves.toEqual({})
   })
 })

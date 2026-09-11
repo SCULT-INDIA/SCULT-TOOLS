@@ -7,7 +7,11 @@ import { SkillCard } from '@/components/skills/SkillCard'
 import { Icon } from '@/components/ui/Icon'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
-import { getSkillCategory, SKILL_CATEGORIES } from '@/lib/skills/categories'
+import {
+  getSkillCategory,
+  liveSkillCategories,
+  SKILL_CATEGORIES,
+} from '@/lib/skills/categories'
 import {
   getAllCategoryCounts,
   getSkillCountByCategory,
@@ -26,14 +30,18 @@ const TILE_BG: Record<SkillCategory['tile'], string> = {
   green: 'bg-tile-green',
 }
 
-/** Only page 1 of each non-empty category is pre-rendered — a category can
+/**
+ * Only page 1 of each non-empty category is pre-rendered — a category can
  * hold tens of thousands of skills at the registry's real scale, so every
- * later page (`?page=2`, `?page=3`, …) renders on request instead. */
+ * later page (`?page=2`, `?page=3`, …) renders on request instead.
+ *
+ * See `liveSkillCategories`'s own docblock (lib/skills/categories.ts) for
+ * why this can never trust a fully-empty `counts` as "confirmed zero
+ * everywhere" — that shape is what caused a real production build failure.
+ */
 export async function generateStaticParams(): Promise<Params[]> {
   const counts = await getAllCategoryCounts()
-  return SKILL_CATEGORIES.filter((c) => (counts[c.slug] ?? 0) > 0).map((c) => ({
-    category: c.slug,
-  }))
+  return liveSkillCategories(counts).map((c) => ({ category: c.slug }))
 }
 
 export async function generateMetadata({
