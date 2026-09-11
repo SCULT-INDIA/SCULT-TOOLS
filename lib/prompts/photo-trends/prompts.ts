@@ -66,6 +66,10 @@ export const prompts: readonly Prompt[] = [
         linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
       },
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged for the whole clip — no morphing, no drifting toward a different face, no beautifying partway through. Almost nothing moves: a slow, natural blink, the faintest shift of weight, and the hard-edged shadow on the canvas trembling very slightly as if the studio light is not perfectly steady. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. Add only the faint electrical hum of a studio light ballast — no dialogue, no music, no narration. Keep the same 1986 film grain, warm faded colour and hard key-light contrast from the still all the way through; do not sharpen the image or clean up the grain as the clip plays. Add no modern object, no on-screen text and no watermark. Output: vertical 9:16, matching the still's framing exactly, with a first and last frame close enough to loop without a visible jump.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'The hard shadow on the backdrop is what dates this, not the corduroy. A 1980s Indian portrait studio used one close, hard key with almost no fill — the opposite of the soft-box lighting these models default to. Naming the shadow as a thing in the frame makes the model build the lighting instead of adding a sepia filter. The hairline clause matters too: models quietly restore a fuller hairline on men, and that single change is what makes people say it does not look like them.',
     exampleOutput:
@@ -119,6 +123,10 @@ export const prompts: readonly Prompt[] = [
         instagram: 'https://www.instagram.com/pranjulrathour.in/',
         linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
       },
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged for the whole clip — no morphing, no beautifying, no drift. A light breeze moves my hair and shirt collar, I shift my weight slightly against the car, and a little roadside dust drifts past at ground level. The Ambassador itself stays still — no wheels turning, no driving. Camera: a very slow, barely-there push in, nothing that would blur the car's shape. Duration: 6 seconds, one continuous shot, no cuts. Add only distant road traffic and a bird call — no dialogue, no music. Keep the same warm faded 1986 film colour, grain and hard low-sun shadows from the still throughout the clip, with no shift in white balance or sharpness. Add no modern vehicle, no phone, no on-screen text. Output: vertical 9:16, matching the still's framing, ending close enough to its own first frame to loop cleanly.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Asking for "a vintage Indian car" returns a generic beige box. Describing the Ambassador by its geometry instead — upright body, chrome grille, small round headlamps, thin bumpers — works because image models recognise silhouettes far more reliably than Indian nameplates, which barely appear in their training data. The blurred signboard is deliberate: background text is where these images break, and declaring it unreadable turns a guaranteed failure into depth of field.',
@@ -174,6 +182,10 @@ export const prompts: readonly Prompt[] = [
         linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
       },
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged — no morphing, no drift, no beautifying. Movement stays small and domestic: a slow blink and breath, the television screen behind me flickering faintly with a scan-line shimmer, and dust motes drifting visibly through the hard flash-lit air. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. Add only quiet room tone and the television's faint electrical hum — no dialogue, no music, no legible television audio. Keep the same flat on-camera-flash exposure, warm tungsten cast and 1986 film grain from the still for the full clip; the hard shadow behind my head must not move or soften. Add no flat-screen, no remote, no modern branding. Output: vertical 9:16, matching the still's framing, with a loop-safe start and end frame.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'Direct on-camera flash is the strongest period signal in this whole trend and the one thing a model will never do unless told. Left alone it renders even, flattering, ambient interiors, because that is what modern interior photography looks like. Spelling out the three consequences — hot foreground, flat face, hard shadow right behind the head — gets the physics instead of a warm filter. The blank clock face removes the one surface that would otherwise render nonsense.',
     exampleOutput:
@@ -227,6 +239,10 @@ export const prompts: readonly Prompt[] = [
         instagram: 'https://www.instagram.com/pranjulrathour.in/',
         linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
       },
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged for the whole clip — coloured light may move across my hair and shoulders, exactly as in the still, but my face must stay recognisably mine throughout, never reshaped or colour-washed. Continue the turn the pose already implies: my weight finishes shifting onto the other leg, my hair swings with the movement, and the haze drifts slowly through the laser beams behind me. Camera: a slow, small arc around me at a fixed distance — not a push in, not a handheld shake. Duration: 6 seconds, one continuous shot, no cuts. Add a muffled, distant disco bassline and a faint crowd murmur, low enough to sit under the visual — no lyrics, no dialogue. Keep the same two-colour rim lighting, haze and 1988 pushed-film grain from the still throughout. Add no modern stage screen, no phone light, no on-screen text. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Ask for "80s neon" and the model floods every surface with magenta and cyan until the face is unrecognisable and the image reads as a filter. Two rules stop that: cap the palette at two colours, which is what a real gelled stage rig produced, and put the colour on the rim, haze and background while keeping the face neutral. That is also how stage photography actually works, and it protects the likeness — heavy coloured light on skin is the fastest way to lose a face.',
@@ -282,6 +298,10 @@ export const prompts: readonly Prompt[] = [
         linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
       },
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated, as a magazine-cover 'comes alive' teaser rather than a scene. Keep my face and identity completely unchanged — no reshaping, no drift toward a generic cover-model face. Movement is minimal and cover-appropriate: a slow blink, a faint catch of light moving across my hair as my head tilts a fraction, the masthead and cover lines staying perfectly still and legible throughout. Camera: locked off, no movement. Duration: 4 seconds, one continuous shot, no cuts. No sound, or at most a very quiet studio-hush room tone — no music, no dialogue, nothing that implies a cover story being read aloud. Keep the same saturated print colour, halftone texture and soft cover-line type from the still for the whole clip — the lettering must not warp, re-flow or become more legible than the still. Output: vertical 3:4, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'Cover prompts live or die on text, and most published versions ignore the problem and ship garbled lettering. The fix is counter-intuitive: give the model a fallback. Telling it to render type smaller and softer when it cannot render it crisply turns the common failure — sharp, confidently misspelled words — into something that reads as ordinary type at normal size. Ruling out Devanagari trades a little authenticity for a usable image, since non-Latin script is where these models fail hardest.',
     exampleOutput:
@@ -335,6 +355,10 @@ export const prompts: readonly Prompt[] = [
         instagram: 'https://www.instagram.com/pranjulrathour.in/',
         linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
       },
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged — no slimming, smoothing or drift. I push my shoulder off the pillar and my half-smile widens slightly, as if a friend just called my name again; the wind lifts my denim jacket collar and hair a little more; someone crosses the blurred sunlit background in the distance without ever becoming a second focal point. Camera: static, or the faintest handheld sway, as if a friend is holding the phone rather than a tripod. Duration: 6 seconds, one continuous shot, no cuts. Add distant campus chatter and birdsong — no dialogue directed at camera, no music. Keep the same flat contrast, faded warm 1985 colour, grain and blown-out background from the still throughout; the background must stay overexposed, not resolve into detail. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Almost every 80s prompt asks for glamour, which is why almost every output looks like a film still instead of an old photograph. This one withholds the studio on purpose: open shade, no flash, flat contrast, a crooked horizon. The load-bearing detail is the blown-out background — real consumer film could not hold a shaded face and a sunlit exterior at once, so the exterior clipped to white. A reproduced limitation is far more convincing than added grain.',
@@ -390,6 +414,10 @@ export const prompts: readonly Prompt[] = [
         linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
       },
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged for the whole clip, and keep the sehra strings exactly where they sit in the still — clearly above my eyebrows, never drifting down over my eyes. The horse shifts its weight and flicks its tail once, the hanging sehra strings sway very slightly with the horse's movement, and the tube-light behind flickers. Camera: locked off, no movement — a moving camera on horseback framing risks losing the face the whole prompt protects. Duration: 5 seconds, one continuous shot, no cuts. Add a distant dhol beat and murmuring wedding crowd, low and non-intrusive — no dialogue, no clear lyrics. Keep the same hard night-flash exposure, warm-magenta cast and steep falloff into the dark crowd from the still throughout. Add no modern lighting rig, no phone light, no on-screen text. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'The sehra is the trap. Asked for one, models drape the floral strings straight down over the eyes and nose, and the image fails because the face — the only thing you care about — is hidden. So the rule is stated twice: above the eyebrows, not over the face. The other choice is the steep light falloff. Night flash in 1986 lit the subject hard and let everything two metres back go dark, and that gradient dates the image more than grain ever could.',
     exampleOutput:
@@ -444,6 +472,10 @@ export const prompts: readonly Prompt[] = [
         linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
       },
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged — no de-aging, no smoothing, no drift. The ceiling fan blade visible at the top of frame turns slowly, the topmost sheet in the red-taped file stack lifts and settles faintly in its breeze, and I blink once, naturally. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. Add a low ceiling-fan whir and distant, indistinct office chatter — no dialogue, no music. Keep the same uncorrected green-cyan fluorescent cast, flat contrast and 1984 film grain from the still for the whole clip; do not colour-correct the cast as the clip plays. Add no computer, no monitor, no modern phone. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'Every competing prompt set is built from glamour — film stars, discos, magazine covers. This one goes the other way and is the most shareable image in the set for exactly that reason. The technical trick is the uncorrected colour: real 1984 film shot under mixed fluorescent and window light came back from the lab with a green-cyan cast nobody could fix, and asking for the uncorrected cast gives the model something physical to reproduce instead of "vintage colours".',
     exampleOutput:
@@ -492,6 +524,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-chiffon-saree-hillside.webp',
       alt: 'A woman in a pale lilac chiffon saree on a backlit hillside at golden hour, the pallu lifting in the wind, shot to look like 1987 film',
       aspectRatio: '9:16',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged for the whole clip — no slimming, lightening or drift. Continue the wind already lifting the pallu in the still: it rises a little further and settles, loose strands of hair move with it, and the grass on the slope behind ripples faintly in the same gusts. Camera: a slow, gentle push in, matching the wind's pace rather than fighting it. Duration: 6 seconds, one continuous shot, no cuts. Add only wind and distant birdsong — no dialogue, no music. Keep the same backlit rim glow on the hair and chiffon, the warm 1987 film grain and the veiling flare from the still throughout; the bounce-fill on my face must stay exactly as bright so I never fall into silhouette as the clip plays. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Sarees are where models produce something nearly right and unmistakably wrong — the drape reads as a stiff wrapped sheet. The fix is describing the fabric physics, not the garment name: light, semi-sheer, fine drape, thin soft folds. Models have learned how thin fabric behaves in wind; they have not learned what "saree" implies about it. The bounce-fill line is the other essential: backlight alone drives the model to silhouette, and a silhouette has no likeness at all.',
@@ -542,6 +578,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'A woman in a mustard salwar kameez on an Indian rooftop terrace at low sun, with water tanks and TV antennas on the skyline behind',
       aspectRatio: '9:16',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged — no lightening, no drift. My dupatta and hair move gently in the terrace breeze, dust catches the low warm light exactly as it does in the still, and a single bird crosses the hazy skyline far in the background. Camera: a slow, small pan across the parapet line, not a push in. Duration: 5 seconds, one continuous shot, no cuts. Add distant city ambience and birdsong — no dialogue, no music. Keep the same long low-sun shadows, warm-cool split lighting on my face and 1986 film grain from the still throughout the clip. Add no satellite dish, no solar panel, no modern glass building. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'The satellite dish exclusion is the whole trick. Ask any model for an Indian rooftop and it fills the skyline with dishes, because almost every rooftop photo it learned from was taken after 1995. Dishes did not exist there in 1986; TV aerial antennas did. Naming the antenna as a positive object and the dish as an exclusion in the same prompt fixes the most common anachronism in this setting.',
     exampleOutput:
@@ -589,6 +629,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-studio-portrait-blue-canvas.webp',
       alt: 'A classic 1986 Indian studio portrait against a mottled blue canvas backdrop, with backcombed hair, gold drop earrings and a hair-light rim',
       aspectRatio: '9:16',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged for the whole clip — no reshaping, no drift toward a smoother or more symmetrical face. Movement stays almost still: a slow natural blink, my head settling a fraction further into the pose, the hair-light rim catching the movement for an instant. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. No sound, or at most a very faint studio-room hush — no music, no dialogue. Keep the same four-light studio modelling, the lighter halo of backdrop behind my head and the fine medium-format grain from the still throughout; the shadow under my nose must not shift position. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'This names a real four-light setup with relative intensities, which is why it returns a studio portrait rather than a filtered snapshot. Models trained on photographs have learned what a four-point rig does; giving them the rig lets them apply that instead of guessing at something pleasant. The lighter halo of backdrop behind the head is the precise period tell — 1980s studios lit their canvas separately to lift the subject off it, and that gradient is in almost every real portrait and almost no unprompted AI one.',
@@ -639,6 +683,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'A woman styled as a 1987 Indian film magazine cover star in a fuchsia sequinned top with heavy period makeup against a clashing saturated backdrop',
       aspectRatio: '3:4',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated, as a magazine-cover teaser rather than a scene. Keep my face and identity completely unchanged — the heavy period makeup may catch light as I move, but it must not reshape a feature or slide toward a generic cover-model face. Movement is minimal: a slow blink, hair catching a little more light as my head tilts a fraction, the masthead and cover lines staying perfectly still. Camera: locked off, no movement. Duration: 4 seconds, one continuous shot, no cuts. No sound, or at most a very quiet room hush — no music, no dialogue. Keep the same clashing saturated backdrop, oversaturated print ink and halftone texture from the still for the whole clip. Output: vertical 3:4, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       '"Visible, unblended-looking" makeup is doing the most work here. Models default to contemporary blended beauty makeup, which quietly slims the nose and enlarges the eyes and breaks the likeness while appearing to obey. Naming 80s makeup as deliberately unblended gets a period result and, because it sits on the skin rather than resculpting it, protects the face. The clashing backdrop is the other deliberate ask — a model told to pick a complementary colour will return something tasteful and modern.',
     exampleOutput:
@@ -687,6 +735,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-college-girl-salwar-kameez.webp',
       alt: 'A student in a pink floral salwar kameez with a long plait holding books in a shaded 1985 Indian college corridor',
       aspectRatio: '9:16',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged — no smoothing, no drift, no making me look younger. I shift the books slightly against my chest, my pinned dupatta moves a little in the breeze, and the sunlit greenery beyond the corridor sways faintly out of focus. Camera: static, or the faintest handheld sway, as if a classmate is holding the camera rather than a tripod. Duration: 5 seconds, one continuous shot, no cuts. Add distant campus chatter and birdsong — no dialogue, no music. Keep the same flat open-shade lighting, blown-out sunlit background and faded 1985 film grain from the still throughout; the background must stay overexposed, not resolve into detail. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Two instructions run against the model’s defaults. The dupatta is specified as pinned at both shoulders and falling flat — how students actually wore it — because a model left alone drapes every dupatta decoratively across one arm as if for a wedding shoot. And the prompt asks for slightly self-conscious posture and a little too much headroom, since models compose well by default and good composition is exactly what makes an output look art-directed rather than old.',
@@ -738,6 +790,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'A woman in a deep maroon Kanjeevaram silk saree and temple jewellery on a wedding reception stage in 1986, lit by hard direct flash',
       aspectRatio: '9:16',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged for the whole clip — no reshaping, no lightening, no drift. The zari border catches hard metallic glints as I shift my weight very slightly, the jasmine in my hair moves a fraction, and the dim guests behind me sway in and out of the near-darkness they already sit in. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. Add a low, indistinct reception murmur and a faint tube-light hum — no dialogue, no music with legible lyrics. Keep the same hard direct-flash exposure, warm-magenta cast and steep falloff into darkness from the still throughout. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'This is the deliberate opposite of the chiffon prompt, and the contrast is the lesson: the same word, saree, has to be described through completely different physics to come out right. Here it is heavy, stiff, holds sharp creases, thick structured pleats, zari catching light as hard glints. Ask for "silk saree" alone and the model splits the difference into a fabric that behaves like neither.',
     exampleOutput:
@@ -786,6 +842,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-boombox-denim-street.webp',
       alt: 'A woman with big permed hair in high-waisted denim carrying a twin-deck boombox on her shoulder against a faded painted wall in 1986',
       aspectRatio: '9:16',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged — no slimming, no drift. I bounce very slightly to a beat only I can hear, the boombox's twin cassette reels on my shoulder visibly turning, and my permed hair moves with the motion. Camera: static, or the faintest handheld sway, matching the street-snapshot feel of the still. Duration: 6 seconds, one continuous shot, no cuts. Add a tinny, muffled cassette beat playing from the boombox itself, low enough to read as diegetic rather than a soundtrack, plus quiet street ambience — no clear lyrics, no dialogue. Keep the same hard wall-shadow, punchy 1986 film contrast and grain from the still throughout. Add no Bluetooth speaker, no earbuds, no modern branding. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'The boombox is described by its parts — boxy, silver, twin cassette decks, carry handle, graphic equaliser panel — rather than by name, because "boombox" alone often returns a modern Bluetooth speaker styled to look retro, a subtly wrong object that ruins the frame. The hard wall shadow is the other ask: flat painted walls in bright sun throw a crisp subject shadow, and models omit it when they render "outdoor lighting" as ambient.',
@@ -836,6 +896,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'A woman in a teal cotton saree standing beside a 1980s Indian step-through scooter in a sunlit residential lane',
       aspectRatio: '9:16',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged — no lightening, no drift. A breeze moves my hair and the loose end of my saree, the scooter itself stays parked and still on its side stand, and a bicycle bell sounds once, far down the lane. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. Add the distant bicycle bell, birdsong and quiet residential ambience — no dialogue, no music. Keep the same hard mid-morning shadows, warm faded 1986 colour and film grain from the still throughout, and the scooter's period-correct silhouette must not change shape as the clip plays. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'Same technique as the Ambassador prompt, applied to the other object every Indian family owned. The scooter is specified by silhouette because models recognise shapes far more reliably than Indian nameplates. The spare wheel behind the leg shield is the highest-value single detail — it is unique to this class of scooter and almost never appears unless requested, so including it separates a period-correct result from a generic retro two-wheeler.',
     exampleOutput:
@@ -884,6 +948,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-kitchen-steel-utensils.webp',
       alt: 'A woman in a faded green cotton saree in a 1985 Indian kitchen lit by a single small window, with steel dabbas on open shelves',
       aspectRatio: '9:16',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged — no beautifying, no ageing up or down, no drift. I continue the small task at the counter, a thin curl of steam rises from the pan on the stove, and the light through the window grille flickers faintly as if a tree outside is moving in the wind. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. Add a distant utensil clink and birdsong through the window — no dialogue, no music. Keep the same single-window falloff, deep shadow on the far side of the kitchen and 1985 film grain from the still throughout; the shadow side must not lighten as the clip plays. Add no microwave, no mixer-grinder, no modern packaging. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Single-source window light is the most honest lighting here and the most fragile: models want to fill the shadow side because modern interior photography always does. Stating that the window is the only source, and that the far side sits in deep shadow, is what preserves the falloff. The hint of motion blur at one hand is a deliberate imperfection — indoor film at a slow shutter genuinely produced it, and one soft element does more for believability than any grain setting.',
@@ -934,6 +1002,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'A woman in a gold sequinned gown mid-movement on a hazy dark 1988 stage, lit by a hot coloured rim light from behind',
       aspectRatio: '9:16',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and identity completely unchanged for the whole clip — coloured light may move across my hair and shoulders exactly as in the still, but my face must stay recognisably mine and close to neutral throughout. Continue the turn already implied: my raised arm completes its arc, the sequinned gown catches the rim light as hard moving points, and the haze drifts slowly past the light truss above. Camera: a slow, small arc around me at a fixed distance. Duration: 6 seconds, one continuous shot, no cuts. Add a muffled, distant stage bassline and faint crowd murmur, low enough to sit under the image — no legible lyrics, no dialogue. Keep the same two-colour rim lighting, haze and 1988 pushed-film grain from the still throughout. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'The identity clause here — colour may touch the hair and shoulders, the face stays neutral — is likeness protection, not taste. Saturated colour across skin removes the tonal information a viewer uses to recognise a face, so a magenta-washed portrait can be technically accurate and still look like a stranger. Putting the colour on the rim, haze and background is also how real stage photography works, with a near-white key and gelled separation.',
     exampleOutput:
@@ -981,6 +1053,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-couple-studio-portrait.webp',
       alt: 'A couple in coordinated jewel-tone 1986 formalwear photographed as a studio portrait against a mottled blue canvas backdrop',
       aspectRatio: '9:16',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep both our faces and identities completely unchanged for the whole clip — anchor each to the same side of frame as the still, and do not let either face drift toward the other's. Movement stays small: a slow, near-synchronised blink from both of us, the hair light catching a faint shift as our heads settle a fraction further into the pose. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. No sound, or at most a very quiet studio-room hush — no music, no dialogue. Keep the same four-light studio modelling, offset head heights and fine medium-format grain from the still throughout. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Two faces fail differently from one. The specific failure is identity bleed — the model averages the two faces toward a shared middle and both people come out looking like siblings. Anchoring each output face to its source counterpart by position gives the model a correspondence to hold. The offset head height matters too: real studio photographers never placed two heads at the same level, so equal heights read as an AI composite even when both likenesses are perfect.',
@@ -1031,6 +1107,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'A hand-painted 1987 style Hindi film poster showing a couple as two large painted faces above a smaller action vignette',
       aspectRatio: '3:4',
     },
+    videoPrompt: {
+      promptText: `Animate this hand-painted film poster as a teaser, not as live footage — the two of us stay painted, not photorealistic, throughout the clip. Keep both painted faces recognisably ours by position, left stays left, right stays right, with no proportion drifting toward a more generic or idealised face. In the lower vignette, the painted rain continues falling and the jeep's headlamps flicker; in the upper two-thirds, our painted expressions barely shift, as if the artist's brushwork is settling rather than the scene changing. Camera: a slow push in toward the upper two hero faces, the same restraint a real trailer teaser would use. Duration: 6 seconds, one continuous shot, no cuts. Add a low, distant film-orchestra swell and falling rain — no legible dialogue, no on-screen title reveal beyond what the still already shows. Keep the same visible brushwork, halftone dots and yellowed paper texture from the still throughout; do not sharpen the painting into a photograph. Output: vertical 3:4, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'This is the only prompt that abandons photorealism, and that is strategy rather than style. Painted faces tolerate imperfection: a brushstroke slightly off reads as an artist’s hand, where the same error in a photorealistic render reads as an AI artefact. So a poster returns a usable image more often. The risk is that "stylised" gives the model licence to idealise, which is why the identity lock separates surface simplification, allowed, from proportion change, forbidden.',
     exampleOutput:
@@ -1079,6 +1159,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-couple-honeymoon-hills.webp',
       alt: 'A couple in woollen sweaters at a misty hill-station viewpoint railing, shot in cold flat light to look like a 1986 holiday photo',
       aspectRatio: '9:16',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep both our faces and identities completely unchanged for the whole clip, anchored to the same side of frame as the still. The cold wind moves our hair and the shared shawl a little further, our breath shows faintly in the air, and thin mist drifts slowly across the pine ridges behind us. Camera: a slow, small pan across the ridgeline, not a push in on us. Duration: 6 seconds, one continuous shot, no cuts. Add wind and distant birdsong — no dialogue, no music. Keep the same flat overcast light, cold blue-cyan cast and 1986 film grain from the still throughout; no golden-hour warmth may creep in as the clip plays. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Flat overcast light is unfashionable, which is exactly why it works. Models reach for golden hour whenever a landscape appears, and golden hour is what makes an output look like a travel advertisement rather than a family album. The lab-over-correction detail is a real period artefact worth naming: 1980s minilabs pushed cold negatives toward magenta in the highlights, and cool shadows with faintly magenta highlights is very hard to fake with a filter.',
@@ -1129,6 +1213,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'A newlywed couple in cream sherwani and red Banarasi silk seated under a mandap in 1986, lit by hard flash with warm firelight under their chins',
       aspectRatio: '9:16',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep both our faces and identities completely unchanged for the whole clip, anchored to the same side of frame as the still — nothing worn may drift to cover either face as we move. The sacred fire beside us flickers and casts moving warm light on both our chins, the garlands sway very slightly with our breathing, and one of us turns a fraction further toward the other. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. Add a low, indistinct chant and the crackle of the sacred fire — no clear dialogue, no music with legible lyrics. Keep the same hard flash exposure, warm-magenta cast and the fire's separate warm uplight from the still throughout. Output: vertical 9:16, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'Wedding prompts stack three identity threats: garlands rising over the chin, a sehra falling across the eyes, a dupatta pulled forward over the hairline. Any one hides the face you came for, so all three are handled explicitly and separately. The two-source lighting is the other thing worth asking for — hard frontal flash plus warm uplight from the fire gives flat-lit faces with warm light under both chins, a look a single-source description never reaches.',
     exampleOutput:
@@ -1177,6 +1265,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-couple-ambassador-drive.webp',
       alt: 'A couple seen through the wound-down window of a white Ambassador on an Indian highway in 1986, with a hard roof shadow across the opening',
       aspectRatio: '4:3',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated, as though the car has just rolled to a stop rather than as a driving shot. Keep both our faces and identities completely unchanged, anchored to the same side of frame as the still. The wind through the open window moves our hair a little further, the forearm resting on the window frame shifts slightly, and a distant vehicle passes on the road behind, out of focus. Camera: locked off, no movement, still framed on the open window from outside the car. Duration: 5 seconds, one continuous shot, no cuts. Add idling engine tone and wind — no dialogue, no music. Keep the same hard roof-shadow line across the window opening and the road-bounce light on both faces from the still throughout. Output: horizontal 4:3, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Shooting from outside through the open window solves a problem car interiors always create: dashboards are dense with small period detail and models render them badly. From outside, the window frame crops most of the interior away and the few remaining cues carry the period alone. The roof-shadow instruction is what sells it — a car roof genuinely cuts a hard line across the window opening, shading the tops of heads while road bounce lifts the faces.',
@@ -1227,6 +1319,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'A couple seated on a floral-print sofa in a 1986 Indian drawing room, flash-lit with two hard shadows on the wall behind them',
       aspectRatio: '4:3',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep both our faces and identities completely unchanged for the whole clip, anchored to the same side of frame as the still. We settle a little closer on the sofa, a small, quiet shared smile forms, and the television screen behind us flickers faintly with a scan-line shimmer. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. Add quiet room tone and a faint television hum — no dialogue, no music. Keep the same flat on-camera-flash exposure and the two separate hard head-shadows on the wall from the still throughout; neither shadow may merge or move independently of its own head. Output: horizontal 4:3, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'Two heads under a single direct flash produce two separate hard shadows on the wall, at slightly different angles. Asking for that explicitly is what makes a two-person flash frame read as one real photograph rather than two subjects composited together, and models will not add it unprompted. Everything else is deliberately ordinary — a busy floral sofa, a doily, a jug on a tray, a picture hung too high. Nobody art-directs a room like this, so a room like this reads as found rather than made.',
     exampleOutput:
@@ -1275,6 +1371,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-couple-rain-song-frame.webp',
       alt: 'A couple in a backlit 1987 film rain sequence, lit rain streaks around them and both faces kept bright by a hard front key light',
       aspectRatio: '16:9',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep both our faces and identities completely unchanged for the whole clip, anchored to the same side of frame as the still — rain and hair may move but neither face may ever fall into shadow, streak over or go out of focus. The backlit rain keeps falling in bright glowing streaks, our foreheads drift a fraction closer, and water continues to run from the wet fabric. Camera: a very slow, small push in, matching the scene's own stillness rather than a dramatic move. Duration: 6 seconds, one continuous shot, no cuts. Add falling rain and a distant rumble — no dialogue, no music with legible lyrics. Keep the same hard front key keeping both faces bright, the backlit rain rim and the 1987 pushed-film grain from the still throughout. Output: horizontal 16:9, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Backlit rain is the most likeness-destructive setup in the whole category. A strong backlight is what makes each drop glow, but it also drives both faces toward silhouette, and a silhouette has no likeness at all. So the prompt states three times, in three places, that the faces stay lit, in focus and unobstructed. That repetition is deliberate — on a setup this hostile to faces, a single mention gets overridden by the drama of the rest of the description.',
@@ -1325,6 +1425,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'A family arranged in tiers for a 1986 Indian studio group portrait against a mottled blue canvas backdrop',
       aspectRatio: '4:3',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Count the people in the still and animate exactly that many — anchor every face to the same left-to-right position as the still, and do not let any two identities drift toward each other or toward a more even age. Movement stays small and shared: a near-synchronised slow blink across the group, the hair light catching a faint shift as heads settle a fraction further into the tiered pose. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. No sound, or at most a very quiet studio-room hush — no music, no dialogue. Keep the same tiered studio arrangement, the lighter backdrop halo and fine medium-format grain from the still throughout, and every face must stay as evenly lit as it is in the still. Output: horizontal 4:3, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'Group prompts fail three ways and this blocks each separately. Headcount drift, where the model adds or drops a person, is blocked by counting the source first. Identity bleed is blocked by left-to-right anchoring. Age flattening — the most damaging, where grandparents come back looking forty — is blocked by naming the age gap as something to preserve. The flatter, higher-fill lighting is a real departure from the single-portrait prompts: a hard key that flatters one face leaves the people at the edges in shadow.',
     exampleOutput:
@@ -1373,6 +1477,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-family-ambassador-outing.webp',
       alt: 'A family posed around a white Ambassador on an Indian street in bright 1986 morning sun, dressed in Sunday best',
       aspectRatio: '4:3',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Count the people in the still and animate exactly that many, anchored to the same left-to-right position and the same relative body scale as the still — no adult may shrink and no child may grow as the clip plays. A breeze moves clothing and hair across the group, a gulmohar leaf drifts past in the foreground, and the Ambassador itself stays parked and still. Camera: locked off, no movement. Duration: 6 seconds, one continuous shot, no cuts. Add distant street ambience and birdsong — no dialogue, no music. Keep the same hard morning shadows, chrome highlight and 1986 film grain from the still throughout. Add no modern vehicle, no phone. Output: horizontal 4:3, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Once a group shares a frame with a large object, scale drift appears — a child slightly too large next to a car door, an adult slightly too small against the roofline — and it makes the image feel wrong in a way viewers notice without being able to name. Stating scale as a relationship gives the model a constraint it can actually apply. The squinting instruction is the small authenticity win: people genuinely squint in hard morning sun, and uniformly wide-open eyes read as staged.',
@@ -1423,6 +1531,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'A family gathered around a boxy television in a 1987 Indian drawing room, their faces lit by the cool glow of the screen',
       aspectRatio: '4:3',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Count the people in the still and animate exactly that many, anchored to the same left-to-right position as the still. The television screen flickers with a faint scan-line shimmer, its cool glow shifting very slightly across the faces turned toward it, and one person glances back toward the camera. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. Add a faint television hum and quiet room tone — no legible television audio, no dialogue, no music. Keep the same screen-lit upward shadows, the warm tungsten bulb behind and the coarse 1987 film grain from the still throughout; the screen must show only an indistinct glow, never a legible picture. Output: horizontal 4:3, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'Screen-lit interiors are a genuinely different lighting problem, and the result looks like nothing else in the trend. The key instruction is directional: the glow comes from low and in front, throwing shadows upward on the wall — the inverse of every other frame here. Naming that inversion is what produces the effect. The screen-content rule matters just as much: told to show a programme, models render garbled logos and captions, so an indistinct scan-lined glow removes the failure surface entirely.',
     exampleOutput:
@@ -1472,6 +1584,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'Three generations of an Indian family posed on a house verandah in 1985, grandparents seated with the family standing behind',
       aspectRatio: '4:3',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Count the people in the still and animate exactly that many, anchored to the same left-to-right position as the still — every visible sign of age (grey hair, lines, a stooped posture) must stay exactly as it appears, with no one rejuvenated as they move. The youngest child fidgets slightly at the elders' feet, a breeze moves through the potted plants on the verandah, and the eldest pair sit still and composed while everyone standing behind shifts only faintly. Camera: locked off, no movement. Duration: 6 seconds, one continuous shot, no cuts. Add birdsong and quiet household ambience — no dialogue, no music. Keep the same open-shade flat lighting and 1985 film grain from the still throughout, with the sunlit garden beyond staying blown out. Output: horizontal 4:3, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'Image models beautify, and beautification is functionally the same operation as rejuvenation. On a three-generation portrait that produces the one failure people find genuinely upsetting: a grandmother returned with smooth skin and dark hair. The fix is promoting age into the identity lock and enumerating what must survive — grey hair, deep lines, folds, thinning hair, age spots, stooped posture. A general instruction is too abstract to bind; a list is something the model can check itself against.',
     exampleOutput:
@@ -1520,6 +1636,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-family-park-picnic.webp',
       alt: 'A family sitting on a cotton sheet under a tree in an Indian park in 1986 with steel tiffin boxes, in dappled sunlight',
       aspectRatio: '4:3',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Count the people in the still and animate exactly that many, anchored to the same left-to-right position as the still — dappled light may shift across faces as the leaves above move, but no face may become unreadable as it does. The child already mid-movement completes a small gesture, one adult's reaching hand reaches the tiffin box, and the dappled light pattern drifts slowly across the spread sheet. Camera: static, or the faintest handheld sway, as if a family member is holding the camera. Duration: 6 seconds, one continuous shot, no cuts. Add park ambience, birdsong and distant chatter — no dialogue directed at camera, no music. Keep the same punchy midday contrast and 1986 film grain from the still throughout. Output: horizontal 4:3, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Dappled light is the most interesting condition in the set and the most dangerous for a group, because a hard bright patch across one person’s eyes can make them unrecognisable while every other face is perfect. So the identity lock carries an exception: dapple is allowed, unreadable faces are not. The other choice is that not everyone looks at the camera — every competing prompt lines subjects up facing the lens, which is exactly what makes those outputs read as portraits rather than snapshots.',
@@ -1571,6 +1691,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'A family on the front steps of a house on Diwali night in 1986, lit from below by a row of clay oil lamps with one sparkler burning',
       aspectRatio: '4:3',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Count the people in the still and animate exactly that many, anchored to the same left-to-right position as the still — the warm lamp light may flicker across faces but every face must stay clearly readable throughout. The row of clay diyas keeps burning, the held sparkler showers a few more sparks and casts moving light, and the rangoli stays still on the ground beneath. Camera: locked off, no movement. Duration: 6 seconds, one continuous shot, no cuts. Add the crackle of the sparkler and distant, faint firecracker sounds — no dialogue, no music, no sung 'happy birthday'-style lyrics of any kind. Keep the same below-lighting from the lamp row, the sparkler's small hot point and the coarse night-film grain from the still throughout; the night beyond the lamps must stay near-black. Output: horizontal 4:3, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'Uplight is the rarest lighting direction in any image model’s training data, which is why asking for it produces something that does not look like other AI output. The instruction has to be specific about consequences — light on the undersides of chins and lower cheeks, shadows thrown upward — because "lit by diyas" alone returns a normally-lit scene with some lamps in it. Uplight also distorts faces more than any other direction, hence the explicit clause that it may not reshape a feature.',
     exampleOutput:
@@ -1619,6 +1743,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-family-hill-station-holiday.webp',
       alt: 'A family in woollen sweaters and caps pressed together at a misty hill-station viewpoint railing in flat overcast 1987 light',
       aspectRatio: '4:3',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Count the people in the still and animate exactly that many, anchored to the same left-to-right position as the still — caps, hoods and the shared shawl may move in the wind but nothing may drift to cover any face. The cold wind moves everyone's clothing and headwear a little further, breath shows faintly in the air, and thin mist drifts across the pine slope behind the group. Camera: locked off, no movement. Duration: 6 seconds, one continuous shot, no cuts. Add wind and distant birdsong — no dialogue, no music. Keep the same flat overcast light and cold blue-cast shadows from the still throughout; no golden-hour warmth may creep in. Output: horizontal 4:3, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Winter group photos introduce a quiet failure: caps, hoods and a shared shawl creep across faces and one person ends up half-hidden. On a single portrait that is obvious; in a group of six it is easy to miss until after sharing. The flat overcast light is the same deliberate anti-golden-hour choice as the honeymoon prompt, and for a group it does double duty — directionless light means nobody at the edge of the row falls into shadow, so every likeness survives equally.',
@@ -1669,6 +1797,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'A group of college friends with arms over each other on stone steps in 1985, one crouched at the front, in flat open shade',
       aspectRatio: '4:3',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Count the people in the still and animate exactly that many, anchored to the same left-to-right position as the still — every arm stays connected to exactly the same person and shoulder it rests on in the still, with no new or missing limb appearing as the group moves. The shared laugh continues — one head tips back further, shoulders shake slightly — while the group's loose, uneven posture holds. Camera: static, or the faintest handheld sway, as if a friend is holding the camera rather than a tripod. Duration: 6 seconds, one continuous shot, no cuts. Add laughter and campus ambience — no directed dialogue, no music. Keep the same flat open-shade lighting, the blown-out background and 1985 film grain from the still throughout. Output: horizontal 4:3, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'Once people stand close enough to put arms over shoulders, limb topology becomes the dominant failure — an extra arm appears, or a hand rests on a shoulder with no body behind it. Giving the model an explicit escape route ("or keep that hand out of frame entirely") matters as much as the rule itself, because a model that cannot render a correct hand will render a wrong one unless told it may omit it. The clipped elbow at the frame edge is the deliberate imperfection that sells the snapshot.',
     exampleOutput:
@@ -1718,6 +1850,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'Friends packed onto a bunk bed in a cluttered 1986 hostel room with a poster wall, lit by a single bare hanging bulb',
       aspectRatio: '4:3',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Count the people in the still and animate exactly that many, anchored to the same left-to-right position as the still — every arm and hand stays exactly as connected as it is in the still. The bare bulb overhead sways very slightly, its warm light and the shadow it casts moving faintly with it, and the cassette reels on the tape recorder on the floor keep turning. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. Add a faint cassette hiss and quiet room tone — no legible song, no dialogue. Keep the same hard top-down bulb light, shadowed eye sockets and coarse tungsten-cast grain from the still throughout; the poster wall behind must stay illegible. Output: horizontal 4:3, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'A single bare bulb hanging close above a group behaves nothing like studio light: it lights the tops of heads hard, drops the eye sockets into shadow, and falls off within a metre. Describing those three consequences produces a genuinely cramped interior, where "dim room lighting" returns an evenly lit room that could be anywhere. The poster wall is why illegibility is specified twice — a wall of posters is the single largest text-failure surface in the set.',
     exampleOutput:
@@ -1766,6 +1902,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-friends-gully-cricket.webp',
       alt: 'A group of boys after a gully cricket match in a narrow Indian lane in 1986, with a chalk wicket on the wall and long late-afternoon shadows',
       aspectRatio: '4:3',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Count the people in the still and animate exactly that many, anchored to the same left-to-right position as the still — every arm and leg stays connected to exactly the same person as in the still, and every visible hand keeps five correctly formed fingers. The raised hand finishes a small toss of the taped ball and catches it again, dust the sun already lit continues drifting, and one or two of us keep squinting into the low light. Camera: static, or the faintest handheld sway, as if a friend's older brother is holding the camera. Duration: 6 seconds, one continuous shot, no cuts. Add distant street sounds and children playing further off — no directed dialogue, no music. Keep the same hard late-afternoon shadows and punchy 1986 film grain from the still throughout. Output: horizontal 4:3, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Slight motion blur on one moving element is the most under-used authenticity signal available. Real 1986 film in late-afternoon light could not freeze a raised hand, so the blur belongs there — and because AI output is uniformly, unnaturally sharp, one genuinely soft element reads as photographic evidence. The chalked stumps are the cultural detail that makes it specific: gully cricket used a wall, and a model asked for "street cricket" will otherwise plant three wooden stumps in concrete.',
@@ -1817,6 +1957,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'Friends squeezed into a rexine restaurant booth in 1987, lit by a hard direct flash with the nearest faces brightest',
       aspectRatio: '4:3',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Count the people in the still and animate exactly that many, anchored to the same left-to-right position as the still — every arm stays connected to exactly the same person as in the still, and hands stay above the table edge or visibly correct. The shared laughter continues, the steel glasses on the table catch a faint afterglow from the waiter's flash as hands shift slightly, and the pendant lamp in the background flickers once. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. Add restaurant murmur and the clink of glasses — no directed dialogue, no music. Keep the same hard cross-table flash falloff, the near-to-far brightness gradient and the warm-magenta 1987 grain from the still throughout. Output: horizontal 4:3, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'A flash fired across a table produces a specific exposure gradient — near subjects hot, far subjects dim — that models will not reproduce unless the unevenness is named. Uniformly exposed faces are the default and exactly what makes a flash-lit group read as a modern composite. Red eye is the deliberate flaw: direct flash close to the lens genuinely caused it in 1987, almost nobody prompts for it, and a hint of it is very hard to dismiss as a filter.',
     exampleOutput:
@@ -1865,6 +2009,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-birthday-party-1986.webp',
       alt: 'A family crowded around a candlelit cream cake at a 1986 Indian home birthday party with paper hats and crepe streamers, lit by hard flash',
       aspectRatio: '4:3',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Count the people in the still and animate exactly that many, anchored to the same left-to-right position as the still — paper hats may sit exactly as they do in the still but must never slide down to cover a face. The lit candles on the cake flicker and gutter slightly, the birthday person leans in a fraction further as if about to blow them out, and one person mid-clap finishes the clap. Camera: locked off, no movement. Duration: 6 seconds, one continuous shot, no cuts. Add children's chatter and quiet laughter — no sung 'happy birthday'-style lyrics of any kind, no directed dialogue, no music. Keep the same flat on-camera-flash exposure, the faint candle-glow under the nearest chins and the warm-yellow 1986 grain from the still throughout. Output: horizontal 4:3, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'Flash and candlelight together are why this frame looks unlike the other flash prompts. A camera flash overwhelms candle flames almost completely, so the correct rendering is a flat flash-lit scene with only a faint warm trace under the nearest chins — not the warm candle-lit glow people imagine. Asking for that hierarchy is more accurate and more convincing. The paper-hat clause exists because conical hats slide forward over foreheads and eyes in generated images.',
@@ -1915,6 +2063,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'A 1985 school photo-day portrait in white shirt, striped tie and navy pullover against a grey-blue mottled canvas backdrop',
       aspectRatio: '3:4',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep my face and my real visible age completely unchanged for the whole clip — the school uniform and setting must not make me look younger or older as I move. Movement stays minimal and posed: a slow, natural blink, my hands settling a fraction on my thighs, the slightly self-conscious smile holding steady. Camera: locked off, no movement. Duration: 4 seconds, one continuous shot, no cuts. No sound, or at most a very quiet school-hall hush — no music, no dialogue. Keep the same single-flash-and-umbrella lighting, the mottled canvas backdrop and the flat 1985 film grain from the still throughout. Output: vertical 3:4, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'A school setting is the strongest age-pull in the category: put a uniform and a school hall in a prompt and models quietly return a child even when the uploaded photo shows a forty-year-old. That is the joke most people actually want — themselves, now, in their old uniform — and it only works if the age holds. So the age lock is stated twice with an explicit resolution rule: the setting does not change my age. The crest is declared an indistinct woven patch to remove a small text surface before it goes wrong.',
     exampleOutput:
@@ -1964,6 +2116,10 @@ export const prompts: readonly Prompt[] = [
       alt: 'A parent seated on a stool with a child leaning against their knee in a 1986 Indian studio portrait against mottled blue canvas',
       aspectRatio: '3:4',
     },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep both our faces, our real visible ages and our height difference completely unchanged for the whole clip — anchor each to the same position as the still, and do not let the two faces drift toward looking related or the same age. The child shifts very slightly against the adult's knee, the adult's hand stays resting steadily on the child's shoulder, and both settle a fraction further into the composed smile. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. No sound, or at most a very quiet studio-room hush — no music, no dialogue. Keep the same hard key adjusted for both heights, the catchlights in all four eyes and the fine medium-format grain from the still throughout. Output: vertical 3:4, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
+    },
     whyItWorks:
       'Two people of different ages trigger a compound failure: the model narrows the age gap, equalises the heights, and pushes the two faces toward each other because it reads them as related. Each part needs naming. The clause allowing family resemblance while requiring clearly distinct individuals handles the subtle one — the output can be technically age-correct and still show two versions of the same face. The lighting note is practical: a key placed to flatter a seated adult leaves a shorter child underlit.',
     exampleOutput:
@@ -2012,6 +2168,10 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-mother-daughter-doorway.webp',
       alt: 'A mother and daughter in cream and pale blue sarees standing in a painted doorway of an Indian house in soft 1986 morning light',
       aspectRatio: '3:4',
+    },
+    videoPrompt: {
+      promptText: `Animate the photo exactly as generated. Keep both our faces and our real visible ages completely unchanged for the whole clip — anchor each to the same position as the still, keep every line and any grey hair on the older of us exactly as it appears, and do not let the two faces drift toward looking like the same age. Soft morning light moves very slightly as a breeze stirs both our pallus and loose hair, and the dim interior behind the doorway stays several stops darker than we are. Camera: locked off, no movement. Duration: 5 seconds, one continuous shot, no cuts. Add quiet morning ambience and distant birdsong — no dialogue, no music. Keep the same single-source morning light, the doorway's dark interior falloff and the gentle 1986 film grain from the still throughout. Output: vertical 3:4, matching the still's framing, loop-safe.`,
+      targetTools: ['Veo 3.1', 'Kling 3.0', 'Runway Gen-4.5'],
     },
     whyItWorks:
       'This is where the "two ages of one face" failure is most likely, because a real family resemblance gives the model permission to converge the two faces, and the result is uncanny in a way people notice without being able to say why. Naming the failure precisely is more effective than a generic instruction not to merge identities. The doorway framing then does the lighting work for free: a bright exterior against a dark interior gives natural separation and puts both faces in the same soft light.',

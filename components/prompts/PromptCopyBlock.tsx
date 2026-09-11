@@ -76,11 +76,21 @@ export function PromptCopyBlock({
   promptSlug,
   promptText,
   variables,
+  label = 'Prompt',
+  analyticsAction = 'copy_prompt',
 }: {
   category: string
   promptSlug: string
   promptText: string
   variables: readonly PromptVariable[]
+  /** Header chip text — 'Prompt' for the image brief, 'Video prompt' for
+   * the video companion below it, so the two dark editor cards on a Photo
+   * Trends page read as clearly distinct artifacts rather than duplicates. */
+  label?: string
+  /** Distinct `trackPromptEvent` action name per card — kept apart from the
+   * default `copy_prompt` so the two copy buttons on one page don't collapse
+   * into a single, ambiguous analytics action. */
+  analyticsAction?: string
 }) {
   // Defaults are the example values — the prompt is complete on first paint.
   const [values, setValues] = useState<Record<string, string>>(() =>
@@ -115,7 +125,7 @@ export function PromptCopyBlock({
       const customized = variables.some(
         (v) => (values[v.name]?.trim() || v.example) !== v.example,
       )
-      trackPromptEvent(category, promptSlug, 'copy_prompt', { customized })
+      trackPromptEvent(category, promptSlug, analyticsAction, { customized })
     } catch {
       // Clipboard API can fail (permissions, insecure context) — the text
       // is still fully selectable/visible below, so nothing is truly lost.
@@ -153,7 +163,7 @@ export function PromptCopyBlock({
             <span className="size-2.5 rounded-full bg-cta" />
             <span className="size-2.5 rounded-full bg-green" />
             <span className="ml-2 font-bold font-mono text-[11px] text-white/50 uppercase tracking-[0.18em]">
-              Prompt
+              {label}
             </span>
           </span>
           <span className="flex items-center gap-2">

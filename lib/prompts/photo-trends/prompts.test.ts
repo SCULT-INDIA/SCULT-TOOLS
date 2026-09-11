@@ -119,4 +119,46 @@ describe('photo-trends prompts', () => {
       expect(p.relatedToolSlug, p.slug).toBeUndefined()
     }
   })
+
+  /**
+   * The video-prompt companion (an image-to-video brief for Veo/Kling/
+   * Runway that animates THIS still) is optional on the shared `Prompt`
+   * type but required in practice for every entry in this category, same
+   * as `exampleImage` above — a picture with no matching motion prompt
+   * would leave `PromptDetailShell`'s video section silently missing for
+   * that one card.
+   */
+  describe('videoPrompt companion', () => {
+    it('is present on every prompt', () => {
+      for (const p of prompts) {
+        expect(p.videoPrompt, p.slug).toBeDefined()
+      }
+    })
+
+    it('names at least one real video-generation tool', () => {
+      for (const p of prompts) {
+        expect(p.videoPrompt?.targetTools.length ?? 0, p.slug).toBeGreaterThan(0)
+      }
+    })
+
+    it('leaves no {{placeholder}} — this category ships zero variables', () => {
+      for (const p of prompts) {
+        expect(p.videoPrompt?.promptText ?? '', p.slug).not.toMatch(/\{\{/)
+      }
+    })
+
+    it('never carries a Midjourney flag', () => {
+      for (const p of prompts) {
+        expect(p.videoPrompt?.promptText ?? '', p.slug).not.toMatch(
+          /--ar\b|--v\s+\d|--style\b|--chaos\b/,
+        )
+      }
+    })
+
+    it('states a concrete clip duration in seconds, not an open-ended request', () => {
+      for (const p of prompts) {
+        expect(p.videoPrompt?.promptText ?? '', p.slug).toMatch(/\d+\s*seconds?\b/)
+      }
+    })
+  })
 })

@@ -181,6 +181,23 @@ export interface PromptExampleImage {
   }
 }
 
+/**
+ * A companion video-generation prompt for THIS specific example image — an
+ * image-to-video brief (Veo/Kling/Runway) that animates the still
+ * `exampleImage`/`promptText` produce, derived from the same scene rather
+ * than a generic "animate this photo" line. Deliberately carries no rendered
+ * example clip the way `PromptExampleImage` carries a still: nobody on this
+ * team has actually run these through a video model yet, so there is no real
+ * clip to show and no honest `verifiedAgainst` claim to make for it (see
+ * `PromptDetailShell`, which renders the prompt text only here — never a
+ * video player or "what you get back" section for this field, unlike the
+ * image prompt above it).
+ */
+export interface PromptVideoCompanion {
+  readonly promptText: string
+  readonly targetTools: readonly string[]
+}
+
 export interface Prompt {
   readonly slug: string
   readonly category: PromptCategorySlug
@@ -202,6 +219,7 @@ export interface Prompt {
   readonly whyItWorks: string
   readonly exampleOutput?: string
   readonly exampleImage?: PromptExampleImage
+  readonly videoPrompt?: PromptVideoCompanion
   /** At least one entry required — this is the single best-evidenced
    * differentiator in the whole brief (§9, differentiator #1). */
   readonly verifiedAgainst: readonly PromptVerification[]

@@ -356,6 +356,41 @@ export function PromptDetailShell({
         />
       </section>
 
+      {/* The video companion — an image-to-video brief that animates the
+          still above, for whoever wants to take this further than a photo.
+          Deliberately text-only: no rendered clip, no "what you get back"
+          card, no player — this hasn't been run through Veo/Kling/Runway
+          yet, so there is nothing honest to show as a result. Sits inside
+          the article's normal reading column rather than the full-bleed
+          breakout above, since a video prompt never carries variables and
+          so never needs PromptCopyBlock's split Customize panel. */}
+      {prompt.videoPrompt ? (
+        <section aria-labelledby="video-prompt" className="mt-10">
+          <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
+            <h2
+              id="video-prompt"
+              className="text-[22px] tracking-[-0.5px] md:text-[26px]"
+            >
+              Take it further: the video prompt
+            </h2>
+            <p className="text-[13px] text-ink-subtle">Animates the photo above.</p>
+          </div>
+          <p className="mb-4 max-w-[60ch] text-[14.5px] text-ink-muted leading-6">
+            An image-to-video brief for {prompt.videoPrompt.targetTools.join(', ')} that
+            continues this exact still, not a new scene — paste it alongside the generated
+            photo.
+          </p>
+          <PromptCopyBlock
+            category={prompt.category}
+            promptSlug={prompt.slug}
+            promptText={prompt.videoPrompt.promptText}
+            variables={[]}
+            label="Video prompt"
+            analyticsAction="copy_video_prompt"
+          />
+        </section>
+      ) : null}
+
       <section aria-labelledby="why-it-works" className="mt-10">
         {/* bg-violet-50 is theme-fixed light — text on it must be literal
             black, never adaptive ink (which flips near-white in dark mode). */}
