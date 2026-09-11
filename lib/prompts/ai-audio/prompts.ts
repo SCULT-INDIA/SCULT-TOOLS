@@ -665,4 +665,86 @@ Visual pacing notes for the treatment: the Intro should correspond to an establi
       },
     ],
   },
+  {
+    slug: 'ai-audio-live-band-podcast-opener',
+    category: 'ai-audio',
+    title: `Build a live-band jazz-funk podcast opener that doesn't sound like synth stock music`,
+    description: `A Suno v5 instrumental prompt for a high-energy, human-played funk-rock/jazz-fusion podcast opener — an SNL-house-band feel rather than a synth sting — that hits hard immediately, then strips down cleanly under a host's cold open.`,
+    promptText: `STYLE OF MUSIC:
+Instrumental only, no vocals. {{bpm}} BPM. High-energy live {{genre_blend}} podcast opener — human-played band feel, organic recording, analog studio warmth, not a synth-driven sting. {{rhythm_section_detail}}. {{lead_instrumentation}}. {{percussion_accent}}. {{harmony_note}}, {{energy_descriptor}}, dynamic but controlled.
+
+Catchy 2-bar instrumental hook that arrives immediately — a big first hit and a memorable groove — then gradually strips down so the music disappears naturally underneath the host. Runtime: {{intro_length}}, designed to transition seamlessly into spoken dialogue.
+
+Avoid: vocals, an EDM drop, a cinematic trailer swell, cheesy corporate music, a generic stock-music sound, excessive reverb, a long melody, or a distracting solo.`,
+    variables: [
+      {
+        name: 'bpm',
+        description: `Target tempo in beats per minute`,
+        example: `118`,
+        required: true,
+      },
+      {
+        name: 'genre_blend',
+        description: `The genre mix that defines the band's sound`,
+        example: `funk-rock jazz fusion`,
+        required: true,
+      },
+      {
+        name: 'rhythm_section_detail',
+        description: `Drums and bass — the groove the whole cue sits on`,
+        example: `Punchy acoustic drum kit with a tight funky groove and an explosive opening drum fill, deep electric bass with a syncopated funk pocket`,
+        required: true,
+      },
+      {
+        name: 'lead_instrumentation',
+        description: `The melodic/lead instruments layered over the groove`,
+        example: `Gritty clean electric guitar riffs, short brass and saxophone stabs`,
+        required: true,
+      },
+      {
+        name: 'percussion_accent',
+        description: `A secondary percussion layer for texture, if wanted`,
+        example: `Subtle West African hand percussion and rhythmic accents`,
+        required: false,
+      },
+      {
+        name: 'harmony_note',
+        description: `The harmonic character underneath the groove`,
+        example: `Sophisticated jazz harmony with a slight blues influence`,
+        required: true,
+      },
+      {
+        name: 'energy_descriptor',
+        description: `The overall attitude and atmosphere of the cue`,
+        example: `youthful, intelligent and intriguing, cool late-night band atmosphere`,
+        required: true,
+      },
+      {
+        name: 'intro_length',
+        description: `Target runtime for the intro cue`,
+        example: `10-12 seconds`,
+        required: true,
+      },
+    ],
+    targetTools: [`Suno v5`],
+    tags: [
+      `audio`,
+      `music`,
+      `podcast`,
+      `suno`,
+      `intro`,
+      `funk`,
+      `jazz-fusion`,
+      `live-band`,
+    ],
+    whyItWorks: `Naming "human-played band feel, organic recording" up front matters because Suno v5's default read of "high-energy podcast intro" skews toward a synth-driven sting or a trailer-style build — the same failure mode the site's other podcast-intro prompt guards against, just from the opposite genre direction. Here the fix is genre-specific: describing a real rhythm section (acoustic kit, electric bass, clean guitar, live brass) rather than a mood adjective gives the model actual instruments to arrange like a band would, which is what produces a live-feeling groove instead of a layered synth pad. The explicit avoid-list earns its place for the same reason the other cue's structural notes do — "no EDM drop, no cinematic trailer, no generic stock-music sound" rules out the exact directions Suno defaults toward when a prompt says "energetic" without saying what NOT to become, and naming a distracting solo as something to avoid keeps a genuinely skilled-sounding band from wandering into a self-indulgent instrumental break that a 10-12 second cue has no room for. The big-hit-then-strip-down structure is the same functional requirement every intro cue on this site shares — a podcast opener has to disappear under a host's first line, not compete with it — but written here as a groove thinning out rather than a synth pad fading, which is the version of that instruction a live-band arrangement actually responds to.`,
+    exampleOutput: `A 10-second cue: a full-band hit lands on beat one — kit, bass and guitar together — then a punchy two-bar funk-rock riff with brass stabs and hand percussion running underneath, before the arrangement thins to just bass and a light hi-hat groove by the final two seconds, leaving clear space for a host to start talking.`,
+    verifiedAgainst: [],
+    changelog: [
+      {
+        date: '2026-09-11',
+        note: `Added from a site prompt request (TR-00012) submitted via the SCULT Studio dashboard.`,
+      },
+    ],
+  },
 ]
