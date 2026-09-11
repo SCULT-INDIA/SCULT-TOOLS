@@ -160,6 +160,25 @@ export interface PromptExampleImage {
    * reverse. Omitted defaults to `'3:4'` on the detail page, a safe middle
    * ground between portrait and landscape. */
   readonly aspectRatio?: PromptImageAspectRatio
+  /**
+   * Named, real-person credit for the subject of THIS specific photo —
+   * never invented, and only ever populated for a subject who has agreed to
+   * appear and be named on a public page (the same consent bar
+   * `docs/research/photo-trends-80s.md` sets for every example image in
+   * this category). A verifiable named person behind a photo, linked to
+   * real social profiles, is a genuine E-E-A-T signal search engines reward
+   * over an anonymous or stock image — the opposite of keyword-stuffing,
+   * since it's simply telling the truth about who is in the picture.
+   * Rendered on the detail page only (`PromptDetailShell`), not the compact
+   * grid card — same "detail page carries the extra context, the card
+   * stays a fast scan" split this category already uses for `whyItWorks`
+   * and `verifiedAgainst`.
+   */
+  readonly modelCredit?: {
+    readonly name: string
+    readonly instagram?: string
+    readonly linkedin?: string
+  }
 }
 
 export interface Prompt {

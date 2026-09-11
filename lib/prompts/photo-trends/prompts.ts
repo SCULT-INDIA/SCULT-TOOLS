@@ -60,6 +60,11 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-angry-young-man-studio.webp',
       alt: 'A man in a rust-brown corduroy blazer photographed as a 1986 Hindi film studio portrait against a mottled grey canvas backdrop',
       aspectRatio: '9:16',
+      modelCredit: {
+        name: 'Pranjul Rathour',
+        instagram: 'https://www.instagram.com/pranjulrathour.in/',
+        linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
+      },
     },
     whyItWorks:
       'The hard shadow on the backdrop is what dates this, not the corduroy. A 1980s Indian portrait studio used one close, hard key with almost no fill — the opposite of the soft-box lighting these models default to. Naming the shadow as a thing in the frame makes the model build the lighting instead of adding a sepia filter. The hairline clause matters too: models quietly restore a fuller hairline on men, and that single change is what makes people say it does not look like them.',
@@ -109,6 +114,11 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-ambassador-car-lean.webp',
       alt: 'A man leaning against a white Hindustan Ambassador on an Indian roadside in late afternoon light, shot to look like a 1986 photograph',
       aspectRatio: '9:16',
+      modelCredit: {
+        name: 'Pranjul Rathour',
+        instagram: 'https://www.instagram.com/pranjulrathour.in/',
+        linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
+      },
     },
     whyItWorks:
       'Asking for "a vintage Indian car" returns a generic beige box. Describing the Ambassador by its geometry instead — upright body, chrome grille, small round headlamps, thin bumpers — works because image models recognise silhouettes far more reliably than Indian nameplates, which barely appear in their training data. The blurred signboard is deliberate: background text is where these images break, and declaring it unreadable turns a guaranteed failure into depth of field.',
@@ -158,6 +168,11 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-doordarshan-living-room.webp',
       alt: 'A person seated on a floral sofa in a wood-panelled 1986 Indian drawing room beside a boxy television, lit by a direct camera flash',
       aspectRatio: '9:16',
+      modelCredit: {
+        name: 'Pranjul Rathour',
+        instagram: 'https://www.instagram.com/pranjulrathour.in/',
+        linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
+      },
     },
     whyItWorks:
       'Direct on-camera flash is the strongest period signal in this whole trend and the one thing a model will never do unless told. Left alone it renders even, flattering, ambient interiors, because that is what modern interior photography looks like. Spelling out the three consequences — hot foreground, flat face, hard shadow right behind the head — gets the physics instead of a warm filter. The blank clock face removes the one surface that would otherwise render nonsense.',
@@ -207,6 +222,11 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-disco-dancer-stage.webp',
       alt: 'A performer in a silver sequinned blazer on a hazy 1987 stage with a laser starburst backdrop and a hot coloured rim light',
       aspectRatio: '9:16',
+      modelCredit: {
+        name: 'Pranjul Rathour',
+        instagram: 'https://www.instagram.com/pranjulrathour.in/',
+        linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
+      },
     },
     whyItWorks:
       'Ask for "80s neon" and the model floods every surface with magenta and cyan until the face is unrecognisable and the image reads as a filter. Two rules stop that: cap the palette at two colours, which is what a real gelled stage rig produced, and put the colour on the rim, haze and background while keeping the face neutral. That is also how stage photography actually works, and it protects the likeness — heavy coloured light on skin is the fastest way to lose a face.',
@@ -256,6 +276,11 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-filmfare-magazine-cover.webp',
       alt: 'A man styled as a 1986 Indian film magazine cover star, with a bold masthead overlapping his hair and cover lines down the left edge',
       aspectRatio: '3:4',
+      modelCredit: {
+        name: 'Pranjul Rathour',
+        instagram: 'https://www.instagram.com/pranjulrathour.in/',
+        linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
+      },
     },
     whyItWorks:
       'Cover prompts live or die on text, and most published versions ignore the problem and ship garbled lettering. The fix is counter-intuitive: give the model a fallback. Telling it to render type smaller and softer when it cannot render it crisply turns the common failure — sharp, confidently misspelled words — into something that reads as ordinary type at normal size. Ruling out Devanagari trades a little authenticity for a usable image, since non-Latin script is where these models fail hardest.',
@@ -305,6 +330,11 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-college-campus-denim.webp',
       alt: 'A student in a denim jacket leaning against a pillar in a shaded college corridor, shot to look like a flat, faded 1985 snapshot',
       aspectRatio: '9:16',
+      modelCredit: {
+        name: 'Pranjul Rathour',
+        instagram: 'https://www.instagram.com/pranjulrathour.in/',
+        linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
+      },
     },
     whyItWorks:
       'Almost every 80s prompt asks for glamour, which is why almost every output looks like a film still instead of an old photograph. This one withholds the studio on purpose: open shade, no flash, flat contrast, a crooked horizon. The load-bearing detail is the blown-out background — real consumer film could not hold a shaded face and a sunlit exterior at once, so the exterior clipped to white. A reproduced limitation is far more convincing than added grain.',
@@ -354,6 +384,11 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-baraat-groom.webp',
       alt: 'A groom in a cream sherwani and turban on a decorated white horse at a 1986 night wedding procession, lit by hard direct flash',
       aspectRatio: '9:16',
+      modelCredit: {
+        name: 'Pranjul Rathour',
+        instagram: 'https://www.instagram.com/pranjulrathour.in/',
+        linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
+      },
     },
     whyItWorks:
       'The sehra is the trap. Asked for one, models drape the floral strings straight down over the eyes and nose, and the image fails because the face — the only thing you care about — is hidden. So the rule is stated twice: above the eyebrows, not over the face. The other choice is the steep light falloff. Night flash in 1986 lit the subject hard and let everything two metres back go dark, and that gradient dates the image more than grain ever could.',
@@ -403,6 +438,11 @@ export const prompts: readonly Prompt[] = [
       src: '/prompt-images/photo-trends/80s-government-office-portrait.webp',
       alt: 'A person seated behind a wooden desk in a 1984 Indian government office with a steel almirah and red-tape files, under green fluorescent light',
       aspectRatio: '9:16',
+      modelCredit: {
+        name: 'Pranjul Rathour',
+        instagram: 'https://www.instagram.com/pranjulrathour.in/',
+        linkedin: 'https://www.linkedin.com/in/pranjul-rathour/',
+      },
     },
     whyItWorks:
       'Every competing prompt set is built from glamour — film stars, discos, magazine covers. This one goes the other way and is the most shareable image in the set for exactly that reason. The technical trick is the uncorrected colour: real 1984 film shot under mixed fluorescent and window light came back from the lab with a green-cyan cast nobody could fix, and asking for the uncorrected cast gives the model something physical to reproduce instead of "vintage colours".',

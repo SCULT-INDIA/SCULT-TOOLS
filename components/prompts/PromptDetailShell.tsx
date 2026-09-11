@@ -288,17 +288,63 @@ export function PromptDetailShell({
             prompt itself; `priority` because this is the single largest
             above-the-fold image on the page. */}
         {prompt.exampleImage ? (
-          <div
-            className={`relative mx-auto mb-6 w-full max-w-[420px] overflow-hidden rounded-panel border border-ink shadow-brutal-sm ${ASPECT_CLASS[prompt.exampleImage.aspectRatio ?? '3:4']}`}
-          >
-            <Image
-              src={prompt.exampleImage.src}
-              alt={prompt.exampleImage.alt}
-              fill
-              sizes="420px"
-              priority
-              className="object-cover"
-            />
+          <div className="mx-auto mb-6 w-full max-w-[420px]">
+            <div
+              className={`relative w-full overflow-hidden rounded-panel border border-ink shadow-brutal-sm ${ASPECT_CLASS[prompt.exampleImage.aspectRatio ?? '3:4']}`}
+            >
+              <Image
+                src={prompt.exampleImage.src}
+                alt={prompt.exampleImage.alt}
+                fill
+                sizes="420px"
+                priority
+                className="object-cover"
+              />
+            </div>
+
+            {/* Named, real-person model credit — populated only where the
+                subject agreed to appear and be named on a public page (see
+                PromptExampleImage.modelCredit's own docblock). A verifiable
+                named person behind a photo, linked to real profiles, is a
+                genuine trust signal, not keyword-stuffing: the name is
+                plain text (never itself the link, so nothing here reads as
+                anchor-text stuffing), and each social link uses its own
+                platform name as its visible text. `rel="me"` is the
+                technically correct relation for these specifically — they
+                are the subject's own verified profiles, the same relation
+                a personal site uses to link its own social accounts. */}
+            {prompt.exampleImage.modelCredit ? (
+              <p className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[13px] text-ink-subtle">
+                <span>
+                  Model:{' '}
+                  <span className="font-medium text-ink-muted">
+                    {prompt.exampleImage.modelCredit.name}
+                  </span>
+                </span>
+                {prompt.exampleImage.modelCredit.instagram ? (
+                  <a
+                    href={prompt.exampleImage.modelCredit.instagram}
+                    target="_blank"
+                    rel="me noopener noreferrer"
+                    className="flex items-center gap-1 rounded-pill border border-line-grey bg-offwhite px-2 py-0.5 text-[12px] text-ink-subtle transition-colors hover:border-violet-300 hover:text-violet-700"
+                  >
+                    <BrandIcon brand="instagram" size={12} />
+                    Instagram
+                  </a>
+                ) : null}
+                {prompt.exampleImage.modelCredit.linkedin ? (
+                  <a
+                    href={prompt.exampleImage.modelCredit.linkedin}
+                    target="_blank"
+                    rel="me noopener noreferrer"
+                    className="flex items-center gap-1 rounded-pill border border-line-grey bg-offwhite px-2 py-0.5 text-[12px] text-ink-subtle transition-colors hover:border-violet-300 hover:text-violet-700"
+                  >
+                    <BrandIcon brand="linkedin" size={12} />
+                    LinkedIn
+                  </a>
+                ) : null}
+              </p>
+            ) : null}
           </div>
         ) : null}
 
