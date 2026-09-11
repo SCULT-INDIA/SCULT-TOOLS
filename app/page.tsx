@@ -1,10 +1,12 @@
 import { Lock, Radar, ShieldCheck, Zap } from 'lucide-react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { AnnouncementBanner } from '@/components/sections/AnnouncementBanner'
 import { CategoryTabs } from '@/components/sections/CategoryTabs'
 import { ContactAndCta } from '@/components/sections/ContactAndCta'
 import { Hero } from '@/components/sections/Hero'
 import { McpSpotlight } from '@/components/sections/McpSpotlight'
+import { PhotoTrendsSpotlight } from '@/components/sections/PhotoTrendsSpotlight'
 import { PromptLibrarySpotlight } from '@/components/sections/PromptLibrarySpotlight'
 import { ResourcesStrip } from '@/components/sections/ResourcesStrip'
 import { SkillLibrarySpotlight } from '@/components/sections/SkillLibrarySpotlight'
@@ -104,6 +106,11 @@ export default async function Home() {
     <>
       <JsonLd data={homeFaqJsonLd()} />
 
+      {/* ==================================================== 0. ANNOUNCEMENT
+          The Photo Trends launch strip — a NEW component, not an edit to the
+          locked Hero below it (see AnnouncementBanner.tsx's own docblock). */}
+      <AnnouncementBanner />
+
       {/* ============================================================ 1. HERO
           LOCKED section — see the redesign notes in the file docblock. */}
       <Hero />
@@ -116,6 +123,10 @@ export default async function Home() {
           The one and only "here are the tools" section — violet band,
           pill tabs with live counts, arrow-key navigable. */}
       <CategoryTabs toolsByCategory={toolsByCategory} />
+
+      {/* ============================================ 3. PHOTO TRENDS SPOTLIGHT
+          The latest release — yellow panel, three real example photos. */}
+      <PhotoTrendsSpotlight />
 
       {/* ========================================== 4. PROMPT LIBRARY SPOTLIGHT
           Second catalogue — lavender panel, real prompt-card mockup. */}
