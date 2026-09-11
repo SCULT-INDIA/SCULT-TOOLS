@@ -22,6 +22,14 @@ export async function generateMetadata({
   if (!prompt || prompt.category !== category) return {}
 
   const path = `/prompts/${prompt.category}/${prompt.slug}`
+  // Undefined, not a fallback graphic, when the prompt has no exampleImage —
+  // this is a pure addition for the ~40 prompts that do; the other 1,170
+  // keep whatever OG rendering they already had. These pages are built to be
+  // shared straight into a WhatsApp group, where a card showing the actual
+  // retro photo is worth far more than a generic site card.
+  const ogImage = prompt.exampleImage
+    ? [{ url: absoluteUrl(prompt.exampleImage.src), alt: prompt.exampleImage.alt }]
+    : undefined
   return {
     title: `${prompt.title} — Free Prompt`,
     description: prompt.description,
@@ -32,11 +40,13 @@ export async function generateMetadata({
       url: absoluteUrl(path),
       title: prompt.title,
       description: prompt.description,
+      images: ogImage,
     },
     twitter: {
       card: 'summary_large_image',
       title: prompt.title,
       description: prompt.description,
+      images: ogImage,
     },
   }
 }

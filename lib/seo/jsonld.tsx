@@ -149,6 +149,10 @@ export function promptJsonLd(prompt: Prompt, category: PromptCategory): object {
     publisher: PUBLISHER,
     inLanguage: SITE.locale,
     dateModified: prompt.changelog.at(-1)?.date ?? latestVerification?.date,
+    // JSON.stringify (see JsonLd below) drops an undefined value entirely,
+    // so this key is simply absent for the 1,170 prompts with no
+    // exampleImage rather than present-but-empty.
+    image: prompt.exampleImage ? absoluteUrl(prompt.exampleImage.src) : undefined,
   }
 }
 

@@ -93,6 +93,7 @@ export type PromptCategorySlug =
   | 'flux'
   | 'ideogram'
   | 'dalle'
+  | 'photo-trends'
   // video-ai
   | 'veo'
   | 'kling'
@@ -140,6 +141,27 @@ export interface PromptChangelogEntry {
   readonly note: string
 }
 
+/** The shape an example image's OWN prompt asks for in words in its
+ * `promptText` (e.g. a couple prompt ending "vertical 9:16 portrait" vs a
+ * magazine-cover prompt ending "3:4 crop") — never `--ar`, which neither
+ * ChatGPT nor Gemini parses. */
+export type PromptImageAspectRatio = '9:16' | '3:4' | '4:3' | '16:9'
+
+/** A rendered example of what this prompt produces. Optional across the
+ * registry, but required in practice for `photo-trends` — a trend prompt
+ * card with no picture does not convert. Files live in
+ * `public/prompt-images/<category>/<name>.webp`. */
+export interface PromptExampleImage {
+  readonly src: string
+  readonly alt: string
+  /** Card grids crop everything to a uniform 4:5 regardless, but a detail
+   * page showing the wrong box would visibly mismatch what the prompt
+   * actually produces — a landscape frame in a portrait crop, or the
+   * reverse. Omitted defaults to `'3:4'` on the detail page, a safe middle
+   * ground between portrait and landscape. */
+  readonly aspectRatio?: PromptImageAspectRatio
+}
+
 export interface Prompt {
   readonly slug: string
   readonly category: PromptCategorySlug
@@ -160,6 +182,7 @@ export interface Prompt {
    * unexplained prompt is selling an illusion. */
   readonly whyItWorks: string
   readonly exampleOutput?: string
+  readonly exampleImage?: PromptExampleImage
   /** At least one entry required — this is the single best-evidenced
    * differentiator in the whole brief (§9, differentiator #1). */
   readonly verifiedAgainst: readonly PromptVerification[]

@@ -1,3 +1,5 @@
+import { meta as eightiesPhotoPromptChatgpt } from './80s-photo-prompt-chatgpt/meta'
+import { meta as eightiesPhotoPromptGemini } from './80s-photo-prompt-gemini/meta'
 import { meta as adCampaignPromptsGuide } from './ad-campaign-prompts-guide/meta'
 import { meta as ceAiAgentApiCostAtScale } from './ai-agent-api-cost-at-scale/meta'
 import { meta as ceAiAgentCodebaseMigration } from './ai-agent-codebase-migration/meta'
@@ -25,6 +27,7 @@ import { meta as aiModelPromptsRoundup } from './ai-model-prompts-roundup/meta'
 import { meta as aiMusicVoiceGuide } from './ai-music-voice-prompts-guide/meta'
 import { meta as ceAiOverviewsImpactOnCtr } from './ai-overviews-impact-on-ctr/meta'
 import { meta as ceAiPairProgrammingCodeReview } from './ai-pair-programming-code-review/meta'
+import { meta as aiPhotoChangesMyFace } from './ai-photo-changes-my-face/meta'
 import { meta as ceAiProductDescriptionsAtScaleEcommerce } from './ai-product-descriptions-at-scale-ecommerce/meta'
 import { meta as aiVisibility30DayFixPlan } from './ai-visibility-30-day-fix-plan/meta'
 import { meta as aiVisibilityCheckerGuide } from './ai-visibility-checker-guide/meta'
@@ -196,6 +199,7 @@ import { meta as ceValidateStartupIdeaBeforeBuilding } from './validate-startup-
 import { meta as ceVatInvoicingUkFreelancerInternational } from './vat-invoicing-uk-freelancer-international/meta'
 import { meta as veoPromptsGuide } from './veo-prompts-guide/meta'
 import { meta as videoAudioPromptsRoundup } from './video-audio-prompts-roundup/meta'
+import { meta as viralAiPhotoTrendsIndia } from './viral-ai-photo-trends-india/meta'
 import { meta as webDevelopmentServiceGuide } from './web-development-service-guide/meta'
 import { meta as websiteSpeedTestGuide } from './website-speed-test-guide/meta'
 import { meta as ceWhatBreaksANoCodeAppAtScale } from './what-breaks-a-no-code-app-at-scale/meta'
@@ -408,6 +412,10 @@ export const BLOG_POSTS: readonly BlogPost[] = [
   ceMultiCurrencyInvoicingWithoutAccountant,
   ceSmallBusinessSpreadsheetToToolsTransition,
   ceFreelanceToAgencyTransitionCommunication,
+  eightiesPhotoPromptChatgpt,
+  eightiesPhotoPromptGemini,
+  aiPhotoChangesMyFace,
+  viralAiPhotoTrendsIndia,
 ]
 
 export const BLOG_POST_BY_SLUG: ReadonlyMap<string, BlogPost> = new Map(

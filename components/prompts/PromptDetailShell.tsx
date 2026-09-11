@@ -8,6 +8,7 @@ import {
   TriangleAlert,
   Wrench,
 } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { BrandIcon, brandForTool, categoryBrand } from '@/components/ui/BrandIcon'
 import { Icon } from '@/components/ui/Icon'
@@ -15,7 +16,7 @@ import { PromptCard } from '@/components/ui/PromptCard'
 import { RequestButton } from '@/components/ui/RequestButton'
 import { ViewTracker } from '@/components/ui/ViewTracker'
 import { getPromptsByCategory } from '@/lib/prompts/registry'
-import type { Prompt, PromptCategory } from '@/lib/prompts/types'
+import type { Prompt, PromptCategory, PromptImageAspectRatio } from '@/lib/prompts/types'
 import { getTool } from '@/lib/tools/registry'
 import { resolveServiceLink } from '@/lib/tools/service-links'
 import { HowToUseButton } from './HowToUseButton'
@@ -27,6 +28,17 @@ const TILE_BG: Record<PromptCategory['tile'], string> = {
   blue: 'bg-tile-blue',
   lavender: 'bg-tile-lavender',
   green: 'bg-tile-green',
+}
+
+/** Maps a prompt's stated output shape to the `aspect-*` utility that
+ * reserves the matching box on the detail page — an `object-cover` crop
+ * inside the *wrong*-shaped box would visibly mismatch what the prompt
+ * itself asks for. */
+const ASPECT_CLASS: Record<PromptImageAspectRatio, string> = {
+  '9:16': 'aspect-[9/16]',
+  '3:4': 'aspect-[3/4]',
+  '4:3': 'aspect-[4/3]',
+  '16:9': 'aspect-[16/9]',
 }
 
 /**
@@ -268,6 +280,27 @@ export function PromptDetailShell({
             triggerLabel="Request a prompt"
           />
         </div>
+
+        {/* The example image, when the prompt has one — Photo Trends'
+            image-first layout: see the look, then the prompt, then Copy.
+            Capped at 420px and centred rather than filling this full-bleed
+            section's width, since a wide detail hero would upstage the
+            prompt itself; `priority` because this is the single largest
+            above-the-fold image on the page. */}
+        {prompt.exampleImage ? (
+          <div
+            className={`relative mx-auto mb-6 w-full max-w-[420px] overflow-hidden rounded-panel border border-ink shadow-brutal-sm ${ASPECT_CLASS[prompt.exampleImage.aspectRatio ?? '3:4']}`}
+          >
+            <Image
+              src={prompt.exampleImage.src}
+              alt={prompt.exampleImage.alt}
+              fill
+              sizes="420px"
+              priority
+              className="object-cover"
+            />
+          </div>
+        ) : null}
 
         <PromptCopyBlock
           category={prompt.category}

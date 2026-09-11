@@ -2,8 +2,10 @@
 
 import { Check, Copy, SlidersHorizontal } from 'lucide-react'
 import { Fragment, useMemo, useState } from 'react'
+import { BrandIcon } from '@/components/ui/BrandIcon'
 import { trackPromptEvent } from '@/lib/analytics'
 import type { PromptVariable } from '@/lib/prompts/types'
+import { absoluteUrl } from '@/lib/site'
 
 /**
  * The prompt itself, styled as a dark editor card so it reads as "this is
@@ -122,6 +124,19 @@ export function PromptCopyBlock({
 
   const hasFields = variables.length > 0
 
+  // The growth mechanic this whole share row exists for: someone pastes the
+  // prompt into a family WhatsApp group, and the LINK is what brings that
+  // group back to the site. Sharing only the prompt text is a share that
+  // leaks all of its traffic, so the page URL is always appended — never
+  // optional, never left to whichever variant a caller remembers to add.
+  const pageUrl = absoluteUrl(`/prompts/${category}/${promptSlug}`)
+  const shareText = `${filledText}\n\n— from ${pageUrl}`
+  const whatsappHref = `https://wa.me/?text=${encodeURIComponent(shareText)}`
+  // Telegram's share intent takes the link and the caption as separate
+  // parameters (unlike wa.me's single prefilled-message string), which is
+  // why this URL is built differently from the WhatsApp one above.
+  const telegramHref = `https://t.me/share/url?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(filledText)}`
+
   return (
     <div
       className={
@@ -141,18 +156,48 @@ export function PromptCopyBlock({
               Prompt
             </span>
           </span>
-          <button
-            type="button"
-            onClick={handleCopy}
-            className="flex min-h-[36px] items-center gap-1.5 rounded-pill border border-ink bg-cta px-4 py-1 font-medium text-[13px] text-black shadow-[3px_3px_0_0_#000] transition-all duration-150 hover:translate-x-[3px] hover:translate-y-[3px] hover:bg-white hover:shadow-none"
-          >
-            {copied ? (
-              <Check className="size-3.5" aria-hidden="true" />
-            ) : (
-              <Copy className="size-3.5" aria-hidden="true" />
-            )}
-            {copied ? 'Copied!' : 'Copy prompt'}
-          </button>
+          <span className="flex items-center gap-2">
+            {/* Share, not copy: WhatsApp and Telegram are quiet icon-only
+                buttons beside the loud Copy CTA, which stays the one action
+                that matters most on this page. Real <a> tags (not a click
+                handler that opens a popup) so they behave like any other
+                link — new tab, middle-click, long-press-to-share on mobile
+                all work without extra code. */}
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackPromptEvent(category, promptSlug, 'share_whatsapp')}
+              aria-label="Share this prompt on WhatsApp"
+              title="Share on WhatsApp"
+              className="flex size-9 items-center justify-center rounded-pill border border-ink/15 bg-white text-black shadow-[2px_2px_0_0_#000] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+            >
+              <BrandIcon brand="whatsapp" size={16} />
+            </a>
+            <a
+              href={telegramHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackPromptEvent(category, promptSlug, 'share_telegram')}
+              aria-label="Share this prompt on Telegram"
+              title="Share on Telegram"
+              className="flex size-9 items-center justify-center rounded-pill border border-ink/15 bg-white text-black shadow-[2px_2px_0_0_#000] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+            >
+              <BrandIcon brand="telegram" size={16} />
+            </a>
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="flex min-h-[36px] items-center gap-1.5 rounded-pill border border-ink bg-cta px-4 py-1 font-medium text-[13px] text-black shadow-[3px_3px_0_0_#000] transition-all duration-150 hover:translate-x-[3px] hover:translate-y-[3px] hover:bg-white hover:shadow-none"
+            >
+              {copied ? (
+                <Check className="size-3.5" aria-hidden="true" />
+              ) : (
+                <Copy className="size-3.5" aria-hidden="true" />
+              )}
+              {copied ? 'Copied!' : 'Copy prompt'}
+            </button>
+          </span>
         </div>
 
         <pre className="max-h-[34rem] overflow-auto whitespace-pre-wrap bg-[#131020] p-6 font-mono text-[14px] text-[#e8e5f5] leading-[1.8]">

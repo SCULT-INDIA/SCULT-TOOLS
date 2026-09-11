@@ -646,6 +646,17 @@ export const PROMPT_CATEGORIES: readonly PromptCategory[] = [
     tile: 'blue',
     icon: 'Wand',
   },
+  {
+    slug: 'photo-trends',
+    group: 'image-ai',
+    name: 'Photo Trends',
+    blurb: 'Copy-paste prompts for the viral photo trends.',
+    intro:
+      'Prompts for the viral photo trends people actually run on their own selfies — starting with the 1980s retro look. Every prompt here is complete as pasted and follows the same order, identity lock first: lock the face, then hair, wardrobe, setting, light, film stock, exclusions, output. That order is the product. The identity lock goes first because the model weights early instructions most heavily when it re-renders an uploaded image, and a prompt that describes the era before it protects the face is the reason people say the result does not look like them.',
+    tier: 3,
+    tile: 'yellow',
+    icon: 'Camera',
+  },
 
   // ---- Video & Audio ----
   {

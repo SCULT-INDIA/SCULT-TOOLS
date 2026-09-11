@@ -37,6 +37,7 @@ import { prompts as nanoBananaPrompts } from './nano-banana/prompts'
 import { prompts as nextjsPrompts } from './nextjs/prompts'
 import { prompts as noCodeAppsPrompts } from './no-code-apps/prompts'
 import { prompts as perplexityPrompts } from './perplexity/prompts'
+import { prompts as photoTrendsPrompts } from './photo-trends/prompts'
 import { prompts as presentationsPrompts } from './presentations/prompts'
 import { prompts as pythonPrompts } from './python/prompts'
 import { prompts as reactPrompts } from './react/prompts'
@@ -120,6 +121,7 @@ export const PROMPTS = [
   ...fluxPrompts,
   ...ideogramPrompts,
   ...dallePrompts,
+  ...photoTrendsPrompts,
   // video-ai
   ...veoPrompts,
   ...klingPrompts,

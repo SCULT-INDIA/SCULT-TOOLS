@@ -1,4 +1,5 @@
 import { BadgeCheck } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { BrandIcon, brandForTool, categoryBrand } from '@/components/ui/BrandIcon'
 import { Icon } from '@/components/ui/Icon'
@@ -33,6 +34,73 @@ export function PromptCard({
     null
   const latestVerification = prompt.verifiedAgainst[0]
 
+  const tagRow = (
+    <span className="mt-auto flex w-full flex-wrap items-center gap-1.5 pt-1">
+      {prompt.targetTools.slice(0, 2).map((tool) => {
+        const toolBrand = brandForTool(tool)
+        return (
+          <span
+            key={tool}
+            className="flex items-center gap-1.5 rounded-pill border border-line-grey bg-offwhite px-2 py-0.5 text-[11px] text-ink-subtle"
+          >
+            {/* White disc behind the mark: bg-offwhite flips near-black in
+                dark mode, where a mono (near-black) brand logo would
+                otherwise vanish. Logos always sit on white on this site. */}
+            {toolBrand ? (
+              <span className="flex size-4 shrink-0 items-center justify-center rounded-[5px] bg-white ring-1 ring-black/5">
+                <BrandIcon brand={toolBrand} size={11} />
+              </span>
+            ) : null}
+            {tool}
+          </span>
+        )
+      })}
+      {latestVerification ? (
+        <span className="ml-auto flex items-center gap-1 font-medium text-[11px] text-green">
+          <BadgeCheck className="size-3.5" aria-hidden="true" />
+          <span className="text-ink-subtle">{latestVerification.date}</span>
+        </span>
+      ) : null}
+    </span>
+  )
+
+  // A trend prompt's whole pitch is "see the look, tap Copy" — a text-only
+  // card doesn't sell that, so a prompt with an exampleImage leads with a
+  // 4:5 preview instead of the brand-mark row every other card opens with.
+  // `.chip-tool` (globals.css) sets its own padding directly on the link, so
+  // the image sits in its own unpadded child instead of fighting that with a
+  // negative margin; the padded content below is a second child carrying
+  // the padding this class used to put on the link itself. Every prompt
+  // without an image (still 1,170 of them) keeps that original single-child,
+  // directly-padded structure exactly as it was.
+  if (prompt.exampleImage) {
+    return (
+      <Link
+        href={`/prompts/${prompt.category}/${prompt.slug}`}
+        className="chip-tool group flex-col items-stretch gap-0 p-0"
+      >
+        <span className="relative block aspect-[4/5] w-full overflow-hidden rounded-t-card">
+          <Image
+            src={prompt.exampleImage.src}
+            alt={prompt.exampleImage.alt}
+            fill
+            sizes="(min-width: 1024px) 280px, (min-width: 640px) 45vw, 90vw"
+            className="object-cover"
+          />
+        </span>
+        <span className="flex flex-1 flex-col items-start gap-3 p-5">
+          <span className="block font-display font-semibold text-[17.5px] leading-[1.3] tracking-normal transition-colors group-hover:text-violet-700">
+            {prompt.title}
+          </span>
+          <span className="line-clamp-2 text-[14px] text-ink-muted leading-5">
+            {prompt.description}
+          </span>
+          {tagRow}
+        </span>
+      </Link>
+    )
+  }
+
   return (
     <Link
       href={`/prompts/${prompt.category}/${prompt.slug}`}
@@ -61,33 +129,7 @@ export function PromptCard({
         {prompt.description}
       </span>
 
-      <span className="mt-auto flex w-full flex-wrap items-center gap-1.5 pt-1">
-        {prompt.targetTools.slice(0, 2).map((tool) => {
-          const toolBrand = brandForTool(tool)
-          return (
-            <span
-              key={tool}
-              className="flex items-center gap-1.5 rounded-pill border border-line-grey bg-offwhite px-2 py-0.5 text-[11px] text-ink-subtle"
-            >
-              {/* White disc behind the mark: bg-offwhite flips near-black in
-                  dark mode, where a mono (near-black) brand logo would
-                  otherwise vanish. Logos always sit on white on this site. */}
-              {toolBrand ? (
-                <span className="flex size-4 shrink-0 items-center justify-center rounded-[5px] bg-white ring-1 ring-black/5">
-                  <BrandIcon brand={toolBrand} size={11} />
-                </span>
-              ) : null}
-              {tool}
-            </span>
-          )
-        })}
-        {latestVerification ? (
-          <span className="ml-auto flex items-center gap-1 font-medium text-[11px] text-green">
-            <BadgeCheck className="size-3.5" aria-hidden="true" />
-            <span className="text-ink-subtle">{latestVerification.date}</span>
-          </span>
-        ) : null}
-      </span>
+      {tagRow}
     </Link>
   )
 }
