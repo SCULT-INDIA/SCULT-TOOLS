@@ -5,6 +5,43 @@ const nextConfig: NextConfig = {
   // experimental.ppr / experimental.dynamicIO, both of which were removed).
   cacheComponents: true,
 
+  /**
+   * Hard byte cap on the default in-memory `'use cache'` store — this is the
+   * actual fix for the production OOM crash loop seen 2026-09-11 on Railway
+   * (repeated `FATAL ERROR: ... JavaScript heap out of memory` and bare
+   * `Killed` restarts, roughly every 45min-2h, heap always topping out
+   * around 470-483MB right before each crash).
+   *
+   * Root cause: `cacheComponents: true` makes `'use cache'` the caching
+   * mechanism for this app (see lib/skills/db.ts's `getSkill`/
+   * `getSkillsPage`/etc., each `cacheLife('hours')`), and per Next.js's own
+   * docs and maintainers (github.com/vercel/next.js/discussions/88078),
+   * the DEFAULT in-memory handler for `'use cache'` has NO size limit unless
+   * `cacheMaxMemorySize` is set — it is "effectively unbounded, constrained
+   * only by Node.js heap limits," which the same discussion names as
+   * exactly the wrong fit for "caching millions of unique...entities."
+   * That is precisely this app's shape: the skills table is a live,
+   * ~600k-row registry (see lib/skills/db.ts's own docblock), and every
+   * distinct (category, slug) skill page or (category, page) listing a
+   * visitor or crawler hits gets its own cache entry — complete with the
+   * full SKILL.md `body` text — that then sits in memory for up to the
+   * `cacheLife('hours')` window with zero eviction pressure. On a
+   * long-running `next start` process (not Vercel's managed, per-request
+   * infra) that accumulation is permanent until either this limit or a
+   * restart clears it, which is exactly why a manual Railway restart
+   * "fixed" it: it zeroed the cache, not the underlying cause.
+   *
+   * 50MB matches the classic (pre-Cache-Components) fetch/ISR cache
+   * handler's own documented default (nextjs.org/docs/app/guides/
+   * self-hosting) — small enough to leave the observed ~480MB heap ceiling
+   * almost entirely free for actual request handling and rendering, large
+   * enough to still cache several thousand average skill entries for the
+   * hot path. Past this cap, Next's built-in handler evicts
+   * least-recently-used entries instead of growing further — a cache miss
+   * and a fresh (fast) Supabase read, never a crash.
+   */
+  cacheMaxMemorySize: 50 * 1024 * 1024,
+
   env: {
     /**
      * The copyright year, resolved at BUILD time.
