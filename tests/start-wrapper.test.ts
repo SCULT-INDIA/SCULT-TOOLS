@@ -7,6 +7,10 @@ import {
   parseImageCacheFilename,
   planImageCacheCleanup,
 } from '../scripts/lib/image-cache.mjs'
+import {
+  shouldRespawn,
+  shouldTriggerMemoryRestart,
+} from '../scripts/lib/memory-guard.mjs'
 import { hasHeapSizeFlag, heapSizeMbFor } from '../scripts/lib/runtime-tuning.mjs'
 
 /**
@@ -126,5 +130,54 @@ describe('hasHeapSizeFlag', () => {
     expect(hasHeapSizeFlag('--max-old-space-size 900')).toBe(true)
     expect(hasHeapSizeFlag('--enable-source-maps')).toBe(false)
     expect(hasHeapSizeFlag(undefined)).toBe(false)
+  })
+})
+
+describe('shouldTriggerMemoryRestart', () => {
+  const GB = 1024 * 1024 * 1024
+
+  it('trips once RSS crosses the ratio of the container limit', () => {
+    expect(shouldTriggerMemoryRestart(0.9 * GB, GB, 0.85)).toBe(true)
+    expect(shouldTriggerMemoryRestart(0.85 * GB, GB, 0.85)).toBe(true)
+    expect(shouldTriggerMemoryRestart(0.5 * GB, GB, 0.85)).toBe(false)
+  })
+
+  it('never trips when the limit is unusable, so a missing cgroup read is inert', () => {
+    expect(shouldTriggerMemoryRestart(0.9 * GB, Number.NaN)).toBe(false)
+    expect(shouldTriggerMemoryRestart(0.9 * GB, 0)).toBe(false)
+    expect(shouldTriggerMemoryRestart(0.9 * GB, null)).toBe(false)
+  })
+
+  it('never trips on bad RSS input', () => {
+    expect(shouldTriggerMemoryRestart(Number.NaN, GB)).toBe(false)
+    expect(shouldTriggerMemoryRestart(0, GB)).toBe(false)
+  })
+})
+
+describe('shouldRespawn', () => {
+  it('allows respawns under the cap', () => {
+    const now = 1_800_000_000_000
+    expect(shouldRespawn([], now)).toBe(true)
+    expect(shouldRespawn([now - 1000, now - 2000, now - 3000, now - 4000], now)).toBe(
+      true,
+    )
+  })
+
+  it('refuses once the rolling window already has the max restarts', () => {
+    const now = 1_800_000_000_000
+    const recent = [now - 1000, now - 2000, now - 3000, now - 4000, now - 5000]
+    expect(shouldRespawn(recent, now)).toBe(false)
+  })
+
+  it('ignores restarts that have aged out of the window', () => {
+    const now = 1_800_000_000_000
+    const stale = [
+      now - 20 * 60_000,
+      now - 25 * 60_000,
+      now - 30 * 60_000,
+      now - 35 * 60_000,
+      now - 40 * 60_000,
+    ]
+    expect(shouldRespawn(stale, now)).toBe(true)
   })
 })

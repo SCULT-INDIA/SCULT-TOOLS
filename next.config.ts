@@ -42,6 +42,49 @@ const nextConfig: NextConfig = {
    */
   cacheMaxMemorySize: 50 * 1024 * 1024,
 
+  /**
+   * Sharp/libvips tuning for the image optimizer (2026-09-15 follow-up to
+   * the two OOM fixes above). Production `[memory]` logs kept climbing —
+   * `external`/`arrayBuffers`, the native-memory categories `--max-old-
+   * space-size` does not bound — hours after both prior fixes, from ~300MB
+   * to ~930MB against a 954MB container limit, with zero plateau.
+   *
+   * `imgOptOperationCache: false` disables sharp's own built-in operation
+   * cache (50MB/100 items by default — confirmed via `sharp.cache()` on
+   * this install). That cache exists to speed up re-processing the *same*
+   * image; this site's shape is the opposite of that (see the
+   * `cacheMaxMemorySize` comment above: a live, ~600k-row skills table,
+   * every distinct image essentially never repeated), so it can only ever
+   * hold data, never return a hit — pure unrecoverable cost for zero
+   * benefit here.
+   *
+   * `imgOptConcurrency: 1` caps how many images sharp decodes/encodes at
+   * once. Next already halves its own CPU-count-based default in
+   * production; pinning it to 1 bounds the number of full-resolution
+   * native decode buffers alive at the same instant during a traffic
+   * burst, trading a little latency on concurrent image requests (not this
+   * site's hot path) for a hard ceiling on that memory instead of a
+   * CPU-count-dependent one.
+   *
+   * Both are official Next.js 16 config keys (see next/dist/server/
+   * image-optimizer.js's `getSharp()`), not a private workaround. sharp's
+   * own docs separately flag glibc-based Linux as prone to allocator
+   * fragmentation under exactly this access pattern and recommend jemalloc
+   * (sharp.pixelplumbing.com/install#linux-memory-allocator) — worth
+   * revisiting if production memory still climbs with this in place, since
+   * that fix needs a container-level change (a custom build image) this
+   * config file can't make.
+   */
+  experimental: {
+    imgOptOperationCache: false,
+    imgOptConcurrency: 1,
+    // Faster cold starts across restarts in dev.
+    turbopackFileSystemCacheForDev: true,
+    // The brand-icon barrel exports ~330 marks; the prompt library uses ~25.
+    // Without this, every page importing BrandIcon pulls the whole set.
+    optimizePackageImports: ['@lobehub/icons'],
+  },
+
   env: {
     /**
      * The copyright year, resolved at BUILD time.
@@ -52,14 +95,6 @@ const nextConfig: NextConfig = {
      * this is the right place for it: every deploy bakes in the current year.
      */
     NEXT_PUBLIC_BUILD_YEAR: String(new Date().getFullYear()),
-  },
-
-  // Faster cold starts across restarts in dev.
-  experimental: {
-    turbopackFileSystemCacheForDev: true,
-    // The brand-icon barrel exports ~330 marks; the prompt library uses ~25.
-    // Without this, every page importing BrandIcon pulls the whole set.
-    optimizePackageImports: ['@lobehub/icons'],
   },
 
   images: {

@@ -19,6 +19,17 @@ import { centerCrop } from './logic'
  * sharp does deterministically regardless of environment.
  */
 
+/**
+ * Every upload is a distinct source image, so sharp's own operation cache
+ * (on by default, up to 50MB) can never return a hit here — only hold
+ * decoded buffers in native memory for the life of the process. sharp is a
+ * process-wide native singleton, so this also covers next/image's own use
+ * of it (see next.config.ts's `experimental.imgOptOperationCache`, which
+ * disables the same cache for that path); this call just guarantees the
+ * setting wins regardless of which of the two runs first in a given boot.
+ */
+sharp.cache(false)
+
 const MASTER = 512
 export const APPLE_SIZE = 180
 export const PNG_SIZES = [16, 32, 48, 192, 512] as const
