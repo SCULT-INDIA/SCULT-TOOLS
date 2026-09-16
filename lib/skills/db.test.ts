@@ -20,9 +20,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
  *     `.gt('id', …)` paging.
  */
 
-// `'use cache'` functions call `cacheLife`, which only exists inside a Next
-// render. Stubbed so this file can exercise the query logic directly.
-vi.mock('next/cache', () => ({ cacheLife: () => {} }))
+// `'use cache'` functions call `cacheLife`/`cacheTag`, which only exist
+// inside a Next render. Stubbed so this file can exercise the query logic
+// directly.
+vi.mock('next/cache', () => ({ cacheLife: () => {}, cacheTag: () => {} }))
 
 type Row = { id: string; slug: string; category: string; last_synced_at: string }
 

@@ -1,4 +1,4 @@
-import { cacheLife } from 'next/cache'
+import { cacheLife, cacheTag } from 'next/cache'
 import { resolveSkillDescription } from './description'
 import { supabaseSkills } from './supabase'
 import type { Skill, SkillCategorySlug } from './types'
@@ -15,6 +15,14 @@ import type { Skill, SkillCategorySlug } from './types'
  * everything else renders on first request and is cached with `cacheLife`
  * below, so the site stays fast without requiring a full pre-build of
  * something that size.
+ *
+ * Every function also carries `cacheTag('skills')`, so a single
+ * `revalidateTag('skills', 'max')` call (see app/api/revalidate/route.ts)
+ * refreshes all of them immediately — the on-demand half of "content
+ * should go stale because it changed, not because a timer expired." The
+ * `cacheLife` windows above are the fallback for when nothing calls that
+ * endpoint (e.g. the sync worker hasn't been wired up to it yet), not a
+ * replacement for it.
  */
 
 // snake_case DB columns -> the camelCase `Skill` shape the rest of the app expects.
@@ -68,6 +76,7 @@ export async function getTopSkillsByCategory(
 ): Promise<readonly Skill[]> {
   'use cache'
   cacheLife('skillsRegistry')
+  cacheTag('skills')
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_COLUMNS)
@@ -90,6 +99,7 @@ export async function getSkillsPage(
 ): Promise<readonly Skill[]> {
   'use cache'
   cacheLife('skillsRegistry')
+  cacheTag('skills')
   const from = (page - 1) * SKILLS_PAGE_SIZE
   const to = from + SKILLS_PAGE_SIZE - 1
   const { data, error } = await supabaseSkills
@@ -110,6 +120,7 @@ export async function getSkillCountByCategory(
 ): Promise<number> {
   'use cache'
   cacheLife('skillsRegistry')
+  cacheTag('skills')
   const { count, error } = await supabaseSkills
     .from('skills')
     .select('id', { count: 'exact', head: true })
@@ -147,6 +158,7 @@ export async function getSkillCountByCategory(
 export async function getAllCategoryCounts(): Promise<Readonly<Record<string, number>>> {
   'use cache'
   cacheLife('skillsRegistry')
+  cacheTag('skills')
   let rows: { category: string; count: number }[]
   try {
     rows = await fetchPage('getAllCategoryCounts', () =>
@@ -172,6 +184,7 @@ export async function getSkill(
 ): Promise<Skill | undefined> {
   'use cache'
   cacheLife('skillsRegistry')
+  cacheTag('skills')
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_COLUMNS)
@@ -257,6 +270,7 @@ export async function getSiblingSkills(
 ): Promise<readonly Skill[]> {
   'use cache'
   cacheLife('skillsRegistry')
+  cacheTag('skills')
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_COLUMNS)
@@ -274,6 +288,7 @@ export async function getSiblingSkills(
 export async function getRecentlyAddedSkills(limit: number): Promise<readonly Skill[]> {
   'use cache'
   cacheLife('skillsRegistry')
+  cacheTag('skills')
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_COLUMNS)
@@ -289,6 +304,7 @@ export async function getRecentlyAddedSkills(limit: number): Promise<readonly Sk
 export async function getTotalSkillCount(): Promise<number> {
   'use cache'
   cacheLife('skillsRegistry')
+  cacheTag('skills')
   const { count, error } = await supabaseSkills
     .from('skills')
     .select('id', { count: 'exact', head: true })
@@ -308,6 +324,7 @@ export async function getSyncMeta(): Promise<{
 }> {
   'use cache'
   cacheLife('hours')
+  cacheTag('skills')
   const { data, error } = await supabaseSkills
     .from('skills_sync_meta')
     .select('last_synced_at, total_skills')
@@ -440,6 +457,7 @@ export async function getAllSkillRefs(
 ): Promise<readonly { slug: string; category: string; lastSyncedAt: string }[]> {
   'use cache'
   cacheLife('skillsRegistry')
+  cacheTag('skills')
   if (limit <= 0) return []
 
   // Shard 1 starts at the beginning and needs no probe at all.
