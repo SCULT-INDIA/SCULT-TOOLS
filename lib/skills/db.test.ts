@@ -32,6 +32,9 @@ let table: Row[] = []
 /** Every query the code issued, in order — the assertion subject for
  * "did it page, and did it use a cursor rather than an offset". */
 let queries: string[] = []
+/** Every `.lte(column, value)` call the code issued, in order — the
+ * assertion subject for the skills-freeze cutoff below. */
+let lteCalls: [string, string][] = []
 /** Cursor value of a `.gt('id', …)` page that should fail, or null. */
 let failAfter: string | null | undefined
 /** How many times the failing page fails before succeeding. */
@@ -53,6 +56,9 @@ let categoryCountRows: { category: string; count: number }[] = []
  * load of `next build`'s page-data collection. */
 let categoryCountFailTimes = 0
 let categoryCountAttempts = 0
+/** Arguments the code passed to the `skills_category_counts` RPC — the
+ * assertion subject for the skills-freeze cutoff below. */
+let rpcArgs: { cutoff?: string } | undefined
 
 const POSTGREST_CAP = 1_000
 const TIMEOUT_ERROR = {
@@ -107,10 +113,20 @@ vi.mock('./supabase', () => {
     supabaseSkills: {
       from: () => ({
         select: (cols: string) => ({
-          order: () => builder({ limit: POSTGREST_CAP, after: null, cols }),
+          // The freeze-cutoff filter (SKILLS_FREEZE_CUTOFF in db.ts) sits
+          // between `.select()` and `.order()` in the real query; this fake
+          // table has no `first_seen_at` column to actually filter on, so
+          // it's a pass-through that keeps the chain shape correct — it
+          // only records what it was called with, for
+          // `describe('skills freeze')` below to assert on.
+          lte: (column: string, value: string) => {
+            lteCalls.push([column, value])
+            return { order: () => builder({ limit: POSTGREST_CAP, after: null, cols }) }
+          },
         }),
       }),
-      rpc: (_name: string) => {
+      rpc: (_name: string, args?: { cutoff?: string }) => {
+        rpcArgs = args
         categoryCountAttempts++
         if (categoryCountAttempts <= categoryCountFailTimes) {
           return Promise.resolve({ data: null, error: TIMEOUT_ERROR })
@@ -121,7 +137,9 @@ vi.mock('./supabase', () => {
   }
 })
 
-const { getAllSkillRefs, getAllCategoryCounts } = await import('./db')
+const { getAllSkillRefs, getAllCategoryCounts, SKILLS_FREEZE_CUTOFF } = await import(
+  './db'
+)
 
 function rows(count: number, startId = 0): Row[] {
   return Array.from({ length: count }, (_, i) => {
@@ -140,6 +158,7 @@ function rows(count: number, startId = 0): Row[] {
 beforeEach(() => {
   table = []
   queries = []
+  lteCalls = []
   failAfter = undefined
   failTimes = Number.POSITIVE_INFINITY
   failAttempts = 0
@@ -147,6 +166,7 @@ beforeEach(() => {
   categoryCountRows = []
   categoryCountFailTimes = 0
   categoryCountAttempts = 0
+  rpcArgs = undefined
 })
 
 describe('getAllSkillRefs', () => {
@@ -302,5 +322,31 @@ describe('getAllCategoryCounts', () => {
     // trust an empty result as "confirmed zero" guard for that themselves
     // (see liveSkillCategories in lib/skills/categories.ts).
     await expect(getAllCategoryCounts()).resolves.toEqual({})
+  })
+})
+
+/**
+ * The Skills Library was frozen at its current size at the user's explicit
+ * request (see SKILLS_FREEZE_CUTOFF's own docblock in db.ts) — these two
+ * functions are the ones this file already has a fake table/RPC for, so
+ * they carry the regression test: if a future edit ever drops the cutoff
+ * from either query, the site would silently start showing skills added by
+ * a sync nobody meant to re-enable.
+ */
+describe('skills freeze', () => {
+  it('is a real, parseable cutoff date', () => {
+    expect(Number.isNaN(Date.parse(SKILLS_FREEZE_CUTOFF))).toBe(false)
+  })
+
+  it('filters getAllSkillRefs to first_seen_at <= the freeze cutoff', async () => {
+    table = rows(10)
+    await getAllSkillRefs(0, 10)
+    expect(lteCalls).toEqual([['first_seen_at', SKILLS_FREEZE_CUTOFF]])
+  })
+
+  it('passes the freeze cutoff to the skills_category_counts RPC', async () => {
+    categoryCountRows = [{ category: 'testing', count: 1 }]
+    await getAllCategoryCounts()
+    expect(rpcArgs).toEqual({ cutoff: SKILLS_FREEZE_CUTOFF })
   })
 })

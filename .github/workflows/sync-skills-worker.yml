@@ -7,9 +7,18 @@ name: Drive Skills Library sync
 # GitHub Actions jobs can run for hours, calling that one short endpoint
 # over and over so real cumulative progress toward the full ~600k registry
 # happens in a realistic timeframe.
+#
+# 2026-09-16: the daily schedule is deliberately removed — the registry is
+# frozen at its current size at the user's explicit request (no more new
+# skills should reach the site). `workflow_dispatch` is kept as a manual-only
+# escape hatch: it does not fire on its own, so the freeze holds unless
+# someone deliberately clicks "Run workflow". See lib/skills/db.ts's own
+# freeze-cutoff comment for the other, code-level half of this — even a
+# manually triggered sync (or the still-registered Vercel cron on
+# vercel-skills-sync, which could not be removed live yet — see that
+# project's own vercel.json for why) cannot add skills the website will
+# actually show.
 on:
-  schedule:
-    - cron: '0 2 * * *' # 02:00 UTC daily
   workflow_dispatch: {}
 
 concurrency:

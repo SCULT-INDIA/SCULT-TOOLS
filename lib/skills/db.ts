@@ -23,7 +23,24 @@ import type { Skill, SkillCategorySlug } from './types'
  * `cacheLife` windows above are the fallback for when nothing calls that
  * endpoint (e.g. the sync worker hasn't been wired up to it yet), not a
  * replacement for it.
+ *
+ * FROZEN as of 2026-09-16, at the user's explicit request: the Skills
+ * Library should stop growing and stay at its current size — no more new
+ * skills reaching the site. The sync worker's own triggers were disabled
+ * (vercel-skills-sync/vercel.json's cron removed; the main repo's
+ * `.github/workflows/sync-skills-worker.yml` schedule removed) as the
+ * first layer, but this file is the real backstop: every query below
+ * filters to `first_seen_at <= SKILLS_FREEZE_CUTOFF`, so even a sync that
+ * somehow ran again — a manually triggered GitHub Actions run, or the
+ * Vercel cron, which could not be removed live yet because that project's
+ * Vercel team was blocked for exceeding fair-use limits at the time — could
+ * write new rows to Supabase without any of them actually becoming visible
+ * on the website. To lift the freeze later, remove `SKILLS_FREEZE_CUTOFF`
+ * and every `.lte('first_seen_at', SKILLS_FREEZE_CUTOFF)` call below (a
+ * repo-wide search for the constant name finds all of them), and re-enable
+ * the two triggers named above.
  */
+export const SKILLS_FREEZE_CUTOFF = '2026-09-16T00:00:00.000Z'
 
 // snake_case DB columns -> the camelCase `Skill` shape the rest of the app expects.
 // biome-ignore lint/suspicious/noExplicitAny: raw Supabase row, shape asserted by the SELECT list below
@@ -81,6 +98,7 @@ export async function getTopSkillsByCategory(
     .from('skills')
     .select(SKILL_COLUMNS)
     .eq('category', category)
+    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
     .order('installs', { ascending: false })
     .limit(limit)
   if (error) {
@@ -106,6 +124,7 @@ export async function getSkillsPage(
     .from('skills')
     .select(SKILL_COLUMNS)
     .eq('category', category)
+    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
     .order('installs', { ascending: false })
     .range(from, to)
   if (error) {
@@ -125,6 +144,7 @@ export async function getSkillCountByCategory(
     .from('skills')
     .select('id', { count: 'exact', head: true })
     .eq('category', category)
+    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
   if (error) {
     console.error('getSkillCountByCategory failed', error)
     return 0
@@ -162,7 +182,7 @@ export async function getAllCategoryCounts(): Promise<Readonly<Record<string, nu
   let rows: { category: string; count: number }[]
   try {
     rows = await fetchPage('getAllCategoryCounts', () =>
-      supabaseSkills.rpc('skills_category_counts'),
+      supabaseSkills.rpc('skills_category_counts', { cutoff: SKILLS_FREEZE_CUTOFF }),
     )
   } catch (error) {
     // `fetchPage` already logged each retry attempt with the real Postgres
@@ -190,6 +210,7 @@ export async function getSkill(
     .select(SKILL_COLUMNS)
     .eq('category', category)
     .eq('slug', slug)
+    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
     .maybeSingle()
   if (error) {
     console.error('getSkill failed', error)
@@ -210,6 +231,7 @@ export async function getSkillBySlug(slug: string): Promise<Skill | undefined> {
     .from('skills')
     .select(SKILL_COLUMNS)
     .eq('slug', slug)
+    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
     .maybeSingle()
   if (error) {
     console.error('getSkillBySlug failed', error)
@@ -252,6 +274,7 @@ export async function searchSkills(
     .from('skills')
     .select(SKILL_COLUMNS)
     .or(`name.ilike.%${trimmed}%,description.ilike.%${trimmed}%`)
+    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
     .order('installs', { ascending: false })
     .limit(limit)
   if (category !== undefined) builder = builder.eq('category', category)
@@ -276,6 +299,7 @@ export async function getSiblingSkills(
     .select(SKILL_COLUMNS)
     .eq('category', category)
     .neq('slug', excludeSlug)
+    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
     .order('installs', { ascending: false })
     .limit(limit)
   if (error) {
@@ -292,6 +316,7 @@ export async function getRecentlyAddedSkills(limit: number): Promise<readonly Sk
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_COLUMNS)
+    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
     .order('first_seen_at', { ascending: false })
     .limit(limit)
   if (error) {
@@ -308,6 +333,7 @@ export async function getTotalSkillCount(): Promise<number> {
   const { count, error } = await supabaseSkills
     .from('skills')
     .select('id', { count: 'exact', head: true })
+    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
   if (error) {
     console.error('getTotalSkillCount failed', error)
     return 0
@@ -315,9 +341,18 @@ export async function getTotalSkillCount(): Promise<number> {
   return count ?? 0
 }
 
-/** Backs the hub page's real "last synced" timestamp and the sitemap's
+/**
+ * Backs the hub page's real "last synced" timestamp and the sitemap's
  * `lastModified` for /skills — read from `skills_sync_meta`, written by the
- * sync-worker after each run, not guessed from the most recent row. */
+ * sync-worker after each run, not guessed from the most recent row.
+ *
+ * Both fields are clamped to `SKILLS_FREEZE_CUTOFF`. This table is written
+ * by the sync worker, not read from `skills` itself, so it isn't covered by
+ * the `.lte('first_seen_at', ...)` filter every other function here uses —
+ * if a sync somehow ran again after the freeze, this row's own counters
+ * would otherwise report a growing total that the rest of the site (all of
+ * it frozen) would flatly contradict.
+ */
 export async function getSyncMeta(): Promise<{
   lastSyncedAt: string | null
   totalSkills: number
@@ -333,7 +368,12 @@ export async function getSyncMeta(): Promise<{
     if (error) console.error('getSyncMeta failed', error)
     return { lastSyncedAt: null, totalSkills: 0 }
   }
-  return { lastSyncedAt: data.last_synced_at, totalSkills: data.total_skills }
+  const lastSyncedAt =
+    data.last_synced_at && data.last_synced_at > SKILLS_FREEZE_CUTOFF
+      ? SKILLS_FREEZE_CUTOFF
+      : data.last_synced_at
+  const totalSkills = await getTotalSkillCount()
+  return { lastSyncedAt, totalSkills }
 }
 
 /**
@@ -409,6 +449,7 @@ async function idBeforeOffset(offset: number): Promise<string | null> {
     supabaseSkills
       .from('skills')
       .select('id')
+      .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
       .order('id', { ascending: true })
       .range(offset - 1, offset - 1),
   )
@@ -480,6 +521,7 @@ export async function getAllSkillRefs(
         const query = supabaseSkills
           .from('skills')
           .select('id, slug, category, last_synced_at')
+          .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
           .order('id', { ascending: true })
           .limit(pageSize)
         return cursor === null ? query : query.gt('id', cursor)

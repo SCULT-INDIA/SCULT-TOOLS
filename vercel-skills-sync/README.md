@@ -3,8 +3,33 @@
 A standalone Vercel project. Its only job is calling skills.sh's official,
 paginated `/api/v1/*` API (which requires a Vercel OIDC token — something
 only a project actually deployed on Vercel can obtain) and writing real
-skills into the same Supabase database the main tools.scult.in app (on
-Railway) reads from.
+skills into the same Supabase database the main tools.scult.in app reads
+from.
+
+## Frozen as of 2026-09-16 — do not re-enable without asking
+
+Both automatic triggers were deliberately turned off at the user's
+explicit request: the Skills Library should stay at its current size, no
+more new skills. `vercel.json`'s `crons` entry was removed (the daily
+`0 3 * * *` call to `/api/sync`) and the main repo's
+`.github/workflows/sync-skills-worker.yml` schedule was removed too
+(manual `workflow_dispatch` still works if someone deliberately runs it).
+
+**The `vercel.json` change could not be deployed live yet** — this
+project's Vercel team (`pranjulrathour41-gmailcoms-projects`) was blocked
+for exceeding fair-use limits at the time this was done. Until that's
+resolved and `vercel --prod` is run from this directory, the cron job
+technically remains registered on Vercel's side even though the source no
+longer defines it. It is very unlikely to actually be firing successfully
+regardless (see `skills_sync_meta.last_synced_at` — it stopped advancing
+around 2026-09-03, well before this freeze, so whatever was already wrong
+with it was wrong independently of this change).
+
+Either way, the real backstop is code-level, not this file:
+`lib/skills/db.ts` in the main app filters every skills query to rows that
+existed before a fixed cutoff timestamp, so even a sync that somehow ran
+again could not make any new skill actually appear on the website. See
+that file's own docblock.
 
 ## Deploy
 
