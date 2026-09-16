@@ -108,22 +108,40 @@ function evictSome(now: number, windowMs: number): void {
 /**
  * Real client IP for rate-limit keying, from proxy headers.
  *
- * The RIGHTMOST x-forwarded-for entry, not the leftmost: every proxy on the
- * path APPENDS the peer address it saw, so the rightmost entry is the one
- * written by OUROWN trusted edge (Railway's proxy), while the leftmost is
- * whatever the client itself claims. Taking the leftmost — what this
- * function originally did — let any client defeat every rate limit on this
- * site by rotating made-up addresses in a self-supplied x-forwarded-for
- * header, since the proxy appends the real address AFTER the forged ones.
- * The rightmost entry is spoof-proof under exactly one assumption: requests
- * reach this process only through the platform proxy, which is how Railway
- * (and every similar PaaS) routes traffic.
+ * 2026-09-16: rewritten for Vercel (the app moved off Railway — see
+ * memory/railway-deploy-infra.md). The two platforms have opposite trust
+ * models for this header, so the old "rightmost entry" logic was reasoning
+ * about a threat that no longer applies here:
+ *
+ *   - Railway (and a classic reverse-proxy chain generally) APPENDS each
+ *     hop's peer address to `x-forwarded-for`, so a client can prepend any
+ *     number of forged addresses before the proxy's own trusted one — only
+ *     the rightmost entry is safe to trust.
+ *   - Vercel's edge instead OVERWRITES the header outright: per Vercel's
+ *     own docs (vercel.com/docs/headers/request-headers#x-forwarded-for),
+ *     "we currently overwrite the X-Forwarded-For header and do not
+ *     forward external IPs" — a non-Enterprise deployment can never
+ *     receive a client-forged value here at all, chained or otherwise.
+ *
+ * `x-vercel-forwarded-for` is checked first because Vercel's docs single it
+ * out as the one immune to being overwritten "if you're using a proxy on
+ * top of Vercel" (e.g. Cloudflare in front of it) — `x-forwarded-for` would
+ * then reflect that intermediary proxy's own address instead of the real
+ * client. `x-forwarded-for` is still safe as the fallback for the common
+ * case (nothing in front of Vercel); `x-real-ip` is documented as identical
+ * to it and kept as the last resort. The comma-split stays defensive rather
+ * than trusting the header verbatim, in case any hop ever legitimately
+ * produces more than one value.
  */
 export function clientIpFromHeaders(headers: Headers): string {
-  const forwarded = headers.get('x-forwarded-for')
-  if (forwarded) {
-    const parts = forwarded.split(',')
-    const last = parts[parts.length - 1]?.trim()
+  for (const header of ['x-vercel-forwarded-for', 'x-forwarded-for']) {
+    const value = headers.get(header)
+    if (!value) continue
+    const last = value
+      .split(',')
+      .map((part) => part.trim())
+      .filter(Boolean)
+      .pop()
     if (last) return last
   }
   const real = headers.get('x-real-ip')

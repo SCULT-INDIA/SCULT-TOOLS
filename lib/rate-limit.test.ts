@@ -91,21 +91,29 @@ describe('checkRateLimit (token bucket)', () => {
 })
 
 describe('clientIpFromHeaders', () => {
-  it('takes the RIGHTMOST x-forwarded-for entry (the trusted proxy hop)', async () => {
+  it('prefers x-vercel-forwarded-for over x-forwarded-for', async () => {
     const { clientIpFromHeaders } = await freshLimiter()
     const headers = new Headers({
-      // A client trying to defeat rate limits by forging XFF: the platform
-      // proxy APPENDS the real peer address after the forged ones.
-      'x-forwarded-for': '1.2.3.4, 5.6.7.8, 203.0.113.9',
+      // A proxy in front of Vercel (e.g. Cloudflare) would leave its own
+      // address in x-forwarded-for; x-vercel-forwarded-for is Vercel's own
+      // guarantee of the real client per its docs.
+      'x-forwarded-for': '198.51.100.55',
+      'x-vercel-forwarded-for': '203.0.113.9',
     })
     expect(clientIpFromHeaders(headers)).toBe('203.0.113.9')
   })
 
-  it('handles a single-entry header', async () => {
+  it('falls back to x-forwarded-for — safe on Vercel, which strips forged values', async () => {
     const { clientIpFromHeaders } = await freshLimiter()
     expect(clientIpFromHeaders(new Headers({ 'x-forwarded-for': '203.0.113.9' }))).toBe(
       '203.0.113.9',
     )
+  })
+
+  it('takes the last entry defensively if a header ever carries more than one', async () => {
+    const { clientIpFromHeaders } = await freshLimiter()
+    const headers = new Headers({ 'x-forwarded-for': '1.2.3.4, 5.6.7.8, 203.0.113.9' })
+    expect(clientIpFromHeaders(headers)).toBe('203.0.113.9')
   })
 
   it('falls back to x-real-ip, then "unknown"', async () => {
