@@ -12,9 +12,23 @@ import { TOOLS } from '@/lib/tools/registry'
  * other page, including the homepage, falls back to this one. Real figures
  * (tool/prompt counts) rather than invented copy, same as every other claim
  * on this site.
+ *
+ * Cache-Control (2026-09-16): under `cacheComponents`, a metadata-file image
+ * route with no `'use cache'` of its own defaults to dynamic — re-running
+ * the icon read and the full Satori render on every single request. Nothing
+ * here is per-visitor (no params, no cookies/headers), so every one of those
+ * was identical output for a billed Fluid Compute invocation; confirmed live
+ * (`curl -I`) as `Cache-Control: max-age=0, must-revalidate` /
+ * `X-Vercel-Cache: MISS` on every hit, including the repeat unfurl requests
+ * social platforms make per share. The header below lets Vercel's edge cache
+ * the rendered PNG instead — this route can't use `'use cache'` directly
+ * (an `ImageResponse` isn't a cacheable value; see `search-index.json`'s
+ * route for the same constraint on a plain `Response`), so the HTTP cache is
+ * the only lever available for this specific route.
  */
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
+const CACHE_CONTROL = 'public, max-age=0, s-maxage=86400, stale-while-revalidate=604800'
 
 export default async function OpengraphImage() {
   const iconBuffer = await readFile(join(process.cwd(), 'app/icon.png'))
@@ -58,6 +72,6 @@ export default async function OpengraphImage() {
         {`${TOOLS.length} free tools · ${PROMPTS.length} AI prompts · zero signups`}
       </div>
     </div>,
-    { ...size },
+    { ...size, headers: { 'Cache-Control': CACHE_CONTROL } },
   )
 }

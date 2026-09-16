@@ -67,7 +67,7 @@ export async function getTopSkillsByCategory(
   limit: number,
 ): Promise<readonly Skill[]> {
   'use cache'
-  cacheLife('hours')
+  cacheLife('skillsRegistry')
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_COLUMNS)
@@ -89,7 +89,7 @@ export async function getSkillsPage(
   page: number,
 ): Promise<readonly Skill[]> {
   'use cache'
-  cacheLife('hours')
+  cacheLife('skillsRegistry')
   const from = (page - 1) * SKILLS_PAGE_SIZE
   const to = from + SKILLS_PAGE_SIZE - 1
   const { data, error } = await supabaseSkills
@@ -109,7 +109,7 @@ export async function getSkillCountByCategory(
   category: SkillCategorySlug,
 ): Promise<number> {
   'use cache'
-  cacheLife('hours')
+  cacheLife('skillsRegistry')
   const { count, error } = await supabaseSkills
     .from('skills')
     .select('id', { count: 'exact', head: true })
@@ -146,7 +146,7 @@ export async function getSkillCountByCategory(
  */
 export async function getAllCategoryCounts(): Promise<Readonly<Record<string, number>>> {
   'use cache'
-  cacheLife('hours')
+  cacheLife('skillsRegistry')
   let rows: { category: string; count: number }[]
   try {
     rows = await fetchPage('getAllCategoryCounts', () =>
@@ -171,7 +171,7 @@ export async function getSkill(
   slug: string,
 ): Promise<Skill | undefined> {
   'use cache'
-  cacheLife('hours')
+  cacheLife('skillsRegistry')
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_COLUMNS)
@@ -256,7 +256,7 @@ export async function getSiblingSkills(
   limit: number,
 ): Promise<readonly Skill[]> {
   'use cache'
-  cacheLife('hours')
+  cacheLife('skillsRegistry')
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_COLUMNS)
@@ -273,7 +273,7 @@ export async function getSiblingSkills(
 
 export async function getRecentlyAddedSkills(limit: number): Promise<readonly Skill[]> {
   'use cache'
-  cacheLife('hours')
+  cacheLife('skillsRegistry')
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_COLUMNS)
@@ -288,7 +288,7 @@ export async function getRecentlyAddedSkills(limit: number): Promise<readonly Sk
 
 export async function getTotalSkillCount(): Promise<number> {
   'use cache'
-  cacheLife('hours')
+  cacheLife('skillsRegistry')
   const { count, error } = await supabaseSkills
     .from('skills')
     .select('id', { count: 'exact', head: true })
@@ -439,7 +439,7 @@ export async function getAllSkillRefs(
   limit: number,
 ): Promise<readonly { slug: string; category: string; lastSyncedAt: string }[]> {
   'use cache'
-  cacheLife('hours')
+  cacheLife('skillsRegistry')
   if (limit <= 0) return []
 
   // Shard 1 starts at the beginning and needs no probe at all.

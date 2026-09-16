@@ -43,6 +43,54 @@ const nextConfig: NextConfig = {
   cacheMaxMemorySize: 50 * 1024 * 1024,
 
   /**
+   * 2026-09-16: the live site has since moved from that Railway container to
+   * Vercel's managed, per-request infra, which the paragraph above already
+   * called out as the alternative this cap doesn't need to matter as much
+   * on — kept anyway as a harmless safety cap in case Vercel ever falls back
+   * to the default in-memory handler within a function's lifetime. See the
+   * `cacheLife` block below for the cost-relevant follow-up on Vercel: the
+   * revalidate window on this same cache, not its size.
+   */
+
+  /**
+   * How long each `'use cache'` profile treats its data as fresh before a
+   * background re-fetch, and how long before a stale hit forces a
+   * synchronous one. `lib/skills/db.ts`'s functions read a Supabase table
+   * that only a separate sync-worker project writes to (verified: nothing
+   * in this repo issues an `update`/`insert` against the `skills` table),
+   * on a run cadence that project's own history calls a "16h rescan gate" —
+   * so the data underneath these pages cannot actually change faster than
+   * that, regardless of how often the cache is told to check.
+   *
+   * The built-in `hours` profile (`revalidate: 1h`) they used to run on
+   * doesn't know that: on Vercel, every revalidation of a distinct cache
+   * key is a billed ISR Write, and with ~1,200+ statically-known skill
+   * pages plus every long-tail (category, page) listing a crawler ever
+   * requests, checking hourly for data that changes roughly once a day was
+   * this account's single largest Vercel usage line (ISR Writes, ahead of
+   * build minutes and data transfer) while otherwise sitting at a few cents
+   * total. `revalidate: 20h` sits comfortably past the sync worker's own
+   * cadence — visitors see the same data either way, since there is no
+   * fresher data to serve — cutting revalidation frequency by roughly 20x
+   * for zero perceptible staleness. `expire: 7d` is a generous backstop
+   * (matches the built-in `weeks` profile's order of magnitude) for the
+   * rare page nobody visits across several sync cycles.
+   *
+   * `getSyncMeta()` (the one function still on `cacheLife('hours')`) is
+   * deliberately excluded: it backs the "last synced" trust indicator
+   * itself, is a single-row lookup on a tiny metadata table (negligible
+   * cost either way), and is the one place staleness would actually read as
+   * wrong rather than merely unnecessary.
+   */
+  cacheLife: {
+    skillsRegistry: {
+      stale: 60 * 60,
+      revalidate: 60 * 60 * 20,
+      expire: 60 * 60 * 24 * 7,
+    },
+  },
+
+  /**
    * Sharp/libvips tuning for the image optimizer (2026-09-15 follow-up to
    * the two OOM fixes above). Production `[memory]` logs kept climbing —
    * `external`/`arrayBuffers`, the native-memory categories `--max-old-

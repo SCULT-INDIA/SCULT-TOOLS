@@ -1,3 +1,4 @@
+import { cacheLife } from 'next/cache'
 import { buildSearchPayload } from '@/lib/search-payload'
 
 /**
@@ -34,9 +35,18 @@ import { buildSearchPayload } from '@/lib/search-payload'
  * Failure modes
  *   None at request time. If the payload cannot be constructed the build fails
  *   loudly, which is correct — a silently empty index would disable search.
+ *
+ * cacheLife('max')
+ *   Without an explicit profile this fell back to the platform default
+ *   (`revalidate: 15min`) — needlessly frequent for a payload that is "the
+ *   same bytes for every visitor" per the docblock above and can only
+ *   actually change on a new deploy, which resets the cache anyway. Every
+ *   15-minute revalidation under real traffic was a billed Vercel ISR
+ *   Write for content that had nothing new to write.
  */
 async function payloadJson(): Promise<string> {
   'use cache'
+  cacheLife('max')
   return JSON.stringify(buildSearchPayload())
 }
 
