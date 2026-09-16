@@ -12,12 +12,13 @@ name: Drive Skills Library sync
 # frozen at its current size at the user's explicit request (no more new
 # skills should reach the site). `workflow_dispatch` is kept as a manual-only
 # escape hatch: it does not fire on its own, so the freeze holds unless
-# someone deliberately clicks "Run workflow". See lib/skills/db.ts's own
-# freeze-cutoff comment for the other, code-level half of this — even a
-# manually triggered sync (or the still-registered Vercel cron on
-# vercel-skills-sync, which could not be removed live yet — see that
-# project's own vercel.json for why) cannot add skills the website will
-# actually show.
+# someone deliberately clicks "Run workflow". The registry was also curated
+# down to a served set of 10,000 and the rest deleted (see lib/skills/db.ts's
+# header and supabase/migrations/0005 + 0006) — and the app gates every
+# query on a `served` column that defaults to false, so even a manually
+# triggered sync (or the still-registered Vercel cron on vercel-skills-sync,
+# which could not be removed live yet — see that project's README for why)
+# cannot add skills the website will actually show.
 on:
   workflow_dispatch: {}
 

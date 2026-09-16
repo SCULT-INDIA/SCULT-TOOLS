@@ -1,7 +1,7 @@
 import { ArrowUpRight, BadgeCheck } from 'lucide-react'
 import Link from 'next/link'
 import { BrandIcon } from '@/components/ui/BrandIcon'
-import { getTotalSkillCount } from '@/lib/skills/db'
+import { getTotalSkillCount, SKILLS_INDEXED_REGISTRY_TOTAL } from '@/lib/skills/db'
 
 /**
  * Homepage spotlight for the Skills Library — the site's third catalogue,
@@ -60,7 +60,7 @@ export async function SkillLibrarySpotlight() {
                   <p className="mt-3">
                     <span className="text-green">➜</span>{' '}
                     <span className="text-white/90">synced from a public repo</span>{' '}
-                    <span className="text-white/45">· updated today</span>
+                    <span className="text-white/45">· a real file, not a rewrite</span>
                   </p>
                 </div>
               </div>
@@ -97,16 +97,17 @@ export async function SkillLibrarySpotlight() {
               <span className="mr-1 inline-block rotate-1 rounded-md border border-ink bg-white px-3 py-0.5 shadow-brutal-sm">
                 {total.toLocaleString()}
               </span>{' '}
-              real AI agent skills, synced daily
+              best AI agent skills
             </h2>
             <p className="mt-5 max-w-[52ch] text-[17px] text-black/70 leading-7">
-              A curated, daily-growing directory of real, public `SKILL.md` files —
-              organized by the task you're doing, not by which AI tool you use. Works
-              natively with Claude Code, Cursor, Codex CLI, and Copilot:
+              We indexed {SKILLS_INDEXED_REGISTRY_TOTAL.toLocaleString()}+ real, public
+              `SKILL.md` files from the open skills.sh registry and kept the
+              most-installed — organized by the task you're doing, not by which AI tool
+              you use. Works natively with Claude Code, Cursor, Codex CLI, and Copilot:
             </p>
             <ul className="mt-4 flex flex-col gap-2 text-[15px] text-black/80">
               {[
-                'Every skill is a real file synced from a public repo, never invented',
+                'Every skill is a real file from a public repo, never invented',
                 'Copy as-is, or export as AGENTS.md, .cursorrules, or Copilot instructions',
                 'Organized by task — testing, debugging, deployment — not by AI brand',
               ].map((line) => (

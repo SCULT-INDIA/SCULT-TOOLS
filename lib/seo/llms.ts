@@ -4,7 +4,11 @@ import { getCategoriesByGroup, PROMPT_GROUPS } from '@/lib/prompts/categories'
 import { getPromptsByCategory, PROMPTS } from '@/lib/prompts/registry'
 import { absoluteUrl, SITE } from '@/lib/site'
 import { SKILL_CATEGORIES } from '@/lib/skills/categories'
-import { getAllCategoryCounts, getTotalSkillCount } from '@/lib/skills/db'
+import {
+  getAllCategoryCounts,
+  getTotalSkillCount,
+  SKILLS_INDEXED_REGISTRY_TOTAL,
+} from '@/lib/skills/db'
 import { CATEGORIES } from '@/lib/tools/categories'
 import { getToolsByCategory, TOOLS } from '@/lib/tools/registry'
 
@@ -170,10 +174,9 @@ function buildPromptSection(): string[] {
   return lines
 }
 
-/** Link-level only, same reasoning as `buildPromptSection` — at the
- * registry's real scale (~600k), inlining every skill would make this file
- * enormous for little benefit, since each is already a small, templated
- * third-party record. */
+/** Link-level only, same reasoning as `buildPromptSection` — inlining ten
+ * thousand skills would make this file enormous for little benefit, since
+ * each is already a small, templated third-party record. */
 async function buildSkillSection(): Promise<string[]> {
   const [total, counts] = await Promise.all([
     getTotalSkillCount(),
@@ -182,7 +185,7 @@ async function buildSkillSection(): Promise<string[]> {
   const lines = [
     '',
     '## Skills Library',
-    `- [Skills Library](${absoluteUrl('/skills')}): ${total.toLocaleString()} real AI agent skills synced daily from the open skills.sh registry, exportable as SKILL.md, AGENTS.md, .cursorrules, or Copilot instructions.`,
+    `- [Skills Library](${absoluteUrl('/skills')}): the ${total.toLocaleString()} most-installed real AI agent skills, hand-curated from the ${SKILLS_INDEXED_REGISTRY_TOTAL.toLocaleString()}+ in the open skills.sh registry, exportable as SKILL.md, AGENTS.md, .cursorrules, or Copilot instructions.`,
   ]
   for (const category of SKILL_CATEGORIES) {
     const count = counts[category.slug] ?? 0

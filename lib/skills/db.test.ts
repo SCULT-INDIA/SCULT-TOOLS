@@ -32,9 +32,9 @@ let table: Row[] = []
 /** Every query the code issued, in order — the assertion subject for
  * "did it page, and did it use a cursor rather than an offset". */
 let queries: string[] = []
-/** Every `.lte(column, value)` call the code issued, in order — the
- * assertion subject for the skills-freeze cutoff below. */
-let lteCalls: [string, string][] = []
+/** Every `.eq(column, value)` call the code issued, in order — the
+ * assertion subject for the curated `served` gate below. */
+let eqCalls: [string, boolean][] = []
 /** Cursor value of a `.gt('id', …)` page that should fail, or null. */
 let failAfter: string | null | undefined
 /** How many times the failing page fails before succeeding. */
@@ -113,14 +113,14 @@ vi.mock('./supabase', () => {
     supabaseSkills: {
       from: () => ({
         select: (cols: string) => ({
-          // The freeze-cutoff filter (SKILLS_FREEZE_CUTOFF in db.ts) sits
+          // The curated-set gate (`.eq('served', true)` in db.ts) sits
           // between `.select()` and `.order()` in the real query; this fake
-          // table has no `first_seen_at` column to actually filter on, so
-          // it's a pass-through that keeps the chain shape correct — it
-          // only records what it was called with, for
-          // `describe('skills freeze')` below to assert on.
-          lte: (column: string, value: string) => {
-            lteCalls.push([column, value])
+          // table has no `served` column to actually filter on, so it's a
+          // pass-through that keeps the chain shape correct — it only
+          // records what it was called with, for
+          // `describe('curated served set')` below to assert on.
+          eq: (column: string, value: boolean) => {
+            eqCalls.push([column, value])
             return { order: () => builder({ limit: POSTGREST_CAP, after: null, cols }) }
           },
         }),
@@ -137,9 +137,7 @@ vi.mock('./supabase', () => {
   }
 })
 
-const { getAllSkillRefs, getAllCategoryCounts, SKILLS_FREEZE_CUTOFF } = await import(
-  './db'
-)
+const { getAllSkillRefs, getAllCategoryCounts } = await import('./db')
 
 function rows(count: number, startId = 0): Row[] {
   return Array.from({ length: count }, (_, i) => {
@@ -158,7 +156,7 @@ function rows(count: number, startId = 0): Row[] {
 beforeEach(() => {
   table = []
   queries = []
-  lteCalls = []
+  eqCalls = []
   failAfter = undefined
   failTimes = Number.POSITIVE_INFINITY
   failAttempts = 0
@@ -326,27 +324,23 @@ describe('getAllCategoryCounts', () => {
 })
 
 /**
- * The Skills Library was frozen at its current size at the user's explicit
- * request (see SKILLS_FREEZE_CUTOFF's own docblock in db.ts) — these two
- * functions are the ones this file already has a fake table/RPC for, so
- * they carry the regression test: if a future edit ever drops the cutoff
- * from either query, the site would silently start showing skills added by
- * a sync nobody meant to re-enable.
+ * The Skills Library was frozen and curated to a served set of 10,000 at the
+ * user's explicit request (see db.ts's header) — `served` is the one gate
+ * every query goes through. These two functions are the ones this file
+ * already has a fake table/RPC for, so they carry the regression test: if a
+ * future edit ever drops the gate from a query, a row a re-enabled sync
+ * inserted would silently start appearing on the site.
  */
-describe('skills freeze', () => {
-  it('is a real, parseable cutoff date', () => {
-    expect(Number.isNaN(Date.parse(SKILLS_FREEZE_CUTOFF))).toBe(false)
-  })
-
-  it('filters getAllSkillRefs to first_seen_at <= the freeze cutoff', async () => {
+describe('curated served set', () => {
+  it('gates getAllSkillRefs on served = true', async () => {
     table = rows(10)
     await getAllSkillRefs(0, 10)
-    expect(lteCalls).toEqual([['first_seen_at', SKILLS_FREEZE_CUTOFF]])
+    expect(eqCalls).toEqual([['served', true]])
   })
 
-  it('passes the freeze cutoff to the skills_category_counts RPC', async () => {
+  it('calls the skills_category_counts RPC with no arguments — the gate lives in the function itself', async () => {
     categoryCountRows = [{ category: 'testing', count: 1 }]
     await getAllCategoryCounts()
-    expect(rpcArgs).toEqual({ cutoff: SKILLS_FREEZE_CUTOFF })
+    expect(rpcArgs).toBeUndefined()
   })
 })

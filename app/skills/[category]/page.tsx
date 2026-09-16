@@ -217,7 +217,7 @@ export default async function SkillCategoryPage({
           </p>
           <p className="mt-4 flex items-center gap-1.5 font-medium text-[13.5px] text-ink-subtle">
             <BadgeCheck className="size-4 text-green" aria-hidden="true" />
-            Sourced from real, public repositories — synced daily, never invented.
+            Sourced from real, public repositories — hand-curated, never invented.
           </p>
         </header>
       </section>

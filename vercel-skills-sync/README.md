@@ -6,14 +6,27 @@ only a project actually deployed on Vercel can obtain) and writing real
 skills into the same Supabase database the main tools.scult.in app reads
 from.
 
-## Frozen as of 2026-09-16 — do not re-enable without asking
+## Frozen and curated as of 2026-09-16 — do not re-enable without asking
 
 Both automatic triggers were deliberately turned off at the user's
-explicit request: the Skills Library should stay at its current size, no
-more new skills. `vercel.json`'s `crons` entry was removed (the daily
-`0 3 * * *` call to `/api/sync`) and the main repo's
-`.github/workflows/sync-skills-worker.yml` schedule was removed too
-(manual `workflow_dispatch` still works if someone deliberately runs it).
+explicit request, and the registry this worker had built (50,456 skills)
+was curated down to a served set of exactly 10,000 — every category's top
+250 by installs, then the globally most-installed to fill the rest — with
+the other 40,456 rows **deleted** from Supabase after a verified local
+backup (`supabase/backups/skills-unserved-2026-09-16.jsonl.gz`, 117 MB,
+gitignored, on the machine that ran it). See
+`supabase/migrations/0005_curate_served_skills.sql` and `0006_...` for the
+selection logic and the delete, and `lib/skills/db.ts`'s header for how
+the app now gates every query on the new `served` column.
+
+**If this worker is ever re-enabled, it must set `served` on what it
+writes** (the column defaults to `false`), or nothing it inserts will
+appear on the site — that default is the deliberate backstop.
+
+`vercel.json`'s `crons` entry was removed (the daily `0 3 * * *` call to
+`/api/sync`) and the main repo's `.github/workflows/sync-skills-worker.yml`
+schedule was removed too (manual `workflow_dispatch` still works if someone
+deliberately runs it).
 
 **The `vercel.json` change could not be deployed live yet** — this
 project's Vercel team (`pranjulrathour41-gmailcoms-projects`) was blocked
@@ -25,11 +38,11 @@ regardless (see `skills_sync_meta.last_synced_at` — it stopped advancing
 around 2026-09-03, well before this freeze, so whatever was already wrong
 with it was wrong independently of this change).
 
-Either way, the real backstop is code-level, not this file:
-`lib/skills/db.ts` in the main app filters every skills query to rows that
-existed before a fixed cutoff timestamp, so even a sync that somehow ran
-again could not make any new skill actually appear on the website. See
-that file's own docblock.
+Either way, the real backstop is the database column, not this file:
+`lib/skills/db.ts` in the main app filters every skills query to
+`served = true`, and `served` defaults to `false`, so even a sync that
+somehow ran again could not make any new skill actually appear on the
+website, the CLI, or the MCP tools. See that file's own docblock.
 
 ## Deploy
 

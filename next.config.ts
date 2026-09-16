@@ -55,38 +55,28 @@ const nextConfig: NextConfig = {
   /**
    * How long each `'use cache'` profile treats its data as fresh before a
    * background re-fetch, and how long before a stale hit forces a
-   * synchronous one. `lib/skills/db.ts`'s functions read a Supabase table
-   * that only a separate sync-worker project writes to (verified: nothing
-   * in this repo issues an `update`/`insert` against the `skills` table),
-   * on a run cadence that project's own history calls a "16h rescan gate" —
-   * so the data underneath these pages cannot actually change faster than
-   * that, regardless of how often the cache is told to check.
+   * synchronous one. On Vercel, every revalidation of a distinct cache key
+   * is a billed ISR Write — this account's single largest usage line when
+   * `lib/skills/db.ts` still ran on the built-in `hours` profile (1h).
    *
-   * The built-in `hours` profile (`revalidate: 1h`) they used to run on
-   * doesn't know that: on Vercel, every revalidation of a distinct cache
-   * key is a billed ISR Write, and with ~1,200+ statically-known skill
-   * pages plus every long-tail (category, page) listing a crawler ever
-   * requests, checking hourly for data that changes roughly once a day was
-   * this account's single largest Vercel usage line (ISR Writes, ahead of
-   * build minutes and data transfer) while otherwise sitting at a few cents
-   * total. `revalidate: 20h` sits comfortably past the sync worker's own
-   * cadence — visitors see the same data either way, since there is no
-   * fresher data to serve — cutting revalidation frequency by roughly 20x
-   * for zero perceptible staleness. `expire: 7d` is a generous backstop
-   * (matches the built-in `weeks` profile's order of magnitude) for the
-   * rare page nobody visits across several sync cycles.
+   * The Skills Library is now FROZEN and curated (see lib/skills/db.ts's
+   * header: the sync was stopped 2026-09-16 and the served set fixed at
+   * 10,000 rows that nothing writes to), so there is literally no fresher
+   * data a re-check could ever find. Re-checking hourly, or even daily, was
+   * paying to rediscover that. `revalidate: 30d` matches the built-in `max`
+   * profile — a skill page is built at most once a month; `expire: 365d`
+   * means a stale hit still serves instantly and refreshes in the
+   * background rather than blocking. `stale: 1d` lets the client router
+   * reuse a page it already has for a day without asking the server at all.
    *
-   * `getSyncMeta()` (the one function still on `cacheLife('hours')`) is
-   * deliberately excluded: it backs the "last synced" trust indicator
-   * itself, is a single-row lookup on a tiny metadata table (negligible
-   * cost either way), and is the one place staleness would actually read as
-   * wrong rather than merely unnecessary.
+   * To lift this later (if the sync is ever re-enabled), the built-in
+   * `days` profile is the sensible fallback.
    */
   cacheLife: {
     skillsRegistry: {
-      stale: 60 * 60,
-      revalidate: 60 * 60 * 20,
-      expire: 60 * 60 * 24 * 7,
+      stale: 60 * 60 * 24,
+      revalidate: 60 * 60 * 24 * 30,
+      expire: 60 * 60 * 24 * 365,
     },
   },
 

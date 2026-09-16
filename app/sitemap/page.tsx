@@ -156,7 +156,7 @@ export default async function SitemapPage() {
         </h1>
         <p className="mt-5 max-w-[62ch] text-[17px] text-ink-muted leading-7 md:text-lead">
           {TOOLS.length} tools, {PROMPTS.length} prompts, {totalSkills.toLocaleString()}{' '}
-          synced agent skills, {GUIDES.length} guides, {BLOG_POSTS.length} blog posts and
+          curated agent skills, {GUIDES.length} guides, {BLOG_POSTS.length} blog posts and
           every trust page, grouped by section.
         </p>
         <p className="mt-3 max-w-[62ch] text-[15px] text-ink-muted">
@@ -266,7 +266,7 @@ export default async function SitemapPage() {
           </Link>
           {skillSyncMeta.lastSyncedAt ? (
             <span className="ml-2 text-ink-subtle">
-              (updated daily — last synced{' '}
+              (last synced{' '}
               {new Date(skillSyncMeta.lastSyncedAt).toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric',
@@ -276,10 +276,9 @@ export default async function SitemapPage() {
           ) : null}
         </p>
         <p className="mt-2 max-w-[62ch] text-[13.5px] text-ink-subtle">
-          Individual skills aren't listed here one by one — at this scale (growing toward
-          the full skills.sh registry) that would make this page unusable. The categories
-          below are real and daily-synced; every skill under them is in the
-          machine-readable{' '}
+          Individual skills aren't listed here one by one — ten thousand of them would
+          make this page unusable. The categories below are real; every skill under them
+          is in the machine-readable{' '}
           <a href="/sitemap.xml" className={LINK_CLASS}>
             XML sitemap
           </a>

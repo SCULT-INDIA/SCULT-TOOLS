@@ -15,3 +15,6 @@ next-env.d.ts
 
 # scult-cli build output (built on publish via prepublishOnly)
 cli/dist/
+
+# Local-only DB backups (e.g. the 117MB archive of the 40,456 skill rows deleted 2026-09-16) — never commit.
+supabase/backups/

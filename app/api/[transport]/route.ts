@@ -55,7 +55,7 @@ const baseHandler = createMcpHandler(
   {
     serverInfo: { name: 'scult-tools', version: '1.1.0' },
     instructions: [
-      'Every free tool on tools.scult.in, callable directly: SEO utilities (schema markup, FAQ schema, UTM builder), business tools (invoice totals, marketing ROI, name/slogan generators), developer utilities (JSON formatter, word counter, QR codes, favicons, colour palettes), live site audits (check_ai_visibility, test_website_speed), and keyword search over the 1,170-prompt Prompt Library, the 50,000-skill Skills Library, the blog, and the guides.',
+      'Every free tool on tools.scult.in, callable directly: SEO utilities (schema markup, FAQ schema, UTM builder), business tools (invoice totals, marketing ROI, name/slogan generators), developer utilities (JSON formatter, word counter, QR codes, favicons, colour palettes), live site audits (check_ai_visibility, test_website_speed), and keyword search over the 1,170-prompt Prompt Library, the Skills Library (the 10,000 most-installed agent skills, curated from a 50,000+ registry), the blog, and the guides.',
       'Start with list_site_tools to see the full catalogue. Search tools return compact results — follow up with the matching get_* tool for full content.',
       'Rate limits per client: 30 calls/min for lookups and pure computation, 6/min for favicon rendering, 3/min for the two live-audit tools (they hit external APIs). Rate-limit errors state the bucket and when to retry.',
     ].join('\n'),

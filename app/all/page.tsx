@@ -166,7 +166,7 @@ export default function AllToolsPage() {
             },
             {
               icon: BadgeCheck,
-              title: 'Agent skills, synced daily',
+              title: 'Curated agent skills',
               blurb:
                 'Real, public SKILL.md files for Claude Code, Cursor and Copilot — copy as-is or export for your agent.',
               href: '/skills',

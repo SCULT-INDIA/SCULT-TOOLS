@@ -23,6 +23,39 @@ import { AI_BOTS } from '@/lib/tools/ai-visibility-checker/logic'
  * app/layout.tsx's robots metadata for the page-level directive — pre-declared
  * here even though the route does not exist yet).
  */
+/**
+ * SEO / backlink-intelligence scrapers, turned away by name (2026-09-16).
+ * They crawl every one of the 10,000 skill pages as eagerly as Googlebot
+ * does, but what they build is their own paid index — none of this site's
+ * search ranking or AI-answer visibility comes from them. On Vercel every
+ * first hit on a not-yet-cached page is a paid render, and the Observability
+ * data showed exactly that shape: ~3,500 distinct skill URLs hit in 12 hours
+ * with under one read each — crawlers sweeping the long tail once, never
+ * to return. Search engines and every AI crawler stay fully allowed; this
+ * is the one class of bot where "no" costs the site nothing.
+ *
+ * Well-behaved ones honour this. The rest are `proxy.ts`'s rate limiter's
+ * problem — this file is the polite request, not the enforcement.
+ *
+ * Deliberately NOT here: Bytespider (ByteDance) is in `AI_BOTS` and
+ * therefore explicitly allowed below; disallowing it here would contradict
+ * the roster this site's own AI Visibility Checker holds other sites to.
+ */
+const SEO_SCRAPER_BOTS = [
+  'AhrefsBot',
+  'SemrushBot',
+  'MJ12bot',
+  'DotBot',
+  'BLEXBot',
+  'DataForSeoBot',
+  'PetalBot',
+  'serpstatbot',
+  'Barkrowler',
+  'MegaIndex.ru',
+  'ZoominfoBot',
+  'SeekportBot',
+] as const
+
 export default async function robots(): Promise<MetadataRoute.Robots> {
   // `generateSitemaps()` in app/sitemap.ts shards the sitemap once the
   // Skills Library needs more than one file (50,000 URLs each), which makes
@@ -47,10 +80,21 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
         userAgent: '*',
         allow: '/',
         disallow: ['/api/', '/search'],
+        // Honoured by Bing, Yandex and most others (Google ignores it, and
+        // every AI crawler has its own group below, which this doesn't
+        // touch). At one request per 10s, a full pass over the 10,000 skill
+        // pages takes about a day — fine for a frozen library, and it stops
+        // a single well-behaved crawler from turning a sweep into a burst of
+        // paid renders.
+        crawlDelay: 10,
       },
       ...AI_BOTS.map((bot) => ({
         userAgent: bot.name,
         allow: '/',
+      })),
+      ...SEO_SCRAPER_BOTS.map((name) => ({
+        userAgent: name,
+        disallow: '/',
       })),
     ],
     sitemap: sitemapUrls,

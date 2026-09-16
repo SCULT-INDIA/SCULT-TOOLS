@@ -1,4 +1,4 @@
-import { ArrowUpRight, RefreshCw } from 'lucide-react'
+import { ArrowUpRight, BadgeCheck } from 'lucide-react'
 import type { Metadata } from 'next'
 import { SkillCard } from '@/components/skills/SkillCard'
 import { Icon } from '@/components/ui/Icon'
@@ -11,6 +11,7 @@ import {
   getSyncMeta,
   getTopSkillsByCategory,
   getTotalSkillCount,
+  SKILLS_INDEXED_REGISTRY_TOTAL,
 } from '@/lib/skills/db'
 import type { SkillCategory } from '@/lib/skills/types'
 
@@ -18,8 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const total = await getTotalSkillCount()
   return {
     title: `${total.toLocaleString()} Free AI Agent Skills — Claude Code, Cursor, Codex & More`,
-    description:
-      'A curated, daily-synced directory of real agent skills sourced from the open skills.sh registry — organized by task, not by which AI tool you use. Copy as SKILL.md, AGENTS.md, .cursorrules, or Copilot instructions.',
+    description: `The ${total.toLocaleString()} most-installed real agent skills, hand-curated from the ${SKILLS_INDEXED_REGISTRY_TOTAL.toLocaleString()}+ in the open skills.sh registry — organized by task, not by which AI tool you use. Copy as SKILL.md, AGENTS.md, .cursorrules, or Copilot instructions.`,
     alternates: { canonical: '/skills' },
   }
 }
@@ -71,21 +71,26 @@ export default async function SkillsPage() {
             catalogue pages open with. Fixed pastel: literal black text. */}
         <header className="rounded-panel border border-ink bg-tile-green p-6 shadow-brutal md:p-9">
           <p className="font-bold text-[12px] text-black/60 uppercase tracking-[0.14em]">
-            Free agent skills directory · {categoriesWithCounts.length} task categories
+            Free agent skills directory · curated from{' '}
+            {SKILLS_INDEXED_REGISTRY_TOTAL.toLocaleString()}+ indexed ·{' '}
+            {categoriesWithCounts.length} task categories
           </p>
           <h1 className="mt-2 max-w-[26ch] text-[38px] text-black leading-[1.05] tracking-[-1px] md:text-[52px] md:leading-[56px]">
-            {total.toLocaleString()} real AI agent skills
+            The {total.toLocaleString()} best AI agent skills
           </h1>
           <p className="mt-4 max-w-[62ch] text-[17px] text-black/70 leading-7">
-            Every skill here is a real, public `SKILL.md` synced from the open skills.sh
-            registry — organized by the task you're trying to do, not by which AI tool you
-            happen to use. Copy it as-is for Claude Code, Codex CLI, Cursor, or Gemini
-            CLI, or export it as AGENTS.md, .cursorrules, or Copilot instructions.
+            We indexed {SKILLS_INDEXED_REGISTRY_TOTAL.toLocaleString()}+ real, public
+            `SKILL.md` files from the open skills.sh registry and kept the{' '}
+            {total.toLocaleString()} most-installed — organized by the task you're trying
+            to do, not by which AI tool you happen to use. Copy one as-is for Claude Code,
+            Codex CLI, Cursor, or Gemini CLI, or export it as AGENTS.md, .cursorrules, or
+            Copilot instructions.
           </p>
 
           <p className="mt-5 flex items-center gap-1.5 font-medium text-[13.5px] text-black/70">
-            <RefreshCw className="size-4 text-green" aria-hidden="true" />
-            Updated daily — last synced {formatSyncedAt(syncMeta.lastSyncedAt)}
+            <BadgeCheck className="size-4 text-green" aria-hidden="true" />
+            Hand-curated, never invented — registry snapshot{' '}
+            {formatSyncedAt(syncMeta.lastSyncedAt)}
           </p>
         </header>
 

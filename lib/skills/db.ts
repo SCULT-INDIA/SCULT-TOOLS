@@ -5,42 +5,48 @@ import type { Skill, SkillCategorySlug } from './types'
 
 /**
  * The Skills Library's data-access layer. Unlike `lib/tools/registry.ts` or
- * `lib/prompts/registry.ts` (compile-time arrays), this reads a live
- * Supabase table that a separate Vercel sync-worker keeps growing toward
- * the full skills.sh registry (~600k) — far too large to hold in a
- * git-committed array or to statically pre-render in full. Every function
- * here is async for that reason, and callers use it accordingly: a few
- * hundred of the most-installed skills per category are still statically
- * generated at build time (see `generateStaticParams` in the route files),
- * everything else renders on first request and is cached with `cacheLife`
- * below, so the site stays fast without requiring a full pre-build of
- * something that size.
+ * `lib/prompts/registry.ts` (compile-time arrays), this reads a Supabase
+ * table — too large to hold in a git-committed array or to statically
+ * pre-render in full, so every function here is async: the hottest few
+ * skills per category are pre-rendered at build time (see
+ * `generateStaticParams` in the route files), everything else renders on
+ * first request and is then cached with the `skillsRegistry` profile below.
  *
  * Every function also carries `cacheTag('skills')`, so a single
  * `revalidateTag('skills', 'max')` call (see app/api/revalidate/route.ts)
- * refreshes all of them immediately — the on-demand half of "content
- * should go stale because it changed, not because a timer expired." The
- * `cacheLife` windows above are the fallback for when nothing calls that
- * endpoint (e.g. the sync worker hasn't been wired up to it yet), not a
- * replacement for it.
+ * refreshes all of them immediately if that is ever needed.
  *
- * FROZEN as of 2026-09-16, at the user's explicit request: the Skills
- * Library should stop growing and stay at its current size — no more new
- * skills reaching the site. The sync worker's own triggers were disabled
- * (vercel-skills-sync/vercel.json's cron removed; the main repo's
- * `.github/workflows/sync-skills-worker.yml` schedule removed) as the
- * first layer, but this file is the real backstop: every query below
- * filters to `first_seen_at <= SKILLS_FREEZE_CUTOFF`, so even a sync that
- * somehow ran again — a manually triggered GitHub Actions run, or the
- * Vercel cron, which could not be removed live yet because that project's
- * Vercel team was blocked for exceeding fair-use limits at the time — could
- * write new rows to Supabase without any of them actually becoming visible
- * on the website. To lift the freeze later, remove `SKILLS_FREEZE_CUTOFF`
- * and every `.lte('first_seen_at', SKILLS_FREEZE_CUTOFF)` call below (a
- * repo-wide search for the constant name finds all of them), and re-enable
- * the two triggers named above.
+ * FROZEN AND CURATED as of 2026-09-16, at the user's explicit request.
+ * The sync worker that used to grow this table toward the full skills.sh
+ * registry was stopped (vercel-skills-sync/vercel.json's cron and the main
+ * repo's `.github/workflows/sync-skills-worker.yml` schedule both removed),
+ * and the 50,456 skills it had indexed were curated down to a served set of
+ * exactly 10,000: every category's top 250 by installs, then the globally
+ * most-installed to fill the rest (supabase/migrations/
+ * 0005_curate_served_skills.sql has the selection and the reasoning — a
+ * flat installs cutoff would have handed `general` 60% of the slots and
+ * left `architecture` with 11). Rows outside that set were then deleted
+ * (0006), after a local backup.
+ *
+ * `served` is the single gate: every query below filters `.eq('served',
+ * true)`. It is `default false`, so even a row a re-enabled sync somehow
+ * inserted could never appear on the site, the CLI, or the MCP tools — all
+ * three read exclusively through this file. To lift this later: re-enable
+ * the two triggers named above, have the sync set `served` on what it
+ * writes, and adjust `SKILLS_INDEXED_REGISTRY_TOTAL` below.
  */
-export const SKILLS_FREEZE_CUTOFF = '2026-09-16T00:00:00.000Z'
+
+/**
+ * How many skills the registry held when the served set was curated from
+ * it — the "curated from 50,000+" figure the site shows. A constant rather
+ * than a live count on purpose: the unselected rows no longer exist in the
+ * database, so this number is a fact about the curation, not the table.
+ */
+export const SKILLS_INDEXED_REGISTRY_TOTAL = 50_456
+
+/** When the registry was frozen and curated; `getSyncMeta` clamps the
+ * "last synced" date to this so a stale meta row can't claim otherwise. */
+export const SKILLS_CURATED_AT = '2026-09-16T00:00:00.000Z'
 
 // snake_case DB columns -> the camelCase `Skill` shape the rest of the app expects.
 // biome-ignore lint/suspicious/noExplicitAny: raw Supabase row, shape asserted by the SELECT list below
@@ -98,7 +104,7 @@ export async function getTopSkillsByCategory(
     .from('skills')
     .select(SKILL_COLUMNS)
     .eq('category', category)
-    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
+    .eq('served', true)
     .order('installs', { ascending: false })
     .limit(limit)
   if (error) {
@@ -124,7 +130,7 @@ export async function getSkillsPage(
     .from('skills')
     .select(SKILL_COLUMNS)
     .eq('category', category)
-    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
+    .eq('served', true)
     .order('installs', { ascending: false })
     .range(from, to)
   if (error) {
@@ -144,7 +150,7 @@ export async function getSkillCountByCategory(
     .from('skills')
     .select('id', { count: 'exact', head: true })
     .eq('category', category)
-    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
+    .eq('served', true)
   if (error) {
     console.error('getSkillCountByCategory failed', error)
     return 0
@@ -182,7 +188,7 @@ export async function getAllCategoryCounts(): Promise<Readonly<Record<string, nu
   let rows: { category: string; count: number }[]
   try {
     rows = await fetchPage('getAllCategoryCounts', () =>
-      supabaseSkills.rpc('skills_category_counts', { cutoff: SKILLS_FREEZE_CUTOFF }),
+      supabaseSkills.rpc('skills_category_counts'),
     )
   } catch (error) {
     // `fetchPage` already logged each retry attempt with the real Postgres
@@ -210,7 +216,7 @@ export async function getSkill(
     .select(SKILL_COLUMNS)
     .eq('category', category)
     .eq('slug', slug)
-    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
+    .eq('served', true)
     .maybeSingle()
   if (error) {
     console.error('getSkill failed', error)
@@ -231,7 +237,7 @@ export async function getSkillBySlug(slug: string): Promise<Skill | undefined> {
     .from('skills')
     .select(SKILL_COLUMNS)
     .eq('slug', slug)
-    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
+    .eq('served', true)
     .maybeSingle()
   if (error) {
     console.error('getSkillBySlug failed', error)
@@ -274,7 +280,7 @@ export async function searchSkills(
     .from('skills')
     .select(SKILL_COLUMNS)
     .or(`name.ilike.%${trimmed}%,description.ilike.%${trimmed}%`)
-    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
+    .eq('served', true)
     .order('installs', { ascending: false })
     .limit(limit)
   if (category !== undefined) builder = builder.eq('category', category)
@@ -299,7 +305,7 @@ export async function getSiblingSkills(
     .select(SKILL_COLUMNS)
     .eq('category', category)
     .neq('slug', excludeSlug)
-    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
+    .eq('served', true)
     .order('installs', { ascending: false })
     .limit(limit)
   if (error) {
@@ -316,7 +322,7 @@ export async function getRecentlyAddedSkills(limit: number): Promise<readonly Sk
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_COLUMNS)
-    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
+    .eq('served', true)
     .order('first_seen_at', { ascending: false })
     .limit(limit)
   if (error) {
@@ -333,7 +339,7 @@ export async function getTotalSkillCount(): Promise<number> {
   const { count, error } = await supabaseSkills
     .from('skills')
     .select('id', { count: 'exact', head: true })
-    .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
+    .eq('served', true)
   if (error) {
     console.error('getTotalSkillCount failed', error)
     return 0
@@ -342,37 +348,38 @@ export async function getTotalSkillCount(): Promise<number> {
 }
 
 /**
- * Backs the hub page's real "last synced" timestamp and the sitemap's
- * `lastModified` for /skills — read from `skills_sync_meta`, written by the
- * sync-worker after each run, not guessed from the most recent row.
+ * Backs the hub page's "last synced" date and the sitemap's `lastModified`
+ * for /skills — read from `skills_sync_meta`, the row the sync-worker wrote
+ * after each run.
  *
- * Both fields are clamped to `SKILLS_FREEZE_CUTOFF`. This table is written
- * by the sync worker, not read from `skills` itself, so it isn't covered by
- * the `.lte('first_seen_at', ...)` filter every other function here uses —
- * if a sync somehow ran again after the freeze, this row's own counters
- * would otherwise report a growing total that the rest of the site (all of
- * it frozen) would flatly contradict.
+ * Both fields are clamped to the curation. `skills_sync_meta` is the sync
+ * worker's own bookkeeping, not derived from `skills`, so it isn't covered
+ * by the `served` gate every other function here uses — if a sync somehow
+ * ran again it would report a later date and a larger total that the rest
+ * of the site (frozen at 10,000) would flatly contradict. `totalSkills` is
+ * therefore the real served count, and `lastSyncedAt` can never read later
+ * than `SKILLS_CURATED_AT`.
  */
 export async function getSyncMeta(): Promise<{
   lastSyncedAt: string | null
   totalSkills: number
 }> {
   'use cache'
-  cacheLife('hours')
+  cacheLife('skillsRegistry')
   cacheTag('skills')
   const { data, error } = await supabaseSkills
     .from('skills_sync_meta')
-    .select('last_synced_at, total_skills')
+    .select('last_synced_at')
     .maybeSingle()
+  const totalSkills = await getTotalSkillCount()
   if (error || !data) {
     if (error) console.error('getSyncMeta failed', error)
-    return { lastSyncedAt: null, totalSkills: 0 }
+    return { lastSyncedAt: null, totalSkills }
   }
   const lastSyncedAt =
-    data.last_synced_at && data.last_synced_at > SKILLS_FREEZE_CUTOFF
-      ? SKILLS_FREEZE_CUTOFF
+    data.last_synced_at && data.last_synced_at > SKILLS_CURATED_AT
+      ? SKILLS_CURATED_AT
       : data.last_synced_at
-  const totalSkills = await getTotalSkillCount()
   return { lastSyncedAt, totalSkills }
 }
 
@@ -449,7 +456,7 @@ async function idBeforeOffset(offset: number): Promise<string | null> {
     supabaseSkills
       .from('skills')
       .select('id')
-      .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
+      .eq('served', true)
       .order('id', { ascending: true })
       .range(offset - 1, offset - 1),
   )
@@ -521,7 +528,7 @@ export async function getAllSkillRefs(
         const query = supabaseSkills
           .from('skills')
           .select('id, slug, category, last_synced_at')
-          .lte('first_seen_at', SKILLS_FREEZE_CUTOFF)
+          .eq('served', true)
           .order('id', { ascending: true })
           .limit(pageSize)
         return cursor === null ? query : query.gt('id', cursor)

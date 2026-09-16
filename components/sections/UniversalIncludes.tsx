@@ -36,7 +36,7 @@ function shortName(title: string): string {
 const GUARANTEES: readonly string[] = [
   `${APPROVED_TOOL_COUNT} tools, all free`,
   `${PROMPTS.length.toLocaleString('en-US')} verified AI prompts`,
-  'Real agent skills, synced daily',
+  'Real agent skills, hand-curated',
   'MCP server for AI agents',
   'No signup or account',
   'No ads, anywhere',
