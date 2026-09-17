@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cabin, Fraunces, Permanent_Marker } from 'next/font/google'
 import { CtaClickTracker } from '@/components/layout/CtaClickTracker'
@@ -262,6 +263,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           studioSiteId={SITE.studioSiteId}
           openaiAdsPixelId={SITE.openaiAdsPixelId}
         />
+        <Analytics />
       </body>
     </html>
   )
