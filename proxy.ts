@@ -1,85 +1,105 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { classifyRequester } from '@/lib/bot-classify'
+import { classifyRequest, type RequesterTier } from '@/lib/bot-classify'
 import { checkRateLimit, clientIpFromHeaders } from '@/lib/rate-limit'
 
 /**
- * Flood protection for page routes — the one surface with zero rate limiting
- * until now. Every `/api/*` route already has its own purpose-tuned limiter
- * (see lib/rate-limit.ts's other callers: speed-test, ai-visibility,
- * cli/events, feedback, request, the MCP transport), so this file
- * explicitly skips `api/` via its matcher rather than layering a second,
- * differently-tuned limit on top.
+ * Flood protection for page routes. Every `/api/*` route already has its
+ * own purpose-tuned limiter (see lib/rate-limit.ts's other callers:
+ * speed-test, ai-visibility, cli/events, feedback, request, the MCP
+ * transport), so this file explicitly skips `api/` via its matcher rather
+ * than layering a second, differently-tuned limit on top.
  *
- * Two tiers: this site actively wants search engines, AI/LLM crawlers, and
- * social-preview bots to crawl it freely — blocking Googlebot or GPTBot to
- * save a few cents would undercut the site's own SEO/AI-visibility goals —
- * so `lib/bot-classify.ts`'s recognized crawlers get a higher ceiling than
- * everything else. Neither limit is a security boundary — see that file's
- * own docblock for why a spoofed User-Agent still hits a real, just higher,
- * ceiling rather than bypassing the limit entirely; Vercel's own Bot
- * Protection (Firewall → Bot Management, set to Challenge) is the real
- * boundary against automated/non-browser traffic, ahead of this layer.
+ * Order of checks, cheapest first:
  *
- * There used to be a third, stricter tier for `/skills/[category]/[slug]`:
- * only the top 15 skills per category were pre-rendered at build time, so a
- * scraper walking the long tail forced a real Supabase query per page.
- * 2026-09-17: every served skill (all ~10,000) is now statically
- * pre-rendered (see that route's own docblock), so a skill page costs
- * exactly what a prompt or blog page costs — a static file off the CDN
- * edge, regardless of visit volume. The dedicated tier no longer protected
- * against anything real, so it was removed rather than kept as a stricter
- * limit with no reason behind it.
+ *   1. Method: page routes are read-only. Anything but GET/HEAD is a 405
+ *      before any bucket is touched. (No Server Actions exist in this app —
+ *      the only `'use server'` strings in the repo are prompt copy.)
+ *   2. Probe paths: /.env, /wp-login.php, /.git/…, anything *.php — the
+ *      vocabulary of vulnerability scanners, none of which exists on a
+ *      Next.js site. Answered with an empty 404 straight from the edge, so a
+ *      scanner never reaches the not-found page render and never consumes a
+ *      real visitor's bucket on a shared (CGNAT) IP.
+ *   3. Tier (lib/bot-classify.ts: blocked / crawler / suspect / default),
+ *      then two token buckets for that tier: one GLOBAL (keyed identically
+ *      for every request, so rotating IPs buys nothing) and one per IP.
+ *
+ * Why two buckets per tier: 2026-09-18 local attack simulation confirmed a
+ * per-IP limiter alone is useless against a scraper that fakes a new IP on
+ * every request — each fake IP got its own fresh budget. The global bucket
+ * is what puts a ceiling on that, and the tiering is what lets it be tight
+ * for automation without touching humans: a real browser lands in
+ * `default`, whose global ceiling sits far above any traffic this site has
+ * ever seen; a script wearing a browser UA lands in `suspect`, whose global
+ * ceiling admits a few pages a minute site-wide. `burst` (the 4th argument
+ * to checkRateLimit) is what keeps the first few seconds of a flood from
+ * getting a full minute's allowance up front.
+ *
+ * None of this is a security boundary. A headless browser that sends every
+ * header a real one sends, keeps its real platform hint, and rotates IPs is
+ * indistinguishable from a human at the HTTP layer and lands in `default`
+ * — the residual that Vercel's Bot Protection (Firewall → Bot Management,
+ * set to Challenge) catches at the edge via TLS/HTTP fingerprinting, before
+ * a request reaches this code. This file raises the floor under that layer.
+ *
+ * Every limit here is per-instance (lib/rate-limit.ts's own documented
+ * limitation) — on Fluid Compute with several warm instances the real
+ * fleet-wide ceiling is the number below times the instance count.
  *
  * Numbers are a documented starting point, not a measured optimum: retune
  * from real traffic (Vercel Observability, or the 429 rate itself) rather
- * than assuming these are exactly right.
+ * than assuming these are exactly right. The one to watch is
+ * `GLOBAL_LIMITS.default` — it's the only ceiling a legitimate traffic
+ * spike (a viral share) could ever reach; raise it before lowering anything.
  */
-type Tier = ReturnType<typeof classifyRequester>
 
-const LIMITS: Record<Tier, { limit: number; windowMs: number }> = {
-  // ~5 req/s sustained — generous for a legitimate crawl burst, still a
-  // finite backstop against a scraper that spoofs a crawler's UA to
-  // bypass the stricter default tier below.
-  crawler: { limit: 300, windowMs: 60_000 },
-  // ~2 req/s sustained. Deliberately generous for real browsing (fast
-  // navigation, Next's own link-hover prefetching, several tabs) and for
-  // shared/CGNAT IPs — common on Indian mobile networks, a real share of
-  // this site's traffic — where many distinct real visitors can appear
-  // to come from one address.
-  default: { limit: 120, windowMs: 60_000 },
+interface Limit {
+  limit: number
+  windowMs: number
+  /** Up-front capacity; defaults to `limit` (see checkRateLimit). */
+  burst?: number
+}
+
+/** Per IP (or per whatever `clientIpFromHeaders` resolves to). */
+const LIMITS: Record<RequesterTier, Limit> = {
+  // Recognized search/AI/social crawlers. ~1.6 req/s sustained per IP —
+  // Googlebot crawls from many IPs, so this is per-worker, not per-crawler.
+  crawler: { limit: 100, windowMs: 60_000 },
+  // A coherent browser. 1 page/s sustained is far past any human's pace,
+  // with room for Next's link prefetching and several open tabs. Shared
+  // CGNAT IPs (common on Indian mobile networks) are the case this could
+  // pinch: many real visitors behind one address — watch the 429 rate.
+  default: { limit: 60, windowMs: 60_000 },
+  // Not a recognized crawler and not a coherent browser. Admits an uptime
+  // monitor's once-a-minute ping; not a crawl.
+  suspect: { limit: 5, windowMs: 60_000, burst: 3 },
+  // Self-declared automation (curl, python-requests, HeadlessChrome, …) or
+  // no UA at all. Enough for an owner's `curl -I` sanity check; nothing more.
+  blocked: { limit: 3, windowMs: 60_000, burst: 2 },
+}
+
+/** Site-wide, one bucket per tier regardless of IP. */
+const GLOBAL_LIMITS: Record<RequesterTier, Limit> = {
+  crawler: { limit: 600, windowMs: 60_000, burst: 300 },
+  // THE knob a real traffic spike could hit. Set well above anything this
+  // site's own dashboards have shown (double-digit sessions in a normal
+  // window): a viral moment has headroom; a coherent-looking flood of
+  // thousands a minute does not.
+  default: { limit: 600, windowMs: 60_000, burst: 400 },
+  // Site-wide budget for everything automated-but-unrecognized. The burst
+  // of 8 is what a rotating-IP scraper actually gets before the wall.
+  suspect: { limit: 20, windowMs: 60_000, burst: 8 },
+  blocked: { limit: 10, windowMs: 60_000, burst: 4 },
 }
 
 /**
- * 2026-09-18: local attack-simulation testing (rotating a fake IP on every
- * request, real skill/prompt/blog paths, one identical User-Agent) confirmed
- * the per-IP limits above do nothing against that specific pattern — by
- * construction, a limiter keyed on IP can only ever bound how many requests
- * ONE IP makes. That isn't a bug in `checkRateLimit`; it's the documented,
- * inherent ceiling of any IP-keyed limiter (see lib/rate-limit.ts's own
- * header). It's also the exact shape of the incident that Vercel's Bot
- * Protection (Firewall → Bot Management, set to Challenge) was turned on to
- * stop — that layer runs at the edge, before a request reaches this code,
- * using signals (TLS/HTTP fingerprint) a spoofed IP or UA can't fake, and
- * stays the real defense against a determined rotating-IP scraper.
- *
- * This is a second, independent backstop underneath that: a single shared
- * counter per tier, keyed the same for every request regardless of IP, so
- * no amount of IP rotation increases the budget. It exists for the case
- * Bot Protection is ever disabled, misconfigured, or bypassed — not as the
- * primary defense. The numbers are set well above anything this site's real
- * traffic has ever shown (Studio's own dashboards: double-digit sessions in
- * a normal window) specifically so a genuine traffic spike (a viral share,
- * a good review) never trips it; only a sustained flood approaching
- * thousands of requests a minute would. Like the per-IP buckets, this is
- * per-instance, not fleet-wide (lib/rate-limit.ts's own limitation) — on
- * Fluid Compute with several concurrent instances the real ceiling is this
- * number times however many instances are warm, not a hard global cap.
+ * Paths that only a vulnerability scanner asks a Next.js site for. Anchored
+ * to the path root for the directory/file names (a skill slug could
+ * legitimately contain "phpinfo"), unanchored for the server-side file
+ * extensions (slugs are [a-z0-9-] and never carry a dot).
  */
-const GLOBAL_LIMITS: Record<Tier, { limit: number; windowMs: number }> = {
-  crawler: { limit: 3000, windowMs: 60_000 },
-  default: { limit: 1000, windowMs: 60_000 },
-}
+const PROBE_PATH =
+  /^\/(?:wp-admin|wp-login|wp-content|wp-includes|xmlrpc|\.env|\.git|\.svn|\.htaccess|\.htpasswd|\.aws|\.ssh|\.DS_Store|phpmyadmin|phpinfo|cgi-bin|vendor|server-status|actuator|_ignition|telescope|web\.config)(?:$|[/.?])|\.(?:php|asp|aspx|jsp|cgi)(?:$|\?)/i
 
 /**
  * Known-safe automated visitors that must never be throttled here:
@@ -92,44 +112,50 @@ function isExempt(request: NextRequest): boolean {
   return ua.includes('Vercel-Speed-Insights') || ua.includes('vercel-favicon')
 }
 
+function tooManyRequests(limit: number, retryAfterSeconds: number): NextResponse {
+  return NextResponse.json(
+    { error: 'Too many requests.' },
+    {
+      status: 429,
+      headers: {
+        'retry-after': String(retryAfterSeconds),
+        'x-ratelimit-limit': String(limit),
+        'x-ratelimit-remaining': '0',
+      },
+    },
+  )
+}
+
 export function proxy(request: NextRequest): NextResponse | undefined {
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    return new NextResponse(null, { status: 405, headers: { allow: 'GET, HEAD' } })
+  }
+  if (PROBE_PATH.test(request.nextUrl.pathname)) {
+    return new NextResponse(null, { status: 404 })
+  }
   if (isExempt(request)) return undefined
 
+  const tier = classifyRequest(request.headers)
+
+  const global = GLOBAL_LIMITS[tier]
+  const globalGate = checkRateLimit(
+    `page:${tier}:global`,
+    global.limit,
+    global.windowMs,
+    global.burst,
+  )
+  if (!globalGate.allowed)
+    return tooManyRequests(global.limit, globalGate.retryAfterSeconds)
+
   const ip = clientIpFromHeaders(request.headers)
-  const tier = classifyRequester(request.headers.get('user-agent') ?? '')
-
-  const { limit: globalLimit, windowMs: globalWindowMs } = GLOBAL_LIMITS[tier]
-  const globalGate = checkRateLimit(`page:${tier}:global`, globalLimit, globalWindowMs)
-  if (!globalGate.allowed) {
-    return NextResponse.json(
-      { error: 'Too many requests.' },
-      {
-        status: 429,
-        headers: {
-          'retry-after': String(globalGate.retryAfterSeconds),
-          'x-ratelimit-limit': String(globalLimit),
-          'x-ratelimit-remaining': '0',
-        },
-      },
-    )
-  }
-
-  const { limit, windowMs } = LIMITS[tier]
-  const gate = checkRateLimit(`page:${tier}:${ip}`, limit, windowMs)
-
-  if (!gate.allowed) {
-    return NextResponse.json(
-      { error: 'Too many requests.' },
-      {
-        status: 429,
-        headers: {
-          'retry-after': String(gate.retryAfterSeconds),
-          'x-ratelimit-limit': String(limit),
-          'x-ratelimit-remaining': '0',
-        },
-      },
-    )
-  }
+  const perIp = LIMITS[tier]
+  const gate = checkRateLimit(
+    `page:${tier}:${ip}`,
+    perIp.limit,
+    perIp.windowMs,
+    perIp.burst,
+  )
+  if (!gate.allowed) return tooManyRequests(perIp.limit, gate.retryAfterSeconds)
 
   return undefined
 }

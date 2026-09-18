@@ -77,6 +77,40 @@ describe('checkRateLimit (token bucket)', () => {
     expect(checkRateLimit('k', 3, 60_000).remaining).toBe(0)
   })
 
+  it('`burst` caps the up-front capacity below `limit` while the sustained rate stays `limit`/window', async () => {
+    const { checkRateLimit } = await freshLimiter()
+    // 20/min sustained, but only 8 at once.
+    let granted = 0
+    for (let i = 0; i < 20; i++) {
+      if (checkRateLimit('k', 20, 60_000, 8).allowed) granted++
+    }
+    expect(granted).toBe(8)
+    // 20/60s refills one token every 3s.
+    vi.advanceTimersByTime(3_100)
+    expect(checkRateLimit('k', 20, 60_000, 8).allowed).toBe(true)
+    expect(checkRateLimit('k', 20, 60_000, 8).allowed).toBe(false)
+  })
+
+  it('refill never exceeds `burst`, no matter how long the idle gap', async () => {
+    const { checkRateLimit } = await freshLimiter()
+    checkRateLimit('k', 20, 60_000, 8)
+    vi.advanceTimersByTime(3_600_000)
+    let granted = 0
+    for (let i = 0; i < 30; i++) {
+      if (checkRateLimit('k', 20, 60_000, 8).allowed) granted++
+    }
+    expect(granted).toBe(8)
+  })
+
+  it('`burst` defaults to `limit`, so the original three-argument callers are unchanged', async () => {
+    const { checkRateLimit } = await freshLimiter()
+    let granted = 0
+    for (let i = 0; i < 10; i++) {
+      if (checkRateLimit('k', 5, 60_000).allowed) granted++
+    }
+    expect(granted).toBe(5)
+  })
+
   it('stays hard-bounded under a flood of distinct keys', async () => {
     const { checkRateLimit } = await freshLimiter()
     // Well past MAX_TRACKED_KEYS (5000) one-shot keys must not throw or

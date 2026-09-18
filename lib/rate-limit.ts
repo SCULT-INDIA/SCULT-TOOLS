@@ -46,13 +46,21 @@ export interface RateLimitResult {
 
 /**
  * At most `limit` calls per `windowMs` per key, enforced as a token bucket
- * with capacity `limit` and continuous refill. Signature unchanged from the
- * fixed-window version so every existing caller keeps working.
+ * with continuous refill. `burst` is the bucket's capacity — how many calls
+ * a completely idle key may make at once before the sustained rate takes
+ * over. It defaults to `limit` (the original behavior, so every existing
+ * caller is unchanged), but a caller can pass something smaller: the
+ * page-route limiter's global "suspect traffic" bucket uses a burst of 8
+ * against a sustained 20/min, so a rotating-IP scraper gets a handful of
+ * pages through, not a full minute's worth up front, while the sustained
+ * rate still leaves room for the trickle of legitimate non-browser clients
+ * (uptime monitors, feed readers) that tier exists to admit.
  */
 export function checkRateLimit(
   key: string,
   limit: number,
   windowMs: number,
+  burst: number = limit,
 ): RateLimitResult {
   const now = Date.now()
   const refillPerMs = limit / windowMs
@@ -60,12 +68,12 @@ export function checkRateLimit(
 
   if (bucket === undefined) {
     if (buckets.size >= MAX_TRACKED_KEYS) evictSome(now, windowMs)
-    bucket = { tokens: limit, lastRefill: now }
+    bucket = { tokens: burst, lastRefill: now }
     buckets.set(key, bucket)
   } else {
     const elapsed = now - bucket.lastRefill
     if (elapsed > 0) {
-      bucket.tokens = Math.min(limit, bucket.tokens + elapsed * refillPerMs)
+      bucket.tokens = Math.min(burst, bucket.tokens + elapsed * refillPerMs)
       bucket.lastRefill = now
     }
   }
