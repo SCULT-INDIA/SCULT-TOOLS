@@ -1,8 +1,0 @@
-{
-  "regions": ["icn1"],
-  "functions": {
-    "api/sync.js": {
-      "maxDuration": 60
-    }
-  }
-}
