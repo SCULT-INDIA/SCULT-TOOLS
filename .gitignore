@@ -18,3 +18,6 @@ cli/dist/
 
 # Local-only DB backups (e.g. the 117MB archive of the 40,456 skill rows deleted 2026-09-16) — never commit.
 supabase/backups/
+
+# Build-time registry snapshot written by scripts/snapshot-skills.mjs (~100MB, regenerated every build) — never commit.
+.skills-snapshot/

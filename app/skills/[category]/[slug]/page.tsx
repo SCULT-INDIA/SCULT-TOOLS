@@ -3,44 +3,41 @@ import { notFound } from 'next/navigation'
 import { SkillDetailShell } from '@/components/skills/SkillDetailShell'
 import { breadcrumbJsonLd, JsonLd, skillJsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
-import { getSkillCategory, SKILL_CATEGORIES } from '@/lib/skills/categories'
-import { getAllSkillSlugsByCategory, getSiblingSkills, getSkill } from '@/lib/skills/db'
+import { getSkillCategory } from '@/lib/skills/categories'
+import { getSiblingSkills, getSkill, getStaticSkillRefs } from '@/lib/skills/db'
 
 type Params = { category: string; slug: string }
 
 /**
- * Every served skill is statically pre-rendered — not just the hottest few
- * per category. The registry is frozen at exactly 10,000 rows (see
- * lib/skills/db.ts's header) with nothing left to sync, so there is no
- * ongoing tension between "pre-render everything" and "keep builds cheap":
- * this only costs once, at the next deploy, and deploys are now both rare
- * (vercel.json's `ignoreCommand`) and infrequent by habit.
+ * The 6,000 most-installed skills are statically pre-rendered
+ * (`SKILLS_STATIC_PAGE_LIMIT` in lib/skills/db.ts); the other 4,000 served
+ * skills render on their first request and are then cached for 30 days
+ * (`cacheLife('skillsRegistry')`) — ordinary on-demand ISR, the path this
+ * route used before 2026-09-17, and what `dynamicParams` (true, since Next
+ * rejects `false` alongside `cacheComponents`) already gives a slug outside
+ * the pre-rendered set.
  *
- * This is what makes it pay off: a `'use cache'` page is re-checked against
- * the ISR/Cache Components cache on every single visit no matter how long
- * `revalidate` is set to (revalidate only bounds how often it's
- * *rewritten*, not how often it's *read*), so traffic volume alone kept
- * driving ISR Read Units up regardless of the 30-day cacheLife. 24 × ~15
- * (2026-09-16) grew Vercel's build cost by pre-rendering fewer pages; going
- * to all 10,000 (2026-09-17) trades a bigger one-time build for removing
- * this route from that per-visit read path entirely — a page that already
- * exists as a static file is served straight from the CDN edge, no cache
- * check involved.
+ * Why a split and not all 10,000: a pre-rendered page is served from the
+ * CDN with no ISR read at all, so the ideal is everything static — and
+ * 2026-09-17 did exactly that. The first production build of it stalled on
+ * ~20,000 live Supabase calls and was killed at Vercel's 45-minute limit;
+ * fixing that (every `lib/skills/db` call below is answered from the
+ * registry snapshot scripts/build.mjs writes before `next build` — zero
+ * network during generation, see lib/skills/snapshot.ts) exposed the second
+ * ceiling: Next's export retains ~250KB of native memory per `'use cache'`
+ * page per worker, and 10,000 pages across the Standard machine's 3 workers
+ * measured 8.05–8.3GB against its 8GB. 6,000 measures ~5.6GB. The
+ * most-installed 6,000 carry the traffic; the on-demand tail is the pages
+ * that see the least, so its ISR cost stays small by construction.
  *
- * `dynamicParams` can't be set to `false` alongside `cacheComponents` (Next
- * rejects the combination outright), so a slug outside this set still
- * reaches the component instead of 404ing at the framework level — but
- * `getSkill` returns `undefined` for it and the component below already
- * calls `notFound()` in that case, so the visible behavior is identical.
+ * `getSkill` throws on a snapshot miss (and on a Supabase error at request
+ * time) instead of returning `undefined`, so `notFound()` below is reached
+ * only for a slug that genuinely isn't in the registry — never for a real
+ * skill a flaky query failed to load.
  */
 export async function generateStaticParams(): Promise<Params[]> {
-  const perCategory = await Promise.all(
-    SKILL_CATEGORIES.map(async (c) => {
-      const slugs = await getAllSkillSlugsByCategory(c.slug)
-      return slugs.map((slug) => ({ category: c.slug, slug }))
-    }),
-  )
-  return perCategory.flat()
+  const refs = await getStaticSkillRefs()
+  return refs.map(({ category, slug }) => ({ category, slug }))
 }
 
 export async function generateMetadata({

@@ -122,21 +122,43 @@ const nextConfig: NextConfig = {
     // Without this, every page importing BrandIcon pulls the whole set.
     optimizePackageImports: ['@lobehub/icons'],
     /**
-     * 2026-09-17: statically pre-rendering every one of the 10,000 curated
-     * skill pages (see app/skills/[category]/[slug]/page.tsx's docblock)
-     * made the build fan out into thousands of concurrent Supabase REST
-     * calls — Next's defaults (8 pages at once per worker, a new worker
-     * every 25 pages) are tuned for pages with no external dependency, not
-     * one shared upstream API. The first attempt at this actually failed
-     * the build: individual page renders started timing out past 60s, and
-     * the cascading load eventually starved even `app/sitemap.ts`'s own
-     * Supabase call past Next's cache-fill timeout, aborting the whole
-     * build. Capping concurrency trades build wall-clock time (deploys are
-     * now rare — vercel.json's `ignoreCommand` plus batching by habit) for
-     * a build that reliably finishes instead of racing Supabase.
+     * 3 pages in flight per static-generation worker (Next's default is 8).
+     *
+     * History, because the number has meant two different things:
+     * 2026-09-17 it was set to 3 (with 100 pages per worker) because
+     * pre-rendering all 10,000 skill pages straight from Supabase fanned
+     * out into thousands of concurrent REST calls and timed pages out. That
+     * was treating a symptom — even so capped, the first production build
+     * made ~20,000 calls, stalled silently at page 6,664 and was killed at
+     * Vercel's 45-minute limit (2026-09-18). The real fix is that the build
+     * no longer talks to Supabase per page at all: scripts/build.mjs
+     * snapshots the frozen registry once, before rendering starts, and
+     * lib/skills/snapshot.ts serves every page from it.
+     *
+     * It stays at 3 for a different reason now — MEMORY. Vercel's build
+     * machine has 8GB. Measured locally at that machine's shape (3
+     * workers), Next's default of 8 CPU-bound renders per worker pushed the
+     * build's processes to 7–8GB combined; 3 is the concurrency that ran 46
+     * minutes on that machine without an OOM, and with no network wait per
+     * page it still renders far faster than the 900 pages/min that run
+     * managed. `staticGenerationMinPagesPerWorker` is left at its default:
+     * it only shapes how many workers spawn, and 3 is what a 4-vCPU machine
+     * gets either way. See scripts/build.mjs's MEMORY note for the rest.
      */
     staticGenerationMaxConcurrency: 3,
-    staticGenerationMinPagesPerWorker: 100,
+  },
+
+  /**
+   * Keep the build-time registry snapshot (~100MB of JSON, see
+   * scripts/snapshot-skills.mjs) out of every serverless function bundle.
+   * lib/skills/snapshot.ts reads it from a path in an environment variable,
+   * which file tracing can't follow anyway, but a static path someday would
+   * quietly add 100MB to each function and blow cold starts — so the
+   * exclusion is stated here regardless. `'*'` is matched with picomatch's
+   * `contains`, i.e. every route.
+   */
+  outputFileTracingExcludes: {
+    '*': ['./.skills-snapshot/**'],
   },
 
   env: {

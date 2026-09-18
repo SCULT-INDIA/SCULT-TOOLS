@@ -1,5 +1,6 @@
 import { cacheLife, cacheTag } from 'next/cache'
-import { resolveSkillDescription } from './description'
+import { rowToSkill, SKILL_COLUMNS, SKILL_LIST_COLUMNS } from './row'
+import { loadBuildSnapshot } from './snapshot'
 import { supabaseSkills } from './supabase'
 import type { Skill, SkillCategorySlug } from './types'
 
@@ -10,6 +11,18 @@ import type { Skill, SkillCategorySlug } from './types'
  * function here is async — but every served skill is statically
  * pre-rendered too (see `generateStaticParams` in the route files), since
  * the registry is frozen (below) and small enough to pre-render in full.
+ *
+ * BUILD-TIME SNAPSHOT (2026-09-18): during `next build` every function
+ * here answers from ./snapshot.ts — the whole served table, read once up
+ * front by scripts/snapshot-skills.mjs — instead of Supabase, so the
+ * 10,000-page static build makes ~20 network calls rather than ~20,000
+ * (the first production build to try the latter stalled silently and was
+ * killed at Vercel's 45-minute limit; see that script's header).
+ * `loadBuildSnapshot()` returns null outside a build — it keys on the
+ * SKILLS_SNAPSHOT variable only scripts/build.mjs sets — so at request
+ * time the Supabase branches below are the ones that run, unchanged. Both
+ * branches must return the same shape for the same arguments; the
+ * snapshot's sort orders mirror each query's ORDER BY.
  *
  * Every function also carries `cacheTag('skills')`, kept as a cheap,
  * currently-unused hook: nothing calls `revalidateTag('skills', ...)`
@@ -57,78 +70,20 @@ export const SKILLS_INDEXED_REGISTRY_TOTAL = 50_456
  * "last synced" date to this so a stale meta row can't claim otherwise. */
 export const SKILLS_CURATED_AT = '2026-09-16T00:00:00.000Z'
 
-// snake_case DB columns -> the camelCase `Skill` shape the rest of the app expects.
-// biome-ignore lint/suspicious/noExplicitAny: raw Supabase row, shape asserted by the SELECT list below
-function rowToSkill(row: any): Skill {
-  return {
-    id: row.id,
-    slug: row.slug,
-    category: row.category,
-    name: row.name,
-    // Repaired here, at the single boundary every consumer reads through,
-    // because 19.9% of rows store only a YAML block-scalar indicator (`>`,
-    // `|`, `>-`) where the description should be — see ./description.ts.
-    // Doing it here is what fixes the detail page, every listing card, the
-    // meta tags, the CLI and MCP payloads and all four Markdown exports at
-    // once; the rows themselves are only writable by the sync worker, which
-    // is a separate project holding the sole service-role key.
-    description: resolveSkillDescription(
-      row.description ?? '',
-      row.body ?? '',
-      row.name,
-      row.source_owner,
-      row.source_repo,
-    ),
-    // List queries no longer select `body` (see SKILL_LIST_COLUMNS above), so
-    // this is `undefined` on those rows — `''` keeps the `Skill` type honest
-    // (`body: string`, never undefined) rather than crashing a future
-    // `skill.body.trim()` call on a list result that was never meant to have one.
-    body: row.body ?? '',
-    tags: row.tags ?? [],
-    license: row.license ?? undefined,
-    licenseGated: row.license_gated,
-    sourceOwner: row.source_owner,
-    sourceRepo: row.source_repo,
-    sourceSkillId: row.source_skill_id,
-    sourceUrl: row.source_url,
-    installs: row.installs,
-    firstSeenAt: row.first_seen_at,
-    lastSyncedAt: row.last_synced_at,
-    relatedTools: row.related_tools ?? [],
-    relatedPrompts: row.related_prompts ?? [],
-  }
-}
-
-/**
- * Every column except `body` (the full SKILL.md text) — the single largest
- * column, and one a list/card view never renders (see SkillCard.tsx: name,
- * description, tags, installs only). `resolveSkillDescription` in
- * rowToSkill() falls back to `body` only for a stored description that is
- * meaningless (~19.9% of the pre-curation registry), and
- * scripts/db-repair-descriptions.mjs has since backfilled a real
- * `description` for every served row, so that fallback is never actually
- * needed for a served skill — dropping `body` from list queries costs
- * nothing. `getSkill`/`getSkillBySlug` (the detail page and the CLI's
- * single-skill lookup, the only places that render or export the body)
- * still select the full `SKILL_COLUMNS` below.
- */
-const SKILL_LIST_COLUMNS =
-  'id, slug, category, name, description, tags, license, license_gated, source_owner, source_repo, source_skill_id, source_url, installs, first_seen_at, last_synced_at, related_tools, related_prompts'
-
-const SKILL_COLUMNS = `${SKILL_LIST_COLUMNS}, body`
+// The column lists and the row -> `Skill` conversion live in ./row.ts,
+// shared with ./snapshot.ts so the build-time and request-time paths read
+// the same columns and produce the same objects.
 
 export const SKILLS_PAGE_SIZE = 60
 
 /**
  * Every served skill's slug in a category — id/slug only, no other columns.
- * The registry is frozen (see this file's header), so `generateStaticParams`
- * in `app/skills/[category]/[slug]/page.tsx` uses this to pre-render every
- * served skill at build time instead of only the hottest few: a page that
- * exists as a plain static file is never checked against the ISR/Cache
- * Components read path at all, versus a `'use cache'` page, which is
- * re-checked against that cache on every single visit regardless of how
- * long `revalidate` is set to. For a dataset that will never change again,
- * that per-visit check is pure, avoidable cost.
+ * Drove `generateStaticParams` in `app/skills/[category]/[slug]/page.tsx`
+ * from 2026-09-17 to 2026-09-18, when every served skill was pre-rendered;
+ * that route now pre-renders the most-installed `SKILLS_STATIC_PAGE_LIMIT`
+ * via `getStaticSkillRefs` (see its docblock for the memory measurements
+ * behind the change). Kept as the per-category enumeration for anything
+ * that needs a category's full slug list.
  *
  * Paginated on purpose — this file's own `getAllSkillRefs` docblock records
  * the exact bug a single unpaginated `.select()` runs into: PostgREST caps
@@ -140,7 +95,9 @@ export const SKILLS_PAGE_SIZE = 60
  * its 4,119 pages with no error anywhere in the build log. Throws rather
  * than returning a partial list for the same reason that function throws:
  * a partial `generateStaticParams` result is frozen into the build as if
- * it were complete.
+ * it were complete. (During a build this is answered from the snapshot,
+ * whose own count check covers the same failure; the paging below is the
+ * request-time path.)
  */
 export async function getAllSkillSlugsByCategory(
   category: SkillCategorySlug,
@@ -148,6 +105,8 @@ export async function getAllSkillSlugsByCategory(
   'use cache'
   cacheLife('skillsRegistry')
   cacheTag('skills')
+  const snapshot = loadBuildSnapshot()
+  if (snapshot) return snapshot.category(category).map((skill) => skill.slug)
   const slugs: string[] = []
   for (let offset = 0; ; offset += POSTGREST_MAX_ROWS) {
     const page = await fetchPage(`skill slugs for ${category} at offset ${offset}`, () =>
@@ -165,9 +124,61 @@ export async function getAllSkillSlugsByCategory(
   return slugs
 }
 
+/**
+ * How many skill pages `next build` pre-renders, and which ones: the N
+ * most-installed skills across every category. The remaining served skills
+ * (4,000 at N = 6,000) are rendered on their first request and cached for
+ * the `skillsRegistry` cacheLife (30 days) — the ordinary on-demand ISR
+ * path this route used before 2026-09-17, which `dynamicParams` (true by
+ * necessity under Cache Components) already provides.
+ *
+ * Why not all 10,000 (2026-09-18, measured, not estimated): Next 16.3.4's
+ * static export retains roughly 250KB of native memory per `'use cache'`
+ * page per worker for the life of the worker's batch, and a batch is
+ * `ceil(pages / workers)` — not configurable. Five local builds shaped like
+ * Vercel's Standard machine (3 workers) peaked at 8.05–8.3GB across the
+ * build's processes with all 10,000 skill pages, regardless of heap cap or
+ * whether skill bodies were held in memory. The machine has 8GB. At 6,000
+ * the same arithmetic gives ~2,000 skill pages per worker ≈ 1.2GB each,
+ * ~5.6GB peak with the main process. 6,000 is also below the 6,664 pages
+ * the failed production build demonstrably got through before it stalled
+ * for an unrelated reason. Most-installed first because installs are the
+ * best available proxy for traffic: the static set absorbs the visits, the
+ * on-demand tail is exactly the pages that see the fewest.
+ *
+ * Raising this means re-measuring memory first (scripts/build.mjs has the
+ * method) or moving to Vercel's Enhanced build machine.
+ */
+export const SKILLS_STATIC_PAGE_LIMIT = 6_000
+
+/**
+ * The (category, slug) pairs `generateStaticParams` pre-renders — see
+ * `SKILLS_STATIC_PAGE_LIMIT`. Build-time only, and deliberately answered
+ * ONLY from the snapshot: a plain `next build` with no snapshot would
+ * otherwise pre-render 6,000 pages against live Supabase, which is the
+ * exact build that stalled and was killed on 2026-09-18. Outside a
+ * production build (dev server, tests) there is nothing to pre-render, so
+ * an empty list is the right answer rather than an error.
+ */
+export async function getStaticSkillRefs(): Promise<
+  readonly { category: SkillCategorySlug; slug: string }[]
+> {
+  const snapshot = loadBuildSnapshot()
+  if (!snapshot) {
+    if (process.env.NODE_ENV !== 'production') return []
+    throw new Error(
+      'getStaticSkillRefs: no registry snapshot (SKILLS_SNAPSHOT is unset). Build with `npm run build` — scripts/build.mjs writes the snapshot first — not `next build` directly.',
+    )
+  }
+  return snapshot
+    .all()
+    .slice(0, SKILLS_STATIC_PAGE_LIMIT)
+    .map((skill) => ({ category: skill.category, slug: skill.slug }))
+}
+
 /** The N most-installed skills in a category — used for the skills hub's
  * preview cards and the category page's "other categories" rail, not for
- * static generation (see `getAllSkillSlugsByCategory` for that). */
+ * static generation (see `getStaticSkillRefs` for that). */
 export async function getTopSkillsByCategory(
   category: SkillCategorySlug,
   limit: number,
@@ -175,6 +186,8 @@ export async function getTopSkillsByCategory(
   'use cache'
   cacheLife('skillsRegistry')
   cacheTag('skills')
+  const snapshot = loadBuildSnapshot()
+  if (snapshot) return snapshot.category(category).slice(0, limit)
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_LIST_COLUMNS)
@@ -196,6 +209,8 @@ export async function getTopSkills(limit: number): Promise<readonly Skill[]> {
   'use cache'
   cacheLife('skillsRegistry')
   cacheTag('skills')
+  const snapshot = loadBuildSnapshot()
+  if (snapshot) return snapshot.all().slice(0, limit)
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_LIST_COLUMNS)
@@ -211,10 +226,9 @@ export async function getTopSkills(limit: number): Promise<readonly Skill[]> {
 
 /** One page of a category's skills, sorted by installs — backs page 1 at
  * `/skills/[category]` and every later page at
- * `/skills/[category]/page/[page]`. Both routes are fully static
- * (`dynamicParams = false`), enumerated in full by their own
- * `generateStaticParams` — see either route's docblock for why pagination
- * moved off a `?page=` query param. */
+ * `/skills/[category]/page/[page]`. Both routes are fully static,
+ * enumerated in full by their own `generateStaticParams` — see either
+ * route's docblock for why pagination moved off a `?page=` query param. */
 export async function getSkillsPage(
   category: SkillCategorySlug,
   page: number,
@@ -224,6 +238,8 @@ export async function getSkillsPage(
   cacheTag('skills')
   const from = (page - 1) * SKILLS_PAGE_SIZE
   const to = from + SKILLS_PAGE_SIZE - 1
+  const snapshot = loadBuildSnapshot()
+  if (snapshot) return snapshot.category(category).slice(from, from + SKILLS_PAGE_SIZE)
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_LIST_COLUMNS)
@@ -244,6 +260,8 @@ export async function getSkillCountByCategory(
   'use cache'
   cacheLife('skillsRegistry')
   cacheTag('skills')
+  const snapshot = loadBuildSnapshot()
+  if (snapshot) return snapshot.category(category).length
   const { count, error } = await supabaseSkills
     .from('skills')
     .select('id', { count: 'exact', head: true })
@@ -283,6 +301,8 @@ export async function getAllCategoryCounts(): Promise<Readonly<Record<string, nu
   'use cache'
   cacheLife('skillsRegistry')
   cacheTag('skills')
+  const snapshot = loadBuildSnapshot()
+  if (snapshot) return snapshot.categoryCounts()
   let rows: { category: string; count: number }[]
   try {
     rows = await fetchPage('getAllCategoryCounts', () =>
@@ -309,6 +329,17 @@ export async function getSkill(
   'use cache'
   cacheLife('skillsRegistry')
   cacheTag('skills')
+  const snapshot = loadBuildSnapshot()
+  if (snapshot) {
+    const skill = snapshot.skill(category, slug)
+    if (!skill) {
+      // Every slug the build renders came from this same snapshot, so a
+      // miss here is a bug in the build, not a skill that doesn't exist —
+      // throw and fail the build rather than let the page 404 it.
+      throw new Error(`getSkill(${category}, ${slug}): not in the build snapshot`)
+    }
+    return skill
+  }
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_COLUMNS)
@@ -317,8 +348,11 @@ export async function getSkill(
     .eq('served', true)
     .maybeSingle()
   if (error) {
-    console.error('getSkill failed', error)
-    return undefined
+    // Not `return undefined`: the caller turns that into `notFound()`, and
+    // under `'use cache'` that 404 would be stored and served for the
+    // profile's whole revalidate window. A transient Supabase failure must
+    // fail this render, not become a cached "this skill does not exist".
+    throw new Error(`getSkill(${category}, ${slug}) failed: ${describeError(error)}`)
   }
   return data ? rowToSkill(data) : undefined
 }
@@ -344,8 +378,6 @@ export async function getSkillBySlug(slug: string): Promise<Skill | undefined> {
   return data ? rowToSkill(data) : undefined
 }
 
-/** A few other skills in the same category, for the detail page's "more
- * like this" section — excludes the current skill. */
 /**
  * Keyword search — the one lookup path that didn't exist before the MCP
  * server needed it. A real (if unindexed) `ilike` scan over name/description,
@@ -390,33 +422,37 @@ export async function searchSkills(
   return data.map(rowToSkill)
 }
 
+/**
+ * A few other skills in the same category for the detail page's "More
+ * {category} skills" rail — the category's most-installed, minus the
+ * current one.
+ *
+ * Composed from `getTopSkillsByCategory` rather than its own query on
+ * purpose (2026-09-18): the earlier version ran a category-wide
+ * `ORDER BY installs DESC` per skill page — over all 4,118 `general` rows,
+ * 4,118 times — for an answer that is identical for every page in the
+ * category except for which one row to leave out. That was half of the
+ * ~20,000 Supabase calls the first 10,000-page production build made
+ * before it stalled. Now it is one cached read per category (24 in all),
+ * and the exclusion is a filter on that. Not `'use cache'` itself: the
+ * function it awaits is, and a second, per-page cache entry on top would
+ * recreate 10,000 entries for nothing.
+ */
 export async function getSiblingSkills(
   category: SkillCategorySlug,
   excludeSlug: string,
   limit: number,
 ): Promise<readonly Skill[]> {
-  'use cache'
-  cacheLife('skillsRegistry')
-  cacheTag('skills')
-  const { data, error } = await supabaseSkills
-    .from('skills')
-    .select(SKILL_LIST_COLUMNS)
-    .eq('category', category)
-    .neq('slug', excludeSlug)
-    .eq('served', true)
-    .order('installs', { ascending: false })
-    .limit(limit)
-  if (error) {
-    console.error('getSiblingSkills failed', error)
-    return []
-  }
-  return data.map(rowToSkill)
+  const top = await getTopSkillsByCategory(category, limit + 1)
+  return top.filter((skill) => skill.slug !== excludeSlug).slice(0, limit)
 }
 
 export async function getRecentlyAddedSkills(limit: number): Promise<readonly Skill[]> {
   'use cache'
   cacheLife('skillsRegistry')
   cacheTag('skills')
+  const snapshot = loadBuildSnapshot()
+  if (snapshot) return snapshot.recentlyAdded().slice(0, limit)
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_LIST_COLUMNS)
@@ -434,6 +470,8 @@ export async function getTotalSkillCount(): Promise<number> {
   'use cache'
   cacheLife('skillsRegistry')
   cacheTag('skills')
+  const snapshot = loadBuildSnapshot()
+  if (snapshot) return snapshot.count
   const { count, error } = await supabaseSkills
     .from('skills')
     .select('id', { count: 'exact', head: true })
@@ -465,6 +503,13 @@ export async function getSyncMeta(): Promise<{
   'use cache'
   cacheLife('skillsRegistry')
   cacheTag('skills')
+  const snapshot = loadBuildSnapshot()
+  if (snapshot) {
+    return {
+      lastSyncedAt: clampToCuration(snapshot.lastSyncedAt),
+      totalSkills: snapshot.count,
+    }
+  }
   const { data, error } = await supabaseSkills
     .from('skills_sync_meta')
     .select('last_synced_at')
@@ -474,11 +519,15 @@ export async function getSyncMeta(): Promise<{
     if (error) console.error('getSyncMeta failed', error)
     return { lastSyncedAt: null, totalSkills }
   }
-  const lastSyncedAt =
-    data.last_synced_at && data.last_synced_at > SKILLS_CURATED_AT
-      ? SKILLS_CURATED_AT
-      : data.last_synced_at
-  return { lastSyncedAt, totalSkills }
+  return { lastSyncedAt: clampToCuration(data.last_synced_at), totalSkills }
+}
+
+/** `skills_sync_meta.last_synced_at` can never read later than the
+ * curation date — see `getSyncMeta`. */
+function clampToCuration(lastSyncedAt: string | null): string | null {
+  return lastSyncedAt && lastSyncedAt > SKILLS_CURATED_AT
+    ? SKILLS_CURATED_AT
+    : lastSyncedAt
 }
 
 /**
@@ -605,6 +654,8 @@ export async function getAllSkillRefs(
   cacheLife('skillsRegistry')
   cacheTag('skills')
   if (limit <= 0) return []
+  const snapshot = loadBuildSnapshot()
+  if (snapshot) return snapshot.refs().slice(offset, offset + limit)
 
   // Shard 1 starts at the beginning and needs no probe at all.
   let after: string | null = null
