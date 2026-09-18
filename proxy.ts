@@ -51,6 +51,37 @@ const LIMITS: Record<Tier, { limit: number; windowMs: number }> = {
 }
 
 /**
+ * 2026-09-18: local attack-simulation testing (rotating a fake IP on every
+ * request, real skill/prompt/blog paths, one identical User-Agent) confirmed
+ * the per-IP limits above do nothing against that specific pattern — by
+ * construction, a limiter keyed on IP can only ever bound how many requests
+ * ONE IP makes. That isn't a bug in `checkRateLimit`; it's the documented,
+ * inherent ceiling of any IP-keyed limiter (see lib/rate-limit.ts's own
+ * header). It's also the exact shape of the incident that Vercel's Bot
+ * Protection (Firewall → Bot Management, set to Challenge) was turned on to
+ * stop — that layer runs at the edge, before a request reaches this code,
+ * using signals (TLS/HTTP fingerprint) a spoofed IP or UA can't fake, and
+ * stays the real defense against a determined rotating-IP scraper.
+ *
+ * This is a second, independent backstop underneath that: a single shared
+ * counter per tier, keyed the same for every request regardless of IP, so
+ * no amount of IP rotation increases the budget. It exists for the case
+ * Bot Protection is ever disabled, misconfigured, or bypassed — not as the
+ * primary defense. The numbers are set well above anything this site's real
+ * traffic has ever shown (Studio's own dashboards: double-digit sessions in
+ * a normal window) specifically so a genuine traffic spike (a viral share,
+ * a good review) never trips it; only a sustained flood approaching
+ * thousands of requests a minute would. Like the per-IP buckets, this is
+ * per-instance, not fleet-wide (lib/rate-limit.ts's own limitation) — on
+ * Fluid Compute with several concurrent instances the real ceiling is this
+ * number times however many instances are warm, not a hard global cap.
+ */
+const GLOBAL_LIMITS: Record<Tier, { limit: number; windowMs: number }> = {
+  crawler: { limit: 3000, windowMs: 60_000 },
+  default: { limit: 1000, windowMs: 60_000 },
+}
+
+/**
  * Known-safe automated visitors that must never be throttled here:
  * uptime/monitoring pings and Vercel's own internal prefetch/preview
  * requests carry no cost-abuse risk and blocking them would misreport the
@@ -66,6 +97,23 @@ export function proxy(request: NextRequest): NextResponse | undefined {
 
   const ip = clientIpFromHeaders(request.headers)
   const tier = classifyRequester(request.headers.get('user-agent') ?? '')
+
+  const { limit: globalLimit, windowMs: globalWindowMs } = GLOBAL_LIMITS[tier]
+  const globalGate = checkRateLimit(`page:${tier}:global`, globalLimit, globalWindowMs)
+  if (!globalGate.allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests.' },
+      {
+        status: 429,
+        headers: {
+          'retry-after': String(globalGate.retryAfterSeconds),
+          'x-ratelimit-limit': String(globalLimit),
+          'x-ratelimit-remaining': '0',
+        },
+      },
+    )
+  }
+
   const { limit, windowMs } = LIMITS[tier]
   const gate = checkRateLimit(`page:${tier}:${ip}`, limit, windowMs)
 
