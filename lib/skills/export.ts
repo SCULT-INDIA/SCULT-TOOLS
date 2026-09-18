@@ -190,7 +190,7 @@ export function buildInstallMd(skill: Skill): string {
     [
       '## Cursor, Codex CLI, GitHub Copilot, Gemini CLI',
       "These read the same open Agent Skills format, but each has its own rules or instructions folder — check your tool's docs for where it expects a skill file, then drop this one in. The content does not need to change between tools.",
-      'The skill page this ZIP came from also offers Cursor `.mdc` and plain `AGENTS.md` renderings of the same skill, if your tool wants one of those shapes.',
+      'This ZIP already includes `skill.mdc` (drop into `.cursor/rules/`) and `AGENTS.md` (also works as `.github/copilot-instructions.md` or a legacy `.cursorrules`), so no reformatting is needed for either.',
     ].join('\n\n'),
   )
 
