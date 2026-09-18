@@ -1,43 +1,32 @@
-import { BadgeCheck } from 'lucide-react'
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { Suspense } from 'react'
-import { SkillCard } from '@/components/skills/SkillCard'
-import { Icon } from '@/components/ui/Icon'
+import { CategoryPageBody } from '@/components/skills/CategoryPageBody'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
-import {
-  getSkillCategory,
-  liveSkillCategories,
-  SKILL_CATEGORIES,
-} from '@/lib/skills/categories'
+import { getSkillCategory, liveSkillCategories } from '@/lib/skills/categories'
 import {
   getAllCategoryCounts,
   getSkillCountByCategory,
   getSkillsPage,
   SKILLS_PAGE_SIZE,
 } from '@/lib/skills/db'
-import type { Skill, SkillCategory } from '@/lib/skills/types'
 
 type Params = { category: string }
-type SearchParams = { page?: string }
-
-const TILE_BG: Record<SkillCategory['tile'], string> = {
-  yellow: 'bg-tile-yellow',
-  blue: 'bg-tile-blue',
-  lavender: 'bg-tile-lavender',
-  green: 'bg-tile-green',
-}
 
 /**
- * Only page 1 of each non-empty category is pre-rendered — a category can
- * hold tens of thousands of skills at the registry's real scale, so every
- * later page (`?page=2`, `?page=3`, …) renders on request instead.
+ * Always page 1 — page >= 2 lives at `/skills/[category]/page/[page]`
+ * (see that route's docblock). Query-string pagination (`?page=N`) used to
+ * live here, but reading `searchParams` forces a dynamic, per-request
+ * render under Cache Components regardless of `revalidate`, so *every*
+ * visit to a category page — not just the first — was hitting the
+ * ISR/Cache Components read path. The registry is frozen, so there is no
+ * reason any visit should ever need a fresh read; moving pagination to
+ * enumerable static routes removes this page from that path entirely.
  *
- * See `liveSkillCategories`'s own docblock (lib/skills/categories.ts) for
- * why this can never trust a fully-empty `counts` as "confirmed zero
- * everywhere" — that shape is what caused a real production build failure.
+ * `dynamicParams` can't be set to `false` alongside `cacheComponents` (Next
+ * rejects the combination), so an unknown category still reaches the
+ * component instead of 404ing at the framework level — but the runtime
+ * `if (!category) notFound()` below already covers it.
  */
 export async function generateStaticParams(): Promise<Params[]> {
   const counts = await getAllCategoryCounts()
@@ -72,98 +61,18 @@ export async function generateMetadata({
   }
 }
 
-function SkillGridSkeleton() {
-  return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
-      {Array.from({ length: 6 }, (_, i) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: static placeholder count, never reordered
-        <div key={i} className="h-40 animate-pulse rounded-card bg-offwhite" />
-      ))}
-    </div>
-  )
-}
-
-/**
- * The only part of this page that reads `searchParams` — a dynamic,
- * per-request API. Under `cacheComponents`, any dynamic read has to sit
- * inside its own `<Suspense>` boundary or the *whole* page is flagged as
- * blocking at build time; isolating it here is what lets the header/intro
- * above stay statically prerendered while this streams in.
- */
-async function SkillGrid({
-  category,
-  searchParams,
-}: {
-  category: SkillCategory
-  searchParams: Promise<SearchParams>
-}) {
-  const { page: pageParam } = await searchParams
-  const page = Math.max(1, Number(pageParam) || 1)
-  const [skills, count] = await Promise.all([
-    getSkillsPage(category.slug, page),
-    getSkillCountByCategory(category.slug),
-  ])
-  if (skills.length === 0) notFound()
-
-  const totalPages = Math.max(1, Math.ceil(count / SKILLS_PAGE_SIZE))
-
-  return (
-    <>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {skills.map((skill: Skill) => (
-          <SkillCard key={skill.id} skill={skill} category={category} />
-        ))}
-      </div>
-
-      {totalPages > 1 ? (
-        <nav
-          aria-label="Pagination"
-          className="mt-8 flex items-center justify-center gap-3"
-        >
-          {page > 1 ? (
-            <Link
-              href={
-                page - 1 === 1
-                  ? `/skills/${category.slug}`
-                  : `/skills/${category.slug}?page=${page - 1}`
-              }
-              className="rounded-full border border-line-grey bg-white px-4 py-2 font-medium text-[14px] text-ink-body transition-colors hover:border-violet-300 hover:text-violet-700"
-            >
-              ← Previous
-            </Link>
-          ) : null}
-          <span className="text-[13.5px] text-ink-subtle">
-            Page {page.toLocaleString()} of {totalPages.toLocaleString()}
-          </span>
-          {page < totalPages ? (
-            <Link
-              href={`/skills/${category.slug}?page=${page + 1}`}
-              className="rounded-full border border-line-grey bg-white px-4 py-2 font-medium text-[14px] text-ink-body transition-colors hover:border-violet-300 hover:text-violet-700"
-            >
-              Next →
-            </Link>
-          ) : null}
-        </nav>
-      ) : null}
-    </>
-  )
-}
-
-export default async function SkillCategoryPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<Params>
-  searchParams: Promise<SearchParams>
-}) {
+export default async function SkillCategoryPage({ params }: { params: Promise<Params> }) {
   const { category: slug } = await params
   const category = getSkillCategory(slug)
   if (!category) notFound()
 
-  const count = await getSkillCountByCategory(category.slug)
+  const [skills, count] = await Promise.all([
+    getSkillsPage(category.slug, 1),
+    getSkillCountByCategory(category.slug),
+  ])
   if (count === 0) notFound()
 
-  const siblings = SKILL_CATEGORIES.filter((c) => c.slug !== category.slug).slice(0, 3)
+  const totalPages = Math.max(1, Math.ceil(count / SKILLS_PAGE_SIZE))
 
   return (
     <>
@@ -174,88 +83,13 @@ export default async function SkillCategoryPage({
           { name: category.name, path: `/skills/${category.slug}` },
         ])}
       />
-
-      <section className="container-site pt-10 pb-4">
-        <nav aria-label="Breadcrumb" className="mb-6">
-          <ol className="flex items-center gap-2 text-[14px] text-ink-subtle">
-            <li>
-              <Link href="/" className="hover:text-violet-600">
-                Home
-              </Link>
-            </li>
-            <li aria-hidden="true">/</li>
-            <li>
-              <Link href="/skills" className="hover:text-violet-600">
-                Skills
-              </Link>
-            </li>
-            <li aria-hidden="true">/</li>
-            <li aria-current="page" className="text-ink">
-              {category.name}
-            </li>
-          </ol>
-        </nav>
-
-        <header className="rounded-3xl border border-line-grey bg-white p-7 shadow-xs md:p-10">
-          <div className="flex flex-wrap items-center gap-4">
-            <span
-              className={`flex size-14 shrink-0 items-center justify-center rounded-2xl ${TILE_BG[category.tile]}`}
-            >
-              <Icon name={category.icon} className="size-6 text-violet-700" />
-            </span>
-            <div>
-              <p className="font-semibold text-[12px] text-ink-subtle uppercase tracking-[0.14em]">
-                {count.toLocaleString()} free {count === 1 ? 'skill' : 'skills'}
-              </p>
-              <h1 className="mt-1 text-[30px] leading-[1.1] tracking-[-0.5px] md:text-[38px]">
-                {category.name} skills
-              </h1>
-            </div>
-          </div>
-          <p className="mt-5 max-w-[64ch] text-[16px] text-ink-muted leading-7">
-            {category.intro}
-          </p>
-          <p className="mt-4 flex items-center gap-1.5 font-medium text-[13.5px] text-ink-subtle">
-            <BadgeCheck className="size-4 text-green" aria-hidden="true" />
-            Sourced from real, public repositories — hand-curated, never invented.
-          </p>
-        </header>
-      </section>
-
-      <section aria-label={`${category.name} skills`} className="container-site py-10">
-        <Suspense fallback={<SkillGridSkeleton />}>
-          <SkillGrid category={category} searchParams={searchParams} />
-        </Suspense>
-      </section>
-
-      <section className="container-site pb-8">
-        <h2 className="font-sans font-bold text-[13px] uppercase tracking-[0.1em]">
-          Other skill categories
-        </h2>
-        <div className="mt-4 flex flex-wrap gap-3">
-          {siblings.map((s) => (
-            <Link
-              key={s.slug}
-              href={`/skills/${s.slug}`}
-              className="flex max-w-sm items-center gap-2.5 rounded-full border border-line-grey bg-white px-3.5 py-2 text-[15px] transition-colors hover:border-violet-300"
-            >
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-offwhite">
-                <Icon name={s.icon} className="size-4 text-violet-700" />
-              </span>
-              <span>
-                <span className="font-medium">{s.name}</span>{' '}
-                <span className="text-ink-subtle">— {s.blurb}</span>
-              </span>
-            </Link>
-          ))}
-          <Link
-            href="/skills"
-            className="flex items-center rounded-full border border-line-grey bg-white px-3.5 py-2 text-[15px] transition-colors hover:border-violet-300"
-          >
-            <span className="font-medium">All skills</span>
-          </Link>
-        </div>
-      </section>
+      <CategoryPageBody
+        category={category}
+        count={count}
+        skills={skills}
+        page={1}
+        totalPages={totalPages}
+      />
     </>
   )
 }

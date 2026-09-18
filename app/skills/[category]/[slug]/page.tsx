@@ -4,28 +4,40 @@ import { SkillDetailShell } from '@/components/skills/SkillDetailShell'
 import { breadcrumbJsonLd, JsonLd, skillJsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
 import { getSkillCategory, SKILL_CATEGORIES } from '@/lib/skills/categories'
-import { getSiblingSkills, getSkill, getTopSkillsByCategory } from '@/lib/skills/db'
+import { getAllSkillSlugsByCategory, getSiblingSkills, getSkill } from '@/lib/skills/db'
 
 type Params = { category: string; slug: string }
 
 /**
- * Statically pre-renders only the most-installed skills per category; the
- * rest render on first request (`dynamicParams` defaults to true and is
- * required to under `cacheComponents` anyway) and then stay cached for the
- * `skillsRegistry` profile's 30 days, since the data is frozen.
+ * Every served skill is statically pre-rendered — not just the hottest few
+ * per category. The registry is frozen at exactly 10,000 rows (see
+ * lib/skills/db.ts's header) with nothing left to sync, so there is no
+ * ongoing tension between "pre-render everything" and "keep builds cheap":
+ * this only costs once, at the next deploy, and deploys are now both rare
+ * (vercel.json's `ignoreCommand`) and infrequent by habit.
  *
- * 15 per category, down from 50 (2026-09-16): every pre-rendered page is a
- * Supabase query plus a render on every single deploy — 24 × 50 = 1,200 of
- * them made builds the single largest line on the Vercel bill during an
- * active day. 24 × 15 = 360 keeps the genuinely hot pages instant on a fresh
- * deploy while a first visit to a colder one costs the same one-time render
- * it did before, just on demand instead of up front.
+ * This is what makes it pay off: a `'use cache'` page is re-checked against
+ * the ISR/Cache Components cache on every single visit no matter how long
+ * `revalidate` is set to (revalidate only bounds how often it's
+ * *rewritten*, not how often it's *read*), so traffic volume alone kept
+ * driving ISR Read Units up regardless of the 30-day cacheLife. 24 × ~15
+ * (2026-09-16) grew Vercel's build cost by pre-rendering fewer pages; going
+ * to all 10,000 (2026-09-17) trades a bigger one-time build for removing
+ * this route from that per-visit read path entirely — a page that already
+ * exists as a static file is served straight from the CDN edge, no cache
+ * check involved.
+ *
+ * `dynamicParams` can't be set to `false` alongside `cacheComponents` (Next
+ * rejects the combination outright), so a slug outside this set still
+ * reaches the component instead of 404ing at the framework level — but
+ * `getSkill` returns `undefined` for it and the component below already
+ * calls `notFound()` in that case, so the visible behavior is identical.
  */
 export async function generateStaticParams(): Promise<Params[]> {
   const perCategory = await Promise.all(
     SKILL_CATEGORIES.map(async (c) => {
-      const skills = await getTopSkillsByCategory(c.slug, 15)
-      return skills.map((s) => ({ category: c.slug, slug: s.slug }))
+      const slugs = await getAllSkillSlugsByCategory(c.slug)
+      return slugs.map((slug) => ({ category: c.slug, slug }))
     }),
   )
   return perCategory.flat()

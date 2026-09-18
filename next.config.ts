@@ -121,6 +121,22 @@ const nextConfig: NextConfig = {
     // The brand-icon barrel exports ~330 marks; the prompt library uses ~25.
     // Without this, every page importing BrandIcon pulls the whole set.
     optimizePackageImports: ['@lobehub/icons'],
+    /**
+     * 2026-09-17: statically pre-rendering every one of the 10,000 curated
+     * skill pages (see app/skills/[category]/[slug]/page.tsx's docblock)
+     * made the build fan out into thousands of concurrent Supabase REST
+     * calls — Next's defaults (8 pages at once per worker, a new worker
+     * every 25 pages) are tuned for pages with no external dependency, not
+     * one shared upstream API. The first attempt at this actually failed
+     * the build: individual page renders started timing out past 60s, and
+     * the cascading load eventually starved even `app/sitemap.ts`'s own
+     * Supabase call past Next's cache-fill timeout, aborting the whole
+     * build. Capping concurrency trades build wall-clock time (deploys are
+     * now rare — vercel.json's `ignoreCommand` plus batching by habit) for
+     * a build that reliably finishes instead of racing Supabase.
+     */
+    staticGenerationMaxConcurrency: 3,
+    staticGenerationMinPagesPerWorker: 100,
   },
 
   env: {
@@ -193,6 +209,24 @@ const nextConfig: NextConfig = {
          */
         source: '/tools/:path*',
         destination: '/:path*',
+        permanent: true,
+      },
+      {
+        /**
+         * `/skills/[category]?page=N` (N >= 2) moved to the static
+         * `/skills/[category]/page/[page]` route (2026-09-17) — see that
+         * route's docblock: a query param forces a dynamic render under
+         * Cache Components on every visit, which was the real reason ISR
+         * Read Units kept climbing regardless of `revalidate`. The old
+         * shape was never linked from the sitemap or any in-app link (page
+         * 1 always linked to the bare category URL, never `?page=1`), so
+         * this exists only to 301 anyone who bookmarked or was linked the
+         * old `?page=N` URL directly. `[2-9]|[1-9]\d+` matches 2 and up
+         * while leaving `?page=1` (or anything non-numeric) alone.
+         */
+        source: '/skills/:category',
+        has: [{ type: 'query', key: 'page', value: '(?<page>[2-9]|[1-9]\\d+)' }],
+        destination: '/skills/:category/page/:page',
         permanent: true,
       },
     ]
@@ -277,6 +311,26 @@ const nextConfig: NextConfig = {
       {
         // Fonts are immutable and content-hashed by next/font.
         source: '/fonts/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      {
+        /**
+         * Tool icons, brand marks, device mockups, and tool/prompt
+         * screenshots — none are content-hashed, so `public.max-age=
+         * 31536000` isn't the platform's default for them; without an
+         * explicit header they were falling back to a short/no-cache
+         * response, meaning every visitor re-downloaded them from origin
+         * (Vercel's Fast Origin Transfer, the second-largest static-asset
+         * cost line after Build CPU). `immutable` here is a deliberate bet
+         * that these specific assets — one icon per tool, the site logo,
+         * device frames — don't change without a deploy anyone would
+         * notice; if a file under any of these paths is ever replaced with
+         * different content at the same name, rename it (e.g. add a `-v2`
+         * suffix) rather than overwriting in place, or a returning
+         * visitor's browser and any CDN edge that already cached the old
+         * bytes will keep serving them for up to a year.
+         */
+        source: '/(tool-icons|brand|mockups|tool-screenshots)/:path*',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
     ]

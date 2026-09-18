@@ -5,35 +5,44 @@ import type { Skill, SkillCategorySlug } from './types'
 
 /**
  * The Skills Library's data-access layer. Unlike `lib/tools/registry.ts` or
- * `lib/prompts/registry.ts` (compile-time arrays), this reads a Supabase
- * table — too large to hold in a git-committed array or to statically
- * pre-render in full, so every function here is async: the hottest few
- * skills per category are pre-rendered at build time (see
- * `generateStaticParams` in the route files), everything else renders on
- * first request and is then cached with the `skillsRegistry` profile below.
+ * `lib/prompts/registry.ts` (compile-time arrays read at build time with no
+ * runtime dependency at all), this reads a Supabase table, so every
+ * function here is async — but every served skill is statically
+ * pre-rendered too (see `generateStaticParams` in the route files), since
+ * the registry is frozen (below) and small enough to pre-render in full.
  *
- * Every function also carries `cacheTag('skills')`, so a single
- * `revalidateTag('skills', 'max')` call (see app/api/revalidate/route.ts)
- * refreshes all of them immediately if that is ever needed.
+ * Every function also carries `cacheTag('skills')`, kept as a cheap,
+ * currently-unused hook: nothing calls `revalidateTag('skills', ...)`
+ * today (the on-demand invalidation endpoint that used to — POST
+ * /api/revalidate — was removed 2026-09-17 along with the rest of the sync
+ * worker's plumbing, since nothing was ever wired to call it and an
+ * unauthenticated-but-guessed request against it was the single largest
+ * avoidable cost risk: one call could force-refresh every skill page's
+ * cache at once). If the registry is ever deliberately unfrozen, tagging is
+ * already in place to invalidate precisely.
  *
- * FROZEN AND CURATED as of 2026-09-16, at the user's explicit request.
- * The sync worker that used to grow this table toward the full skills.sh
- * registry was stopped (vercel-skills-sync/vercel.json's cron and the main
- * repo's `.github/workflows/sync-skills-worker.yml` schedule both removed),
- * and the 50,456 skills it had indexed were curated down to a served set of
- * exactly 10,000: every category's top 250 by installs, then the globally
- * most-installed to fill the rest (supabase/migrations/
- * 0005_curate_served_skills.sql has the selection and the reasoning — a
- * flat installs cutoff would have handed `general` 60% of the slots and
- * left `architecture` with 11). Rows outside that set were then deleted
- * (0006), after a local backup.
+ * FROZEN AND CURATED as of 2026-09-16, at the user's explicit request, and
+ * as of 2026-09-17 there is no sync worker left at all: the
+ * `vercel-skills-sync` Vercel project's source, `.github/workflows/
+ * sync-skills-worker.yml`, and the `/api/revalidate` on-demand invalidation
+ * endpoint were all deleted from this repo — not just disabled — since
+ * nothing was reading from them and each was a live risk of accidentally
+ * regrowing or re-triggering a full cache refresh of a dataset that is
+ * never supposed to change again. The 50,456 skills that worker had
+ * indexed were curated down to a served set of exactly 10,000: every
+ * category's top 250 by installs, then the globally most-installed to fill
+ * the rest (supabase/migrations/0005_curate_served_skills.sql has the
+ * selection and the reasoning — a flat installs cutoff would have handed
+ * `general` 60% of the slots and left `architecture` with 11). Rows outside
+ * that set were then deleted (0006), after a local backup.
  *
  * `served` is the single gate: every query below filters `.eq('served',
- * true)`. It is `default false`, so even a row a re-enabled sync somehow
+ * true)`. It is `default false`, so even a row some future write somehow
  * inserted could never appear on the site, the CLI, or the MCP tools — all
- * three read exclusively through this file. To lift this later: re-enable
- * the two triggers named above, have the sync set `served` on what it
- * writes, and adjust `SKILLS_INDEXED_REGISTRY_TOTAL` below.
+ * three read exclusively through this file. To lift this later requires
+ * building a sync mechanism again from scratch (nothing to "re-enable" —
+ * see above), having it set `served` on what it writes, and adjusting
+ * `SKILLS_INDEXED_REGISTRY_TOTAL` below.
  */
 
 /**
@@ -70,7 +79,11 @@ function rowToSkill(row: any): Skill {
       row.source_owner,
       row.source_repo,
     ),
-    body: row.body,
+    // List queries no longer select `body` (see SKILL_LIST_COLUMNS above), so
+    // this is `undefined` on those rows — `''` keeps the `Skill` type honest
+    // (`body: string`, never undefined) rather than crashing a future
+    // `skill.body.trim()` call on a list result that was never meant to have one.
+    body: row.body ?? '',
     tags: row.tags ?? [],
     license: row.license ?? undefined,
     licenseGated: row.license_gated,
@@ -86,13 +99,75 @@ function rowToSkill(row: any): Skill {
   }
 }
 
-const SKILL_COLUMNS =
-  'id, slug, category, name, description, body, tags, license, license_gated, source_owner, source_repo, source_skill_id, source_url, installs, first_seen_at, last_synced_at, related_tools, related_prompts'
+/**
+ * Every column except `body` (the full SKILL.md text) — the single largest
+ * column, and one a list/card view never renders (see SkillCard.tsx: name,
+ * description, tags, installs only). `resolveSkillDescription` in
+ * rowToSkill() falls back to `body` only for a stored description that is
+ * meaningless (~19.9% of the pre-curation registry), and
+ * scripts/db-repair-descriptions.mjs has since backfilled a real
+ * `description` for every served row, so that fallback is never actually
+ * needed for a served skill — dropping `body` from list queries costs
+ * nothing. `getSkill`/`getSkillBySlug` (the detail page and the CLI's
+ * single-skill lookup, the only places that render or export the body)
+ * still select the full `SKILL_COLUMNS` below.
+ */
+const SKILL_LIST_COLUMNS =
+  'id, slug, category, name, description, tags, license, license_gated, source_owner, source_repo, source_skill_id, source_url, installs, first_seen_at, last_synced_at, related_tools, related_prompts'
+
+const SKILL_COLUMNS = `${SKILL_LIST_COLUMNS}, body`
 
 export const SKILLS_PAGE_SIZE = 60
 
-/** The N most-installed skills in a category — the set that gets
- * statically pre-rendered at build time (see route files' `generateStaticParams`). */
+/**
+ * Every served skill's slug in a category — id/slug only, no other columns.
+ * The registry is frozen (see this file's header), so `generateStaticParams`
+ * in `app/skills/[category]/[slug]/page.tsx` uses this to pre-render every
+ * served skill at build time instead of only the hottest few: a page that
+ * exists as a plain static file is never checked against the ISR/Cache
+ * Components read path at all, versus a `'use cache'` page, which is
+ * re-checked against that cache on every single visit regardless of how
+ * long `revalidate` is set to. For a dataset that will never change again,
+ * that per-visit check is pure, avoidable cost.
+ *
+ * Paginated on purpose — this file's own `getAllSkillRefs` docblock records
+ * the exact bug a single unpaginated `.select()` runs into: PostgREST caps
+ * every response at `POSTGREST_MAX_ROWS` and reports the truncation only in
+ * a header supabase-js discards, so a >1,000-row category (only `general`,
+ * at 4,118, crosses that today) would silently return 1,000 slugs with
+ * `error === null` — confirmed live: an earlier, unpaginated version of
+ * this function shipped exactly that, and `general` built only 1,001 of
+ * its 4,119 pages with no error anywhere in the build log. Throws rather
+ * than returning a partial list for the same reason that function throws:
+ * a partial `generateStaticParams` result is frozen into the build as if
+ * it were complete.
+ */
+export async function getAllSkillSlugsByCategory(
+  category: SkillCategorySlug,
+): Promise<readonly string[]> {
+  'use cache'
+  cacheLife('skillsRegistry')
+  cacheTag('skills')
+  const slugs: string[] = []
+  for (let offset = 0; ; offset += POSTGREST_MAX_ROWS) {
+    const page = await fetchPage(`skill slugs for ${category} at offset ${offset}`, () =>
+      supabaseSkills
+        .from('skills')
+        .select('slug')
+        .eq('category', category)
+        .eq('served', true)
+        .order('id', { ascending: true })
+        .range(offset, offset + POSTGREST_MAX_ROWS - 1),
+    )
+    slugs.push(...page.map((row) => row.slug))
+    if (page.length < POSTGREST_MAX_ROWS) break
+  }
+  return slugs
+}
+
+/** The N most-installed skills in a category — used for the skills hub's
+ * preview cards and the category page's "other categories" rail, not for
+ * static generation (see `getAllSkillSlugsByCategory` for that). */
 export async function getTopSkillsByCategory(
   category: SkillCategorySlug,
   limit: number,
@@ -102,7 +177,7 @@ export async function getTopSkillsByCategory(
   cacheTag('skills')
   const { data, error } = await supabaseSkills
     .from('skills')
-    .select(SKILL_COLUMNS)
+    .select(SKILL_LIST_COLUMNS)
     .eq('category', category)
     .eq('served', true)
     .order('installs', { ascending: false })
@@ -114,9 +189,12 @@ export async function getTopSkillsByCategory(
   return data.map(rowToSkill)
 }
 
-/** One page of a category's skills, sorted by installs — backs
- * `/skills/[category]?page=N`. Page 1 (no query param) is the one
- * included in `generateStaticParams`; every other page renders on request. */
+/** One page of a category's skills, sorted by installs — backs page 1 at
+ * `/skills/[category]` and every later page at
+ * `/skills/[category]/page/[page]`. Both routes are fully static
+ * (`dynamicParams = false`), enumerated in full by their own
+ * `generateStaticParams` — see either route's docblock for why pagination
+ * moved off a `?page=` query param. */
 export async function getSkillsPage(
   category: SkillCategorySlug,
   page: number,
@@ -128,7 +206,7 @@ export async function getSkillsPage(
   const to = from + SKILLS_PAGE_SIZE - 1
   const { data, error } = await supabaseSkills
     .from('skills')
-    .select(SKILL_COLUMNS)
+    .select(SKILL_LIST_COLUMNS)
     .eq('category', category)
     .eq('served', true)
     .order('installs', { ascending: false })
@@ -278,7 +356,7 @@ export async function searchSkills(
   if (trimmed === '') return []
   let builder = supabaseSkills
     .from('skills')
-    .select(SKILL_COLUMNS)
+    .select(SKILL_LIST_COLUMNS)
     .or(`name.ilike.%${trimmed}%,description.ilike.%${trimmed}%`)
     .eq('served', true)
     .order('installs', { ascending: false })
@@ -302,7 +380,7 @@ export async function getSiblingSkills(
   cacheTag('skills')
   const { data, error } = await supabaseSkills
     .from('skills')
-    .select(SKILL_COLUMNS)
+    .select(SKILL_LIST_COLUMNS)
     .eq('category', category)
     .neq('slug', excludeSlug)
     .eq('served', true)
@@ -321,7 +399,7 @@ export async function getRecentlyAddedSkills(limit: number): Promise<readonly Sk
   cacheTag('skills')
   const { data, error } = await supabaseSkills
     .from('skills')
-    .select(SKILL_COLUMNS)
+    .select(SKILL_LIST_COLUMNS)
     .eq('served', true)
     .order('first_seen_at', { ascending: false })
     .limit(limit)
