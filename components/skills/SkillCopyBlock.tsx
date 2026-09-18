@@ -1,6 +1,6 @@
 'use client'
 
-import { Download } from 'lucide-react'
+import { ArrowUpRight, Download, FileText } from 'lucide-react'
 import { TrackedLink } from '@/components/ui/TrackedLink'
 import { trackSkillEvent } from '@/lib/analytics'
 import { downloadBinaryFile } from '@/lib/download-file'
@@ -8,15 +8,20 @@ import { buildInstallMd, exportSkillAs } from '@/lib/skills/export'
 import type { Skill } from '@/lib/skills/types'
 import { createZip } from '@/lib/skills/zip'
 
+const ZIP_CONTENTS: readonly { file: string; purpose: string }[] = [
+  { file: 'SKILL.md', purpose: 'The real skill — Claude Code reads it as-is' },
+  { file: 'skill.mdc', purpose: 'Cursor project rule, for .cursor/rules/' },
+  { file: 'AGENTS.md', purpose: 'Copilot instructions, .cursorrules, Codex, Gemini' },
+  { file: 'INSTALL.md', purpose: 'Exact install paths for this skill' },
+]
+
 /**
- * The skill's real content — download-only. This used to also show the
- * text inline (a code-block preview with a format-switcher and a "Copy"
- * button, mirroring `PromptCopyBlock`'s editor-card look). Removed at the
- * user's explicit, repeated request: the ZIP is now the only way to get a
- * skill's content off this page. Nothing that was in the on-page picker is
- * lost — every format it used to render (`SKILL.md`, Cursor's `.mdc`,
- * `AGENTS.md`) is bundled into the one ZIP instead of requiring a tab
- * click per shape.
+ * The skill's one action: download it. Download-only at the user's explicit
+ * request (no inline preview, no copy button); every format the page used to
+ * render is bundled into the single ZIP instead. Styled as a cream brutal
+ * card with the site's signature yellow `btn-brutal` — the same CTA register
+ * as every other primary action on the site, replacing an earlier dark
+ * "editor" card that read as a different design system.
  */
 export function SkillCopyBlock({
   skill,
@@ -25,13 +30,6 @@ export function SkillCopyBlock({
   skill: Skill
   licenseGated: boolean
 }) {
-  /**
-   * The real "Skill Page → Download ZIP → Install/Use" flow. The skill's
-   * own sync only ever stores one file (SKILL.md's body — see the `Skill`
-   * type's docblock), so every other file here is a real re-formatting of
-   * that same content (see lib/skills/export.ts), not invented structure —
-   * plus a genuinely useful `INSTALL.md` this site generates.
-   */
   function handleDownloadZip() {
     const zip = createZip([
       { name: 'SKILL.md', content: exportSkillAs(skill, 'skill-md') },
@@ -45,10 +43,13 @@ export function SkillCopyBlock({
 
   if (licenseGated) {
     return (
-      <div className="rounded-panel border border-ink bg-offwhite p-6 text-center">
-        <p className="text-[15px] text-ink-muted leading-6">
-          This skill's source license couldn't be confirmed as safe to mirror here, so it
-          isn't inlined. View the full skill directly on its source repository.
+      <div className="rounded-panel border border-ink bg-cream p-6 shadow-brutal-sm">
+        <p className="font-display font-semibold text-[19px] text-ink tracking-normal">
+          Available at the source
+        </p>
+        <p className="mt-2 text-[14.5px] text-ink-muted leading-6">
+          This skill's license couldn't be confirmed as safe to mirror here, so it isn't
+          bundled. Get it directly from its repository.
         </p>
         <TrackedLink
           href={skill.sourceUrl}
@@ -60,44 +61,50 @@ export function SkillCopyBlock({
             action: 'open_repository',
             context: 'license-gated',
           }}
-          className="mt-4 inline-flex items-center gap-1.5 rounded-pill border border-ink bg-cta px-5 py-2 font-medium text-[14px] text-black shadow-[3px_3px_0_0_#000] transition-all duration-150 hover:translate-x-[3px] hover:translate-y-[3px] hover:bg-white hover:shadow-none"
+          className="btn-brutal btn-brutal-sm btn-white mt-5 w-full"
         >
-          View on GitHub
+          VIEW ON GITHUB
+          <ArrowUpRight className="size-4" aria-hidden="true" />
         </TrackedLink>
       </div>
     )
   }
 
   return (
-    <div className="overflow-hidden rounded-panel border border-ink shadow-brutal-sm">
-      <div className="flex items-center gap-2 border-[#2c2743] border-b bg-[#191527] px-4 py-2.5">
-        <span className="size-2.5 rounded-full bg-[#ff5f57]" aria-hidden="true" />
-        <span className="size-2.5 rounded-full bg-cta" aria-hidden="true" />
-        <span className="size-2.5 rounded-full bg-green" aria-hidden="true" />
-        <span className="ml-2 font-bold font-mono text-[11px] text-white/50 uppercase tracking-[0.18em]">
-          {skill.slug}.zip
-        </span>
-      </div>
+    <div className="rounded-panel border border-ink bg-cream p-6 shadow-brutal-sm">
+      <p className="font-display font-semibold text-[19px] text-ink tracking-normal">
+        Download this skill
+      </p>
+      <p className="mt-1 font-mono text-[12px] text-ink-subtle">{skill.slug}.zip</p>
 
-      <div className="flex flex-col items-center gap-4 bg-[#131020] px-6 py-10 text-center">
-        <p className="max-w-[46ch] text-[14px] text-white/70 leading-6">
-          Includes <span className="font-mono text-white/90">SKILL.md</span>,{' '}
-          <span className="font-mono text-white/90">skill.mdc</span> (Cursor),{' '}
-          <span className="font-mono text-white/90">AGENTS.md</span> (also works as
-          Copilot instructions or{' '}
-          <span className="font-mono text-white/90">.cursorrules</span>
-          ), and an <span className="font-mono text-white/90">INSTALL.md</span> with exact
-          install paths for this skill.
-        </p>
-        <button
-          type="button"
-          onClick={handleDownloadZip}
-          className="flex min-h-[44px] items-center gap-2 rounded-pill border border-ink bg-cta px-6 py-2.5 font-medium text-[15px] text-black shadow-[3px_3px_0_0_#000] transition-all duration-150 hover:translate-x-[3px] hover:translate-y-[3px] hover:bg-white hover:shadow-none"
-        >
-          <Download className="size-4" aria-hidden="true" />
-          Download ZIP
-        </button>
-      </div>
+      <ul className="mt-4 flex flex-col gap-2">
+        {ZIP_CONTENTS.map(({ file, purpose }) => (
+          <li
+            key={file}
+            className="flex items-start gap-2.5 rounded-card border border-ink/10 bg-white px-3 py-2.5"
+          >
+            <FileText
+              className="mt-0.5 size-4 shrink-0 text-violet-700"
+              aria-hidden="true"
+            />
+            <span className="min-w-0">
+              <span className="block font-mono text-[13px] text-ink">{file}</span>
+              <span className="block text-[12.5px] text-ink-subtle leading-5">
+                {purpose}
+              </span>
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <button
+        type="button"
+        onClick={handleDownloadZip}
+        className="btn-brutal btn-brutal-sm mt-5 w-full"
+      >
+        <Download className="size-4" aria-hidden="true" />
+        DOWNLOAD ZIP
+      </button>
     </div>
   )
 }

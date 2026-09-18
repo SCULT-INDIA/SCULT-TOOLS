@@ -189,6 +189,26 @@ export async function getTopSkillsByCategory(
   return data.map(rowToSkill)
 }
 
+/** The N most-installed skills across every category — the skills hub's
+ * "Most installed" rail. Cheap at build time (the hub is static) and never
+ * queried per visit. */
+export async function getTopSkills(limit: number): Promise<readonly Skill[]> {
+  'use cache'
+  cacheLife('skillsRegistry')
+  cacheTag('skills')
+  const { data, error } = await supabaseSkills
+    .from('skills')
+    .select(SKILL_LIST_COLUMNS)
+    .eq('served', true)
+    .order('installs', { ascending: false })
+    .limit(limit)
+  if (error) {
+    console.error('getTopSkills failed', error)
+    return []
+  }
+  return data.map(rowToSkill)
+}
+
 /** One page of a category's skills, sorted by installs — backs page 1 at
  * `/skills/[category]` and every later page at
  * `/skills/[category]/page/[page]`. Both routes are fully static
