@@ -1672,12 +1672,35 @@ export type ApiErrorCode =
   | 'private-address'
   | 'unreachable'
   | 'blocked'
+  | 'bot-protection'
   | 'rate-limited'
+
+export type BotChallengeProvider = 'vercel' | 'cloudflare'
 
 export interface ApiError {
   readonly error: string
   readonly code: ApiErrorCode
   readonly httpStatus?: number
+  /** Set with `bot-protection`: whose firewall answered with a challenge. */
+  readonly challengedBy?: BotChallengeProvider
+}
+
+/**
+ * Whether a response is a bot-protection challenge page rather than the
+ * site's own answer. Both providers say so explicitly in a response header
+ * (`x-vercel-mitigated: challenge` — Vercel Firewall / Bot Protection /
+ * Attack Challenge Mode; `cf-mitigated: challenge` — Cloudflare), usually
+ * alongside a 429 or 403. Found live 2026-09-23: scult.in itself answered
+ * every automated request, including ones identifying as GPTBot and
+ * ClaudeBot, with a Vercel challenge — which the checker had been
+ * reporting as a bare "HTTP 429".
+ */
+export function detectBotChallenge(headers: {
+  get(name: string): string | null
+}): BotChallengeProvider | undefined {
+  if (headers.get('x-vercel-mitigated')?.toLowerCase() === 'challenge') return 'vercel'
+  if (headers.get('cf-mitigated')?.toLowerCase() === 'challenge') return 'cloudflare'
+  return undefined
 }
 
 /** Type guard for the error payload the Route Handler returns on failure. */

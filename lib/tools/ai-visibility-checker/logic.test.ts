@@ -8,6 +8,7 @@ import {
   buildReport,
   computeScore,
   countVisibleWords,
+  detectBotChallenge,
   detectNoaiSignals,
   detectNoindexSignals,
   evaluateBot,
@@ -20,6 +21,27 @@ import {
   parseRobots,
   validateTargetUrl,
 } from './logic'
+
+describe('detectBotChallenge', () => {
+  it('recognises a Vercel firewall challenge', () => {
+    expect(detectBotChallenge(new Headers({ 'x-vercel-mitigated': 'challenge' }))).toBe(
+      'vercel',
+    )
+  })
+
+  it('recognises a Cloudflare challenge, case-insensitively', () => {
+    expect(detectBotChallenge(new Headers({ 'cf-mitigated': 'Challenge' }))).toBe(
+      'cloudflare',
+    )
+  })
+
+  it('treats an ordinary error response as the site’s own answer', () => {
+    expect(detectBotChallenge(new Headers({ 'retry-after': '30' }))).toBeUndefined()
+    expect(
+      detectBotChallenge(new Headers({ 'x-vercel-mitigated': 'deny' })),
+    ).toBeUndefined()
+  })
+})
 
 describe('parseRobots', () => {
   it('groups consecutive user-agent lines and lowercases tokens', () => {

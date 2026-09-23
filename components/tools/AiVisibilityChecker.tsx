@@ -2190,6 +2190,26 @@ export function AiVisibilityChecker() {
                 user-agent, or read your robots.txt and WAF allowlist directly.
               </p>
             ) : null}
+            {apiError.code === 'bot-protection' ? (
+              <div className="flex flex-col gap-2 text-[14px] text-ink-muted leading-5">
+                <p>
+                  That challenge is shown to automated visitors the firewall doesn&rsquo;t
+                  recognise as verified bots. Our checker isn&rsquo;t one, so it
+                  can&rsquo;t get through. Real AI crawlers (GPTBot, ClaudeBot,
+                  PerplexityBot) may be verified and let through — or may be challenged
+                  too, in which case AI search can&rsquo;t read your site at all.
+                </p>
+                <p>
+                  <strong className="text-ink">If this is your site:</strong>{' '}
+                  {apiError.challengedBy === 'cloudflare'
+                    ? 'in Cloudflare, check Security → Bots (Bot Fight Mode and the AI crawler setting) and make sure the AI crawlers you want are allowed.'
+                    : 'in your Vercel project, open Firewall, turn off Attack Challenge Mode unless you are under attack, and make sure verified bots and the AI crawlers you want are allowed.'}{' '}
+                  To run this check, add a rule that bypasses bot protection for the{' '}
+                  <span className="font-mono text-[13px]">ScultToolsBot/1.0</span>{' '}
+                  user-agent.
+                </p>
+              </div>
+            ) : null}
             {apiError.code === 'unreachable' ? (
               <p className="text-[14px] text-ink-muted leading-5">
                 Check the site is live and publicly reachable, then try again. Very slow

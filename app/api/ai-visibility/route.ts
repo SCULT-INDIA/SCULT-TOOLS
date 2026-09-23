@@ -3,7 +3,9 @@ import { NextResponse } from 'next/server'
 import { checkRateLimit, clientIpFromHeaders } from '@/lib/rate-limit'
 import {
   type ApiError,
+  type BotChallengeProvider,
   buildReport,
+  detectBotChallenge,
   extractHeroImageUrl,
   isApiError,
   isIpLiteral,
@@ -34,8 +36,10 @@ import {
  *
  * Failure modes
  *   400 invalid-url / private-address, 502 unreachable, 502 blocked (the
- *   target answered 401/403/451 to our honest user-agent). Nothing here
- *   throws to the client — every path returns typed JSON.
+ *   target answered 401/403/451 to our honest user-agent), 502
+ *   bot-protection (a Vercel/Cloudflare firewall answered with a challenge
+ *   page — see `detectBotChallenge`). Nothing here throws to the client —
+ *   every path returns typed JSON.
  *
  * Cost
  *   All outbound fetches carry `next: { revalidate: 21600 }`, so repeat
@@ -85,6 +89,9 @@ interface FetchOutcome {
    * (the hero image) read this instead, since decoding image bytes as text
    * would corrupt them. */
   readonly rawBytes?: Uint8Array
+  /** Set when the response is a firewall's bot challenge, not the site's
+   * own page — see `detectBotChallenge`. */
+  readonly challengedBy?: BotChallengeProvider
   /** Set instead of the above when the fetch could not complete safely. */
   readonly failure?: 'invalid' | 'private' | 'unreachable'
 }
@@ -203,6 +210,7 @@ async function safeFetch(
     const { text, bytes, rawBytes } = await readCapped(res, capBytes)
     const xRobotsTag = res.headers.get('x-robots-tag')
     const contentType = res.headers.get('content-type')
+    const challengedBy = detectBotChallenge(res.headers)
     return {
       ok: res.ok,
       status: res.status,
@@ -212,6 +220,7 @@ async function safeFetch(
       finalUrl: validation.url,
       ...(xRobotsTag !== null ? { xRobotsTag } : {}),
       ...(contentType !== null ? { contentType } : {}),
+      ...(challengedBy !== undefined ? { challengedBy } : {}),
     }
   }
   return FAILED('unreachable') // redirect loop
@@ -280,6 +289,15 @@ export async function runAiVisibilityCheck(
       error:
         'The site did not respond within 10 seconds (or redirected more than 3 times).',
       code: 'unreachable',
+    }
+  }
+  if (!home.ok && home.challengedBy !== undefined) {
+    const provider = home.challengedBy === 'vercel' ? 'Vercel' : 'Cloudflare'
+    return {
+      error: `${provider}'s bot protection on this site answered our checker with a challenge page (HTTP ${home.status}) instead of the page itself, so there was nothing to analyse.`,
+      code: 'bot-protection',
+      httpStatus: home.status,
+      challengedBy: home.challengedBy,
     }
   }
   if (!home.ok) {
