@@ -57,7 +57,7 @@ export function HeroAssistant() {
   const [turns, setTurns] = useState<readonly Turn[]>([])
   const [draft, setDraft] = useState('')
   const [wantsIndex, setWantsIndex] = useState(false)
-  const { toolEntries, promptEntries } = useSearchIndex(wantsIndex)
+  const { toolEntries, promptEntries, ready: indexReady } = useSearchIndex(wantsIndex)
   const inputRef = useRef<HTMLInputElement>(null)
   const threadRef = useRef<HTMLDivElement>(null)
   const nextId = useRef(1)
@@ -180,6 +180,7 @@ export function HeroAssistant() {
                 parsed={turn.parsed}
                 toolEntries={toolEntries}
                 promptEntries={promptEntries}
+                indexReady={indexReady}
               />
             </div>
           ))}
@@ -202,10 +203,12 @@ function AssistantReply({
   parsed,
   toolEntries,
   promptEntries,
+  indexReady,
 }: {
   parsed: ParsedMessage
   toolEntries: readonly ToolSearchEntry[]
   promptEntries: readonly PromptSearchEntry[]
+  indexReady: boolean
 }) {
   const hits = useMemo(
     () => rankSearch(toolEntries, promptEntries, parsed.keywords, RESULT_LIMIT),
@@ -235,16 +238,17 @@ function AssistantReply({
 
   // One analytics event per answer, once the skills leg has settled — the
   // same "did search find anything" signal the header box sends.
+  const pending = skillsLoading || !indexReady
   const tracked = useRef(false)
   useEffect(() => {
-    if (tracked.current || skillsLoading || !parsed.keywords) return
+    if (tracked.current || pending || !parsed.keywords) return
     tracked.current = true
     trackSearch(parsed.display, { has_results: total > 0, source: 'assistant' })
-  }, [skillsLoading, parsed.keywords, parsed.display, total])
+  }, [pending, parsed.keywords, parsed.display, total])
 
   const showCatalogue = !parsed.keywords
     ? parsed.intents.length > 0
-    : total === 0 && !skillsLoading
+    : total === 0 && !pending
   const catalogueLinks =
     parsed.intents.length > 0 && !parsed.keywords
       ? CATALOGUE_LINKS.filter((l) => parsed.intents.includes(l.intent))
@@ -252,7 +256,7 @@ function AssistantReply({
 
   return (
     <div className="mt-1.5 text-[15px] text-ink leading-6">
-      <p>{replyText(parsed, counts, skillsLoading)}</p>
+      <p>{replyText(parsed, counts, skillsLoading, !indexReady)}</p>
 
       {total > 0 ? (
         <div className="mt-2.5 flex flex-col gap-2.5">

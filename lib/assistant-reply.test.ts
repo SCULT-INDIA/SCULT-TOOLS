@@ -88,6 +88,12 @@ describe('replyText', () => {
     ).toContain('still checking skills')
   })
 
+  it('never says "nothing found" before the tools/prompts index has loaded', () => {
+    const text = replyText(parseMessage('invoice'), none, false, true)
+    expect(text).toMatch(/^Searching for/)
+    expect(text).not.toContain("couldn't find")
+  })
+
   it('offers a way forward when nothing matched', () => {
     expect(replyText(parseMessage('xyzzy'), none, false)).toContain(
       "couldn't find anything",

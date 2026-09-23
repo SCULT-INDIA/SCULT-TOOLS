@@ -211,12 +211,14 @@ function joinNatural(parts: readonly string[]): string {
   return `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`
 }
 
-/** The sentence above the links. `skillsLoading` keeps the wording honest
- * while the (network) skills leg is still in flight. */
+/** The sentence above the links. `skillsLoading` and `indexPending` keep the
+ * wording honest while a leg is still in flight — zero results before the
+ * tools/prompts index has even downloaded means "not yet", not "none". */
 export function replyText(
   parsed: ParsedMessage,
   counts: ReplyCounts,
   skillsLoading: boolean,
+  indexPending = false,
 ): string {
   if (!parsed.keywords) {
     if (parsed.intents.length > 0) {
@@ -232,6 +234,7 @@ export function replyText(
   const quoted = `“${parsed.display}”`
 
   if (total === 0) {
+    if (indexPending) return `Searching for ${quoted}…`
     if (skillsLoading) return `Checking the skills library for ${quoted}…`
     return `I couldn't find anything for ${quoted}. Try a different word, or start from one of these:`
   }

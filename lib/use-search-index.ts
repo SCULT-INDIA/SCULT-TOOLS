@@ -68,24 +68,33 @@ export function loadSearchIndex(): Promise<DecodedSearchIndex> {
  * `active` gates the fetch. Callers flip it on the first real signal of intent
  * (focus, or a pointer entering the input), so the request is usually already
  * in flight by the time the first character is typed.
+ *
+ * `ready` is false until the load attempt has settled (success or failure).
+ * An empty index before then means "not here yet", not "nothing matches" —
+ * a caller that shows a "no results" message must wait for `ready`, or every
+ * visitor sees a false "no results" flash while the index downloads (and a
+ * no-JS visitor sees nothing else). Found 2026-09-23 on /search.
  */
-export function useSearchIndex(active: boolean): DecodedSearchIndex {
-  // Reads the module cache during initialisation so a second SearchBox opened
-  // later starts with a populated index and never flashes an empty state.
+export function useSearchIndex(
+  active: boolean,
+): DecodedSearchIndex & { readonly ready: boolean } {
   // Safe for hydration: on the server, and on the client's first render, the
-  // cache is always null, so both produce EMPTY.
-  const [index, setIndex] = useState<DecodedSearchIndex>(EMPTY)
+  // cache is always null, so both produce EMPTY / not ready.
+  const [state, setState] = useState<{ index: DecodedSearchIndex; ready: boolean }>({
+    index: EMPTY,
+    ready: false,
+  })
 
   useEffect(() => {
     if (!active) return
     let alive = true
     void loadSearchIndex().then((loaded) => {
-      if (alive) setIndex(loaded)
+      if (alive) setState({ index: loaded, ready: true })
     })
     return () => {
       alive = false
     }
   }, [active])
 
-  return index
+  return { ...state.index, ready: state.ready }
 }

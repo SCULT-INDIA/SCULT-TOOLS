@@ -97,7 +97,7 @@ export function SearchResultsView() {
   const initialQuery = searchParams.get('q') ?? ''
   const [query, setQuery] = useState(initialQuery)
 
-  const { toolEntries, promptEntries } = useSearchIndex(true)
+  const { toolEntries, promptEntries, ready: indexReady } = useSearchIndex(true)
   const { hits: skillHits, loading: skillsLoading } = useSkillSearchHits(query)
 
   const hits = useMemo(
@@ -112,6 +112,9 @@ export function SearchResultsView() {
   const trimmed = query.trim()
   const totalCount = toolHits.length + promptHits.length + skillHits.length
   const searching = trimmed.length > 0
+  // Nothing has matched yet only because nothing has arrived yet — the
+  // server render and the first client paint always land here.
+  const pending = !indexReady || skillsLoading
 
   // Keeps the URL in sync so a search here is bookmarkable/shareable —
   // debounced so every keystroke doesn't push a new history entry. `/search`
@@ -131,12 +134,12 @@ export function SearchResultsView() {
   useEffect(() => {
     if (trimmed.length < 2) return
     const timer = setTimeout(() => {
-      if (totalCount === 0 && !skillsLoading) {
+      if (totalCount === 0 && !pending) {
         trackSearch(trimmed, { has_results: false })
       }
     }, 800)
     return () => clearTimeout(timer)
-  }, [trimmed, totalCount, skillsLoading])
+  }, [trimmed, totalCount, pending])
 
   return (
     <div className="container-site py-10">
@@ -165,7 +168,11 @@ export function SearchResultsView() {
       <div className="mt-8 max-w-[48rem]">
         {!searching ? (
           <p className="text-[14px] text-ink-subtle">Start typing to search.</p>
-        ) : totalCount === 0 && !skillsLoading ? (
+        ) : totalCount === 0 && pending ? (
+          <p className="text-[14px] text-ink-subtle" aria-live="polite">
+            Searching for &ldquo;{trimmed}&rdquo;…
+          </p>
+        ) : totalCount === 0 ? (
           <div className="rounded-card border border-line bg-cream p-6 text-center">
             <p className="font-medium text-[16px] text-ink">No results for "{trimmed}"</p>
             <p className="mt-2 text-[14px] text-ink-subtle">
