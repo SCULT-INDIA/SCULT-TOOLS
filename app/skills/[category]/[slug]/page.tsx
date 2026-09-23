@@ -3,19 +3,19 @@ import { notFound } from 'next/navigation'
 import { SkillDetailShell } from '@/components/skills/SkillDetailShell'
 import { breadcrumbJsonLd, JsonLd, skillJsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
-import { getSkillCategory } from '@/lib/skills/categories'
+import { getSkillCategoryOrCustom } from '@/lib/skills/category-resolver'
 import { getSiblingSkills, getSkill, getStaticSkillRefs } from '@/lib/skills/db'
 
 type Params = { category: string; slug: string }
 
 /**
- * The 6,000 most-installed skills are statically pre-rendered
- * (`SKILLS_STATIC_PAGE_LIMIT` in lib/skills/db.ts); the other 4,000 served
- * skills render on their first request and are then cached for 30 days
- * (`cacheLife('skillsRegistry')`) — ordinary on-demand ISR, the path this
- * route used before 2026-09-17, and what `dynamicParams` (true, since Next
- * rejects `false` alongside `cacheComponents`) already gives a slug outside
- * the pre-rendered set.
+ * The 4,000 most-installed skills are statically pre-rendered
+ * (`SKILLS_STATIC_PAGE_LIMIT` in lib/skills/db.ts); the other 6,000 served
+ * skills are ISR — rendered on their first request, written to the cache,
+ * and read from it for 30 days (`cacheLife('skillsRegistry')`) — the path
+ * this route used before 2026-09-17, and what `dynamicParams` (true, since
+ * Next rejects `false` alongside `cacheComponents`) already gives a slug
+ * outside the pre-rendered set.
  *
  * Why a split and not all 10,000: a pre-rendered page is served from the
  * CDN with no ISR read at all, so the ideal is everything static — and
@@ -26,9 +26,11 @@ type Params = { category: string; slug: string }
  * network during generation, see lib/skills/snapshot.ts) exposed the second
  * ceiling: Next's export retains ~250KB of native memory per `'use cache'`
  * page per worker, and 10,000 pages across the Standard machine's 3 workers
- * measured 8.05–8.3GB against its 8GB. 6,000 measures ~5.6GB. The
- * most-installed 6,000 carry the traffic; the on-demand tail is the pages
- * that see the least, so its ISR cost stays small by construction.
+ * measured 8.05–8.3GB against its 8GB; 6,000 measured 6.68GB, and the
+ * limit was lowered again to 4,000 on 2026-09-23 (~5.6GB projected — see
+ * `SKILLS_STATIC_PAGE_LIMIT`'s docblock for the model). The most-installed
+ * pages carry the traffic; the on-demand tail is the pages that see the
+ * least, so its ISR cost stays small by construction.
  *
  * `getSkill` throws on a snapshot miss (and on a Supabase error at request
  * time) instead of returning `undefined`, so `notFound()` below is reached
@@ -46,7 +48,7 @@ export async function generateMetadata({
   params: Promise<Params>
 }): Promise<Metadata> {
   const { category: categorySlug, slug } = await params
-  const category = getSkillCategory(categorySlug)
+  const category = await getSkillCategoryOrCustom(categorySlug)
   if (!category) return {}
   const skill = await getSkill(category.slug, slug)
   if (!skill) return {}
@@ -74,7 +76,7 @@ export async function generateMetadata({
 export default async function SkillDetailPage({ params }: { params: Promise<Params> }) {
   const { category: categorySlug, slug } = await params
 
-  const category = getSkillCategory(categorySlug)
+  const category = await getSkillCategoryOrCustom(categorySlug)
   if (!category) notFound()
 
   const skill = await getSkill(category.slug, slug)

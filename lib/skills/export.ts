@@ -172,9 +172,14 @@ export function exportSkillAs(skill: Skill, format: SkillExportFormat): string {
  * a tool this codebase doesn't control would risk being confidently wrong.
  */
 export function buildInstallMd(skill: Skill): string {
+  // Admin-authored skills have no source repo (migration 0007 made the
+  // source_* columns nullable for them), so never print "null/null".
+  const fromRepo = Boolean(skill.sourceUrl && skill.sourceOwner)
   const sections = [
     `# Installing ${skill.name}`,
-    `\`SKILL.md\` in this ZIP is the real skill, synced from [${skill.sourceOwner}/${skill.sourceRepo}](${skill.sourceUrl}) — not a rewrite of it.`,
+    fromRepo
+      ? `\`SKILL.md\` in this ZIP is the real skill, synced from [${skill.sourceOwner}/${skill.sourceRepo}](${skill.sourceUrl}) — not a rewrite of it.`
+      : '`SKILL.md` in this ZIP is the skill exactly as published on tools.scult.in.',
   ]
 
   if (skill.description !== '') {
@@ -194,8 +199,14 @@ export function buildInstallMd(skill: Skill): string {
     ].join('\n\n'),
   )
 
-  const facts = [`- Category: ${skill.category}`, `- Source: ${skill.sourceUrl}`]
-  if (skill.license) facts.push(`- License: ${skill.license}, per the source repository`)
+  const facts = [`- Category: ${skill.category}`]
+  if (fromRepo) facts.push(`- Source: ${skill.sourceUrl}`)
+  if (skill.license)
+    facts.push(
+      fromRepo
+        ? `- License: ${skill.license}, per the source repository`
+        : `- License: ${skill.license}`,
+    )
   sections.push(['## This skill', ...facts].join('\n'))
 
   return sections.join('\n\n')

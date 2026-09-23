@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation'
 import { CategoryPageBody } from '@/components/skills/CategoryPageBody'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
-import { getSkillCategory, liveSkillCategories } from '@/lib/skills/categories'
+import { liveSkillCategories } from '@/lib/skills/categories'
+import { getSkillCategoryOrCustom } from '@/lib/skills/category-resolver'
 import {
   getAllCategoryCounts,
   getSkillCountByCategory,
@@ -39,7 +40,7 @@ export async function generateMetadata({
   params: Promise<Params>
 }): Promise<Metadata> {
   const { category: slug } = await params
-  const category = getSkillCategory(slug)
+  const category = await getSkillCategoryOrCustom(slug)
   if (!category) return {}
 
   const count = await getSkillCountByCategory(category.slug)
@@ -63,7 +64,7 @@ export async function generateMetadata({
 
 export default async function SkillCategoryPage({ params }: { params: Promise<Params> }) {
   const { category: slug } = await params
-  const category = getSkillCategory(slug)
+  const category = await getSkillCategoryOrCustom(slug)
   if (!category) notFound()
 
   const [skills, count] = await Promise.all([

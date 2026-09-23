@@ -49,13 +49,14 @@ import type { Skill, SkillCategorySlug } from './types'
  * `general` 60% of the slots and left `architecture` with 11). Rows outside
  * that set were then deleted (0006), after a local backup.
  *
- * `served` is the single gate: every query below filters `.eq('served',
- * true)`. It is `default false`, so even a row some future write somehow
- * inserted could never appear on the site, the CLI, or the MCP tools — all
- * three read exclusively through this file. To lift this later requires
- * building a sync mechanism again from scratch (nothing to "re-enable" —
- * see above), having it set `served` on what it writes, and adjusting
- * `SKILLS_INDEXED_REGISTRY_TOTAL` below.
+ * `served` gates the frozen, synced set: every live query below filters
+ * `served = true OR (origin = 'admin' AND status = 'published')` — the
+ * second half added 2026-09-22 by the admin publishing system (see
+ * lib/admin/skills.ts), the one deliberate crack in the freeze above.
+ * `served` itself is still `default false` and nothing here ever sets it
+ * for an admin row; an admin-authored skill becomes visible purely through
+ * `origin`/`status`, so the 10,000-row frozen, synced set stays exactly as
+ * curated no matter how many admin skills are published alongside it.
  */
 
 /**
@@ -114,7 +115,7 @@ export async function getAllSkillSlugsByCategory(
         .from('skills')
         .select('slug')
         .eq('category', category)
-        .eq('served', true)
+        .or('served.eq.true,and(origin.eq.admin,status.eq.published)')
         .order('id', { ascending: true })
         .range(offset, offset + POSTGREST_MAX_ROWS - 1),
     )
@@ -127,8 +128,9 @@ export async function getAllSkillSlugsByCategory(
 /**
  * How many skill pages `next build` pre-renders, and which ones: the N
  * most-installed skills across every category. The remaining served skills
- * (4,000 at N = 6,000) are rendered on their first request and cached for
- * the `skillsRegistry` cacheLife (30 days) — the ordinary on-demand ISR
+ * (6,000 at N = 4,000) are ISR: rendered on their first request, the
+ * result written to the cache and read from it for every later visit until
+ * the `skillsRegistry` cacheLife (30 days) expires — the ordinary on-demand
  * path this route used before 2026-09-17, which `dynamicParams` (true by
  * necessity under Cache Components) already provides.
  *
@@ -138,42 +140,59 @@ export async function getAllSkillSlugsByCategory(
  * `ceil(pages / workers)` — not configurable. Five local builds shaped like
  * Vercel's Standard machine (3 workers) peaked at 8.05–8.3GB across the
  * build's processes with all 10,000 skill pages, regardless of heap cap or
- * whether skill bodies were held in memory. The machine has 8GB. At 6,000
- * the same arithmetic gives ~2,000 skill pages per worker ≈ 1.2GB each,
- * ~5.6GB peak with the main process. 6,000 is also below the 6,664 pages
- * the failed production build demonstrably got through before it stalled
- * for an unrelated reason. Most-installed first because installs are the
- * best available proxy for traffic: the static set absorbs the visits, the
- * on-demand tail is exactly the pages that see the fewest.
+ * whether skill bodies were held in memory. The machine has 8GB. The limit
+ * was first set to 6,000, which MEASURED 6.68GB peak (workers 2.69/2.56/
+ * 1.46GB, main 1.94GB; worker RSS ≈ 1.16GB + ~0.49MB per skill page in its
+ * batch), and was lowered to 4,000 on 2026-09-23 by request — ~5.6GB
+ * projected by that same model, so roughly 1GB more headroom and a shorter
+ * build, at the cost of ISR rendering on first visit for 2,000 more of the
+ * least-visited pages.
+ * Most-installed first because installs are the best available proxy for
+ * traffic: the static set absorbs the visits, the on-demand tail is exactly
+ * the pages that see the fewest.
  *
  * Raising this means re-measuring memory first (scripts/build.mjs has the
  * method) or moving to Vercel's Enhanced build machine.
  */
-export const SKILLS_STATIC_PAGE_LIMIT = 6_000
+export const SKILLS_STATIC_PAGE_LIMIT = 4_000
 
 /**
  * The (category, slug) pairs `generateStaticParams` pre-renders — see
- * `SKILLS_STATIC_PAGE_LIMIT`. Build-time only, and deliberately answered
- * ONLY from the snapshot: a plain `next build` with no snapshot would
- * otherwise pre-render 6,000 pages against live Supabase, which is the
- * exact build that stalled and was killed on 2026-09-18. Outside a
- * production build (dev server, tests) there is nothing to pre-render, so
- * an empty list is the right answer rather than an error.
+ * `SKILLS_STATIC_PAGE_LIMIT`. In a production build this is answered ONLY
+ * from the snapshot: a plain `next build` with no snapshot would otherwise
+ * pre-render thousands of pages against live Supabase, which is the exact
+ * build that stalled and was killed on 2026-09-18.
+ *
+ * In `next dev`, though, this cannot return `[]`: Cache Components hard-
+ * requires "all `generateStaticParams` functions must return at least one
+ * result" (Next throws a 500 on the very first skill page visited
+ * otherwise — found live 2026-09-19 clicking through the new hero search).
+ * A `next dev` process never runs scripts/build.mjs, so there is no
+ * snapshot to answer from and none is needed — one real, cheap, live
+ * lookup (`getTopSkills(1)`) is enough to satisfy that "at least one"
+ * check. It does not need to be the specific slug a developer is about to
+ * open: `dynamicParams` (true, since Next also rejects `false` alongside
+ * `cacheComponents`) already renders any other slug on request via
+ * `getSkill`'s own live-Supabase fallback, exactly as it does in
+ * production for the skills outside the static set.
  */
 export async function getStaticSkillRefs(): Promise<
   readonly { category: SkillCategorySlug; slug: string }[]
 > {
   const snapshot = loadBuildSnapshot()
-  if (!snapshot) {
-    if (process.env.NODE_ENV !== 'production') return []
-    throw new Error(
-      'getStaticSkillRefs: no registry snapshot (SKILLS_SNAPSHOT is unset). Build with `npm run build` — scripts/build.mjs writes the snapshot first — not `next build` directly.',
-    )
+  if (snapshot) {
+    return snapshot
+      .all()
+      .slice(0, SKILLS_STATIC_PAGE_LIMIT)
+      .map((skill) => ({ category: skill.category, slug: skill.slug }))
   }
-  return snapshot
-    .all()
-    .slice(0, SKILLS_STATIC_PAGE_LIMIT)
-    .map((skill) => ({ category: skill.category, slug: skill.slug }))
+  if (process.env.NODE_ENV !== 'production') {
+    const [seed] = await getTopSkills(1)
+    return seed ? [{ category: seed.category, slug: seed.slug }] : []
+  }
+  throw new Error(
+    'getStaticSkillRefs: no registry snapshot (SKILLS_SNAPSHOT is unset). Build with `npm run build` — scripts/build.mjs writes the snapshot first — not `next build` directly.',
+  )
 }
 
 /** The N most-installed skills in a category — used for the skills hub's
@@ -192,7 +211,7 @@ export async function getTopSkillsByCategory(
     .from('skills')
     .select(SKILL_LIST_COLUMNS)
     .eq('category', category)
-    .eq('served', true)
+    .or('served.eq.true,and(origin.eq.admin,status.eq.published)')
     .order('installs', { ascending: false })
     .limit(limit)
   if (error) {
@@ -214,7 +233,7 @@ export async function getTopSkills(limit: number): Promise<readonly Skill[]> {
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_LIST_COLUMNS)
-    .eq('served', true)
+    .or('served.eq.true,and(origin.eq.admin,status.eq.published)')
     .order('installs', { ascending: false })
     .limit(limit)
   if (error) {
@@ -244,7 +263,7 @@ export async function getSkillsPage(
     .from('skills')
     .select(SKILL_LIST_COLUMNS)
     .eq('category', category)
-    .eq('served', true)
+    .or('served.eq.true,and(origin.eq.admin,status.eq.published)')
     .order('installs', { ascending: false })
     .range(from, to)
   if (error) {
@@ -266,7 +285,7 @@ export async function getSkillCountByCategory(
     .from('skills')
     .select('id', { count: 'exact', head: true })
     .eq('category', category)
-    .eq('served', true)
+    .or('served.eq.true,and(origin.eq.admin,status.eq.published)')
   if (error) {
     console.error('getSkillCountByCategory failed', error)
     return 0
@@ -345,7 +364,7 @@ export async function getSkill(
     .select(SKILL_COLUMNS)
     .eq('category', category)
     .eq('slug', slug)
-    .eq('served', true)
+    .or('served.eq.true,and(origin.eq.admin,status.eq.published)')
     .maybeSingle()
   if (error) {
     // Not `return undefined`: the caller turns that into `notFound()`, and
@@ -369,7 +388,7 @@ export async function getSkillBySlug(slug: string): Promise<Skill | undefined> {
     .from('skills')
     .select(SKILL_COLUMNS)
     .eq('slug', slug)
-    .eq('served', true)
+    .or('served.eq.true,and(origin.eq.admin,status.eq.published)')
     .maybeSingle()
   if (error) {
     console.error('getSkillBySlug failed', error)
@@ -410,7 +429,7 @@ export async function searchSkills(
     .from('skills')
     .select(SKILL_LIST_COLUMNS)
     .or(`name.ilike.%${trimmed}%,description.ilike.%${trimmed}%`)
-    .eq('served', true)
+    .or('served.eq.true,and(origin.eq.admin,status.eq.published)')
     .order('installs', { ascending: false })
     .limit(limit)
   if (category !== undefined) builder = builder.eq('category', category)
@@ -456,7 +475,7 @@ export async function getRecentlyAddedSkills(limit: number): Promise<readonly Sk
   const { data, error } = await supabaseSkills
     .from('skills')
     .select(SKILL_LIST_COLUMNS)
-    .eq('served', true)
+    .or('served.eq.true,and(origin.eq.admin,status.eq.published)')
     .order('first_seen_at', { ascending: false })
     .limit(limit)
   if (error) {
@@ -475,7 +494,7 @@ export async function getTotalSkillCount(): Promise<number> {
   const { count, error } = await supabaseSkills
     .from('skills')
     .select('id', { count: 'exact', head: true })
-    .eq('served', true)
+    .or('served.eq.true,and(origin.eq.admin,status.eq.published)')
   if (error) {
     console.error('getTotalSkillCount failed', error)
     return 0
@@ -603,7 +622,7 @@ async function idBeforeOffset(offset: number): Promise<string | null> {
     supabaseSkills
       .from('skills')
       .select('id')
-      .eq('served', true)
+      .or('served.eq.true,and(origin.eq.admin,status.eq.published)')
       .order('id', { ascending: true })
       .range(offset - 1, offset - 1),
   )
@@ -677,7 +696,7 @@ export async function getAllSkillRefs(
         const query = supabaseSkills
           .from('skills')
           .select('id, slug, category, last_synced_at')
-          .eq('served', true)
+          .or('served.eq.true,and(origin.eq.admin,status.eq.published)')
           .order('id', { ascending: true })
           .limit(pageSize)
         return cursor === null ? query : query.gt('id', cursor)

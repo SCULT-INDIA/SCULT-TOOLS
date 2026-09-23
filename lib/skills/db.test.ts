@@ -32,9 +32,14 @@ let table: Row[] = []
 /** Every query the code issued, in order — the assertion subject for
  * "did it page, and did it use a cursor rather than an offset". */
 let queries: string[] = []
-/** Every `.eq(column, value)` call the code issued, in order — the
- * assertion subject for the curated `served` gate below. */
+/** Every `.eq(column, value)` call the code issued, in order — no
+ * caller of the mock table exercises this any more (the curated
+ * `served` gate moved to `.or()`, tracked separately below), kept
+ * only because the builder's own `eq` chain method still uses it. */
 let eqCalls: [string, boolean][] = []
+/** Every `.or(filter)` call the code issued, in order — the assertion
+ * subject for the curated `served`-or-admin-published gate below. */
+let orCalls: string[] = []
 /** Cursor value of a `.gt('id', …)` page that should fail, or null. */
 let failAfter: string | null | undefined
 /** How many times the failing page fails before succeeding. */
@@ -123,6 +128,10 @@ vi.mock('./supabase', () => {
             eqCalls.push([column, value])
             return { order: () => builder({ limit: POSTGREST_CAP, after: null, cols }) }
           },
+          or: (filter: string) => {
+            orCalls.push(filter)
+            return { order: () => builder({ limit: POSTGREST_CAP, after: null, cols }) }
+          },
         }),
       }),
       rpc: (_name: string, args?: { cutoff?: string }) => {
@@ -157,6 +166,7 @@ beforeEach(() => {
   table = []
   queries = []
   eqCalls = []
+  orCalls = []
   failAfter = undefined
   failTimes = Number.POSITIVE_INFINITY
   failAttempts = 0
@@ -332,10 +342,10 @@ describe('getAllCategoryCounts', () => {
  * inserted would silently start appearing on the site.
  */
 describe('curated served set', () => {
-  it('gates getAllSkillRefs on served = true', async () => {
+  it('gates getAllSkillRefs on served = true (or a published admin skill)', async () => {
     table = rows(10)
     await getAllSkillRefs(0, 10)
-    expect(eqCalls).toEqual([['served', true]])
+    expect(orCalls).toEqual(['served.eq.true,and(origin.eq.admin,status.eq.published)'])
   })
 
   it('calls the skills_category_counts RPC with no arguments — the gate lives in the function itself', async () => {

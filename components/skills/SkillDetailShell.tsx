@@ -68,11 +68,20 @@ export function SkillDetailShell({
   skill,
   category,
   siblings,
+  previewMode = false,
 }: {
   skill: Skill
   category: SkillCategory
   siblings: readonly Skill[]
+  /** Admin draft preview (app/admin-preview/skills/[id]) — skips the
+   * page-view event so previews don't count as real traffic. */
+  previewMode?: boolean
 }) {
+  // Admin-authored skills have no source repo — migration 0007 made the
+  // source_* columns nullable for them — so the repo avatar, repo chip and
+  // "real file from a public repo" line only apply to synced skills.
+  const fromRepo = Boolean(skill.sourceUrl && skill.sourceOwner)
+
   const relatedTools = skill.relatedTools
     .map((slug) => getTool(slug))
     .filter((tool): tool is NonNullable<typeof tool> => tool !== undefined)
@@ -86,10 +95,12 @@ export function SkillDetailShell({
 
   return (
     <article className="container-site pt-8 pb-24">
-      <ViewTracker
-        event="skill_action"
-        params={{ category: skill.category, skill: skill.slug, action: 'view' }}
-      />
+      {previewMode ? null : (
+        <ViewTracker
+          event="skill_action"
+          params={{ category: skill.category, skill: skill.slug, action: 'view' }}
+        />
+      )}
       <nav aria-label="Breadcrumb" className="mb-5">
         <ol className="flex flex-wrap items-center gap-2 text-[13px] text-ink-subtle">
           <li>
@@ -123,14 +134,21 @@ export function SkillDetailShell({
       >
         <div className="flex flex-wrap items-center gap-4">
           <span className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-ink/10 bg-white shadow-[0_2px_8px_rgb(0_0_0/0.08)]">
-            <Image
-              src={`https://avatars.githubusercontent.com/${skill.sourceOwner}?s=128`}
-              alt={`${skill.sourceOwner} logo`}
-              width={64}
-              height={64}
-              unoptimized
-              className="size-full object-cover"
-            />
+            {fromRepo ? (
+              <Image
+                src={`https://avatars.githubusercontent.com/${skill.sourceOwner}?s=128`}
+                alt={`${skill.sourceOwner} logo`}
+                width={64}
+                height={64}
+                unoptimized
+                className="size-full object-cover"
+              />
+            ) : category.logoDataUrl ? (
+              // biome-ignore lint/performance/noImgElement: an admin-uploaded data: URL, not an optimizable remote asset — next/image's loader can't process it.
+              <img src={category.logoDataUrl} alt="" className="size-full object-cover" />
+            ) : (
+              <Icon name={category.icon} className="size-8 text-violet-700" />
+            )}
           </span>
           <div className="min-w-0">
             <Link
@@ -142,7 +160,9 @@ export function SkillDetailShell({
             </Link>
             <p className="mt-0.5 flex items-center gap-1 font-medium text-[13px] text-black/70">
               <BadgeCheck className="size-4 text-green" aria-hidden="true" />
-              Real file from a public repo · synced {formatDate(skill.lastSyncedAt)}
+              {fromRepo
+                ? `Real file from a public repo · synced ${formatDate(skill.lastSyncedAt)}`
+                : `Published by Scult · ${formatDate(skill.firstSeenAt)}`}
             </p>
           </div>
         </div>
@@ -155,25 +175,29 @@ export function SkillDetailShell({
         </p>
 
         <div className="mt-5 flex flex-wrap gap-2">
-          <TrackedLink
-            href={skill.sourceUrl}
-            external
-            event="skill_action"
-            params={{
-              category: skill.category,
-              skill: skill.slug,
-              action: 'open_repository',
-            }}
-            className={`${chip} hover:border-ink`}
-          >
-            <BrandIcon brand="github" size={14} />
-            {skill.sourceOwner}/{skill.sourceRepo}
-            <ArrowUpRight className="size-3" aria-hidden="true" />
-          </TrackedLink>
-          <span className={chip}>
-            <Download className="size-3.5 text-violet-700" aria-hidden="true" />
-            {formatInstalls(skill.installs)} installs
-          </span>
+          {fromRepo ? (
+            <TrackedLink
+              href={skill.sourceUrl}
+              external
+              event="skill_action"
+              params={{
+                category: skill.category,
+                skill: skill.slug,
+                action: 'open_repository',
+              }}
+              className={`${chip} hover:border-ink`}
+            >
+              <BrandIcon brand="github" size={14} />
+              {skill.sourceOwner}/{skill.sourceRepo}
+              <ArrowUpRight className="size-3" aria-hidden="true" />
+            </TrackedLink>
+          ) : null}
+          {skill.installs > 0 ? (
+            <span className={chip}>
+              <Download className="size-3.5 text-violet-700" aria-hidden="true" />
+              {formatInstalls(skill.installs)} installs
+            </span>
+          ) : null}
           {skill.license ? (
             <span className={chip}>
               <Scale className="size-3.5 text-violet-700" aria-hidden="true" />
@@ -211,7 +235,9 @@ export function SkillDetailShell({
         {/* Sidebar first in source so the CTA is above the fold on mobile;
             visually second on desktop. */}
         <aside className="order-first lg:sticky lg:top-28 lg:order-last">
-          <SkillCopyBlock skill={skill} licenseGated={skill.licenseGated} />
+          {/* Gating sends visitors to the source repo instead of a download,
+              so it can only apply when there is a repo to send them to. */}
+          <SkillCopyBlock skill={skill} licenseGated={skill.licenseGated && fromRepo} />
 
           <dl className="mt-4 grid grid-cols-2 gap-3">
             <div className="rounded-card border border-line-grey bg-offwhite p-3.5">
@@ -224,7 +250,7 @@ export function SkillDetailShell({
             <div className="rounded-card border border-line-grey bg-offwhite p-3.5">
               <dt className="flex items-center gap-1.5 font-bold text-[11px] text-ink-subtle uppercase tracking-[0.1em]">
                 <CalendarDays className="size-3.5" aria-hidden="true" />
-                Indexed
+                {fromRepo ? 'Indexed' : 'Added'}
               </dt>
               <dd className="mt-1 text-[14px] text-ink">
                 {formatDate(skill.firstSeenAt)}

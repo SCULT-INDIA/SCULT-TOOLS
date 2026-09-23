@@ -189,6 +189,20 @@ describe('buildInstallMd', () => {
     expect(buildInstallMd({ ...skill, license: undefined })).not.toContain('License:')
   })
 
+  it('never prints "null" source fields for an admin-authored skill with no repo', () => {
+    const adminSkill = {
+      ...skill,
+      sourceOwner: null,
+      sourceRepo: null,
+      sourceUrl: null,
+    } as unknown as Skill
+    const md = buildInstallMd(adminSkill)
+    expect(md).not.toContain('null')
+    expect(md).not.toContain('Source:')
+    expect(md).toContain('as published on tools.scult.in')
+    expect(md).toContain('License: MIT')
+  })
+
   it('keeps intentional blank lines between sections', () => {
     // A previous version filtered empty lines out and welded every section
     // together into one unreadable block.

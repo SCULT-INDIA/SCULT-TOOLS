@@ -51,6 +51,10 @@ export interface SkillCategory {
   readonly blurb: string
   readonly intro: string
   readonly icon: string
+  /** An admin-uploaded logo image (data: URL), preferred over `icon` when
+   * present — set only on a custom category resolved via
+   * lib/skills/category-resolver.ts, never on a built-in one. */
+  readonly logoDataUrl?: string
   readonly tile: 'yellow' | 'blue' | 'lavender' | 'green'
   /** skills.sh `/api/search` query terms used to seed and grow this
    * category — the combinatorial mechanism that reaches real volume without

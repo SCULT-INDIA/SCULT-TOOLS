@@ -29,8 +29,9 @@
 //      JSON text and the parsed rows stayed resident in this wrapper for the
 //      whole build (it sits idle inside spawnSync, so V8 never collects
 //      them). A child process gives all of it back on exit.
-//   4. (The decisive one.) 6,000 of the 10,000 skill pages are pre-rendered,
-//      not all — `SKILLS_STATIC_PAGE_LIMIT` in lib/skills/db.ts. Points 1–3
+//   4. (The decisive one.) Only the most-installed skill pages are
+//      pre-rendered (`SKILLS_STATIC_PAGE_LIMIT` in lib/skills/db.ts — 4,000
+//      of the 10,000 as of 2026-09-23; the rest are ISR). Points 1–3
 //      still left the build at 8.05–8.3GB: the export retains ~250KB of
 //      native memory per 'use cache' page per worker for the whole batch,
 //      and a batch is ceil(pages / workers). Fewer pages per worker is the

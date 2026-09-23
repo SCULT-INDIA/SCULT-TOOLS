@@ -85,8 +85,17 @@ export function CategoryPageBody({
           <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_0.8fr]">
             <div>
               <div className="flex flex-wrap items-center gap-3">
-                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-ink bg-white shadow-brutal-sm">
-                  <Icon name={category.icon} className="size-6 text-violet-700" />
+                <span className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-ink bg-white shadow-brutal-sm">
+                  {category.logoDataUrl ? (
+                    // biome-ignore lint/performance/noImgElement: an admin-uploaded data: URL, not an optimizable remote asset — next/image's loader can't process it.
+                    <img
+                      src={category.logoDataUrl}
+                      alt=""
+                      className="size-full object-cover"
+                    />
+                  ) : (
+                    <Icon name={category.icon} className="size-6 text-violet-700" />
+                  )}
                 </span>
                 <p className="font-bold text-[12px] text-black/60 uppercase tracking-[0.14em]">
                   {count.toLocaleString()} free {count === 1 ? 'skill' : 'skills'}
