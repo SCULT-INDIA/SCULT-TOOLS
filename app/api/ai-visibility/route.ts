@@ -62,9 +62,16 @@ const REVALIDATE_SECONDS = 21_600 // 6 hours
 
 /** Each check can fire up to 5 outbound fetches against a THIRD PARTY's
  * server on the visitor's behalf — more conservative than the speed test,
- * which only ever calls Google. See lib/rate-limit.ts. */
+ * which only ever calls Google. See lib/rate-limit.ts.
+ *
+ * Tightened 2026-09-23: the sustained rate stays at 6/min, but the burst a
+ * fresh connection may fire at once dropped from 6 to 3 — a person checks
+ * one or two sites and reads the result, while a script hitting this with
+ * six targets back-to-back was getting all six (each up to five outbound
+ * fetches) before the limit ever applied. */
 const RATE_LIMIT_MAX = 6
 const RATE_LIMIT_WINDOW_MS = 60_000
+const RATE_LIMIT_BURST = 3
 
 interface FetchOutcome {
   readonly ok: boolean
@@ -336,6 +343,7 @@ export async function GET(request: Request): Promise<NextResponse> {
     `ai-visibility:${clientIp}`,
     RATE_LIMIT_MAX,
     RATE_LIMIT_WINDOW_MS,
+    RATE_LIMIT_BURST,
   )
   if (!rateLimit.allowed) {
     return NextResponse.json(

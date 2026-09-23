@@ -20,6 +20,9 @@ export default defineConfig({
       'lib/**/*.test.tsx',
       'components/**/*.test.tsx',
       'tests/**/*.test.ts',
+      // Route Handlers with real logic of their own (rate limits, response
+      // headers) — colocated next to the route they exercise.
+      'app/api/**/*.test.ts',
     ],
     coverage: {
       provider: 'v8',

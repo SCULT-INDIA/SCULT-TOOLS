@@ -1,5 +1,24 @@
+import { after } from 'next/server'
 import { checkRateLimit, clientIpFromHeaders } from '@/lib/rate-limit'
 import { type CliEvent, enqueueCliEvent, flushCliEvents } from './studio-report'
+
+/**
+ * Reports to Studio AFTER the response has gone out, not before. The POST
+ * to studio.scult.in measured ~1.5s from a dev machine (2026-09-23) and
+ * was being awaited inline, so every CLI/skills-search response carried
+ * that full delay on top of its own ~0.4s query — the homepage assistant's
+ * skills leg was the first place it was visible to a visitor. `after()` is
+ * Next's supported way to keep the serverless function alive for
+ * post-response work, so nothing is lost. Falls back to awaiting inline
+ * when called outside a request scope (unit tests), where `after` throws.
+ */
+async function reportAfterResponse(): Promise<void> {
+  try {
+    after(() => flushCliEvents())
+  } catch {
+    await flushCliEvents()
+  }
+}
 
 /**
  * Cross-cutting instrumentation for every /api/cli/v1 route —
@@ -60,8 +79,8 @@ function json(value: unknown, status = 200, headers?: HeadersInit): Response {
 /**
  * Wraps a CLI route handler with rate limiting + Studio reporting. The
  * handler returns the response; this measures it, enqueues one `command`
- * event, and flushes after the response is built (mirroring the MCP route's
- * flush-before-freeze pattern). Instrumentation failures never affect the
+ * event, and flushes once the response has been sent (see
+ * `reportAfterResponse`). Instrumentation failures never affect the
  * response.
  */
 export function withCliTracking(
@@ -87,7 +106,7 @@ export function withCliTracking(
     const gate = checkRateLimit(`cli:route:${ip}`, MAX_PER_MINUTE, WINDOW_MS)
     if (!gate.allowed) {
       enqueueCliEvent({ ...base, status: 'rate_limited', ts: Date.now() })
-      await flushCliEvents()
+      await reportAfterResponse()
       return json({ error: 'Rate limit exceeded — try again shortly.' }, 429, {
         'retry-after': String(gate.retryAfterSeconds),
         'x-ratelimit-limit': String(MAX_PER_MINUTE),
@@ -104,7 +123,7 @@ export function withCliTracking(
         duration_ms: Date.now() - started,
         ts: Date.now(),
       })
-      await flushCliEvents()
+      await reportAfterResponse()
       return response
     } catch (err) {
       enqueueCliEvent({
@@ -114,7 +133,7 @@ export function withCliTracking(
         duration_ms: Date.now() - started,
         ts: Date.now(),
       })
-      await flushCliEvents()
+      await reportAfterResponse()
       return json({ error: 'Internal error — try again shortly.' }, 500)
     }
   }

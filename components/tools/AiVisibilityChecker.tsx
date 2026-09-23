@@ -1308,53 +1308,27 @@ function ScoreSparkline({ history }: { history: readonly HistoryEntry[] }) {
 }
 
 /**
- * Renders the report as a real PDF client-side (`@react-pdf/renderer`) and
- * saves it directly — one click, no new tab, no manual Ctrl+P. Both
- * react-pdf and the document tree in `pdf-document.tsx` are dynamically
- * imported inside the click handler so their weight never loads for a
- * visitor who doesn't use this button.
+ * A plain link to the server-rendered PDF (app/api/ai-visibility/pdf) — the
+ * browser performs the download itself, so it works the same on every
+ * engine, OS and device. This used to build the PDF in the browser and fire
+ * a synthetic `<a download>` click after several awaits; Safari on macOS
+ * and iOS treats a download started that long after the real tap as not
+ * user-initiated and silently drops it, so the button did nothing there.
+ * That route's docblock has the full account.
  */
 function DownloadPdfButton({ report }: { report: VisibilityReport }) {
-  const [generating, setGenerating] = useState(false)
   return (
-    <button
-      type="button"
-      disabled={generating}
-      onClick={async () => {
-        setGenerating(true)
+    <a
+      href={`/api/ai-visibility/pdf?url=${encodeURIComponent(report.url)}`}
+      download={`${slugifyUrlForFilename(report.url)}-ai-visibility-report.pdf`}
+      onClick={() =>
         trackToolEvent('ai-visibility-checker', 'download_report', { format: 'pdf' })
-        try {
-          const [{ pdf }, { AiVisibilityPdfDocument }] = await Promise.all([
-            import('@react-pdf/renderer'),
-            import('@/lib/tools/ai-visibility-checker/pdf-document'),
-          ])
-          const generatedAt = new Date().toLocaleString('en-US', {
-            dateStyle: 'medium',
-            timeStyle: 'short',
-          })
-          const blob = await pdf(
-            <AiVisibilityPdfDocument report={report} generatedAt={generatedAt} />,
-          ).toBlob()
-          const url = URL.createObjectURL(blob)
-          const a = document.createElement('a')
-          a.href = url
-          a.download = `${slugifyUrlForFilename(report.url)}-ai-visibility-report.pdf`
-          document.body.appendChild(a)
-          a.click()
-          a.remove()
-          setTimeout(() => URL.revokeObjectURL(url), 1000)
-        } catch {
-          // Best-effort — generation failing leaves the on-screen report
-          // untouched; nothing here is destructive.
-        } finally {
-          setGenerating(false)
-        }
-      }}
-      className="flex min-h-11 items-center gap-1.5 rounded-sm border border-line-grey bg-cream px-3 py-1.5 font-medium text-[14px] transition-colors hover:border-ink disabled:cursor-not-allowed disabled:opacity-60 sm:min-h-9"
+      }
+      className="flex min-h-11 items-center gap-1.5 rounded-sm border border-line-grey bg-cream px-3 py-1.5 font-medium text-[14px] transition-colors hover:border-ink sm:min-h-9"
     >
       <Download className="size-4" aria-hidden="true" />
-      {generating ? 'Generating PDF…' : 'Download PDF'}
-    </button>
+      Download PDF
+    </a>
   )
 }
 

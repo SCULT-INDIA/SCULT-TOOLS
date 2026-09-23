@@ -3,6 +3,7 @@
 import Script from 'next/script'
 import { useEffect, useState } from 'react'
 import { isLikelyAutomatedBrowser, isLikelyBotUserAgent } from '@/lib/bot-detection'
+import { SITE } from '@/lib/site'
 
 /** Any of these counts as "the visitor is actually using the page" — the
  * bar deliberately stays low since the only cost of triggering early is
@@ -50,7 +51,7 @@ const FALLBACK_DELAY_MS = 4000
  * for this component to mount), so this script tag's only job is to
  * eventually drain that queue.
  *
- * `isBot` gates ONLY the Studio script, never GA4/Clarity: both of those
+ * `isBot` and `isLiveHost` gate ONLY the Studio script, never GA4/Clarity: both of those
  * already run their own always-on bot filtering server-side (Google's
  * "known bots and spiders" exclusion for GA4, Clarity's own equivalent) —
  * adding a client-side gate there would be redundant and risks disagreeing
@@ -82,6 +83,15 @@ export function DeferredAnalyticsScripts({
     if (typeof navigator === 'undefined') return false
     return isLikelyBotUserAgent(navigator.userAgent) || isLikelyAutomatedBrowser()
   })
+  // Studio's events endpoint answers CORS preflights only for the live
+  // origin (verified 2026-09-23: 204 + Access-Control-Allow-Origin for
+  // https://tools.scult.in, 403 with no CORS headers for anything else), so
+  // on localhost or a preview deployment every beacon track.js sends fails
+  // in the console. Not mounting it there removes the noise and keeps dev
+  // traffic out of Studio's numbers. GA4/Clarity accept any origin.
+  const [isLiveHost] = useState(
+    () => typeof window !== 'undefined' && window.location.hostname === SITE.host,
+  )
 
   useEffect(() => {
     if (active || (!gaId && !clarityId && !studioSiteId && !openaiAdsPixelId)) return
@@ -128,7 +138,7 @@ gtag('js',new Date());gtag('config','${gaId}',{cookie_domain:'.scult.in'});`}
         />
       ) : null}
 
-      {studioSiteId && !isBot ? (
+      {studioSiteId && !isBot && isLiveHost ? (
         <Script
           src="https://studio.scult.in/track.js"
           data-site={studioSiteId}
