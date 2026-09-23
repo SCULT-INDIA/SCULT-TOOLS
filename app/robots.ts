@@ -21,7 +21,11 @@ import { AI_BOTS } from '@/lib/tools/ai-visibility-checker/logic'
  *
  * `/api/` carries no indexable content; `/search` is noindex, follow (see
  * app/layout.tsx's robots metadata for the page-level directive — pre-declared
- * here even though the route does not exist yet).
+ * here even though the route does not exist yet); `/admin` is the internal
+ * publishing tool and `/admin-preview` is its draft-preview route (both
+ * also set a page-level noindex of their own, so a crawler that ignores
+ * this file still won't index them, but there's no reason to invite the
+ * crawl attempt at all).
  */
 /**
  * SEO / backlink-intelligence scrapers, turned away by name (2026-09-16).
@@ -79,7 +83,7 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/search'],
+        disallow: ['/api/', '/search', '/admin', '/admin-preview'],
         // Honoured by Bing, Yandex and most others (Google ignores it, and
         // every AI crawler has its own group below, which this doesn't
         // touch). At one request per 10s, a full pass over the 10,000 skill

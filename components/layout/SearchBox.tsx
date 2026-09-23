@@ -2,11 +2,14 @@
 
 import { Search } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Icon } from '@/components/ui/Icon'
 import { trackSearch } from '@/lib/analytics'
 import { type PromptSearchEntry, rankSearch, type SearchHit } from '@/lib/search-client'
+import type { SkillHit } from '@/lib/skills/search-hit'
+import { useSkillSearchHits } from '@/lib/skills/use-skill-search'
 import { useSearchIndex } from '@/lib/use-search-index'
 
 /** SSR-safe: defaults to the non-Mac label so server and first client render
@@ -37,6 +40,15 @@ const TILE_BG: Record<PromptSearchEntry['tile'], string> = {
  * closes, and the listbox is announced. `Cmd/Ctrl+K` focuses it from anywhere.
  * Results arrive from searchSite() with all tool hits before all prompt hits,
  * so the flat keyboard index maps 1:1 onto the two labelled groups below.
+ *
+ * A third catalogue, Skills, is appended after those two. It cannot use the
+ * same instant, client-ranked path — the Skills Library is a 10,000-row
+ * Supabase table, not a small build-time registry — so `useSkillSearchHits`
+ * fetches it live, debounced, from the same endpoint the CLI uses. `hits`
+ * below stays exactly the tool/prompt array `rankSearch` always produced;
+ * `combinedHits` is what keyboard nav and rendering actually use, so a slow
+ * skill fetch degrades to "the group just appears a moment later," never to
+ * broken arrow-key indices.
  */
 export function SearchBox({
   toolCount,
@@ -76,6 +88,14 @@ export function SearchBox({
   // simply stays shut — the same state as an empty query, so no new UI.
   const [wantsIndex, setWantsIndex] = useState(false)
   const { toolEntries, promptEntries } = useSearchIndex(wantsIndex)
+  const { hits: skillHits, loading: skillsLoading } = useSkillSearchHits(query)
+
+  // The single array keyboard nav and rendering actually use — see the
+  // component docblock for why the Skills leg can't join `hits` itself.
+  const combinedHits = useMemo(
+    (): readonly (SearchHit | SkillHit)[] => [...hits, ...skillHits],
+    [hits, skillHits],
+  )
 
   useEffect(() => {
     const next = rankSearch(toolEntries, promptEntries, query)
@@ -84,18 +104,31 @@ export function SearchBox({
     setOpen(next.length > 0)
   }, [query, toolEntries, promptEntries])
 
+  // Skills arrive later than tools/prompts (a debounced network call, not an
+  // instant client rank), so the effect above — which only sees the
+  // tool/prompt result — cannot be the thing that opens the dropdown for a
+  // query that matches skills alone. This only ever flips `open` to true;
+  // Escape and the outside-click handler below are still what closes it.
+  useEffect(() => {
+    if (combinedHits.length > 0) setOpen(true)
+  }, [combinedHits.length])
+
   // Debounced, and only for a query worth calling "a real search" (2+
   // chars) — this is a content-gap signal ("people search for X and find
   // nothing"), not something worth firing on every single keystroke while
-  // someone is still typing their first letter.
+  // someone is still typing their first letter. Waits for the skills fetch
+  // too, or a slow network would log a false "no results" while it's still
+  // in flight.
   useEffect(() => {
     const trimmed = query.trim()
     if (trimmed.length < 2) return
     const timer = setTimeout(() => {
-      if (hits.length === 0) trackSearch(trimmed, { has_results: false })
+      if (combinedHits.length === 0 && !skillsLoading) {
+        trackSearch(trimmed, { has_results: false })
+      }
     }, 800)
     return () => clearTimeout(timer)
-  }, [query, hits.length])
+  }, [query, combinedHits.length, skillsLoading])
 
   // Cmd/Ctrl+K focuses search from anywhere on the page.
   useEffect(() => {
@@ -118,7 +151,7 @@ export function SearchBox({
     return () => document.removeEventListener('mousedown', onDocDown)
   }, [])
 
-  function go(hit: SearchHit | undefined) {
+  function go(hit: SearchHit | SkillHit | undefined) {
     if (!hit) return
     trackSearch(query.trim(), { has_results: true, result_kind: hit.kind })
     setOpen(false)
@@ -132,23 +165,23 @@ export function SearchBox({
       setOpen(false)
       return
     }
-    if (!open || hits.length === 0) return
+    if (!open || combinedHits.length === 0) return
 
     if (e.key === 'ArrowDown') {
       e.preventDefault()
-      setActive((i) => (i + 1) % hits.length)
+      setActive((i) => (i + 1) % combinedHits.length)
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
-      setActive((i) => (i - 1 + hits.length) % hits.length)
+      setActive((i) => (i - 1 + combinedHits.length) % combinedHits.length)
     } else if (e.key === 'Enter') {
       e.preventDefault()
-      go(hits[active])
+      go(combinedHits[active])
     } else if (e.key === 'Home') {
       e.preventDefault()
       setActive(0)
     } else if (e.key === 'End') {
       e.preventDefault()
-      setActive(hits.length - 1)
+      setActive(combinedHits.length - 1)
     }
   }
 
@@ -158,16 +191,23 @@ export function SearchBox({
   // sitting behind live search results reads as a stray leftover, not a tip.
   const showShortcutHint = query === '' && !open
 
-  // searchSite() returns tools-then-prompts, so these partitions preserve the
-  // flat `hits` order and each option's id can stay `${listId}-${flat index}`.
-  const toolHits = hits.filter((h) => h.kind === 'tool')
-  const promptHits = hits.filter((h) => h.kind !== 'tool')
+  // `combinedHits` is tools, then prompts, then skills — these partitions
+  // preserve that order so each option's id can stay
+  // `${listId}-${flat index}` (tools at i, prompts at toolHits.length+i,
+  // skills at toolHits.length+promptHits.length+i, all below).
+  const toolHits = combinedHits.filter((h) => h.kind === 'tool')
+  const promptHits = combinedHits.filter(
+    (h) => h.kind === 'prompt' || h.kind === 'prompt-category',
+  )
+  const skillResultHits = combinedHits.filter((h): h is SkillHit => h.kind === 'skill')
 
   /* Options are <div role="option"> rather than <li>, and are deliberately
      NOT focusable: under the ARIA 1.2 combobox pattern focus stays on the
      input and the active option is conveyed by aria-activedescendant. All
-     key handling therefore lives on the input, not on each option. */
-  function renderOption(hit: SearchHit, i: number) {
+     key handling therefore lives on the input, not on each option.
+     A skill hit's fields line up 1:1 with a prompt hit's (see
+     lib/skills/search-hit.ts's docblock), so this needs no third branch. */
+  function renderOption(hit: SearchHit | SkillHit, i: number) {
     return (
       <div
         key={hit.href}
@@ -245,12 +285,14 @@ export function SearchBox({
           aria-expanded={open}
           aria-controls={listId}
           aria-autocomplete="list"
-          aria-activedescendant={open && hits[active] ? `${listId}-${active}` : undefined}
-          aria-label="Search tools and prompts"
+          aria-activedescendant={
+            open && combinedHits[active] ? `${listId}-${active}` : undefined
+          }
+          aria-label="Search tools, prompts and skills"
           placeholder={
             large
-              ? `Search ${toolCount} free tools & ${promptCount} prompts…`
-              : 'Search tools & prompts…'
+              ? `Search ${toolCount} free tools, ${promptCount} prompts & skills…`
+              : 'Search tools, prompts & skills…'
           }
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -261,9 +303,9 @@ export function SearchBox({
           onPointerEnter={() => setWantsIndex(true)}
           onFocus={() => {
             setWantsIndex(true)
-            if (hits.length > 0) setOpen(true)
+            if (combinedHits.length > 0) setOpen(true)
           }}
-          className={`field rounded-pill ${large ? 'py-3.5 pl-12 pr-16 text-[17px]' : 'pl-11 pr-11'}`}
+          className={`field rounded-pill ${large ? 'py-6 pl-12 pr-16 text-[17px]' : 'pl-11 pr-11'}`}
         />
         {showShortcutHint ? (
           <span
@@ -275,12 +317,12 @@ export function SearchBox({
         ) : null}
       </div>
 
-      {open && hits.length > 0 ? (
+      {open && combinedHits.length > 0 ? (
         <div
           id={listId}
           role="listbox"
           aria-label="Search results"
-          className="absolute top-full left-0 z-50 mt-2 w-full overflow-hidden rounded-card border border-line bg-cream shadow-card-raised"
+          className="absolute top-full left-0 z-50 mt-2 max-h-[26rem] w-full overflow-y-auto overscroll-contain rounded-card border border-line bg-cream shadow-card-raised"
         >
           {toolHits.length > 0 ? (
             // biome-ignore lint/a11y/useSemanticElements: role="group" is how ARIA 1.2 labels a section of options INSIDE a listbox; <fieldset> is for form controls and is invalid here.
@@ -300,6 +342,29 @@ export function SearchBox({
               {promptHits.map((hit, i) => renderOption(hit, toolHits.length + i))}
             </div>
           ) : null}
+          {skillResultHits.length > 0 ? (
+            // biome-ignore lint/a11y/useSemanticElements: role="group" is how ARIA 1.2 labels a section of options INSIDE a listbox; <fieldset> is for form controls and is invalid here.
+            <div role="group" aria-labelledby={`${listId}-group-skills`}>
+              {renderGroupHeading(
+                `${listId}-group-skills`,
+                'Skills',
+                toolHits.length > 0 || promptHits.length > 0,
+              )}
+              {skillResultHits.map((hit, i) =>
+                renderOption(hit, toolHits.length + promptHits.length + i),
+              )}
+            </div>
+          ) : null}
+          <Link
+            href={`/search?q=${encodeURIComponent(query.trim())}`}
+            onClick={() => {
+              setOpen(false)
+              onNavigate?.()
+            }}
+            className="flex items-center justify-center gap-1.5 border-line-grey border-t px-3 py-2.5 font-semibold text-[12px] text-violet-700 uppercase tracking-wider transition-colors hover:bg-violet-50"
+          >
+            View all results for &ldquo;{query.trim()}&rdquo;
+          </Link>
         </div>
       ) : null}
     </div>

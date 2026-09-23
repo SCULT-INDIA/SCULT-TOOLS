@@ -1,15 +1,35 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { PromptDetailShell } from '@/components/prompts/PromptDetailShell'
-import { getPromptCategory } from '@/lib/prompts/categories'
+import { getPromptCategoryOrCustom } from '@/lib/prompts/category-resolver'
+import { getDbPrompt } from '@/lib/prompts/db'
 import { getPrompt, PROMPTS } from '@/lib/prompts/registry'
+import type { Prompt } from '@/lib/prompts/types'
 import { breadcrumbJsonLd, JsonLd, promptJsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
 
 type Params = { category: string; slug: string }
 
+/** Compiled registry only — admin-published prompts (lib/prompts/db.ts)
+ * are never in `generateStaticParams`'s output, the same reason
+ * app/skills/[category]/[slug]/page.tsx's static set excludes the
+ * on-demand tail of skills: they render on first request instead
+ * (`dynamicParams` defaults true) and are cached from then on. */
 export function generateStaticParams(): Params[] {
   return PROMPTS.map((prompt) => ({ category: prompt.category, slug: prompt.slug }))
+}
+
+/** Registry first, admin-published second — never both: a slug that exists
+ * in the compiled registry can't also be an admin draft (createDraftPrompt
+ * never checks the registry, but a duplicate is a content problem for the
+ * admin to notice, not this route's job to resolve). */
+async function resolvePrompt(
+  category: string,
+  slug: string,
+): Promise<Prompt | undefined> {
+  const compiled = getPrompt(slug)
+  if (compiled && compiled.category === category) return compiled
+  return getDbPrompt(category, slug)
 }
 
 export async function generateMetadata({
@@ -18,8 +38,8 @@ export async function generateMetadata({
   params: Promise<Params>
 }): Promise<Metadata> {
   const { category, slug } = await params
-  const prompt = getPrompt(slug)
-  if (!prompt || prompt.category !== category) return {}
+  const prompt = await resolvePrompt(category, slug)
+  if (!prompt) return {}
 
   const path = `/prompts/${prompt.category}/${prompt.slug}`
   // Undefined, not a fallback graphic, when the prompt has no exampleImage —
@@ -54,8 +74,8 @@ export async function generateMetadata({
 export default async function PromptDetailPage({ params }: { params: Promise<Params> }) {
   const { category: categorySlug, slug } = await params
 
-  const prompt = getPrompt(slug)
-  const category = getPromptCategory(categorySlug)
+  const prompt = await resolvePrompt(categorySlug, slug)
+  const category = await getPromptCategoryOrCustom(categorySlug)
 
   // Guard the cross-product, same reason app/[category]/[slug]/page.tsx
   // does: a prompt served under the wrong category is a duplicate-URL bug,

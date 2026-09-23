@@ -106,14 +106,22 @@ export default async function Home() {
     <>
       <JsonLd data={homeFaqJsonLd()} />
 
-      {/* ==================================================== 0. ANNOUNCEMENT
-          The Photo Trends launch strip — a NEW component, not an edit to the
-          locked Hero below it (see AnnouncementBanner.tsx's own docblock). */}
-      <AnnouncementBanner />
-
       {/* ============================================================ 1. HERO
-          LOCKED section — see the redesign notes in the file docblock. */}
+          2026-09-19: starts directly under the header now — no banner
+          above it. The announcement strip used to sit here, but a heavy
+          yellow bar competing with the hero's own headline for the very
+          first thing a visitor sees read as clutter (explicit feedback);
+          it still exists, just relocated below the hero (see 1b) so the
+          hero itself is one clean, uninterrupted read: header, then hero. */}
       <Hero />
+
+      {/* ============================================== 1b. ANNOUNCEMENT
+          The Photo Trends launch strip — a NEW component, not an edit to
+          Hero.tsx. Moved below the hero 2026-09-19 for the reason above;
+          still the first thing after it, just no longer competing with the
+          headline for top-of-page attention. See AnnouncementBanner.tsx's
+          own docblock. */}
+      <AnnouncementBanner />
 
       {/* TrustStrip (the "No made-up numbers" receipts band) was removed by
           request — the hero's sky photo now flows straight into the

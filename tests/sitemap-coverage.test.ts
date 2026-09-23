@@ -55,6 +55,23 @@ vi.mock('@/lib/skills/db', async () => {
   }
 })
 
+// Admin-published content and custom categories both read through
+// lib/supabase-anon.ts, which constructs a real Supabase client at module
+// load and throws without NEXT_PUBLIC_SUPABASE_URL — exactly the reason
+// lib/skills/db is stubbed above. This file asserts route coverage, not
+// live admin content, so both come back empty: coverage for admin-published
+// URLs is this suite's own concern only insofar as an empty result still
+// exercises the merge code path without a network call.
+vi.mock('@/lib/prompts/db', () => ({
+  getAllDbPrompts: async () => [],
+  getDbPromptsByCategory: async () => [],
+  getDbPrompt: async () => undefined,
+}))
+vi.mock('@/lib/custom-categories', () => ({
+  getCustomCategories: async () => [],
+  getCustomCategory: async () => undefined,
+}))
+
 import sitemap, { generateSitemaps, SKILLS_PER_SHARD, sitemapShards } from '@/app/sitemap'
 import { BLOG_POSTS } from '@/lib/blog/registry'
 import { GUIDES } from '@/lib/guides/registry'
@@ -76,10 +93,20 @@ function staticRoutes(dir = APP_DIR, prefix = ''): string[] {
     }
     if (!entry.isDirectory()) continue
     // Dynamic segments ([slug]) come from the registries; `api` serves no
-    // pages; route groups aren't used in this app but are skipped for safety.
+    // pages; `admin` is an internal, noindexed tool (see app/robots.ts),
+    // never a page this sitemap should list; `admin-preview` is its
+    // draft-preview route, noindexed the same way; `search` is a
+    // query-dependent results page (app/search/page.tsx sets `robots:
+    // {index: false}`, and app/robots.ts disallows it outright) — listing
+    // any of these in the sitemap would contradict their own robots
+    // directive; route groups aren't used in this app but are skipped for
+    // safety.
     if (
       entry.name.startsWith('[') ||
       entry.name === 'api' ||
+      entry.name === 'admin' ||
+      entry.name === 'admin-preview' ||
+      entry.name === 'search' ||
       entry.name.startsWith('(')
     ) {
       continue

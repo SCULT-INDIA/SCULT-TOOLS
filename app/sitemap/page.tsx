@@ -3,9 +3,12 @@ import Link from 'next/link'
 import { SKILLS_PER_SHARD } from '@/app/sitemap'
 import { BLOG_POSTS } from '@/lib/blog/registry'
 import type { BlogPillar } from '@/lib/blog/types'
+import { getCustomCategories } from '@/lib/custom-categories'
 import { GUIDES } from '@/lib/guides/registry'
 import { getCategoriesByGroup, PROMPT_GROUPS } from '@/lib/prompts/categories'
+import { getAllDbPrompts } from '@/lib/prompts/db'
 import { getPromptsByCategory, PROMPTS } from '@/lib/prompts/registry'
+import type { PromptCategorySlug } from '@/lib/prompts/types'
 import { breadcrumbJsonLd, JsonLd } from '@/lib/seo/jsonld'
 import { absoluteUrl } from '@/lib/site'
 import { SKILL_CATEGORIES } from '@/lib/skills/categories'
@@ -108,22 +111,59 @@ const BLOG_PILLARS: readonly BlogPillar[] = [
  * that can drift from what actually exists.
  */
 export default async function SitemapPage() {
-  const livePromptGroups = PROMPT_GROUPS.map((group) => ({
-    group,
-    categories: getCategoriesByGroup(group.slug).filter(
-      (category) => getPromptsByCategory(category.slug).length > 0,
-    ),
-  })).filter((entry) => entry.categories.length > 0)
-
-  const [totalSkills, skillCounts, skillSyncMeta] = await Promise.all([
+  const [
+    totalSkills,
+    skillCounts,
+    skillSyncMeta,
+    dbPrompts,
+    customPromptCategories,
+    customSkillCategories,
+  ] = await Promise.all([
     getTotalSkillCount(),
     getAllCategoryCounts(),
     getSyncMeta(),
+    getAllDbPrompts(),
+    getCustomCategories('prompt'),
+    getCustomCategories('skill'),
   ])
-  const liveSkillCategories = SKILL_CATEGORIES.map((category) => ({
-    category,
-    count: skillCounts[category.slug] ?? 0,
-  })).filter(({ count }) => count > 0)
+
+  // Admin-published prompt counts, by category — merged alongside the
+  // compiled registry's own counts below, the same "registry + DB" shape
+  // app/sitemap.ts's XML sitemap uses.
+  const dbPromptCountByCategory = new Map<string, number>()
+  for (const p of dbPrompts) {
+    dbPromptCountByCategory.set(
+      p.category,
+      (dbPromptCountByCategory.get(p.category) ?? 0) + 1,
+    )
+  }
+  const promptCountFor = (slug: string): number =>
+    getPromptsByCategory(slug as PromptCategorySlug).length +
+    (dbPromptCountByCategory.get(slug) ?? 0)
+
+  const livePromptGroups = PROMPT_GROUPS.map((group) => ({
+    group,
+    categories: [
+      ...getCategoriesByGroup(group.slug).filter(
+        (category) => promptCountFor(category.slug) > 0,
+      ),
+      ...customPromptCategories.filter(
+        (c) => c.group === group.slug && promptCountFor(c.slug) > 0,
+      ),
+    ],
+  })).filter((entry) => entry.categories.length > 0)
+
+  // A custom category whose admin-typed `group` doesn't match one of the
+  // nine built-in group slugs (the field is free text — see
+  // lib/admin/categories.ts's own docblock on why) still needs to be
+  // reachable from this page rather than silently dropped.
+  const otherCustomPromptCategories = customPromptCategories.filter(
+    (c) => promptCountFor(c.slug) > 0 && !PROMPT_GROUPS.some((g) => g.slug === c.group),
+  )
+
+  const liveSkillCategories = [...SKILL_CATEGORIES, ...customSkillCategories]
+    .map((category) => ({ category, count: skillCounts[category.slug] ?? 0 }))
+    .filter(({ count }) => count > 0)
 
   // The sitemap is sharded (see app/sitemap.ts's generateSitemaps) — once
   // sharded, there's no bare /sitemap.xml, only /sitemap/0.xml,
@@ -243,13 +283,32 @@ export default async function SitemapPage() {
                     href={`/prompts/${category.slug}`}
                     className="chip-tool px-4 py-2 text-[14px]"
                   >
-                    {category.name} ({getPromptsByCategory(category.slug).length})
+                    {category.name} ({promptCountFor(category.slug)})
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
         ))}
+        {otherCustomPromptCategories.length > 0 && (
+          <div className="mt-6">
+            <p className="font-semibold text-[15px] text-ink-subtle uppercase tracking-wide">
+              Other categories
+            </p>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {otherCustomPromptCategories.map((category) => (
+                <li key={category.slug}>
+                  <Link
+                    href={`/prompts/${category.slug}`}
+                    className="chip-tool px-4 py-2 text-[14px]"
+                  >
+                    {category.name} ({promptCountFor(category.slug)})
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </section>
 
       <section

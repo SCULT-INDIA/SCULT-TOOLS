@@ -112,6 +112,10 @@ export interface PromptCategory {
   readonly tier: PromptTier
   readonly tile: 'yellow' | 'blue' | 'lavender' | 'green'
   readonly icon: string
+  /** An admin-uploaded logo image (data: URL), preferred over `icon` when
+   * present — set only on a custom category resolved via
+   * lib/prompts/category-resolver.ts, never on a built-in one. */
+  readonly logoDataUrl?: string
   /** Reuses lib/tools/service-links.ts's resolveServiceLink() — undefined for
    * Tier 3 categories with no natural paid-service match, same convention
    * Tool.serviceTarget already uses. */

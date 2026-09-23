@@ -132,7 +132,7 @@ export function Header() {
               aria-label="Main"
               className="hidden flex-1 items-center justify-center gap-3 font-medium text-[13px] text-ink tracking-[0.2px] xl:flex"
             >
-              <CategoryMenu items={menuItems} />
+              <CategoryMenu />
               <PromptsMenu />
               <SkillsMenu />
               <McpMenu />

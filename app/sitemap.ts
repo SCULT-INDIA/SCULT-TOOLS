@@ -1,9 +1,11 @@
 import type { MetadataRoute } from 'next'
 import { BLOG_POSTS } from '@/lib/blog/registry'
+import { getCustomCategories } from '@/lib/custom-categories'
 import { GUIDES } from '@/lib/guides/registry'
 import { PROMPT_CATEGORIES } from '@/lib/prompts/categories'
+import { getAllDbPrompts } from '@/lib/prompts/db'
 import { getPromptsByCategory, PROMPTS } from '@/lib/prompts/registry'
-import type { Prompt } from '@/lib/prompts/types'
+import type { Prompt, PromptCategorySlug } from '@/lib/prompts/types'
 import { absoluteUrl } from '@/lib/site'
 import { SKILL_CATEGORIES } from '@/lib/skills/categories'
 import { getAllCategoryCounts, getAllSkillRefs, getSyncMeta } from '@/lib/skills/db'
@@ -175,7 +177,10 @@ export const SKILLS_PER_SHARD = 50_000
 export async function sitemapShards(): Promise<
   readonly { id: number; lastModified: string }[]
 > {
-  const { totalSkills, lastSyncedAt } = await getSyncMeta()
+  const [{ totalSkills, lastSyncedAt }, dbPrompts] = await Promise.all([
+    getSyncMeta(),
+    getAllDbPrompts(),
+  ])
   const skillsLastModified = lastSyncedAt ?? '2026-08-23'
   const skillShardCount = Math.max(1, Math.ceil(totalSkills / SKILLS_PER_SHARD))
   return [
@@ -185,6 +190,7 @@ export async function sitemapShards(): Promise<
         [
           ...TOOLS.map((t) => t.updatedAt),
           ...PROMPTS.map(promptLastModified),
+          ...dbPrompts.map(promptLastModified),
           ...STATIC_PAGES.map((p) => p.lastModified),
           ...GUIDES.map((g) => g.updatedAt),
           ...BLOG_POSTS.map((p) => p.updatedAt),
@@ -212,20 +218,52 @@ async function siteSitemap(): Promise<MetadataRoute.Sitemap> {
     (latest, t) => (t.updatedAt > latest ? t.updatedAt : latest),
     TOOLS[0]?.updatedAt ?? '2026-07-28',
   )
-  const newestPrompt = newest(PROMPTS.map(promptLastModified), '2026-07-25')
 
-  const livePromptCategories = PROMPT_CATEGORIES.filter(
-    (c) => getPromptsByCategory(c.slug).length > 0,
-  )
-
-  const [skillCounts, skillSyncMeta] = await Promise.all([
+  const [
+    skillCounts,
+    skillSyncMeta,
+    dbPrompts,
+    customPromptCategories,
+    customSkillCategories,
+  ] = await Promise.all([
     getAllCategoryCounts(),
     getSyncMeta(),
+    getAllDbPrompts(),
+    getCustomCategories('prompt'),
+    getCustomCategories('skill'),
   ])
-  const skillsLastModified = skillSyncMeta.lastSyncedAt ?? '2026-08-23'
-  const liveSkillCategories = SKILL_CATEGORIES.filter(
-    (c) => (skillCounts[c.slug] ?? 0) > 0,
+
+  const newestPrompt = newest(
+    [...PROMPTS.map(promptLastModified), ...dbPrompts.map(promptLastModified)],
+    '2026-07-25',
   )
+
+  // Every published admin prompt's category, grouped once rather than
+  // re-querying per category — dbPrompts is already the full published set.
+  const dbPromptsByCategory = new Map<string, Prompt[]>()
+  for (const p of dbPrompts) {
+    const list = dbPromptsByCategory.get(p.category)
+    if (list) list.push(p)
+    else dbPromptsByCategory.set(p.category, [p])
+  }
+
+  // Built-in categories with either compiled or admin-published content,
+  // plus any admin-created category that has at least one published prompt
+  // — a category with zero content stays out of the sitemap the same way a
+  // built-in one with none already does (see the filter above this comment
+  // used to be).
+  const livePromptCategories = [
+    ...PROMPT_CATEGORIES.filter(
+      (c) => getPromptsByCategory(c.slug).length > 0 || dbPromptsByCategory.has(c.slug),
+    ),
+    ...customPromptCategories.filter((c) => dbPromptsByCategory.has(c.slug)),
+  ]
+
+  const skillsLastModified = skillSyncMeta.lastSyncedAt ?? '2026-08-23'
+  const liveSkillCategories = [
+    ...SKILL_CATEGORIES.filter((c) => (skillCounts[c.slug] ?? 0) > 0),
+    ...customSkillCategories.filter((c) => (skillCounts[c.slug] ?? 0) > 0),
+  ]
 
   return [
     {
@@ -267,14 +305,27 @@ async function siteSitemap(): Promise<MetadataRoute.Sitemap> {
     },
     ...livePromptCategories.map((c) => ({
       url: absoluteUrl(`/prompts/${c.slug}`),
+      // A custom category's slug is never in the compiled registry by
+      // construction (it didn't exist when PROMPTS was compiled), so the
+      // cast below only ever matches real entries for a built-in slug —
+      // same as the PromptCategorySlug casts already in lib/prompts/categories.ts.
       lastModified: newest(
-        getPromptsByCategory(c.slug).map(promptLastModified),
+        [
+          ...getPromptsByCategory(c.slug as PromptCategorySlug).map(promptLastModified),
+          ...(dbPromptsByCategory.get(c.slug) ?? []).map(promptLastModified),
+        ],
         '2026-07-25',
       ),
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     })),
     ...PROMPTS.map((p) => ({
+      url: absoluteUrl(`/prompts/${p.category}/${p.slug}`),
+      lastModified: promptLastModified(p),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
+    ...dbPrompts.map((p) => ({
       url: absoluteUrl(`/prompts/${p.category}/${p.slug}`),
       lastModified: promptLastModified(p),
       changeFrequency: 'monthly' as const,

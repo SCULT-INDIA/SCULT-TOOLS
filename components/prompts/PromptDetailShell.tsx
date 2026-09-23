@@ -14,6 +14,7 @@ import { BrandIcon, brandForTool, categoryBrand } from '@/components/ui/BrandIco
 import { Icon } from '@/components/ui/Icon'
 import { PromptCard } from '@/components/ui/PromptCard'
 import { RequestButton } from '@/components/ui/RequestButton'
+import { SimpleMarkdown } from '@/components/ui/SimpleMarkdown'
 import { ViewTracker } from '@/components/ui/ViewTracker'
 import { getPromptsByCategory } from '@/lib/prompts/registry'
 import type { Prompt, PromptCategory, PromptImageAspectRatio } from '@/lib/prompts/types'
@@ -52,9 +53,15 @@ const ASPECT_CLASS: Record<PromptImageAspectRatio, string> = {
 export function PromptDetailShell({
   prompt,
   category,
+  previewMode = false,
 }: {
   prompt: Prompt
   category: PromptCategory
+  /** True only for the admin's own draft-preview route
+   * (app/admin/prompts/[id]/preview/page.tsx) — renders exactly the same
+   * markup a real visitor would see, minus the page-view analytics event,
+   * so reviewing an unpublished draft never pollutes real view counts. */
+  previewMode?: boolean
 }) {
   const related = getPromptsByCategory(prompt.category)
     .filter((p) => p.slug !== prompt.slug)
@@ -89,10 +96,12 @@ export function PromptDetailShell({
     // (verified previously) and below the "How to use" / "Request a prompt"
     // dialogs' z-70.
     <article className="container-site relative z-[45] max-w-[50rem] pt-8 pb-20">
-      <ViewTracker
-        event="prompt_action"
-        params={{ category: prompt.category, prompt: prompt.slug, action: 'view' }}
-      />
+      {!previewMode && (
+        <ViewTracker
+          event="prompt_action"
+          params={{ category: prompt.category, prompt: prompt.slug, action: 'view' }}
+        />
+      )}
       <nav aria-label="Breadcrumb" className="mb-5">
         <ol className="flex flex-wrap items-center gap-2 text-[13px] text-ink-subtle">
           <li>
@@ -151,9 +160,12 @@ export function PromptDetailShell({
         <h1 className="mt-5 text-[30px] text-black leading-[1.08] tracking-[-1px] md:text-[40px]">
           {prompt.title}
         </h1>
-        <p className="mt-4 max-w-[60ch] text-[16px] text-black/70 leading-7 md:text-[17px]">
-          {prompt.description}
-        </p>
+        <div className="max-w-[60ch]">
+          <SimpleMarkdown
+            text={prompt.description}
+            className="mt-4 text-[16px] text-black/70 leading-7 md:text-[17px]"
+          />
+        </div>
 
         <div className="mt-5 flex flex-wrap gap-2">
           {prompt.targetTools.map((tool) => {
@@ -404,9 +416,10 @@ export function PromptDetailShell({
             </span>
             Why this works
           </h2>
-          <p className="mt-3.5 text-[14.5px] text-black/70 leading-[1.7]">
-            {prompt.whyItWorks}
-          </p>
+          <SimpleMarkdown
+            text={prompt.whyItWorks}
+            className="mt-3.5 text-[14.5px] text-black/70 leading-[1.7]"
+          />
         </div>
       </section>
 
@@ -420,9 +433,10 @@ export function PromptDetailShell({
             What you get back
           </h2>
           <div className="mt-3 rounded-card border border-line-grey border-dashed bg-cream p-5">
-            <p className="whitespace-pre-wrap text-[14px] text-ink-muted leading-6">
-              {prompt.exampleOutput}
-            </p>
+            <SimpleMarkdown
+              text={prompt.exampleOutput}
+              className="whitespace-pre-wrap text-[14px] text-ink-muted leading-6"
+            />
           </div>
         </section>
       ) : null}

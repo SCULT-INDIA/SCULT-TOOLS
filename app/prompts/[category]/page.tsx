@@ -5,11 +5,9 @@ import { notFound } from 'next/navigation'
 import { BrandIcon, categoryBrand } from '@/components/ui/BrandIcon'
 import { Icon } from '@/components/ui/Icon'
 import { PromptCard } from '@/components/ui/PromptCard'
-import {
-  getCategoriesByGroup,
-  getPromptCategory,
-  PROMPT_CATEGORIES,
-} from '@/lib/prompts/categories'
+import { getCategoriesByGroup, PROMPT_CATEGORIES } from '@/lib/prompts/categories'
+import { getPromptCategoryOrCustom } from '@/lib/prompts/category-resolver'
+import { getDbPromptsByCategory } from '@/lib/prompts/db'
 import { getPromptsByCategory } from '@/lib/prompts/registry'
 import type { PromptCategory } from '@/lib/prompts/types'
 import { breadcrumbJsonLd, JsonLd, promptCollectionJsonLd } from '@/lib/seo/jsonld'
@@ -38,10 +36,12 @@ export async function generateMetadata({
   params: Promise<Params>
 }): Promise<Metadata> {
   const { category: slug } = await params
-  const category = getPromptCategory(slug)
+  const category = await getPromptCategoryOrCustom(slug)
   if (!category) return {}
 
-  const count = getPromptsByCategory(category.slug).length
+  const count =
+    getPromptsByCategory(category.slug).length +
+    (await getDbPromptsByCategory(category.slug)).length
   return {
     title: `${count} Free ${category.name} Prompts`,
     description: category.intro,
@@ -66,10 +66,11 @@ export default async function PromptCategoryPage({
   params: Promise<Params>
 }) {
   const { category: slug } = await params
-  const category = getPromptCategory(slug)
+  const category = await getPromptCategoryOrCustom(slug)
   if (!category) notFound()
 
-  const prompts = getPromptsByCategory(category.slug)
+  const dbPrompts = await getDbPromptsByCategory(category.slug)
+  const prompts = [...getPromptsByCategory(category.slug), ...dbPrompts]
   if (prompts.length === 0) notFound()
 
   const brand = categoryBrand(category.slug)
@@ -120,8 +121,15 @@ export default async function PromptCategoryPage({
           className={`rounded-panel border border-ink p-6 shadow-brutal md:p-9 ${TILE_BG[category.tile]}`}
         >
           <div className="flex flex-wrap items-center gap-4">
-            <span className="flex size-16 shrink-0 items-center justify-center rounded-2xl border border-ink/10 bg-white shadow-[0_2px_8px_rgb(0_0_0/0.08)]">
-              {brand ? (
+            <span className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-ink/10 bg-white shadow-[0_2px_8px_rgb(0_0_0/0.08)]">
+              {category.logoDataUrl ? (
+                // biome-ignore lint/performance/noImgElement: an admin-uploaded data: URL, not an optimizable remote asset — next/image's loader can't process it.
+                <img
+                  src={category.logoDataUrl}
+                  alt=""
+                  className="size-full object-cover"
+                />
+              ) : brand ? (
                 <BrandIcon brand={brand} size={34} />
               ) : (
                 <Icon name={category.icon} className="size-8 text-violet-700" />
