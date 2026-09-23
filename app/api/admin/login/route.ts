@@ -47,10 +47,46 @@ export async function POST(request: Request): Promise<NextResponse> {
     )
   }
 
-  if (!checkCredentials(body.email, body.password)) {
+  let credentialsOk: boolean
+  try {
+    credentialsOk = checkCredentials(body.email, body.password)
+  } catch (error) {
+    // `checkCredentials`/`createSession` throw a plain Error when
+    // ADMIN_EMAIL/ADMIN_PASSWORD_HASH/ADMIN_SESSION_SECRET aren't set
+    // (lib/admin/auth.ts) — an env var missing in this deployment, not a
+    // bug in a request. Uncaught, that throw became a bare 500 with no
+    // indication why (found live 2026-09-23: the admin system was new in
+    // production and its three env vars were never added there). Logged
+    // server-side for the real detail; the client only ever sees that
+    // configuration, not credentials, is the problem.
+    console.error('[admin login] misconfigured:', error)
+    return NextResponse.json(
+      {
+        error:
+          'Admin login is not configured on this deployment — ADMIN_EMAIL, ADMIN_PASSWORD_HASH and ADMIN_SESSION_SECRET must be set as environment variables.',
+      },
+      { status: 500 },
+    )
+  }
+
+  if (!credentialsOk) {
     return NextResponse.json({ error: 'Incorrect email or password.' }, { status: 401 })
   }
 
-  await createSession(body.email.trim().toLowerCase())
+  try {
+    await createSession(body.email.trim().toLowerCase())
+  } catch (error) {
+    // Same misconfiguration class as above, just reached only once the
+    // credentials themselves already checked out (ADMIN_SESSION_SECRET
+    // specifically missing, since checkCredentials doesn't touch it).
+    console.error('[admin login] misconfigured:', error)
+    return NextResponse.json(
+      {
+        error:
+          'Admin login is not configured on this deployment — ADMIN_SESSION_SECRET must be set as an environment variable.',
+      },
+      { status: 500 },
+    )
+  }
   return NextResponse.json({ ok: true })
 }
