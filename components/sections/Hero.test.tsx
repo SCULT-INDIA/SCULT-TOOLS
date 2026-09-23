@@ -7,8 +7,8 @@ import { Hero } from './Hero'
 
 // The hero's only client-side/asset-bearing children. Stubbed so this test
 // exercises the hero's own markup, not the search index loader or next/image.
-vi.mock('@/components/layout/SearchBox', () => ({
-  SearchBox: () => <div data-testid="searchbox" />,
+vi.mock('@/components/sections/HeroAssistant', () => ({
+  HeroAssistant: () => <div data-testid="assistant" />,
 }))
 vi.mock('@/components/ui/UneedBadge', () => ({
   UneedBadge: () => <span data-testid="uneed" />,
@@ -35,12 +35,13 @@ describe('Hero', () => {
     )
   })
 
-  it('states registry-derived counts in the eyebrow pill', () => {
+  it('states registry-derived counts in the stat chips, tools and prompts live, skills the same static label the MCP description uses', () => {
     render(<Hero />)
-    const pill = screen.getByText(/tools ·/)
-    expect(pill.textContent).toContain(`${TOOLS.length} tools`)
-    expect(pill.textContent).toContain(
-      `${PROMPTS.length.toLocaleString('en-US')} prompts`,
-    )
+    expect(screen.getByText(String(TOOLS.length))).toBeInTheDocument()
+    expect(screen.getByText('tools')).toBeInTheDocument()
+    expect(screen.getByText(PROMPTS.length.toLocaleString('en-US'))).toBeInTheDocument()
+    expect(screen.getByText('prompts')).toBeInTheDocument()
+    expect(screen.getByText('50,000+')).toBeInTheDocument()
+    expect(screen.getByText('skills')).toBeInTheDocument()
   })
 })
