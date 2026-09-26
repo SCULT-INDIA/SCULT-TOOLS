@@ -7,6 +7,7 @@ import scultMark from '@/public/brand/scult-mark.png'
 import { BlogsMenu } from './BlogsMenu'
 import { CategoryMenu } from './CategoryMenu'
 import { GitHubStarButton } from './GitHubStarButton'
+import { HideOnHome } from './HideOnHome'
 import { McpMenu } from './McpMenu'
 import { MobileDrawer } from './MobileDrawer'
 import { OurBrandsMenu } from './OurBrandsMenu'
@@ -149,9 +150,13 @@ export function Header() {
                   Narrower again at xl specifically: that's also where the
                   link row grows from 4 items to 7, and the two together
                   measurably overflowed the pill at 1280px before this. */}
-              <div className="hidden w-[170px] shrink-0 md:block lg:w-[200px] xl:w-[140px]">
-                <SearchBox toolCount={TOOL_COUNT} promptCount={PROMPT_COUNT} />
-              </div>
+              {/* Not on the homepage — the hero's assistant is the search
+                  there (see HideOnHome). */}
+              <HideOnHome>
+                <div className="hidden w-[170px] shrink-0 md:block lg:w-[200px] xl:w-[140px]">
+                  <SearchBox toolCount={TOOL_COUNT} promptCount={PROMPT_COUNT} />
+                </div>
+              </HideOnHome>
               {/* xl-only, matching the main <nav> above: the link row now
                   carries 7 items (Tools/Prompts/Skills/MCP/Blogs/Our
                   Brands/Resources), which needs the extra room `xl` gives

@@ -148,13 +148,17 @@ export function MobileDrawer({
             mobile. `onNavigate` closes the drawer itself, since picking a
             search result (unlike clicking a link below) doesn't already run
             through this component's own `setOpen(false)` handlers. */}
-        <div className="shrink-0 border-line border-b p-4">
-          <SearchBox
-            toolCount={toolCount}
-            promptCount={promptCount}
-            onNavigate={() => setOpen(false)}
-          />
-        </div>
+        {/* Not on the homepage, where the hero's assistant is the search
+            (same rule as the header's HideOnHome). */}
+        {pathname !== '/' ? (
+          <div className="shrink-0 border-line border-b p-4">
+            <SearchBox
+              toolCount={toolCount}
+              promptCount={promptCount}
+              onNavigate={() => setOpen(false)}
+            />
+          </div>
+        ) : null}
 
         {/* min-h-0: without it, a flex child's default min-height is its own
             content size, which defeats overflow-y-auto entirely — the same
