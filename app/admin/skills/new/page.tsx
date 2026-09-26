@@ -7,7 +7,7 @@ import { SkillUploadForm } from './SkillUploadForm'
 export const instant = false
 
 export default async function NewSkillPage() {
-  await requireAdminPageSession()
+  await requireAdminPageSession('/admin/skills/new')
 
   return (
     <div>

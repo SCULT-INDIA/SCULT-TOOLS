@@ -7,7 +7,7 @@ import { CategoryForm } from './CategoryForm'
 export const instant = false
 
 export default async function AdminCategoriesPage() {
-  await requireAdminPageSession()
+  await requireAdminPageSession('/admin/categories')
 
   return (
     <div>

@@ -31,8 +31,8 @@ export default async function SkillPreviewPage({
 }: {
   params: Promise<{ id: string }>
 }) {
-  await requireAdminPageSession()
   const { id } = await params
+  await requireAdminPageSession(`/admin-preview/skills/${encodeURIComponent(id)}`)
   const skill = await getAdminSkill(decodeURIComponent(id))
   if (!skill) notFound()
 

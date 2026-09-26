@@ -1,7 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
+import { loginHref, readApiFailure } from '@/lib/admin/client-errors'
 
 interface PromptRow {
   readonly id: string
@@ -15,19 +17,39 @@ interface PromptRow {
 const STATUS_FILTERS = ['all', 'draft', 'published', 'unpublished', 'archived'] as const
 
 export function PromptsList() {
+  const router = useRouter()
   const [prompts, setPrompts] = useState<PromptRow[]>([])
   const [filter, setFilter] = useState<(typeof STATUS_FILTERS)[number]>('all')
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [busyId, setBusyId] = useState<string | null>(null)
 
+  // A failed load used to leave "Loading…" on screen forever (res.json()
+  // threw on a non-JSON 500, and a 401 body has no `prompts`). Now the
+  // server's own message shows, and an expired session goes to login.
   const load = useCallback(async () => {
     setLoading(true)
-    const qs = filter === 'all' ? '' : `?status=${filter}`
-    const res = await fetch(`/api/admin/prompts${qs}`)
-    const body = await res.json()
-    setPrompts(body.prompts ?? [])
-    setLoading(false)
-  }, [filter])
+    setLoadError(null)
+    try {
+      const qs = filter === 'all' ? '' : `?status=${filter}`
+      const res = await fetch(`/api/admin/prompts${qs}`)
+      if (!res.ok) {
+        const { errors, unauthenticated } = await readApiFailure(res)
+        if (unauthenticated) {
+          router.push(loginHref(window.location.pathname))
+          return
+        }
+        setLoadError(errors.map((e) => e.message).join(' '))
+        return
+      }
+      const body = await res.json()
+      setPrompts(body.prompts ?? [])
+    } catch {
+      setLoadError('Could not reach the server. Check your connection and reload.')
+    } finally {
+      setLoading(false)
+    }
+  }, [filter, router])
 
   useEffect(() => {
     load()
@@ -40,9 +62,12 @@ export function PromptsList() {
     })
     setBusyId(null)
     if (!res.ok) {
-      const body = await res.json().catch(() => ({}))
-      const msg = body.errors?.map((e: { message: string }) => e.message).join(' ')
-      alert(msg || `Failed to ${action}.`)
+      const { errors, unauthenticated } = await readApiFailure(res)
+      if (unauthenticated) {
+        router.push(loginHref(window.location.pathname))
+        return
+      }
+      alert(errors.map((e) => e.message).join(' ') || `Failed to ${action}.`)
       return
     }
     load()
@@ -58,9 +83,12 @@ export function PromptsList() {
     })
     setBusyId(null)
     if (!res.ok) {
-      const body = await res.json().catch(() => ({}))
-      const msg = body.errors?.map((e: { message: string }) => e.message).join(' ')
-      alert(msg || 'Failed to delete.')
+      const { errors, unauthenticated } = await readApiFailure(res)
+      if (unauthenticated) {
+        router.push(loginHref(window.location.pathname))
+        return
+      }
+      alert(errors.map((e) => e.message).join(' ') || 'Failed to delete.')
       return
     }
     load()
@@ -87,6 +115,13 @@ export function PromptsList() {
 
       {loading ? (
         <p className="text-[var(--color-ink-subtle)] text-sm">Loading…</p>
+      ) : loadError ? (
+        <div className="rounded-[var(--radius-sm)] border border-red-300 bg-red-50 p-3 text-red-700 text-sm">
+          <p>{loadError}</p>
+          <button type="button" onClick={() => load()} className="mt-2 underline">
+            Retry
+          </button>
+        </div>
       ) : prompts.length === 0 ? (
         <p className="text-[var(--color-ink-subtle)] text-sm">No prompts.</p>
       ) : (

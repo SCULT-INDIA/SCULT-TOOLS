@@ -8,7 +8,7 @@ import { PromptsList } from './PromptsList'
 export const instant = false
 
 export default async function AdminPromptsPage() {
-  await requireAdminPageSession()
+  await requireAdminPageSession('/admin/prompts')
 
   return (
     <div>

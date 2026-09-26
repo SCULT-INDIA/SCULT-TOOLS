@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { loginHref, readApiFailure } from '@/lib/admin/client-errors'
 
 /** Publish / Unpublish / Archive / Delete for one item on its edit page —
  * shared by prompts and skills, which expose the same endpoint shape under
@@ -28,11 +29,12 @@ export function StatusActions({
     const res = await fetch(`${apiBase}/${action}`, { method: 'POST' })
     setBusy(false)
     if (!res.ok) {
-      const body = await res.json().catch(() => ({}))
-      setError(
-        body.errors?.map((e: { message: string }) => e.message).join(' ') ||
-          `Failed to ${action}.`,
-      )
+      const { errors, unauthenticated } = await readApiFailure(res)
+      if (unauthenticated) {
+        router.push(loginHref(window.location.pathname))
+        return
+      }
+      setError(errors.map((e) => e.message).join(' ') || `Failed to ${action}.`)
       return
     }
     router.refresh()
@@ -47,11 +49,12 @@ export function StatusActions({
     const res = await fetch(apiBase, { method: 'DELETE' })
     setBusy(false)
     if (!res.ok) {
-      const body = await res.json().catch(() => ({}))
-      setError(
-        body.errors?.map((e: { message: string }) => e.message).join(' ') ||
-          'Failed to delete.',
-      )
+      const { errors, unauthenticated } = await readApiFailure(res)
+      if (unauthenticated) {
+        router.push(loginHref(window.location.pathname))
+        return
+      }
+      setError(errors.map((e) => e.message).join(' ') || 'Failed to delete.')
       return
     }
     router.push(listHref)

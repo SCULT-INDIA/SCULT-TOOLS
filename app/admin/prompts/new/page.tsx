@@ -7,7 +7,7 @@ import { PromptForm } from '../PromptForm'
 export const instant = false
 
 export default async function NewPromptPage() {
-  await requireAdminPageSession()
+  await requireAdminPageSession('/admin/prompts/new')
 
   return (
     <div>

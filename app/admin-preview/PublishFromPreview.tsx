@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { loginHref, readApiFailure } from '@/lib/admin/client-errors'
 
 /** Publishes straight from a preview page, then lands on the real public
  * URL — seeing the live page is the confirmation that publishing worked.
@@ -27,11 +28,12 @@ export function PublishFromPreview({
     const res = await fetch(publishUrl, { method: 'POST' })
     setBusy(false)
     if (!res.ok) {
-      const body = await res.json().catch(() => ({}))
-      setError(
-        body.errors?.map((e: { message: string }) => e.message).join(' ') ||
-          'Failed to publish.',
-      )
+      const { errors, unauthenticated } = await readApiFailure(res)
+      if (unauthenticated) {
+        router.push(loginHref(window.location.pathname))
+        return
+      }
+      setError(errors.map((e) => e.message).join(' ') || 'Failed to publish.')
       return
     }
     router.push(liveHref)

@@ -25,10 +25,17 @@ function requestFor(
 ): Request {
   return new Request('http://localhost/api/admin/login', {
     method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-forwarded-for': ip },
+    // A browser always sends Origin on a POST; adminRoute's same-origin
+    // check relies on it.
+    headers: {
+      'content-type': 'application/json',
+      'x-forwarded-for': ip,
+      origin: 'http://localhost',
+    },
     body: JSON.stringify({ email, password }),
   })
 }
+const ctx = { params: Promise.resolve({}) }
 
 describe('POST /api/admin/login', () => {
   beforeEach(() => {
@@ -46,10 +53,10 @@ describe('POST /api/admin/login', () => {
     // added (found live 2026-09-23: production 500'd on every login
     // attempt with no indication why).
     const { POST } = await import('./route')
-    const res = await POST(requestFor('connect@scult.in', 'whatever'))
+    const res = await POST(requestFor('connect@scult.in', 'whatever'), ctx)
     expect(res.status).toBe(500)
     const body = await res.json()
-    expect(body.error).toMatch(/not configured/i)
+    expect(body.code).toBe('not-configured')
     expect(body.error).toMatch(/ADMIN_EMAIL/)
   })
 
@@ -58,7 +65,7 @@ describe('POST /api/admin/login', () => {
     const { hashPassword } = await import('../../../../lib/admin/auth')
     vi.stubEnv('ADMIN_PASSWORD_HASH', hashPassword('correct-horse'))
     const { POST } = await import('./route')
-    const res = await POST(requestFor('connect@scult.in', 'correct-horse'))
+    const res = await POST(requestFor('connect@scult.in', 'correct-horse'), ctx)
     expect(res.status).toBe(500)
     const body = await res.json()
     expect(body.error).toMatch(/ADMIN_SESSION_SECRET/)
@@ -70,7 +77,7 @@ describe('POST /api/admin/login', () => {
     vi.stubEnv('ADMIN_PASSWORD_HASH', hashPassword('correct-horse'))
     vi.stubEnv('ADMIN_SESSION_SECRET', 'a-test-signing-secret')
     const { POST } = await import('./route')
-    const res = await POST(requestFor('connect@scult.in', 'wrong-password'))
+    const res = await POST(requestFor('connect@scult.in', 'wrong-password'), ctx)
     expect(res.status).toBe(401)
   })
 
@@ -80,7 +87,7 @@ describe('POST /api/admin/login', () => {
     vi.stubEnv('ADMIN_PASSWORD_HASH', hashPassword('correct-horse'))
     vi.stubEnv('ADMIN_SESSION_SECRET', 'a-test-signing-secret')
     const { POST } = await import('./route')
-    const res = await POST(requestFor('connect@scult.in', 'correct-horse'))
+    const res = await POST(requestFor('connect@scult.in', 'correct-horse'), ctx)
     expect(res.status).toBe(200)
   })
 })

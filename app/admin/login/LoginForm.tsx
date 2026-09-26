@@ -1,10 +1,12 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
+import { safeReturnTo } from '@/lib/admin/client-errors'
 
 export function LoginForm() {
   const router = useRouter()
+  const returnTo = safeReturnTo(useSearchParams().get('next'))
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -25,7 +27,7 @@ export function LoginForm() {
       setError(body.error ?? 'Login failed.')
       return
     }
-    router.push('/admin')
+    router.push(returnTo)
     router.refresh()
   }
 

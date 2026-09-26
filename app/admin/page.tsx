@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { checkAdminHealth } from '@/lib/admin/health'
 import { requireAdminPageSession } from '@/lib/admin/require-session'
 
 /** `instant = false` didn't cascade down from `app/admin/layout.tsx`'s own
@@ -7,7 +8,9 @@ import { requireAdminPageSession } from '@/lib/admin/require-session'
 export const instant = false
 
 export default async function AdminDashboardPage() {
-  await requireAdminPageSession()
+  await requireAdminPageSession('/admin')
+  const health = await checkAdminHealth()
+  const problems = health.missingEnv.length > 0 || !health.database.ok
 
   return (
     <div>
@@ -15,6 +18,36 @@ export default async function AdminDashboardPage() {
       <p className="mb-8 text-[var(--color-ink-subtle)] text-sm">
         Publish and manage prompts, skills, and custom categories.
       </p>
+
+      {problems ? (
+        <div className="mb-8 rounded-[var(--radius-sm)] border border-red-300 bg-red-50 p-4 text-red-800 text-sm">
+          <p className="font-bold">This deployment is not fully configured</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5">
+            {health.missingEnv.map((v) => (
+              <li key={v.name}>
+                <code className="font-mono">{v.name}</code> is not set — {v.purpose}.
+              </li>
+            ))}
+            {!health.database.ok &&
+            !health.missingEnv.some((v) => v.name === 'SUPABASE_DB_URL') ? (
+              <li>
+                The database did not answer:{' '}
+                <span className="font-mono">{health.database.message}</span>
+              </li>
+            ) : null}
+          </ul>
+          <p className="mt-2">
+            Creating or editing anything will fail until this is fixed. Set the variable
+            in the hosting dashboard (Vercel → Project → Settings → Environment Variables)
+            and redeploy.
+          </p>
+        </div>
+      ) : (
+        <p className="mb-8 text-[13px] text-green-700">
+          Configuration OK — database reachable, every required variable set.
+        </p>
+      )}
+
       <div className="grid gap-4 sm:grid-cols-3">
         <Link
           href="/admin/prompts"

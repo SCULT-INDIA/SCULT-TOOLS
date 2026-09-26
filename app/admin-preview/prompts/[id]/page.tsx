@@ -48,8 +48,8 @@ export default async function PromptPreviewPage({
 }: {
   params: Promise<{ id: string }>
 }) {
-  await requireAdminPageSession()
   const { id } = await params
+  await requireAdminPageSession(`/admin-preview/prompts/${encodeURIComponent(id)}`)
   const prompt = await getAdminPrompt(decodeURIComponent(id))
   if (!prompt) notFound()
 

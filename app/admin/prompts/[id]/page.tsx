@@ -14,8 +14,8 @@ export default async function EditPromptPage({
 }: {
   params: Promise<{ id: string }>
 }) {
-  await requireAdminPageSession()
   const { id } = await params
+  await requireAdminPageSession(`/admin/prompts/${encodeURIComponent(id)}`)
   const prompt = await getAdminPrompt(decodeURIComponent(id))
   if (!prompt) notFound()
 

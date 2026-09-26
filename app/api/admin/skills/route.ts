@@ -1,16 +1,14 @@
 import { NextResponse } from 'next/server'
 import { getSessionEmail } from '@/lib/admin/auth'
-import { requireAdminSession } from '@/lib/admin/require-session'
+import { adminRoute } from '@/lib/admin/route'
 import { createDraftSkill, listAdminSkills } from '@/lib/admin/skills'
 
 /** GET /api/admin/skills — every admin-authored skill (any status),
  * newest first. Synced skills never appear here. */
-export async function GET(): Promise<NextResponse> {
-  const denied = await requireAdminSession()
-  if (denied) return denied
+export const GET = adminRoute(async () => {
   const skills = await listAdminSkills()
   return NextResponse.json({ skills })
-}
+})
 
 /**
  * POST /api/admin/skills — creates a skill as a draft from an uploaded
@@ -24,10 +22,7 @@ export async function GET(): Promise<NextResponse> {
  * matter: a `.zip` extension on a file that isn't really one is still
  * caught downstream by `validateSkillZip` actually trying to parse it).
  */
-export async function POST(request: Request): Promise<NextResponse> {
-  const denied = await requireAdminSession()
-  if (denied) return denied
-
+export const POST = adminRoute(async (request) => {
   const form = await request.formData().catch(() => null)
   if (!form) {
     return NextResponse.json(
@@ -78,4 +73,4 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json({ errors: result.errors }, { status: 422 })
   }
   return NextResponse.json({ id: result.id, slug: result.slug }, { status: 201 })
-}
+})

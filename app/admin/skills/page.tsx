@@ -8,7 +8,7 @@ import { SkillsList } from './SkillsList'
 export const instant = false
 
 export default async function AdminSkillsPage() {
-  await requireAdminPageSession()
+  await requireAdminPageSession('/admin/skills')
 
   return (
     <div>
