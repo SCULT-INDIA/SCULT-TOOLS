@@ -27,6 +27,7 @@ export function SaashubBadge({
   /** Rendered height in px, matching `className`'s `h-*` value. */
   heightPx?: number
 }) {
+  const widthPx = Math.round(heightPx * SAASHUB_ASPECT_RATIO)
   return (
     <a
       href={SAASHUB_HREF}
@@ -37,12 +38,16 @@ export function SaashubBadge({
       <Image
         src={SAASHUB_SRC}
         alt="Scult Tools badge"
-        // Inline `auto`: next/image's dev check for "CSS changed one
-        // dimension but not the other" ignores Tailwind's `w-auto`.
-        style={{ width: 'auto' }}
-        width={Math.round(heightPx * SAASHUB_ASPECT_RATIO)}
+        width={widthPx}
         height={heightPx}
-        className={className}
+        // Both dimensions pinned inline to exactly the attributes. With
+        // `w-auto` the browser derived the width from the optimized file,
+        // whose rounded size (e.g. 384x100 for a 582x152 source) put the
+        // rendered width 1px off the attribute — next/image then warned
+        // "width or height modified, but not the other" on every page.
+        // object-contain absorbs that sub-pixel aspect difference.
+        style={{ width: widthPx, height: heightPx }}
+        className={`${className} object-contain`}
       />
     </a>
   )
