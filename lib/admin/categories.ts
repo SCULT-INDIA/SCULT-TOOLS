@@ -168,3 +168,58 @@ function isUniqueViolation(error: unknown): boolean {
     (error as { code?: unknown }).code === '23505'
   )
 }
+
+/**
+ * Removes a custom category — the way back from a typo'd or test category,
+ * which otherwise stays in the public sitemap forever. Refused while any
+ * prompt or skill (any status) still uses the slug: deleting it would leave
+ * those pages pointing at a category that no longer resolves. The admin
+ * moves or deletes that content first; the message says how many.
+ */
+export async function deleteCustomCategory(
+  contentType: 'prompt' | 'skill',
+  slug: string,
+  actor?: string,
+): Promise<
+  { ok: true } | { ok: false; status: 404 | 409; errors: CategoryValidationError[] }
+> {
+  const table = contentType === 'prompt' ? 'prompts' : 'skills'
+  const { rows } = await adminPool().query<{ n: number }>(
+    `select count(*)::int as n from ${table} where category = $1`,
+    [slug],
+  )
+  const inUse = rows[0]?.n ?? 0
+  if (inUse > 0) {
+    return {
+      ok: false,
+      status: 409,
+      errors: [
+        {
+          field: 'slug',
+          message: `"${slug}" is still used by ${inUse} ${contentType}${inUse === 1 ? '' : 's'} — move or delete ${inUse === 1 ? 'it' : 'them'} first.`,
+        },
+      ],
+    }
+  }
+  const { rowCount } = await adminPool().query(
+    'delete from custom_categories where content_type = $1 and slug = $2',
+    [contentType, slug],
+  )
+  if (!rowCount) {
+    return {
+      ok: false,
+      status: 404,
+      errors: [{ field: 'slug', message: `No ${contentType} category "${slug}".` }],
+    }
+  }
+  await logAdminAction({
+    actor,
+    action: 'delete',
+    contentType: 'category',
+    contentId: slug,
+    contentSlug: slug,
+    details: { categoryContentType: contentType },
+  })
+  revalidateTag('custom-categories', 'skillsRegistry')
+  return { ok: true }
+}

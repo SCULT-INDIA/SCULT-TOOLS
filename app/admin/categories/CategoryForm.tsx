@@ -1,13 +1,14 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { loginHref, readApiFailure } from '@/lib/admin/client-errors'
 import { normalizeSlug, normalizeSlugInput, slugify } from '@/lib/admin/slug'
 import { useFormDraft } from '@/lib/admin/use-form-draft'
 import { DraftBanner } from '../DraftBanner'
 
-interface CustomCategory {
+interface ExistingCategory {
+  readonly type: 'prompt' | 'skill'
   readonly slug: string
   readonly name: string
 }
@@ -65,7 +66,8 @@ export function CategoryForm() {
   const [logoError, setLogoError] = useState('')
   const [errors, setErrors] = useState<FieldError[]>([])
   const [submitting, setSubmitting] = useState(false)
-  const [created, setCreated] = useState<CustomCategory[]>([])
+  const [existing, setExisting] = useState<ExistingCategory[] | null>(null)
+  const [listError, setListError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // The logo is kept too (it's already a data: URL, small by the cap
@@ -83,6 +85,67 @@ export function CategoryForm() {
     { contentType, name, slug, slugTouched, logoDataUrl } satisfies DraftSnapshot,
     { initial: EMPTY_DRAFT, restore },
   )
+
+  // Every custom category, both kinds — so a typo'd or test category can
+  // be seen and removed, not just the ones created in this visit.
+  const loadExisting = useCallback(async () => {
+    setListError(null)
+    try {
+      const responses = await Promise.all(
+        (['prompt', 'skill'] as const).map((type) =>
+          fetch(`/api/admin/categories?type=${type}`, { cache: 'no-store' }),
+        ),
+      )
+      const lists = await Promise.all(
+        responses.map(async (res, i) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`)
+          const body = (await res.json()) as {
+            categories?: { slug: string; name: string }[]
+          }
+          const type = i === 0 ? 'prompt' : 'skill'
+          return (body.categories ?? []).map(
+            (c) => ({ type, slug: c.slug, name: c.name }) as const,
+          )
+        }),
+      )
+      setExisting(lists.flat())
+    } catch {
+      setListError('Could not load your categories — refresh to try again.')
+    }
+  }, [])
+  useEffect(() => {
+    void loadExisting()
+  }, [loadExisting])
+
+  async function removeCategory(c: ExistingCategory) {
+    if (
+      !window.confirm(
+        `Delete the ${c.type} category "${c.name}"? This can't be undone. (Refused while any ${c.type} still uses it.)`,
+      )
+    )
+      return
+    setListError(null)
+    let res: Response
+    try {
+      res = await fetch(
+        `/api/admin/categories?type=${c.type}&slug=${encodeURIComponent(c.slug)}`,
+        { method: 'DELETE' },
+      )
+    } catch {
+      setListError('Could not reach the server. Nothing was deleted.')
+      return
+    }
+    if (!res.ok) {
+      const { errors: apiErrors, unauthenticated } = await readApiFailure(res)
+      if (unauthenticated) {
+        router.push(loginHref(window.location.pathname))
+        return
+      }
+      setListError(apiErrors.map((e) => e.message).join(' '))
+      return
+    }
+    void loadExisting()
+  }
 
   function onNameChange(value: string) {
     setName(value)
@@ -156,8 +219,8 @@ export function CategoryForm() {
       setErrors(apiErrors)
       return
     }
-    setCreated((prev) => [{ slug: payload.slug, name }, ...prev])
     draft.clear()
+    void loadExisting()
     setName('')
     setSlug('')
     setSlugTouched(false)
@@ -262,15 +325,41 @@ export function CategoryForm() {
         </button>
       </form>
 
-      {created.length > 0 && (
-        <ul className="mt-8 space-y-2">
-          {created.map((c) => (
-            <li key={c.slug} className="card-flat p-3 text-sm">
-              <strong>{c.name}</strong> — {c.slug}
-            </li>
-          ))}
-        </ul>
-      )}
+      <section className="mt-10" aria-labelledby="existing-categories">
+        <h2
+          id="existing-categories"
+          className="mb-3 font-bold text-lg text-[var(--color-ink)]"
+        >
+          Your custom categories
+        </h2>
+        {listError && <p className="mb-2 text-red-700 text-sm">{listError}</p>}
+        {existing === null ? (
+          <p className="text-ink-subtle text-sm">Loading…</p>
+        ) : existing.length === 0 ? (
+          <p className="text-ink-subtle text-sm">None yet.</p>
+        ) : (
+          <ul className="space-y-2">
+            {existing.map((c) => (
+              <li
+                key={`${c.type}:${c.slug}`}
+                className="card-flat flex items-center justify-between gap-3 p-3 text-sm"
+              >
+                <span>
+                  <strong>{c.name}</strong> — {c.type} · {c.slug}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => removeCategory(c)}
+                  className="text-red-600 text-[13px] hover:underline"
+                  aria-label={`Delete ${c.type} category ${c.name}`}
+                >
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </div>
   )
 }

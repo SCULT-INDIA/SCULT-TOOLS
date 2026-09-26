@@ -202,3 +202,61 @@ describe('createCustomCategory', () => {
     await expect(createCustomCategory(VALID_SKILL)).rejects.toThrow('connection reset')
   })
 })
+
+describe('deleteCustomCategory', () => {
+  const queryMock = vi.fn()
+
+  beforeEach(() => {
+    queryMock.mockReset()
+    vi.doMock('./pg', () => ({ adminPool: () => ({ query: queryMock }) }))
+  })
+
+  afterEach(() => {
+    vi.doUnmock('./pg')
+    vi.resetModules()
+  })
+
+  it('refuses while content still uses the category, and deletes nothing', async () => {
+    vi.resetModules()
+    queryMock.mockResolvedValueOnce({ rows: [{ n: 3 }] })
+    const { deleteCustomCategory } = await import('./categories')
+    const result = await deleteCustomCategory('prompt', 'resume-help')
+    expect(result).toMatchObject({ ok: false, status: 409 })
+    if (!result.ok) expect(result.errors[0]?.message).toMatch(/used by 3 prompts/)
+    expect(queryMock).toHaveBeenCalledTimes(1)
+    expect(queryMock.mock.calls[0]?.[0]).toContain('from prompts')
+  })
+
+  it('checks the skills table for a skill category', async () => {
+    vi.resetModules()
+    queryMock.mockResolvedValueOnce({ rows: [{ n: 1 }] })
+    const { deleteCustomCategory } = await import('./categories')
+    const result = await deleteCustomCategory('skill', 'x')
+    expect(queryMock.mock.calls[0]?.[0]).toContain('from skills')
+    if (!result.ok)
+      expect(result.errors[0]?.message).toMatch(/used by 1 skill —.*it first/)
+  })
+
+  it('deletes an unused category, logs it and revalidates', async () => {
+    vi.resetModules()
+    queryMock.mockResolvedValueOnce({ rows: [{ n: 0 }] }) // usage
+    queryMock.mockResolvedValueOnce({ rowCount: 1 }) // delete
+    queryMock.mockResolvedValueOnce({ rows: [] }) // audit log
+    const { deleteCustomCategory } = await import('./categories')
+    expect(await deleteCustomCategory('prompt', 'typo-categry')).toEqual({ ok: true })
+    expect(queryMock.mock.calls[1]?.[1]).toEqual(['prompt', 'typo-categry'])
+    const { revalidateTag } = await import('next/cache')
+    expect(revalidateTag).toHaveBeenCalledWith('custom-categories', 'skillsRegistry')
+  })
+
+  it('reports an unknown category as 404', async () => {
+    vi.resetModules()
+    queryMock.mockResolvedValueOnce({ rows: [{ n: 0 }] })
+    queryMock.mockResolvedValueOnce({ rowCount: 0 })
+    const { deleteCustomCategory } = await import('./categories')
+    expect(await deleteCustomCategory('skill', 'nope')).toMatchObject({
+      ok: false,
+      status: 404,
+    })
+  })
+})
