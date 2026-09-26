@@ -37,6 +37,9 @@ export function SaashubBadge({
       <Image
         src={SAASHUB_SRC}
         alt="Scult Tools badge"
+        // Inline `auto`: next/image's dev check for "CSS changed one
+        // dimension but not the other" ignores Tailwind's `w-auto`.
+        style={{ width: 'auto' }}
         width={Math.round(heightPx * SAASHUB_ASPECT_RATIO)}
         height={heightPx}
         className={className}

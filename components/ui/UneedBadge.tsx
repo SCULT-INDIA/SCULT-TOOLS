@@ -46,6 +46,9 @@ export function UneedBadge({
         width={Math.round(heightPx * UNEED_ASPECT_RATIO)}
         height={heightPx}
         className={className}
+        // next/image's dev check for "CSS changed one dimension but not the
+        // other" only accepts an *inline* `auto`, not Tailwind's `w-auto`.
+        style={{ width: 'auto' }}
       />
     </a>
   )
