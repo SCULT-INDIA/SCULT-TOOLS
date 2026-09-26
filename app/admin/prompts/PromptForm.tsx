@@ -10,6 +10,7 @@ import {
 } from '@/lib/admin/prompt-template'
 import { normalizeSlug, normalizeSlugInput, slugify } from '@/lib/admin/slug'
 import { useFormDraft } from '@/lib/admin/use-form-draft'
+import { type AutosaveStatus, useServerAutosave } from '@/lib/admin/use-server-autosave'
 import { PROMPT_CATEGORIES } from '@/lib/prompts/categories'
 import type { PromptVariable } from '@/lib/prompts/types'
 import { DraftBanner } from '../DraftBanner'
@@ -46,6 +47,9 @@ export interface PromptFormInitial {
   readonly exampleOutput?: string
   readonly variables: readonly PromptVariable[]
   readonly verifiedAgainst: readonly Verification[]
+  /** draft | published | unpublished | archived — only a draft is
+   * auto-saved to the server; anything live is saved on "Save changes". */
+  readonly status?: string
 }
 
 const EMPTY: PromptFormInitial = {
@@ -254,11 +258,69 @@ export function PromptForm({ initial }: { initial?: PromptFormInitial }) {
     },
     [withRowIds],
   )
-  const draft = useFormDraft(
-    mode === 'edit' && initial?.id ? `prompt:${initial.id}` : 'prompt:new',
-    snapshot,
-    { initial: initialSnapshot, restore },
+  // Once the server has the draft, the browser copy is keyed by its id —
+  // /admin/prompts/new starts clean next time instead of restoring work
+  // that already lives in the Drafts list.
+  const [serverId, setServerId] = useState<string | null>(initial?.id ?? null)
+  const draft = useFormDraft(serverId ? `prompt:${serverId}` : 'prompt:new', snapshot, {
+    initial: initialSnapshot,
+    restore,
+  })
+
+  // ---- server-side draft: saved on its own, no button needed -------------
+  const payload = useMemo(
+    () => ({
+      slug: normalizeSlug(slug),
+      category,
+      title,
+      description,
+      promptText,
+      whyItWorks,
+      exampleOutput: exampleOutput.trim() || undefined,
+      variables,
+      verifiedAgainst: verifiedAgainst.map(({ rowId: _rowId, ...v }) => v),
+      // Not collected by this form — every admin-published prompt starts
+      // with none of these; they were never required to publish.
+      tags: [],
+      targetTools: [],
+      changelog: [],
+    }),
+    [
+      slug,
+      category,
+      title,
+      description,
+      promptText,
+      whyItWorks,
+      exampleOutput,
+      variables,
+      verifiedAgainst,
+    ],
   )
+  const autosaveEnabled = mode === 'create' || initial?.status === 'draft'
+  const autosave = useServerAutosave({
+    enabled: autosaveEnabled,
+    ready: title.trim() !== '',
+    notReadyReason: 'Add a title and this saves itself as a draft.',
+    payload,
+    id: initial?.id ?? null,
+    createUrl: '/api/admin/prompts',
+    updateUrl: (id) => `/api/admin/prompts/${encodeURIComponent(id)}`,
+    onCreated: (id) => {
+      draft.clear()
+      setServerId(id)
+      // A refresh now opens this draft in the editor instead of a blank
+      // "New prompt" form.
+      window.history.replaceState(null, '', `/admin/prompts/${encodeURIComponent(id)}`)
+    },
+    onSaved: (savedBody) => {
+      // The server copy is current: the browser copy would only resurface
+      // as a stale "restored draft" banner.
+      if (savedBody === JSON.stringify(payloadRef.current)) draft.clear()
+    },
+  })
+  const payloadRef = useRef(payload)
+  payloadRef.current = payload
 
   function updateVariable(name: string, patch: Partial<PromptVariable>) {
     setVariables((prev) => prev.map((v) => (v.name === name ? { ...v, ...patch } : v)))
@@ -310,6 +372,9 @@ export function PromptForm({ initial }: { initial?: PromptFormInitial }) {
     take('example output', parsed.exampleOutput, () =>
       setExampleOutput(parsed.exampleOutput ?? ''),
     )
+    take('verified against', parsed.verifiedAgainst, () =>
+      mergeVerifications(parsed.verifiedAgainst ?? []),
+    )
     setFilled({ filled: filledFields, missing })
   }
 
@@ -340,6 +405,22 @@ export function PromptForm({ initial }: { initial?: PromptFormInitial }) {
     if (!parsed) return
     e.preventDefault()
     applyReply(parsed)
+  }
+
+  /** Adds the reply's tool/version rows, dated today. Blank rows (like
+   * one "+ Add" left empty) are replaced, and a pair already listed — the
+   * remembered default, say — is not duplicated. */
+  function mergeVerifications(rows: readonly { tool: string; version: string }[]) {
+    setVerifiedAgainst((prev) => {
+      const kept = prev.filter((v) => v.tool.trim() || v.version.trim())
+      const key = (v: { tool: string; version: string }) =>
+        `${v.tool.trim().toLowerCase()}|${v.version.trim().toLowerCase()}`
+      const have = new Set(kept.map(key))
+      const additions = rows
+        .filter((r) => !have.has(key(r)))
+        .map((r) => ({ ...r, date: TODAY() }))
+      return [...withRowIds(additions), ...kept]
+    })
   }
 
   function addVerification() {
@@ -382,46 +463,48 @@ export function PromptForm({ initial }: { initial?: PromptFormInitial }) {
     setErrors([])
     setSaved(false)
 
-    const verification = verifiedAgainst.map(({ rowId: _rowId, ...v }) => v)
-    const payload = {
-      slug: normalizeSlug(slug),
-      category,
-      title,
-      description,
-      promptText,
-      whyItWorks,
-      exampleOutput: exampleOutput.trim() || undefined,
-      variables,
-      verifiedAgainst: verification,
-      // Not collected by this form — every admin-published prompt starts
-      // with none of these; they were never required to publish.
-      tags: [],
-      targetTools: [],
-      changelog: [],
+    if (autosaveEnabled) {
+      setSubmitting(true)
+      const result = await autosave.flush()
+      setSubmitting(false)
+      if (!result.ok) {
+        if (result.unauthenticated) {
+          router.push(loginHref(window.location.pathname))
+          return
+        }
+        setErrors([...result.errors])
+        return
+      }
+      const first = payload.verifiedAgainst[0]
+      if (first?.tool && first.version) rememberVerificationDefault(first)
+      draft.clear()
+      if (mode === 'create') {
+        router.push(`/admin-preview/prompts/${encodeURIComponent(result.id)}`)
+      } else {
+        setSaved(true)
+        router.refresh()
+      }
+      return
     }
 
+    // Only a prompt that is (or was) live gets here: its edits wait for
+    // this explicit save, so nothing on the public site changes mid-typing.
+    if (!initial?.id) return
     setSubmitting(true)
     let res: Response
     try {
-      res =
-        mode === 'create' || !initial?.id
-          ? await fetch('/api/admin/prompts', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(payload),
-            })
-          : await fetch(`/api/admin/prompts/${encodeURIComponent(initial.id)}`, {
-              method: 'PATCH',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(payload),
-            })
+      res = await fetch(`/api/admin/prompts/${encodeURIComponent(initial.id)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
     } catch {
       setSubmitting(false)
       setErrors([
         {
           field: '(root)',
           message:
-            'Could not reach the server. Your draft is kept — check your connection and try again.',
+            'Could not reach the server. Your edits are kept — check your connection and try again.',
         },
       ])
       return
@@ -431,26 +514,18 @@ export function PromptForm({ initial }: { initial?: PromptFormInitial }) {
     if (!res.ok) {
       const { errors: apiErrors, unauthenticated } = await readApiFailure(res)
       if (unauthenticated) {
-        // The draft survives the round trip through login.
+        // The browser draft survives the round trip through login.
         router.push(loginHref(window.location.pathname))
         return
       }
       setErrors(apiErrors)
       return
     }
-    const body = await res.json()
-    const first = verification[0]
+    const first = payload.verifiedAgainst[0]
     if (first?.tool && first.version) rememberVerificationDefault(first)
     draft.clear()
-    if (mode === 'create') {
-      // Straight to the exact-simulation preview, not the edit form — the
-      // whole point of clicking "Create draft" is to see how this will
-      // actually look; "Back to edit" on that page returns to publishing.
-      router.push(`/admin-preview/prompts/${encodeURIComponent(body.id)}`)
-    } else {
-      setSaved(true)
-      router.refresh()
-    }
+    setSaved(true)
+    router.refresh()
   }
 
   return (
@@ -720,7 +795,8 @@ export function PromptForm({ initial }: { initial?: PromptFormInitial }) {
         </div>
         <p className="hint -mt-2">
           At least one is required to publish — the real tool and version you tested this
-          prompt against. Pre-filled from your last prompt; today&rsquo;s date.
+          prompt against. Filled from the AI reply (the assistant that wrote it),
+          otherwise from your last prompt; dated today.
         </p>
         {verifiedAgainst.map((v) => (
           <div
@@ -774,9 +850,44 @@ export function PromptForm({ initial }: { initial?: PromptFormInitial }) {
         ))}
       </div>
 
-      <button type="submit" className="btn-brutal" disabled={submitting}>
-        {submitting ? 'Saving…' : mode === 'create' ? 'Create draft' : 'Save changes'}
-      </button>
+      <div className="flex flex-wrap items-center gap-3">
+        <button type="submit" className="btn-brutal" disabled={submitting}>
+          {submitting ? 'Saving…' : autosaveEnabled ? 'Save & preview' : 'Save changes'}
+        </button>
+        <AutosaveLine status={autosave.status} />
+      </div>
+      {!autosaveEnabled && (
+        <p className="hint">
+          This prompt is {initial?.status ?? 'live'} — edits are kept in this browser
+          until you click Save changes, so nothing changes on the site by accident.
+        </p>
+      )}
     </form>
+  )
+}
+
+/** One quiet line next to the button saying where the draft stands. */
+function AutosaveLine({ status }: { status: AutosaveStatus }) {
+  const text =
+    status.kind === 'off'
+      ? null
+      : status.kind === 'waiting'
+        ? status.reason
+        : status.kind === 'pending'
+          ? 'Unsaved changes — saving shortly…'
+          : status.kind === 'saving'
+            ? 'Saving draft…'
+            : status.kind === 'saved'
+              ? `Draft saved · ${new Date(status.at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`
+              : `Not saved: ${status.message}`
+  if (!text) return null
+  return (
+    <span
+      role="status"
+      aria-live="polite"
+      className={`text-sm ${status.kind === 'error' ? 'text-red-700' : status.kind === 'saved' ? 'text-green-700' : 'text-ink-subtle'}`}
+    >
+      {text}
+    </span>
   )
 }

@@ -11,16 +11,28 @@ export function PublishFromPreview({
   status,
   publishUrl,
   liveHref,
+  blockers = [],
 }: {
   status: string
   publishUrl: string
   liveHref: string
+  /** What still stops this from publishing (an auto-saved draft is often
+   * unfinished) — shown up front instead of the button, so the admin
+   * isn't sent to click Publish just to be told no. */
+  blockers?: readonly string[]
 }) {
   const router = useRouter()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   if (status === 'published') return null
+  if (blockers.length > 0) {
+    return (
+      <span className="max-w-[28rem] text-right text-[12px] text-ink">
+        Not ready to publish: {blockers.join(' ')}
+      </span>
+    )
+  }
 
   async function publish() {
     setBusy(true)

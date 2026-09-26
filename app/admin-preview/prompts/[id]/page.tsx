@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PromptDetailShell } from '@/components/prompts/PromptDetailShell'
-import { getAdminPrompt } from '@/lib/admin/prompts'
+import { getAdminPrompt, publishBlockers } from '@/lib/admin/prompts'
 import { requireAdminPageSession } from '@/lib/admin/require-session'
 import { getPromptCategoryOrCustom } from '@/lib/prompts/category-resolver'
 import type { PromptCategorySlug } from '@/lib/prompts/types'
@@ -53,8 +53,33 @@ export default async function PromptPreviewPage({
   const prompt = await getAdminPrompt(decodeURIComponent(id))
   if (!prompt) notFound()
 
-  const category = await getPromptCategoryOrCustom(prompt.category)
-  if (!category) notFound()
+  // An auto-saved draft is often unfinished (no category yet, say) —
+  // there is no page to render, so say what's missing rather than 404.
+  const category = prompt.category
+    ? await getPromptCategoryOrCustom(prompt.category)
+    : undefined
+  const blockers = await publishBlockers(prompt)
+  if (!category) {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-16">
+        <h1 className="font-bold text-2xl text-ink">{prompt.title}</h1>
+        <p className="mt-3 text-ink-muted">
+          This draft is saved, but it isn&rsquo;t finished enough to preview yet.
+        </p>
+        <ul className="mt-4 list-disc space-y-1 pl-5 text-sm">
+          {blockers.map((b) => (
+            <li key={b.field}>{b.message}</li>
+          ))}
+        </ul>
+        <Link
+          href={`/admin/prompts/${encodeURIComponent(prompt.id)}`}
+          className="btn-brutal btn-brutal-sm mt-6 inline-flex"
+        >
+          Finish it in the editor
+        </Link>
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -66,6 +91,7 @@ export default async function PromptPreviewPage({
         </span>
         <div className="flex items-center gap-2">
           <PublishFromPreview
+            blockers={blockers.map((b) => b.message)}
             status={prompt.status}
             publishUrl={`/api/admin/prompts/${encodeURIComponent(prompt.id)}/publish`}
             liveHref={`/prompts/${prompt.category}/${prompt.slug}`}

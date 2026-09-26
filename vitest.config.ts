@@ -23,6 +23,9 @@ export default defineConfig({
       // Route Handlers with real logic of their own (rate limits, response
       // headers) — colocated next to the route they exercise.
       'app/api/**/*.test.ts',
+      // Admin client components whose behaviour is the product (autosave,
+      // fill-from-reply) — colocated next to the form they exercise.
+      'app/admin/**/*.test.tsx',
     ],
     coverage: {
       provider: 'v8',

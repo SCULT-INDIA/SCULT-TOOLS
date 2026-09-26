@@ -25,6 +25,32 @@ const BASE_INPUT = {
 
 const VERIFIED = { tool: 'ChatGPT', version: '5.1', date: '2026-09-01' }
 
+/** A complete prompts row as `getAdminPrompt` selects it. */
+function dbRow(overrides: Record<string, unknown> = {}) {
+  return {
+    id: 'p1',
+    slug: 'x',
+    category: REAL_CATEGORY,
+    title: 'X',
+    description: 'Does X.',
+    prompt_text: 'Do X with {{thing}}.',
+    variables: [],
+    target_tools: [],
+    tags: [],
+    why_it_works: 'Because.',
+    example_output: null,
+    example_image: null,
+    video_prompt: null,
+    verified_against: [VERIFIED],
+    changelog: [],
+    service_target: null,
+    related_tool_slug: null,
+    author_name: null,
+    status: 'draft',
+    ...overrides,
+  }
+}
+
 describe('validatePromptInput', () => {
   it('accepts minimal valid input against a real built-in category', async () => {
     const { validatePromptInput } = await import('./prompts')
@@ -107,28 +133,94 @@ describe('createDraftPrompt / updatePrompt / status transitions', () => {
     if (!result.ok) expect(result.errors[0]?.field).toBe('slug')
   })
 
-  it('createDraftPrompt never touches the database for invalid input', async () => {
+  it('createDraftPrompt never touches the database for a draft with no title', async () => {
     vi.resetModules()
     const { createDraftPrompt } = await import('./prompts')
-    await createDraftPrompt({ ...BASE_INPUT, slug: '★★★' })
+    const result = await createDraftPrompt({ ...BASE_INPUT, title: '  ' })
+    expect(result.ok).toBe(false)
+    if (!result.ok) expect(result.errors[0]?.message).toMatch(/at least a title/)
     expect(queryMock).not.toHaveBeenCalled()
+  })
+
+  it('createDraftPrompt saves a half-written draft: just a title, slug from the title', async () => {
+    vi.resetModules()
+    queryMock.mockResolvedValueOnce({ rows: [{ id: 'd1' }] }) // insert
+    queryMock.mockResolvedValueOnce({ rows: [] }) // audit log
+    const { createDraftPrompt } = await import('./prompts')
+    const result = await createDraftPrompt({ title: 'Résumé — ATS audit' })
+    expect(result).toEqual({ ok: true, id: 'd1', slug: 'resume-ats-audit' })
+    const params = queryMock.mock.calls[0]?.[1] as unknown[]
+    // slug, category, title, description, prompt_text …, why_it_works
+    expect(params.slice(0, 5)).toEqual([
+      'resume-ats-audit',
+      '',
+      'Résumé — ATS audit',
+      '',
+      '',
+    ])
+    expect(params[8]).toBe('')
+  })
+
+  it('createDraftPrompt still rejects an unknown category once one is given', async () => {
+    vi.resetModules()
+    const { createDraftPrompt } = await import('./prompts')
+    const result = await createDraftPrompt({ title: 'X', category: 'not-a-category' })
+    expect(result.ok).toBe(false)
+    if (!result.ok) expect(result.errors[0]?.field).toBe('category')
+    expect(queryMock).not.toHaveBeenCalled()
+  })
+
+  it('updatePrompt keeps draft rules for a draft and the full schema for a live prompt', async () => {
+    vi.resetModules()
+    const { updatePrompt } = await import('./prompts')
+
+    queryMock.mockResolvedValueOnce({ rows: [{ status: 'draft' }] }) // status
+    queryMock.mockResolvedValueOnce({ rowCount: 1 }) // update
+    queryMock.mockResolvedValueOnce({ rows: [] }) // audit log
+    expect((await updatePrompt('p1', { title: 'Still writing' })).ok).toBe(true)
+
+    queryMock.mockReset()
+    queryMock.mockResolvedValueOnce({ rows: [{ status: 'published' }] })
+    const live = await updatePrompt('p1', { title: 'Still writing' })
+    expect(live.ok).toBe(false)
+    // Only the status lookup ran — nothing was written to the live row.
+    expect(queryMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('updatePrompt reports "no prompt" for an unknown id', async () => {
+    vi.resetModules()
+    queryMock.mockResolvedValueOnce({ rows: [] })
+    const { updatePrompt } = await import('./prompts')
+    const result = await updatePrompt('nope', BASE_INPUT)
+    expect(result.ok).toBe(false)
+    if (!result.ok) expect(result.errors[0]?.message).toMatch(/No prompt/)
+  })
+
+  it('publishPrompt lists every missing field of an unfinished draft and writes nothing', async () => {
+    vi.resetModules()
+    queryMock.mockResolvedValueOnce({
+      rows: [
+        dbRow({ category: '', description: '', why_it_works: '', verified_against: [] }),
+      ],
+    })
+    const { publishPrompt } = await import('./prompts')
+    const result = await publishPrompt('p1')
+    expect(result.ok).toBe(false)
+    if (!result.ok) {
+      expect(result.errors.map((e) => e.field)).toEqual([
+        'category',
+        'description',
+        'whyItWorks',
+        'verifiedAgainst',
+      ])
+      expect(result.errors[0]?.message).toMatch(/required to publish/)
+    }
+    expect(queryMock).toHaveBeenCalledTimes(1)
   })
 
   it('publishPrompt refuses a prompt with no verifiedAgainst entries', async () => {
     vi.resetModules()
-    queryMock.mockResolvedValueOnce({
-      rows: [
-        {
-          id: 'p1',
-          slug: 'x',
-          category: 'react',
-          title: 'X',
-          status: 'draft',
-          variables: [],
-          verified_against: [],
-        },
-      ],
-    })
+    queryMock.mockResolvedValueOnce({ rows: [dbRow({ verified_against: [] })] })
     const { publishPrompt } = await import('./prompts')
     const result = await publishPrompt('p1')
     expect(result.ok).toBe(false)
@@ -139,19 +231,7 @@ describe('createDraftPrompt / updatePrompt / status transitions', () => {
 
   it('publishPrompt succeeds and sets status=published when verifiedAgainst is present', async () => {
     vi.resetModules()
-    queryMock.mockResolvedValueOnce({
-      rows: [
-        {
-          id: 'p1',
-          slug: 'x',
-          category: 'react',
-          title: 'X',
-          status: 'draft',
-          variables: [],
-          verified_against: [VERIFIED],
-        },
-      ],
-    })
+    queryMock.mockResolvedValueOnce({ rows: [dbRow()] })
     queryMock.mockResolvedValueOnce({ rows: [] }) // update
     queryMock.mockResolvedValueOnce({ rows: [] }) // audit log
     const { publishPrompt } = await import('./prompts')

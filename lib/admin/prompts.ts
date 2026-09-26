@@ -4,7 +4,7 @@ import { getCustomCategory } from '../custom-categories'
 import { getPromptCategory } from '../prompts/categories'
 import { logAdminAction } from './audit'
 import { adminPool } from './pg'
-import { isValidSlugShape, normalizeSlug } from './slug'
+import { isValidSlugShape, normalizeSlug, slugify } from './slug'
 
 /**
  * Admin write path for `prompts` (migration 0007) — the counterpart to
@@ -133,6 +133,81 @@ export async function validatePromptInput(input: unknown): Promise<ValidationRes
   return { ok: true, value: result.data }
 }
 
+/**
+ * What a DRAFT needs: only a title. Drafts are saved automatically while
+ * the admin works (PromptForm's server autosave), so they are routinely
+ * half-written — no category picked yet, no "why it works" yet. Every
+ * other field defaults to empty, the slug falls back to the title's, and
+ * a category is checked only once one is given. Completeness is enforced
+ * where it matters — `publishPrompt` — and never relaxed for a prompt
+ * that is live or has been (`updatePrompt` keeps the full schema there).
+ */
+const DraftPromptInputSchema = PromptInputSchema.extend({
+  slug: z.string().default(''),
+  category: z.string().trim().default(''),
+  description: z.string().trim().max(400).default(''),
+  promptText: z.string().trim().default(''),
+  whyItWorks: z.string().trim().default(''),
+})
+  .transform((p) => ({ ...p, slug: normalizeSlug(p.slug) || slugify(p.title) }))
+  .refine((p) => isValidSlugShape(p.slug), {
+    path: ['slug'],
+    message: 'Slug must be lowercase-hyphenated, e.g. "my-prompt".',
+  })
+
+export async function validateDraftPromptInput(
+  input: unknown,
+): Promise<ValidationResult> {
+  const result = DraftPromptInputSchema.safeParse(input)
+  if (!result.success) {
+    return {
+      ok: false,
+      errors: result.error.issues.map((issue) => ({
+        field: issue.path.join('.') || '(root)',
+        message:
+          issue.path[0] === 'title' ? 'A draft needs at least a title.' : issue.message,
+      })),
+    }
+  }
+  const p = result.data
+  if (p.category) {
+    const known =
+      getPromptCategory(p.category) ?? (await getCustomCategory('prompt', p.category))
+    if (!known) {
+      return {
+        ok: false,
+        errors: [{ field: 'category', message: `Unknown category "${p.category}".` }],
+      }
+    }
+  }
+  return { ok: true, value: p }
+}
+
+/** Every field a prompt page needs before it can go live, in plain words —
+ * the list PublishFromPreview/StatusActions show when a draft isn't
+ * finished. Used by `publishPrompt` and by the preview page. */
+export async function publishBlockers(p: PromptInput): Promise<FieldError[]> {
+  const errors: FieldError[] = []
+  const need = (field: string, value: string | undefined, label: string) => {
+    if (!value?.trim())
+      errors.push({ field, message: `${label} is required to publish.` })
+  }
+  need('title', p.title, 'A title')
+  if (!p.category.trim()) {
+    errors.push({ field: 'category', message: 'A category is required to publish.' })
+  } else if (
+    !getPromptCategory(p.category) &&
+    !(await getCustomCategory('prompt', p.category))
+  ) {
+    errors.push({ field: 'category', message: `Unknown category "${p.category}".` })
+  }
+  need('description', p.description, 'A description')
+  need('promptText', p.promptText, 'The prompt text')
+  need('whyItWorks', p.whyItWorks, '"Why it works"')
+  errors.push(...publishReadinessErrors(p))
+  return errors
+}
+
 /** §9's rule enforced here, at publish time specifically — a draft can be
  * saved with an empty verifiedAgainst, but publishing without at least
  * one real verification is exactly the "unexplained prompt selling an
@@ -167,7 +242,7 @@ export async function createDraftPrompt(
   input: unknown,
   actor?: string,
 ): Promise<WriteResult> {
-  const validated = await validatePromptInput(input)
+  const validated = await validateDraftPromptInput(input)
   if (!validated.ok) return validated
   const p = validated.value
 
@@ -235,7 +310,23 @@ export async function updatePrompt(
   input: unknown,
   actor?: string,
 ): Promise<WriteResult> {
-  const validated = await validatePromptInput(input)
+  // A draft may stay half-written (it is auto-saved as the admin types);
+  // anything that is or was live keeps the full schema.
+  const current = await adminPool().query<{ status: string }>(
+    'select status from prompts where id = $1',
+    [id],
+  )
+  const status = current.rows[0]?.status
+  if (!status) {
+    return {
+      ok: false,
+      errors: [{ field: '(root)', message: 'No prompt with that id.' }],
+    }
+  }
+  const validated =
+    status === 'draft'
+      ? await validateDraftPromptInput(input)
+      : await validatePromptInput(input)
   if (!validated.ok) return validated
   const p = validated.value
 
@@ -325,17 +416,16 @@ async function fetchPromptRow(id: string): Promise<PromptRow | undefined> {
  * prompt is published, so re-publishing after an unpublish doesn't reset
  * its original publish date. */
 export async function publishPrompt(id: string, actor?: string): Promise<WriteResult> {
-  const row = await fetchPromptRow(id)
+  const row = await getAdminPrompt(id)
   if (!row)
     return {
       ok: false,
       errors: [{ field: '(root)', message: 'No prompt with that id.' }],
     }
 
-  const readinessErrors = publishReadinessErrors({
-    verifiedAgainst: (row.verified_against as unknown[] | null) ?? [],
-  } as PromptInput)
-  if (readinessErrors.length > 0) return { ok: false, errors: readinessErrors }
+  // Drafts can be saved incomplete; this is where completeness is enforced.
+  const blockers = await publishBlockers(row)
+  if (blockers.length > 0) return { ok: false, errors: blockers }
 
   await adminPool().query(
     `update prompts set status = 'published', published_at = coalesce(published_at, now()) where id = $1`,
