@@ -1,8 +1,12 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { loginHref, readApiFailure } from '@/lib/admin/client-errors'
+import { normalizeSlug, normalizeSlugInput } from '@/lib/admin/slug'
+import { useFormDraft } from '@/lib/admin/use-form-draft'
 import { SKILL_CATEGORIES } from '@/lib/skills/categories'
+import { DraftBanner } from '../../DraftBanner'
 
 interface FieldError {
   readonly field: string
@@ -39,33 +43,81 @@ export function SkillEditForm({ initial }: { initial: SkillEditInitial }) {
 
   useEffect(() => {
     fetch('/api/admin/categories?type=skill')
-      .then((r) => r.json())
+      .then((r) => (r.ok ? r.json() : { categories: [] }))
       .then((b) => setCustomCategories(b.categories ?? []))
       .catch(() => {})
   }, [])
+
+  // Unsaved edits survive a refresh/back, keyed by this skill's id.
+  const initialSnapshot = useMemo(
+    () => ({
+      name: initial.name,
+      slug: initial.slug,
+      category: initial.category,
+      description: initial.description,
+      body: initial.body,
+    }),
+    [initial],
+  )
+  const restore = useCallback((d: typeof initialSnapshot) => {
+    setName(d.name)
+    setSlug(d.slug)
+    setCategory(d.category)
+    setDescription(d.description)
+    setBody(d.body)
+  }, [])
+  const draft = useFormDraft(
+    `skill:${initial.id}`,
+    { name, slug, category, description, body },
+    { initial: initialSnapshot, restore },
+  )
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
     setErrors([])
     setSaved(false)
     setSaving(true)
-    const res = await fetch(`/api/admin/skills/${encodeURIComponent(initial.id)}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, slug, category, description, body }),
-    })
-    setSaving(false)
-    if (!res.ok) {
-      const b = await res.json().catch(() => ({}))
-      setErrors(b.errors ?? [{ field: '(root)', message: 'Save failed.' }])
+    let res: Response
+    try {
+      res = await fetch(`/api/admin/skills/${encodeURIComponent(initial.id)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          slug: normalizeSlug(slug),
+          category,
+          description,
+          body,
+        }),
+      })
+    } catch {
+      setSaving(false)
+      setErrors([
+        {
+          field: '(root)',
+          message: 'Could not reach the server. Your edits are kept — try again.',
+        },
+      ])
       return
     }
+    setSaving(false)
+    if (!res.ok) {
+      const { errors: apiErrors, unauthenticated } = await readApiFailure(res)
+      if (unauthenticated) {
+        router.push(loginHref(window.location.pathname))
+        return
+      }
+      setErrors(apiErrors)
+      return
+    }
+    draft.clear()
     setSaved(true)
     router.refresh()
   }
 
   return (
     <form onSubmit={onSubmit} className="space-y-5">
+      <DraftBanner restoredAt={draft.restoredAt} onDiscard={draft.discard} />
       {errors.length > 0 && (
         <ul className="rounded-[var(--radius-sm)] border border-red-300 bg-red-50 p-3 text-red-700 text-sm">
           {errors.map((e) => (
@@ -97,7 +149,8 @@ export function SkillEditForm({ initial }: { initial: SkillEditInitial }) {
             id="skill-slug"
             className="field"
             value={slug}
-            onChange={(e) => setSlug(e.target.value)}
+            onChange={(e) => setSlug(normalizeSlugInput(e.target.value))}
+            onBlur={() => setSlug((s) => normalizeSlug(s))}
           />
           <p className="hint mt-1">Changing this changes the page URL.</p>
         </div>
