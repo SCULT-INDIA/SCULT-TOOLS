@@ -1,4 +1,5 @@
 import { Pool } from 'pg'
+import { SUPABASE_ROOT_CA } from './supabase-ca'
 
 /**
  * The admin system's one elevated database connection.
@@ -40,7 +41,14 @@ export function adminPool(): Pool {
     }
     globalForPg.adminPgPool = new Pool({
       connectionString,
-      ssl: { rejectUnauthorized: false },
+      // Verify the server: Supabase's chain ends in its own root CA (not a
+      // public one), so it is pinned in supabase-ca.ts. `rejectUnauthorized:
+      // false` would encrypt but never authenticate — the postgres role's
+      // password could be handed to whoever answers on that host.
+      ssl: {
+        ca: process.env.SUPABASE_DB_SSL_CA || SUPABASE_ROOT_CA,
+        rejectUnauthorized: true,
+      },
       max: 3,
       idleTimeoutMillis: 30_000,
       connectionTimeoutMillis: 10_000,

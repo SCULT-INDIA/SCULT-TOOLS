@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { checkRateLimit, clientIpFromHeaders } from '@/lib/rate-limit'
 import { hasValidSession } from './auth'
+import { dbUrlHint } from './db-url'
 
 /**
  * The one wrapper every `/api/admin/*` Route Handler goes through. It
@@ -87,13 +88,22 @@ export function describeAdminError(
   const pgCode = (error as { code?: unknown } | null)?.code
   if (
     typeof pgCode === 'string' &&
-    /^(ECONNREFUSED|ENOTFOUND|ETIMEDOUT|ECONNRESET|28P01|28000|3D000|57P01|08\d{3})$/.test(
+    /^(ECONNREFUSED|ENOTFOUND|ENETUNREACH|EHOSTUNREACH|EAI_AGAIN|ETIMEDOUT|ECONNRESET|28P01|28000|3D000|57P01|08\d{3})$/.test(
       pgCode,
     )
   ) {
     return {
       code: 'database-unreachable',
-      message: `The database connection failed (${pgCode}). Check SUPABASE_DB_URL and that the database is reachable from this deployment. Ref ${ref}.`,
+      message: `The database connection failed (${pgCode}).${dbUrlHint(process.env.SUPABASE_DB_URL)} Ref ${ref}.`,
+    }
+  }
+  if (
+    typeof pgCode === 'string' &&
+    /CERT|CERTIFICATE|UNABLE_TO_VERIFY|ERR_TLS/.test(pgCode)
+  ) {
+    return {
+      code: 'database-tls',
+      message: `The database's TLS certificate could not be verified (${pgCode}). The connection is pinned to Supabase's root CA; for a database that is not on Supabase, set SUPABASE_DB_SSL_CA to its CA certificate. Ref ${ref}.`,
     }
   }
   return {

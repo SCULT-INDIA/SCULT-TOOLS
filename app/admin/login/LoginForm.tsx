@@ -27,6 +27,10 @@ export function LoginForm() {
       setError(body.error ?? 'Login failed.')
       return
     }
+    // Next keeps the previous page mounted (hidden) in its router cache
+    // for a soft navigation, so the controlled input would otherwise keep
+    // the typed password in the DOM until a full reload.
+    setPassword('')
     router.push(returnTo)
     router.refresh()
   }
