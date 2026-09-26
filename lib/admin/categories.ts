@@ -2,7 +2,7 @@ import { revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { logAdminAction } from './audit'
 import { adminPool } from './pg'
-import { isValidSlugShape } from './slug'
+import { isValidSlugShape, normalizeSlug } from './slug'
 
 /**
  * Admin-side create for `custom_categories` — the write half of
@@ -13,10 +13,25 @@ import { isValidSlugShape } from './slug'
 
 const TileSchema = z.enum(['yellow', 'blue', 'lavender', 'green'])
 
+/** 300KB of image → ~400KB as base64. This string is inlined into the HTML
+ * of every page that shows the category's logo, so it has to stay small. */
+const MAX_LOGO_DATA_URL_LENGTH = 410_000
+
+/** Only raster formats, and only well-formed base64. Not SVG: an SVG can
+ * carry script, and while `<img>` never runs it, nothing should be able to
+ * store one here and rely on every future renderer being an `<img>`. */
+export function isRasterImageDataUrl(value: string): boolean {
+  const match = /^data:image\/(png|jpeg|webp|gif);base64,([A-Za-z0-9+/]+={0,2})$/.exec(
+    value,
+  )
+  return match !== null && match[2] !== undefined && match[2].length % 4 === 0
+}
+
 export const CreateCategorySchema = z.object({
   contentType: z.enum(['prompt', 'skill']),
   slug: z
     .string()
+    .transform(normalizeSlug)
     .refine(isValidSlugShape, 'Slug must be lowercase-hyphenated, e.g. "my-category".'),
   name: z.string().trim().min(1).max(80),
   blurb: z.string().trim().min(1).max(240),
@@ -27,7 +42,13 @@ export const CreateCategorySchema = z.object({
   // directly in Postgres rather than a Storage bucket. Capped well above
   // any reasonable small icon/logo image but far below anything that would
   // strain a request body or bloat the table.
-  logoDataUrl: z.string().trim().min(1).max(2_000_000).optional(),
+  logoDataUrl: z
+    .string()
+    .trim()
+    .min(1)
+    .max(MAX_LOGO_DATA_URL_LENGTH, 'The logo image must be under 300KB.')
+    .refine(isRasterImageDataUrl, 'The logo must be a PNG, JPEG, WebP or GIF image.')
+    .optional(),
   tile: TileSchema,
   // Only meaningful for contentType 'prompt'. No longer required at
   // create time — the admin form intentionally doesn't ask for it

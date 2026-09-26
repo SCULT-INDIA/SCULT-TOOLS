@@ -4,7 +4,7 @@ import { getCustomCategory } from '../custom-categories'
 import { getPromptCategory } from '../prompts/categories'
 import { logAdminAction } from './audit'
 import { adminPool } from './pg'
-import { isValidSlugShape } from './slug'
+import { isValidSlugShape, normalizeSlug } from './slug'
 
 /**
  * Admin write path for `prompts` (migration 0007) — the counterpart to
@@ -28,15 +28,27 @@ const VariableSchema = z.object({
   required: z.boolean(),
 })
 
+/** A URL that is safe to put in an `href`/`src`: absolute http(s), or a
+ * root-relative path on this site. Rules out `javascript:` and `data:` —
+ * these fields render straight into links on the public prompt page. */
+const SafeLinkSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .refine(
+    (v) => /^https?:\/\/[^\s]+$/i.test(v) || (v.startsWith('/') && !v.startsWith('//')),
+    'Must be an http(s) URL or a path on this site.',
+  )
+
 const ExampleImageSchema = z.object({
-  src: z.string().trim().min(1),
+  src: SafeLinkSchema,
   alt: z.string().trim().min(1),
   aspectRatio: z.enum(['9:16', '3:4', '4:3', '16:9']).optional(),
   modelCredit: z
     .object({
       name: z.string().trim().min(1),
-      instagram: z.string().trim().optional(),
-      linkedin: z.string().trim().optional(),
+      instagram: SafeLinkSchema.optional(),
+      linkedin: SafeLinkSchema.optional(),
     })
     .optional(),
 })
@@ -60,6 +72,7 @@ const ChangelogEntrySchema = z.object({
 export const PromptInputSchema = z.object({
   slug: z
     .string()
+    .transform(normalizeSlug)
     .refine(isValidSlugShape, 'Slug must be lowercase-hyphenated, e.g. "my-prompt".'),
   category: z.string().trim().min(1),
   title: z.string().trim().min(1).max(160),

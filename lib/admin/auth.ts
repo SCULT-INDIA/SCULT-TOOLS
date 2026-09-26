@@ -33,7 +33,12 @@ import { cookies } from 'next/headers'
  * signature is what proves the cookie was actually issued by this server.
  */
 
-const COOKIE_NAME = 'admin_session'
+/** `__Host-` in production: the browser then refuses the cookie unless it
+ * is Secure, has no Domain, and Path=/ — so a subdomain or an insecure
+ * origin can never set or overwrite it. Not usable on plain-http
+ * localhost, hence the plain name outside production. */
+const COOKIE_NAME =
+  process.env.NODE_ENV === 'production' ? '__Host-admin_session' : 'admin_session'
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000 // 12h — long enough for a work session, short enough that a stale forgotten login doesn't linger for days.
 const SCRYPT_KEY_LENGTH = 64
 

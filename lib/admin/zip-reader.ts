@@ -28,6 +28,9 @@ const LOCAL_FILE_SIGNATURE = 0x04034b50
  * comment — scanning that far back from the end is enough to find it in
  * any real-world zip without reading the whole file into the search. */
 const MAX_EOCD_SEARCH = 65_535 + 22
+/** Largest single entry this will inflate. SKILL.md is markdown — the
+ * biggest real one in the 10,000-skill registry is well under 100KB. */
+const MAX_ENTRY_BYTES = 4 * 1024 * 1024
 
 export interface ZipReadError {
   readonly ok: false
@@ -168,12 +171,23 @@ export function readZipEntry(
       message: `${targetName}'s data could not be read — the .zip may be truncated.`,
     }
 
+  // Zip bomb guard: the central directory's declared size is checked
+  // before inflating, and the inflater is capped at that size, so a small
+  // upload cannot expand into gigabytes in this function's memory. Deflate
+  // can reach ~1000:1, so the 15MB upload cap alone was no protection.
+  if (entry.uncompressedSize > MAX_ENTRY_BYTES) {
+    return {
+      ok: false,
+      message: `${targetName} is ${Math.round(entry.uncompressedSize / 1024 / 1024)}MB uncompressed — the limit is ${MAX_ENTRY_BYTES / 1024 / 1024}MB.`,
+    }
+  }
+
   let decompressed: Buffer
   if (entry.compressionMethod === 0) {
     decompressed = raw
   } else if (entry.compressionMethod === 8) {
     try {
-      decompressed = inflateRawSync(raw)
+      decompressed = inflateRawSync(raw, { maxOutputLength: MAX_ENTRY_BYTES })
     } catch {
       return {
         ok: false,

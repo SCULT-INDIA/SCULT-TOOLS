@@ -29,3 +29,44 @@ export function slugify(title: string): string {
 export function isValidSlugShape(slug: string): boolean {
   return /^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug) && slug.length <= 96
 }
+
+/**
+ * Every character that reads as "a dash" but isn't U+002D: the hyphen
+ * variants macOS "smart dashes" and word processors substitute (en/em
+ * dash, non-breaking hyphen, minus, figure dash, soft hyphen…).
+ * 2026-09-25: an admin typing `ats-friendly-resume-audit-skill` on a Mac
+ * had the form rejected with "Slug must be lowercase-hyphenated" — the
+ * text carried an en dash, invisible at a glance.
+ */
+const DASH_LIKE = /[­‐-―−⁃﹘﹣－]/g
+/** Zero-width and BOM characters a copy-paste can carry along. */
+const INVISIBLE = /[​-‍⁠﻿]/g
+
+/**
+ * A slug as an admin is typing it: lowercased, dash variants and invisible
+ * characters cleaned up, separators turned into hyphens, everything else
+ * dropped — but leading/trailing hyphens are KEPT so typing "my-" on the
+ * way to "my-skill" isn't fought character by character. `normalizeSlug`
+ * is the finishing pass for blur/submit.
+ */
+export function normalizeSlugInput(input: string): string {
+  return input
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(INVISIBLE, '')
+    .replace(DASH_LIKE, '-')
+    .toLowerCase()
+    .replace(/[\s_]+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-{2,}/g, '-')
+    .slice(0, 96)
+}
+
+/** The finished form of `normalizeSlugInput`: also trims leading/trailing
+ * hyphens. Every admin schema runs a submitted slug through this before
+ * validating, so a slug that only LOOKED wrong (smart dash, stray space)
+ * is repaired rather than rejected; one with nothing usable in it (e.g.
+ * "★★★") still normalises to "" and fails `isValidSlugShape`. */
+export function normalizeSlug(input: string): string {
+  return normalizeSlugInput(input).replace(/^-+|-+$/g, '')
+}

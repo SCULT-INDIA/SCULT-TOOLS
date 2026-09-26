@@ -32,9 +32,16 @@ describe('validatePromptInput', () => {
     expect(result.ok).toBe(true)
   })
 
-  it('rejects a badly-shaped slug', async () => {
+  it('repairs a slug that only looked wrong (case, spaces, smart dashes) instead of rejecting it', async () => {
     const { validatePromptInput } = await import('./prompts')
-    const result = await validatePromptInput({ ...BASE_INPUT, slug: 'Not A Slug' })
+    const result = await validatePromptInput({ ...BASE_INPUT, slug: ' Not A–Slug ' })
+    expect(result.ok).toBe(true)
+    if (result.ok) expect(result.value.slug).toBe('not-a-slug')
+  })
+
+  it('rejects a slug with nothing usable in it and names the field', async () => {
+    const { validatePromptInput } = await import('./prompts')
+    const result = await validatePromptInput({ ...BASE_INPUT, slug: '★★★' })
     expect(result.ok).toBe(false)
     if (!result.ok) expect(result.errors.some((e) => e.field === 'slug')).toBe(true)
   })
@@ -103,7 +110,7 @@ describe('createDraftPrompt / updatePrompt / status transitions', () => {
   it('createDraftPrompt never touches the database for invalid input', async () => {
     vi.resetModules()
     const { createDraftPrompt } = await import('./prompts')
-    await createDraftPrompt({ ...BASE_INPUT, slug: 'BAD' })
+    await createDraftPrompt({ ...BASE_INPUT, slug: '★★★' })
     expect(queryMock).not.toHaveBeenCalled()
   })
 

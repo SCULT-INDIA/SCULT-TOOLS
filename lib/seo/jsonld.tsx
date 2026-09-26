@@ -280,12 +280,35 @@ export function skillJsonLd(skill: Skill): object {
   }
 }
 
-/** Renders a JSON-LD script tag. Input is always our own static config. */
+/**
+ * JSON for embedding inside a `<script>`: `JSON.stringify` alone does not
+ * escape `<`, so a string value containing `</script>` would end the tag
+ * early and whatever followed it would run as script. That was harmless
+ * while every value here came from this repo's own registries; since the
+ * admin CMS, prompt titles and descriptions come from a database. The
+ * escapes are valid JSON, so consumers parse exactly the same object.
+ */
+export function serializeJsonLd(data: object): string {
+  return JSON.stringify(data).replace(
+    HTML_AND_LINE_SEPARATOR_CHARS,
+    (c) => `\\u${c.charCodeAt(0).toString(16).padStart(4, '0')}`,
+  )
+}
+
+/** `<`, `>`, `&`, plus U+2028/U+2029 (valid inside a JSON string, but line
+ * terminators to an HTML script parser). Built from code points so no
+ * invisible character has to live in this source file. */
+const HTML_AND_LINE_SEPARATOR_CHARS = new RegExp(
+  `[<>&${String.fromCharCode(0x2028)}${String.fromCharCode(0x2029)}]`,
+  'g',
+)
+
+/** Renders a JSON-LD script tag. */
 export function JsonLd({ data }: { data: object }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }}
     />
   )
 }

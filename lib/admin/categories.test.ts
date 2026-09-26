@@ -1,5 +1,37 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { validateCategory } from './categories'
+import { isRasterImageDataUrl, validateCategory } from './categories'
+
+describe('isRasterImageDataUrl', () => {
+  it('accepts well-formed raster image data URLs', () => {
+    expect(isRasterImageDataUrl('data:image/png;base64,iVBORw0KGgo=')).toBe(true)
+    expect(isRasterImageDataUrl('data:image/webp;base64,UklGRg==')).toBe(true)
+  })
+
+  it('rejects SVG (can carry script), non-image types, and malformed base64', () => {
+    expect(isRasterImageDataUrl('data:image/svg+xml;base64,PHN2Zz4=')).toBe(false)
+    expect(isRasterImageDataUrl('data:text/html;base64,PGI+')).toBe(false)
+    expect(isRasterImageDataUrl('data:image/png;base64,not base64!')).toBe(false)
+    expect(isRasterImageDataUrl('https://example.com/logo.png')).toBe(false)
+  })
+
+  it('is enforced by the category schema', () => {
+    const base = {
+      contentType: 'skill' as const,
+      slug: 'x',
+      name: 'X',
+      blurb: 'b',
+      intro: 'i',
+      icon: 'Sparkles',
+      tile: 'green' as const,
+    }
+    expect(
+      validateCategory({ ...base, logoDataUrl: 'data:image/svg+xml;base64,PHN2Zz4=' }).ok,
+    ).toBe(false)
+    expect(
+      validateCategory({ ...base, logoDataUrl: 'data:image/png;base64,iVBORw0KGgo=' }).ok,
+    ).toBe(true)
+  })
+})
 
 vi.mock('next/cache', () => ({ revalidateTag: vi.fn() }))
 
@@ -41,8 +73,14 @@ describe('validateCategory', () => {
     expect(result.ok).toBe(true)
   })
 
-  it('rejects a badly-shaped slug and names the field', () => {
+  it('repairs a slug that only looked wrong instead of rejecting it', () => {
     const result = validateCategory({ ...VALID_SKILL, slug: 'Not A Slug!' })
+    expect(result.ok).toBe(true)
+    if (result.ok) expect(result.value.slug).toBe('not-a-slug')
+  })
+
+  it('rejects a slug with nothing usable in it and names the field', () => {
+    const result = validateCategory({ ...VALID_SKILL, slug: '★★★' })
     expect(result.ok).toBe(false)
     if (!result.ok) expect(result.errors.some((e) => e.field === 'slug')).toBe(true)
   })
@@ -82,7 +120,7 @@ describe('createCustomCategory', () => {
   it('returns the validation errors without touching the database for invalid input', async () => {
     vi.resetModules()
     const { createCustomCategory } = await import('./categories')
-    const result = await createCustomCategory({ ...VALID_SKILL, slug: 'BAD SLUG' })
+    const result = await createCustomCategory({ ...VALID_SKILL, slug: '★★★' })
     expect(result.ok).toBe(false)
     expect(queryMock).not.toHaveBeenCalled()
   })
@@ -133,12 +171,12 @@ describe('createCustomCategory', () => {
     const { createCustomCategory } = await import('./categories')
     await createCustomCategory({
       ...VALID_SKILL,
-      logoDataUrl: 'data:image/png;base64,abc',
+      logoDataUrl: 'data:image/png;base64,iVBORw0KGgo=',
     })
     const insertCall = queryMock.mock.calls.find((call) =>
       call[0].includes('insert into custom_categories'),
     )
-    expect(insertCall?.[1]).toContain('data:image/png;base64,abc')
+    expect(insertCall?.[1]).toContain('data:image/png;base64,iVBORw0KGgo=')
   })
 
   it('reports a duplicate slug as a field error, not an unhandled throw', async () => {

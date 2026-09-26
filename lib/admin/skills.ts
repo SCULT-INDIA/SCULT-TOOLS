@@ -7,7 +7,7 @@ import type { Skill } from '../skills/types'
 import { logAdminAction } from './audit'
 import { adminPool } from './pg'
 import { type ParsedSkillMd, parseSkillMd } from './skill-md-parser'
-import { isValidSlugShape } from './slug'
+import { isValidSlugShape, normalizeSlug } from './slug'
 import { readZipEntry } from './zip-reader'
 
 /**
@@ -53,6 +53,7 @@ type WriteResult =
 const MetadataSchema = z.object({
   slug: z
     .string()
+    .transform(normalizeSlug)
     .refine(isValidSlugShape, 'Slug must be lowercase-hyphenated, e.g. "my-skill".'),
   category: z.string().trim().min(1),
   tags: z.array(z.string().trim().min(1)).default([]),
@@ -281,6 +282,7 @@ export async function archiveSkill(id: string, actor?: string): Promise<WriteRes
 const UpdateSkillSchema = z.object({
   slug: z
     .string()
+    .transform(normalizeSlug)
     .refine(isValidSlugShape, 'Slug must be lowercase-hyphenated, e.g. "my-skill".'),
   category: z.string().trim().min(1),
   name: z.string().trim().min(1).max(200),

@@ -7,6 +7,7 @@ import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { HeaderGate } from '@/components/layout/HeaderGate'
 import { FloatingActions } from '@/components/ui/FloatingActions'
+import { serializeJsonLd } from '@/lib/seo/jsonld'
 import { SITE } from '@/lib/site'
 import './globals.css'
 
@@ -198,7 +199,7 @@ function OrganizationJsonLd() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }}
     />
   )
 }

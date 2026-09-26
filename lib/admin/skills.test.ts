@@ -81,9 +81,19 @@ describe('validateSkillMetadata', () => {
     expect(result.ok).toBe(true)
   })
 
-  it('rejects a badly-shaped slug', async () => {
+  it('repairs a slug carrying a Mac smart dash instead of rejecting it', async () => {
     const { validateSkillMetadata } = await import('./skills')
-    const result = await validateSkillMetadata({ ...VALID_METADATA, slug: 'Not A Slug' })
+    const result = await validateSkillMetadata({
+      ...VALID_METADATA,
+      slug: 'ats–friendly-resume-audit-skill',
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) expect(result.value.slug).toBe('ats-friendly-resume-audit-skill')
+  })
+
+  it('rejects a slug with nothing usable in it', async () => {
+    const { validateSkillMetadata } = await import('./skills')
+    const result = await validateSkillMetadata({ ...VALID_METADATA, slug: '★★★' })
     expect(result.ok).toBe(false)
   })
 
@@ -153,7 +163,7 @@ describe('createDraftSkill / status transitions', () => {
   it('never touches the database when the metadata is invalid', async () => {
     vi.resetModules()
     const { createDraftSkill } = await import('./skills')
-    await createDraftSkill(validZip(), { ...VALID_METADATA, slug: 'BAD SLUG' })
+    await createDraftSkill(validZip(), { ...VALID_METADATA, slug: '★★★' })
     expect(queryMock).not.toHaveBeenCalled()
   })
 

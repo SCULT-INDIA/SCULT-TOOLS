@@ -1,5 +1,53 @@
 import { describe, expect, it } from 'vitest'
-import { isValidSlugShape, slugify } from './slug'
+import { isValidSlugShape, normalizeSlug, normalizeSlugInput, slugify } from './slug'
+
+describe('normalizeSlug', () => {
+  it('leaves an already-valid slug untouched', () => {
+    expect(normalizeSlug('ats-friendly-resume-audit-skill')).toBe(
+      'ats-friendly-resume-audit-skill',
+    )
+  })
+
+  it('repairs the smart-dash variants a Mac substitutes for a hyphen', () => {
+    for (const dash of ['–', '—', '‑', '−', '­']) {
+      expect(normalizeSlug(`ats${dash}friendly-resume`)).toBe('ats-friendly-resume')
+    }
+  })
+
+  it('strips zero-width characters and surrounding whitespace', () => {
+    expect(normalizeSlug(' ats-friendly​-resume \n')).toBe('ats-friendly-resume')
+  })
+
+  it('lowercases and turns spaces/underscores into hyphens', () => {
+    expect(normalizeSlug('My New_Skill')).toBe('my-new-skill')
+  })
+
+  it('collapses runs and trims leading/trailing hyphens', () => {
+    expect(normalizeSlug('--my---skill--')).toBe('my-skill')
+  })
+
+  it('normalises to an empty string when nothing usable remains, so validation still rejects it', () => {
+    expect(normalizeSlug('★★★')).toBe('')
+    expect(isValidSlugShape(normalizeSlug('★★★'))).toBe(false)
+  })
+
+  it('always produces something isValidSlugShape accepts, given any usable character', () => {
+    for (const input of ['Résumé Audit', 'a–b', 'x  y', 'Z_9']) {
+      expect(isValidSlugShape(normalizeSlug(input))).toBe(true)
+    }
+  })
+})
+
+describe('normalizeSlugInput', () => {
+  it('keeps a trailing hyphen while typing, so "my-" is not fought on the way to "my-skill"', () => {
+    expect(normalizeSlugInput('my-')).toBe('my-')
+    expect(normalizeSlug('my-')).toBe('my')
+  })
+
+  it('still cleans dashes, case and invalid characters as they are typed', () => {
+    expect(normalizeSlugInput('My–Skill!')).toBe('my-skill')
+  })
+})
 
 describe('slugify', () => {
   it('lowercases and hyphenates a normal title', () => {
