@@ -223,6 +223,14 @@ function publishReadinessErrors(p: PromptInput): FieldError[] {
   return errors
 }
 
+/** Prompt ids are UUIDs. Anything else (a mangled link, "null" from a
+ * client bug, a guessed path) is simply "not found" — without this guard
+ * Postgres rejects the cast and the request fails as a 500. */
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+export function isPromptId(id: string): boolean {
+  return UUID.test(id)
+}
+
 function isUniqueViolation(error: unknown): boolean {
   return (
     typeof error === 'object' &&
@@ -312,6 +320,12 @@ export async function updatePrompt(
 ): Promise<WriteResult> {
   // A draft may stay half-written (it is auto-saved as the admin types);
   // anything that is or was live keeps the full schema.
+  if (!isPromptId(id)) {
+    return {
+      ok: false,
+      errors: [{ field: '(root)', message: 'No prompt with that id.' }],
+    }
+  }
   const current = await adminPool().query<{ status: string }>(
     'select status from prompts where id = $1',
     [id],
@@ -403,6 +417,7 @@ interface PromptRow {
 }
 
 async function fetchPromptRow(id: string): Promise<PromptRow | undefined> {
+  if (!isPromptId(id)) return undefined
   const { rows } = await adminPool().query<PromptRow>(
     'select id, slug, category, title, status, variables, verified_against from prompts where id = $1',
     [id],
@@ -506,6 +521,7 @@ export async function deletePrompt(id: string, actor?: string): Promise<WriteRes
 export async function getAdminPrompt(
   id: string,
 ): Promise<(PromptInput & { id: string; status: string }) | undefined> {
+  if (!isPromptId(id)) return undefined
   const { rows } = await adminPool().query(
     `select id, slug, category, title, description, prompt_text, variables, target_tools, tags,
             why_it_works, example_output, example_image, video_prompt, verified_against,

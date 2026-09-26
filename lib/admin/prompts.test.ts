@@ -23,12 +23,16 @@ const BASE_INPUT = {
   whyItWorks: 'Because it constrains the model to a concrete output shape.',
 }
 
+/** Prompt ids are UUIDs (lib/admin/prompts.ts's isPromptId guard). */
+const P1 = '11111111-2222-4333-8444-555555555555'
+const MISSING_ID = '99999999-2222-4333-8444-555555555555'
+
 const VERIFIED = { tool: 'ChatGPT', version: '5.1', date: '2026-09-01' }
 
 /** A complete prompts row as `getAdminPrompt` selects it. */
 function dbRow(overrides: Record<string, unknown> = {}) {
   return {
-    id: 'p1',
+    id: P1,
     slug: 'x',
     category: REAL_CATEGORY,
     title: 'X',
@@ -177,21 +181,33 @@ describe('createDraftPrompt / updatePrompt / status transitions', () => {
     queryMock.mockResolvedValueOnce({ rows: [{ status: 'draft' }] }) // status
     queryMock.mockResolvedValueOnce({ rowCount: 1 }) // update
     queryMock.mockResolvedValueOnce({ rows: [] }) // audit log
-    expect((await updatePrompt('p1', { title: 'Still writing' })).ok).toBe(true)
+    expect((await updatePrompt(P1, { title: 'Still writing' })).ok).toBe(true)
 
     queryMock.mockReset()
     queryMock.mockResolvedValueOnce({ rows: [{ status: 'published' }] })
-    const live = await updatePrompt('p1', { title: 'Still writing' })
+    const live = await updatePrompt(P1, { title: 'Still writing' })
     expect(live.ok).toBe(false)
     // Only the status lookup ran — nothing was written to the live row.
     expect(queryMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('treats a malformed id (e.g. "null") as not found without querying', async () => {
+    vi.resetModules()
+    const { deletePrompt, getAdminPrompt, publishPrompt, updatePrompt } = await import(
+      './prompts'
+    )
+    expect(await getAdminPrompt('null')).toBeUndefined()
+    expect((await publishPrompt('null')).ok).toBe(false)
+    expect((await updatePrompt('../x', BASE_INPUT)).ok).toBe(false)
+    expect((await deletePrompt('123')).ok).toBe(false)
+    expect(queryMock).not.toHaveBeenCalled()
   })
 
   it('updatePrompt reports "no prompt" for an unknown id', async () => {
     vi.resetModules()
     queryMock.mockResolvedValueOnce({ rows: [] })
     const { updatePrompt } = await import('./prompts')
-    const result = await updatePrompt('nope', BASE_INPUT)
+    const result = await updatePrompt(MISSING_ID, BASE_INPUT)
     expect(result.ok).toBe(false)
     if (!result.ok) expect(result.errors[0]?.message).toMatch(/No prompt/)
   })
@@ -204,7 +220,7 @@ describe('createDraftPrompt / updatePrompt / status transitions', () => {
       ],
     })
     const { publishPrompt } = await import('./prompts')
-    const result = await publishPrompt('p1')
+    const result = await publishPrompt(P1)
     expect(result.ok).toBe(false)
     if (!result.ok) {
       expect(result.errors.map((e) => e.field)).toEqual([
@@ -222,7 +238,7 @@ describe('createDraftPrompt / updatePrompt / status transitions', () => {
     vi.resetModules()
     queryMock.mockResolvedValueOnce({ rows: [dbRow({ verified_against: [] })] })
     const { publishPrompt } = await import('./prompts')
-    const result = await publishPrompt('p1')
+    const result = await publishPrompt(P1)
     expect(result.ok).toBe(false)
     if (!result.ok) expect(result.errors[0]?.field).toBe('verifiedAgainst')
     // Only the select ran — no update was attempted once readiness failed.
@@ -235,8 +251,8 @@ describe('createDraftPrompt / updatePrompt / status transitions', () => {
     queryMock.mockResolvedValueOnce({ rows: [] }) // update
     queryMock.mockResolvedValueOnce({ rows: [] }) // audit log
     const { publishPrompt } = await import('./prompts')
-    const result = await publishPrompt('p1')
-    expect(result).toEqual({ ok: true, id: 'p1', slug: 'x' })
+    const result = await publishPrompt(P1)
+    expect(result).toEqual({ ok: true, id: P1, slug: 'x' })
     const updateSql = queryMock.mock.calls[1]?.[0] as string
     expect(updateSql).toContain("status = 'published'")
   })
@@ -245,54 +261,54 @@ describe('createDraftPrompt / updatePrompt / status transitions', () => {
     vi.resetModules()
     queryMock.mockResolvedValueOnce({ rows: [] })
     const { publishPrompt } = await import('./prompts')
-    const result = await publishPrompt('does-not-exist')
+    const result = await publishPrompt(MISSING_ID)
     expect(result.ok).toBe(false)
   })
 
   it('unpublishPrompt sets status=unpublished', async () => {
     vi.resetModules()
-    queryMock.mockResolvedValueOnce({ rows: [{ id: 'p1', slug: 'x' }] })
+    queryMock.mockResolvedValueOnce({ rows: [{ id: P1, slug: 'x' }] })
     queryMock.mockResolvedValueOnce({ rows: [] })
     queryMock.mockResolvedValueOnce({ rows: [] })
     const { unpublishPrompt } = await import('./prompts')
-    const result = await unpublishPrompt('p1')
-    expect(result).toEqual({ ok: true, id: 'p1', slug: 'x' })
-    expect(queryMock.mock.calls[1]?.[1]).toEqual(['p1', 'unpublished'])
+    const result = await unpublishPrompt(P1)
+    expect(result).toEqual({ ok: true, id: P1, slug: 'x' })
+    expect(queryMock.mock.calls[1]?.[1]).toEqual([P1, 'unpublished'])
   })
 
   it('archivePrompt sets status=archived', async () => {
     vi.resetModules()
-    queryMock.mockResolvedValueOnce({ rows: [{ id: 'p1', slug: 'x' }] })
+    queryMock.mockResolvedValueOnce({ rows: [{ id: P1, slug: 'x' }] })
     queryMock.mockResolvedValueOnce({ rows: [] })
     queryMock.mockResolvedValueOnce({ rows: [] })
     const { archivePrompt } = await import('./prompts')
-    const result = await archivePrompt('p1')
-    expect(result).toEqual({ ok: true, id: 'p1', slug: 'x' })
-    expect(queryMock.mock.calls[1]?.[1]).toEqual(['p1', 'archived'])
+    const result = await archivePrompt(P1)
+    expect(result).toEqual({ ok: true, id: P1, slug: 'x' })
+    expect(queryMock.mock.calls[1]?.[1]).toEqual([P1, 'archived'])
   })
 
   it('deletePrompt removes the row and logs the deletion with the fetched slug', async () => {
     vi.resetModules()
-    queryMock.mockResolvedValueOnce({ rows: [{ id: 'p1', slug: 'x' }] }) // select
+    queryMock.mockResolvedValueOnce({ rows: [{ id: P1, slug: 'x' }] }) // select
     queryMock.mockResolvedValueOnce({ rows: [] }) // delete
     queryMock.mockResolvedValueOnce({ rows: [] }) // audit log
     const { deletePrompt } = await import('./prompts')
-    const result = await deletePrompt('p1', 'connect@scult.in')
-    expect(result).toEqual({ ok: true, id: 'p1', slug: 'x' })
+    const result = await deletePrompt(P1, 'connect@scult.in')
+    expect(result).toEqual({ ok: true, id: P1, slug: 'x' })
     const deleteSql = queryMock.mock.calls[1]?.[0] as string
     expect(deleteSql).toContain('delete from prompts')
-    expect(queryMock.mock.calls[1]?.[1]).toEqual(['p1'])
+    expect(queryMock.mock.calls[1]?.[1]).toEqual([P1])
     const auditSql = queryMock.mock.calls[2]?.[0] as string
     const auditParams = queryMock.mock.calls[2]?.[1] as unknown[]
     expect(auditSql).toContain('insert into admin_audit_log')
-    expect(auditParams).toEqual(['connect@scult.in', 'delete', 'prompt', 'p1', 'x', '{}'])
+    expect(auditParams).toEqual(['connect@scult.in', 'delete', 'prompt', P1, 'x', '{}'])
   })
 
   it('deletePrompt reports "no prompt" for an unknown id instead of throwing, and never issues a delete', async () => {
     vi.resetModules()
     queryMock.mockResolvedValueOnce({ rows: [] })
     const { deletePrompt } = await import('./prompts')
-    const result = await deletePrompt('does-not-exist')
+    const result = await deletePrompt(MISSING_ID)
     expect(result.ok).toBe(false)
     expect(queryMock).toHaveBeenCalledTimes(1)
   })
