@@ -50,6 +50,12 @@ export function SkillCard({
   return (
     <Link
       href={`/skills/${skill.category}/${skill.slug}`}
+      // No viewport prefetch: a grid shows 20–50 of these at once and most
+      // long-tail skill pages are rendered on demand (only ~4,000 of 10,000
+      // are pre-rendered), so every card scrolling into view was a request
+      // — often a fresh server render — for a page the visitor may never
+      // open. Clicking still navigates normally.
+      prefetch={false}
       className="chip-tool group relative flex-col items-start gap-3 p-5"
     >
       {rank !== undefined ? (
