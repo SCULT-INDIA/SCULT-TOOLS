@@ -304,7 +304,12 @@ const nextConfig: NextConfig = {
       // Client-side generators (QR, favicon, PDF export) build downloads
       // via blob: workers/URLs.
       "worker-src 'self' blob:",
-      'upgrade-insecure-requests',
+      // Not in `next dev`: Safari/WebKit applies this even to
+      // http://localhost (Chrome and Firefox exempt it), rewriting every
+      // /_next asset to https://localhost:3000 — "SSL connect error", an
+      // unstyled page and no JavaScript for anyone developing on a Mac.
+      // Production is served over HTTPS (plus HSTS), where it applies.
+      ...(process.env.NODE_ENV === 'development' ? [] : ['upgrade-insecure-requests']),
     ].join('; ')
 
     return [
