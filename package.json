@@ -11,6 +11,7 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
+    "admin:password": "node scripts/hash-admin-password.mjs --write-local",
     "test": "vitest run",
     "test:watch": "vitest"
   },
