@@ -3,6 +3,7 @@ import {
   buildPromptTemplate,
   parseTemplateReply,
   parseVariables,
+  parseVerifiedAgainst,
 } from './prompt-template'
 
 const FULL_REPLY = `---TITLE---
@@ -34,7 +35,10 @@ It fixes the **tone** before the content.
 ---EXAMPLE_OUTPUT---
 **Subject:** Invoice INV-0042 — quick check-in
 
-Hi Priya, ...`
+Hi Priya, ...
+
+---VERIFIED_AGAINST---
+ChatGPT | GPT-5`
 
 describe('parseTemplateReply', () => {
   it('fills every field from a well-formed reply', () => {
@@ -58,6 +62,8 @@ describe('parseTemplateReply', () => {
     })
     expect(reply?.whyItWorks).toContain('- Role-setting keeps it calm.')
     expect(reply?.exampleOutput).toMatch(/^\*\*Subject:\*\*/)
+    expect(reply?.exampleOutput).not.toContain('VERIFIED')
+    expect(reply?.verifiedAgainst).toEqual([{ tool: 'ChatGPT', version: 'GPT-5' }])
   })
 
   it('tolerates code fences, spaced/bold/lowercase markers and a category written with its name', () => {
@@ -112,6 +118,44 @@ describe('parseVariables', () => {
   })
 })
 
+describe('parseVerifiedAgainst', () => {
+  it('reads tool | version, tolerating bullets, bold, quotes and a date column', () => {
+    expect(
+      parseVerifiedAgainst([
+        '- **Claude** | `Sonnet 5`',
+        '"Gemini" | 2.5 Pro | 2026-09-26',
+        'claude | sonnet 5',
+        'just a sentence with no pipe',
+        ' | missing tool',
+        'Tool only |',
+      ]),
+    ).toEqual([
+      { tool: 'Claude', version: 'Sonnet 5' },
+      { tool: 'Gemini', version: '2.5 Pro' },
+    ])
+  })
+
+  it('keeps at most five rows', () => {
+    const lines = Array.from({ length: 8 }, (_, i) => `Tool${i} | v${i}`)
+    expect(parseVerifiedAgainst(lines)).toHaveLength(5)
+  })
+
+  it('is absent from the reply when the section is missing or unparseable', () => {
+    expect(parseTemplateReply('---TITLE---\nX')?.verifiedAgainst).toBeUndefined()
+    expect(
+      parseTemplateReply('---TITLE---\nX\n---VERIFIED_AGAINST---\nnot sure')
+        ?.verifiedAgainst,
+    ).toBeUndefined()
+  })
+
+  it('accepts the marker without its underscore', () => {
+    expect(
+      parseTemplateReply('---TITLE---\nX\n--- VERIFIEDAGAINST ---\nClaude | Opus 5.5')
+        ?.verifiedAgainst,
+    ).toEqual([{ tool: 'Claude', version: 'Opus 5.5' }])
+  })
+})
+
 describe('buildPromptTemplate', () => {
   it('lists the real categories and every marker the parser understands', () => {
     const t = buildPromptTemplate([{ slug: 'chatgpt', name: 'ChatGPT' }])
@@ -124,6 +168,7 @@ describe('buildPromptTemplate', () => {
       'VARIABLES',
       'WHY_IT_WORKS',
       'EXAMPLE_OUTPUT',
+      'VERIFIED_AGAINST',
     ]) {
       expect(t).toContain(`---${s}---`)
     }

@@ -20,6 +20,7 @@ export const REPLY_SECTIONS = [
   'VARIABLES',
   'WHY_IT_WORKS',
   'EXAMPLE_OUTPUT',
+  'VERIFIED_AGAINST',
 ] as const
 export type ReplySection = (typeof REPLY_SECTIONS)[number]
 
@@ -31,6 +32,9 @@ export interface TemplateReply {
   readonly variables?: readonly PromptVariable[]
   readonly whyItWorks?: string
   readonly exampleOutput?: string
+  /** The assistant that wrote the reply (it ran the prompt to produce the
+   * example output) — tool and model only; the form dates it today. */
+  readonly verifiedAgainst?: readonly { tool: string; version: string }[]
 }
 
 export interface TemplateCategory {
@@ -77,7 +81,12 @@ ${marker('WHY_IT_WORKS')}
 2–4 sentences on why this prompt gets better results than asking plainly — the specific techniques it uses (role, constraints, output format, examples). You may use **bold** and "- " bullet lines.
 
 ${marker('EXAMPLE_OUTPUT')}
-A realistic, abridged example of what the AI returns when the prompt is run with the example values — 5–15 lines. You may use **bold** and "- " bullet lines.`
+A realistic, abridged example of what the AI returns when the prompt is run with the example values — 5–15 lines. You may use **bold** and "- " bullet lines.
+
+${marker('VERIFIED_AGAINST')}
+The AI product and exact model you are — the assistant writing this reply, which is what produced the example output above. One line, in exactly this format:
+tool | model version
+e.g. "ChatGPT | GPT-5", "Claude | Sonnet 5", "Gemini | 2.5 Pro". Only name yourself; don't guess other tools.`
 }
 
 /** `---TITLE---`, `--- TITLE ---`, `**---TITLE---**`, `### ---TITLE---`,
@@ -136,6 +145,8 @@ export function parseTemplateReply(raw: string): TemplateReply | null {
   const promptText = text('PROMPT') ?? (preamble.join('\n').trim() || undefined)
   const variablesBlock = sections.get('VARIABLES')
   const variables = variablesBlock ? parseVariables(variablesBlock) : undefined
+  const verifiedBlock = sections.get('VERIFIED_AGAINST')
+  const verifiedAgainst = verifiedBlock ? parseVerifiedAgainst(verifiedBlock) : undefined
 
   const result: TemplateReply = {
     ...(text('TITLE') !== undefined ? { title: singleLine(text('TITLE') ?? '') } : {}),
@@ -149,6 +160,7 @@ export function parseTemplateReply(raw: string): TemplateReply | null {
     ...(text('EXAMPLE_OUTPUT') !== undefined
       ? { exampleOutput: text('EXAMPLE_OUTPUT') }
       : {}),
+    ...(verifiedAgainst && verifiedAgainst.length > 0 ? { verifiedAgainst } : {}),
   }
   return result
 }
@@ -173,6 +185,34 @@ export function parseVariables(lines: readonly string[]): PromptVariable[] {
     })
   }
   return variables
+}
+
+/** `tool | version` per line → at most 5 distinct pairs. Tolerates
+ * bullets, bold, backticks, quotes, an "e.g." prefix and a trailing third
+ * column (a date the model may add — ignored: the form dates it today,
+ * the day the admin checked it). */
+export function parseVerifiedAgainst(
+  lines: readonly string[],
+): { tool: string; version: string }[] {
+  const clean = (v: string | undefined) =>
+    (v ?? '')
+      .replace(/[`*"“”]/g, '')
+      .replace(/^e\.g\.\s*/i, '')
+      .trim()
+  const out: { tool: string; version: string }[] = []
+  const seen = new Set<string>()
+  for (const line of lines) {
+    const trimmed = line.trim().replace(/^[-*•]\s+/, '')
+    if (!trimmed.includes('|')) continue
+    const [tool, version] = trimmed.split('|').map(clean)
+    if (!tool || !version || tool.length > 60 || version.length > 60) continue
+    const key = `${tool.toLowerCase()}|${version.toLowerCase()}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    out.push({ tool, version })
+    if (out.length === 5) break
+  }
+  return out
 }
 
 /** A title is one line; a model that wraps it in quotes or bold gets
