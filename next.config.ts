@@ -293,7 +293,11 @@ const nextConfig: NextConfig = {
       "style-src 'self' 'unsafe-inline'",
       // avatars.githubusercontent.com: every Skills Library card/detail
       // shows the publishing GitHub owner's real avatar as the skill's logo.
-      "img-src 'self' data: blob: https://www.uneed.best https://cdn-b.saashub.com https://avatars.githubusercontent.com https://*.clarity.ms https://*.google-analytics.com https://www.googletagmanager.com https://a.fsdn.com https://sourceforge.net https://b.sf-syn.com",
+      // google.com / google.co.in / g.doubleclick.net: GA4's Google Signals
+      // audience pixel (/ads/ga-audiences), sent from the visitor's country
+      // Google domain — blocked (a console error on every page) without it.
+      // CSP can't wildcard a TLD; .co.in covers this site's main audience.
+      "img-src 'self' data: blob: https://www.uneed.best https://cdn-b.saashub.com https://avatars.githubusercontent.com https://*.clarity.ms https://*.google-analytics.com https://www.googletagmanager.com https://www.google.com https://www.google.co.in https://*.g.doubleclick.net https://a.fsdn.com https://sourceforge.net https://b.sf-syn.com",
       "font-src 'self'",
       "connect-src 'self' https://*.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.clarity.ms https://studio.scult.in https://api.github.com https://bzrcdn.openai.com https://bzr.openai.com",
       'frame-src https://sourceforge.net https://b.sf-syn.com',
